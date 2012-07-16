@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{F20DF782-C2A8-3763-6D19-4FC24CDD8F05}") = "AlphaLive", "AlphaLive.vcxproj", "{CC81117A-5533-3190-C259-DB165354BFDE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC81117A-5533-3190-C259-DB165354BFDE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CC81117A-5533-3190-C259-DB165354BFDE}.Debug|Win32.Build.0 = Debug|Win32
+		{CC81117A-5533-3190-C259-DB165354BFDE}.Release|Win32.ActiveCfg = Release|Win32
+		{CC81117A-5533-3190-C259-DB165354BFDE}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

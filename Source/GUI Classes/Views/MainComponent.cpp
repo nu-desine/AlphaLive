@@ -350,6 +350,8 @@ void MainComponent::resized()
 
 void MainComponent::paint(juce::Graphics &g)
 {
+    //std::cout << "Paint main component...";
+    
     g.setOrigin(0, 0);
 	g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight()-30, 0, 0, 1600, 1000);
     

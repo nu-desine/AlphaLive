@@ -139,10 +139,12 @@ GuiPadLayout::GuiPadLayout(AlphaLiveEngine &subject, MainComponent &ref)
 	cosN11 = -cos11;
 	
     //trigger the global button being clicked to set a default set of selected pads!
-	globalSb->triggerClick();
+	//globalSb->triggerClick();
     
     shouldDisplaySettings = false;
-    currentlySelectedPad = 99;
+    //currentlySelectedPad = 99;
+    
+    selectedPads.clear(); //should I call clearQuick() instead?
 	
 }
 
@@ -243,6 +245,7 @@ bool GuiPadLayout::update(const Subject& theChangedSubject)
         {
             //if 'show pad settings when pressed' control is set to on, the pad settings are currently
             //not being displayed, display current settings of the pressed pad
+            /*
             if (shouldDisplaySettings == true)
             {
                 
@@ -256,6 +259,7 @@ bool GuiPadLayout::update(const Subject& theChangedSubject)
                     pads[mSubject.getRecievedPad()]->toggleChange();
                 }
             }
+             */
             
             //update gradient
             pads[mSubject.getRecievedPad()]->setGradient(mSubject.getRecievedValue());
@@ -325,198 +329,179 @@ bool GuiPadLayout::hitTest (int x, int y)
 void GuiPadLayout::buttonClicked(Button *button)
 {
 	//function to listen for button clicks and turn on whichever pad or row has been clicked on and turn off the previous pad or row
+    
+    //get modifier key so we can handle cmd-clicks and shift-clicks when selecting pads
+    ModifierKeys modifier = ModifierKeys::getCurrentModifiers();
+    
+    //if a regular click is performed, clear the selectedPads array and clear all pads
+    if (modifier.isCommandDown() == false && modifier.isShiftDown() == false)
+    {
+        selectedPads.clear(); //should I call clearQuick() instead?
+        for (int i = 0; i <=47; i++)
+            turnOff(i);
+    }
 	
+    //individual pads
     for (int i = 0; i <=47; i++)
     {
         if (button == pads[i]->getButton())
         {
-
-			if (pStore != i) 
+            //if shift is down....
+            if (modifier.isShiftDown() == true)
             {
-				turnOff(pStore);
-				pStore = i;
-			}
+                //select and turn on all the pads within the range if the 
+                //newly selected pad and the last selected pad
+                
+                int newPad = i;
+                int lastPad = selectedPads.getLast(); //this will return 0 if the array is empty (which is also a pad number),
+                                                        //but the array should never be empty at this point, right?
+                
+                if (newPad > lastPad)
+                {
+                    for (int i = lastPad; i <= newPad; i++)
+                    {
+                        selectedPads.addIfNotAlreadyThere(i);
+                        turnOn(i); 
+                    }
+                }
+                else if (newPad < lastPad)
+                {
+                    for (int i = lastPad; i >= newPad; i--)
+                    {
+                        selectedPads.addIfNotAlreadyThere(i);
+                        turnOn(i); 
+                    }
+                }
+                //if newPad == lastPad, do nothing as that pad would have already been selected
+            }
+            //else, cmd-click or regular click...
+            else
+            {
+                if (modifier.isCommandDown() == true && selectedPads.contains(i))
+                {
+                    //if cmd-click and pad is already selected, unselected
+                    selectedPads.removeFirstMatchingValue(i);
+                    turnOff(i);
+                }
+                else
+                {
+                    //select and turn on pad
+                    selectedPads.addIfNotAlreadyThere(i);
+                    turnOn(i);
+                }
+            }
             
-			pads[i]->turnOn();
-			pads[i]->toggleChange();
+            break; // so it doesn't check for other pads afterwards
         }
     }
     
 	
-	
+    
+    //row buttons...
+	if (button == row1Sb || button == row2Sb || button == row3Sb || button == row4Sb ||button == row5Sb || button == row6Sb) 
+    {
+        //for shift click stuff
+        int lastPad = selectedPads.getLast();
+        int newPad;
+        
+        int row; 
+        
+        //get row based on clicked button...
+        if (button == row1Sb)
+            row = 1;
+        else if (button == row2Sb)
+            row = 2;
+        else if (button == row3Sb)
+            row = 3;
+        else if (button == row4Sb)
+            row = 4;
+        else if (button == row5Sb)
+            row = 5;
+        else if (button == row6Sb)
+            row = 6;
+               
+        //select and turn on pads is selected row
+        for(int i = (row*8)-8; i <= (row*8)-1; i++) 
+        {
+            if (modifier.isCommandDown() == true && selectedPads.contains(i))
+            {
+                selectedPads.removeFirstMatchingValue(i);
+                turnOff(i);
+                newPad = i; //for shift-click stuff
+            }
+            else
+            {
+                selectedPads.addIfNotAlreadyThere(i);
+                turnOn(i);
+                newPad = i;
+            }
+        }
+        
+        
+        //if shift is down....
+        if (modifier.isShiftDown() == true)
+        {
+            if (newPad > lastPad)
+            {
+                for (int i = lastPad; i <= newPad; i++)
+                {
+                    selectedPads.addIfNotAlreadyThere(i);
+                    turnOn(i); 
+                }
+            }
+            else if (newPad < lastPad)
+            {
+                for (int i = lastPad; i >= newPad; i--)
+                {
+                    selectedPads.addIfNotAlreadyThere(i);
+                    turnOn(i); 
+                }
+            }
+        }
+	}
+    
+    
+    //global button...
 	if (button == globalSb)
     {
-		turnOff(pStore);
-		pStore = 99;
-        
 		for (int i = 0; i <=47; i++) 
         {
-			pads[i]->turnOn();
-			pads[i]->toggleChange();
+            if (modifier.isCommandDown() == true && selectedPads.contains(i))
+            {
+                selectedPads.removeFirstMatchingValue(i);
+                turnOff(i);
+            }
+            else
+            {
+                selectedPads.addIfNotAlreadyThere(i);
+                turnOn(i);
+            }
 		}
 	}
 	
-	else if (button == row1Sb) 
+    
+    for (int i = 0; i < selectedPads.size(); i++)
     {
-		turnOff(pStore);
-		pStore = 100;
-        
-		for (int i = 0; i <=7; i++) 
-        {
-			pads[i]->turnOn();
-			pads[i]->toggleChange();
-		}
-	}
-	
-	else if (button == row2Sb) 
-    {
-		turnOff(pStore);
-		pStore = 101;
+        std::cout << "Pad " << selectedPads[i] << " is selected!\n";
+    }
+    std::cout << std::endl;
 
-		for (int i = 8; i <=15; i++) 
-        {
-			pads[i]->turnOn();
-			pads[i]->toggleChange();
-		}
-	}
-	
-	else if (button == row3Sb) 
-    {
-		turnOff(pStore);
-		pStore = 102;
-        
-		for (int i = 16; i <=23; i++) 
-        {
-			pads[i]->turnOn();
-			pads[i]->toggleChange();
-		}
-	}
-	
-	else if (button == row4Sb) 
-    {
-		turnOff(pStore);
-		pStore = 103;
-        
-		for (int i = 24; i <=31; i++) 
-        {
-			pads[i]->turnOn();
-			pads[i]->toggleChange();
-		}
-	}
-	
-	else if (button == row5Sb) 
-    {
-		turnOff(pStore);
-		pStore = 104;
-        
-		for (int i = 32; i <=39; i++) 
-        {
-			pads[i]->turnOn();
-			pads[i]->toggleChange();
-		}
-	}
-	
-	else if (button == row6Sb) 
-    {
-		turnOff(pStore);
-		pStore = 105;
-        
-		for (int i = 40; i <=47; i++) 
-        {
-			pads[i]->turnOn();
-			pads[i]->toggleChange();
-		}
-	}
-    
-    
-    currentlySelectedPad = pStore;
-    mainComponentRef.setCurrentlySelectedPad(pStore);
+    //mainComponentRef.setCurrentlySelectedPad(pStore);
 	
 }
 
-void GuiPadLayout::turnOff(int o)
+void GuiPadLayout::turnOn(int pad)
 {
-	// function to turn off individual and multiple pads
-	
-	if (o <=47) 
-    {
-		pads[o]->turnOff();
-		pads[o]->toggleChange();
-	}
-    
-	else if (o == 99)
-    {
-		for (int i = 0; i <=47; i++)
-		{
-			pads[i]->turnOff();
-			pads[i]->toggleChange();
-			
-		}
-		
-	}
-	else if (o == 100)
-    {
-		for (int i = 0; i <=7; i++)
-		{
-			pads[i]->turnOff();
-			pads[i]->toggleChange();
-			
-		}
-		
-	}
-	else if (o == 101)
-    {
-		for (int i = 8; i <=15; i++)
-		{
-			pads[i]->turnOff();
-			pads[i]->toggleChange();
-			
-		}
-		
-	}
-	else if (o == 102)
-    {
-		for (int i = 16; i <=23; i++)
-		{
-			pads[i]->turnOff();
-			pads[i]->toggleChange();
-			
-		}
-		
-	}
-	else if (o == 103)
-    {
-		for (int i = 24; i <=31; i++)
-		{
-			pads[i]->turnOff();
-			pads[i]->toggleChange();
-		}
-		
-	}
-	else if (o == 104)
-    {
-		
-		for (int i = 32; i <=39; i++)
-		{
-			pads[i]->turnOff();
-			pads[i]->toggleChange();
-			
-		}
-		
-	}
-	else if (o == 105)
-    {
-		
-		for (int i = 40; i <=47; i++)
-		{
-			pads[i]->turnOff();
-			pads[i]->toggleChange();
-			
-		}
-		
-	}
-	
+    pads[pad]->turnOn();
+    pads[pad]->toggleChange();
 }
+
+void GuiPadLayout::turnOff(int pad)
+{
+    pads[pad]->turnOff();
+    pads[pad]->toggleChange();
+}
+
 
 void GuiPadLayout::modeChange(int padNumber, int modeNumber)
 {

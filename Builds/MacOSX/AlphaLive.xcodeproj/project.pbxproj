@@ -248,7 +248,7 @@
 		0C78A2DC15B467900049C0C8 /* ModeMidi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModeMidi.cpp; sourceTree = "<group>"; };
 		0C78A2DD15B467900049C0C8 /* ModeMidi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModeMidi.h; sourceTree = "<group>"; };
 		0C78A2DE15B467900049C0C8 /* AlphaLiveEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlphaLiveEngine.cpp; sourceTree = "<group>"; };
-		0C78A2DF15B467900049C0C8 /* AlphaLiveEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; path = AlphaLiveEngine.h; sourceTree = "<group>"; };
+		0C78A2DF15B467900049C0C8 /* AlphaLiveEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlphaLiveEngine.h; sourceTree = "<group>"; };
 		0C78A2E115B467900049C0C8 /* LayoutsAndScales.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutsAndScales.cpp; sourceTree = "<group>"; };
 		0C78A2E215B467900049C0C8 /* PlayStates.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayStates.cpp; sourceTree = "<group>"; };
 		0C78A2E315B467900049C0C8 /* PlayStates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayStates.h; sourceTree = "<group>"; };
@@ -1657,10 +1657,10 @@
 		0C78A33C15B467900049C0C8 /* Pad */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A33D15B467900049C0C8 /* GuiPad.cpp */,
 				0C78A33E15B467900049C0C8 /* GuiPad.h */,
-				0C78A33F15B467900049C0C8 /* GuiPadLayout.cpp */,
+				0C78A33D15B467900049C0C8 /* GuiPad.cpp */,
 				0C78A34015B467900049C0C8 /* GuiPadLayout.h */,
+				0C78A33F15B467900049C0C8 /* GuiPadLayout.cpp */,
 				0C78A34115B467900049C0C8 /* GuiPadRow.cpp */,
 				0C78A34215B467900049C0C8 /* GuiPadRow.h */,
 			);

@@ -37,7 +37,9 @@ public:
 	bool hitTest (int x, int y);
 	void buttonClicked (Button *button);
 	void rotated (int val);
-	void turnOff(int o);
+    
+    void turnOn(int pad);
+	void turnOff(int pad);
 	void modeChange(int padNumber, int modeNumber);
 	Image snapshot();
     
@@ -61,6 +63,7 @@ public:
 private:
 	
     int currentlySelectedPad;
+    Array <int> selectedPads;
 	OwnedArray<GuiPad> pads;
 	
 	Path hitPath, globalpath, row1path, row2path, row3path, row4path, row5path, row6path;

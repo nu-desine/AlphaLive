@@ -144,6 +144,7 @@ void GuiGlobalClock::resized()
 
 void GuiGlobalClock::paint (Graphics &g)
 {
+    //std::cout << "painting clock... ";
     g.setColour(Colours::darkgrey.withAlpha(0.5f));
     g.fillRoundedRectangle(0, 0, getWidth(), getHeight(), 10);
     

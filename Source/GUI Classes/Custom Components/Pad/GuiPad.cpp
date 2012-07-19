@@ -100,6 +100,7 @@ void GuiPad::resized()
 
 void GuiPad::paint (Graphics& g)
 {
+    //std::cout << "Paint pad...";
 	
     //main image
     g.drawImage(image, 0, 0, getWidth(), getHeight(), 0, 0, 100, 100);
@@ -427,7 +428,8 @@ void GuiPad::mouseDown (const MouseEvent &e)
     else if (e.mods.isAltDown() == true)
     {
         //dissable the component so that that the mouse-up event that 
-        //will follow doesn't trigger the shape button to be 'listened' to.
+        //will follow doesn't trigger the shape button to be 'listened' to
+        //(so it doesn't call buttonClicked() is GuiPadLayout)
         setEnabled(false);
         
         isMouseInPlayMode = true;

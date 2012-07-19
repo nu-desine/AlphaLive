@@ -28,8 +28,9 @@
 #include "GlobalValues.h"
 #include "MainComponent.h"
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
-#define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 #define UPDATE_TIME 50
 
 #ifndef M_PI
@@ -272,12 +273,12 @@ void GuiSequencerMode::resized()
 }
 
 
-void GuiSequencerMode::setCurrentlySelectedPad (int padNumber)
+void GuiSequencerMode::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
-    currentlySelectedPad = padNumber;
+    selectedPads = selectedPads_;
     
-    midiMode->setCurrentlySelectedPad(currentlySelectedPad);
-    samplesMode->setCurrentlySelectedPad(currentlySelectedPad);
+    midiMode->setCurrentlySelectedPad(selectedPads);
+    samplesMode->setCurrentlySelectedPad(selectedPads);
     
     //updateDisplay();    
 }
@@ -289,33 +290,12 @@ void GuiSequencerMode::comboBoxChanged (ComboBox* comboBox)
     //play state combobox
     if (comboBox == playStateMenu)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this combo box in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerPlayState(playStateMenu->getSelectedId());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerPlayState(playStateMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerPlayState(playStateMenu->getSelectedId());
-            }
-        }
     }
     
     
@@ -324,69 +304,25 @@ void GuiSequencerMode::comboBoxChanged (ComboBox* comboBox)
     //trigger mode combobox
     if (comboBox == triggerModeMenu)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this combo box in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerTriggerMode(triggerModeMenu->getSelectedId());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerTriggerMode(triggerModeMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerTriggerMode(triggerModeMenu->getSelectedId());
-            }
-        }
     }
     
     //==============================================================================
     //relative tempo mode combobox
     if (comboBox == relativeTempoMenu)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this combo box in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerRelativeTempoMode(relativeTempoMenu->getSelectedId());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerRelativeTempoMode(relativeTempoMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerRelativeTempoMode(relativeTempoMenu->getSelectedId());
-            }
-        }
     }
-
-
     
 }
 
@@ -397,65 +333,22 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
         //set the the range of the currentSequenceNumberSlider so that the max matches this sliders value
         currentSequenceNumberSlider->setRange(1, numberOfSequencesSlider->getValue(), 1);
         
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerNumberOfSequences(numberOfSequencesSlider->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerNumberOfSequences(numberOfSequencesSlider->getValue());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerNumberOfSequences(numberOfSequencesSlider->getValue());
-            }
-        }
     }
     
     if (slider == channelSlider)
     {
-        std::cout << channelSlider->getValue() << std::endl;
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerChannel(channelSlider->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerChannel(channelSlider->getValue());           
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerChannel(channelSlider->getValue());
-            }
-        }
     }
     
     if (slider == sequenceLengthSlider)
@@ -463,62 +356,31 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
         //set the range of the noteLengthSlider so that the max value matches this sliders value
         midiMode->setNoteLengthSliderRange(sequenceLengthSlider->getValue());
         
-        sequencerGrid->repaint();
+        sequencerGrid->repaint(); //repaint with bounds!
         
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerLength(sequenceLengthSlider->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerLength(sequenceLengthSlider->getValue());          
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerLength(sequenceLengthSlider->getValue());
-            }
-        }
     }
-    
     
     
     if (slider == currentSequenceNumberSlider)
     {
         //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        if(SINGLE_PAD)
         {
             //this function will update the display of the grid
             sequencerGrid->setCurrentSequenceNumber(currentSequenceNumberSlider->getValue());
         }
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
+        else if(MULTI_PADS)
         {
             //what do i do here? clear grid but don't cleat data. 
             sequencerGrid->resetGridGui();
         }
         
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            //what do i do here? clear grid but don't clear data.
-            sequencerGrid->resetGridGui();
-        }
-
-
     }
 
     
@@ -537,70 +399,23 @@ void GuiSequencerMode::buttonClicked (Button* button)
         setToMidiMode();
         buttonIndex = 1;
         
-        //if current pad selected is a single pad
-        if (currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerMode(buttonIndex);
         }
         
-        
-        //if current pad selected is 'all pads'
-        if (currentlySelectedPad == 99)
-        {
-            for (int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerMode(buttonIndex);
-                
-            }
-        }
-        
-        //if current pad selected is a row
-        if (currentlySelectedPad > 99)
-        {
-            //get row number
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerMode(buttonIndex);
-            }
-        }
 
     }
-    if (button == modeSamplesButton)
+    else if (button == modeSamplesButton)
     {
         setToSamplesMode();
         buttonIndex = 2;
         
-        //if current pad selected is a single pad
-        if (currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerMode(buttonIndex);
-        }
-        
-        
-        //if current pad selected is 'all pads'
-        if (currentlySelectedPad == 99)
-        {
-            for (int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerMode(buttonIndex);
-                
-            }
-        }
-        
-        //if current pad selected is a row
-        if (currentlySelectedPad > 99)
-        {
-            //get row number
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerMode(buttonIndex);
-            }
         }
 
     }
@@ -668,24 +483,28 @@ void GuiSequencerMode::buttonClicked (Button* button)
     }
     
     
+    //the below if(SINGLE_PAD) checks are just for safety... if multi pads are selected the save buttons should be invisible.
     if (button == saveSeqButton)
     {
-        appDocumentStateRef.saveSequence(currentSequenceNumberSlider->getValue()-1, currentlySelectedPad);
+        if (SINGLE_PAD)
+            appDocumentStateRef.saveSequence(currentSequenceNumberSlider->getValue()-1, selectedPads[0]);
     }
     
     if (button == loadSeqButton)
     {
-        appDocumentStateRef.loadSequence(currentSequenceNumberSlider->getValue()-1, currentlySelectedPad);
+        
+        appDocumentStateRef.loadSequence(currentSequenceNumberSlider->getValue()-1, selectedPads);
     }
     
     if (button == saveSeqSetButton)
     {
-        appDocumentStateRef.saveSequenceSet(currentlySelectedPad);
+        if (SINGLE_PAD)
+            appDocumentStateRef.saveSequenceSet(selectedPads[0]);
     }
     
     if (button == loadSeqSetButton)
     {
-        appDocumentStateRef.loadSequenceSet(currentlySelectedPad);
+        appDocumentStateRef.loadSequenceSet(selectedPads);
     }
     
      
@@ -699,8 +518,9 @@ void GuiSequencerMode::updateDisplay()
     
     
     //if an individual pad number is currently selected
-    if(currentlySelectedPad < 99)
+    if(SINGLE_PAD)
     {
+        int padNum = selectedPads[0];
         //get the settings of the pad selected (in padMenu ComboBox)
         //set the stored values on the GUI components
         //Don't broadcast any changes to the component Listeners. Only want to update the GUI here
@@ -742,13 +562,13 @@ void GuiSequencerMode::updateDisplay()
         //set the the range of the currentSequenceNumberSlider so that the max matches this sliders value
         currentSequenceNumberSlider->setRange(1, numberOfSequencesSlider->getValue(), 1);
 
+        saveSeqButton->setVisible(true);
+        saveSeqSetButton->setVisible(true);
         
         
     }
     
-    
-    //if 'all pads' selected
-    if(currentlySelectedPad == 99)
+    else if(MULTI_PADS)
     {
         
         //set to a default setting
@@ -774,38 +594,13 @@ void GuiSequencerMode::updateDisplay()
         currentSequenceNumberSlider->setRange(1, numberOfSequencesSlider->getValue(), 1);
 
         
-        
-    }
-    
-    //if a 'row' is selected
-    if(currentlySelectedPad > 99)
-    {
-        
-        //set to a default setting
-        setToMidiMode();
-        modeMidiButton->setToggleState(true, false);
-        
-        sequencerGrid->setPlayHeadPos(0); // ??
-        
-        //set default values
-        numberOfSequencesSlider->setValue(8, false); 
-        channelSlider->setValue(1, false);
-        sequenceLengthSlider->setValue(250, false);
-        playStateMenu->setSelectedId(3, true);
-        //currentSequenceNumberSlider->setValue(1);
-        triggerModeMenu->setSelectedId(1, true);
-        relativeTempoMenu->setSelectedId(3, true);
-        
-        //set the range of the noteLengthSlider so that the max value matches this sliders value
-        midiMode->setNoteLengthSliderRange(sequenceLengthSlider->getValue());
-        //set the the range of the currentSequenceNumberSlider so that the max matches this sliders value
-        currentSequenceNumberSlider->setRange(1, numberOfSequencesSlider->getValue(), 1);
-
+        saveSeqButton->setVisible(false);
+        saveSeqSetButton->setVisible(false);
         
     }
     
     //update sequencerGrid GUI based on currently selected pad and currently selected sequence number
-    sequencerGrid->setCurrentlySelectedPad(currentlySelectedPad);
+    sequencerGrid->setCurrentlySelectedPad(selectedPads); //why is this called here and not above?
     currentSequenceNumberSlider->setValue(1);
     sequencerGrid->setCurrentSequenceNumber(currentSequenceNumberSlider->getValue());
     

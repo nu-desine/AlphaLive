@@ -47,7 +47,7 @@ public:
     void clear();
     void clearAll();
     void resetGridGui(); //clears GUI but not sequencerData
-    void setCurrentlySelectedPad (int value);
+    void setCurrentlySelectedPad (Array<int> selectedPads_);
     void setCurrentSequenceNumber (int value);
     void setSequencerData (int seqNumber, int rowNumber, int columnNumber, int status);
     
@@ -71,7 +71,8 @@ private:
     int sequencerData[NO_OF_SEQS][NO_OF_ROWS][NO_OF_COLUMNS];
     
     int currentSequenceNumber;
-    int currentlySelectedPad;
+    //int currentlySelectedPad;
+    Array<int> selectedPads;
     
     //create a reference to the subject that you want this class to observe
     ModeSequencer &mSubject;

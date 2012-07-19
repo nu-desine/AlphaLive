@@ -57,12 +57,14 @@ public:
     
     void setShouldDisplaySettings (bool value);
     
+    //access by the menu bar/command manager in MainComponent
+    //which will only be available when a single pad is selected
     void copyPadSettings();
     void pastePadSettings();
 	
 private:
 	
-    int currentlySelectedPad;
+    //int currentlySelectedPad;
     Array <int> selectedPads;
 	OwnedArray<GuiPad> pads;
 	

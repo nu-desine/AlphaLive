@@ -53,7 +53,7 @@ public:
     
     void setComponentsVisible(bool isVisible);
     
-    void setCurrentlySelectedPad (int padNumber);
+    void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
     
     void mouseEnter (const MouseEvent &e);
@@ -64,7 +64,8 @@ private:
     FilenameComponent *audioSampleChooser[NO_OF_ROWS];
     ComboBox *drumBankMenu;
     
-    int currentlySelectedPad;
+    //int currentlySelectedPad;
+    Array<int> selectedPads;
     
     MainComponent &mainComponentRef;
     

@@ -596,15 +596,18 @@ void GuiPadLayout::mouseExit (const MouseEvent &e)
 
 
 
+
 void GuiPadLayout::copyPadSettings()
 {
-    pads[currentlySelectedPad]->copyPadSettings();
+    //this function should only be called if a single pad is selected
+    pads[selectedPads[0]]->copyPadSettings();
 }
 
 
 void GuiPadLayout::pastePadSettings()
 {
-    pads[currentlySelectedPad]->pastePadSettings();
+    //this function should only be called if a single pad is selected
+    pads[selectedPads[0]]->pastePadSettings();
 }
 
 

@@ -25,8 +25,9 @@
 #include "SequencerBinaryData.h"
 #include "GuiSequencerMode.h"
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
-#define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 
 
 
@@ -97,17 +98,18 @@ void SequencerGrid::resized()
     }
 }
 
-void SequencerGrid::setCurrentlySelectedPad (int value)
+void SequencerGrid::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
-    currentlySelectedPad = value;
+    selectedPads = selectedPads_;
     
     //if it is a single pad, get the padsettings seq data array and put it into the local array.
     //then display the first one
     //if it is a row or 'all' pads, 
     
     //if individual pad number is selected
-    if(currentlySelectedPad < 99)
+    if(SINGLE_PAD)
     {
+        int padNum = selectedPads[0];
         for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
         {
             for (int row = 0; row <= NO_OF_ROWS-1; row++)
@@ -121,8 +123,8 @@ void SequencerGrid::setCurrentlySelectedPad (int value)
         
     }
     
-    //if current pad selected is 'all pads'
-    if (currentlySelectedPad == 99)
+    
+    else if (MULTI_PADS)
     {
         for (int i = 0; i <= 47; i++)
         {
@@ -141,27 +143,6 @@ void SequencerGrid::setCurrentlySelectedPad (int value)
         }
     }
     
-    //if current pad selected is a row
-    if (currentlySelectedPad > 99)
-    {
-        //get row number
-        int alphaRow = currentlySelectedPad - 99; 
-        
-        for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-        {
-            for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
-            {
-                for (int row = 0; row <= NO_OF_ROWS-1; row++)
-                {
-                    for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
-                    {
-                        sequencerData[seq][row][column] = 0;
-                    }
-                }
-            }
-
-        }
-    }
     
     //setCurrentSequenceNumber(1);
 
@@ -184,33 +165,10 @@ void SequencerGrid::gridClicked (int row, int column, int status)
     
     //NEW STUFF
     
-    //if current pad selected is a single pad
-    if (currentlySelectedPad < 99)
+    for (int i = 0; i < selectedPads.size(); i++)
     {
+        int padNum = selectedPads[i];
         PAD_SETTINGS->setSequencerData(currentSequenceNumber-1, row, column, status);
-    }
-    
-    //if current pad selected is 'all pads'
-    if (currentlySelectedPad == 99)
-    {
-        for (int i = 0; i <= 47; i++)
-        {
-            PAD_SETTINGS_i->setSequencerData(currentSequenceNumber-1, row, column, status);
-            
-        }
-    }
-    
-    //if current pad selected is a row
-    if (currentlySelectedPad > 99)
-    {
-        //get row number
-        int alphaRow = currentlySelectedPad - 99; 
-        
-        for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-        {
-            //i = pad number
-            PAD_SETTINGS_i->setSequencerData(currentSequenceNumber-1, row, column, status);
-        }
     }
     
     //set the local sequencer data array
@@ -262,8 +220,22 @@ void SequencerGrid::paint (Graphics &g)
     }
   
     //resize end block
-    endBlock->setBounds(float(PAD_SETTINGS->getSequencerLength()+1)*GRID_POINT_W, 0, getWidth()-(float(PAD_SETTINGS->getSequencerLength()+1)*GRID_POINT_W), getHeight());
+    
+    if(SINGLE_PAD)
+    {
+        int padNum = selectedPads[0];
+        endBlock->setBounds(float(PAD_SETTINGS->getSequencerLength()+1)*GRID_POINT_W, 0, getWidth()-(float(PAD_SETTINGS->getSequencerLength()+1)*GRID_POINT_W), getHeight());
+    }
+    else if (MULTI_PADS)
+    {
+        //draw default end point here!!
+        
+        //NOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE ME
+        //NOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE ME
+        //NOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE ME
+    }
 }
+
 
 
 void SequencerGrid::clear()
@@ -273,42 +245,16 @@ void SequencerGrid::clear()
     {
         for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
         {
-            //if current pad selected is a single pad
-            if (currentlySelectedPad < 99)
+            for (int i = 0; i < selectedPads.size(); i++)
             {
+                int padNum = selectedPads[i];
                 PAD_SETTINGS->setSequencerData(currentSequenceNumber-1, row, column, 0, false); 
                 PAD_SETTINGS->clearSequencerDataString(currentSequenceNumber-1);
-            }
-            
-            //if current pad selected is 'all pads'
-            if (currentlySelectedPad == 99)
-            {
-                for (int i = 0; i <= 47; i++)
-                {
-                    PAD_SETTINGS_i->setSequencerData(currentSequenceNumber-1, row, column, 0, false);
-                    PAD_SETTINGS_i->clearSequencerDataString(currentSequenceNumber-1);
-                    
-                }
-            }
-            
-            //if current pad selected is a row
-            if (currentlySelectedPad > 99)
-            {
-                //get row number
-                int alphaRow = currentlySelectedPad - 99; 
-                
-                for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-                {
-                    //i = pad number
-                    PAD_SETTINGS_i->setSequencerData(currentSequenceNumber-1, row, column, 0, false);
-                    PAD_SETTINGS_i->clearSequencerDataString(currentSequenceNumber-1);
-                }
             }
             
             //clear grid GUI and local data array
             gridPoint[row][column]->setStatus(0);
             sequencerData[currentSequenceNumber-1][row][column] = 0;
-            
             
         }
     }
@@ -336,39 +282,13 @@ void SequencerGrid::clearAll()
         {
             for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
             {
-                //if current pad selected is a single pad
-                if (currentlySelectedPad < 99)
+                for (int i = 0; i < selectedPads.size(); i++)
                 {
+                    int padNum = selectedPads[i];
                     PAD_SETTINGS->setSequencerData(seq, row, column, 0, false);
                     PAD_SETTINGS->clearSequencerDataString(seq);
                 }
-                
-                //if current pad selected is 'all pads'
-                if (currentlySelectedPad == 99)
-                {
-                    for (int i = 0; i <= 47; i++)
-                    {
-                        PAD_SETTINGS_i->setSequencerData(seq, row, column, 0, false);
-                        PAD_SETTINGS_i->clearSequencerDataString(seq);
-                        
-                    }
-                }
-                
-                //if current pad selected is a row
-                if (currentlySelectedPad > 99)
-                {
-                    //get row number
-                    int alphaRow = currentlySelectedPad - 99; 
-                    
-                    for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-                    {
-                        //i = pad number
-                        PAD_SETTINGS_i->setSequencerData(seq, row, column, 0, false);
-                        PAD_SETTINGS_i->clearSequencerDataString(seq);
-                    }
-                }
-
-               
+            
                 //clear local data array
                 sequencerData[seq][row][column] = 0;
                 
@@ -442,7 +362,11 @@ bool SequencerGrid::update(const Subject& theChangedSubject)
             int currentColumnNumber = mSubject.getCurrentColumnNumber();
             if (currentColumnNumber == 0)
             {
-                currentColumnNumber = PAD_SETTINGS->getSequencerLength(); //weird thing to get it displaying right
+                if (SINGLE_PAD)
+                {
+                    int padNum = selectedPads[0];
+                    currentColumnNumber = PAD_SETTINGS->getSequencerLength(); //weird thing to get it displaying right
+                }
             }
             
             playHead->setLinePostion(float(currentColumnNumber)*GRID_POINT_W);

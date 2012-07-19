@@ -1427,8 +1427,8 @@
 		0C78A2CC15B467900049C0C8 /* File and Settings */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A2CD15B467900049C0C8 /* AppDocumentState.cpp */,
 				0C78A2CE15B467900049C0C8 /* AppDocumentState.h */,
+				0C78A2CD15B467900049C0C8 /* AppDocumentState.cpp */,
 				0C78A2D015B467900049C0C8 /* AppSettings.h */,
 				0C78A2CF15B467900049C0C8 /* AppSettings.cpp */,
 				0C78A2D215B467900049C0C8 /* PadSettings.h */,
@@ -1670,11 +1670,11 @@
 		0C78A34315B467900049C0C8 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A34415B467900049C0C8 /* PresetComponent.cpp */,
-				0C78A34515B467900049C0C8 /* PresetComponent.h */,
-				0C78A34615B467900049C0C8 /* PresetSlot.cpp */,
-				0C78A34715B467900049C0C8 /* PresetSlot.h */,
 				0C78A34815B467900049C0C8 /* PresetValues.h */,
+				0C78A34515B467900049C0C8 /* PresetComponent.h */,
+				0C78A34415B467900049C0C8 /* PresetComponent.cpp */,
+				0C78A34715B467900049C0C8 /* PresetSlot.h */,
+				0C78A34615B467900049C0C8 /* PresetSlot.cpp */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -1682,8 +1682,8 @@
 		0C78A34915B467900049C0C8 /* Sequencer */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A34A15B467900049C0C8 /* SequencerGrid.cpp */,
 				0C78A34B15B467900049C0C8 /* SequencerGrid.h */,
+				0C78A34A15B467900049C0C8 /* SequencerGrid.cpp */,
 				0C78A34C15B467900049C0C8 /* SequencerGridEndBlock.cpp */,
 				0C78A34D15B467900049C0C8 /* SequencerGridEndBlock.h */,
 				0C78A34E15B467900049C0C8 /* SequencerGridPlayHead.cpp */,

@@ -45,7 +45,7 @@ public:
     void resized();
     void paint (Graphics& g);
     
-    void setCurrentlySelectedPad (int padNumber);
+    void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
     
     //==============================================================================
@@ -63,7 +63,8 @@ public:
     //==============================================================================
 private:
     
-    int currentlySelectedPad;
+    //int currentlySelectedPad;
+    Array<int> selectedPads;
     MainComponent &mainComponentRef;
     
     GuiSpeaker *speakerLeft;

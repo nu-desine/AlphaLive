@@ -590,9 +590,9 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
     AppSettings::Instance()->setCurrentlySelectedPad(selectedPads);
     guiMidiMode->setCurrentlySelectedPad(selectedPads);
     guiLooperMode->setCurrentlySelectedPad(selectedPads);
-    //guiSequencerMode->setCurrentlySelectedPad(currentlySelectedPad);
-    //guiControllerMode->setCurrentlySelectedPad(currentlySelectedPad);
-    //presetComponent->setCurrentlySelectedPad(currentlySelectedPad);
+    guiSequencerMode->setCurrentlySelectedPad(selectedPads);
+    guiControllerMode->setCurrentlySelectedPad(selectedPads);
+    //presetComponent->setCurrentlySelectedPad(selectedPads);
     
     
     //==============================================================================

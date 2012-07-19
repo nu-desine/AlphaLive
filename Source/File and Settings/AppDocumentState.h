@@ -94,9 +94,9 @@ public:
     void clearPreset (int presetNumber);
     
     void saveSequence (int currentlySelectedSeqNumber, int currentlySelectedPad);
-    void loadSequence (int currentlySeletedSeqNumber, int currentlySelectedPad);
+    void loadSequence (int currentlySeletedSeqNumber, Array<int> selectedPads_);
     void saveSequenceSet (int currentlySelectedPad);
-    void loadSequenceSet (int currentlySelectedPad);
+    void loadSequenceSet (Array<int> selectedPads_);
     
     int getGuiUpdateFlag();
     int getPresetToUpdate();

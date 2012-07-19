@@ -26,8 +26,9 @@
 #include "GlobalValues.h"
 #include "MainComponent.h"
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
-#define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 
 GuiSeqSamplesMode::GuiSeqSamplesMode(MainComponent &ref)
                                         :   mainComponentRef(ref)
@@ -78,9 +79,9 @@ GuiSeqSamplesMode::~GuiSeqSamplesMode()
     deleteAllChildren();
 }
 
-void GuiSeqSamplesMode::setCurrentlySelectedPad (int padNumber)
+void GuiSeqSamplesMode::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
-    currentlySelectedPad = padNumber;
+    selectedPads = selectedPads_;
 }
 
 void GuiSeqSamplesMode::updateDisplay()
@@ -89,8 +90,10 @@ void GuiSeqSamplesMode::updateDisplay()
     //as well as to hide/dissabled any unneeded components. 
     
     //if an individual pad number is currently selected
-    if(currentlySelectedPad < 99)
+    if(SINGLE_PAD)
     {
+        int padNum = selectedPads[0];
+        
         for (int row = 0; row <= NO_OF_ROWS-1; row++)
         {
             audioSampleChooser[row]->setCurrentFile(PAD_SETTINGS->getSequencerSamplesAudioFilePath(row), true, false);
@@ -102,24 +105,7 @@ void GuiSeqSamplesMode::updateDisplay()
         
     }
     
-    
-    //if 'all pads' selected
-    if(currentlySelectedPad == 99)
-    {
-        //set to a default setting
-        for (int row = 0; row <= NO_OF_ROWS-1; row++)
-        {
-            audioSampleChooser[row]->setCurrentFile(File::nonexistent, false, false);
-        }
-        
-        drumBankMenu->setSelectedId(1, true);
-        gainSlider->sliderComponent()->setValue(0.7, true);
-        panSlider->sliderComponent()->setValue(0.5, true);
-        
-    }
-    
-    //if a 'row' is selected
-    if(currentlySelectedPad > 99)
+    else if(MULTI_PADS)
     {
         //set to a default setting
         for (int row = 0; row <= NO_OF_ROWS-1; row++)
@@ -206,9 +192,9 @@ void GuiSeqSamplesMode::comboBoxChanged (ComboBox* comboBox)
             
             if (exitCommand == false)
             {
-                //if individual pad number is selected
-                if(currentlySelectedPad < 99)
+                for (int i = 0; i < selectedPads.size(); i++)
                 {
+                    int padNum = selectedPads[i];
                     for (int seqRow = 0; seqRow <= 11; seqRow++)
                     {
                         //get correct audio file based on bank selected
@@ -224,56 +210,6 @@ void GuiSeqSamplesMode::comboBoxChanged (ComboBox* comboBox)
                         }
                     }
                     
-                }
-                
-                //if 'all pads' selected
-                if(currentlySelectedPad == 99)
-                {
-                    for(int i = 0; i <= 47; i++)
-                    {
-                        for (int seqRow = 0; seqRow <= 11; seqRow++)
-                        {
-                            //get correct audio file based on bank selected
-                            File audioFile = drumBankDirectory.getFullPathName() + "/Kit"+String(drumBankMenu->getSelectedId()-1)+"/Kit"+String(drumBankMenu->getSelectedId()-1)+"_drum"+String(seqRow+1)+".aif";
-                            //if it exists put audio file into correct padSettings variable
-                            if (audioFile.existsAsFile() == true)
-                            {
-                                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioFile, seqRow);
-                            }
-                            else //set a flag to let the user know at least one audio file was not found
-                            {
-                                audioFilesNotFound = true;
-                            }
-                        }
-
-                        
-                    }
-                }
-                
-                //if a 'row' is selected
-                if(currentlySelectedPad > 99)
-                {
-                    int row = currentlySelectedPad - 99; 
-                    
-                    for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-                    {
-                        for (int seqRow = 0; seqRow <= 11; seqRow++)
-                        {
-                            //get correct audio file based on bank selected
-                            File audioFile = drumBankDirectory.getFullPathName() + "/Kit"+String(drumBankMenu->getSelectedId()-1)+"/Kit"+String(drumBankMenu->getSelectedId()-1)+"_drum"+String(seqRow+1)+".aif";
-                            //if it exists put audio file into correct padSettings variable
-                            if (audioFile.existsAsFile() == true)
-                            {
-                                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioFile, seqRow);
-                            }
-                            else //set a flag to let the user know at least one audio file was not found
-                            {
-                                audioFilesNotFound = true;
-                            }
-                        }
-
-                        
-                    }
                 }
             }
             
@@ -302,64 +238,21 @@ void GuiSeqSamplesMode::sliderValueChanged (Slider* slider)
 {
     if (slider == gainSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerGain(gainSlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerGain(gainSlider->sliderComponent()->getValue());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerGain(gainSlider->sliderComponent()->getValue());
-            }
-        }
     }
     
     //pan slider
     if (slider == panSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerPan(panSlider->sliderComponent()->getValue());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerPan(panSlider->sliderComponent()->getValue());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerPan(panSlider->sliderComponent()->getValue());
-            }
         }
         
         
@@ -376,354 +269,18 @@ void GuiSeqSamplesMode::buttonClicked (Button* button)
 void GuiSeqSamplesMode::filenameComponentChanged (FilenameComponent* filenameComponent)
 {
     
-    if (filenameComponent == audioSampleChooser[0])
+    for (int row = 0; row < NO_OF_ROWS; row++)
     {
-        int row = 0;
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        if (filenameComponent == audioSampleChooser[row])
         {
-            //store the value of this slider in the pad settings of that pad
-            PAD_SETTINGS->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-        }
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
+            for (int i = 0; i < selectedPads.size(); i++)
             {
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);          
-            }
-        }
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int alphaRow = currentlySelectedPad - 99; 
-            
-            for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
             }
         }
     }
-    if (filenameComponent == audioSampleChooser[1])
-    {
-        int row = 1;
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
-        {
-            //store the value of this slider in the pad settings of that pad
-            PAD_SETTINGS->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-        }
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);          
-            }
-        }
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int alphaRow = currentlySelectedPad - 99; 
-            
-            for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-            }
-        }
-    }
-    if (filenameComponent == audioSampleChooser[2])
-    {
-        int row = 2;
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
-        {
-            //store the value of this slider in the pad settings of that pad
-            PAD_SETTINGS->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-        }
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);          
-            }
-        }
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int alphaRow = currentlySelectedPad - 99; 
-            
-            for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-            }
-        }
-    }
-    if (filenameComponent == audioSampleChooser[3])
-    {
-        int row = 3;
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
-        {
-            //store the value of this slider in the pad settings of that pad
-            PAD_SETTINGS->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-        }
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);          
-            }
-        }
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int alphaRow = currentlySelectedPad - 99; 
-            
-            for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-            }
-        }
-    }
-    if (filenameComponent == audioSampleChooser[4])
-    {
-        int row = 4;
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
-        {
-            //store the value of this slider in the pad settings of that pad
-            PAD_SETTINGS->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-        }
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);          
-            }
-        }
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int alphaRow = currentlySelectedPad - 99; 
-            
-            for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-            }
-        }
-    }
-    if (filenameComponent == audioSampleChooser[5])
-    {
-        int row = 5;
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
-        {
-            //store the value of this slider in the pad settings of that pad
-            PAD_SETTINGS->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-        }
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);          
-            }
-        }
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int alphaRow = currentlySelectedPad - 99; 
-            
-            for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-            }
-        }
-    }
-    if (filenameComponent == audioSampleChooser[6])
-    {
-        int row = 6;
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
-        {
-            //store the value of this slider in the pad settings of that pad
-            PAD_SETTINGS->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-        }
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);          
-            }
-        }
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int alphaRow = currentlySelectedPad - 99; 
-            
-            for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-            }
-        }
-    }
-    if (filenameComponent == audioSampleChooser[7])
-    {
-        int row = 7;
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
-        {
-            //store the value of this slider in the pad settings of that pad
-            PAD_SETTINGS->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-        }
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);          
-            }
-        }
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int alphaRow = currentlySelectedPad - 99; 
-            
-            for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-            }
-        }
-    }
-    if (filenameComponent == audioSampleChooser[8])
-    {
-        int row = 8;
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
-        {
-            //store the value of this slider in the pad settings of that pad
-            PAD_SETTINGS->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-        }
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);          
-            }
-        }
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int alphaRow = currentlySelectedPad - 99; 
-            
-            for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-            }
-        }
-    }
-    if (filenameComponent == audioSampleChooser[9])
-    {
-        int row = 9;
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
-        {
-            //store the value of this slider in the pad settings of that pad
-            PAD_SETTINGS->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-        }
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);          
-            }
-        }
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int alphaRow = currentlySelectedPad - 99; 
-            
-            for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-            }
-        }
-    }
-    if (filenameComponent == audioSampleChooser[10])
-    {
-        int row = 10;
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
-        {
-            //store the value of this slider in the pad settings of that pad
-            PAD_SETTINGS->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-        }
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);          
-            }
-        }
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int alphaRow = currentlySelectedPad - 99; 
-            
-            for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-            }
-        }
-    }
-    if (filenameComponent == audioSampleChooser[11])
-    {
-        int row = 11;
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
-        {
-            //store the value of this slider in the pad settings of that pad
-            PAD_SETTINGS->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-        }
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);          
-            }
-        }
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int alphaRow = currentlySelectedPad - 99; 
-            
-            for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerSamplesAudioFilePath(audioSampleChooser[row]->getCurrentFile(), row);
-            }
-        }
-    }
+    
 
 }
 

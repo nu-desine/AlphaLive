@@ -67,7 +67,7 @@ public:
     
     //==============================================================================
     
-    void setCurrentlySelectedPad (int padNumber);
+    void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
     
     void setToMidiMode();
@@ -87,7 +87,8 @@ private:
     ComboBox *playStateMenu, *triggerModeMenu, *relativeTempoMenu;
     Label *velocityLabel;
     
-    int currentlySelectedPad;
+    //int currentlySelectedPad;
+    Array<int> selectedPads;
     
     ModeSequencer &modeSequencerRef;
     MainComponent &mainComponentRef;

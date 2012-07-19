@@ -23,7 +23,7 @@
 #include "PresetComponent.h"
 #include "AppSettings.h"
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 
 
 PresetComponent::PresetComponent(AppDocumentState &ref, ModeController &ref2)
@@ -225,10 +225,12 @@ bool PresetComponent::update(const Subject& theChangedSubject)
 }
 
 
-void PresetComponent::setCurrentlySelectedPad (int value)
+/*
+void PresetComponent::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
-    currentlySelectedPad = value;
+    selectedPads = selectedPads_;
 }
+ */
 
 AppDocumentState& PresetComponent::getAppDocumentState()
 {

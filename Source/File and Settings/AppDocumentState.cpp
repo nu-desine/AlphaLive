@@ -28,6 +28,7 @@
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[i]
 #define PAD_SETTINGS_pad AppSettings::Instance()->padSettings[currentlySelectedPad]
+#define PAD_SETTINGS_pads AppSettings::Instance()->padSettings[padNum]
 
 AppDocumentState::AppDocumentState()
 {
@@ -1486,7 +1487,7 @@ void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int current
 }
 
 
-void AppDocumentState::loadSequence (int currentlySeletedSeqNumber, int currentlySelectedPad)
+void AppDocumentState::loadSequence (int currentlySeletedSeqNumber, Array<int> selectedPads_)
 {
     //navigate to app directory
     FileChooser loadFileChooser("Select a .alphaseq file to load...", 
@@ -1500,35 +1501,14 @@ void AppDocumentState::loadSequence (int currentlySeletedSeqNumber, int currentl
         XmlElement* xml = XmlDocument::parse(loadedFile);
         if (xml != nullptr && xml->hasTagName("SEQUENCE_DATA"))
         {
-            //if current pad selected is a single pad
-            if (currentlySelectedPad < 99)
+            for (int i = 0; i < selectedPads_.size(); i++)
             {
+                int padNum = selectedPads_[i];
                 //get the saved string and call stringToSeqData() to convert it back int a stream of int's
-                PAD_SETTINGS_pad->stringToSeqData(xml->getStringAttribute("sequenceData"), currentlySeletedSeqNumber);
+                PAD_SETTINGS_pads->stringToSeqData(xml->getStringAttribute("sequenceData"), currentlySeletedSeqNumber);
             }
             
-            //if current pad selected is 'all pads'
-            if (currentlySelectedPad == 99)
-            {
-                for (int i = 0; i <= 47; i++)
-                {
-                    //get the saved string and call stringToSeqData() to convert it back int a stream of int's
-                    PAD_SETTINGS->stringToSeqData(xml->getStringAttribute("sequenceData"), currentlySeletedSeqNumber);
-                }
-            }
-            
-            //if current pad selected is a row
-            if (currentlySelectedPad > 99)
-            {
-                //get row number
-                int row = currentlySelectedPad - 99; 
-                
-                for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-                {
-                    //get the saved string and call stringToSeqData() to convert it back int a stream of int's
-                    PAD_SETTINGS->stringToSeqData(xml->getStringAttribute("sequenceData"), currentlySeletedSeqNumber);
-                }
-            }
+
         }
         
         delete xml;
@@ -1591,7 +1571,7 @@ void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
 
 
 
-void AppDocumentState::loadSequenceSet(int currentlySelectedPad)
+void AppDocumentState::loadSequenceSet(Array<int> selectedPads_)
 {
     //i haven't updated this function yet to allow for old format seq strings to be correctly converted to the new format.
     //it's not hard but will it be really needed? -  since i bet of the few ppl who currently use the software don't save
@@ -1609,44 +1589,16 @@ void AppDocumentState::loadSequenceSet(int currentlySelectedPad)
         XmlElement* xml = XmlDocument::parse(loadedFile);
         if (xml != nullptr && xml->hasTagName("SEQUENCE_DATA"))
         {
-            //if current pad selected is a single pad
-            if (currentlySelectedPad < 99)
+            for (int i = 0; i < selectedPads_.size(); i++)
             {
+                int padNum = selectedPads_[i];
                 //get the saved string for each of the seq and call stringToSeqData() to convert them back int a stream of int's
                 for (int seqNumber = 0; seqNumber <= NO_OF_SEQS-1; seqNumber++)
                 {
-                    PAD_SETTINGS_pad->stringToSeqData(xml->getStringAttribute("sequenceData"+String(seqNumber)), seqNumber);
+                    PAD_SETTINGS_pads->stringToSeqData(xml->getStringAttribute("sequenceData"+String(seqNumber)), seqNumber);
                 }
             }
             
-            //if current pad selected is 'all pads'
-            if (currentlySelectedPad == 99)
-            {
-                for (int i = 0; i <= 47; i++)
-                {
-                    //get the saved string for each of the seq and call stringToSeqData() to convert them back int a stream of int's
-                    for (int seqNumber = 0; seqNumber <= NO_OF_SEQS-1; seqNumber++)
-                    {
-                        PAD_SETTINGS->stringToSeqData(xml->getStringAttribute("sequenceData"+String(seqNumber)), seqNumber);
-                    }
-                }
-            }
-            
-            //if current pad selected is a row
-            if (currentlySelectedPad > 99)
-            {
-                //get row number
-                int row = currentlySelectedPad - 99; 
-                
-                for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-                {
-                    //get the saved string for each of the seq and call stringToSeqData() to convert them back int a stream of int's
-                    for (int seqNumber = 0; seqNumber <= NO_OF_SEQS-1; seqNumber++)
-                    {
-                        PAD_SETTINGS->stringToSeqData(xml->getStringAttribute("sequenceData"+String(seqNumber)), seqNumber);
-                    }
-                }
-            }
         }
         
         delete xml;

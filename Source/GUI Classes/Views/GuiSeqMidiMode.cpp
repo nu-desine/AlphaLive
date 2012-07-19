@@ -26,8 +26,9 @@
 #include "GlobalValues.h"
 #include "MainComponent.h"
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
-#define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 
 GuiSeqMidiMode::GuiSeqMidiMode(MainComponent &ref)
                                         :   mainComponentRef(ref)
@@ -99,9 +100,9 @@ GuiSeqMidiMode::~GuiSeqMidiMode()
     
 }
 
-void GuiSeqMidiMode::setCurrentlySelectedPad (int padNumber)
+void GuiSeqMidiMode::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
-    currentlySelectedPad = padNumber;
+    selectedPads = selectedPads_;
     
 }
 void GuiSeqMidiMode::updateDisplay()
@@ -110,8 +111,9 @@ void GuiSeqMidiMode::updateDisplay()
     //as well as to hide/dissabled any unneeded components. 
     
     //if an individual pad number is currently selected
-    if(currentlySelectedPad < 99)
+    if(SINGLE_PAD)
     {
+        int padNum = selectedPads[0];
         //get the settings of the pad selected (in padMenu ComboBox)
         //set the stored values on the GUI components
         //Don't broadcast any changes to the component Listeners. Only want to update the GUI here
@@ -130,8 +132,7 @@ void GuiSeqMidiMode::updateDisplay()
     }
     
     
-    //if 'all pads' selected
-    if(currentlySelectedPad == 99)
+    else if(MULTI_PADS)
     {
         //set to a default setting
         scaleMenu->setSelectedId(100, true);
@@ -146,27 +147,6 @@ void GuiSeqMidiMode::updateDisplay()
             
             i++;
         }
-        
-    }
-    
-    //if a 'row' is selected
-    if(currentlySelectedPad > 99)
-    {
-        //set to a default setting
-        //set to a default setting
-        scaleMenu->setSelectedId(100, true);
-        rootNoteSlider->setValue(60, false);
-        channelSlider->setValue(1, false);
-        velocitySlider->setValue(110,false);
-        noteLengthSlider->setValue(4,false);
-        
-        for (int row = 0, i = 60; row <= NO_OF_ROWS-1; row++)
-        {
-            noteSlider[row]->setValue(i, false);
-            
-            i++;
-        }
-
         
     }
 
@@ -206,97 +186,34 @@ void GuiSeqMidiMode::sliderValueChanged (Slider* slider)
 {
     if (slider == channelSlider)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerMidiChannel(channelSlider->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerMidiChannel(channelSlider->getValue());           
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerMidiChannel(channelSlider->getValue());
-            }
-        }
     }
     
     
     if (slider == velocitySlider)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerMidiVelocity(velocitySlider->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerMidiVelocity(velocitySlider->getValue());           
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerMidiVelocity(velocitySlider->getValue());
-            }
-        }
     }
     
     
     if (slider == noteLengthSlider)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerMidiNoteLength(noteLengthSlider->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setSequencerMidiNoteLength(noteLengthSlider->getValue());           
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setSequencerMidiNoteLength(noteLengthSlider->getValue());
-            }
-        }
     }
 
     
@@ -315,32 +232,10 @@ void GuiSeqMidiMode::sliderValueChanged (Slider* slider)
     {
         if (slider == noteSlider[row])
         {
-            //if individual pad number is selected
-            if(currentlySelectedPad < 99)
+            for (int i = 0; i < selectedPads.size(); i++)
             {
-                //store the value of this slider in the pad settings of that pad
+                int padNum = selectedPads[i];
                 PAD_SETTINGS->setSequencerMidiNote(noteSlider[row]->getValue(), row);
-            }
-            
-            //if 'all pads' selected
-            if(currentlySelectedPad == 99)
-            {
-                for(int i = 0; i <= 47; i++)
-                {
-                    PAD_SETTINGS_i->setSequencerMidiNote(noteSlider[row]->getValue(), row);          
-                }
-            }
-            
-            //if a 'row' is selected
-            if(currentlySelectedPad > 99)
-            {
-                int alphaRow = currentlySelectedPad - 99; 
-                
-                for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-                {
-                    //i = pad number
-                    PAD_SETTINGS_i->setSequencerMidiNote(noteSlider[row]->getValue(), row);
-                }
             }
         }
     }
@@ -361,41 +256,14 @@ void GuiSeqMidiMode::setNoteLengthSliderRange (int maxValue)
     //set the range
     noteLengthSlider->setRange(1, maxValue, 1);
     
-    //if individual pad number is selected
-    if(currentlySelectedPad < 99)
+    for (int i = 0; i < selectedPads.size(); i++)
     {
+        int padNum = selectedPads[i];
+        
         if (PAD_SETTINGS->getSequencerMidiNoteLength() > maxValue) //if now out of range
         {
             PAD_SETTINGS->setSequencerMidiNoteLength(maxValue); //set the PAD_SETTINGS value to the new maxValue
             noteLengthSlider->setValue(maxValue, false); //update the slider display, but don;t send an update
-        }
-    }
-    
-    //if 'all pads' selected
-    if(currentlySelectedPad == 99)
-    {
-        for(int i = 0; i <= 47; i++)
-        {
-            if (PAD_SETTINGS_i->getSequencerMidiNoteLength() > maxValue) 
-            {
-                PAD_SETTINGS_i->setSequencerMidiNoteLength(maxValue);
-                noteLengthSlider->setValue(maxValue, false);
-            }          
-        }
-    }
-    
-    //if a 'row' is selected
-    if(currentlySelectedPad > 99)
-    {
-        int row = currentlySelectedPad - 99; 
-        
-        for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-        {
-            if (PAD_SETTINGS_i->getSequencerMidiNoteLength() > maxValue) 
-            {
-                PAD_SETTINGS_i->setSequencerMidiNoteLength(maxValue);
-                noteLengthSlider->setValue(maxValue, false);
-            }  
         }
     }
 
@@ -462,9 +330,10 @@ void GuiSeqMidiMode::setScale()
     
     if (doNothing == false)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
+            
             for (int row = 0; row <= NO_OF_ROWS-1; row++)
             {
                 PAD_SETTINGS->setSequencerMidiNote(selectedScale[row], row);
@@ -474,35 +343,6 @@ void GuiSeqMidiMode::setScale()
             
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                for (int row = 0; row <= NO_OF_ROWS-1; row++)
-                {
-                    PAD_SETTINGS_i->setSequencerMidiNote(selectedScale[row], row);
-                    noteSlider[row]->setValue(selectedScale[row], false);
-                    
-                }         
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int alphaRow = currentlySelectedPad - 99; 
-            
-            for(int i = (alphaRow*8)-8; i <= (alphaRow*8)-1; i++) 
-            {
-                for (int row = 0; row <= NO_OF_ROWS-1; row++)
-                {
-                    PAD_SETTINGS_i->setSequencerMidiNote(selectedScale[row], row);
-                    noteSlider[row]->setValue(selectedScale[row], false);
-                    
-                }  
-            }
-        }
 
     }
 }

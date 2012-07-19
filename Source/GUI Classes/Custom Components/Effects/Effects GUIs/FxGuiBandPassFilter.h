@@ -57,7 +57,7 @@ private:
     TextButton *reverseButton;
     AlphaImageKnob *intensitySlider;
     
-    int currentlySelectedPad;
+    //int currentlySelectedPad;
     Array<int> selectedPads;
     
 };

@@ -26,14 +26,15 @@
 #include "../../File and Settings/AppSettings.h"
 #include "MainComponent.h"
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
-#define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 
 
 GuiControllerMode::GuiControllerMode(MainComponent &ref)
                                             :   mainComponentRef(ref)
 {
-    currentlySelectedPad = 99;
+    //currentlySelectedPad = 99;
     
     addAndMakeVisible(speakerLeft = new GuiSpeaker());
     addAndMakeVisible(circleBackgroundSmall = new GuiCircleBackground());
@@ -129,9 +130,9 @@ void GuiControllerMode::paint (Graphics& g)
 
 
 
-void GuiControllerMode::setCurrentlySelectedPad (int padNumber)
+void GuiControllerMode::setCurrentlySelectedPad (Array <int> selectedPads_)
 {
-    currentlySelectedPad = padNumber;
+    selectedPads = selectedPads_;
 }
 
 
@@ -143,33 +144,12 @@ void GuiControllerMode::comboBoxChanged (ComboBox* comboBox)
     //pressure mode combobox
     if (comboBox == controlMenu)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this combo box in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setControllerControl(controlMenu->getSelectedId());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setControllerControl(controlMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setControllerControl(controlMenu->getSelectedId());
-            }
-        }
          
         //==============set what other components are visible===============
         
@@ -216,32 +196,10 @@ void GuiControllerMode::sliderValueChanged (Slider* slider)
     //channel slider
     if (slider == presetNumberSlider)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setControllerPresetNumber(presetNumberSlider->getValue());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setControllerPresetNumber(presetNumberSlider->getValue());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setControllerPresetNumber(presetNumberSlider->getValue());
-            }
         }
     }
     
@@ -250,33 +208,12 @@ void GuiControllerMode::sliderValueChanged (Slider* slider)
     //OSC port number slider slider
     else if (slider == oscPortNumberSlider)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setControllerOscPort(oscPortNumberSlider->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setControllerOscPort(oscPortNumberSlider->getValue());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setControllerOscPort(oscPortNumberSlider->getValue());
-            }
-        }
     }
     
     
@@ -284,66 +221,24 @@ void GuiControllerMode::sliderValueChanged (Slider* slider)
     //MIDI program change number slider
     else if (slider == midiProgramChangeNumberSlider)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setControllerMidiProgramChangeNumber(midiProgramChangeNumberSlider->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setControllerMidiProgramChangeNumber(midiProgramChangeNumberSlider->getValue());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setControllerMidiProgramChangeNumber(midiProgramChangeNumberSlider->getValue());
-            }
-        }
     }
     
     
     //MIDI program change channel slider
     else if (slider == midiProgramChangeChannelSlider)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setControllerMidiProgramChangeChannel(midiProgramChangeChannelSlider->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setControllerMidiProgramChangeChannel(midiProgramChangeChannelSlider->getValue());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setControllerMidiProgramChangeChannel(midiProgramChangeChannelSlider->getValue());
-            }
-        }
     }
 
     
@@ -353,33 +248,10 @@ void GuiControllerMode::labelTextChanged (Label* labelThatHasChanged)
 {
     if (labelThatHasChanged == oscIpAddressEditor)
     {
-        
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setControllerOscIpAddress(oscIpAddressEditor->getText());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setControllerOscIpAddress(oscIpAddressEditor->getText());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setControllerOscIpAddress(oscIpAddressEditor->getText());
-            }
         }
     }
 }
@@ -415,8 +287,9 @@ void GuiControllerMode::updateDisplay()
     //as well as to hide/dissabled any unneeded components. 
     
     //if an individual pad number is currently selected
-    if(currentlySelectedPad < 99)
+    if(SINGLE_PAD)
     {
+        int padNum = selectedPads[0];
         controlMenu->setSelectedId(PAD_SETTINGS->getControllerControl(), true);
         presetNumberSlider->setValue(PAD_SETTINGS->getControllerPresentNumber(), false);
         oscIpAddressEditor->setText(PAD_SETTINGS->getControllerOscIpAddress(), false);
@@ -426,20 +299,7 @@ void GuiControllerMode::updateDisplay()
         
     }
     
-    
-    //if 'all pads' selected
-    if(currentlySelectedPad == 99)
-    {
-        controlMenu->setSelectedId(1, true);
-        presetNumberSlider->setValue(1, false);
-        oscIpAddressEditor->setText("127.0.0.1", false);
-        oscPortNumberSlider->setValue(5004, false);
-        midiProgramChangeNumberSlider->setValue(1, false);
-        midiProgramChangeChannelSlider->setValue(1, false);
-    }
-    
-    //if a 'row' is selected
-    if(currentlySelectedPad > 99)
+    else if(MULTI_PADS)
     {
         controlMenu->setSelectedId(1, true);
         presetNumberSlider->setValue(1, false);

@@ -49,7 +49,7 @@ public:
     
     //==============================================================================
     
-    void setCurrentlySelectedPad (int padNumber);
+    void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
     void setNoteLengthSliderRange (int maxValue);
     
@@ -67,7 +67,8 @@ private:
     AlphaSlider *rootNoteSlider, *velocitySlider, *channelSlider, *noteLengthSlider;
     ComboBox *scaleMenu;
     
-    int currentlySelectedPad;
+    //int currentlySelectedPad;
+    Array <int> selectedPads; 
     
     MainComponent &mainComponentRef;
     

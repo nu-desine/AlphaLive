@@ -79,7 +79,7 @@ public:
     //override the Observer virtual update function
     bool update(const Subject& theChangedSubject);
     
-    void setCurrentlySelectedPad (int padNumber);
+    void setCurrentlySelectedPad (Array <int> selectedPads_);
     void setToOffMode();
     void setToMidiMode();
     void setToLooperMode();
@@ -124,11 +124,8 @@ private:
     AlphaLiveEngine &alphaLiveEngineRef;
     AppDocumentState &appDocumentStateRef;
     
-    //currentlySelectedPad will hold the selected pad number or set of pads
-    //0-47 = pads 0-47
-    //99 = all pads
-    // 100-105 = rows 1-6
-    int currentlySelectedPad;
+    //int currentlySelectedPad;
+    Array <int> selectedPads;
     
     PresetComponent *presetComponent;
     

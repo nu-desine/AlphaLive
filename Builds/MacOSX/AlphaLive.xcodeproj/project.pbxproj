@@ -1723,6 +1723,8 @@
 		0C78A36215B467910049C0C8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0C78A37115B467910049C0C8 /* MainComponent.h */,
+				0C78A37015B467910049C0C8 /* MainComponent.cpp */,
 				0C78A36315B467910049C0C8 /* GlobalValues.h */,
 				0C78A36415B467910049C0C8 /* GuiControllerMode.cpp */,
 				0C78A36515B467910049C0C8 /* GuiControllerMode.h */,
@@ -1736,8 +1738,6 @@
 				0C78A36D15B467910049C0C8 /* GuiSeqSamplesMode.h */,
 				0C78A36E15B467910049C0C8 /* GuiSequencerMode.cpp */,
 				0C78A36F15B467910049C0C8 /* GuiSequencerMode.h */,
-				0C78A37015B467910049C0C8 /* MainComponent.cpp */,
-				0C78A37115B467910049C0C8 /* MainComponent.h */,
 			);
 			path = Views;
 			sourceTree = "<group>";

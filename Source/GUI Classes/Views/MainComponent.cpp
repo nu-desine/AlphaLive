@@ -31,7 +31,9 @@
 #include "../../File and Settings/StoredSettings.h"
 
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 
 
 
@@ -270,7 +272,14 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     isInfoBoxEnabled = true;
     isClockRunning = false;
     
-    currentlySelectedPad = 99; //'all pads'
+    //currentlySelectedPad = 99; //'all pads'
+    guiMidiMode->setVisible(false);
+    guiLooperMode->setVisible(false);
+    guiSequencerMode->setVisible(false);
+    guiControllerMode->setVisible(false);
+    speakerLeft->setVisible(true);
+    speakerRight->setVisible(true);
+    circleBackground->setVisible(true);
 
 }
 
@@ -375,7 +384,7 @@ bool MainComponent::update(const Subject& theChangedSubject)
         if (appDocumentStateRef.getGuiUpdateFlag() == 0)
         {
             //this call effectively updates the GUI display
-            setCurrentlySelectedPad(currentlySelectedPad);
+            setCurrentlySelectedPad(selectedPads);
             
             //update GUI things (GUI of global settings) which aren't updated by setCurrentlySelectedPad
             //these things could be put in setCurrentlySelectedPad but they'll be updated everytime a pad is selected which would be inefficent
@@ -412,7 +421,6 @@ void MainComponent::sliderValueChanged (Slider *slider)
     if (slider == gainSlider->sliderComponent())
     {
         AppSettings::Instance()->setGlobalGain(gainSlider->sliderComponent()->getValue());
-        
     }
     
     if (slider == panSlider->sliderComponent())
@@ -421,11 +429,13 @@ void MainComponent::sliderValueChanged (Slider *slider)
         
     }
     
+    /*
     if (slider == tempoSlider)
     {
         AppSettings::Instance()->setGlobalTempo(tempoSlider->getValue());
         
     }
+     */
     
     if (slider == padRotate)
 	{
@@ -478,80 +488,28 @@ void MainComponent::buttonClicked(Button *button)
     if (button == modeOffButton)
     {
         setToOffMode();
-        
         buttonIndex = 0;
         
-        //if current pad selected is a single pad
-        if (currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMode(buttonIndex);
             //set the Gui pads to have a ring of colour signifying the pad's current mode
-            guiPadLayout->modeChange(currentlySelectedPad, buttonIndex);
-        }
-        
-        //if current pad selected is 'all pads'
-        if (currentlySelectedPad == 99)
-        {
-            for (int i = 0; i <= 47; i++)
-            {
-                AppSettings::Instance()->padSettings[i]->setMode(buttonIndex);
-                //set the Gui pads to have a ring of colour signifying the pad's current mode
-                guiPadLayout->modeChange(i, buttonIndex);
-            }
-        }
-        
-        //if current pad selected is a row
-        if (currentlySelectedPad > 99)
-        {
-            //get row number
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                AppSettings::Instance()->padSettings[i]->setMode(buttonIndex);
-                //set the Gui pads to have a ring of colour signifying the pad's current mode
-                guiPadLayout->modeChange(i, buttonIndex);
-            }
+            guiPadLayout->modeChange(padNum, buttonIndex);
         }
     }
+    
     else if (button == modeMidiButton)
     {
         setToMidiMode();
         buttonIndex = 1;
         
-        //if current pad selected is a single pad
-        if (currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMode(buttonIndex);
             //set the Gui pads to have a ring of colour signifying the pad's current mode
-            guiPadLayout->modeChange(currentlySelectedPad, buttonIndex);
-        }
-        
-        //if current pad selected is 'all pads'
-        if (currentlySelectedPad == 99)
-        {
-            for (int i = 0; i <= 47; i++)
-            {
-                AppSettings::Instance()->padSettings[i]->setMode(buttonIndex);
-                //set the Gui pads to have a ring of colour signifying the pad's current mode
-                guiPadLayout->modeChange(i, buttonIndex);
-            }
-        }
-        
-        //if current pad selected is a row
-        if (currentlySelectedPad > 99)
-        {
-            //get row number
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                AppSettings::Instance()->padSettings[i]->setMode(buttonIndex);
-                //set the Gui pads to have a ring of colour signifying the pad's current mode
-                guiPadLayout->modeChange(i, buttonIndex);
-            }
+            guiPadLayout->modeChange(padNum, buttonIndex);
         }
     } 
     
@@ -560,38 +518,12 @@ void MainComponent::buttonClicked(Button *button)
         setToLooperMode();
         buttonIndex = 2;
         
-        //if current pad selected is a single pad
-        if (currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMode(buttonIndex);
             //set the Gui pads to have a ring of colour signifying the pad's current mode
-            guiPadLayout->modeChange(currentlySelectedPad, buttonIndex);
-        }
-        
-        //if current pad selected is 'all pads'
-        if (currentlySelectedPad == 99)
-        {
-            for (int i = 0; i <= 47; i++)
-            {
-                AppSettings::Instance()->padSettings[i]->setMode(buttonIndex);
-                //set the Gui pads to have a ring of colour signifying the pad's current mode
-                guiPadLayout->modeChange(i, buttonIndex);
-            }
-        }
-        
-        //if current pad selected is a row
-        if (currentlySelectedPad > 99)
-        {
-            //get row number
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                AppSettings::Instance()->padSettings[i]->setMode(buttonIndex);
-                //set the Gui pads to have a ring of colour signifying the pad's current mode
-                guiPadLayout->modeChange(i, buttonIndex);
-            }
+            guiPadLayout->modeChange(padNum, buttonIndex);
         }
     }
     
@@ -600,39 +532,14 @@ void MainComponent::buttonClicked(Button *button)
         setToSequencerMode();
         buttonIndex = 3;
         
-        //if current pad selected is a single pad
-        if (currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMode(buttonIndex);
             //set the Gui pads to have a ring of colour signifying the pad's current mode
-            guiPadLayout->modeChange(currentlySelectedPad, buttonIndex);
+            guiPadLayout->modeChange(padNum, buttonIndex);
         }
         
-        //if current pad selected is 'all pads'
-        if (currentlySelectedPad == 99)
-        {
-            for (int i = 0; i <= 47; i++)
-            {
-                AppSettings::Instance()->padSettings[i]->setMode(buttonIndex);
-                //set the Gui pads to have a ring of colour signifying the pad's current mode
-                guiPadLayout->modeChange(i, buttonIndex);
-            }
-        }
-        
-        //if current pad selected is a row
-        if (currentlySelectedPad > 99)
-        {
-            //get row number
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                AppSettings::Instance()->padSettings[i]->setMode(buttonIndex);
-                //set the Gui pads to have a ring of colour signifying the pad's current mode
-                guiPadLayout->modeChange(i, buttonIndex);
-            }
-        }
     }
     
     else if (button == modeControllerButton)
@@ -640,38 +547,12 @@ void MainComponent::buttonClicked(Button *button)
         setToControllerMode();
         buttonIndex = 4;
         
-        //if current pad selected is a single pad
-        if (currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMode(buttonIndex);
             //set the Gui pads to have a ring of colour signifying the pad's current mode
-            guiPadLayout->modeChange(currentlySelectedPad, buttonIndex);
-        }
-        
-        //if current pad selected is 'all pads'
-        if (currentlySelectedPad == 99)
-        {
-            for (int i = 0; i <= 47; i++)
-            {
-                AppSettings::Instance()->padSettings[i]->setMode(buttonIndex);
-                //set the Gui pads to have a ring of colour signifying the pad's current mode
-                guiPadLayout->modeChange(i, buttonIndex);
-            }
-        }
-        
-        //if current pad selected is a row
-        if (currentlySelectedPad > 99)
-        {
-            //get row number
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                AppSettings::Instance()->padSettings[i]->setMode(buttonIndex);
-                //set the Gui pads to have a ring of colour signifying the pad's current mode
-                guiPadLayout->modeChange(i, buttonIndex);
-            }
+            guiPadLayout->modeChange(padNum, buttonIndex);
         }
     }
     
@@ -692,8 +573,19 @@ void MainComponent::buttonClicked(Button *button)
 
 
 //this function is called every time a user selects a pad on the GUI
-void MainComponent::setCurrentlySelectedPad(int padNumber)
+void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
 {
+    /*
+    for (int i = 0; i < selectedPads.size(); i++)
+    {
+        std::cout << "Pad " << selectedPads[i] << " is selected!\n";
+    }
+    std::cout << std::endl;
+     */
+    
+    selectedPads = selectedPads_;
+    
+    /*
     currentlySelectedPad = padNumber;
     //pass in the currently selected pad to the mode GUIs for them to use
     //in order to display the right settings from appSettings
@@ -703,11 +595,14 @@ void MainComponent::setCurrentlySelectedPad(int padNumber)
     guiSequencerMode->setCurrentlySelectedPad(currentlySelectedPad);
     guiControllerMode->setCurrentlySelectedPad(currentlySelectedPad);
     presetComponent->setCurrentlySelectedPad(currentlySelectedPad);
+    */
     
     //==============================================================================
     //if current pad selected is a single pad
-    if (currentlySelectedPad < 99)
+    if (SINGLE_PAD)
     {
+        int padNum = selectedPads[0];
+        
         if (PAD_SETTINGS->getMode() == 0) //off mode
         {
             setToOffMode();
@@ -741,10 +636,7 @@ void MainComponent::setCurrentlySelectedPad(int padNumber)
         //padNumberDisplayLabel->setText("Pad " + String(currentlySelectedPad+1) + " Selected", false);
         pressureSensitivityMenu->setSelectedId(PAD_SETTINGS->getPressureSensitivityMode(), true);
     }
-    
-    //==============================================================================
-    //if current pad selected is 'all pads'
-    if (currentlySelectedPad == 99)
+    else if (MULTI_PADS)
     {
         //set to a default setting
         setToOffMode();
@@ -755,67 +647,32 @@ void MainComponent::setCurrentlySelectedPad(int padNumber)
         pressureSensitivityMenu->setSelectedId(2, true);
     }
     
-    //==============================================================================
-    //if current pad selected is a row
-    if (currentlySelectedPad > 99)
-    {
-        //set to a default setting
-        setToOffMode();
-        modeOffButton->setToggleState(true, false);
-
-        //set other things
-        //padNumberDisplayLabel->setText("Row " + String(currentlySelectedPad-99) + " Selected", false);
-        pressureSensitivityMenu->setSelectedId(2, true);
-    }
 
     commandManager->commandStatusChanged(); //so that if a single pad is selected, the copy and paste settings
                                             //command is enabled
             
+     
 }
 
 void MainComponent::comboBoxChanged (ComboBox *comboBox)
 {
     
+    /*
     if (comboBox == padDisplayTextMenu)
     {
         AppSettings::Instance()->setPadDisplayTextMode(padDisplayTextMenu->getSelectedId());
     }
-    
-    
+     */
     
     if (comboBox == pressureSensitivityMenu)
     {
-        //if current pad selected is a single pad
-        if (currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setPressureSensitivityMode(pressureSensitivityMenu->getSelectedId());
-        }
-        
-        //if current pad selected is 'all pads'
-        if (currentlySelectedPad == 99)
-        {
-            for (int i = 0; i <= 47; i++)
-            {
-                AppSettings::Instance()->padSettings[i]->setPressureSensitivityMode(pressureSensitivityMenu->getSelectedId());
-            }
-        }
-        
-        //if current pad selected is a row
-        if (currentlySelectedPad > 99)
-        {
-            //get row number
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                AppSettings::Instance()->padSettings[i]->setPressureSensitivityMode(pressureSensitivityMenu->getSelectedId());
-            }
         }
     }
 
-
-       
 }
 
 
@@ -1154,7 +1011,7 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
 						"Copy's the settings of the currently selected pad.",
 						CommandCategories::FileCommands, 0);
 		result.defaultKeypresses.add (KeyPress ('c', cmd, 0));
-        result.setActive(currentlySelectedPad < 48);
+        result.setActive(SINGLE_PAD);
 	}
     else if(commandID == CommandIDs::PastePadSettings)
 	{
@@ -1162,7 +1019,7 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
 						"Paste's settings to the currently selected pads.",
 						CommandCategories::FileCommands, 0);
 		result.defaultKeypresses.add (KeyPress ('v', cmd, 0));
-        result.setActive(currentlySelectedPad < 48);
+        result.setActive(SINGLE_PAD);
 	}
     
     else if (commandID == CommandIDs::ClearPreset)

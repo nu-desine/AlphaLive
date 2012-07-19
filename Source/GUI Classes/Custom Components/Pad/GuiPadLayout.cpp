@@ -479,14 +479,11 @@ void GuiPadLayout::buttonClicked(Button *button)
 		}
 	}
 	
-    
-    for (int i = 0; i < selectedPads.size(); i++)
+    if (selectedPads.size() > 0)
     {
-        std::cout << "Pad " << selectedPads[i] << " is selected!\n";
+        //pass on the selected pads to mainComponent, which then passes it further into the application..
+        mainComponentRef.setCurrentlySelectedPad(selectedPads);
     }
-    std::cout << std::endl;
-
-    //mainComponentRef.setCurrentlySelectedPad(pStore);
 	
 }
 
@@ -540,7 +537,7 @@ MainComponent& GuiPadLayout::getMainComponent()
 
 void GuiPadLayout::updateCurrentlySelectedPad (int padNumber)
 {
-    mainComponentRef.setCurrentlySelectedPad(padNumber);
+    mainComponentRef.setCurrentlySelectedPad(selectedPads);
     
 }
 

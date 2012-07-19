@@ -516,9 +516,11 @@ void GuiPad::pastePadSettings()
     modeChange(PAD_SETTINGS->getMode());
     
     //if the pasted pad is currently selected, update its display
-    if (AppSettings::Instance()->getCurrentlySelectedPad() == padNumber)
+
+    if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
     {
-        guiPadLayoutRef.updateCurrentlySelectedPad(padNumber);
+        if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
+            guiPadLayoutRef.updateCurrentlySelectedPad();
     }
     
     //ideally, users should only be allowed to paste once something has been copied

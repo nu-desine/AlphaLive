@@ -24,8 +24,9 @@
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
-#define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 
 
 GuiFlanger::GuiFlanger(MainComponent &ref)
@@ -98,7 +99,7 @@ GuiFlanger::GuiFlanger(MainComponent &ref)
     intensitySlider->sliderComponent()->addListener(this);
     intensitySlider->sliderComponent()->addMouseListener(this, true);
     
-    currentlySelectedPad = 99;
+    //currentlySelectedPad = 99;
     tempo = AppSettings::Instance()->getGlobalTempo();
     
     setInterceptsMouseClicks(false, true);
@@ -133,149 +134,52 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
 {
     if (slider == mixSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxFlangerMix(mixSlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerMix(mixSlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerMix(mixSlider->sliderComponent()->getValue());
-            }
-        }
     }
 
     else if (slider == rateSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxFlangerRate(rateSlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerRate(rateSlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerRate(rateSlider->sliderComponent()->getValue());
-            }
-        }
     }
     
     
     else if (slider == feedbackSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxFlangerFeedback(feedbackSlider->sliderComponent()->getValue());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerFeedback(feedbackSlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerFeedback(feedbackSlider->sliderComponent()->getValue());
-            }
         }
     }
     
     
     else if (slider == flangerIntensitySlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxFlangerIntensity(flangerIntensitySlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerIntensity(flangerIntensitySlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerIntensity(flangerIntensitySlider->sliderComponent()->getValue());
-            }
-        }
     }
     
     
     else if (slider == intensitySlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxFlangerAtIntensity(intensitySlider->sliderComponent()->getValue());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerAtIntensity(intensitySlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerAtIntensity(intensitySlider->sliderComponent()->getValue());
-            }
         }
     }
     
@@ -287,31 +191,12 @@ void GuiFlanger::comboBoxChanged (ComboBox *comboBox)
 {
     if (comboBox == alphaTouchMenu)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxFlangerAlphaTouch(alphaTouchMenu->getSelectedId());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerAlphaTouch(alphaTouchMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerAlphaTouch(alphaTouchMenu->getSelectedId());
-            }
-        }
     }
     
     else if (comboBox == rateMenu)
@@ -359,34 +244,13 @@ void GuiFlanger::comboBoxChanged (ComboBox *comboBox)
         
         rateSlider->sliderComponent()->setValue(lfoRate, false);
         
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxFlangerRate(lfoRate);
             PAD_SETTINGS->setLooperFxFlangerRateMenu(rateMenu->getSelectedId());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerRate(lfoRate);
-                PAD_SETTINGS_i->setLooperFxFlangerRateMenu(rateMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerRate(lfoRate);
-                PAD_SETTINGS_i->setLooperFxFlangerRateMenu(rateMenu->getSelectedId());
-            }
-        }
     }
     
 }
@@ -396,60 +260,21 @@ void GuiFlanger::buttonClicked (Button *button)
 {
     if (button == reverseButton)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxFlangerAtReverse(reverseButton->getToggleState());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerAtReverse(reverseButton->getToggleState());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerAtReverse(reverseButton->getToggleState());
-            }
         }
     }
     
     else if (button == syncButton)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxFlangerSync(syncButton->getToggleState());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerSync(syncButton->getToggleState());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxFlangerSync(syncButton->getToggleState());
-            }
-        }
         
         rateSlider->setVisible(false);
         rateMenu->setVisible(false);
@@ -459,13 +284,12 @@ void GuiFlanger::buttonClicked (Button *button)
         else //on
             rateMenu->setVisible(true);
         
-        
     }
 }
 
-void GuiFlanger::setCurrentlySelectedPad (int padNumber)
+void GuiFlanger::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
-    currentlySelectedPad = padNumber;
+    selectedPads = selectedPads_;
 }
 
 void GuiFlanger::updateDisplay()
@@ -475,8 +299,9 @@ void GuiFlanger::updateDisplay()
     rateMenu->setVisible(false);
     
     //if an individual pad number is currently selected
-    if(currentlySelectedPad < 99)
+    if(SINGLE_PAD)
     {
+        int padNum = selectedPads[0];
         mixSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxFlangerMix(), false);
         rateSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxFlangerRate(), false);
         feedbackSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxFlangerFeedback(), false);
@@ -489,23 +314,7 @@ void GuiFlanger::updateDisplay()
         intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxFlangerAtIntensity(), false);
     }
     
-    //if 'all pads' selected
-    else if(currentlySelectedPad == 99)
-    {
-        mixSlider->sliderComponent()->setValue(0.7, false);
-        rateSlider->sliderComponent()->setValue(0.25, false);
-        feedbackSlider->sliderComponent()->setValue(0.9, false);
-        flangerIntensitySlider->sliderComponent()->setValue(0.1, false);
-        rateMenu->setSelectedId(3, true); //??????????????????
-        syncButton->setToggleState(1, false);
-        
-        alphaTouchMenu->setSelectedId(1, true);
-        reverseButton->setToggleState(0, false);
-        intensitySlider->sliderComponent()->setValue(1.0, false);
-    }
-    
-    //if a 'row' is selected
-    else if(currentlySelectedPad > 99)
+    else if(MULTI_PADS)
     {
         mixSlider->sliderComponent()->setValue(0.7, false);
         rateSlider->sliderComponent()->setValue(0.25, false);

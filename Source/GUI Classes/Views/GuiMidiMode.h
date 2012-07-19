@@ -55,7 +55,7 @@ public:
     void sliderValueChanged (Slider* slider);
     void buttonClicked (Button* button);
     
-    void setCurrentlySelectedPad (int padNumber);
+    void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
     
     void setScale();
@@ -71,7 +71,8 @@ private:
     ComboBox *pressureModeMenu, *pressurePlayStateMenu, *triggerModeMenu;
     AlphaSlider *pressureMinRangeSlider, *pressureMaxRangeSlider, *ccControllerSlider, *exclusiveGroupSlider;
     
-    int currentlySelectedPad;
+    //int currentlySelectedPad;
+    Array<int> selectedPads;
     
     MainComponent &mainComponentRef;
     

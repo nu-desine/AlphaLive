@@ -1429,12 +1429,12 @@
 			children = (
 				0C78A2CD15B467900049C0C8 /* AppDocumentState.cpp */,
 				0C78A2CE15B467900049C0C8 /* AppDocumentState.h */,
-				0C78A2CF15B467900049C0C8 /* AppSettings.cpp */,
 				0C78A2D015B467900049C0C8 /* AppSettings.h */,
-				0C78A2D115B467900049C0C8 /* PadSettings.cpp */,
+				0C78A2CF15B467900049C0C8 /* AppSettings.cpp */,
 				0C78A2D215B467900049C0C8 /* PadSettings.h */,
-				0C78A2D315B467900049C0C8 /* StoredSettings.cpp */,
+				0C78A2D115B467900049C0C8 /* PadSettings.cpp */,
 				0C78A2D415B467900049C0C8 /* StoredSettings.h */,
+				0C78A2D315B467900049C0C8 /* StoredSettings.cpp */,
 			);
 			name = "File and Settings";
 			path = "../../Source/File and Settings";
@@ -1562,14 +1562,14 @@
 		0C78A30015B467900049C0C8 /* Circle Piano */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A30115B467900049C0C8 /* GuiCirclePiano.cpp */,
 				0C78A30215B467900049C0C8 /* GuiCirclePiano.h */,
-				0C78A30315B467900049C0C8 /* GuiCirclePianoForScales.cpp */,
+				0C78A30115B467900049C0C8 /* GuiCirclePiano.cpp */,
 				0C78A30415B467900049C0C8 /* GuiCirclePianoForScales.h */,
-				0C78A30515B467900049C0C8 /* GuiCirclePianoOneOctave.cpp */,
+				0C78A30315B467900049C0C8 /* GuiCirclePianoForScales.cpp */,
 				0C78A30615B467900049C0C8 /* GuiCirclePianoOneOctave.h */,
-				0C78A30715B467900049C0C8 /* GuiPianoKeys.cpp */,
+				0C78A30515B467900049C0C8 /* GuiCirclePianoOneOctave.cpp */,
 				0C78A30815B467900049C0C8 /* GuiPianoKeys.h */,
+				0C78A30715B467900049C0C8 /* GuiPianoKeys.cpp */,
 			);
 			path = "Circle Piano";
 			sourceTree = "<group>";
@@ -1590,10 +1590,10 @@
 		0C78A31015B467900049C0C8 /* Effects */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A32215B467900049C0C8 /* GuiFxButtons.cpp */,
-				0C78A32315B467900049C0C8 /* GuiFxButtons.h */,
-				0C78A32415B467900049C0C8 /* GuiFxDial.cpp */,
 				0C78A32515B467900049C0C8 /* GuiFxDial.h */,
+				0C78A32415B467900049C0C8 /* GuiFxDial.cpp */,
+				0C78A32315B467900049C0C8 /* GuiFxButtons.h */,
+				0C78A32215B467900049C0C8 /* GuiFxButtons.cpp */,
 				0C78A31115B467900049C0C8 /* Effects GUIs */,
 			);
 			path = Effects;
@@ -1602,22 +1602,22 @@
 		0C78A31115B467900049C0C8 /* Effects GUIs */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A31215B467900049C0C8 /* FxGuiBandPassFilter.cpp */,
-				0C78A31315B467900049C0C8 /* FxGuiBandPassFilter.h */,
-				0C78A31415B467900049C0C8 /* FxGuiDelay.cpp */,
-				0C78A31515B467900049C0C8 /* FxGuiDelay.h */,
-				0C78A31615B467900049C0C8 /* FxGuiFlanger.cpp */,
-				0C78A31715B467900049C0C8 /* FxGuiFlanger.h */,
-				0C78A31815B467900049C0C8 /* FxGuiHighPassFilter.cpp */,
-				0C78A31915B467900049C0C8 /* FxGuiHighPassFilter.h */,
-				0C78A31A15B467900049C0C8 /* FxGuiLowPassFilter.cpp */,
-				0C78A31B15B467900049C0C8 /* FxGuiLowPassFilter.h */,
-				0C78A31C15B467900049C0C8 /* FxGuiPanAndGain.cpp */,
 				0C78A31D15B467900049C0C8 /* FxGuiPanAndGain.h */,
-				0C78A31E15B467900049C0C8 /* FxGuiReverb.cpp */,
+				0C78A31C15B467900049C0C8 /* FxGuiPanAndGain.cpp */,
+				0C78A31B15B467900049C0C8 /* FxGuiLowPassFilter.h */,
+				0C78A31A15B467900049C0C8 /* FxGuiLowPassFilter.cpp */,
+				0C78A31915B467900049C0C8 /* FxGuiHighPassFilter.h */,
+				0C78A31815B467900049C0C8 /* FxGuiHighPassFilter.cpp */,
+				0C78A31315B467900049C0C8 /* FxGuiBandPassFilter.h */,
+				0C78A31215B467900049C0C8 /* FxGuiBandPassFilter.cpp */,
+				0C78A31515B467900049C0C8 /* FxGuiDelay.h */,
+				0C78A31415B467900049C0C8 /* FxGuiDelay.cpp */,
 				0C78A31F15B467900049C0C8 /* FxGuiReverb.h */,
-				0C78A32015B467900049C0C8 /* FxGuiTremolo.cpp */,
+				0C78A31E15B467900049C0C8 /* FxGuiReverb.cpp */,
+				0C78A31715B467900049C0C8 /* FxGuiFlanger.h */,
+				0C78A31615B467900049C0C8 /* FxGuiFlanger.cpp */,
 				0C78A32115B467900049C0C8 /* FxGuiTremolo.h */,
+				0C78A32015B467900049C0C8 /* FxGuiTremolo.cpp */,
 			);
 			path = "Effects GUIs";
 			sourceTree = "<group>";
@@ -1723,21 +1723,21 @@
 		0C78A36215B467910049C0C8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0C78A36315B467910049C0C8 /* GlobalValues.h */,
 				0C78A37115B467910049C0C8 /* MainComponent.h */,
 				0C78A37015B467910049C0C8 /* MainComponent.cpp */,
-				0C78A36315B467910049C0C8 /* GlobalValues.h */,
-				0C78A36415B467910049C0C8 /* GuiControllerMode.cpp */,
-				0C78A36515B467910049C0C8 /* GuiControllerMode.h */,
-				0C78A36615B467910049C0C8 /* GuiLooperMode.cpp */,
-				0C78A36715B467910049C0C8 /* GuiLooperMode.h */,
-				0C78A36815B467910049C0C8 /* GuiMidiMode.cpp */,
 				0C78A36915B467910049C0C8 /* GuiMidiMode.h */,
-				0C78A36A15B467910049C0C8 /* GuiSeqMidiMode.cpp */,
-				0C78A36B15B467910049C0C8 /* GuiSeqMidiMode.h */,
-				0C78A36C15B467910049C0C8 /* GuiSeqSamplesMode.cpp */,
-				0C78A36D15B467910049C0C8 /* GuiSeqSamplesMode.h */,
-				0C78A36E15B467910049C0C8 /* GuiSequencerMode.cpp */,
+				0C78A36815B467910049C0C8 /* GuiMidiMode.cpp */,
+				0C78A36715B467910049C0C8 /* GuiLooperMode.h */,
+				0C78A36615B467910049C0C8 /* GuiLooperMode.cpp */,
 				0C78A36F15B467910049C0C8 /* GuiSequencerMode.h */,
+				0C78A36E15B467910049C0C8 /* GuiSequencerMode.cpp */,
+				0C78A36B15B467910049C0C8 /* GuiSeqMidiMode.h */,
+				0C78A36A15B467910049C0C8 /* GuiSeqMidiMode.cpp */,
+				0C78A36D15B467910049C0C8 /* GuiSeqSamplesMode.h */,
+				0C78A36C15B467910049C0C8 /* GuiSeqSamplesMode.cpp */,
+				0C78A36515B467910049C0C8 /* GuiControllerMode.h */,
+				0C78A36415B467910049C0C8 /* GuiControllerMode.cpp */,
 			);
 			path = Views;
 			sourceTree = "<group>";

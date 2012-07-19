@@ -42,7 +42,7 @@ AppSettings::AppSettings()
 {
     
     //default values
-    currentlySelectedPad = 99; //what should this default be?
+    //currentlySelectedPad = 99; //what should this default be?
     padDisplayTextMode = 1;
     
     
@@ -131,9 +131,9 @@ void AppSettings::pastePadSettings (int padNumber)
 
 //=====================================================================
 
-void AppSettings::setCurrentlySelectedPad(int value)
+void AppSettings::setCurrentlySelectedPad(Array<int> selectedPads_)
 {
-    currentlySelectedPad = value;
+    selectedPads = selectedPads_;
 }
 void AppSettings::setPadDisplayTextMode(int value)
 {
@@ -196,10 +196,11 @@ void AppSettings::setCopyExternalFiles (bool value)
 
 
 
-int AppSettings::getCurrentlySelectedPad()
+Array<int> AppSettings::getCurrentlySelectedPad()
 {
-    return currentlySelectedPad;
+    return selectedPads;
 }
+
 int AppSettings::getPadDisplayTextMode()
 {
     return padDisplayTextMode;

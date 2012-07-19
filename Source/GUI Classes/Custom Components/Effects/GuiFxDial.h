@@ -58,7 +58,7 @@ public:
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);
     
-    void setCurrentlySelectedPad (int padNumber);
+    void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
     void hideAllFx();
 	
@@ -77,7 +77,8 @@ private:
 	
 	Path hitPath;
     
-    int currentlySelectedPad;
+    //int currentlySelectedPad;
+    Array<int> selectedPads;
     
     MainComponent &mainComponentRef;
     

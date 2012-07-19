@@ -27,8 +27,9 @@
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
-#define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 
 
 GuiTremolo::GuiTremolo(MainComponent &ref)
@@ -97,7 +98,7 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     intensitySlider->sliderComponent()->addListener(this);
     intensitySlider->sliderComponent()->addMouseListener(this, true);
     
-    currentlySelectedPad = 99;
+    //currentlySelectedPad = 99;
     tempo = AppSettings::Instance()->getGlobalTempo();
     
     setInterceptsMouseClicks(false, true);
@@ -129,90 +130,33 @@ void GuiTremolo::sliderValueChanged (Slider *slider)
 {
     if (slider == depthSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxTremoloDepth(depthSlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloDepth(depthSlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloDepth(depthSlider->sliderComponent()->getValue());
-            }
-        }
     }
     
     else if (slider == rateSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxTremoloRate(rateSlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloRate(rateSlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloRate(rateSlider->sliderComponent()->getValue());
-            }
-        }
     }
     
     
     else if (slider == intensitySlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxTremoloAtIntensity(intensitySlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloAtIntensity(intensitySlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloAtIntensity(intensitySlider->sliderComponent()->getValue());
-            }
-        }
     }
     
     
@@ -223,60 +167,22 @@ void GuiTremolo::comboBoxChanged (ComboBox *comboBox)
 {
     if (comboBox == alphaTouchMenu)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxTremoloAlphaTouch(alphaTouchMenu->getSelectedId());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloAlphaTouch(alphaTouchMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloAlphaTouch(alphaTouchMenu->getSelectedId());
-            }
-        }
     }
     
     else if (comboBox == shapeMenu)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxTremoloShape(shapeMenu->getSelectedId());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloShape(shapeMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloShape(shapeMenu->getSelectedId());
-            }
-        }
     }
     
     else if (comboBox == rateMenu)
@@ -318,34 +224,13 @@ void GuiTremolo::comboBoxChanged (ComboBox *comboBox)
         
         rateSlider->sliderComponent()->setValue(lfoRate, false);
         
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxTremoloRate(lfoRate);
             PAD_SETTINGS->setLooperFxTremoloRateMenu(rateMenu->getSelectedId());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloRate(lfoRate);
-                PAD_SETTINGS_i->setLooperFxTremoloRateMenu(rateMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloRate(lfoRate);
-                PAD_SETTINGS_i->setLooperFxTremoloRateMenu(rateMenu->getSelectedId());
-            }
-        }
     }
     
 }
@@ -355,59 +240,20 @@ void GuiTremolo::buttonClicked (Button *button)
 {
     if (button == reverseButton)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxTremoloAtReverse(reverseButton->getToggleState());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloAtReverse(reverseButton->getToggleState());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloAtReverse(reverseButton->getToggleState());
-            }
-        }
     }
     
     else if (button == syncButton)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxTremoloSync(syncButton->getToggleState());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloSync(syncButton->getToggleState());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxTremoloSync(syncButton->getToggleState());
-            }
         }
         
         rateSlider->setVisible(false);
@@ -418,13 +264,12 @@ void GuiTremolo::buttonClicked (Button *button)
         else //on
             rateMenu->setVisible(true);
         
-        
     }
 }
 
-void GuiTremolo::setCurrentlySelectedPad (int padNumber)
+void GuiTremolo::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
-    currentlySelectedPad = padNumber;
+    selectedPads = selectedPads_;
 }
 
 void GuiTremolo::updateDisplay()
@@ -434,8 +279,9 @@ void GuiTremolo::updateDisplay()
     rateMenu->setVisible(false);
     
     //if an individual pad number is currently selected
-    if(currentlySelectedPad < 99)
+    if(SINGLE_PAD)
     {
+        int padNum = selectedPads[0];
         depthSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxTremoloDepth(), false);
         rateSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxTremoloRate(), false);
         rateMenu->setSelectedId(PAD_SETTINGS->getLooperFxTremoloRateMenu(), true);
@@ -447,22 +293,7 @@ void GuiTremolo::updateDisplay()
         intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxTremoloAtIntensity(), false);
     }
     
-    //if 'all pads' selected
-    else if(currentlySelectedPad == 99)
-    {
-        depthSlider->sliderComponent()->setValue(0.7, false);
-        rateSlider->sliderComponent()->setValue(5.0, false);
-        rateMenu->setSelectedId(3, true);
-        syncButton->setToggleState(true, false);
-        shapeMenu->setSelectedId(2, true);
-        
-        alphaTouchMenu->setSelectedId(1, true);
-        reverseButton->setToggleState(0, false);
-        intensitySlider->sliderComponent()->setValue(1.0, false);
-    }
-    
-    //if a 'row' is selected
-    else if(currentlySelectedPad > 99)
+    else if(MULTI_PADS)
     {
         depthSlider->sliderComponent()->setValue(0.7, false);
         rateSlider->sliderComponent()->setValue(5.0, false);

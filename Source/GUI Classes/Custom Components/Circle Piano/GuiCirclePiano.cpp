@@ -26,8 +26,9 @@
 #include "../../../File and Settings/AppSettings.h"
 #include "../../../File and Settings/StoredSettings.h"
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
-#define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 
 GuiCirclePiano::GuiCirclePiano() : Component ("GuiCirclePiano")
 
@@ -377,9 +378,9 @@ void GuiCirclePiano::setNote()
     //get correct note from transposeValue and keyValue 
     note = (transposeValue * 12) + keyValue;
 
-    //if an individual pad number is currently selected (which should always be the case)
-    if(currentlySelectedPad < 99)
+    for (int i = 0; i < selectedPads.size(); i++)
     {
+        int padNum = selectedPads[i];
         PAD_SETTINGS->setMidiNote(note);
         setNoteLabelText(note);
     }
@@ -393,9 +394,9 @@ bool GuiCirclePiano::hitTest (int x, int y)
 
 
 //called when a pad is selected from the pad layout
-void GuiCirclePiano::setCurrentlySelectedPad (int padNumber)
+void GuiCirclePiano::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
-    currentlySelectedPad = padNumber;
+    selectedPads = selectedPads_;
 }
 
 
@@ -403,52 +404,72 @@ void GuiCirclePiano::setCurrentlySelectedPad (int padNumber)
 void GuiCirclePiano::updateDisplay()
 {
     //if an individual pad number is currently selected (this should always be the case here!)
-        if(currentlySelectedPad < 99)
+    if(SINGLE_PAD)
+    {
+        int padNum = selectedPads[0];
+        
+        noteDisplayType = StoredSettings::getInstance()->midiNoteDisplayType;
+        
+        //get stored note
+        int midiNote = PAD_SETTINGS->getMidiNote();
+        
+        ///update label display
+        setNoteLabelText(midiNote);
+        note = midiNote;
+        
+        //---display note on piano interface----
+        //display notes for the '0' octave
+        if (midiNote >= 36 && midiNote <= 83)
         {
-            noteDisplayType = StoredSettings::getInstance()->midiNoteDisplayType;
+            buttons[2]->setToggleState(true, false);
+            transposeValue = 3;
             
-            //get stored note
-            int midiNote = PAD_SETTINGS->getMidiNote();
-            
-            ///update label display
-            setNoteLabelText(midiNote);
-            note = midiNote;
-            
-            //---display note on piano interface----
-            //display notes for the '0' octave
-            if (midiNote >= 36 && midiNote <= 83)
-            {
-                buttons[2]->setToggleState(true, false);
-                transposeValue = 3;
-                
-                keyValue = midiNote-36;
-                keys[keyValue]->setToggleState(true, false);
-            }
-            
-            //display notes for the '-36' octave
-            if (midiNote <= 35)
-            {
-                buttons[0]->setToggleState(true, false);
-                transposeValue = 0;
-                
-                keyValue = midiNote-0;
-                keys[keyValue]->setToggleState(true, false);
-            }
-            
-            //display notes for the '+36' octave
-            if (midiNote >= 84)
-            {
-                buttons[4]->setToggleState(true, false);
-                transposeValue = 6;
-                
-                keyValue = midiNote-72;
-                keys[keyValue]->setToggleState(true, false);
-                
-            }
-            
-            //there's enough overlap in the octaves to not need the +/-24 ranges here
-                
+            keyValue = midiNote-36;
+            keys[keyValue]->setToggleState(true, false);
         }
+        
+        //display notes for the '-36' octave
+        if (midiNote <= 35)
+        {
+            buttons[0]->setToggleState(true, false);
+            transposeValue = 0;
+            
+            keyValue = midiNote-0;
+            keys[keyValue]->setToggleState(true, false);
+        }
+        
+        //display notes for the '+36' octave
+        if (midiNote >= 84)
+        {
+            buttons[4]->setToggleState(true, false);
+            transposeValue = 6;
+            
+            keyValue = midiNote-72;
+            keys[keyValue]->setToggleState(true, false);
+            
+        }
+        
+        //there's enough overlap in the octaves to not need the +/-24 ranges here
+    }
+    else if (MULTI_PADS)
+    {
+        noteDisplayType = StoredSettings::getInstance()->midiNoteDisplayType;
+        
+        //get stored note
+        int midiNote = 60;
+        
+        ///update label display
+        setNoteLabelText(midiNote);
+        note = midiNote;
+        
+        buttons[2]->setToggleState(true, false);
+        transposeValue = 3;
+        
+        keyValue = midiNote-36;
+        keys[keyValue]->setToggleState(true, false);
+        
+    }
+
     
 }
 

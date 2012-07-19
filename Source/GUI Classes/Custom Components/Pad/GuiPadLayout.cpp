@@ -535,7 +535,7 @@ MainComponent& GuiPadLayout::getMainComponent()
     return mainComponentRef;
 }
 
-void GuiPadLayout::updateCurrentlySelectedPad (int padNumber)
+void GuiPadLayout::updateCurrentlySelectedPad()
 {
     mainComponentRef.setCurrentlySelectedPad(selectedPads);
     

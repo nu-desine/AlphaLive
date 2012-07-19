@@ -45,7 +45,7 @@ public:
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);
     
-    void setCurrentlySelectedPad (int padNumber);
+    void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
     
     void setTempo (float value);
@@ -59,7 +59,8 @@ private:
     TextButton *reverseButton, *syncButton;
     AlphaImageKnob *intensitySlider;
     
-    int currentlySelectedPad;
+    //int currentlySelectedPad;
+    Array<int> selectedPads;
     float tempo;
     
 };

@@ -47,7 +47,7 @@ public:
     bool update(const Subject& theChangedSubject);
     
     //MainComponent& getMainComponent();
-    void updateCurrentlySelectedPad (int padNumber);
+    void updateCurrentlySelectedPad();
     
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);

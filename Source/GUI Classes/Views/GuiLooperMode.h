@@ -50,7 +50,7 @@ public:
     void sliderValueChanged (Slider* slider);
     void filenameComponentChanged (FilenameComponent* filenameComponent);
     
-    void setCurrentlySelectedPad (int padNumber);
+    void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
     
     void mouseEnter (const MouseEvent &e);
@@ -62,7 +62,8 @@ private:
     FilenameComponent *fileChooser;
     ComboBox *playStateMenu, *triggerModeMenu, *pressureModeMenu;
     
-    int currentlySelectedPad;
+    //int currentlySelectedPad;
+    Array<int> selectedPads;
     
     MainComponent &mainComponentRef;
     

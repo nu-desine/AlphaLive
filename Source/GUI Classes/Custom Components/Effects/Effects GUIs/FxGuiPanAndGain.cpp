@@ -24,8 +24,9 @@
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
-#define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 
 
 GuiGainAndPan::GuiGainAndPan(MainComponent &ref)
@@ -62,7 +63,7 @@ GuiGainAndPan::GuiGainAndPan(MainComponent &ref)
     intensitySlider->sliderComponent()->addListener(this);
     intensitySlider->sliderComponent()->addMouseListener(this, true);
     
-    currentlySelectedPad = 99;
+    //currentlySelectedPad = 99;
     
     setInterceptsMouseClicks(false, true);
 }
@@ -90,89 +91,31 @@ void GuiGainAndPan::sliderValueChanged (Slider *slider)
 {
     if (slider == gainSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxGainPanGain(gainSlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxGainPanGain(gainSlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxGainPanGain(gainSlider->sliderComponent()->getValue());
-            }
-        }
     }
     
     
     if (slider == panSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxGainPanPan(panSlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxGainPanPan(panSlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxGainPanPan(panSlider->sliderComponent()->getValue());
-            }
-        }
     }    
     
     if (slider == intensitySlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxGainPanAtIntensity(intensitySlider->sliderComponent()->getValue());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxGainPanAtIntensity(intensitySlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxGainPanAtIntensity(intensitySlider->sliderComponent()->getValue());
-            }
         }
     }
     
@@ -183,31 +126,12 @@ void GuiGainAndPan::comboBoxChanged (ComboBox *comboBox)
 {
     if (comboBox == alphaTouchMenu)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxGainPanAlphaTouch(alphaTouchMenu->getSelectedId());
         }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxGainPanAlphaTouch(alphaTouchMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxGainPanAlphaTouch(alphaTouchMenu->getSelectedId());
-            }
-        }
+    
     }
     
 }
@@ -217,38 +141,18 @@ void GuiGainAndPan::buttonClicked (Button *button)
 {
     if (button == reverseButton)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxGainPanAtReverse(reverseButton->getToggleState());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxGainPanAtReverse(reverseButton->getToggleState());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxGainPanAtReverse(reverseButton->getToggleState());
-            }
         }
         
     }
 }
 
-void GuiGainAndPan::setCurrentlySelectedPad (int padNumber)
+void GuiGainAndPan::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
-    currentlySelectedPad = padNumber;
+    selectedPads = selectedPads_;
 }
 
 void GuiGainAndPan::updateDisplay()
@@ -256,8 +160,9 @@ void GuiGainAndPan::updateDisplay()
     //This method is used to set all the components to the currently selected pad's settings.
     
     //if an individual pad number is currently selected
-    if(currentlySelectedPad < 99)
+    if(SINGLE_PAD)
     {
+        int padNum = selectedPads[0];
         gainSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxGainPanGain(), false);
         panSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxGainPanPan(), false);
         
@@ -266,18 +171,7 @@ void GuiGainAndPan::updateDisplay()
         intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxGainPanAtIntensity(), false);
     }
     
-    //if 'all pads' selected
-    if(currentlySelectedPad == 99)
-    {
-        gainSlider->sliderComponent()->setValue(0.5, false);
-        panSlider->sliderComponent()->setValue(0.5, false);
-        alphaTouchMenu->setSelectedId(1, true);
-        reverseButton->setToggleState(0, false);
-        intensitySlider->sliderComponent()->setValue(1.0, false);
-    }
-    
-    //if a 'row' is selected
-    if(currentlySelectedPad > 99)
+    else if(MULTI_PADS)
     {
         gainSlider->sliderComponent()->setValue(0.5, false);
         panSlider->sliderComponent()->setValue(0.5, false);

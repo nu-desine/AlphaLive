@@ -28,8 +28,9 @@
 #include "MainComponent.h"
 
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
-#define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -42,7 +43,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
                                     : mainComponentRef(ref)
 {
     
-    currentlySelectedPad = 99;
+    //currentlySelectedPad = 99;
     
     //general graphics stuff
     addAndMakeVisible(circleBackgroundLeft = new GuiCircleBackground());
@@ -191,8 +192,8 @@ void GuiMidiMode::resized()
     speakerRight->setBounds(780, 402, 230, 230);
     
     //the following three sets only one is visible at any time
-    circlePianoOneOctave->setBounds(780, 402, 230, 230);
-    circlePianoForScales->setBounds(780, 402, 230, 230);
+    //circlePianoOneOctave->setBounds(780, 402, 230, 230);
+    //circlePianoForScales->setBounds(780, 402, 230, 230);
     circlePiano->setBounds(780, 402, 230, 230);
     
     //----------------------------------------------------------------------------------------------
@@ -222,11 +223,11 @@ void GuiMidiMode::paint (Graphics& g)
 }
 
 
-void GuiMidiMode::setCurrentlySelectedPad (int padNumber)
+void GuiMidiMode::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
-    currentlySelectedPad = padNumber;
-    circlePiano->setCurrentlySelectedPad(padNumber);
-    circlePianoForScales->setCurrentlySelectedPad(padNumber);
+    selectedPads = selectedPads_;
+    circlePiano->setCurrentlySelectedPad(selectedPads);
+    //circlePianoForScales->setCurrentlySelectedPad(padNumber);
 }
 
 //==============================================================================
@@ -239,76 +240,26 @@ void GuiMidiMode::comboBoxChanged (ComboBox* comboBox)
     //pressure mode combobox
     if (comboBox == pressureModeMenu)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this combo box in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMidiPressureMode(pressureModeMenu->getSelectedId());
-            
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setMidiPressureMode(pressureModeMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setMidiPressureMode(pressureModeMenu->getSelectedId());
-            }
         }
         
         if (pressureModeMenu->getSelectedId() == 2)
-        {
             ccControllerSlider->setVisible(true);
-        }
         else
-        {
             ccControllerSlider->setVisible(false);
-            
-        }
     }
     
     //==============================================================================
     //pressure playstate combo box
     else if (comboBox == pressurePlayStateMenu)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this combo box in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMidiPressurePlayState(pressurePlayStateMenu->getSelectedId());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setMidiPressurePlayState(pressurePlayStateMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setMidiPressurePlayState(pressurePlayStateMenu->getSelectedId());
-            }
         }
     }
     
@@ -317,36 +268,13 @@ void GuiMidiMode::comboBoxChanged (ComboBox* comboBox)
     //trigger mode combobox
     if (comboBox == triggerModeMenu)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this combo box in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMidiTriggerMode(triggerModeMenu->getSelectedId());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setMidiTriggerMode(triggerModeMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setMidiTriggerMode(triggerModeMenu->getSelectedId());
-            }
         }
     }
 
-    
 }
 
 void GuiMidiMode::sliderValueChanged (Slider* slider)
@@ -355,167 +283,54 @@ void GuiMidiMode::sliderValueChanged (Slider* slider)
     //velocity slider
     if (slider == velocitySlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMidiVelocity(velocitySlider->sliderComponent()->getValue());
         }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setMidiVelocity(velocitySlider->sliderComponent()->getValue());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setMidiVelocity(velocitySlider->sliderComponent()->getValue());
-            }
-        }
     }
-    
-    
     
     
     //channel slider
     if (slider == channelSlider)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMidiChannel(channelSlider->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setMidiChannel(channelSlider->getValue());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setMidiChannel(channelSlider->getValue());
-            }
-        }
     }
-    
-    
-    
+
     //min pressure range slider
     if (slider == pressureMinRangeSlider)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMidiMinPressureRange(pressureMinRangeSlider->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setMidiMinPressureRange(pressureMinRangeSlider->getValue());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setMidiMinPressureRange(pressureMinRangeSlider->getValue());
-            }
-        }
     }
-    
     
     
     //max pressure range slider
     if (slider == pressureMaxRangeSlider)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMidiMaxPressureRange(pressureMaxRangeSlider->getValue());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setMidiMaxPressureRange(pressureMaxRangeSlider->getValue());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setMidiMaxPressureRange(pressureMaxRangeSlider->getValue());
-            }
         }
     }
         
     //CC Controller Number
     if (slider == ccControllerSlider)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMidiCcController(ccControllerSlider->getValue());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setMidiCcController(ccControllerSlider->getValue());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setMidiCcController(ccControllerSlider->getValue());
-            }
         }
     }
     
@@ -523,32 +338,10 @@ void GuiMidiMode::sliderValueChanged (Slider* slider)
     //Exclusive group
     if (slider == exclusiveGroupSlider)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMidiExclusiveGroup(exclusiveGroupSlider->getValue());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setMidiExclusiveGroup(exclusiveGroupSlider->getValue());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setMidiExclusiveGroup(exclusiveGroupSlider->getValue());
-            }
         }
     }
 
@@ -559,32 +352,10 @@ void GuiMidiMode::buttonClicked (Button* button)
     
     if(button == pressureStatusButton)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the toggle state in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMidiPressureStatus(pressureStatusButton->getToggleState());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setMidiPressureStatus(pressureStatusButton->getToggleState());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setMidiPressureStatus(pressureStatusButton->getToggleState());
-            }
         }
         
         //update speaker display
@@ -597,32 +368,10 @@ void GuiMidiMode::buttonClicked (Button* button)
     
     if(button == noteStatusButton)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the toggle state in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setMidiNoteStatus(noteStatusButton->getToggleState());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setMidiNoteStatus(noteStatusButton->getToggleState());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setMidiNoteStatus(noteStatusButton->getToggleState());
-            }
         }
         
         //update speaker display
@@ -640,14 +389,16 @@ void GuiMidiMode::updateDisplay()
     //as well as to hide/dissabled any unneeded components. 
     
     //if an individual pad number is currently selected
-    if(currentlySelectedPad < 99)
+    if(SINGLE_PAD)
     {
+        int padNum = selectedPads[0];
+        
         //update circle piano component
         circlePiano->updateDisplay();
-        circlePiano->setVisible(true);
+        //circlePiano->setVisible(true);
         
-        circlePianoOneOctave->setVisible(false);
-        circlePianoForScales->setVisible(false);
+        //circlePianoOneOctave->setVisible(false);
+        //circlePianoForScales->setVisible(false);
         
         //get the settings of the pad selected (in padMenu ComboBox)
         //set the stored values on the GUI components
@@ -692,12 +443,10 @@ void GuiMidiMode::updateDisplay()
         
     }
     
-    
-    //if 'all pads' selected
-    if(currentlySelectedPad == 99)
+    else if(MULTI_PADS)
     {
-        circlePianoOneOctave->updateDisplay();
-        circlePianoOneOctave->setVisible(true);
+        //circlePianoOneOctave->updateDisplay();
+        //circlePianoOneOctave->setVisible(true);
         
         //set default values
         velocitySlider->sliderComponent()->setValue(110, true);
@@ -714,37 +463,9 @@ void GuiMidiMode::updateDisplay()
         exclusiveGroupSlider->setValue(1, false);
         triggerModeMenu->setSelectedId(1, true);
         
-        circlePianoForScales->setVisible(false);
-        circlePiano->setVisible(false);
-        speakerLeft->setVisible(false);
-        speakerRight->setVisible(false);
-        
-    }
-    
-    //if a 'row' is selected
-    if(currentlySelectedPad > 99)
-    {
-        //update circle piano component
-        circlePianoForScales->updateDisplay();
-        circlePianoForScales->setVisible(true);
-        
-        //set default values
-        velocitySlider->sliderComponent()->setValue(110, true);
-        channelSlider->setValue(1, false);
-        pressureMinRangeSlider->setValue(0, false);
-        pressureMaxRangeSlider->setValue(127, false);
-        pressureModeMenu->setSelectedId(1, true);
-        pressurePlayStateMenu->setSelectedId(1, true);
-        pressureStatusButton->setToggleState(true, false);
-        pressureStatusButton->setButtonText("Pressure Data On");
-        noteStatusButton->setToggleState(true, false);
-        noteStatusButton->setButtonText("Note Data On");
-        ccControllerSlider->setValue(12, false);
-        exclusiveGroupSlider->setValue(1, false);
-        triggerModeMenu->setSelectedId(1, true);
-        
-        circlePiano->setVisible(false);
-        circlePianoOneOctave->setVisible(false);
+        //circlePianoForScales->setVisible(false);
+        circlePiano->updateDisplay();
+        //circlePiano->setVisible(true);
         speakerLeft->setVisible(false);
         speakerRight->setVisible(false);
         

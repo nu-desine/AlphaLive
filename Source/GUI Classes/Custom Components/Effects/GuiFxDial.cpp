@@ -12,8 +12,9 @@
 #include "../../../File and Settings/AppSettings.h"
 #include "../../Views/MainComponent.h"
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
-#define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 
 
 
@@ -120,7 +121,7 @@ GuiFxDial::GuiFxDial(MainComponent &ref) :  Component ("GuiFxDial"),
     //hide all fx Gui's to start with...
     hideAllFx();
     
-    currentlySelectedPad = 99;
+    //currentlySelectedPad = 99;
 
     
 }
@@ -173,34 +174,14 @@ void GuiFxDial::buttonClicked(Button *button)
     {
         if (button == buttons[fx])
 			{
-                //if individual pad number is selected
-                if(currentlySelectedPad < 99)
+                for (int i = 0; i < selectedPads.size(); i++)
                 {
+                    int padNum = selectedPads[i];
                     PAD_SETTINGS->setLooperEffect(fx);
                 }
                 
-                //if 'all pads' selected
-                if(currentlySelectedPad == 99)
-                {
-                    for(int i = 0; i <= 47; i++)
-                    {
-                        PAD_SETTINGS_i->setLooperEffect(fx);
-                    }
-                }
-                
-                //if a 'row' is selected
-                if(currentlySelectedPad > 99)
-                {
-                    int row = currentlySelectedPad - 99; 
-                    
-                    for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-                    {
-                        PAD_SETTINGS_i->setLooperEffect(fx);
-                    }
-                }
-                
 				im = *bgIm[fx];
-                repaint();
+                repaint(); // repaint with bounds!!
 			}
 	}
     
@@ -271,17 +252,17 @@ void GuiFxDial::hideAllFx()
     tremolo->setVisible(false);
 }
 
-void GuiFxDial::setCurrentlySelectedPad (int padNumber)
+void GuiFxDial::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
-    currentlySelectedPad = padNumber;
-    gainAndPan->setCurrentlySelectedPad(padNumber);
-    lowpassFilter->setCurrentlySelectedPad(padNumber);
-    highPassFilter->setCurrentlySelectedPad(padNumber);
-    bandPassFilter->setCurrentlySelectedPad(padNumber);
-    delay->setCurrentlySelectedPad(padNumber);
-    reverb->setCurrentlySelectedPad(padNumber);
-    flanger->setCurrentlySelectedPad(padNumber);
-    tremolo->setCurrentlySelectedPad(padNumber);
+    selectedPads = selectedPads_;
+    gainAndPan->setCurrentlySelectedPad(selectedPads);
+    lowpassFilter->setCurrentlySelectedPad(selectedPads);
+    highPassFilter->setCurrentlySelectedPad(selectedPads);
+    bandPassFilter->setCurrentlySelectedPad(selectedPads);
+    delay->setCurrentlySelectedPad(selectedPads);
+    reverb->setCurrentlySelectedPad(selectedPads);
+    flanger->setCurrentlySelectedPad(selectedPads);
+    tremolo->setCurrentlySelectedPad(selectedPads);
 }
 
 void GuiFxDial::updateDisplay()
@@ -294,8 +275,9 @@ void GuiFxDial::updateDisplay()
     int currentEffect;
     
     //if an individual pad number is currently selected
-    if(currentlySelectedPad < 99)
+    if(SINGLE_PAD)
     {
+        int padNum = selectedPads[0];
         currentEffect = PAD_SETTINGS->getLooperEffect();
         
         if (currentEffect == 1) //Gain and Pan
@@ -340,19 +322,14 @@ void GuiFxDial::updateDisplay()
         }
         
     }
-    
-    //if 'all pads' selected
-    else if(currentlySelectedPad == 99)
-        currentEffect = 0;
-    
-    //if a 'row' is selected
-    else if(currentlySelectedPad > 99)
+
+    else if(MULTI_PADS)
         currentEffect = 0;
     
     //update button state and background image
     buttons[currentEffect]->setToggleState(true, false);
     im = *bgIm[currentEffect];
-    repaint();
+    repaint(); //repaint with bounds!
 
 }
 

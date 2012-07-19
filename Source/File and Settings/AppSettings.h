@@ -51,7 +51,7 @@ public:
     void setAlphaLiveEngineRef (AlphaLiveEngine *ref);
     void resetData();
     
-    void setCurrentlySelectedPad (int value);
+    void setCurrentlySelectedPad (Array<int> selectedPads_);
     void setPadDisplayTextMode (int value);
     
     void setGlobalPan (float value);
@@ -67,7 +67,7 @@ public:
     
     void setCopyExternalFiles (bool value);
     
-    int getCurrentlySelectedPad();
+    Array<int> getCurrentlySelectedPad();
     int getPadDisplayTextMode();
     
     float getGlobalPan();
@@ -111,7 +111,8 @@ private:
     //==================================================================
     AlphaLiveEngine *alphaLiveEngineRef;
     
-    int currentlySelectedPad;
+    //int currentlySelectedPad;
+    Array<int> selectedPads;
     int padDisplayTextMode; //1 is pad numbers, 2 is pad contents. More will be added!
     
     float globalPan;

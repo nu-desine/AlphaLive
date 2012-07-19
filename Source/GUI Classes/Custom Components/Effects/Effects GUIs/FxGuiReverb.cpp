@@ -24,8 +24,9 @@
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
-#define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 
 
 GuiReverb::GuiReverb(MainComponent &ref)
@@ -83,7 +84,7 @@ GuiReverb::GuiReverb(MainComponent &ref)
     intensitySlider->sliderComponent()->addListener(this);
     intensitySlider->sliderComponent()->addMouseListener(this, true);
     
-    currentlySelectedPad = 99;
+    //currentlySelectedPad = 99;
     
     setInterceptsMouseClicks(false, true);
 }
@@ -114,178 +115,61 @@ void GuiReverb::sliderValueChanged (Slider *slider)
 {
     if (slider == mixSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxReverbMix(mixSlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxReverbMix(mixSlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxReverbMix(mixSlider->sliderComponent()->getValue());
-            }
-        }
     }
     
     else if (slider == roomSizeSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxReverbRoomSize(roomSizeSlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxReverbRoomSize(roomSizeSlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxReverbRoomSize(roomSizeSlider->sliderComponent()->getValue());
-            }
-        }
     }
     
     else if (slider == dampingSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxReverbDamping(dampingSlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxReverbDamping(dampingSlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxReverbDamping(dampingSlider->sliderComponent()->getValue());
-            }
-        }
     }
     
     else if (slider == widthSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxReverbWidth(widthSlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxReverbWidth(widthSlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxReverbWidth(widthSlider->sliderComponent()->getValue());
-            }
-        }
     }
     
     else if (slider == freezeModeSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxReverbFreezeMode(freezeModeSlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxReverbFreezeMode(freezeModeSlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxReverbFreezeMode(freezeModeSlider->sliderComponent()->getValue());
-            }
-        }
     }
 
     
-      
-    
     else if (slider == intensitySlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxReverbAtIntensity(intensitySlider->sliderComponent()->getValue());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxReverbAtIntensity(intensitySlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxReverbAtIntensity(intensitySlider->sliderComponent()->getValue());
-            }
         }
     }
     
@@ -296,30 +180,10 @@ void GuiReverb::comboBoxChanged (ComboBox *comboBox)
 {
     if (comboBox == alphaTouchMenu)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxReverbAlphaTouch(alphaTouchMenu->getSelectedId());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxReverbAlphaTouch(alphaTouchMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxReverbAlphaTouch(alphaTouchMenu->getSelectedId());
-            }
         }
     }
     
@@ -330,38 +194,18 @@ void GuiReverb::buttonClicked (Button *button)
 {
     if (button == reverseButton)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxReverbAtReverse(reverseButton->getToggleState());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxReverbAtReverse(reverseButton->getToggleState());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxReverbAtReverse(reverseButton->getToggleState());
-            }
         }
         
     }
 }
 
-void GuiReverb::setCurrentlySelectedPad (int padNumber)
+void GuiReverb::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
-    currentlySelectedPad = padNumber;
+    selectedPads = selectedPads_;
 }
 
 void GuiReverb::updateDisplay()
@@ -369,8 +213,9 @@ void GuiReverb::updateDisplay()
     //This method is used to set all the components to the currently selected pad's settings.
     
     //if an individual pad number is currently selected
-    if(currentlySelectedPad < 99)
+    if(SINGLE_PAD)
     {
+        int padNum = selectedPads[0];
         mixSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxReverbMix(), false);
         roomSizeSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxReverbRoomSize(), false);
         dampingSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxReverbDamping(), false);
@@ -382,8 +227,7 @@ void GuiReverb::updateDisplay()
         intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxReverbAtIntensity(), false);
     }
     
-    //if 'all pads' selected
-    else if(currentlySelectedPad == 99)
+    else if(MULTI_PADS)
     {
         mixSlider->sliderComponent()->setValue(0.7, false);
         roomSizeSlider->sliderComponent()->setValue(0.5, false);
@@ -396,19 +240,6 @@ void GuiReverb::updateDisplay()
         intensitySlider->sliderComponent()->setValue(1.0, false);
     }
     
-    //if a 'row' is selected
-    else if(currentlySelectedPad > 99)
-    {
-        mixSlider->sliderComponent()->setValue(0.7, false);
-        roomSizeSlider->sliderComponent()->setValue(0.5, false);
-        dampingSlider->sliderComponent()->setValue(0.5, false);
-        widthSlider->sliderComponent()->setValue(0.5, false);
-        freezeModeSlider->sliderComponent()->setValue(0.2, false);
-        
-        alphaTouchMenu->setSelectedId(1, true);
-        reverseButton->setToggleState(0, false);
-        intensitySlider->sliderComponent()->setValue(1.0, false);
-    }
     
 }
 

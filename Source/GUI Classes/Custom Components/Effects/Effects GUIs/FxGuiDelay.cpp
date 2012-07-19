@@ -24,8 +24,9 @@
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
-#define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 
 
 GuiDelay::GuiDelay(MainComponent &ref)
@@ -100,7 +101,7 @@ GuiDelay::GuiDelay(MainComponent &ref)
     intensitySlider->sliderComponent()->addListener(this);
     intensitySlider->sliderComponent()->addMouseListener(this, true);
     
-    currentlySelectedPad = 99;
+    //currentlySelectedPad = 99;
     tempo = AppSettings::Instance()->getGlobalTempo();
     
     setInterceptsMouseClicks(false, true);
@@ -134,176 +135,61 @@ void GuiDelay::sliderValueChanged (Slider *slider)
 {
     if (slider == wetMixSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxDelayMix(wetMixSlider->sliderComponent()->getValue());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxDelayMix(wetMixSlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxDelayMix(wetMixSlider->sliderComponent()->getValue());
-            }
         }
     }
     
     else if (slider == delayTimeSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxDelayTime(delayTimeSlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxDelayTime(delayTimeSlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxDelayTime(delayTimeSlider->sliderComponent()->getValue());
-            }
-        }
     }
     
     else if (slider == feedbackSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxDelayFeedback(feedbackSlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxDelayFeedback(feedbackSlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxDelayFeedback(feedbackSlider->sliderComponent()->getValue());
-            }
-        }
     }
     
     else if (slider == lpfFrequencySlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxDelayLpfFreq(lpfFrequencySlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxDelayLpfFreq(lpfFrequencySlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxDelayLpfFreq(lpfFrequencySlider->sliderComponent()->getValue());
-            }
-        }
     }
     
     else if (slider == hpfFrequencySlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxDelayHpfFreq(hpfFrequencySlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxDelayHpfFreq(hpfFrequencySlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxDelayHpfFreq(hpfFrequencySlider->sliderComponent()->getValue());
-            }
-        }
     }
     
     else if (slider == intensitySlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxDelayAtIntensity(intensitySlider->sliderComponent()->getValue());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxDelayAtIntensity(intensitySlider->sliderComponent()->getValue());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxDelayAtIntensity(intensitySlider->sliderComponent()->getValue());
-            }
-        }
     }
     
 
@@ -314,31 +200,12 @@ void GuiDelay::comboBoxChanged (ComboBox *comboBox)
 {
     if (comboBox == alphaTouchMenu)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxDelayAlphaTouch(alphaTouchMenu->getSelectedId());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxDelayAlphaTouch(alphaTouchMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxDelayAlphaTouch(alphaTouchMenu->getSelectedId());
-            }
-        }
     }
     
     else if (comboBox == delayTimeMenu)
@@ -371,34 +238,13 @@ void GuiDelay::comboBoxChanged (ComboBox *comboBox)
         
         delayTimeSlider->sliderComponent()->setValue(delayTime, false);
         
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxDelayTime(delayTime);
             PAD_SETTINGS->setLooperFxDelayTimeMenu(delayTimeMenu->getSelectedId());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxDelayTime(delayTime);
-                PAD_SETTINGS_i->setLooperFxDelayTimeMenu(delayTimeMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxDelayTime(delayTime);
-                PAD_SETTINGS_i->setLooperFxDelayTimeMenu(delayTimeMenu->getSelectedId());
-            }
-        }
     }
     
 }
@@ -408,59 +254,19 @@ void GuiDelay::buttonClicked (Button *button)
 {
     if (button == reverseButton)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxDelayAtReverse(reverseButton->getToggleState());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxDelayAtReverse(reverseButton->getToggleState());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxDelayAtReverse(reverseButton->getToggleState());
-            }
         }
     }
     
     else if (button == syncButton)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperFxDelaySync(syncButton->getToggleState());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperFxDelaySync(syncButton->getToggleState());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                PAD_SETTINGS_i->setLooperFxDelaySync(syncButton->getToggleState());
-            }
         }
         
         delayTimeSlider->setVisible(false);
@@ -475,9 +281,9 @@ void GuiDelay::buttonClicked (Button *button)
     }
 }
 
-void GuiDelay::setCurrentlySelectedPad (int padNumber)
+void GuiDelay::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
-    currentlySelectedPad = padNumber;
+    selectedPads = selectedPads_;
 }
 
 void GuiDelay::updateDisplay()
@@ -487,8 +293,9 @@ void GuiDelay::updateDisplay()
     delayTimeMenu->setVisible(false);
     
     //if an individual pad number is currently selected
-    if(currentlySelectedPad < 99)
+    if(SINGLE_PAD)
     {
+        int padNum = selectedPads[0];
         wetMixSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxDelayMix(), false);
         delayTimeSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxDelayTime(), false);
         delayTimeMenu->setSelectedId(PAD_SETTINGS->getLooperFxDelayTimeMenu(), true);
@@ -502,24 +309,7 @@ void GuiDelay::updateDisplay()
         intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxDelayAtIntensity(), false);
     }
     
-    //if 'all pads' selected
-    else if(currentlySelectedPad == 99)
-    {
-        wetMixSlider->sliderComponent()->setValue(0.7, false);
-        delayTimeSlider->sliderComponent()->setValue(500.0, false);
-        delayTimeMenu->setSelectedId(3, true);
-        feedbackSlider->sliderComponent()->setValue(0.5, false);
-        lpfFrequencySlider->sliderComponent()->setValue(5000, false);
-        hpfFrequencySlider->sliderComponent()->setValue(50, false);
-        syncButton->setToggleState(1, false);
-        
-        alphaTouchMenu->setSelectedId(1, true);
-        reverseButton->setToggleState(0, false);
-        intensitySlider->sliderComponent()->setValue(1.0, false);
-    }
-    
-    //if a 'row' is selected
-    else if(currentlySelectedPad > 99)
+    else if(MULTI_PADS)
     {
         wetMixSlider->sliderComponent()->setValue(0.7, false);
         delayTimeSlider->sliderComponent()->setValue(500.0, false);

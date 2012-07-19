@@ -26,8 +26,9 @@
 #include "GlobalValues.h"
 #include "MainComponent.h"
 
-#define PAD_SETTINGS AppSettings::Instance()->padSettings[currentlySelectedPad]
-#define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -37,7 +38,7 @@ GuiLooperMode::GuiLooperMode(MainComponent &ref)
 : mainComponentRef(ref)
 										
 {
-    currentlySelectedPad = 99;
+    //currentlySelectedPad = 99;
     
     //create circle background graphic
     addAndMakeVisible(circleBackgroundRight = new GuiCircleBackground());
@@ -172,32 +173,10 @@ void GuiLooperMode::comboBoxChanged (ComboBox* comboBox)
     //play state combobox
     if (comboBox == playStateMenu)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this combo box in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperPlayState(playStateMenu->getSelectedId());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperPlayState(playStateMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setLooperPlayState(playStateMenu->getSelectedId());
-            }
         }
     }
     
@@ -206,36 +185,16 @@ void GuiLooperMode::comboBoxChanged (ComboBox* comboBox)
     //trigger mode combobox
     if (comboBox == triggerModeMenu)
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this combo box in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperTriggerMode(triggerModeMenu->getSelectedId());
         }
         
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperTriggerMode(triggerModeMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setLooperTriggerMode(triggerModeMenu->getSelectedId());
-            }
-        }
     }
     
     //==============================================================================
+    /*
     //pressure mode combobox
     if (comboBox == pressureModeMenu)
     {
@@ -276,6 +235,7 @@ void GuiLooperMode::comboBoxChanged (ComboBox* comboBox)
             fxDial->setVisible(false);
         }
     }
+     */
 
 
 }
@@ -287,32 +247,10 @@ void GuiLooperMode::sliderValueChanged (Slider* slider)
     //gain slider
     if (slider == gainSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperGain(gainSlider->sliderComponent()->getValue());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperGain(gainSlider->sliderComponent()->getValue());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setLooperGain(gainSlider->sliderComponent()->getValue());
-            }
         }
     }
     
@@ -320,32 +258,10 @@ void GuiLooperMode::sliderValueChanged (Slider* slider)
     //pan slider
     if (slider == panSlider->sliderComponent())
     {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //store the value of this slider in the pad settings of that pad
+            int padNum = selectedPads[i];
             PAD_SETTINGS->setLooperPan(panSlider->sliderComponent()->getValue());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                PAD_SETTINGS_i->setLooperPan(panSlider->sliderComponent()->getValue());            
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                PAD_SETTINGS_i->setLooperPan(panSlider->sliderComponent()->getValue());
-            }
         }
         
     }
@@ -353,34 +269,12 @@ void GuiLooperMode::sliderValueChanged (Slider* slider)
         //channel slider
         if (slider == channelSlider)
         {
-            //if individual pad number is selected
-            if(currentlySelectedPad < 99)
+            for (int i = 0; i < selectedPads.size(); i++)
             {
-                //store the value of this slider in the pad settings of that pad
+                int padNum = selectedPads[i];
                 PAD_SETTINGS->setLooperChannel(channelSlider->getValue());
             }
             
-            //if 'all pads' selected
-            if(currentlySelectedPad == 99)
-            {
-                for(int i = 0; i <= 47; i++)
-                {
-                    PAD_SETTINGS_i->setLooperChannel(channelSlider->getValue());            
-                }
-            }
-            
-            //if a 'row' is selected
-            if(currentlySelectedPad > 99)
-            {
-                int row = currentlySelectedPad - 99; 
-                
-                for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-                {
-                    //i = pad number
-                    PAD_SETTINGS_i->setLooperChannel(channelSlider->getValue());
-                }
-            }
-
         }
 
 }
@@ -395,39 +289,13 @@ void GuiLooperMode::filenameComponentChanged (FilenameComponent* filenameCompone
         
         if(audioFile.existsAsFile())
         {
-            //if individual pad number is selected
-            if(currentlySelectedPad < 99)
+            for (int i = 0; i < selectedPads.size(); i++)
             {
-                //store the file into the correct padSettings index
+                int padNum = selectedPads[i];
                 PAD_SETTINGS->setLooperAudioFilePath(audioFile);
 				
 				waveform->setFile (audioFile);
 				
-            }
-            
-            //if 'all pads' selected
-            if(currentlySelectedPad == 99)
-            {
-                for(int i = 0; i <= 47; i++)
-                {
-                    PAD_SETTINGS_i->setLooperAudioFilePath(audioFile); 
-					
-					waveform->setFile (audioFile);
-                }
-            }
-            
-            //if a 'row' is selected
-            if(currentlySelectedPad > 99)
-            {
-                int row = currentlySelectedPad - 99; 
-                
-                for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-                {
-                    //i = pad number
-                    PAD_SETTINGS_i->setLooperAudioFilePath(audioFile);
-					
-					waveform->setFile (audioFile);
-                }
             }
             
         }
@@ -443,10 +311,10 @@ void GuiLooperMode::filenameComponentChanged (FilenameComponent* filenameCompone
 }
 
 
-void GuiLooperMode::setCurrentlySelectedPad (int padNumber)
+void GuiLooperMode::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
-    currentlySelectedPad = padNumber;
-    fxDial->setCurrentlySelectedPad(padNumber);
+    selectedPads = selectedPads_;
+    fxDial->setCurrentlySelectedPad(selectedPads);
 }
 
 void GuiLooperMode::updateDisplay()
@@ -455,8 +323,9 @@ void GuiLooperMode::updateDisplay()
     //as well as to hide/dissabled any unneeded components. 
     
     //if an individual pad number is currently selected
-    if(currentlySelectedPad < 99)
+    if (SINGLE_PAD)
     {
+        int padNum = selectedPads[0];
         //fileChooser->setVisible(true);
         //fileChooserLabel->setVisible(true);
         
@@ -472,10 +341,8 @@ void GuiLooperMode::updateDisplay()
         
         
     }
-    
-    
-    //if 'all pads' selected
-    if(currentlySelectedPad == 99)
+
+    else if (MULTI_PADS)
     {
         //fileChooser->setVisible(false);
         //fileChooserLabel->setVisible(false);
@@ -490,23 +357,6 @@ void GuiLooperMode::updateDisplay()
         
 
         
-    }
-    
-    //if a 'row' is selected
-    if(currentlySelectedPad > 99)
-    {
-        //fileChooser->setVisible(false);
-        //fileChooserLabel->setVisible(false);
-        
-        //set default values
-        fileChooser->setCurrentFile(File::nonexistent, false, false);
-        gainSlider->sliderComponent()->setValue(0.7, false);
-        panSlider->sliderComponent()->setValue(0.5, false);
-        playStateMenu->setSelectedId(3, true);
-        channelSlider->setValue(1, false);
-        triggerModeMenu->setSelectedId(1, true);
-
-                
     }
 
     fxDial->updateDisplay();

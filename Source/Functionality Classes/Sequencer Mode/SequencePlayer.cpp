@@ -242,11 +242,14 @@ void SequencePlayer::processSequence(int padValue)
     //that is currently selected (and hence currently displayed)
     if (sequenceNumber != prevSequenceNumber) //so that an update will only be sent of the sequence number has changed!
     {
-        if (AppSettings::Instance()->getCurrentlySelectedPad() == padNumber)
+        if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
         {
+            if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
+            {
             
-            prevSequenceNumber = sequenceNumber;
-            broadcaster.sendActionMessage("SEQ DISPLAY");
+                prevSequenceNumber = sequenceNumber;
+                broadcaster.sendActionMessage("SEQ DISPLAY");
+            }
         }
     
     }
@@ -376,10 +379,14 @@ void SequencePlayer::run()
     sequenceNumber = 0;
     
     //initally reset sequence display
-    if (AppSettings::Instance()->getCurrentlySelectedPad() == padNumber)
+    if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
     {
-        prevSequenceNumber = sequenceNumber;
-        broadcaster.sendActionMessage("SEQ DISPLAY");
+        if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
+        {
+            prevSequenceNumber = sequenceNumber;
+            broadcaster.sendActionMessage("SEQ DISPLAY");
+        }
+        
     }
     
     //tell the pad gui that the sequence is playing
@@ -495,9 +502,10 @@ void SequencePlayer::run()
                 }
                 
                 //update gui (if this pad's gui is currently being displayed)
-                if (AppSettings::Instance()->getCurrentlySelectedPad() == padNumber)
+                if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
                 {
-                    broadcaster.sendActionMessage("SEQ DISPLAY");
+                    if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
+                        broadcaster.sendActionMessage("SEQ DISPLAY");
                 }
             }
         }
@@ -505,9 +513,10 @@ void SequencePlayer::run()
         //===============update sequencer grid GUI here!====================
         //if the this instance of SequencePlayer is the one belonging to the pad 
         //that is currently selected (and hence currently displayed)
-        if (AppSettings::Instance()->getCurrentlySelectedPad() == padNumber)
+        if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
         {
-            broadcaster.sendActionMessage("PLAYHEAD");
+            if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
+                broadcaster.sendActionMessage("PLAYHEAD");
         }
         
         //==================================================================

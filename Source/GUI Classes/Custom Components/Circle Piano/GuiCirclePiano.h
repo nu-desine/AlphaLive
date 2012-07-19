@@ -67,7 +67,7 @@ public:
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);
     
-    void setCurrentlySelectedPad (int padNumber);
+    void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
     
     void setNoteLabelText (int noteNumber);
@@ -96,7 +96,7 @@ private:
     int keyValue; //holds the index number of the currently selected piano key button
     int note; //holds the current MIDI note number
     
-    int currentlySelectedPad;
+    Array<int> selectedPads;
     
 };
 

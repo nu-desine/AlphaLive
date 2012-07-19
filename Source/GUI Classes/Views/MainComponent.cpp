@@ -585,17 +585,15 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
     
     selectedPads = selectedPads_;
     
-    /*
-    currentlySelectedPad = padNumber;
-    //pass in the currently selected pad to the mode GUIs for them to use
+    //pass in the currently selected pads to the mode GUIs for them to use
     //in order to display the right settings from appSettings
-    AppSettings::Instance()->setCurrentlySelectedPad(currentlySelectedPad);
-    guiMidiMode->setCurrentlySelectedPad(currentlySelectedPad);
-    guiLooperMode->setCurrentlySelectedPad(currentlySelectedPad);
-    guiSequencerMode->setCurrentlySelectedPad(currentlySelectedPad);
-    guiControllerMode->setCurrentlySelectedPad(currentlySelectedPad);
-    presetComponent->setCurrentlySelectedPad(currentlySelectedPad);
-    */
+    AppSettings::Instance()->setCurrentlySelectedPad(selectedPads);
+    guiMidiMode->setCurrentlySelectedPad(selectedPads);
+    guiLooperMode->setCurrentlySelectedPad(selectedPads);
+    //guiSequencerMode->setCurrentlySelectedPad(currentlySelectedPad);
+    //guiControllerMode->setCurrentlySelectedPad(currentlySelectedPad);
+    //presetComponent->setCurrentlySelectedPad(currentlySelectedPad);
+    
     
     //==============================================================================
     //if current pad selected is a single pad

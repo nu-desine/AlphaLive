@@ -106,6 +106,7 @@ public:
     void setLooperShouldLoop (int value);
     void setLooperIndestructible (int value);
     void setLooperShouldFinishLoop (int value);
+    void setLooperSticky (int value);
     void setLooperEffect (int value);
     void setLooperPan (float value);
     void setLooperGain (float value);
@@ -118,6 +119,7 @@ public:
     int getLooperShouldLoop();
     int getLooperIndestructible();
     int getLooperShouldFinishLoop();
+    int getLooperSticky();
     int getLooperEffect();
     float getLooperPan();
     float getLooperGain();
@@ -359,6 +361,7 @@ private:
     int looperShouldLoop;
     int looperIndestructible;
     int looperShouldFinishLoop;
+    int looperSticky;
     int looperEffect;
     float looperPan;
     float looperGain;

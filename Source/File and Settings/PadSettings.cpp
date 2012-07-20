@@ -67,6 +67,7 @@ PadSettings::PadSettings(int arrayIndex)
     looperShouldLoop = 1;
     looperIndestructible = 0;
     looperShouldFinishLoop = 0;
+    looperSticky = 0;
     looperEffect = 0;
     looperPan = 0.5;
     looperGain = 1.0;
@@ -272,6 +273,7 @@ void PadSettings::resetData (int whatToReset)
         setLooperShouldLoop(1);
         setLooperIndestructible(0);
         setLooperShouldFinishLoop(0);
+        setLooperSticky(0);
         setLooperEffect (0);
         setLooperPan (0.5);
         setLooperGain (1.0);
@@ -672,6 +674,15 @@ void PadSettings::setLooperShouldFinishLoop (int value)
     }
 }
 
+void PadSettings::setLooperSticky (int value)
+{
+    looperSticky = value;
+    if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setSticky(looperSticky);
+    }
+}
+
 void PadSettings::setLooperEffect(int value)
 {
     //std::cout << "Pad " << padNumber << " set with effect " << value << std::endl;
@@ -759,6 +770,10 @@ int PadSettings::getLooperIndestructible()
 int PadSettings::getLooperShouldFinishLoop()
 {
     return looperShouldFinishLoop;
+}
+int PadSettings::getLooperSticky()
+{
+    return looperSticky;
 }
 
 int PadSettings::getLooperEffect()

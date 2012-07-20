@@ -57,6 +57,7 @@ AudioFilePlayer::AudioFilePlayer(int looperPadNumber, ModeLooper &ref, TimeSlice
     shouldLoop = PAD_SETTINGS->getLooperShouldLoop();
     indestructible = PAD_SETTINGS->getLooperIndestructible();
     shouldFinishLoop = PAD_SETTINGS->getLooperShouldFinishLoop();
+    sticky = PAD_SETTINGS->getLooperSticky();
     currentPlayingState = currentPressureValue = 0;
     effect = PAD_SETTINGS->getLooperEffect();
     quantizeMode = PAD_SETTINGS->getLooperQuantizeMode();
@@ -226,41 +227,66 @@ void AudioFilePlayer::processAudioFile(int padValue)
             broadcaster.sendActionMessage("WAITING TO STOP");
         }
     }
-    //==========================================================================================
-    
-    
-    prevPadValue = padValue; //should sticky stuff go before or after this line? where is prevPadValue used? investigate!
+    //=========================================================================================
     
     
     //==========================================================================================
     // Pressure stuff
     //==========================================================================================
+    
+    if (sticky == 1) //'on'
+    {
+        //modify pressure valie
+        if(padValue == 0)
+        {
+            //don't want to do this till the pad is repressed, not when it is first released as at the moment
+            prevPadValue = 0;
+            
+        }
+        else
+        {
+            if(padValue < prevPadValue)
+            {
+                padValue = prevPadValue; //don't change value
+            }
+            
+            prevPadValue = padValue;
+        }
+        
+    }
+    else // 'off'
+    {
+       prevPadValue = padValue; 
+    }
+    
+    
+    
     //determine what effect and parameter the pressure is controlling
     switch (effect)
     {
         case 1: //Gain and Pan
-            gainAndPan->processAlphaTouch(padValue);
+            gainAndPan->processAlphaTouch(prevPadValue);
             break;
         case 2: //LPF
-            lowPassFilter->processAlphaTouch(padValue);
+            lowPassFilter->processAlphaTouch(prevPadValue);
             break;
         case 3: //HPF
-            highPassFilter->processAlphaTouch(padValue);
+            highPassFilter->processAlphaTouch(prevPadValue);
             break;
         case 4: //BPF
-            bandPassFilter->processAlphaTouch(padValue);
+            bandPassFilter->processAlphaTouch(prevPadValue);
             break;
         case 6: //Delay
-            delay->processAlphaTouch(padValue);
+            delay->processAlphaTouch(prevPadValue);
             break;
         case 7: //Reverb
-            reverb->processAlphaTouch(padValue);
+            reverb->processAlphaTouch(prevPadValue);
             break;
         case 9: //Flanger
-            flanger->processAlphaTouch(padValue);
+            flanger->processAlphaTouch(prevPadValue);
             break;
         case 10: //Tremolo
-            tremolo->processAlphaTouch(padValue);
+            tremolo->processAlphaTouch(prevPadValue);
             break;
         default:
             break;
@@ -688,6 +714,11 @@ void AudioFilePlayer::setIndestructible (int value)
 void AudioFilePlayer::setShouldFinishLoop (int value)
 {
     shouldFinishLoop = value;
+}
+
+void AudioFilePlayer::setSticky (int value)
+{
+    sticky = value;
 }
 
 //========================================================================================

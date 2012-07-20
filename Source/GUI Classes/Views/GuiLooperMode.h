@@ -63,7 +63,7 @@ private:
     
     FilenameComponent *fileChooser;
     ComboBox *triggerModeMenu, *quantizeModeMenu, *pressureModeMenu;
-    TextButton *loopButton, *indestructibleButton, *finishLoopButton;
+    TextButton *loopButton, *indestructibleButton, *finishLoopButton, *stickyButton;
     
     //int currentlySelectedPad;
     Array<int> selectedPads;

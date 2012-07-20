@@ -61,6 +61,7 @@ public:
     void setShouldLoop (int value);
     void setIndestructible (int value);
     void setShouldFinishLoop (int value);
+    void setSticky (int value);
     void setEffect (int value);
     void setQuantizeMode (int value);
     void setChannel (int value);
@@ -112,7 +113,7 @@ private:
     
     //settings
     int triggerMode, effect;
-    int shouldLoop, indestructible, shouldFinishLoop;
+    int shouldLoop, indestructible, shouldFinishLoop, sticky;
     int currentPlayingState; //0 - off, 1 - playing, 2 - waiting to play, 3 - waiting to stop 
     int currentPressureValue;
     int quantizeMode;

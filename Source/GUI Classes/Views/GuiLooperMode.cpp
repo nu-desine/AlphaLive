@@ -99,6 +99,12 @@ GuiLooperMode::GuiLooperMode(MainComponent &ref)
     finishLoopButton->setClickingTogglesState(true);
     finishLoopButton->setToggleState(0, false);
     
+    addAndMakeVisible(stickyButton = new TextButton("Sticky"));
+    stickyButton->addListener(this);
+    stickyButton->addMouseListener(this, true);
+    stickyButton->setClickingTogglesState(true);
+    stickyButton->setToggleState(0, false);
+    
     
     //channel slider - this feature is now referenced to 'groups' not channels
     Image *dialImage = new Image(ImageFileFormat::loadFrom(ImageSliderBinaryData::channeldial_png, ImageSliderBinaryData::channeldial_pngSize));
@@ -157,7 +163,8 @@ void GuiLooperMode::resized()
     triggerModeMenu->setBounds(RIGHT_CIRCLE_X, 538, COMPONENT_W, COMPONENT_H);
     loopButton->setBounds(RIGHT_CIRCLE_X, 558, 50, 15);
     indestructibleButton->setBounds(RIGHT_CIRCLE_X+50, 558, 50, 15);
-    finishLoopButton->setBounds(RIGHT_CIRCLE_X+25, 573, 50, 15);
+    finishLoopButton->setBounds(RIGHT_CIRCLE_X, 573, 50, 15);
+    stickyButton->setBounds(RIGHT_CIRCLE_X+50, 573, 50, 15);
     
     
     channelSlider->setBounds(850, 251, 142, 142);
@@ -354,6 +361,14 @@ void GuiLooperMode::buttonClicked (Button* button)
             PAD_SETTINGS->setLooperShouldFinishLoop(button->getToggleState());
         }
     }
+    else if (button == stickyButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setLooperSticky(button->getToggleState());
+        }
+    }
 }
 
 
@@ -385,6 +400,7 @@ void GuiLooperMode::updateDisplay()
         loopButton->setToggleState(PAD_SETTINGS->getLooperShouldLoop(), false);
         indestructibleButton->setToggleState(PAD_SETTINGS->getLooperIndestructible(), false);
         finishLoopButton->setToggleState(PAD_SETTINGS->getLooperShouldFinishLoop(), false);
+        stickyButton->setToggleState(PAD_SETTINGS->getLooperSticky(), false);
         channelSlider->setValue(PAD_SETTINGS->getLooperChannel(), false);
         quantizeModeMenu->setSelectedId(PAD_SETTINGS->getLooperQuantizeMode(), true);
         
@@ -404,6 +420,7 @@ void GuiLooperMode::updateDisplay()
         loopButton->setToggleState(1, false);
         indestructibleButton->setToggleState(0, false);
         finishLoopButton->setToggleState(0, false);
+        stickyButton->setToggleState(0, false);
         channelSlider->setValue(1, false);
         quantizeModeMenu->setSelectedId(1, true);
         

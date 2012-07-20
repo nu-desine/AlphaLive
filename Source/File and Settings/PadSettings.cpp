@@ -64,6 +64,9 @@ PadSettings::PadSettings(int arrayIndex)
     //looperAudioFilePath = File::nonexistent;
     looperAudioFilePath = String::empty;
     looperTriggerMode = 2; 
+    looperShouldLoop = 1;
+    looperIndestructible = 0;
+    looperShouldFinishLoop = 0;
     looperEffect = 0;
     looperPan = 0.5;
     looperGain = 1.0;
@@ -266,6 +269,9 @@ void PadSettings::resetData (int whatToReset)
     {
         setLooperAudioFilePath (File::nonexistent);
         setLooperTriggerMode (2);
+        setLooperShouldLoop(1);
+        setLooperIndestructible(0);
+        setLooperShouldFinishLoop(0);
         setLooperEffect (0);
         setLooperPan (0.5);
         setLooperGain (1.0);
@@ -639,6 +645,33 @@ void PadSettings::setLooperTriggerMode(int value)
         alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setTriggerMode(looperTriggerMode);
     }
 }
+
+void PadSettings::setLooperShouldLoop (int value)
+{
+    looperShouldLoop = value;
+    if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setShouldLoop(looperShouldLoop);
+    }
+    
+}
+void PadSettings::setLooperIndestructible (int value)
+{
+    looperIndestructible = value;
+    if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setIndestructible(looperIndestructible);
+    }
+}
+void PadSettings::setLooperShouldFinishLoop (int value)
+{
+    looperShouldFinishLoop = value;
+    if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setShouldFinishLoop(looperShouldFinishLoop);
+    }
+}
+
 void PadSettings::setLooperEffect(int value)
 {
     //std::cout << "Pad " << padNumber << " set with effect " << value << std::endl;
@@ -714,6 +747,20 @@ int PadSettings::getLooperTriggerMode()
 {
     return looperTriggerMode;
 }
+
+int PadSettings::getLooperShouldLoop()
+{
+    return looperShouldLoop;
+}
+int PadSettings::getLooperIndestructible()
+{
+    return looperIndestructible;
+}
+int PadSettings::getLooperShouldFinishLoop()
+{
+    return looperShouldFinishLoop;
+}
+
 int PadSettings::getLooperEffect()
 {
     return looperEffect;

@@ -36,7 +36,8 @@ class MainComponent;
 class GuiLooperMode :   public Component,
                             public ComboBox::Listener,
                             public Slider::Listener,
-                            public FilenameComponentListener
+                            public FilenameComponentListener,
+                            public Button::Listener
 {
 public:
     GuiLooperMode(MainComponent &ref);
@@ -49,6 +50,7 @@ public:
     void comboBoxChanged (ComboBox* comboBox);
     void sliderValueChanged (Slider* slider);
     void filenameComponentChanged (FilenameComponent* filenameComponent);
+    void buttonClicked (Button* button);
     
     void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
@@ -61,6 +63,7 @@ private:
     
     FilenameComponent *fileChooser;
     ComboBox *triggerModeMenu, *quantizeModeMenu, *pressureModeMenu;
+    TextButton *loopButton, *indestructibleButton, *finishLoopButton;
     
     //int currentlySelectedPad;
     Array<int> selectedPads;

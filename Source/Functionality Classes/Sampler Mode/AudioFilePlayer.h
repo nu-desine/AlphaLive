@@ -58,6 +58,9 @@ public:
     void stopAudioFile();
     
     void setTriggerMode (int value);
+    void setShouldLoop (int value);
+    void setIndestructible (int value);
+    void setShouldFinishLoop (int value);
     void setEffect (int value);
     void setQuantizeMode (int value);
     void setChannel (int value);
@@ -79,8 +82,6 @@ public:
     ReverbClass& getReverb();
     Flanger& getFlanger();
     Tremolo& getTremolo();
-    
-    void setPlaybackPosition();
     
     //quantization stuff
     void triggerQuantizationPoint();
@@ -111,6 +112,7 @@ private:
     
     //settings
     int triggerMode, effect;
+    int shouldLoop, indestructible, shouldFinishLoop;
     int currentPlayingState; //0 - off, 1 - playing, 2 - waiting to play, 3 - waiting to stop 
     int currentPressureValue;
     int quantizeMode;
@@ -128,6 +130,8 @@ private:
     Tremolo *tremolo;
     
     ActionBroadcaster broadcaster;
+    
+    bool playingLastLoop;
     
     //playback manipulation stuff
     double fileStartPosition, fileEndPosition, currentPositionInRegion;

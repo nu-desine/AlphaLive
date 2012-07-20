@@ -54,6 +54,9 @@ AudioFilePlayer::AudioFilePlayer(int looperPadNumber, ModeLooper &ref, TimeSlice
     panLeft = panLeftPrev = PanControl::leftChanPan_(PAD_SETTINGS->getLooperPan());
     panRight = panRightPrev = PanControl::rightChanPan_(PAD_SETTINGS->getLooperPan());
     triggerMode = PAD_SETTINGS->getLooperTriggerMode();
+    shouldLoop = PAD_SETTINGS->getLooperShouldLoop();
+    indestructible = PAD_SETTINGS->getLooperIndestructible();
+    shouldFinishLoop = PAD_SETTINGS->getLooperShouldFinishLoop();
     currentPlayingState = currentPressureValue = 0;
     effect = PAD_SETTINGS->getLooperEffect();
     quantizeMode = PAD_SETTINGS->getLooperQuantizeMode();
@@ -65,13 +68,7 @@ AudioFilePlayer::AudioFilePlayer(int looperPadNumber, ModeLooper &ref, TimeSlice
     
     prevPadValue = 0;
     
-    /*
-    //test playback manipulation stuff
-    prevPressureRegion = 0;
-    currentPositionInRegion = 0;
-    fileStartPosition = 0;
-    fileEndPosition = 0;
-     */
+    playingLastLoop = false;
     
     
     //call this here incase a loop has been 'dropped' onto a pad before this AudioFilePlayer instance actually exists,
@@ -116,7 +113,9 @@ void AudioFilePlayer::processAudioFile(int padValue)
         triggerModes.reset();
     }
    
-    //determime triggerMode and audio file transportation
+    //==========================================================================================
+    // Trigger Mode stuff
+    //==========================================================================================
     switch (triggerMode) 
     {
         case 1:
@@ -143,6 +142,49 @@ void AudioFilePlayer::processAudioFile(int padValue)
     }
     
     
+    
+    
+    if (triggerModeData.playingStatus == 0 && shouldFinishLoop == 1)
+    {
+        //if recieved a command to stop file but is set to finish current loop before stopping,
+        //ignore note off message and set looping status to off
+        triggerModeData.playingStatus = 2; //ignore
+        currentAudioFileSource->setLooping(false);
+        playingLastLoop = true;
+        
+        //what about if the user wants to cancel the finish loop command?
+    }
+    
+    if (playingLastLoop == false)
+    {
+        currentAudioFileSource->setLooping(shouldLoop);
+    }
+    
+    
+    
+    
+    
+    if (indestructible == 1)
+    {
+        //if set to indestructible...
+        
+        if (triggerModeData.playingStatus == 0)
+        {
+            //...and triggerModeData signifies to stop audio, DON'T LET IT...MWAHAHAHA! 
+            triggerModeData.playingStatus = 2; //ignore
+        }
+        else if (triggerModeData.playingStatus == 1 && currentPlayingState == 1 && triggerMode != 6)
+        {
+            //...and triggerModeData signifies to start playing, 
+            //but file is already playing and triggerMode does not equal 'trigger'
+            //Don't send a play command!
+            triggerModeData.playingStatus = 2; //ignore
+        }
+        
+    }
+    
+    //==========================================================================================
+    // Start/Stop stuff
     //==========================================================================================
     if (quantizeMode == 1) //free
     {
@@ -187,71 +229,38 @@ void AudioFilePlayer::processAudioFile(int padValue)
     //==========================================================================================
     
     
-    prevPadValue = padValue;
+    prevPadValue = padValue; //should sticky stuff go before or after this line? where is prevPadValue used? investigate!
     
-    /*
-    //playback manipulation test stuff
-    int pressureRegion = 1 + (triggerModeData.pressureValue*(3.0/511.0));
-    std::cout << pressureRegion << std::endl;
     
-    if (pressureRegion != prevPressureRegion)
-    {
-        switch (pressureRegion)
-        {
-            case 1:
-                fileStartPosition = 0.0;
-                fileEndPosition = (fileSource.getLengthInSeconds()/4.0)*1.0;
-                fileSource.setPosition(fileStartPosition + currentPositionInRegion);
-                break;
-            case 2:
-                fileStartPosition = (fileSource.getLengthInSeconds()/4.0)*1.0;
-                fileEndPosition = (fileSource.getLengthInSeconds()/4.0)*2.0;
-                fileSource.setPosition(fileStartPosition + currentPositionInRegion);
-                break;
-            case 3:
-                fileStartPosition = (fileSource.getLengthInSeconds()/4.0)*2.0;
-                fileEndPosition = (fileSource.getLengthInSeconds()/4.0)*3.0;
-                fileSource.setPosition(fileStartPosition + currentPositionInRegion);
-                break;
-            case 4:
-                fileStartPosition = (fileSource.getLengthInSeconds()/4.0)*3.0;
-                fileEndPosition = fileSource.getLengthInSeconds();
-                fileSource.setPosition(fileStartPosition + currentPositionInRegion);
-                break;
-            default:
-                break;
-        }
-    }
-    
-    prevPressureRegion = pressureRegion;
-     */
-    
+    //==========================================================================================
+    // Pressure stuff
+    //==========================================================================================
     //determine what effect and parameter the pressure is controlling
     switch (effect)
     {
         case 1: //Gain and Pan
-            gainAndPan->processAlphaTouch(triggerModeData.pressureValue);
+            gainAndPan->processAlphaTouch(padValue);
             break;
         case 2: //LPF
-            lowPassFilter->processAlphaTouch(triggerModeData.pressureValue);
+            lowPassFilter->processAlphaTouch(padValue);
             break;
         case 3: //HPF
-            highPassFilter->processAlphaTouch(triggerModeData.pressureValue);
+            highPassFilter->processAlphaTouch(padValue);
             break;
         case 4: //BPF
-            bandPassFilter->processAlphaTouch(triggerModeData.pressureValue);
+            bandPassFilter->processAlphaTouch(padValue);
             break;
         case 6: //Delay
-            delay->processAlphaTouch(triggerModeData.pressureValue);
+            delay->processAlphaTouch(padValue);
             break;
         case 7: //Reverb
-            reverb->processAlphaTouch(triggerModeData.pressureValue);
+            reverb->processAlphaTouch(padValue);
             break;
         case 9: //Flanger
-            flanger->processAlphaTouch(triggerModeData.pressureValue);
+            flanger->processAlphaTouch(padValue);
             break;
         case 10: //Tremolo
-            tremolo->processAlphaTouch(triggerModeData.pressureValue);
+            tremolo->processAlphaTouch(padValue);
             break;
         default:
             break;
@@ -330,9 +339,9 @@ void AudioFilePlayer::triggerQuantizationPoint()
 
 void AudioFilePlayer::playAudioFile()
 {
-    //set to whether the audio should loop, set from the triggerMode functions
-    if (currentFile != File::nonexistent && currentAudioFileSource != NULL)
-        currentAudioFileSource->setLooping(triggerModeData.shouldLoop);
+    //set to whether the audio should loop. CAN WE PUT THIS IN processAudioFile without too much CPU usage?
+    //if (currentFile != File::nonexistent && currentAudioFileSource != NULL)
+        //currentAudioFileSource->setLooping(shouldLoop);
     
     //set the state of certain effects
     if (effect == 9) //flanger
@@ -389,6 +398,8 @@ void AudioFilePlayer::stopAudioFile()
     //don't need to setPosition to 0 after stopping AND before playing. Where's best to do it though?
     //fileSource.setPosition (0.0);
     
+    playingLastLoop = false;
+    
     broadcaster.sendActionMessage("OFF");
     
 }
@@ -409,38 +420,6 @@ void AudioFilePlayer::actionListenerCallback (const String& message)
     
 }
 
-void AudioFilePlayer::setPlaybackPosition()
-{
-    //test playback manipulation stuff
-    
-    //ideally stuff in here should be in it's own class
-    /*
-    if (fileSource.getCurrentPosition() >= fileSource.getLengthInSeconds()/32)
-    {
-        double difference = fileSource.getCurrentPosition() - fileSource.getLengthInSeconds()/32;
-        fileSource.setPosition(0.0 + difference);
-    }
-     */
-    
-    if (fileSource.getCurrentPosition() >= fileEndPosition)
-    {
-        double difference = fileSource.getCurrentPosition() - fileEndPosition;
-        fileSource.setPosition(fileStartPosition + difference);
-    }
-    
-    /*
-    if (fileSource.getCurrentPosition() < fileStartPosition)
-    {
-        //double difference = fileSource.getCurrentPosition() - fileEndPosition;
-        fileSource.setPosition(fileStartPosition);
-    }
-     */
-    
-    currentPositionInRegion = fileSource.getCurrentPosition() - fileStartPosition;
-    //std::cout << currentPositionInRegion << std::endl;
-    
-}
-
 
 void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
@@ -449,12 +428,6 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
     //otherwise it is to CPU heavy!
     
     fileSource.getNextAudioBlock(bufferToFill);
-    
-    /*
-    sharedMemory.enter();
-    setPlaybackPosition();
-    sharedMemory.exit();
-     */
     
     //how can I set it so that effects will only be applied when playing, but without causing clicks at the start and the end of sound? Need something like a look ahead and release time.
     sharedMemory.enter();
@@ -493,28 +466,6 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
          
     }
     sharedMemory.exit();
-    
-    //OLD METHOD OF SETTING GAIN AND PAN - created clicks/pops
-    //when changing the vales and playing audio and the same time
-    /*
-    //get first pair of sample data from audio buffer
-    float *pOutL = bufferToFill.buffer->getSampleData (0, bufferToFill.startSample);
-    float *pOutR = bufferToFill.buffer->getSampleData (1, bufferToFill.startSample);
-    
-    sharedMemory.enter();
-    //increment through each pair of samples (left channel and right channel) in the current block of the audio buffer
-    for (int i = 0; i < bufferToFill.numSamples; ++i)
-    {
-        //pan
-        *pOutL = panControl.leftChanPan(*pOutL) * gainNext;
-        *pOutR = panControl.rightChanPan(*pOutR) * gainNext;
-        
-        //move to next pair of samples
-        pOutL++;
-        pOutR++;
-    }
-    sharedMemory.exit();
-     */
      
     //gain and pan
     sharedMemory.enter();
@@ -548,6 +499,8 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
         //we are currently in ther audio thread here and calling it causes some form of objective C leak. Therefore we
         //are using a Async action broadcaster so that it doesn't cause any time-critical pauses in the thread which i think
         broadcaster.sendActionMessage("OFF");
+        
+        playingLastLoop = false;
     }
 
 }
@@ -724,6 +677,18 @@ void AudioFilePlayer::setPan (float value)
     sharedMemory.exit();
 }
 
+void AudioFilePlayer::setShouldLoop (int value)
+{
+    shouldLoop = value;
+}
+void AudioFilePlayer::setIndestructible (int value)
+{
+    indestructible = value;
+}
+void AudioFilePlayer::setShouldFinishLoop (int value)
+{
+    shouldFinishLoop = value;
+}
 
 //========================================================================================
 GainAndPan& AudioFilePlayer::getGainAndPan()

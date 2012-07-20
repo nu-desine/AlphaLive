@@ -103,6 +103,9 @@ public:
     //Looper mode
     void setLooperAudioFilePath (File value);
     void setLooperTriggerMode (int value);
+    void setLooperShouldLoop (int value);
+    void setLooperIndestructible (int value);
+    void setLooperShouldFinishLoop (int value);
     void setLooperEffect (int value);
     void setLooperPan (float value);
     void setLooperGain (float value);
@@ -112,6 +115,9 @@ public:
     File getLooperAudioFilePath();
     bool getLooperIsLibraryFile();
     int getLooperTriggerMode();
+    int getLooperShouldLoop();
+    int getLooperIndestructible();
+    int getLooperShouldFinishLoop();
     int getLooperEffect();
     float getLooperPan();
     float getLooperGain();
@@ -350,6 +356,9 @@ private:
     //Looper mode
     String looperAudioFilePath;
     int looperTriggerMode;
+    int looperShouldLoop;
+    int looperIndestructible;
+    int looperShouldFinishLoop;
     int looperEffect;
     float looperPan;
     float looperGain;

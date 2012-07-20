@@ -81,6 +81,25 @@ GuiLooperMode::GuiLooperMode(MainComponent &ref)
     triggerModeMenu->setSelectedId(2, true);
     triggerModeMenu->addMouseListener(this, true);
     
+    addAndMakeVisible(loopButton = new TextButton("Loop"));
+    loopButton->addListener(this);
+    loopButton->addMouseListener(this, true);
+    loopButton->setClickingTogglesState(true);
+    loopButton->setToggleState(0, false);
+    
+    addAndMakeVisible(indestructibleButton = new TextButton("indestruct"));
+    indestructibleButton->addListener(this);
+    indestructibleButton->addMouseListener(this, true);
+    indestructibleButton->setClickingTogglesState(true);
+    indestructibleButton->setToggleState(0, false);
+    
+    addAndMakeVisible(finishLoopButton = new TextButton("Finish"));
+    finishLoopButton->addListener(this);
+    finishLoopButton->addMouseListener(this, true);
+    finishLoopButton->setClickingTogglesState(true);
+    finishLoopButton->setToggleState(0, false);
+    
+    
     //channel slider - this feature is now referenced to 'groups' not channels
     Image *dialImage = new Image(ImageFileFormat::loadFrom(ImageSliderBinaryData::channeldial_png, ImageSliderBinaryData::channeldial_pngSize));
     addAndMakeVisible(channelSlider = new ImageSlider(dialImage, 16, true));
@@ -88,7 +107,7 @@ GuiLooperMode::GuiLooperMode(MainComponent &ref)
     channelSlider->setRotaryParameters(0, M_PI*2, false);
     channelSlider->setRange(1, 16, 1);
     channelSlider->addListener(this);
-    channelSlider->addMouseListener(this, true);;
+    channelSlider->addMouseListener(this, true);
 
     addAndMakeVisible(fxDial = new GuiFxDial(mainComponentRef));
 	fxDial->setInterceptsMouseClicks(false, true);
@@ -136,6 +155,9 @@ void GuiLooperMode::resized()
 	panSlider->setBounds(900, 495, 45, 45);
         
     triggerModeMenu->setBounds(RIGHT_CIRCLE_X, 538, COMPONENT_W, COMPONENT_H);
+    loopButton->setBounds(RIGHT_CIRCLE_X, 558, 50, 15);
+    indestructibleButton->setBounds(RIGHT_CIRCLE_X+50, 558, 50, 15);
+    finishLoopButton->setBounds(RIGHT_CIRCLE_X+25, 573, 50, 15);
     
     
     channelSlider->setBounds(850, 251, 142, 142);
@@ -303,6 +325,38 @@ void GuiLooperMode::filenameComponentChanged (FilenameComponent* filenameCompone
 }
 
 
+
+void GuiLooperMode::buttonClicked (Button* button)
+{
+    if (button == loopButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setLooperShouldLoop(button->getToggleState());
+        }
+    }
+    
+    else if (button == indestructibleButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setLooperIndestructible(button->getToggleState());
+        }
+    }
+    
+    else if (button == finishLoopButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setLooperShouldFinishLoop(button->getToggleState());
+        }
+    }
+}
+
+
 void GuiLooperMode::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
     selectedPads = selectedPads_;
@@ -328,6 +382,9 @@ void GuiLooperMode::updateDisplay()
         gainSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperGain(), false);
         panSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperPan(), false);
         triggerModeMenu->setSelectedId(PAD_SETTINGS->getLooperTriggerMode(), true);
+        loopButton->setToggleState(PAD_SETTINGS->getLooperShouldLoop(), false);
+        indestructibleButton->setToggleState(PAD_SETTINGS->getLooperIndestructible(), false);
+        finishLoopButton->setToggleState(PAD_SETTINGS->getLooperShouldFinishLoop(), false);
         channelSlider->setValue(PAD_SETTINGS->getLooperChannel(), false);
         quantizeModeMenu->setSelectedId(PAD_SETTINGS->getLooperQuantizeMode(), true);
         
@@ -344,6 +401,9 @@ void GuiLooperMode::updateDisplay()
         gainSlider->sliderComponent()->setValue(0.7, false);
         panSlider->sliderComponent()->setValue(0.5, false);
         triggerModeMenu->setSelectedId(2, true);
+        loopButton->setToggleState(1, false);
+        indestructibleButton->setToggleState(0, false);
+        finishLoopButton->setToggleState(0, false);
         channelSlider->setValue(1, false);
         quantizeModeMenu->setSelectedId(1, true);
         

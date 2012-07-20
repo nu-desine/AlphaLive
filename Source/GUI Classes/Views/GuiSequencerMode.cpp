@@ -142,29 +142,20 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     numberOfSequencesSlider->setValue(NO_OF_SEQS, false);
     numberOfSequencesSlider->addMouseListener(this, true);
     
-    addAndMakeVisible(playStateMenu = new ComboBox());
-    playStateMenu->addListener(this);
-    playStateMenu->addItem("Play Once", 1);
-    playStateMenu->addItem("Play Once (Continuous)", 2);
-    playStateMenu->addItem("Play Once (Non-Destructive)", 21);
-    playStateMenu->addItem("Loop", 3);
-    playStateMenu->addItem("Toggle (Press-Off)", 4);
-    playStateMenu->addItem("Toggle (Release-Off)", 5);
-    playStateMenu->addItem("Toggle (Non-Destructive)", 25);
-    playStateMenu->addItem("Sticky", 6);
-    playStateMenu->addItem("Latch (Max-Latch)", 7);
-    playStateMenu->addItem("Latch (Press-Latch)", 8);
-    playStateMenu->addItem("Trigger (Looped)", 9);
-    playStateMenu->addItem("Trigger (Looped, Non-Destructive)", 22);
-    playStateMenu->addItem("Trigger (Non-Looped)", 10);
-    playStateMenu->addItem("Trigger (Non-Looped, Non-Destructive)", 24);
-    playStateMenu->addItem("Cycle (Looped)", 11);
-    playStateMenu->addItem("Cycle (Linear)", 12);
-    playStateMenu->addItem("Cycle (Linear, Non Destructive)", 23);
-    playStateMenu->addItem("Auto-Cycle (Looped)", 13);
-    playStateMenu->addItem("Auto-Cycle (Linear)", 14);
-    playStateMenu->setSelectedId(3, true);
-    playStateMenu->addMouseListener(this, true);
+    addAndMakeVisible(triggerModeMenu = new ComboBox());
+    triggerModeMenu->addListener(this);
+    triggerModeMenu->addListener(this);
+    triggerModeMenu->addItem("Hold", 1);
+    triggerModeMenu->addItem("Toggle", 2);
+    triggerModeMenu->addItem("Toggle Release", 3);
+    triggerModeMenu->addItem("Latch", 4);
+    triggerModeMenu->addItem("Latch Max", 5);
+    triggerModeMenu->addItem("Trigger", 6);
+    triggerModeMenu->addItem("Cycle", 7);
+    triggerModeMenu->addItem("Auto Cycle", 8);
+    triggerModeMenu->setSelectedId(2, true);
+    triggerModeMenu->addMouseListener(this, true);
+    triggerModeMenu->addMouseListener(this, true);
     
     addAndMakeVisible(quantizeModeMenu = new ComboBox());
     quantizeModeMenu->addItem("Free", 1);
@@ -265,7 +256,7 @@ void GuiSequencerMode::resized()
     
     numberOfSequencesSlider->setBounds(LEFT_CIRCLE_X, 440, COMPONENT_W, COMPONENT_H);
     sequenceLengthSlider->setBounds(LEFT_CIRCLE_X, 470, COMPONENT_W, COMPONENT_H);
-    playStateMenu->setBounds(LEFT_CIRCLE_X, 570, COMPONENT_W, COMPONENT_H);
+    triggerModeMenu->setBounds(LEFT_CIRCLE_X, 570, COMPONENT_W, COMPONENT_H);
     relativeTempoMenu->setBounds(LEFT_CIRCLE_X, 500, COMPONENT_W, COMPONENT_H);
     
     quantizeModeMenu->setBounds(800, 155, 100, 20);
@@ -288,12 +279,12 @@ void GuiSequencerMode::comboBoxChanged (ComboBox* comboBox)
 {
     //==============================================================================
     //play state combobox
-    if (comboBox == playStateMenu)
+    if (comboBox == triggerModeMenu)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSequencerPlayState(playStateMenu->getSelectedId());
+            PAD_SETTINGS->setSequencerTriggerMode(triggerModeMenu->getSelectedId());
         }
         
     }
@@ -551,8 +542,8 @@ void GuiSequencerMode::updateDisplay()
         channelSlider->setValue(i, false);
         i = PAD_SETTINGS->getSequencerLength();
         sequenceLengthSlider->setValue(i, false);
-        i = PAD_SETTINGS->getSequencerPlayState();
-        playStateMenu->setSelectedId(i, true);
+        i = PAD_SETTINGS->getSequencerTriggerMode();
+        triggerModeMenu->setSelectedId(i, true);
         //currentSequenceNumberSlider->setValue(1);
         quantizeModeMenu->setSelectedId(PAD_SETTINGS->getSequencerQuantizeMode(), true);
         relativeTempoMenu->setSelectedId(PAD_SETTINGS->getSequencerRelativeTempoMode(), true);
@@ -583,7 +574,7 @@ void GuiSequencerMode::updateDisplay()
         numberOfSequencesSlider->setValue(8, false); 
         channelSlider->setValue(1, false);
         sequenceLengthSlider->setValue(250, false);
-        playStateMenu->setSelectedId(3, true);
+        triggerModeMenu->setSelectedId(2, true);
         //currentSequenceNumberSlider->setValue(1);
         quantizeModeMenu->setSelectedId(1, true);
         relativeTempoMenu->setSelectedId(3, true);
@@ -694,9 +685,9 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText("Number of Sequences Selector. Sets and displays the number of sequences in the sequencer set for the selected pad/pads.");
     }
-    else if (playStateMenu->isMouseOver(true))
+    else if (triggerModeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("PlayState Drop-down Menu. Sets and displays the sequencer PlayState for the selected pad/pads. Sequencer PlayStates determine how interation with a pad controls the playback and modification of a sequence.");
+        mainComponentRef.setInfoTextBoxText("TriggerMode Drop-down Menu. Sets and displays the sequencer TriggerMode for the selected pad/pads. Sequencer TriggerModes determine how interation with a pad controls the playback and modification of a sequence.");
     }
     else if (sequencerGrid->isMouseOver(true))
     {

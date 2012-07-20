@@ -1472,8 +1472,8 @@
 		0C78A2DB15B467900049C0C8 /* MIDI Mode */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A2DC15B467900049C0C8 /* ModeMidi.cpp */,
 				0C78A2DD15B467900049C0C8 /* ModeMidi.h */,
+				0C78A2DC15B467900049C0C8 /* ModeMidi.cpp */,
 			);
 			path = "MIDI Mode";
 			sourceTree = "<group>";
@@ -1493,10 +1493,10 @@
 		0C78A2E415B467900049C0C8 /* Sampler Mode */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A2E515B467900049C0C8 /* AudioFilePlayer.cpp */,
-				0C78A2E615B467900049C0C8 /* AudioFilePlayer.h */,
-				0C78A2E715B467900049C0C8 /* ModeLooper.cpp */,
 				0C78A2E815B467900049C0C8 /* ModeLooper.h */,
+				0C78A2E715B467900049C0C8 /* ModeLooper.cpp */,
+				0C78A2E615B467900049C0C8 /* AudioFilePlayer.h */,
+				0C78A2E515B467900049C0C8 /* AudioFilePlayer.cpp */,
 			);
 			path = "Sampler Mode";
 			sourceTree = "<group>";
@@ -1504,13 +1504,13 @@
 		0C78A2E915B467900049C0C8 /* Sequencer Mode */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A2EA15B467900049C0C8 /* ModeSequencer.cpp */,
-				0C78A2EB15B467900049C0C8 /* ModeSequencer.h */,
-				0C78A2EC15B467900049C0C8 /* SequenceAudioFilePlayer.cpp */,
-				0C78A2ED15B467900049C0C8 /* SequenceAudioFilePlayer.h */,
-				0C78A2EE15B467900049C0C8 /* SequencePlayer.cpp */,
-				0C78A2EF15B467900049C0C8 /* SequencePlayer.h */,
 				0C78A2F015B467900049C0C8 /* SequencerValues.h */,
+				0C78A2EB15B467900049C0C8 /* ModeSequencer.h */,
+				0C78A2EA15B467900049C0C8 /* ModeSequencer.cpp */,
+				0C78A2EF15B467900049C0C8 /* SequencePlayer.h */,
+				0C78A2EE15B467900049C0C8 /* SequencePlayer.cpp */,
+				0C78A2ED15B467900049C0C8 /* SequenceAudioFilePlayer.h */,
+				0C78A2EC15B467900049C0C8 /* SequenceAudioFilePlayer.cpp */,
 			);
 			path = "Sequencer Mode";
 			sourceTree = "<group>";

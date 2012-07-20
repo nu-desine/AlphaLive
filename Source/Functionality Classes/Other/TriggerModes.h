@@ -31,7 +31,10 @@ struct TriggerModeData
     bool shouldLoop; //don't need this now as looping is defined with trigger modes
     
     //special variables for the cycle and auto-cyle play states
-    bool ignorePressure; //is this variable needed? in each playstate where pressure is ignored, the pressure value is set to 0 each time - is this adequate enough?
+    bool ignorePressure; //don't think we need this anymore. was used for the cycle playstates so that the pressure wouldn't change the seq number,
+                            //however now the default pressure feature is to apply continous midi data or control DSP effects
+                            //with a secondary option to use the pressure to control the seq arrangement.
+                            //therefore we don't want to ignore pressure with the cycle playstates anymore.
     bool moveToNextSeq;
     bool isLinearCycle;
     bool isAutoCycle;
@@ -71,7 +74,7 @@ public:
     TriggerModeData toggleRelease (int padValue);
     TriggerModeData latch (int padValue);
     TriggerModeData latchMax (int padValue);
-    TriggerModeData Trigger (int padValue);
+    TriggerModeData trigger (int padValue);
     
     //sequencer-only trigger modes
     TriggerModeData cycle (int padValue);

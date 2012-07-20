@@ -53,15 +53,15 @@ AudioFilePlayer::AudioFilePlayer(int looperPadNumber, ModeLooper &ref, TimeSlice
     gain = gainPrev = PAD_SETTINGS->getLooperGain();
     panLeft = panLeftPrev = PanControl::leftChanPan_(PAD_SETTINGS->getLooperPan());
     panRight = panRightPrev = PanControl::rightChanPan_(PAD_SETTINGS->getLooperPan());
-    playState = PAD_SETTINGS->getLooperPlayState();
+    triggerMode = PAD_SETTINGS->getLooperTriggerMode();
     currentPlayingState = currentPressureValue = 0;
     effect = PAD_SETTINGS->getLooperEffect();
     quantizeMode = PAD_SETTINGS->getLooperQuantizeMode();
     channel = PAD_SETTINGS->getLooperChannel();
     
-    playStateData.playingStatus = 0;
-    playStateData.pressureValue = 0;
-    playStateData.shouldLoop = true;
+    triggerModeData.playingStatus = 0;
+    triggerModeData.pressureValue = 0;
+    triggerModeData.shouldLoop = true;
     
     prevPadValue = 0;
     
@@ -113,56 +113,32 @@ void AudioFilePlayer::processAudioFile(int padValue)
     {
         std::cout << "stream ended on its own!!";
         currentPlayingState = 0;
-        playStates.reset();
+        triggerModes.reset();
     }
    
-    //determime playstate and audio file transportation
-    switch (playState) 
+    //determime triggerMode and audio file transportation
+    switch (triggerMode) 
     {
         case 1:
-            playStateData = playStates.playOnce(padValue);
+            triggerModeData = triggerModes.hold(padValue);
             break;
         case 2:
-            playStateData = playStates.playOnceContinuous(padValue);
+            triggerModeData = triggerModes.toggle(padValue);
             break;
         case 3:
-            playStateData = playStates.loop(padValue);
+            triggerModeData = triggerModes.toggleRelease(padValue);
             break;
         case 4:
-            playStateData = playStates.togglePressOff(padValue);
+            triggerModeData = triggerModes.latch(padValue);
             break;
         case 5:
-            playStateData = playStates.toggleReleaseOff(padValue);
+            triggerModeData = triggerModes.latchMax(padValue);
             break;
         case 6:
-            playStateData = playStates.sticky(padValue);
-            break;
-        case 7:
-            playStateData = playStates.latchMaxLatch(padValue);
-            break;
-        case 8:
-            playStateData = playStates.latchPressLatch(padValue);
-            break;
-        case 9:
-            playStateData = playStates.triggerLooped(padValue);
-            break;
-        case 10:
-            playStateData = playStates.triggerNonLooped(padValue);
-            break;
-        case 21:
-            playStateData = playStates.playOnceNonDestructive(padValue);
-            break;
-        case 22:
-            playStateData = playStates.triggerLoopedNonDestructive(padValue);
-            break;
-        case 24:
-            playStateData = playStates.triggerNonLoopedNonDestructive(padValue);
-            break;
-        case 25:
-            playStateData = playStates.toggleNonDestructive(padValue);
+            triggerModeData = triggerModes.trigger(padValue);
             break;
         default:
-            playStateData = playStates.loop(padValue);
+            triggerModeData = triggerModes.toggle(padValue);
             break;
     }
     
@@ -170,12 +146,12 @@ void AudioFilePlayer::processAudioFile(int padValue)
     //==========================================================================================
     if (quantizeMode == 1) //free
     {
-        if (playStateData.playingStatus == 1) //play
+        if (triggerModeData.playingStatus == 1) //play
         {
             playAudioFile();
         }
         
-        else if (playStateData.playingStatus == 0) //stop
+        else if (triggerModeData.playingStatus == 0) //stop
         {
             stopAudioFile();
             currentPlayingState = 0;
@@ -184,7 +160,7 @@ void AudioFilePlayer::processAudioFile(int padValue)
     //==========================================================================================
     else if (quantizeMode == 2) //quantized
     {
-        if (playStateData.playingStatus == 1) //play
+        if (triggerModeData.playingStatus == 1) //play
         {
             currentPlayingState = 2; //waiting to play
             
@@ -197,7 +173,7 @@ void AudioFilePlayer::processAudioFile(int padValue)
             
         }
         
-        else if (playStateData.playingStatus == 0) //stop
+        else if (triggerModeData.playingStatus == 0) //stop
         {
             currentPlayingState = 3; // waiting to stop
             
@@ -215,7 +191,7 @@ void AudioFilePlayer::processAudioFile(int padValue)
     
     /*
     //playback manipulation test stuff
-    int pressureRegion = 1 + (playStateData.pressureValue*(3.0/511.0));
+    int pressureRegion = 1 + (triggerModeData.pressureValue*(3.0/511.0));
     std::cout << pressureRegion << std::endl;
     
     if (pressureRegion != prevPressureRegion)
@@ -254,28 +230,28 @@ void AudioFilePlayer::processAudioFile(int padValue)
     switch (effect)
     {
         case 1: //Gain and Pan
-            gainAndPan->processAlphaTouch(playStateData.pressureValue);
+            gainAndPan->processAlphaTouch(triggerModeData.pressureValue);
             break;
         case 2: //LPF
-            lowPassFilter->processAlphaTouch(playStateData.pressureValue);
+            lowPassFilter->processAlphaTouch(triggerModeData.pressureValue);
             break;
         case 3: //HPF
-            highPassFilter->processAlphaTouch(playStateData.pressureValue);
+            highPassFilter->processAlphaTouch(triggerModeData.pressureValue);
             break;
         case 4: //BPF
-            bandPassFilter->processAlphaTouch(playStateData.pressureValue);
+            bandPassFilter->processAlphaTouch(triggerModeData.pressureValue);
             break;
         case 6: //Delay
-            delay->processAlphaTouch(playStateData.pressureValue);
+            delay->processAlphaTouch(triggerModeData.pressureValue);
             break;
         case 7: //Reverb
-            reverb->processAlphaTouch(playStateData.pressureValue);
+            reverb->processAlphaTouch(triggerModeData.pressureValue);
             break;
         case 9: //Flanger
-            flanger->processAlphaTouch(playStateData.pressureValue);
+            flanger->processAlphaTouch(triggerModeData.pressureValue);
             break;
         case 10: //Tremolo
-            tremolo->processAlphaTouch(playStateData.pressureValue);
+            tremolo->processAlphaTouch(triggerModeData.pressureValue);
             break;
         default:
             break;
@@ -354,9 +330,9 @@ void AudioFilePlayer::triggerQuantizationPoint()
 
 void AudioFilePlayer::playAudioFile()
 {
-    //set to whether the audio should loop, set from the playstate functions
+    //set to whether the audio should loop, set from the triggerMode functions
     if (currentFile != File::nonexistent && currentAudioFileSource != NULL)
-        currentAudioFileSource->setLooping(playStateData.shouldLoop);
+        currentAudioFileSource->setLooping(triggerModeData.shouldLoop);
     
     //set the state of certain effects
     if (effect == 9) //flanger
@@ -634,9 +610,9 @@ int AudioFilePlayer::getCurrentPlayingState()
 {
     return currentPlayingState;
 }
-void AudioFilePlayer::setPlayState (int value)
+void AudioFilePlayer::setTriggerMode (int value)
 {
-    playState = value;
+    triggerMode = value;
 }
 void AudioFilePlayer::setEffect(int value)
 {

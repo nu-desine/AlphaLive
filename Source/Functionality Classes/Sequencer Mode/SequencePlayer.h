@@ -27,7 +27,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "SequencerValues.h"
-#include "../Other/PlayStates.h"
+#include "../Other/TriggerModes.h"
 #include "SequenceAudioFilePlayer.h"
 #include "../../Application/AbstractSubjectAndObserver.h"
 #include "../../Audio Processing/PanControl.h"
@@ -72,7 +72,7 @@ public:
     void setSequenceData (int seq, int row, int column, int value);
     void setMode (int value);
     void setNumberOfSequences (int value);
-    void setPlayState (int value);
+    void setTriggerMode (int value);
     void setSequenceLength (int value);
     void setQuantizeMode (int value);
     void setChannel (int value);
@@ -104,9 +104,9 @@ private:
     ActionBroadcaster broadcaster;
     ModeSequencer &modeSequencerRef;
     
-    //create an object of the PlayStates Class and a variable of the PlayStateData struct
-    PlayStates playStates;
-    PlayStateData playStateData;
+    //create an object of the TriggerModes Class and a variable of the TriggerModeData struct
+    TriggerModes triggerModes;
+    TriggerModeData triggerModeData;
     
     //midi stuff
     MidiOutput *midiOutputDevice;
@@ -134,7 +134,7 @@ private:
     int sequenceData[NO_OF_SEQS][NO_OF_ROWS][NO_OF_COLUMNS];
     int mode;
     int numberOfSequences;
-    int playState;
+    int triggerMode;
     int sequenceLength;
     int quantizeMode;
     int channel;

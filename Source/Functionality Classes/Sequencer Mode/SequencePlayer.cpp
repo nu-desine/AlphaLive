@@ -55,7 +55,7 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     
     mode = PAD_SETTINGS->getSequencerMode();
     numberOfSequences = PAD_SETTINGS->getSequencerNumberOfSequences();
-    playState = PAD_SETTINGS->getSequencerPlayState();
+    triggerMode = PAD_SETTINGS->getSequencerTriggerMode();
     sequenceLength = PAD_SETTINGS->getSequencerLength();
     for (int row = 0; row <=NO_OF_ROWS-1; row++)
        midiNote[row] = PAD_SETTINGS->getSequencerMidiNote(row); 
@@ -70,12 +70,12 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     panLeft = panLeftPrev = PanControl::leftChanPan_(PAD_SETTINGS->getSequencerPan());
     panRight = panRightPrev = PanControl::rightChanPan_(PAD_SETTINGS->getSequencerPan());
     
-    playStateData.playingStatus = 0;
-    playStateData.pressureValue = 0;
-    playStateData.shouldLoop = true;
-    playStateData.moveToNextSeq = false;
-    playStateData.ignorePressure = false;
-    playStateData.isLinearCycle = false;
+    triggerModeData.playingStatus = 0;
+    triggerModeData.pressureValue = 0;
+    triggerModeData.shouldLoop = true;
+    triggerModeData.moveToNextSeq = false;
+    triggerModeData.ignorePressure = false;
+    triggerModeData.isLinearCycle = false;
     //=====================================
     
     sequenceNumber = 0;
@@ -139,96 +139,63 @@ void SequencePlayer::processSequence(int padValue)
     {
         std::cout << "stream ended on its own!!";
         currentPlayingState = 0;
-        playStates.reset();
+        triggerModes.reset();
     }
     
-    switch (playState) 
+    switch (triggerMode) 
     {
         case 1:
-            playStateData = playStates.playOnce(padValue);
+            triggerModeData = triggerModes.hold(padValue);
             break;
         case 2:
-            playStateData = playStates.playOnceContinuous(padValue);
+            triggerModeData = triggerModes.toggle(padValue);
             break;
         case 3:
-            playStateData = playStates.loop(padValue);
+            triggerModeData = triggerModes.toggleRelease(padValue);
             break;
         case 4:
-            playStateData = playStates.togglePressOff(padValue);
+            triggerModeData = triggerModes.latch(padValue);
             break;
         case 5:
-            playStateData = playStates.toggleReleaseOff(padValue);
+            triggerModeData = triggerModes.latchMax(padValue);
             break;
         case 6:
-            playStateData = playStates.sticky(padValue);
+            triggerModeData = triggerModes.trigger(padValue);
             break;
         case 7:
-            playStateData = playStates.latchMaxLatch(padValue);
+            triggerModeData = triggerModes.cycle(padValue);
             break;
         case 8:
-            playStateData = playStates.latchPressLatch(padValue);
-            break;
-        case 9: 
-            playStateData = playStates.triggerLooped(padValue);
-            break;
-        case 10:
-            playStateData = playStates.triggerNonLooped(padValue);
-            break;
-        case 11:
-            playStateData = playStates.cycleLooped(padValue);
-            break;
-        case 12:
-            playStateData = playStates.cycleLinear(padValue);
-            break;
-        case 13:
-            playStateData = playStates.autoCycleLooped(padValue);
-            break;
-        case 14:
-            playStateData = playStates.autoCycleLinear(padValue);
-            break;
-        case 21:
-            playStateData = playStates.playOnceNonDestructive(padValue);
-            break;
-        case 22:
-            playStateData = playStates.triggerLoopedNonDestructive(padValue);
-            break;
-        case 23:
-            playStateData = playStates.cycleLinearNonDestructive(padValue);
-            break;
-        case 24:
-            playStateData = playStates.triggerNonLoopedNonDestructive(padValue);
-            break;
-        case 25:
-            playStateData = playStates.toggleNonDestructive(padValue);
+            triggerModeData = triggerModes.autoCycle(padValue);
             break;
         default:
-            playStateData = playStates.loop(padValue);
+            triggerModeData = triggerModes.toggle(padValue);
             break;
     }
     
-    //CONTROL PRESSURE STUFF WITH playStateData.pressureValue NOT padValue AS STICKY MODE WOULD MODIFY THE VALUE
+    //CONTROL PRESSURE STUFF WITH triggerModeData.pressureValue NOT padValue AS STICKY MODE WOULD MODIFY THE VALUE
     
     //===========convert pressure to steps here!===============
-    if (playStateData.ignorePressure == false) //ignore for certain playstates
+    if (triggerModeData.ignorePressure == false) //ignore for certain triggerModes
     {
-        sequenceNumber = playStateData.pressureValue * (numberOfSequences/511.0);
+        sequenceNumber = triggerModeData.pressureValue * (numberOfSequences/511.0);
         if (sequenceNumber > numberOfSequences-1)
             sequenceNumber  = numberOfSequences-1;
     }
     
-    //for cycle playstates
-    if (playStateData.moveToNextSeq == true)
+    //for cycle triggerModes
+    if (triggerModeData.moveToNextSeq == true)
     {
         //if true, move to next seq
         sequenceNumber++;
         
         if (sequenceNumber == numberOfSequences) //if goes beyond the last sequence
         {
-            if (playStateData.isLinearCycle == false)
+            if (triggerModeData.isLinearCycle == false)
             {
                 sequenceNumber = 0; //if reached end of seqs and play state isn't a linear cycle, go back to the beginning
             }
-            else if (playStateData.isLinearCycle == true)
+            else if (triggerModeData.isLinearCycle == true)
             {
                 //stopThreadAndReset(); //if reached end of seqs and play state IS a linear cycle, stop thread
                 stopThread(timeInterval);
@@ -257,11 +224,11 @@ void SequencePlayer::processSequence(int padValue)
     //==========================================================================================
     //====================set the transportation of the thread here!============================
     
-    //if playStateData.playingStatus = 2, do nothing
+    //if triggerModeData.playingStatus = 2, do nothing
     
     if (quantizeMode == 1) //free
     {
-        if (playStateData.playingStatus == 1) //play
+        if (triggerModeData.playingStatus == 1) //play
         {
             if (isThreadRunning() == true)
                 stopThread(timeInterval); //so that the 'trigger' play states work ()
@@ -278,7 +245,7 @@ void SequencePlayer::processSequence(int padValue)
             
         }
         
-        else if (playStateData.playingStatus == 0) //stop
+        else if (triggerModeData.playingStatus == 0) //stop
         {
             currentPlayingState = 0;
             stopThread(timeInterval);
@@ -290,7 +257,7 @@ void SequencePlayer::processSequence(int padValue)
     //==========================================================================================
     else if (quantizeMode == 2) //quantized
     {
-        if (playStateData.playingStatus == 1) //play
+        if (triggerModeData.playingStatus == 1) //play
         {
             currentPlayingState = 2; //waiting to play
             
@@ -302,7 +269,7 @@ void SequencePlayer::processSequence(int padValue)
             
             
         }
-        else if (playStateData.playingStatus == 0) //stop
+        else if (triggerModeData.playingStatus == 0) //stop
         {
             currentPlayingState = 3; // waiting to stop
             
@@ -397,15 +364,15 @@ void SequencePlayer::run()
     {
         //in the above while loop statement, the following paramaters cause the thread to end:
         // - threadShouldExit() becomes true when stopThread is called
-        // - columnNumber becomes greater than sequenceLength when playStateData.shouldLoop is set to false from the current play state. see bottom of this loop.
-        // - sequenceNumber becomes greater than numberOfSequences when playStateData.isLinearCycle is set to true from the autocyclelinear playstate. see bottom of this while loop
+        // - columnNumber becomes greater than sequenceLength when triggerModeData.shouldLoop is set to false from the current play state. see bottom of this loop.
+        // - sequenceNumber becomes greater than numberOfSequences when triggerModeData.isLinearCycle is set to true from the autocyclelinear triggerMode. see bottom of this while loop
         
         
         //PREVIOUSLY, waitForMillisecondCounter() WAS CALLED HERE, AND currentTime ABOVE WAS SET TO JUST Time::getMillisecondCounter().
         //HOWEVER NOW IT IS CALLED AT THE END OF THE WHILE LOOP AND THE INTIAL VALUE OF currentTime HAS BEEN CHANGED.
         //THIS HAS BEEN DONE AS BEFORE THERE WAS A BUG IN THAT WHEN THE THREAD WAS TOLD TO EXIT IT WOULD CUT OFF THE LAST NOTE BEING PLAYED
         //HOWEVER NOW THIS BUG DOES NOT OCCUR AS THE THREAD PAUSES AFTER THE SOUND HAS BEEN TRIGGER IN THE SAME INTERATION OF THE LOOP, NOT BEFORE.
-        //IT ALSO SEEMS TO MAKE THE TRIGGER PLAYSTATE BEHAVE BETTER IN TERMS OF TIMING
+        //IT ALSO SEEMS TO MAKE THE TRIGGER TriggerMode BEHAVE BETTER IN TERMS OF TIMING
         
         
         if (mode == 1) //midi mode selected
@@ -480,13 +447,13 @@ void SequencePlayer::run()
         columnNumber++;
         //if the counter variable reaches the end and the current play state iss set to loop, restart the counter.
         //otherwise the while loop will exit and the read will stop on it's own
-        if (columnNumber == sequenceLength && playStateData.shouldLoop == true)
+        if (columnNumber == sequenceLength && triggerModeData.shouldLoop == true)
             columnNumber = 0;
         
         
         
-        //for autocycle playstates
-        if (playStateData.isAutoCycle == true)
+        //for autocycle triggerModes
+        if (triggerModeData.isAutoCycle == true)
         {
             if (columnNumber == sequenceLength) //if goes beyond the last column of the sequence
             {
@@ -495,7 +462,7 @@ void SequencePlayer::run()
                 
                 if (sequenceNumber == numberOfSequences) //if goes beyond the last sequence
                 {
-                    if (playStateData.isLinearCycle == false)
+                    if (triggerModeData.isLinearCycle == false)
                         sequenceNumber = 0; //if reached end of seqs and play state isn't a linear cycle, go back to the beginning
                     
                     //else, sequencer number will greater than the number of sequences, so the while loop will not run next time
@@ -586,7 +553,7 @@ void SequencePlayer::stopThreadAndReset()
     
     //this call can't be made in bottom of run() (when the thread will be finshed)
     //as it would interupt the trigger play states
-    //playStates.reset();
+    //triggerModes.reset();
     currentPlayingState = 0;
     std::cout << "stopping sequence!" << std::endl;
 }
@@ -783,7 +750,7 @@ void SequencePlayer::actionListenerCallback (const String& message)
             columnNumberEnd++;
             //if the counter variable reaches the end and the current play state is set to loop, restart the counter.
             //otherwise the while loop will exit 
-            if (columnNumberEnd == sequenceLength && playStateData.shouldLoop == true)
+            if (columnNumberEnd == sequenceLength && triggerModeData.shouldLoop == true)
                 columnNumberEnd = 0;
         }
         
@@ -867,9 +834,9 @@ void SequencePlayer::setNumberOfSequences (int value)
 {
     numberOfSequences = value;
 }
-void SequencePlayer::setPlayState (int value)
+void SequencePlayer::setTriggerMode (int value)
 {
-    playState = value;
+    triggerMode = value;
 }
 void SequencePlayer::setSequenceLength (int value)
 {

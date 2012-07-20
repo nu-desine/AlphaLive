@@ -24,7 +24,7 @@
 #define H_AUDIOFILEPLAYER
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "../Other/PlayStates.h"
+#include "../Other/TriggerModes.h"
 #include "../../Audio Processing/DSP Effects/GainAndPan.h"
 #include "../../Audio Processing/DSP Effects/LowpassFilter.h"
 #include "../../Audio Processing/DSP Effects/HighPassFilter.h"
@@ -57,7 +57,7 @@ public:
     void playAudioFile();
     void stopAudioFile();
     
-    void setPlayState (int value);
+    void setTriggerMode (int value);
     void setEffect (int value);
     void setQuantizeMode (int value);
     void setChannel (int value);
@@ -102,15 +102,15 @@ private:
     int prevPadValue;
     float sampleRate_;
     
-    //create an object of the PlayStates Class and a variable of the PlayStateData struct
-    PlayStates playStates;
-    PlayStateData playStateData;
+    //create an object of the TriggerModes Class and a variable of the TriggerModeData struct
+    TriggerModes triggerModes;
+    TriggerModeData triggerModeData;
     
     ModeLooper &modeLooperRef;
     
     
     //settings
-    int playState, effect;
+    int triggerMode, effect;
     int currentPlayingState; //0 - off, 1 - playing, 2 - waiting to play, 3 - waiting to stop 
     int currentPressureValue;
     int quantizeMode;

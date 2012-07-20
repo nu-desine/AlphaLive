@@ -70,35 +70,15 @@ GuiLooperMode::GuiLooperMode(MainComponent &ref)
     panSlider->sliderComponent()->addMouseListener(this, true);
 
     
-    addAndMakeVisible(playStateMenu = new ComboBox());
-    playStateMenu->addListener(this);
-    playStateMenu->addItem("Play Once", 1);
-    playStateMenu->addItem("Play Once (Continuous)", 2);
-    playStateMenu->addItem("Play Once (Non-Destructive)", 21);
-    playStateMenu->addItem("Loop", 3);
-    playStateMenu->addItem("Toggle (Press-Off)", 4);
-    playStateMenu->addItem("Toggle (Release-Off)", 5);
-    playStateMenu->addItem("Toggle (Non-Destructive)", 25);
-    playStateMenu->addItem("Sticky", 6);
-    playStateMenu->addItem("Latch (Max-Latch)", 7);
-    playStateMenu->addItem("Latch (Press-Latch)", 8);
-    playStateMenu->addItem("Trigger (Looped)", 9);
-    playStateMenu->addItem("Trigger (Looped, Non-Destructive)", 22);
-    playStateMenu->addItem("Trigger (Non-Looped)", 10);
-    playStateMenu->addItem("Trigger (Non-Looped, Non-Destructive)", 24);
-    
-    playStateMenu->setSelectedId(3, true);
-    playStateMenu->addMouseListener(this, true);
-    
     addAndMakeVisible(triggerModeMenu = new ComboBox());
     triggerModeMenu->addListener(this);
     triggerModeMenu->addItem("Hold", 1);
     triggerModeMenu->addItem("Toggle", 2);
-    triggerModeMenu->addItem("Toggle Release", 21);
-    triggerModeMenu->addItem("Latch", 3);
-    triggerModeMenu->addItem("Latch Max", 4);
-    triggerModeMenu->addItem("Trigger", 5);
-    triggerModeMenu->setSelectedId(3, true);
+    triggerModeMenu->addItem("Toggle Release", 3);
+    triggerModeMenu->addItem("Latch", 4);
+    triggerModeMenu->addItem("Latch Max", 5);
+    triggerModeMenu->addItem("Trigger", 6);
+    triggerModeMenu->setSelectedId(2, true);
     triggerModeMenu->addMouseListener(this, true);
     
     //channel slider - this feature is now referenced to 'groups' not channels
@@ -155,8 +135,8 @@ void GuiLooperMode::resized()
     gainSlider->setBounds(845, 495, 45, 45);
 	panSlider->setBounds(900, 495, 45, 45);
         
-    //playStateMenu->setBounds(RIGHT_CIRCLE_X, 538, COMPONENT_W, COMPONENT_H);
     triggerModeMenu->setBounds(RIGHT_CIRCLE_X, 538, COMPONENT_W, COMPONENT_H);
+    
     
     channelSlider->setBounds(850, 251, 142, 142);
     
@@ -183,12 +163,12 @@ void GuiLooperMode::comboBoxChanged (ComboBox* comboBox)
     
     //==============================================================================
     //play state combobox
-    if (comboBox == playStateMenu)
+    if (comboBox == triggerModeMenu)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperPlayState(playStateMenu->getSelectedId());
+            PAD_SETTINGS->setLooperTriggerMode(triggerModeMenu->getSelectedId());
         }
     }
     
@@ -347,7 +327,7 @@ void GuiLooperMode::updateDisplay()
 		
         gainSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperGain(), false);
         panSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperPan(), false);
-        playStateMenu->setSelectedId(PAD_SETTINGS->getLooperPlayState(), true);
+        triggerModeMenu->setSelectedId(PAD_SETTINGS->getLooperTriggerMode(), true);
         channelSlider->setValue(PAD_SETTINGS->getLooperChannel(), false);
         quantizeModeMenu->setSelectedId(PAD_SETTINGS->getLooperQuantizeMode(), true);
         
@@ -363,7 +343,7 @@ void GuiLooperMode::updateDisplay()
         fileChooser->setCurrentFile(File::nonexistent, false, false);
         gainSlider->sliderComponent()->setValue(0.7, false);
         panSlider->sliderComponent()->setValue(0.5, false);
-        playStateMenu->setSelectedId(3, true);
+        triggerModeMenu->setSelectedId(2, true);
         channelSlider->setValue(1, false);
         quantizeModeMenu->setSelectedId(1, true);
         
@@ -394,9 +374,9 @@ void GuiLooperMode::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText("Gain Knob. Sets and displays the gain/volume of the selected pad/pads audio signal.");
     }
-    else if (playStateMenu->isMouseOver(true))
+    else if (triggerModeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("PlayState Drop-down Menu. \nSets and displays the looper PlayState for the selected pad/pads. Looper PlayStates determine how interation with a pad controls the playback and modification of an audio file.");
+        mainComponentRef.setInfoTextBoxText("TriggerMode Drop-down Menu. \nSets and displays the looper TriggerMode for the selected pad/pads. Looper TriggerModes determine how interation with a pad controls the playback and modification of an audio file.");
     }
     else if (fxDial->isMouseOver(true))
     {

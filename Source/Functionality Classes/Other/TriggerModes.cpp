@@ -82,38 +82,341 @@ TriggerModeData TriggerModes::hold (int padValue)
 
 TriggerModeData TriggerModes::toggle (int padValue)
 {
+    //press to play
+    //press again to stop
     
+    if (currentPlayingStatus == 0 && padValue > 0 && pressCount == 0 && releaseCount == 0)
+    {
+        triggerModeData.playingStatus = 1;
+        currentPlayingStatus = 1;
+        pressCount = 1;
+    }
+    else if(currentPlayingStatus == 1 && padValue == 0)
+    {
+        releaseCount = 1;
+    }
+    else if(currentPlayingStatus == 1 && padValue > 0 && releaseCount == 1 && pressCount >= 1) 
+    {
+        currentPlayingStatus = 0;
+        triggerModeData.playingStatus = 0;
+        pressCount = 0;
+    }
+    else if(currentPlayingStatus == 0 && padValue == 0 && releaseCount == 1 && pressCount == 0)
+    {
+        releaseCount = 0;
+    }
+    else
+    {
+        triggerModeData.playingStatus = 2; //ignore
+    }
+    
+    maxPressCount = 1; 
+    rePressCount = 0;
+    
+    //triggerModeData.pressureValue = padValue;    
+    //triggerModeData.shouldLoop = true;
+    triggerModeData.ignorePressure = false;
+    triggerModeData.moveToNextSeq = false;
+    triggerModeData.isLinearCycle = false;
+    triggerModeData.isAutoCycle = false;
+    
+    return triggerModeData;
 }
 
 TriggerModeData TriggerModes::toggleRelease (int padValue)
 {
+    //press to play
+    //press again and release to stop
     
+    if (currentPlayingStatus == 0 && padValue > 0 && pressCount == 0 && releaseCount == 0)
+    {
+        currentPlayingStatus = 1;
+        triggerModeData.playingStatus = 1;
+        pressCount = 1;
+        
+    }
+    else if(currentPlayingStatus == 1 && padValue == 0 && releaseCount == 0 && pressCount == 1)
+    {
+        releaseCount = 1;
+        
+    }
+    else if(currentPlayingStatus == 1 && padValue > 0 && releaseCount == 1 && pressCount == 1)
+    {
+        pressCount = 2;
+        
+    }
+    else if(currentPlayingStatus == 1 && padValue == 0 && pressCount >= 2)
+    {
+        currentPlayingStatus = 0;
+        triggerModeData.playingStatus = 0;
+        releaseCount = 0;
+        pressCount = 0;
+    }
+    else
+    {
+        triggerModeData.playingStatus = 2; //ignore
+    }
+    
+    maxPressCount = 1;
+    rePressCount = 0;
+    
+    //triggerModeData.pressureValue = padValue;    
+    //triggerModeData.shouldLoop = true;
+    triggerModeData.ignorePressure = false;
+    triggerModeData.moveToNextSeq = false;
+    triggerModeData.isLinearCycle = false;
+    triggerModeData.isAutoCycle = false;
+    
+    return triggerModeData;
 }
 
 TriggerModeData TriggerModes::latch (int padValue)
 {
+    //press to play
+    //press to max value and release to stop
     
+    if (currentPlayingStatus == 0 && padValue > 0 && pressCount == 0 && releaseCount == 0) 
+    {
+        currentPlayingStatus = 1;
+        triggerModeData.playingStatus = 1;
+        pressCount = 1;
+        maxPressCount = 1;
+    }
+    else if(padValue == 511 && maxPressCount == 1)
+    {
+        maxPressCount = 0;
+    }
+    else if(currentPlayingStatus == 1 && padValue == 0 && maxPressCount == 0) 
+    {
+        currentPlayingStatus = 0;
+        triggerModeData.playingStatus = 0;
+        releaseCount = 0;
+        pressCount = 0;
+    }
+    else if(currentPlayingStatus == 1 && padValue == 0 && pressCount == 1) 
+    {
+        releaseCount = 1;
+    }
+    else
+    {
+        triggerModeData.playingStatus = 2; //ignore
+    }
+    
+    rePressCount = 0;
+    
+    //triggerModeData.pressureValue = padValue;    
+    //triggerModeData.shouldLoop = true;
+    triggerModeData.ignorePressure = false;
+    triggerModeData.moveToNextSeq = false;
+    triggerModeData.isLinearCycle = false;
+    triggerModeData.isAutoCycle = false;
+    
+    return triggerModeData;
 }
 
 TriggerModeData TriggerModes::latchMax (int padValue)
 {
+    //press to play
+    //release to stop
+    //press to max value to 'latch' the pad so any further 
+    //releases don't stop the pad until pressed to max value again
     
+    if (currentPlayingStatus == 0 && padValue > 0 && pressCount == 0 && releaseCount == 0) 
+    {
+        currentPlayingStatus = 1;
+        triggerModeData.playingStatus = 1;
+        pressCount = 1;
+        maxPressCount = 0;
+    }
+    else if(padValue == 511 && maxPressCount == 0)
+    {
+        maxPressCount = 1;
+    }
+    else if(padValue == 511 && maxPressCount == 1)
+    {
+        maxPressCount = 0;
+    }
+    else if (currentPlayingStatus == 1 && padValue == 0 && maxPressCount == 0)
+    {
+        currentPlayingStatus = 0;
+        triggerModeData.playingStatus = 0;
+        releaseCount = 0;
+        pressCount = 0;
+    }
+    
+    else if(currentPlayingStatus == 1 && padValue == 0 && pressCount == 1) 
+    {
+        releaseCount = 1;
+    }
+    else
+    {
+        triggerModeData.playingStatus = 2; //ignore
+    }
+    
+    
+    rePressCount = 0;
+    
+    //triggerModeData.pressureValue = padValue;    
+    //triggerModeData.shouldLoop = true;
+    triggerModeData.ignorePressure = false;
+    triggerModeData.moveToNextSeq = false;
+    triggerModeData.isLinearCycle = false;
+    triggerModeData.isAutoCycle = false;
+    
+    return triggerModeData;
 }
 
-TriggerModeData TriggerModes::Trigger (int padValue)
+TriggerModeData TriggerModes::trigger (int padValue)
 {
+    //press to play
+    //press again to restart the loop
+    //press to max value and release to stop
     
+    if (padValue > 0 && rePressCount == 0)
+    {
+        currentPlayingStatus = 1;
+        triggerModeData.playingStatus = 1;
+        pressCount = 1;
+        rePressCount = 1;
+        maxPressCount = 1;
+    }
+    else if(currentPlayingStatus == 1 && padValue == 0 && pressCount == 1 && maxPressCount == 1)
+    {
+        releaseCount = 1;
+        rePressCount = 0;
+        
+    }
+    else if(padValue == 511)
+    {
+        maxPressCount = 0;
+    }
+    else if(currentPlayingStatus == 1 && padValue == 0 && maxPressCount == 0)
+    {
+        currentPlayingStatus = 0;
+        triggerModeData.playingStatus = 0;
+        pressCount = 0;
+        releaseCount = 0;
+        rePressCount = 0;
+        
+    }
+    else
+    {
+        triggerModeData.playingStatus = 2; //ignore
+    }
+    
+    
+    //triggerModeData.pressureValue = padValue;    
+    //triggerModeData.shouldLoop = true;
+    triggerModeData.ignorePressure = false;
+    triggerModeData.moveToNextSeq = false;
+    triggerModeData.isLinearCycle = false;
+    triggerModeData.isAutoCycle = false;
+    
+    return triggerModeData;
 }
 
 //sequencer-only trigger modes
+
 TriggerModeData TriggerModes::cycle (int padValue)
 {
+    //MAY NEED TO EDIT THIS SO THAT 'LOOP' WILL CONTROL WHETHER THE WHOLE SET OF SEQS LOOPS
+    //RATHER THAN THE SINGLE SEQ, WHICH IS WHAT LOOP USUALLY CONTROLS
     
+    //press to play and loop
+    //for each press after, move to the next sequence
+    //press to max value and release to stop
+    
+    if (currentPlayingStatus == 0 && padValue > 0 && pressCount == 0) 
+    {
+        currentPlayingStatus = 1;
+        triggerModeData.playingStatus = 1;
+        pressCount = 1;
+        rePressCount = 1;
+        maxPressCount = 1;
+    }
+    else if(currentPlayingStatus == 1 && padValue == 0 && pressCount == 1 && maxPressCount == 1) 
+    {
+        releaseCount = 1;
+        rePressCount = 0;
+    }
+    else if (currentPlayingStatus == 1 && padValue > 0 && rePressCount == 0 && releaseCount == 1) 
+    {
+        triggerModeData.moveToNextSeq = true;
+        rePressCount = 1;
+    }
+    else if(padValue == 511)
+    {
+        maxPressCount = 0;
+    }
+    else if(currentPlayingStatus == 1 && padValue == 0 && maxPressCount == 0) 
+    {
+        currentPlayingStatus = 0;
+        triggerModeData.playingStatus = 0;
+        pressCount = 0;
+        releaseCount = 0;
+        rePressCount = 0;
+    }
+    else
+    {
+        triggerModeData.playingStatus = 2; //ignore
+        triggerModeData.moveToNextSeq = false;
+    }
+    
+    //triggerModeData.pressureValue = 0;    
+    //triggerModeData.shouldLoop = true;
+    triggerModeData.ignorePressure = true;
+    triggerModeData.isLinearCycle = false;
+    triggerModeData.isAutoCycle = false;
+    
+    return triggerModeData;
 }
 
 TriggerModeData TriggerModes::autoCycle (int padValue)
 {
+    //MAY NEED TO EDIT THIS SO THAT 'LOOP' WILL CONTROL WHETHER THE WHOLE SET OF SEQS LOOPS
+    //RATHER THAN THE SINGLE SEQ, WHICH IS WHAT LOOP USUALLY CONTROLS
     
+    //press to play
+    //when sequence reaches end, it moves on to the next sequence
+    //press to max value and release to stop
+    
+    if (currentPlayingStatus == 0 && padValue > 0 && pressCount == 0 && releaseCount == 0)
+    {
+        triggerModeData.playingStatus = 1;
+        currentPlayingStatus = 1;
+        pressCount = 1;
+    }
+    
+    else if(currentPlayingStatus == 1 && padValue == 0)
+    {
+        releaseCount = 1;
+    }
+    else if(currentPlayingStatus == 1 && padValue > 0 && pressCount >= 1 && releaseCount == 1) 
+    {
+        currentPlayingStatus = 0;
+        triggerModeData.playingStatus = 0;
+        pressCount = 0;
+    }
+    else if(currentPlayingStatus == 0 && padValue == 0 && pressCount == 0 && releaseCount == 1)
+    {
+        releaseCount = 0;
+    }
+    else
+    {
+        triggerModeData.playingStatus = 2; //ignore
+    }
+    
+    maxPressCount = 1; 
+    rePressCount = 0;
+    
+    //triggerModeData.pressureValue = 0;    
+    //triggerModeData.shouldLoop = false;
+    triggerModeData.ignorePressure = true;
+    triggerModeData.moveToNextSeq = false; //'move to next seq' command cannot be done here... must be done in SequencerPlayer
+    triggerModeData.isLinearCycle = false;
+    triggerModeData.isAutoCycle = true;
+    
+    return triggerModeData;
 }
 
 

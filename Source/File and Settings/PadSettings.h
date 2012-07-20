@@ -79,7 +79,7 @@ public:
     void setMidiMinPressureRange(int value);
     void setMidiMaxPressureRange(int value);
     void setMidiPressureMode(int value);
-    void setMidiPressurePlayState(int value);
+    void setMidiTriggerMode(int value);
     void setMidiPressureStatus (bool value);
     void setMidiNoteStatus (bool value);
     void setMidiCcController (int value);
@@ -92,7 +92,7 @@ public:
     int getMidiMinPressureRange();
     int getMidiMaxPressureRange();
     int getMidiPressureMode();
-    int getMidiPressurePlaystate();
+    int getMidiTriggerMode();
     bool getMidiPressureStatus();
     bool getMidiNoteStatus();
     int getMidiCcController();
@@ -102,7 +102,7 @@ public:
     //==================================================================
     //Looper mode
     void setLooperAudioFilePath (File value);
-    void setLooperPlayState (int value);
+    void setLooperTriggerMode (int value);
     void setLooperEffect (int value);
     void setLooperPan (float value);
     void setLooperGain (float value);
@@ -111,7 +111,7 @@ public:
     
     File getLooperAudioFilePath();
     bool getLooperIsLibraryFile();
-    int getLooperPlayState();
+    int getLooperTriggerMode();
     int getLooperEffect();
     float getLooperPan();
     float getLooperGain();
@@ -250,7 +250,7 @@ public:
     void setSequencerMode (int value);
     void setSequencerData (int sequenceNumber, int rowNumber, int columnNumber, int value, bool shouldUpdateSeqDataString=true);
     void setSequencerNumberOfSequences (int value);
-    void setSequencerPlayState (int value);
+    void setSequencerTriggerMode (int value);
     void setSequencerChannel (int value);
     void setSequencerLength (int value);
     void setSequencerQuantizeMode (int value);
@@ -268,7 +268,7 @@ public:
     int getSequencerMode();
     int getSequencerData (int sequenceNumber, int rowNumber, int columnNumber);
     int getSequencerNumberOfSequences();
-    int getSequencerPlayState();
+    int getSequencerTriggerMode();
     int getSequencerChannel();
     int getSequencerLength();
     int getSequencerQuantizeMode();
@@ -339,7 +339,7 @@ private:
     int midiMinPressureRange;
     int midiMaxPressureRange;
     int midiPressureMode;
-    int midiPressurePlayState; //shouldn't be named using 'pressure' 
+    int midiTriggerMode; //shouldn't be named using 'pressure' 
     bool midiPressureStatus;
     bool midiNoteStatus;
     int midiCcController;
@@ -349,7 +349,7 @@ private:
     //==================================================================
     //Looper mode
     String looperAudioFilePath;
-    int looperPlayState;
+    int looperTriggerMode;
     int looperEffect;
     float looperPan;
     float looperGain;
@@ -435,7 +435,7 @@ private:
     int sequencerMode; //Midi or Samples
     int sequencerData[NO_OF_SEQS][NO_OF_ROWS][NO_OF_COLUMNS]; //[sequence][row][column]
     int sequencerNumberOfSequences;
-    int sequencerPlayState;
+    int sequencerTriggerMode;
     int sequencerChannel; //now called 'group' not 'channel' to the user
     int sequencerLength;
     int sequencerQuantizeMode;

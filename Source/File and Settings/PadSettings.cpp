@@ -52,7 +52,7 @@ PadSettings::PadSettings(int arrayIndex)
     midiMinPressureRange = 0;
     midiMaxPressureRange = 127;
     midiPressureMode = 1;
-    midiPressurePlayState = 1;
+    midiTriggerMode = 2;
     midiPressureStatus = true;
     midiNoteStatus = true;
     //default CC layout
@@ -63,7 +63,7 @@ PadSettings::PadSettings(int arrayIndex)
     //looper mode
     //looperAudioFilePath = File::nonexistent;
     looperAudioFilePath = String::empty;
-    looperPlayState = 3; 
+    looperTriggerMode = 2; 
     looperEffect = 0;
     looperPan = 0.5;
     looperGain = 1.0;
@@ -159,7 +159,7 @@ PadSettings::PadSettings(int arrayIndex)
     
     sequencerMode = 1; 
     sequencerNumberOfSequences = 8; 
-    sequencerPlayState = 3; 
+    sequencerTriggerMode = 2; 
     sequencerChannel = 1;
     sequencerLength = 32;
     sequencerQuantizeMode = 1;
@@ -254,7 +254,7 @@ void PadSettings::resetData (int whatToReset)
         setMidiMinPressureRange(0);
         setMidiMaxPressureRange(127);
         setMidiPressureMode(1);
-        setMidiPressurePlayState(1);
+        setMidiTriggerMode(2);
         setMidiPressureStatus (true);
         setMidiNoteStatus (true);
         setMidiCcController (Layouts::ccLayout[padNumber]);
@@ -265,7 +265,7 @@ void PadSettings::resetData (int whatToReset)
     if (whatToReset != 2)
     {
         setLooperAudioFilePath (File::nonexistent);
-        setLooperPlayState (3);
+        setLooperTriggerMode (2);
         setLooperEffect (0);
         setLooperPan (0.5);
         setLooperGain (1.0);
@@ -290,7 +290,7 @@ void PadSettings::resetData (int whatToReset)
             clearSequencerDataString(seq);
         }
         setSequencerNumberOfSequences (8);
-        setSequencerPlayState (3);
+        setSequencerTriggerMode (2);
         setSequencerChannel (1);
         setSequencerLength (32);
         setSequencerQuantizeMode (1);
@@ -468,10 +468,10 @@ void PadSettings::setMidiPressureMode(int value)
     midiPressureMode = value;
     alphaLiveEngineRef->getModeMidi()->setPressureMode(value, padNumber);
 }
-void PadSettings::setMidiPressurePlayState(int value)
+void PadSettings::setMidiTriggerMode(int value)
 {
-    midiPressurePlayState = value;
-    alphaLiveEngineRef->getModeMidi()->setPlayStateValue(value, padNumber);
+    midiTriggerMode = value;
+    alphaLiveEngineRef->getModeMidi()->setTriggerModeValue(value, padNumber);
 }
 void PadSettings::setMidiPressureStatus (bool value)
 {
@@ -525,9 +525,9 @@ int PadSettings::getMidiPressureMode()
 {
     return midiPressureMode;
 }
-int PadSettings::getMidiPressurePlaystate()
+int PadSettings::getMidiTriggerMode()
 {
-    return midiPressurePlayState;
+    return midiTriggerMode;
 }
 bool PadSettings::getMidiPressureStatus()
 {
@@ -631,12 +631,12 @@ void PadSettings::setLooperAudioFilePath(File value)
 }
 
 
-void PadSettings::setLooperPlayState(int value)
+void PadSettings::setLooperTriggerMode(int value)
 {
-    looperPlayState = value;
+    looperTriggerMode = value;
     if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
     {
-        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setPlayState(looperPlayState);
+        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setTriggerMode(looperTriggerMode);
     }
 }
 void PadSettings::setLooperEffect(int value)
@@ -710,9 +710,9 @@ File PadSettings::getLooperAudioFilePath()
 }
 
 
-int PadSettings::getLooperPlayState()
+int PadSettings::getLooperTriggerMode()
 {
-    return looperPlayState;
+    return looperTriggerMode;
 }
 int PadSettings::getLooperEffect()
 {
@@ -1328,12 +1328,12 @@ void PadSettings::setSequencerNumberOfSequences(int value)
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setNumberOfSequences(value);
     }
 }
-void PadSettings::setSequencerPlayState(int value)
+void PadSettings::setSequencerTriggerMode(int value)
 {
-    sequencerPlayState = value;
+    sequencerTriggerMode = value;
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
     {
-        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setPlayState(value);
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setTriggerMode(value);
     }
 }
 void PadSettings::setSequencerChannel(int value)
@@ -1602,9 +1602,9 @@ int PadSettings::getSequencerNumberOfSequences()
 {
     return sequencerNumberOfSequences;
 }
-int PadSettings::getSequencerPlayState()
+int PadSettings::getSequencerTriggerMode()
 {
-    return sequencerPlayState;
+    return sequencerTriggerMode;
 }
 int PadSettings::getSequencerChannel()
 {

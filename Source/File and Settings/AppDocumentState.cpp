@@ -923,7 +923,7 @@ void AppDocumentState::saveToPreset (int presetNumber)
             padData->setAttribute("midiMinPressureRange", PAD_SETTINGS->getMidiMinPressureRange());
             padData->setAttribute("midiMaxPressureRange", PAD_SETTINGS->getMidiMaxPressureRange());
             padData->setAttribute("midiPressureMode", PAD_SETTINGS->getMidiPressureMode());
-            padData->setAttribute("midiPressurePlaystate", PAD_SETTINGS->getMidiPressurePlaystate());
+            padData->setAttribute("midiTriggerMode", PAD_SETTINGS->getMidiTriggerMode());
             padData->setAttribute("midiPressureStatus", PAD_SETTINGS->getMidiPressureStatus());
             padData->setAttribute("midiNoteStatus", PAD_SETTINGS->getMidiNoteStatus());
             padData->setAttribute("midiCcController", PAD_SETTINGS->getMidiCcController());
@@ -945,7 +945,7 @@ void AppDocumentState::saveToPreset (int presetNumber)
                 padData->setAttribute("looperAudioFilePath", PAD_SETTINGS->getLooperAudioFilePath().getFullPathName());
             }
     
-            padData->setAttribute("looperPlayState", PAD_SETTINGS->getLooperPlayState());
+            padData->setAttribute("looperTriggerMode", PAD_SETTINGS->getLooperTriggerMode());
             padData->setAttribute("looperEffect", PAD_SETTINGS->getLooperEffect());
             padData->setAttribute("looperPan", PAD_SETTINGS->getLooperPan());
             padData->setAttribute("looperGain", PAD_SETTINGS->getLooperGain());
@@ -1045,7 +1045,7 @@ void AppDocumentState::saveToPreset (int presetNumber)
             }
             
             padData->setAttribute("sequencerNumberOfSequences", PAD_SETTINGS->getSequencerNumberOfSequences());
-            padData->setAttribute("sequencerPlayState", PAD_SETTINGS->getSequencerPlayState());
+            padData->setAttribute("sequencerTriggerMode", PAD_SETTINGS->getSequencerTriggerMode());
             padData->setAttribute("sequencerChannel", PAD_SETTINGS->getSequencerChannel());
             padData->setAttribute("sequencerLength", PAD_SETTINGS->getSequencerLength());
             padData->setAttribute("sequencerQuantizeMode", PAD_SETTINGS->getSequencerQuantizeMode());
@@ -1160,7 +1160,7 @@ void AppDocumentState::loadFromPreset (int presetNumber)
                 PAD_SETTINGS->setMidiMinPressureRange(padData->getIntAttribute("midiMinPressureRange"));
                 PAD_SETTINGS->setMidiMaxPressureRange(padData->getIntAttribute("midiMaxPressureRange"));
                 PAD_SETTINGS->setMidiPressureMode(padData->getIntAttribute("midiPressureMode"));
-                PAD_SETTINGS->setMidiPressurePlayState(padData->getIntAttribute("midiPressurePlaystate"));
+                PAD_SETTINGS->setMidiTriggerMode(padData->getIntAttribute("midiTriggerMode"));
                 PAD_SETTINGS->setMidiPressureStatus(padData->getBoolAttribute("midiPressureStatus"));
                 PAD_SETTINGS->setMidiNoteStatus(padData->getBoolAttribute("midiNoteStatus"));
                 PAD_SETTINGS->setMidiCcController(padData->getIntAttribute("midiCcController"));
@@ -1195,7 +1195,7 @@ void AppDocumentState::loadFromPreset (int presetNumber)
                 else
                     PAD_SETTINGS->setLooperAudioFilePath(File::nonexistent);
                 
-                PAD_SETTINGS->setLooperPlayState(padData->getIntAttribute("looperPlayState"));
+                PAD_SETTINGS->setLooperTriggerMode(padData->getIntAttribute("looperTriggerMode"));
                 PAD_SETTINGS->setLooperEffect(padData->getIntAttribute("looperEffect"));
                 PAD_SETTINGS->setLooperPan(padData->getDoubleAttribute("looperPan"));
                 PAD_SETTINGS->setLooperGain(padData->getDoubleAttribute("looperGain"));
@@ -1347,7 +1347,7 @@ void AppDocumentState::loadFromPreset (int presetNumber)
             
                     
                 PAD_SETTINGS->setSequencerNumberOfSequences(padData->getIntAttribute("sequencerNumberOfSequences"));
-                PAD_SETTINGS->setSequencerPlayState(padData->getIntAttribute("sequencerPlayState"));
+                PAD_SETTINGS->setSequencerTriggerMode(padData->getIntAttribute("sequencerTriggerMode"));
                 PAD_SETTINGS->setSequencerChannel(padData->getIntAttribute("sequencerChannel"));
                 PAD_SETTINGS->setSequencerLength(padData->getIntAttribute("sequencerLength"));
                 if (padData->hasAttribute("sequencerQuantizeMode") == true)

@@ -68,7 +68,7 @@ public:
 private:
     //==============================================================================
 	//GUI Components
-    ComboBox *pressureModeMenu, *pressurePlayStateMenu, *quantizeModeMenu;
+    ComboBox *pressureModeMenu, *triggerModeMenu, *quantizeModeMenu;
     AlphaSlider *pressureMinRangeSlider, *pressureMaxRangeSlider, *ccControllerSlider, *exclusiveGroupSlider;
     
     //int currentlySelectedPad;

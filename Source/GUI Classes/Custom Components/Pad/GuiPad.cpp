@@ -487,7 +487,7 @@ void GuiPad::mouseUp (const MouseEvent &e)
         setEnabled(true);
         //why can't i just sent a 'pressure value' of 0?
         //for some reason i need to send something before that
-        //for most of the playstates to work. This should probably be fixed!!
+        //for most of the triggerModes to work. This should probably be fixed!!
         guiPadLayoutRef.getAlphaLiveEngine().inputData(padNumber, 1);
         guiPadLayoutRef.getAlphaLiveEngine().inputData(padNumber, 0);
         //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 1);

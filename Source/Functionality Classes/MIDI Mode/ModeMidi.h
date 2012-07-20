@@ -24,7 +24,7 @@
 #define H_MODEMIDI
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
-#include "../Other/PlayStates.h"
+#include "../Other/TriggerModes.h"
 
 class AlphaLiveEngine;
 
@@ -59,7 +59,7 @@ public:
     void setMaxRange (int value, int pad);
     void setControllerNumber (int value, int pad);
     void setPressureMode (int value, int pad);
-    void setPlayStateValue (int value, int pad);
+    void setTriggerModeValue (int value, int pad);
     void setPressureStatus (bool value, int pad);
     void setNoteStatus (bool value, int pad);
     void setExclusiveGroup (int value, int pad);
@@ -82,13 +82,13 @@ private:
     int maxRange[48];
     int controllerNumber[48];
     int pressureMode[48];
-    int playStateValue[48];
+    int triggerModeValue[48];
     bool pressureStatus[48];
     bool noteStatus[48];
     int exclusiveGroup[48];
     int quantizeMode[48];
-    PlayStateData playStateData[48];
-    PlayStates playStates[48];
+    TriggerModeData triggerModeData[48];
+    TriggerModes triggerModes[48];
     
     ActionBroadcaster broadcaster;
     AlphaLiveEngine &alphaLiveEngineRef;

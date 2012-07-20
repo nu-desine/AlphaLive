@@ -117,19 +117,18 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     
     
     //----------------pressure play state combobox-------------------------------
-    addAndMakeVisible(pressurePlayStateMenu = new ComboBox());
-    pressurePlayStateMenu->addListener(this);
-    pressurePlayStateMenu->addMouseListener(this, true);
-    
-    pressurePlayStateMenu->addItem("Standard", 1);
-    pressurePlayStateMenu->addItem("Toggle (Press-Off)", 2);
-    pressurePlayStateMenu->addItem("Toggle (Release-Off)", 3);
-    pressurePlayStateMenu->addItem("Sticky", 4);
-    pressurePlayStateMenu->addItem("Latch (Max-Latch)", 5);
-    pressurePlayStateMenu->addItem("Latch (Press-Latch)", 6);
-    pressurePlayStateMenu->addItem("Trigger", 7);
-    
-    pressurePlayStateMenu->setSelectedId(1, true);
+    addAndMakeVisible(triggerModeMenu = new ComboBox());
+    triggerModeMenu->addListener(this);
+    triggerModeMenu->addMouseListener(this, true);
+    triggerModeMenu->addListener(this);
+    triggerModeMenu->addItem("Hold", 1);
+    triggerModeMenu->addItem("Toggle", 2);
+    triggerModeMenu->addItem("Toggle Release", 3);
+    triggerModeMenu->addItem("Latch", 4);
+    triggerModeMenu->addItem("Latch Max", 5);
+    triggerModeMenu->addItem("Trigger", 6);
+    triggerModeMenu->setSelectedId(2, true);
+    triggerModeMenu->addMouseListener(this, true);
     
     
     
@@ -205,7 +204,7 @@ void GuiMidiMode::resized()
     
     pressureModeMenu->setBounds(LEFT_CIRCLE_X, 500, COMPONENT_W, COMPONENT_H);
     ccControllerSlider->setBounds(LEFT_CIRCLE_X, 530, COMPONENT_W, COMPONENT_H);
-    pressurePlayStateMenu->setBounds(LEFT_CIRCLE_X, 570, COMPONENT_W, COMPONENT_H);
+    triggerModeMenu->setBounds(LEFT_CIRCLE_X, 570, COMPONENT_W, COMPONENT_H);
     
     pressureStatusButton->setBounds(165, 360, 45, 45);
     noteStatusButton->setBounds(810, 360, 45, 45);
@@ -253,13 +252,13 @@ void GuiMidiMode::comboBoxChanged (ComboBox* comboBox)
     }
     
     //==============================================================================
-    //pressure playstate combo box
-    else if (comboBox == pressurePlayStateMenu)
+    //pressure triggerMode combo box
+    else if (comboBox == triggerModeMenu)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setMidiPressurePlayState(pressurePlayStateMenu->getSelectedId());
+            PAD_SETTINGS->setMidiTriggerMode(triggerModeMenu->getSelectedId());
         }
     }
     
@@ -415,8 +414,8 @@ void GuiMidiMode::updateDisplay()
         pressureMaxRangeSlider->setValue(i, false);
         i = PAD_SETTINGS->getMidiPressureMode();
         pressureModeMenu->setSelectedId(i, true);
-        i = PAD_SETTINGS->getMidiPressurePlaystate();
-        pressurePlayStateMenu->setSelectedId(i, true);
+        i = PAD_SETTINGS->getMidiTriggerMode();
+        triggerModeMenu->setSelectedId(i, true);
         i = PAD_SETTINGS->getMidiCcController();
         ccControllerSlider->setValue(i, false);
         i = PAD_SETTINGS->getMidiExclusiveGroup();
@@ -454,7 +453,7 @@ void GuiMidiMode::updateDisplay()
         pressureMinRangeSlider->setValue(0, false);
         pressureMaxRangeSlider->setValue(127, false);
         pressureModeMenu->setSelectedId(1, true);
-        pressurePlayStateMenu->setSelectedId(1, true);
+        triggerModeMenu->setSelectedId(2, true);
         pressureStatusButton->setToggleState(true, false);
         pressureStatusButton->setButtonText("Pressure Data On");
         noteStatusButton->setToggleState(true, false);
@@ -526,9 +525,9 @@ void GuiMidiMode::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText("Pressure Mode Drop-down Menu. Sets and displays what type of MIDI data will be created from the selected pad/pads pressure value.");
     }
-    else if (pressurePlayStateMenu->isMouseOver(true))
+    else if (triggerModeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Pressure PlayState Drop-down Menu. Sets and displays the pressure PlayState for the selected pad/pads. Pressure PlayStates determine how interation with a pad controls the creation of MIDI data.");
+        mainComponentRef.setInfoTextBoxText("Pressure TriggerMode Drop-down Menu. Sets and displays the pressure TriggerMode for the selected pad/pads. Pressure TriggerModes determine how interation with a pad controls the creation of MIDI data.");
     }
     else if (ccControllerSlider->isMouseOver(true))
     {

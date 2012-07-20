@@ -43,7 +43,7 @@ ModeMidi::ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref)
         pressureStatus[i] = true;
         noteStatus[i] = true;
         exclusiveGroup[i] = 0;
-        triggerMode[i] = 1;
+        quantizeMode[i] = 1;
         
         //not all members of the PlayStateData struct are needed for MIDI mode
         playStateData[i].playingStatus = 0;
@@ -119,7 +119,7 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
     if (noteStatus[padNumber] == true) //if pad note status is 'on'
     {
         //==========================================================================================
-        if (triggerMode[padNumber] == 1) //free
+        if (quantizeMode[padNumber] == 1) //free
         {
             //Create 'note on' message
             if (playStateData[padNumber].playingStatus == 1) //play
@@ -135,7 +135,7 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
         }
         
         //==========================================================================================
-        else if (triggerMode[padNumber] == 2) // quantised
+        else if (quantizeMode[padNumber] == 2) // quantized
         {
             //Create 'note on' message
             if (playStateData[padNumber].playingStatus == 1) //play
@@ -363,7 +363,7 @@ void ModeMidi::setMidiOutputDevice (MidiOutput &midiOutput)
 }
 
 
-void ModeMidi::triggerQuantisationPoint()
+void ModeMidi::triggerQuantizationPoint()
 {
     if (waitingPad.size() > 0)
     {
@@ -382,7 +382,7 @@ void ModeMidi::triggerQuantisationPoint()
         }
         
         //remove items from array so they no longer recieve alerts of
-        //quantisation points in time
+        //quantization points in time
         waitingPad.clear();
     }
 }
@@ -443,7 +443,7 @@ void ModeMidi::setPadData (int padNumber)
     setPressureStatus (PAD_SETTINGS->getMidiPressureStatus(), padNumber);
     setNoteStatus (PAD_SETTINGS->getMidiNoteStatus(), padNumber);
     setExclusiveGroup (PAD_SETTINGS->getMidiExclusiveGroup(), padNumber);
-    setTriggerMode (PAD_SETTINGS->getMidiTriggerMode(), padNumber);
+    setQuantizeMode (PAD_SETTINGS->getMidiQuantizeMode(), padNumber);
     
 }
 
@@ -545,8 +545,8 @@ void ModeMidi::setExclusiveGroup (int value, int pad)
     exclusiveGroup[pad] = value-1;
 }
 
-void ModeMidi::setTriggerMode (int value, int pad)
+void ModeMidi::setQuantizeMode (int value, int pad)
 {
-    triggerMode[pad] = value;
+    quantizeMode[pad] = value;
 }
 

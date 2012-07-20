@@ -1,9 +1,9 @@
 //
-//  PlayStates.h
-//  AlphaSoft
+//  TriggerModes.h
+//  AlphaLive
 //
-//  Created by Liam Meredith-Lacey on 04/10/2011.
-//  Copyright 2011 nu desine.
+//  Created by Liam Meredith-Lacey on 20/07/2012.
+//  Copyright 2012 nu desine.
 //
 //  This file is part of AlphaLive.
 //
@@ -20,15 +20,15 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef H_PLAYSTATEDATA
-#define H_PLAYSTATEDATA
+#ifndef H_TRIGGERMODEDATA
+#define H_TRIGGERMODEDATA
 
-//struct that is used by play states to return the necessary data
-struct PlayStateData 
+//struct that is used by trigger modes to return the necessary data
+struct TriggerModeData 
 {
     int playingStatus; // 0 = stop, 1 = play, 2 = ignore
-    int pressureValue;
-    bool shouldLoop;
+    int pressureValue; //do we need this now? as sticky isn't now contain with trigger modes the incoming pressure will always be the outgoing pressure
+    bool shouldLoop; //don't need this now as looping is defined with trigger modes
     
     //special variables for the cycle and auto-cyle play states
     bool ignorePressure; //is this variable needed? in each playstate where pressure is ignored, the pressure value is set to 0 each time - is this adequate enough?
@@ -41,7 +41,7 @@ struct PlayStateData
 #endif
 
 //================================================================================
-//=PLAY STATES====================================================================
+//=TRIGGER MODES==================================================================
 //================================================================================
 /*  Each of the following functions alters the currentState variable in AppSettings
  of the padNumber parameter in question by using padValue parameter. The bool returned
@@ -49,23 +49,35 @@ struct PlayStateData
  
  To start audio, set the currentState varialble to 1, or set to 0 to stop the audio.
  
- HOW TO ADD A PLAY STATE TO THE APPLICATION:
+ HOW TO ADD A TRIGGER MODES TO THE APPLICATION:
  [add instruuctions here...]
  
  */
 //================================================================================
 
-#ifndef H_PLAYSTATES
-#define H_PLAYSTATES
+#ifndef H_TRIGGERMODES
+#define H_TRIGGERMODES
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
 
-class PlayStates
+class TriggerModes
 {
 public:
-    PlayStates();
-    ~PlayStates();
+    TriggerModes();
+    ~TriggerModes();
     
+    TriggerModeData hold (int padValue);
+    TriggerModeData toggle (int padValue);
+    TriggerModeData toggleRelease (int padValue);
+    TriggerModeData latch (int padValue);
+    TriggerModeData latchMax (int padValue);
+    TriggerModeData Trigger (int padValue);
+    
+    //sequencer-only trigger modes
+    TriggerModeData cycle (int padValue);
+    TriggerModeData autoCycle (int padValue);
+    
+    /*
     PlayStateData playOnce (int padValue);
     PlayStateData playOnceContinuous (int padValue);
     PlayStateData loop (int padValue);
@@ -89,6 +101,7 @@ public:
     PlayStateData triggerNonLoopedNonDestructive (int padValue);
     PlayStateData cycleLinearNonDestructive (int padValue);
     PlayStateData toggleNonDestructive (int padValue);
+     */
     
     void reset();
     
@@ -100,10 +113,8 @@ private:
     int rePressCount; //what is this actually being used for? 1 when pressed and 0 when released?
     
     int currentPlayingStatus;
-    PlayStateData playStateData;
+    TriggerModeData triggerModeData;
     
 };
 
 #endif
-
-

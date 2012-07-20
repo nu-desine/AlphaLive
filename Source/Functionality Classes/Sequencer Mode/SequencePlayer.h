@@ -74,7 +74,7 @@ public:
     void setNumberOfSequences (int value);
     void setPlayState (int value);
     void setSequenceLength (int value);
-    void setTriggerMode (int value);
+    void setQuantizeMode (int value);
     void setChannel (int value);
     
     void setMidiNote (int row, int value);
@@ -89,8 +89,8 @@ public:
     void setRelativeTempoMode (int value);
     double getTimeInterval();
     
-    //quantisation stuff
-    void triggerQuantisationPoint();
+    //quantization stuff
+    void triggerQuantizationPoint();
 
     
 private:
@@ -136,7 +136,7 @@ private:
     int numberOfSequences;
     int playState;
     int sequenceLength;
-    int triggerMode;
+    int quantizeMode;
     int channel;
     
     int midiNote[NO_OF_ROWS];

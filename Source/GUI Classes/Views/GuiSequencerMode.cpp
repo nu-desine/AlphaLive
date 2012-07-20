@@ -166,12 +166,12 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     playStateMenu->setSelectedId(3, true);
     playStateMenu->addMouseListener(this, true);
     
-    addAndMakeVisible(triggerModeMenu = new ComboBox());
-    triggerModeMenu->addItem("Free", 1);
-    triggerModeMenu->addItem("Quantised", 2);
-    triggerModeMenu->setSelectedId(1, true);
-    triggerModeMenu->addMouseListener(this, true);
-    triggerModeMenu->addListener(this);
+    addAndMakeVisible(quantizeModeMenu = new ComboBox());
+    quantizeModeMenu->addItem("Free", 1);
+    quantizeModeMenu->addItem("Quantized", 2);
+    quantizeModeMenu->setSelectedId(1, true);
+    quantizeModeMenu->addMouseListener(this, true);
+    quantizeModeMenu->addListener(this);
     
     //relative tempo menu
     addAndMakeVisible(relativeTempoMenu = new ComboBox());
@@ -268,7 +268,7 @@ void GuiSequencerMode::resized()
     playStateMenu->setBounds(LEFT_CIRCLE_X, 570, COMPONENT_W, COMPONENT_H);
     relativeTempoMenu->setBounds(LEFT_CIRCLE_X, 500, COMPONENT_W, COMPONENT_H);
     
-    triggerModeMenu->setBounds(800, 155, 100, 20);
+    quantizeModeMenu->setBounds(800, 155, 100, 20);
     
 }
 
@@ -302,12 +302,12 @@ void GuiSequencerMode::comboBoxChanged (ComboBox* comboBox)
     
     //==============================================================================
     //trigger mode combobox
-    if (comboBox == triggerModeMenu)
+    if (comboBox == quantizeModeMenu)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSequencerTriggerMode(triggerModeMenu->getSelectedId());
+            PAD_SETTINGS->setSequencerQuantizeMode(quantizeModeMenu->getSelectedId());
         }
         
     }
@@ -554,7 +554,7 @@ void GuiSequencerMode::updateDisplay()
         i = PAD_SETTINGS->getSequencerPlayState();
         playStateMenu->setSelectedId(i, true);
         //currentSequenceNumberSlider->setValue(1);
-        triggerModeMenu->setSelectedId(PAD_SETTINGS->getSequencerTriggerMode(), true);
+        quantizeModeMenu->setSelectedId(PAD_SETTINGS->getSequencerQuantizeMode(), true);
         relativeTempoMenu->setSelectedId(PAD_SETTINGS->getSequencerRelativeTempoMode(), true);
         
         //set the range of the noteLengthSlider so that the max value matches this sliders value
@@ -585,7 +585,7 @@ void GuiSequencerMode::updateDisplay()
         sequenceLengthSlider->setValue(250, false);
         playStateMenu->setSelectedId(3, true);
         //currentSequenceNumberSlider->setValue(1);
-        triggerModeMenu->setSelectedId(1, true);
+        quantizeModeMenu->setSelectedId(1, true);
         relativeTempoMenu->setSelectedId(3, true);
         
         //set the range of the noteLengthSlider so that the max value matches this sliders value
@@ -702,9 +702,9 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText("Step-Sequencer Grid. This is where the actual sequence is editted and displayed. Like a traditional step-sequencer interface, click on a grid point (where the grid lines intersect) to create a 'note', or click on a note to delete it. Use alt-click-drag on a note to change the note's velocity/gain.");
     }
-    else if (triggerModeMenu->isMouseOver(true))
+    else if (quantizeModeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Trigger Mode Menu. The trigger mode determines the start time/position of the sequence. 'Free' will trigger the sequence as soon as the pad is pressed, 'Quantised' will trigger the sequence at the next quantised time value set using the global clock above.");
+        mainComponentRef.setInfoTextBoxText("Trigger Mode Menu. The trigger mode determines the start time/position of the sequence. 'Free' will trigger the sequence as soon as the pad is pressed, 'Quantized' will trigger the sequence at the next quantized time value set using the global clock above.");
     }
     else if (relativeTempoMenu->isMouseOver(true))
     {

@@ -68,8 +68,8 @@ public:
 	void releaseResources();
 	void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill);
     
-    //quantisation stuff
-    void triggerQuantisationPoint();
+    //quantization stuff
+    void triggerQuantizationPoint();
     void addItemToWaitingPadSequencer (SequencePlayer* item);
     
     void stopExclusivePadSequencer (int channel, SequencePlayer* item);
@@ -103,7 +103,7 @@ private:
     
     AlphaLiveEngine &alphaLiveEngineRef;
     
-    //quantisation stuff
+    //quantization stuff
     OwnedArray<SequencePlayer> waitingPadSequencer;
 };
 

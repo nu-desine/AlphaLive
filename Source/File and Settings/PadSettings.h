@@ -84,7 +84,7 @@ public:
     void setMidiNoteStatus (bool value);
     void setMidiCcController (int value);
     void setMidiExclusiveGroup (int value);
-    void setMidiTriggerMode (int value);
+    void setMidiQuantizeMode (int value);
     
     int getMidiNote();
     int getMidiVelocity();
@@ -97,7 +97,7 @@ public:
     bool getMidiNoteStatus();
     int getMidiCcController();
     int getMidiExclusiveGroup();
-    int getMidiTriggerMode();
+    int getMidiQuantizeMode();
     
     //==================================================================
     //Looper mode
@@ -107,7 +107,7 @@ public:
     void setLooperPan (float value);
     void setLooperGain (float value);
     void setLooperChannel (int value);
-    void setLooperTriggerMode (int value);
+    void setLooperQuantizeMode (int value);
     
     File getLooperAudioFilePath();
     bool getLooperIsLibraryFile();
@@ -116,7 +116,7 @@ public:
     float getLooperPan();
     float getLooperGain();
     int getLooperChannel();
-    int getLooperTriggerMode();
+    int getLooperQuantizeMode();
     
     //----Looper FX----
     //Gain&Pan
@@ -253,7 +253,7 @@ public:
     void setSequencerPlayState (int value);
     void setSequencerChannel (int value);
     void setSequencerLength (int value);
-    void setSequencerTriggerMode (int value);
+    void setSequencerQuantizeMode (int value);
     void setSequencerRelativeTempoMode (int value);
     
     void setSequencerMidiNote (int value, int arrayIndex);
@@ -271,7 +271,7 @@ public:
     int getSequencerPlayState();
     int getSequencerChannel();
     int getSequencerLength();
-    int getSequencerTriggerMode();
+    int getSequencerQuantizeMode();
     int getSequencerRelativeTempoMode();
     
     int getSequencerMidiNote(int arrayIndex);
@@ -344,7 +344,7 @@ private:
     bool midiNoteStatus;
     int midiCcController;
     int midiExclusiveGroup;
-    int midiTriggerMode;
+    int midiQuantizeMode;
     
     //==================================================================
     //Looper mode
@@ -354,7 +354,7 @@ private:
     float looperPan;
     float looperGain;
     int looperChannel; //now called 'group' not 'channel' to the user
-    int looperTriggerMode;
+    int looperQuantizeMode;
     
     //----fx variables------
     //Gain&Pan
@@ -438,7 +438,7 @@ private:
     int sequencerPlayState;
     int sequencerChannel; //now called 'group' not 'channel' to the user
     int sequencerLength;
-    int sequencerTriggerMode;
+    int sequencerQuantizeMode;
     int sequencerRelativeTempoMode;
     
     int sequencerMidiNote[NO_OF_ROWS]; //assuming there are 12 rows to a sequencer

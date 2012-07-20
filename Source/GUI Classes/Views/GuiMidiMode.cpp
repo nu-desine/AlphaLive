@@ -164,12 +164,12 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     exclusiveGroupSlider->addListener(this);
     
     //---------------trigger mode menu---------------------
-    addAndMakeVisible(triggerModeMenu = new ComboBox());
-    triggerModeMenu->addItem("Free", 1);
-    triggerModeMenu->addItem("Quantised", 2);
-    triggerModeMenu->setSelectedId(1, true);
-    triggerModeMenu->addMouseListener(this, true);
-    triggerModeMenu->addListener(this);
+    addAndMakeVisible(quantizeModeMenu = new ComboBox());
+    quantizeModeMenu->addItem("Free", 1);
+    quantizeModeMenu->addItem("Quantized", 2);
+    quantizeModeMenu->setSelectedId(1, true);
+    quantizeModeMenu->addMouseListener(this, true);
+    quantizeModeMenu->addListener(this);
     
     //these need to be on top of all other components
     addAndMakeVisible(speakerLeft = new GuiSpeaker());
@@ -212,7 +212,7 @@ void GuiMidiMode::resized()
     
     exclusiveGroupSlider->setBounds(871, 210, COMPONENT_W, COMPONENT_H);
     
-    triggerModeMenu->setBounds(800, 155, 100, 20);
+    quantizeModeMenu->setBounds(800, 155, 100, 20);
     
     
 }
@@ -266,12 +266,12 @@ void GuiMidiMode::comboBoxChanged (ComboBox* comboBox)
     
     //==============================================================================
     //trigger mode combobox
-    if (comboBox == triggerModeMenu)
+    if (comboBox == quantizeModeMenu)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setMidiTriggerMode(triggerModeMenu->getSelectedId());
+            PAD_SETTINGS->setMidiQuantizeMode(quantizeModeMenu->getSelectedId());
         }
     }
 
@@ -421,7 +421,7 @@ void GuiMidiMode::updateDisplay()
         ccControllerSlider->setValue(i, false);
         i = PAD_SETTINGS->getMidiExclusiveGroup();
         exclusiveGroupSlider->setValue(i, false);
-        triggerModeMenu->setSelectedId(PAD_SETTINGS->getMidiTriggerMode(), true);
+        quantizeModeMenu->setSelectedId(PAD_SETTINGS->getMidiQuantizeMode(), true);
         
         bool b;
         
@@ -461,7 +461,7 @@ void GuiMidiMode::updateDisplay()
         noteStatusButton->setButtonText("Note Data On");
         ccControllerSlider->setValue(12, false);
         exclusiveGroupSlider->setValue(1, false);
-        triggerModeMenu->setSelectedId(1, true);
+        quantizeModeMenu->setSelectedId(1, true);
         
         //circlePianoForScales->setVisible(false);
         circlePiano->updateDisplay();
@@ -538,9 +538,9 @@ void GuiMidiMode::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText("Exclusive Group. If the pad is set to a group other than group 1 the MIDI pad will be in 'Exclusive Mode' - playing this MIDI note will turn off the previously playing MIDI note of the same group. The default group 1 allows does not enable this exclusive mode.");
     }
-    else if (triggerModeMenu->isMouseOver(true))
+    else if (quantizeModeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Trigger Mode Menu. The trigger mode determines the start time of the MIDI note. 'Free' will trigger the loop as soon as the pad is pressed, 'Quantised' will trigger the loop at the next quantised time value set using the global clock.");
+        mainComponentRef.setInfoTextBoxText("Trigger Mode Menu. The trigger mode determines the start time of the MIDI note. 'Free' will trigger the loop as soon as the pad is pressed, 'Quantized' will trigger the loop at the next quantized time value set using the global clock.");
     }
     
 }

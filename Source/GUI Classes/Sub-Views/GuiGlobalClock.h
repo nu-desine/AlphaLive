@@ -65,7 +65,7 @@ private:
     
     Label *barNumberLabel, *beatNumberLabel;
     AlphaSlider *tempoSlider, *beatsPerBarSlider;
-    ComboBox *quantisationMenu;
+    ComboBox *quantizationMenu;
     TextButton *transportButton;
     GuiSwitch *autoStartSwitch;
     

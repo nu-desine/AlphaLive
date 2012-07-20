@@ -90,6 +90,17 @@ GuiLooperMode::GuiLooperMode(MainComponent &ref)
     playStateMenu->setSelectedId(3, true);
     playStateMenu->addMouseListener(this, true);
     
+    addAndMakeVisible(triggerModeMenu = new ComboBox());
+    triggerModeMenu->addListener(this);
+    triggerModeMenu->addItem("Hold", 1);
+    triggerModeMenu->addItem("Toggle", 2);
+    triggerModeMenu->addItem("Toggle Release", 21);
+    triggerModeMenu->addItem("Latch", 3);
+    triggerModeMenu->addItem("Latch Max", 4);
+    triggerModeMenu->addItem("Trigger", 5);
+    triggerModeMenu->setSelectedId(3, true);
+    triggerModeMenu->addMouseListener(this, true);
+    
     //channel slider - this feature is now referenced to 'groups' not channels
     Image *dialImage = new Image(ImageFileFormat::loadFrom(ImageSliderBinaryData::channeldial_png, ImageSliderBinaryData::channeldial_pngSize));
     addAndMakeVisible(channelSlider = new ImageSlider(dialImage, 16, true));
@@ -107,12 +118,12 @@ GuiLooperMode::GuiLooperMode(MainComponent &ref)
 	addAndMakeVisible (waveform = new DemoThumbnailComp());
 	waveform->setInterceptsMouseClicks(false, false);
     
-    addAndMakeVisible(triggerModeMenu = new ComboBox());
-    triggerModeMenu->addItem("Free", 1);
-    triggerModeMenu->addItem("Quantised", 2);
-    triggerModeMenu->setSelectedId(1, true);
-    triggerModeMenu->addMouseListener(this, true);
-    triggerModeMenu->addListener(this);
+    addAndMakeVisible(quantizeModeMenu = new ComboBox());
+    quantizeModeMenu->addItem("Free", 1);
+    quantizeModeMenu->addItem("Quantized", 2);
+    quantizeModeMenu->setSelectedId(1, true);
+    quantizeModeMenu->addMouseListener(this, true);
+    quantizeModeMenu->addListener(this);
     
     addAndMakeVisible(pressureModeMenu = new ComboBox());
     //ideally, we should have an 'off' here instead of having a 'no effect' elsewhere
@@ -144,13 +155,14 @@ void GuiLooperMode::resized()
     gainSlider->setBounds(845, 495, 45, 45);
 	panSlider->setBounds(900, 495, 45, 45);
         
-    playStateMenu->setBounds(RIGHT_CIRCLE_X, 538, COMPONENT_W, COMPONENT_H);
+    //playStateMenu->setBounds(RIGHT_CIRCLE_X, 538, COMPONENT_W, COMPONENT_H);
+    triggerModeMenu->setBounds(RIGHT_CIRCLE_X, 538, COMPONENT_W, COMPONENT_H);
     
     channelSlider->setBounds(850, 251, 142, 142);
     
     fxDial->setBounds(14, 402, 230, 230);
 	
-	triggerModeMenu->setBounds(800, 155, 100, 20);
+	quantizeModeMenu->setBounds(800, 155, 100, 20);
     
 	//gainSlider->setBounds(965, 150, 45, 45);
 	//panSlider->setBounds(965, 200, 45, 45);
@@ -183,12 +195,12 @@ void GuiLooperMode::comboBoxChanged (ComboBox* comboBox)
     
     //==============================================================================
     //trigger mode combobox
-    if (comboBox == triggerModeMenu)
+    if (comboBox == quantizeModeMenu)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperTriggerMode(triggerModeMenu->getSelectedId());
+            PAD_SETTINGS->setLooperQuantizeMode(quantizeModeMenu->getSelectedId());
         }
         
     }
@@ -202,7 +214,7 @@ void GuiLooperMode::comboBoxChanged (ComboBox* comboBox)
         if(currentlySelectedPad < 99)
         {
             //store the value of this combo box in the pad settings of that pad
-            //PAD_SETTINGS->setLooperTriggerMode(triggerModeMenu->getSelectedId());
+            //PAD_SETTINGS->setLooperQuantizeMode(quantizeModeMenu->getSelectedId());
         }
         
         //if 'all pads' selected
@@ -210,7 +222,7 @@ void GuiLooperMode::comboBoxChanged (ComboBox* comboBox)
         {
             for(int i = 0; i <= 47; i++)
             {
-                //PAD_SETTINGS_i->setLooperTriggerMode(triggerModeMenu->getSelectedId());
+                //PAD_SETTINGS_i->setLooperQuantizeMode(quantizeModeMenu->getSelectedId());
             }
         }
         
@@ -222,7 +234,7 @@ void GuiLooperMode::comboBoxChanged (ComboBox* comboBox)
             for(int i = (row*8)-8; i <= (row*8)-1; i++) 
             {
                 //i = pad number
-                //PAD_SETTINGS_i->setLooperTriggerMode(triggerModeMenu->getSelectedId());
+                //PAD_SETTINGS_i->setLooperQuantizeMode(quantizeModeMenu->getSelectedId());
             }
         }
         
@@ -337,7 +349,7 @@ void GuiLooperMode::updateDisplay()
         panSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperPan(), false);
         playStateMenu->setSelectedId(PAD_SETTINGS->getLooperPlayState(), true);
         channelSlider->setValue(PAD_SETTINGS->getLooperChannel(), false);
-        triggerModeMenu->setSelectedId(PAD_SETTINGS->getLooperTriggerMode(), true);
+        quantizeModeMenu->setSelectedId(PAD_SETTINGS->getLooperQuantizeMode(), true);
         
         
     }
@@ -353,7 +365,7 @@ void GuiLooperMode::updateDisplay()
         panSlider->sliderComponent()->setValue(0.5, false);
         playStateMenu->setSelectedId(3, true);
         channelSlider->setValue(1, false);
-        triggerModeMenu->setSelectedId(1, true);
+        quantizeModeMenu->setSelectedId(1, true);
         
 
         
@@ -390,9 +402,9 @@ void GuiLooperMode::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText("Looper FX Dial. Sets and displays the audio processing effect that the selected pad/pads pressure controls.");
     }
-    else if (triggerModeMenu->isMouseOver(true))
+    else if (quantizeModeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Trigger Mode Menu. The trigger mode determines the start time of the loop. 'Free' will trigger the loop as soon as the pad is pressed, 'Quantised' will trigger the loop at the next quantised time value set using the global clock.");
+        mainComponentRef.setInfoTextBoxText("Trigger Mode Menu. The trigger mode determines the start time of the loop. 'Free' will trigger the loop as soon as the pad is pressed, 'Quantized' will trigger the loop at the next quantized time value set using the global clock.");
     }
     
 }

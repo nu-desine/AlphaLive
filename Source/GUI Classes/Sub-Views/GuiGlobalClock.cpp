@@ -48,18 +48,18 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
     beatsPerBarSlider->setValue(4, false);
     beatsPerBarSlider->addMouseListener(this, true);
     
-    //quantisation menu
-    addAndMakeVisible(quantisationMenu = new ComboBox());
-    quantisationMenu->addItem("4 Bars", 1);
-    quantisationMenu->addItem("2 Bars", 2);
-    quantisationMenu->addItem("1 Bar", 3);
-    //quantisationMenu->addItem("2 Beats", 4); //this wouldn't work with time signatures other than 4/4
-    quantisationMenu->addItem("1 Beat", 5);
-    quantisationMenu->addItem("1/2 Beat", 6);
-    quantisationMenu->addItem("1/4 Beat", 7);
-    quantisationMenu->setSelectedId(3, true);
-    quantisationMenu->addListener(this);
-    quantisationMenu->addMouseListener(this, true);
+    //quantization menu
+    addAndMakeVisible(quantizationMenu = new ComboBox());
+    quantizationMenu->addItem("4 Bars", 1);
+    quantizationMenu->addItem("2 Bars", 2);
+    quantizationMenu->addItem("1 Bar", 3);
+    //quantizationMenu->addItem("2 Beats", 4); //this wouldn't work with time signatures other than 4/4
+    quantizationMenu->addItem("1 Beat", 5);
+    quantizationMenu->addItem("1/2 Beat", 6);
+    quantizationMenu->addItem("1/4 Beat", 7);
+    quantizationMenu->setSelectedId(3, true);
+    quantizationMenu->addListener(this);
+    quantizationMenu->addMouseListener(this, true);
     
     //transport button
     addAndMakeVisible(transportButton = new TextButton());
@@ -119,7 +119,7 @@ void GuiGlobalClock::resized()
     // OLD LAYOUT FOR TOP BAR
     tempoSlider->setBounds(10, 2, 45, 35);
     beatsPerBarSlider->setBounds(60, 2, 45, 35);
-    quantisationMenu->setBounds(110, 7, 70, 20);
+    quantizationMenu->setBounds(110, 7, 70, 20);
     
     
     beatIndicator->setBounds(getWidth()-165, 5, 25, 25);
@@ -138,7 +138,7 @@ void GuiGlobalClock::resized()
     
     tempoSlider->setBounds(5, 35+2, 45, 35);
     beatsPerBarSlider->setBounds(55, 35+2, 45, 35);
-    quantisationMenu->setBounds(105, 35+7, 70, 20);
+    quantizationMenu->setBounds(105, 35+7, 70, 20);
     
 }
 
@@ -229,9 +229,9 @@ void GuiGlobalClock::buttonClicked (Button* button)
 
 void GuiGlobalClock::comboBoxChanged(ComboBox *comboBox)
 {
-   if (comboBox == quantisationMenu)
+   if (comboBox == quantizationMenu)
    {
-       AppSettings::Instance()->setQuantisationValue(quantisationMenu->getSelectedId());
+       AppSettings::Instance()->setQuantizationValue(quantizationMenu->getSelectedId());
    }
     
 }
@@ -255,7 +255,7 @@ void GuiGlobalClock::triggerTransportButton()
 void GuiGlobalClock::updateDisplay()
 {
     tempoSlider->setValue(AppSettings::Instance()->getGlobalTempo(), false);
-    quantisationMenu->setSelectedId(AppSettings::Instance()->getQuantisationValue(), true);
+    quantizationMenu->setSelectedId(AppSettings::Instance()->getQuantizationValue(), true);
     beatsPerBarSlider->setValue(AppSettings::Instance()->getBeatsPerBar(), false);
     autoStartSwitch->setToggleState(AppSettings::Instance()->getAutoStartClock(), false);
 }
@@ -270,9 +270,9 @@ void GuiGlobalClock::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText ("Beats-Per-Bar Selector. This is similar to a time signature option however it does not take into account note value/duration. Therefore this changes the upper numeral of the time signature but the bottom numeral is always set to 4.");
     }
-    else if (quantisationMenu->isMouseOver(true))
+    else if (quantizationMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText ("Quantisation Menu. Sets and displays the quantisation value which is used to determine the start time of loops and sequences when set to Quantisation Trigger Mode.");
+        mainComponentRef.setInfoTextBoxText ("Quantization Menu. Sets and displays the quantization value which is used to determine the start time of loops and sequences when set to Quantization Trigger Mode.");
     }
     else if (beatIndicator->isMouseOver(true))
     {

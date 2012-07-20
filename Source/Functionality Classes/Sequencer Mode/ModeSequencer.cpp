@@ -138,18 +138,18 @@ void ModeSequencer::addItemToWaitingPadSequencer (SequencePlayer* item)
 }
 
 
-void ModeSequencer::triggerQuantisationPoint()
+void ModeSequencer::triggerQuantizationPoint()
 {
     if (waitingPadSequencer.size() > 0)
     {
         for (int i = 0; i < waitingPadSequencer.size(); i++)
         {
-            //alert padLooper[i] of a quantisation point in time
-            waitingPadSequencer[i]->triggerQuantisationPoint();
+            //alert padLooper[i] of a quantization point in time
+            waitingPadSequencer[i]->triggerQuantizationPoint();
         }
         
         //remove items from array so they no longer recieve alerts of
-        //quantisation points in time
+        //quantization points in time
         waitingPadSequencer.clear(false);
     }
 }

@@ -56,7 +56,7 @@ AudioFilePlayer::AudioFilePlayer(int looperPadNumber, ModeLooper &ref, TimeSlice
     playState = PAD_SETTINGS->getLooperPlayState();
     currentPlayingState = currentPressureValue = 0;
     effect = PAD_SETTINGS->getLooperEffect();
-    triggerMode = PAD_SETTINGS->getLooperTriggerMode();
+    quantizeMode = PAD_SETTINGS->getLooperQuantizeMode();
     channel = PAD_SETTINGS->getLooperChannel();
     
     playStateData.playingStatus = 0;
@@ -168,7 +168,7 @@ void AudioFilePlayer::processAudioFile(int padValue)
     
     
     //==========================================================================================
-    if (triggerMode == 1) //free
+    if (quantizeMode == 1) //free
     {
         if (playStateData.playingStatus == 1) //play
         {
@@ -182,14 +182,14 @@ void AudioFilePlayer::processAudioFile(int padValue)
         }
     }
     //==========================================================================================
-    else if (triggerMode == 2) //quantised
+    else if (quantizeMode == 2) //quantized
     {
         if (playStateData.playingStatus == 1) //play
         {
             currentPlayingState = 2; //waiting to play
             
             //add this instance of AudioFilePlayer to the waitingPadLooper Array within
-            //ModeLooper so that it is alerted of the next quantised point in time so
+            //ModeLooper so that it is alerted of the next quantized point in time so
             //the loop can start playing
             modeLooperRef.addItemToWaitingPadLooper(this);
             broadcaster.sendActionMessage("WAITING TO PLAY");
@@ -202,7 +202,7 @@ void AudioFilePlayer::processAudioFile(int padValue)
             currentPlayingState = 3; // waiting to stop
             
             //add this instance of AudioFilePlayer to the waitingPadLooper Array within
-            //ModeLooper so that it is alerted of the next quantised point in time so
+            //ModeLooper so that it is alerted of the next quantized point in time so
             //the loop can stop playing
             modeLooperRef.addItemToWaitingPadLooper(this);
             broadcaster.sendActionMessage("WAITING TO STOP");
@@ -337,7 +337,7 @@ void AudioFilePlayer::setAudioFile (File audioFile_)
 
 }
 
-void AudioFilePlayer::triggerQuantisationPoint()
+void AudioFilePlayer::triggerQuantizationPoint()
 {
     if (currentPlayingState == 2) //waiting to play
     {
@@ -720,9 +720,9 @@ void AudioFilePlayer::setEffect(int value)
     sharedMemory.exit();
 
 }
-void AudioFilePlayer::setTriggerMode (int value)
+void AudioFilePlayer::setQuantizeMode (int value)
 {
-    triggerMode = value;
+    quantizeMode = value;
 }
 void AudioFilePlayer::setChannel (int value)
 {

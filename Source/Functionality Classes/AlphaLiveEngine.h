@@ -133,7 +133,7 @@ public:
     
     //global clock stuff
     GlobalClock* getGlobalClock(); //used by AppSettings to set the tempo
-    void triggerQuantisationPoint(); 
+    void triggerQuantizationPoint(); 
     
     void killAll();
         

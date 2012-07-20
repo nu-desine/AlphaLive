@@ -58,7 +58,7 @@ public:
     void setGlobalGain (float value);
     
     void setGlobalTempo (float value);
-    void setQuantisationValue (int value);
+    void setQuantizationValue (int value);
     void setBeatsPerBar (int value);
     void setAutoStartClock (int value);
     
@@ -74,7 +74,7 @@ public:
     float getGlobalGain();
     
     float getGlobalTempo();
-    int getQuantisationValue();
+    int getQuantizationValue();
     int getBeatsPerBar();
     int getAutoStartClock();
     
@@ -119,7 +119,7 @@ private:
     float globalGain;
     
     float globalTempo;
-    int quantisationValue; //value represents an item in the GUI quantisation menu
+    int quantizationValue; //value represents an item in the GUI quantization menu
     int beatsPerBar; //similar to time signature
     int autoStartClock; //when 1, clock will start when the first loop/seq pad is pressed. First pad atall?
     

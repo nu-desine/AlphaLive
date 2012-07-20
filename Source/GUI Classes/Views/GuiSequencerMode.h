@@ -84,7 +84,7 @@ private:
     
     TextButton *clearButton, *clearAllButton, *saveSeqButton, *saveSeqSetButton, *loadSeqButton, *loadSeqSetButton;
     AlphaSlider *currentSequenceNumberSlider, *numberOfSequencesSlider, *sequenceLengthSlider;
-    ComboBox *playStateMenu, *triggerModeMenu, *relativeTempoMenu;
+    ComboBox *playStateMenu, *quantizeModeMenu, *relativeTempoMenu;
     Label *velocityLabel;
     
     //int currentlySelectedPad;

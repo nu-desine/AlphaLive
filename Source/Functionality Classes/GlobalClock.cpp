@@ -80,47 +80,47 @@ void GlobalClock::run()
          
          
          
-         //=====send clock info to alphaLiveEngine and beyond based on quantisation value=========
-         switch (AppSettings::Instance()->getQuantisationValue()) 
+         //=====send clock info to alphaLiveEngine and beyond based on quantization value=========
+         switch (AppSettings::Instance()->getQuantizationValue()) 
          {
              case 1: //4 bars
                  if (barNumber == 1 && beatNumber == 1 && microbeatNumber == 1)
                  {
-                     alphaLiveEngineRef.triggerQuantisationPoint();
+                     alphaLiveEngineRef.triggerQuantizationPoint();
                  }
                  break;
              case 2: //2 bars
                  if ((barNumber == 1 || barNumber == 3) && beatNumber == 1 && microbeatNumber == 1)
                  {
-                     alphaLiveEngineRef.triggerQuantisationPoint();
+                     alphaLiveEngineRef.triggerQuantizationPoint();
                  }
                  break;
              case 3: //1 bar (default)
                  if (beatNumber == 1 && microbeatNumber == 1)
                  {
-                     alphaLiveEngineRef.triggerQuantisationPoint();
+                     alphaLiveEngineRef.triggerQuantizationPoint();
                  }
                  break;
              case 5: //1 beat
                  if (microbeatNumber == 1)
                  {
-                     alphaLiveEngineRef.triggerQuantisationPoint();
+                     alphaLiveEngineRef.triggerQuantizationPoint();
                  }
                  break;
              case 6: //half beat
                  if (microbeatNumber == 1 || microbeatNumber == 3)
                  {
-                     alphaLiveEngineRef.triggerQuantisationPoint();
+                     alphaLiveEngineRef.triggerQuantizationPoint();
                  }
                  break;
              case 7: //quarter beat
                  //trigger everytime
-                 alphaLiveEngineRef.triggerQuantisationPoint();
+                 alphaLiveEngineRef.triggerQuantizationPoint();
                  break;
              default: //1 bar
                  if (beatNumber == 1)
                  {
-                     alphaLiveEngineRef.triggerQuantisationPoint();
+                     alphaLiveEngineRef.triggerQuantizationPoint();
                  }
                  break;
          }

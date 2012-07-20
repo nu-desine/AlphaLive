@@ -42,7 +42,7 @@ public:
     void noteOff (int padNumber);
     void sendPressureData (int padNumber);
     
-    void triggerQuantisationPoint();
+    void triggerQuantizationPoint();
     
     void actionListenerCallback (const String& message);
     
@@ -63,7 +63,7 @@ public:
     void setPressureStatus (bool value, int pad);
     void setNoteStatus (bool value, int pad);
     void setExclusiveGroup (int value, int pad);
-    void setTriggerMode (int value, int pad);
+    void setQuantizeMode (int value, int pad);
 
 private:
     
@@ -86,7 +86,7 @@ private:
     bool pressureStatus[48];
     bool noteStatus[48];
     int exclusiveGroup[48];
-    int triggerMode[48];
+    int quantizeMode[48];
     PlayStateData playStateData[48];
     PlayStates playStates[48];
     
@@ -113,7 +113,7 @@ private:
     //of that group is triggered
     Array<int> currentExclusivePad;
     
-    //quantisation stuff
+    //quantization stuff
     Array<int> waitingPad;
     
 };

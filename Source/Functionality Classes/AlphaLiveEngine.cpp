@@ -312,11 +312,11 @@ void AlphaLiveEngine::updatePadPlayingStatus (int padNumber, int status)
     
 }
 
-void AlphaLiveEngine::triggerQuantisationPoint()
+void AlphaLiveEngine::triggerQuantizationPoint()
 {
-    modeLooper->triggerQuantisationPoint();
-    modeSequencer->triggerQuantisationPoint();
-    modeMidi->triggerQuantisationPoint();
+    modeLooper->triggerQuantizationPoint();
+    modeSequencer->triggerQuantizationPoint();
+    modeMidi->triggerQuantizationPoint();
 }
 
 

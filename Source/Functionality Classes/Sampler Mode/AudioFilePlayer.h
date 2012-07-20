@@ -59,7 +59,7 @@ public:
     
     void setPlayState (int value);
     void setEffect (int value);
-    void setTriggerMode (int value);
+    void setQuantizeMode (int value);
     void setChannel (int value);
     
     int getCurrentPlayingState();
@@ -82,8 +82,8 @@ public:
     
     void setPlaybackPosition();
     
-    //quantisation stuff
-    void triggerQuantisationPoint();
+    //quantization stuff
+    void triggerQuantizationPoint();
     
     void killAllAudio(); //kills things like delay effect tails
 
@@ -113,7 +113,7 @@ private:
     int playState, effect;
     int currentPlayingState; //0 - off, 1 - playing, 2 - waiting to play, 3 - waiting to stop 
     int currentPressureValue;
-    int triggerMode;
+    int quantizeMode;
     int channel;
     
     //audio signal processing stuff - now dynamically created and deleted when needed

@@ -58,7 +58,7 @@ PadSettings::PadSettings(int arrayIndex)
     //default CC layout
     midiCcController = Layouts::ccLayout[padNumber];
     midiExclusiveGroup = 1;
-    midiTriggerMode = 1;
+    midiQuantizeMode = 1;
     
     //looper mode
     //looperAudioFilePath = File::nonexistent;
@@ -68,7 +68,7 @@ PadSettings::PadSettings(int arrayIndex)
     looperPan = 0.5;
     looperGain = 1.0;
     looperChannel = 1;
-    looperTriggerMode = 1;
+    looperQuantizeMode = 1;
     
     //----looper effects----
     //Gain and Pan
@@ -162,7 +162,7 @@ PadSettings::PadSettings(int arrayIndex)
     sequencerPlayState = 3; 
     sequencerChannel = 1;
     sequencerLength = 32;
-    sequencerTriggerMode = 1;
+    sequencerQuantizeMode = 1;
     sequencerRelativeTempoMode = 3; //regular time
     
     //set a default sequencer note midi layout of 60-72
@@ -259,7 +259,7 @@ void PadSettings::resetData (int whatToReset)
         setMidiNoteStatus (true);
         setMidiCcController (Layouts::ccLayout[padNumber]);
         setMidiExclusiveGroup(1);
-        setMidiTriggerMode(1);
+        setMidiQuantizeMode(1);
     }
     
     if (whatToReset != 2)
@@ -270,7 +270,7 @@ void PadSettings::resetData (int whatToReset)
         setLooperPan (0.5);
         setLooperGain (1.0);
         setLooperChannel (1);
-        setLooperTriggerMode(1);
+        setLooperQuantizeMode(1);
         
         //what about reseting the FX values?
     }
@@ -293,7 +293,7 @@ void PadSettings::resetData (int whatToReset)
         setSequencerPlayState (3);
         setSequencerChannel (1);
         setSequencerLength (32);
-        setSequencerTriggerMode (1);
+        setSequencerQuantizeMode (1);
         setSequencerRelativeTempoMode(3);
         for (int i = 0, num = 60; i <= NO_OF_ROWS-1; i++)
         {
@@ -493,10 +493,10 @@ void PadSettings::setMidiExclusiveGroup (int value)
     midiExclusiveGroup = value;
     alphaLiveEngineRef->getModeMidi()->setExclusiveGroup(value, padNumber);
 }
-void PadSettings::setMidiTriggerMode (int value)
+void PadSettings::setMidiQuantizeMode (int value)
 {
-    midiTriggerMode = value;
-    alphaLiveEngineRef->getModeMidi()->setTriggerMode(value, padNumber);
+    midiQuantizeMode = value;
+    alphaLiveEngineRef->getModeMidi()->setQuantizeMode(value, padNumber);
 }
 
 #pragma mark MIDI mode accessor functions
@@ -545,9 +545,9 @@ int PadSettings::getMidiExclusiveGroup()
 {
     return midiExclusiveGroup;
 }
-int PadSettings::getMidiTriggerMode()
+int PadSettings::getMidiQuantizeMode()
 {
-    return midiTriggerMode;
+    return midiQuantizeMode;
 }
 
 
@@ -672,12 +672,12 @@ void PadSettings::setLooperChannel(int value)
     if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
         alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setChannel(looperChannel);
 }
-void PadSettings::setLooperTriggerMode(int value)
+void PadSettings::setLooperQuantizeMode(int value)
 {
-    looperTriggerMode = value;
+    looperQuantizeMode = value;
     if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
     {
-        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setTriggerMode(looperTriggerMode);
+        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setQuantizeMode(looperQuantizeMode);
     }
 }
 
@@ -730,9 +730,9 @@ int PadSettings::getLooperChannel()
 {
     return looperChannel;
 }
-int PadSettings::getLooperTriggerMode()
+int PadSettings::getLooperQuantizeMode()
 {
-    return looperTriggerMode;
+    return looperQuantizeMode;
 }
 
 
@@ -1350,11 +1350,11 @@ void PadSettings::setSequencerLength(int value)
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setSequenceLength(value);
     }
 }
-void PadSettings::setSequencerTriggerMode(int value)
+void PadSettings::setSequencerQuantizeMode(int value)
 {
-    sequencerTriggerMode = value;
+    sequencerQuantizeMode = value;
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
-        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setTriggerMode(sequencerTriggerMode);
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setQuantizeMode(sequencerQuantizeMode);
 }
 void PadSettings::setSequencerRelativeTempoMode (int value)
 {
@@ -1614,9 +1614,9 @@ int PadSettings::getSequencerLength()
 {
     return sequencerLength;
 }
-int PadSettings::getSequencerTriggerMode()
+int PadSettings::getSequencerQuantizeMode()
 {
-    return sequencerTriggerMode;
+    return sequencerQuantizeMode;
 }
 int PadSettings::getSequencerRelativeTempoMode()
 {

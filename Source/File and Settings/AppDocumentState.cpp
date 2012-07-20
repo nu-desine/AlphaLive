@@ -894,7 +894,7 @@ void AppDocumentState::saveToPreset (int presetNumber)
     globalData->setAttribute("globalPan", AppSettings::Instance()->getGlobalPan());
     
     globalData->setAttribute("globalTempo", AppSettings::Instance()->getGlobalTempo());
-    globalData->setAttribute("quantisationValue", AppSettings::Instance()->getQuantisationValue());
+    globalData->setAttribute("quantizationValue", AppSettings::Instance()->getQuantizationValue());
     globalData->setAttribute("beatsPerBar", AppSettings::Instance()->getBeatsPerBar());
     globalData->setAttribute("autoStartClock", AppSettings::Instance()->getAutoStartClock());
     for (int i = 0; i <= 5; i++)
@@ -928,7 +928,7 @@ void AppDocumentState::saveToPreset (int presetNumber)
             padData->setAttribute("midiNoteStatus", PAD_SETTINGS->getMidiNoteStatus());
             padData->setAttribute("midiCcController", PAD_SETTINGS->getMidiCcController());
             padData->setAttribute("midiExclusiveGroup", PAD_SETTINGS->getMidiExclusiveGroup());
-            padData->setAttribute("midiTriggerMode", PAD_SETTINGS->getMidiTriggerMode());
+            padData->setAttribute("midiQuantizeMode", PAD_SETTINGS->getMidiQuantizeMode());
         }
         else if (PAD_SETTINGS->getMode() == 2) //looper mode
         {
@@ -950,7 +950,7 @@ void AppDocumentState::saveToPreset (int presetNumber)
             padData->setAttribute("looperPan", PAD_SETTINGS->getLooperPan());
             padData->setAttribute("looperGain", PAD_SETTINGS->getLooperGain());
             padData->setAttribute("looperChannel", PAD_SETTINGS->getLooperChannel());
-            padData->setAttribute("looperTriggerMode", PAD_SETTINGS->getLooperTriggerMode());
+            padData->setAttribute("looperQuantizeMode", PAD_SETTINGS->getLooperQuantizeMode());
             
             if (PAD_SETTINGS->getLooperEffect() == 1) //Gain and Pan
             {
@@ -1048,7 +1048,7 @@ void AppDocumentState::saveToPreset (int presetNumber)
             padData->setAttribute("sequencerPlayState", PAD_SETTINGS->getSequencerPlayState());
             padData->setAttribute("sequencerChannel", PAD_SETTINGS->getSequencerChannel());
             padData->setAttribute("sequencerLength", PAD_SETTINGS->getSequencerLength());
-            padData->setAttribute("sequencerTriggerMode", PAD_SETTINGS->getSequencerTriggerMode());
+            padData->setAttribute("sequencerQuantizeMode", PAD_SETTINGS->getSequencerQuantizeMode());
             padData->setAttribute("sequencerRelativeTempoMode", PAD_SETTINGS->getSequencerRelativeTempoMode());
             
             if (PAD_SETTINGS->getSequencerMode() == 1) //sequencer midi mode
@@ -1120,8 +1120,8 @@ void AppDocumentState::loadFromPreset (int presetNumber)
         AppSettings::Instance()->setGlobalPan(globalData->getDoubleAttribute("globalPan"));
         
         AppSettings::Instance()->setGlobalTempo(globalData->getDoubleAttribute("globalTempo"));
-        if (globalData->hasAttribute("quantisationValue") == true)
-            AppSettings::Instance()->setQuantisationValue(globalData->getIntAttribute("quantisationValue"));
+        if (globalData->hasAttribute("quantizationValue") == true)
+            AppSettings::Instance()->setQuantizationValue(globalData->getIntAttribute("quantizationValue"));
         if (globalData->hasAttribute("beatsPerBar") == true)
             AppSettings::Instance()->setBeatsPerBar(globalData->getIntAttribute("beatsPerBar"));
         if (globalData->hasAttribute("autoStartClock") == true)
@@ -1166,8 +1166,8 @@ void AppDocumentState::loadFromPreset (int presetNumber)
                 PAD_SETTINGS->setMidiCcController(padData->getIntAttribute("midiCcController"));
                 if (padData->hasAttribute("midiExclusiveGroup") == true)
                     PAD_SETTINGS->setMidiExclusiveGroup(padData->getIntAttribute("midiExclusiveGroup"));
-                if (padData->hasAttribute("midiTriggerMode") == true)
-                    PAD_SETTINGS->setMidiTriggerMode(padData->getIntAttribute("midiTriggerMode"));
+                if (padData->hasAttribute("midiQuantizeMode") == true)
+                    PAD_SETTINGS->setMidiQuantizeMode(padData->getIntAttribute("midiQuantizeMode"));
             }
             
             //looper mode
@@ -1200,8 +1200,8 @@ void AppDocumentState::loadFromPreset (int presetNumber)
                 PAD_SETTINGS->setLooperPan(padData->getDoubleAttribute("looperPan"));
                 PAD_SETTINGS->setLooperGain(padData->getDoubleAttribute("looperGain"));
                 PAD_SETTINGS->setLooperChannel(padData->getIntAttribute("looperChannel"));
-                if (padData->hasAttribute("looperTriggerMode") == true)
-                    PAD_SETTINGS->setLooperTriggerMode(padData->getIntAttribute("looperTriggerMode"));
+                if (padData->hasAttribute("looperQuantizeMode") == true)
+                    PAD_SETTINGS->setLooperQuantizeMode(padData->getIntAttribute("looperQuantizeMode"));
                 if (PAD_SETTINGS->getLooperEffect() == 1) //Gain and Pan
                 {
                     if (padData->hasAttribute("looperFxGainPanGain") == true) //if data exists
@@ -1350,8 +1350,8 @@ void AppDocumentState::loadFromPreset (int presetNumber)
                 PAD_SETTINGS->setSequencerPlayState(padData->getIntAttribute("sequencerPlayState"));
                 PAD_SETTINGS->setSequencerChannel(padData->getIntAttribute("sequencerChannel"));
                 PAD_SETTINGS->setSequencerLength(padData->getIntAttribute("sequencerLength"));
-                if (padData->hasAttribute("sequencerTriggerMode") == true)
-                    PAD_SETTINGS->setSequencerTriggerMode(padData->getIntAttribute("sequencerTriggerMode"));
+                if (padData->hasAttribute("sequencerQuantizeMode") == true)
+                    PAD_SETTINGS->setSequencerQuantizeMode(padData->getIntAttribute("sequencerQuantizeMode"));
                 if (padData->hasAttribute("sequencerRelativeTempoMode") == true)
                     PAD_SETTINGS->setSequencerRelativeTempoMode(padData->getIntAttribute("sequencerRelativeTempoMode"));
                 

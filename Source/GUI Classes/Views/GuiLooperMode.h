@@ -60,7 +60,7 @@ public:
 private:
     
     FilenameComponent *fileChooser;
-    ComboBox *playStateMenu, *triggerModeMenu, *pressureModeMenu;
+    ComboBox *playStateMenu, *quantizeModeMenu, *pressureModeMenu, *triggerModeMenu;
     
     //int currentlySelectedPad;
     Array<int> selectedPads;

@@ -50,7 +50,7 @@ AppSettings::AppSettings()
     globalGain = 1.0;
     
     globalTempo = 120.0;
-    quantisationValue = 3; //1 Bar
+    quantizationValue = 3; //1 Bar
     beatsPerBar = 4;
     autoStartClock = 0; //off
     
@@ -100,7 +100,7 @@ void AppSettings::resetData()
         setSequencerChannelMode(i, 1);
     }
     
-    setQuantisationValue(3);
+    setQuantizationValue(3);
     setBeatsPerBar(4);
     setAutoStartClock(0);
     setCopyExternalFiles(true);
@@ -164,9 +164,9 @@ void AppSettings::setGlobalTempo (float value)
     alphaLiveEngineRef->getGlobalClock()->setTempo(globalTempo);
 }
 
-void AppSettings::setQuantisationValue(int value)
+void AppSettings::setQuantizationValue(int value)
 {
-    quantisationValue = value;
+    quantizationValue = value;
 }
 
 void AppSettings::setBeatsPerBar (int value)
@@ -222,9 +222,9 @@ float AppSettings::getGlobalTempo()
 {
     return globalTempo;
 }
-int AppSettings::getQuantisationValue()
+int AppSettings::getQuantizationValue()
 {
-    return quantisationValue;
+    return quantizationValue;
 }
 int AppSettings::getBeatsPerBar()
 {

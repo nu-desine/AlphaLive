@@ -119,6 +119,7 @@
 		0C78A43015B467910049C0C8 /* OscPrintReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A3BB15B467910049C0C8 /* OscPrintReceivedElements.cpp */; };
 		0C78A43115B467910049C0C8 /* OscReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A3BD15B467910049C0C8 /* OscReceivedElements.cpp */; };
 		0C78A43215B467910049C0C8 /* OscTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A3BF15B467910049C0C8 /* OscTypes.cpp */; };
+		0CA0A4FA15B97E8C001362B3 /* TriggerModes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CA0A4F815B97E8C001362B3 /* TriggerModes.cpp */; };
 		25CABBE894F6F3FE24224C5B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97FE2821188200B689631086 /* QuartzCore.framework */; };
 		2E4F3ED4068A7F5AC3B49264 /* juce_audio_utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = AE8AA00C09CDA8BD939E2BC5 /* juce_audio_utils.mm */; };
 		31C8BDBDE9A06BAAFAD3D687 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8357D7499044959526A92B1 /* CoreAudio.framework */; };
@@ -440,6 +441,8 @@
 		0C78A3BE15B467910049C0C8 /* OscReceivedElements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscReceivedElements.h; sourceTree = "<group>"; };
 		0C78A3BF15B467910049C0C8 /* OscTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OscTypes.cpp; sourceTree = "<group>"; };
 		0C78A3C015B467910049C0C8 /* OscTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscTypes.h; sourceTree = "<group>"; };
+		0CA0A4F815B97E8C001362B3 /* TriggerModes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TriggerModes.cpp; sourceTree = "<group>"; };
+		0CA0A4F915B97E8C001362B3 /* TriggerModes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriggerModes.h; sourceTree = "<group>"; };
 		0CA92FACC9C857515F5DC895 /* juce_Colours.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Colours.h; path = ../../JuceLibraryCode/modules/juce_graphics/colour/juce_Colours.h; sourceTree = SOURCE_ROOT; };
 		0D5838014A4AB76B63EC13C4 /* juce_FileTreeComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_FileTreeComponent.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/filebrowser/juce_FileTreeComponent.cpp; sourceTree = SOURCE_ROOT; };
 		0D683EFC0C730B43D4BA49E6 /* juce_OggVorbisAudioFormat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_OggVorbisAudioFormat.cpp; path = ../../JuceLibraryCode/modules/juce_audio_formats/codecs/juce_OggVorbisAudioFormat.cpp; sourceTree = SOURCE_ROOT; };
@@ -1447,11 +1450,11 @@
 				0C78A2DE15B467900049C0C8 /* AlphaLiveEngine.cpp */,
 				0C78A2DA15B467900049C0C8 /* GlobalClock.h */,
 				0C78A2D915B467900049C0C8 /* GlobalClock.cpp */,
-				0C78A2D615B467900049C0C8 /* Controller Mode */,
 				0C78A2DB15B467900049C0C8 /* MIDI Mode */,
-				0C78A2E015B467900049C0C8 /* Other */,
 				0C78A2E415B467900049C0C8 /* Sampler Mode */,
 				0C78A2E915B467900049C0C8 /* Sequencer Mode */,
+				0C78A2D615B467900049C0C8 /* Controller Mode */,
+				0C78A2E015B467900049C0C8 /* Other */,
 			);
 			name = "Functionality Classes";
 			path = "../../Source/Functionality Classes";
@@ -1478,6 +1481,8 @@
 		0C78A2E015B467900049C0C8 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				0CA0A4F915B97E8C001362B3 /* TriggerModes.h */,
+				0CA0A4F815B97E8C001362B3 /* TriggerModes.cpp */,
 				0C78A2E315B467900049C0C8 /* PlayStates.h */,
 				0C78A2E215B467900049C0C8 /* PlayStates.cpp */,
 				0C78A2E115B467900049C0C8 /* LayoutsAndScales.cpp */,
@@ -3606,6 +3611,7 @@
 				0C78A43015B467910049C0C8 /* OscPrintReceivedElements.cpp in Sources */,
 				0C78A43115B467910049C0C8 /* OscReceivedElements.cpp in Sources */,
 				0C78A43215B467910049C0C8 /* OscTypes.cpp in Sources */,
+				0CA0A4FA15B97E8C001362B3 /* TriggerModes.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

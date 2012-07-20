@@ -150,18 +150,18 @@ void ModeLooper::addItemToWaitingPadLooper (AudioFilePlayer* item)
 }
 
 
-void ModeLooper::triggerQuantisationPoint()
+void ModeLooper::triggerQuantizationPoint()
 {
     if (waitingPadLooper.size() > 0)
     {
         for (int i = 0; i < waitingPadLooper.size(); i++)
         {
-            //alert padLooper[i] of a quantisation point in time
-            waitingPadLooper[i]->triggerQuantisationPoint();
+            //alert padLooper[i] of a quantization point in time
+            waitingPadLooper[i]->triggerQuantizationPoint();
         }
     
         //remove items from array so they no longer recieve alerts of
-        //quantisation points in time
+        //quantization points in time
         waitingPadLooper.clear(false);
     }
 }

@@ -59,7 +59,7 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     sequenceLength = PAD_SETTINGS->getSequencerLength();
     for (int row = 0; row <=NO_OF_ROWS-1; row++)
        midiNote[row] = PAD_SETTINGS->getSequencerMidiNote(row); 
-    triggerMode = PAD_SETTINGS->getSequencerTriggerMode();
+    quantizeMode = PAD_SETTINGS->getSequencerQuantizeMode();
     channel = PAD_SETTINGS->getSequencerChannel();
     
     midiChannel = PAD_SETTINGS->getSequencerMidiChannel();
@@ -259,7 +259,7 @@ void SequencePlayer::processSequence(int padValue)
     
     //if playStateData.playingStatus = 2, do nothing
     
-    if (triggerMode == 1) //free
+    if (quantizeMode == 1) //free
     {
         if (playStateData.playingStatus == 1) //play
         {
@@ -288,14 +288,14 @@ void SequencePlayer::processSequence(int padValue)
     }
     
     //==========================================================================================
-    else if (triggerMode == 2) //quantised
+    else if (quantizeMode == 2) //quantized
     {
         if (playStateData.playingStatus == 1) //play
         {
             currentPlayingState = 2; //waiting to play
             
             //add this instance of SequencePlayer to the waitingPadSequencer Array within
-            //ModeSequencer so that it is alerted of the next quantised point in time so
+            //ModeSequencer so that it is alerted of the next quantized point in time so
             //the sequence can start playing
             modeSequencerRef.addItemToWaitingPadSequencer(this);
             broadcaster.sendActionMessage("WAITING TO PLAY");
@@ -307,7 +307,7 @@ void SequencePlayer::processSequence(int padValue)
             currentPlayingState = 3; // waiting to stop
             
             //add this instance of SequencePlayer to the waitingPadSequencer Array within
-            //ModeSequencer so that it is alerted of the next quantised point in time so
+            //ModeSequencer so that it is alerted of the next quantized point in time so
             //the sequence can stop playing
             modeSequencerRef.addItemToWaitingPadSequencer(this);
             broadcaster.sendActionMessage("WAITING TO STOP");
@@ -319,7 +319,7 @@ void SequencePlayer::processSequence(int padValue)
     prevPadValue = padValue;
 }
 
-void SequencePlayer::triggerQuantisationPoint()
+void SequencePlayer::triggerQuantizationPoint()
 {
     if (currentPlayingState == 2) //waiting to play
     {
@@ -741,7 +741,7 @@ void SequencePlayer::actionListenerCallback (const String& message)
         //so that this sequence can be stopped via exclusive mode next time
         
         //this is called async so that there is no noticable time delay caused when
-        //doing this via quantisation mode (which is caused by the time value
+        //doing this via quantization mode (which is caused by the time value
         //paramater within the stopThread() function.
         modeSequencerRef.stopExclusivePadSequencer(channel, this);
     }
@@ -876,9 +876,9 @@ void SequencePlayer::setSequenceLength (int value)
     sequenceLength = value;
 }
 
-void SequencePlayer::setTriggerMode (int value)
+void SequencePlayer::setQuantizeMode (int value)
 {
-    triggerMode = value;
+    quantizeMode = value;
 }
 void SequencePlayer::setChannel (int value)
 {

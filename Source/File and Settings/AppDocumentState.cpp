@@ -178,7 +178,7 @@ void AppDocumentState::saveProject()
         currentProjectFile.deleteFile();
         currentProjectFile.create(); //create the file
 
-        XmlElement performanceSettings("PERFORMANCE");
+        XmlElement performanceSettings("ALPHALIVE_PROJECT_VERSION_1");
 
         performanceSettings.addChildElement(projectData);
         
@@ -265,7 +265,7 @@ void AppDocumentState::saveProjectAs()
             savedFile.deleteFile();
             savedFile.create(); //create the file
     
-            XmlElement performanceSettings("PERFORMANCE");
+            XmlElement performanceSettings("ALPHALIVE_PROJECT_VERSION_1");
             
             performanceSettings.addChildElement(projectData);
             
@@ -366,27 +366,29 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
             else
                 loadedFile = fileToOpen;
             
-            //get the folder that holds the projects audio files
-            File audioFileDirectory = (loadedFile.getParentDirectory().getFullPathName() + File::separatorString + "Audio Files");
-            
-            //if so some strange reason the directory doesn't exist, create it
-            if (audioFileDirectory.exists() == false)
-                audioFileDirectory.createDirectory();
-            
-            //set the Audio Files directory as the new working directory so loaded audio files can be found
-            audioFileDirectory.setAsCurrentWorkingDirectory();
-            
             //parse file into xml file
             ScopedPointer<XmlElement> loadedXml (XmlDocument::parse(loadedFile));
             
-            if (loadedXml != nullptr && loadedXml->hasTagName("PERFORMANCE"))
+            
+            if (loadedXml != nullptr && loadedXml->hasTagName("ALPHALIVE_PROJECT_VERSION_1"))
             {
+                
+                //get the folder that holds the projects audio files
+                File audioFileDirectory = (loadedFile.getParentDirectory().getFullPathName() + File::separatorString + "Audio Files");
+                
+                //if so some strange reason the directory doesn't exist, create it
+                if (audioFileDirectory.exists() == false)
+                    audioFileDirectory.createDirectory();
+                
+                //set the Audio Files directory as the new working directory so loaded audio files can be found
+                audioFileDirectory.setAsCurrentWorkingDirectory();
+                
                 //=====================load projectData settings=======================
                 
                 //reset/clear XmlElement.
                 if (projectData != nullptr)
                     projectData->removeAllAttributes();
-                    
+                
                 //put the loaded xml data into the xmlelement for the project settings
                 XmlElement *projSettingsXml = loadedXml->getChildByName("PROJECT_SETTINGS");
                 
@@ -445,27 +447,35 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
                 
                 //call loadFromPreset to load the settings of preset 0 into the application
                 loadFromPreset(0);
+                
+                currentProjectFile = loadedFile;
+                
+                //=====================================================
+                //==============NEW - reset unused mode settings=======
+                //=====================================================
+                /*
+                 Here, the settings of the modes that aren't being used for each pad are reset to their default values.
+                 */
+                for (int i = 0; i <=47; i++)
+                {
+                    PAD_SETTINGS->resetData(PAD_SETTINGS->getMode());
+                }
+                //=====================================================
+                
+                //change the window title bar text
+                mainAppWindowRef->setTitleBarText(currentProjectFile.getFileNameWithoutExtension());
+                
+                //add the file to the 'recent files' list
+                registerRecentFile (currentProjectFile);
             }
-            
-            currentProjectFile = loadedFile;
-            
-            //=====================================================
-            //==============NEW - reset unused mode settings=======
-            //=====================================================
-            /*
-             Here, the settings of the modes that aren't being used for each pad are reset to their default values.
-             */
-            for (int i = 0; i <=47; i++)
+            else if (loadedXml != nullptr && loadedXml->hasTagName("PERFORMANCE"))
             {
-                PAD_SETTINGS->resetData(PAD_SETTINGS->getMode());
+               AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Cannot Open File", "The selected AlphaLive Project file cannot be opened with this version of AlphaLive.");  
             }
-            //=====================================================
-            
-            //change the window title bar text
-            mainAppWindowRef->setTitleBarText(currentProjectFile.getFileNameWithoutExtension());
-            
-            //add the file to the 'recent files' list
-            registerRecentFile (currentProjectFile);
+            else
+            {
+                AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Cannot Open File", "The selected AlphaLive Project file seems to be corrupt.");
+            }
             
         }
         
@@ -481,20 +491,20 @@ void AppDocumentState::savePresetToDisk (int presetNumber)
     saveToPreset(presetNumber);
     
     //navigate to app directory
-    FileChooser saveFileChooser("Create an AlphaLive preset file to save...", 
+    FileChooser saveFileChooser("Create an AlphaLive Scene file to save...", 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.alphapreset");
+                                "*.alphascene");
     if (saveFileChooser.browseForFileToSave(false))
     {
         //create a project directory
         File savedDirectory (saveFileChooser.getResult());
         File savedDirectoryName = savedDirectory;
-        String directoryString = savedDirectory.getFullPathName() + " (PRESET)";
+        String directoryString = savedDirectory.getFullPathName() + " (SCENE)";
         savedDirectory = directoryString;
         
         File savedFile (savedDirectory.getFullPathName() + File::separatorString + savedDirectoryName.getFileName()); //get file that the user has 'saved'
         String stringFile = savedFile.getFullPathName(); //get the filepath name of the file as a string
-        stringFile = stringFile + ".alphapreset"; //append an extension name to the filepath name
+        stringFile = stringFile + ".alphascene"; //append an extension name to the filepath name
         savedFile = stringFile; //set the file to this name
         
         bool overwrite = true; //by default true
@@ -615,7 +625,7 @@ void AppDocumentState::savePresetToDisk (int presetNumber)
             //created which imports the child elements from presetData[presetNumber]
             
             //create xmlelement to be saved
-            XmlElement *toBeSaved = new XmlElement("PRESET");
+            XmlElement *toBeSaved = new XmlElement("ALPHALIVE_SCENE_VERSION_1");
             
             //import child elements
             for (int i = 0; i <= 47; i++)
@@ -632,7 +642,7 @@ void AppDocumentState::savePresetToDisk (int presetNumber)
             
             //----
             
-            AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Single Preset Saved", "The preset has been successfully saved to file");
+            AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Single Scene Saved", "The Scene has been successfully saved to file.");
         }
     }
     
@@ -645,9 +655,9 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
 {
 
     //navigate to app directory
-    FileChooser loadFileChooser("Select a .alphapreset file to load...", 
+    FileChooser loadFileChooser("Select a .alphascene file to load...", 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.alphapreset");
+                                "*.alphascene");
     
     if (loadFileChooser.browseForFileToOpen())
     {
@@ -657,7 +667,7 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
         //parse file into xml file
         ScopedPointer<XmlElement> loadedXml (XmlDocument::parse(loadedFile));
         
-        if (loadedXml != nullptr && loadedXml->hasTagName("PRESET"))
+        if (loadedXml != nullptr && loadedXml->hasTagName("ALPHALIVE_SCENE_VERSION_1"))
         {
             //clear the xmlelement for the currently selected preset number
             clearPreset(presetNumber);
@@ -846,10 +856,15 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
                 }
                 
             }
-            
+           
+            return true;
         }
-    
-        return true;
+        else
+        {
+            AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Cannot Open File", "The selected AlphaLive Scene file seems to be corrupt.");
+            
+            return false;
+        } 
     }
     
     else // 'cancel' button pressed
@@ -946,6 +961,10 @@ void AppDocumentState::saveToPreset (int presetNumber)
             }
     
             padData->setAttribute("looperTriggerMode", PAD_SETTINGS->getLooperTriggerMode());
+            padData->setAttribute("looperShouldLoop", PAD_SETTINGS->getLooperShouldLoop());
+            padData->setAttribute("looperIndestructible", PAD_SETTINGS->getLooperIndestructible());
+            padData->setAttribute("looperShouldFinishLoop", PAD_SETTINGS->getLooperShouldFinishLoop());
+            padData->setAttribute("looperShouldLoop", PAD_SETTINGS->getLooperShouldLoop());
             padData->setAttribute("looperEffect", PAD_SETTINGS->getLooperEffect());
             padData->setAttribute("looperPan", PAD_SETTINGS->getLooperPan());
             padData->setAttribute("looperGain", PAD_SETTINGS->getLooperGain());
@@ -1196,6 +1215,9 @@ void AppDocumentState::loadFromPreset (int presetNumber)
                     PAD_SETTINGS->setLooperAudioFilePath(File::nonexistent);
                 
                 PAD_SETTINGS->setLooperTriggerMode(padData->getIntAttribute("looperTriggerMode"));
+                PAD_SETTINGS->setLooperShouldLoop(padData->getIntAttribute("looperShouldLoop"));
+                PAD_SETTINGS->setLooperIndestructible(padData->getIntAttribute("looperIndestructible"));
+                PAD_SETTINGS->setLooperShouldFinishLoop(padData->getIntAttribute("looperShouldFinishLoop"));
                 PAD_SETTINGS->setLooperEffect(padData->getIntAttribute("looperEffect"));
                 PAD_SETTINGS->setLooperPan(padData->getDoubleAttribute("looperPan"));
                 PAD_SETTINGS->setLooperGain(padData->getDoubleAttribute("looperGain"));

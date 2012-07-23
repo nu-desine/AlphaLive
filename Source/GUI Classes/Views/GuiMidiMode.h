@@ -70,6 +70,7 @@ private:
 	//GUI Components
     ComboBox *pressureModeMenu, *triggerModeMenu, *quantizeModeMenu;
     AlphaSlider *pressureMinRangeSlider, *pressureMaxRangeSlider, *ccControllerSlider, *exclusiveGroupSlider;
+    TextButton *indestructibleButton, *stickyButton;
     
     //int currentlySelectedPad;
     Array<int> selectedPads;

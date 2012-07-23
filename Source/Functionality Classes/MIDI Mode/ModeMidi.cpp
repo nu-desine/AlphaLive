@@ -40,6 +40,8 @@ ModeMidi::ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref)
         controllerNumber[i] = Layouts::ccLayout[i];
         pressureMode[i] = 1;
         triggerModeValue[i] = 1;
+        indestructible[i] = 0;
+        sticky[i] = 0;
         pressureStatus[i] = true;
         noteStatus[i] = true;
         exclusiveGroup[i] = 0;
@@ -47,11 +49,12 @@ ModeMidi::ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref)
         
         //not all members of the TriggerModeData struct are needed for MIDI mode
         triggerModeData[i].playingStatus = 0;
-        triggerModeData[i].pressureValue = 0;
+        //triggerModeData[i].pressureValue = 0;
         
         currentPlayingStatus[i] = 0;
         isCurrentlyPlaying[i] = false;
         prevPadValue[i] = 0;
+        pressureValue[i] = 0;
     }
     
     for (int i = 0; i <= 15; i++)
@@ -79,7 +82,9 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
     }
     
     //==========================================================================================
-    //determime triggerMode
+    // Trigger Mode stuff
+    //==========================================================================================
+    
     switch (triggerModeValue[padNumber]) 
     {
         case 1:
@@ -106,11 +111,28 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
     }
 
     
+    if (indestructible[padNumber] == 1)
+    {
+        //if set to indestructible...
+        
+        if (triggerModeData[padNumber].playingStatus == 0)
+        {
+            //...and triggerModeData signifies to stop midi, DON'T LET IT...MWAHAHAHA! 
+            triggerModeData[padNumber].playingStatus = 2; //ignore
+        }
+        else if (triggerModeData[padNumber].playingStatus == 1 && currentPlayingStatus[padNumber] == 1 && triggerModeValue[padNumber] != 6)
+        {
+            //...and triggerModeData signifies to start midi, 
+            //but note is already playing and triggerMode does not equal 'trigger'
+            //Don't send a play command!
+            triggerModeData[padNumber].playingStatus = 2; //ignore
+        }
+        
+    }
     
-    
-    //scale 0-511 to minPressure-maxPressure
-    triggerModeData[padNumber].pressureValue = minRange[padNumber] + (triggerModeData[padNumber].pressureValue * ((maxRange[padNumber] - minRange[padNumber]) / 511.0));
-    
+    //==========================================================================================
+    // Start/stop stuff
+    //==========================================================================================
 
     
     if (noteStatus[padNumber] == true) //if pad note status is 'on'
@@ -139,12 +161,9 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
             {
                 currentPlayingStatus[padNumber] = 2; //waiting to play
                 waitingPad.addIfNotAlreadyThere(padNumber);
-                
-                if (triggerModeValue[padNumber] != 1) //if not on 'standard' triggerMode
-                {
-                    guiPadWaitingPlayUpdater.add(padNumber);
-                    broadcaster.sendActionMessage("WAITING TO PLAY");
-                }
+            
+                guiPadWaitingPlayUpdater.add(padNumber);
+                broadcaster.sendActionMessage("WAITING TO PLAY");
             }
             
             //Create 'note off' message
@@ -153,11 +172,10 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
                 currentPlayingStatus[padNumber] = 3; // waiting to stop
                 waitingPad.addIfNotAlreadyThere(padNumber);
                 
-                if (triggerModeValue[padNumber] != 1) //if not on 'standard' triggerMode
-                {
-                    guiPadWaitingStopUpdater.add(padNumber);
-                    broadcaster.sendActionMessage("WAITING TO STOP");
-                }
+                
+                guiPadWaitingStopUpdater.add(padNumber);
+                broadcaster.sendActionMessage("WAITING TO STOP");
+            
             }
         }
     }
@@ -174,12 +192,57 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
             alphaLiveEngineRef.getGlobalClock()->startClock();
         }
     }
+    
+    
+    //==========================================================================================
+    // Pressure stuff
+    //==========================================================================================
+    
+    //scale 0-511 to 0-127
+    //as the value will be scaled down and into an int, padValue could be rounded down to 0 even when it isn't quite 0
+    //therefore we must make sure that it is atleast at the value of 1 untill it is actually set to 0,
+    //so it doesn't mess up how the sticky feature is handled
 
+    float padValueFloat = padValue * (127.0 / 511.0);
     
-    prevPadValue[padNumber] = padValue;
+    if (padValueFloat > 0 && padValueFloat < 1)
+        padValue = 1;
+    else
+    padValue = padValueFloat;
     
+    
+    if (sticky[padNumber] == 1) //'on'
+    {
+        //modify pressure value
+        if(prevPadValue[padNumber] == 0)
+        {
+            pressureValue[padNumber] = 0;
+            
+        }
+        else
+        {
+            if(padValue > pressureValue[padNumber])
+            {
+                pressureValue[padNumber] = padValue;
+            }
+            //else if it is smaller, don't change the pressure value
+        }
+        
+    }
+    else // 'off'
+    {
+        pressureValue[padNumber] = padValue; 
+    }
+    
+    //std::cout << "Pad Value: " << padValue << std::endl;
+    //std::cout << "Prev Pad Value: " << prevPadValue[padNumber] << std::endl;
+    //std::cout << "pressure val: " << pressureValue[padNumber] << std::endl;
+    
+    //create pressure MIDI data
     sendPressureData(padNumber);
     
+    
+    prevPadValue[padNumber] = padValue;
     
 }
 
@@ -204,13 +267,10 @@ void ModeMidi::noteOn (int padNumber)
     
     
     //update pad GUI
-    if (triggerModeValue[padNumber] != 1) //if not on 'standard' triggerMode
+    if (currentPlayingStatus[padNumber] != 1) //GUI won't need updating if this is false
     {
-        if (currentPlayingStatus[padNumber] != 1) //GUI won't need updating if this is false
-        {
-            guiPadOnUpdater.add(padNumber);
-            broadcaster.sendActionMessage("ON");
-        }
+        guiPadOnUpdater.add(padNumber);
+        broadcaster.sendActionMessage("ON");
     }
     
     //set pad to 'on'
@@ -225,7 +285,7 @@ void ModeMidi::noteOn (int padNumber)
         //get the previously triggered pad of the same group
         int prevPad = currentExclusivePad[exclusiveGroup[padNumber]];
         
-        if (currentExclusivePad[exclusiveGroup[padNumber]] != 100) //if it exists...
+        if (currentExclusivePad[exclusiveGroup[padNumber]] != 100) //if it exists... (I DON'T UNDERSTAND THIS LINE ANYMORE!)
         {
             //if it isn't the same as the current pad...
             if (prevPad != padNumber)
@@ -239,13 +299,9 @@ void ModeMidi::noteOn (int padNumber)
                 sendMidiMessage(message);
                 isCurrentlyPlaying[prevPad] = false;
                 
-                //update GUI
-                if (triggerModeValue[padNumber] != 1) //if not on 'standard' triggerMode
-                {
-                    //update pad GUI
-                    guiPadOffUpdater.add(prevPad);
-                    broadcaster.sendActionMessage("OFF");
-                }
+                //update pad GUI
+                guiPadOffUpdater.add(prevPad);
+                broadcaster.sendActionMessage("OFF");
                 
             }
             
@@ -267,16 +323,17 @@ void ModeMidi::noteOn (int padNumber)
 
 void ModeMidi::noteOff (int padNumber)
 {
+    //what about reseting pressure data value in here?
+    //e.g. if you use one pad to pitch bend, and then turn the pad off via exclusive mode
+    //the pitch will still be bent and won't change until you touch the previous pad again.
+    
     MidiMessage message = MidiMessage::noteOff(channel[padNumber], note[padNumber]);
     sendMidiMessage(message);
     isCurrentlyPlaying[padNumber] = false;
     
-    if (triggerModeValue[padNumber] != 1) //if not on 'standard' triggerMode
-    {
-        //update pad GUI
-        guiPadOffUpdater.add(padNumber);
-        broadcaster.sendActionMessage("OFF");
-    }
+    //update pad GUI
+    guiPadOffUpdater.add(padNumber);
+    broadcaster.sendActionMessage("OFF");
     
     currentPlayingStatus[padNumber] = 0; //set pad to 'off'
     
@@ -295,6 +352,17 @@ void ModeMidi::noteOff (int padNumber)
 
 void ModeMidi::sendPressureData (int padNumber)
 {
+    //scale 0-127 to minPressure-maxPressure
+    //this has to be done here and not above with the 511 to 127 scaling,
+    //as the minRange could be set higher than the maxRange, which would mean
+    //the sticky feature wouldn't work how it's meant to. 
+    //Also we need to use a new variable here to covert the midi data,
+    //so that sticky will still work correctly in all situations
+    int pressureValueScaled = minRange[padNumber] + (pressureValue[padNumber]  
+                            * ((maxRange[padNumber] - minRange[padNumber]) / 127.0));
+    
+    
+    //std::cout << "pressureValueScaled: " << pressureValueScaled << std::endl;
     
     if (pressureStatus[padNumber] == true) //if pad pressure status is 'off'
     {
@@ -304,35 +372,35 @@ void ModeMidi::sendPressureData (int padNumber)
         switch (pressureMode[padNumber])
         {
             case 1: //poly aftertouch
-                message = MidiMessage::aftertouchChange(channel[padNumber], note[padNumber], triggerModeData[padNumber].pressureValue);
+                message = MidiMessage::aftertouchChange(channel[padNumber], note[padNumber], pressureValueScaled);
                 break;
                 
             case 2: //CC messages
-                message = MidiMessage::controllerEvent(channel[padNumber], controllerNumber[padNumber], triggerModeData[padNumber].pressureValue);
+                message = MidiMessage::controllerEvent(channel[padNumber], controllerNumber[padNumber], pressureValueScaled);
                 break;
                 
             case 3: //channel aftertouch
-                message = MidiMessage::channelPressureChange(channel[padNumber], triggerModeData[padNumber].pressureValue);
+                message = MidiMessage::channelPressureChange(channel[padNumber], pressureValueScaled);
                 break;
                 
             case 4: //pitch bend up
                 //convert 0-127 to 8191-16383
-                triggerModeData[padNumber].pressureValue = 8192 + (triggerModeData[padNumber].pressureValue * (8191.0/127.0));
-                message = MidiMessage::pitchWheel(channel[padNumber], triggerModeData[padNumber].pressureValue);
+                pressureValueScaled = 8192 + (pressureValueScaled * (8191.0/127.0));
+                message = MidiMessage::pitchWheel(channel[padNumber], pressureValueScaled);
                 break;
                 
             case 5: //pitch bend down
                 //convert 0-127 to 8191-0
-                triggerModeData[padNumber].pressureValue = 8192 - (triggerModeData[padNumber].pressureValue * (8191.0/127.0));
-                message = MidiMessage::pitchWheel(channel[padNumber], triggerModeData[padNumber].pressureValue);
+                pressureValueScaled = 8192 - (pressureValueScaled * (8191.0/127.0));
+                message = MidiMessage::pitchWheel(channel[padNumber], pressureValueScaled);
                 break;
                 
             case 6: // mod wheel
-                message = MidiMessage::controllerEvent(channel[padNumber], 1, triggerModeData[padNumber].pressureValue);
+                message = MidiMessage::controllerEvent(channel[padNumber], 1, pressureValueScaled);
                 break;
                 
             default: //poly aftertouch
-                message = MidiMessage::aftertouchChange(channel[padNumber], note[padNumber], triggerModeData[padNumber].pressureValue);
+                message = MidiMessage::aftertouchChange(channel[padNumber], note[padNumber], pressureValueScaled);
                 break;
         }
         
@@ -437,6 +505,8 @@ void ModeMidi::setPadData (int padNumber)
     setControllerNumber (PAD_SETTINGS->getMidiCcController(), padNumber);
     setPressureMode (PAD_SETTINGS->getMidiPressureMode(), padNumber);
     setTriggerModeValue (PAD_SETTINGS->getMidiTriggerMode(), padNumber);
+    setIndestructible (PAD_SETTINGS->getMidiIndestructible(), padNumber);
+    setSticky (PAD_SETTINGS->getMidiSticky(), padNumber);
     setPressureStatus (PAD_SETTINGS->getMidiPressureStatus(), padNumber);
     setNoteStatus (PAD_SETTINGS->getMidiNoteStatus(), padNumber);
     setExclusiveGroup (PAD_SETTINGS->getMidiExclusiveGroup(), padNumber);
@@ -487,9 +557,9 @@ void ModeMidi::setMaxRange (int value, int pad)
 void ModeMidi::setControllerNumber (int value, int pad)
 {
     //is CC number has changed and pressure is currently > 0, reset the value of the current pressure data
-    if (controllerNumber[pad] != value && triggerModeData[pad].pressureValue > 0)
+    if (controllerNumber[pad] != value && pressureValue[pad] > 0)
     {
-        triggerModeData[pad].pressureValue = 0; 
+       pressureValue[pad] = 0; 
         sendPressureData(pad);
     }
     
@@ -499,9 +569,9 @@ void ModeMidi::setControllerNumber (int value, int pad)
 void ModeMidi::setPressureMode (int value, int pad)
 {
     //if pressure mode has changed and pressure is currently > 0, reset the value of the current pressure data
-    if (pressureMode[pad] != value && triggerModeData[pad].pressureValue > 0)
+    if (pressureMode[pad] != value && pressureValue[pad] > 0)
     {
-        triggerModeData[pad].pressureValue = 0; 
+        pressureValue[pad] = 0; 
         sendPressureData(pad);
     }
     
@@ -513,12 +583,22 @@ void ModeMidi::setTriggerModeValue (int value, int pad)
     triggerModeValue[pad] = value;
 }
 
+void ModeMidi::setIndestructible (int value, int pad)
+{
+    indestructible[pad] = value;
+}
+
+void ModeMidi::setSticky (int value, int pad)
+{
+    sticky[pad] = value;
+}
+
 void ModeMidi::setPressureStatus (bool value, int pad)
 {
     //if pressure status has changed and pressure is currently > 0, reset the value of the current pressure data
-    if (pressureStatus[pad] != value && triggerModeData[pad].pressureValue > 0)
+    if (pressureStatus[pad] != value && pressureValue[pad] > 0)
     {
-        triggerModeData[pad].pressureValue = 0; 
+        pressureValue[pad] = 0; 
         sendPressureData(pad);
     }
     

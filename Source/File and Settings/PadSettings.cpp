@@ -52,7 +52,9 @@ PadSettings::PadSettings(int arrayIndex)
     midiMinPressureRange = 0;
     midiMaxPressureRange = 127;
     midiPressureMode = 1;
-    midiTriggerMode = 2;
+    midiTriggerMode = 1;
+    midiIndestructible = 0;
+    midiSticky = 0;
     midiPressureStatus = true;
     midiNoteStatus = true;
     //default CC layout
@@ -258,7 +260,9 @@ void PadSettings::resetData (int whatToReset)
         setMidiMinPressureRange(0);
         setMidiMaxPressureRange(127);
         setMidiPressureMode(1);
-        setMidiTriggerMode(2);
+        setMidiTriggerMode(1);
+        setMidiIndestructible(0);
+        setMidiSticky(0);
         setMidiPressureStatus (true);
         setMidiNoteStatus (true);
         setMidiCcController (Layouts::ccLayout[padNumber]);
@@ -481,6 +485,16 @@ void PadSettings::setMidiTriggerMode(int value)
     midiTriggerMode = value;
     alphaLiveEngineRef->getModeMidi()->setTriggerModeValue(value, padNumber);
 }
+void PadSettings::setMidiIndestructible (int value)
+{
+    midiIndestructible = value;
+    alphaLiveEngineRef->getModeMidi()->setIndestructible(value, padNumber);
+}
+void PadSettings::setMidiSticky (int value)
+{
+    midiSticky = value;
+    alphaLiveEngineRef->getModeMidi()->setSticky(value, padNumber);
+}
 void PadSettings::setMidiPressureStatus (bool value)
 {
     midiPressureStatus = value;
@@ -536,6 +550,14 @@ int PadSettings::getMidiPressureMode()
 int PadSettings::getMidiTriggerMode()
 {
     return midiTriggerMode;
+}
+int PadSettings::getMidiIndestructible()
+{
+    return midiIndestructible;
+}
+int PadSettings::getMidiSticky()
+{
+    return midiSticky;
 }
 bool PadSettings::getMidiPressureStatus()
 {

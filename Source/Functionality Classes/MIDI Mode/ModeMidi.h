@@ -60,6 +60,8 @@ public:
     void setControllerNumber (int value, int pad);
     void setPressureMode (int value, int pad);
     void setTriggerModeValue (int value, int pad);
+    void setIndestructible (int value, int pad);
+    void setSticky (int value, int pad);
     void setPressureStatus (bool value, int pad);
     void setNoteStatus (bool value, int pad);
     void setExclusiveGroup (int value, int pad);
@@ -73,6 +75,7 @@ private:
     int currentPlayingStatus[48];   //set when a MIDI note is turned on or off directly by the user, but not when
                                     //a midi note is turned off via exclusive mode
     int prevPadValue[48];
+    int pressureValue[48];
     
     //settings
     int channel[48];
@@ -83,6 +86,8 @@ private:
     int controllerNumber[48];
     int pressureMode[48];
     int triggerModeValue[48];
+    int indestructible[48];
+    int sticky[48];
     bool pressureStatus[48];
     bool noteStatus[48];
     int exclusiveGroup[48];

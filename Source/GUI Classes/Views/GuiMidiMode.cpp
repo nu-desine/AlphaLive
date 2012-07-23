@@ -127,8 +127,20 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     triggerModeMenu->addItem("Latch", 4);
     triggerModeMenu->addItem("Latch Max", 5);
     triggerModeMenu->addItem("Trigger", 6);
-    triggerModeMenu->setSelectedId(2, true);
+    triggerModeMenu->setSelectedId(1, true);
     triggerModeMenu->addMouseListener(this, true);
+    
+    addAndMakeVisible(indestructibleButton = new TextButton("indestruct"));
+    indestructibleButton->addListener(this);
+    indestructibleButton->addMouseListener(this, true);
+    indestructibleButton->setClickingTogglesState(true);
+    indestructibleButton->setToggleState(0, false);
+    
+    addAndMakeVisible(stickyButton = new TextButton("Sticky"));
+    stickyButton->addListener(this);
+    stickyButton->addMouseListener(this, true);
+    stickyButton->setClickingTogglesState(true);
+    stickyButton->setToggleState(0, false);
     
     
     
@@ -205,6 +217,8 @@ void GuiMidiMode::resized()
     pressureModeMenu->setBounds(LEFT_CIRCLE_X, 500, COMPONENT_W, COMPONENT_H);
     ccControllerSlider->setBounds(LEFT_CIRCLE_X, 530, COMPONENT_W, COMPONENT_H);
     triggerModeMenu->setBounds(LEFT_CIRCLE_X, 570, COMPONENT_W, COMPONENT_H);
+    indestructibleButton->setBounds(LEFT_CIRCLE_X, 593, 50, 15);
+    stickyButton->setBounds(LEFT_CIRCLE_X+50, 593, 50, 15);
     
     pressureStatusButton->setBounds(165, 360, 45, 45);
     noteStatusButton->setBounds(810, 360, 45, 45);
@@ -365,7 +379,7 @@ void GuiMidiMode::buttonClicked (Button* button)
     }
     
     
-    if(button == noteStatusButton)
+    else if(button == noteStatusButton)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
@@ -379,6 +393,25 @@ void GuiMidiMode::buttonClicked (Button* button)
         else
             speakerRight->setVisible(true);
         
+    }
+    
+    
+    else if (button == indestructibleButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setMidiIndestructible(button->getToggleState());
+        }
+    }
+    
+    else if (button == stickyButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setMidiSticky(button->getToggleState());
+        }
     }
 }
 
@@ -421,6 +454,8 @@ void GuiMidiMode::updateDisplay()
         i = PAD_SETTINGS->getMidiExclusiveGroup();
         exclusiveGroupSlider->setValue(i, false);
         quantizeModeMenu->setSelectedId(PAD_SETTINGS->getMidiQuantizeMode(), true);
+        indestructibleButton->setToggleState(PAD_SETTINGS->getMidiIndestructible(), false);
+        stickyButton->setToggleState(PAD_SETTINGS->getMidiSticky(), false);
         
         bool b;
         
@@ -454,6 +489,8 @@ void GuiMidiMode::updateDisplay()
         pressureMaxRangeSlider->setValue(127, false);
         pressureModeMenu->setSelectedId(1, true);
         triggerModeMenu->setSelectedId(2, true);
+        indestructibleButton->setToggleState(0, false);
+        stickyButton->setToggleState(0, false);
         pressureStatusButton->setToggleState(true, false);
         pressureStatusButton->setButtonText("Pressure Data On");
         noteStatusButton->setToggleState(true, false);

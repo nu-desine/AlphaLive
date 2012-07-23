@@ -73,13 +73,15 @@ public:
     
     //==================================================================
     //MIDI mode
-    void setMidiNote(int value);
-    void setMidiVelocity(int value);
-    void setMidiChannel(int value);
-    void setMidiMinPressureRange(int value);
-    void setMidiMaxPressureRange(int value);
-    void setMidiPressureMode(int value);
-    void setMidiTriggerMode(int value);
+    void setMidiNote (int value);
+    void setMidiVelocity (int value);
+    void setMidiChannel (int value);
+    void setMidiMinPressureRange (int value);
+    void setMidiMaxPressureRange (int value);
+    void setMidiPressureMode (int value);
+    void setMidiTriggerMode (int value);
+    void setMidiIndestructible (int value);
+    void setMidiSticky (int value);
     void setMidiPressureStatus (bool value);
     void setMidiNoteStatus (bool value);
     void setMidiCcController (int value);
@@ -93,6 +95,8 @@ public:
     int getMidiMaxPressureRange();
     int getMidiPressureMode();
     int getMidiTriggerMode();
+    int getMidiIndestructible();
+    int getMidiSticky();
     bool getMidiPressureStatus();
     bool getMidiNoteStatus();
     int getMidiCcController();
@@ -347,7 +351,9 @@ private:
     int midiMinPressureRange;
     int midiMaxPressureRange;
     int midiPressureMode;
-    int midiTriggerMode; //shouldn't be named using 'pressure' 
+    int midiTriggerMode;
+    int midiIndestructible;
+    int midiSticky;
     bool midiPressureStatus;
     bool midiNoteStatus;
     int midiCcController;

@@ -939,6 +939,8 @@ void AppDocumentState::saveToPreset (int presetNumber)
             padData->setAttribute("midiMaxPressureRange", PAD_SETTINGS->getMidiMaxPressureRange());
             padData->setAttribute("midiPressureMode", PAD_SETTINGS->getMidiPressureMode());
             padData->setAttribute("midiTriggerMode", PAD_SETTINGS->getMidiTriggerMode());
+            padData->setAttribute("midiIndestructible", PAD_SETTINGS->getMidiIndestructible());
+            padData->setAttribute("midiSticky", PAD_SETTINGS->getMidiSticky());
             padData->setAttribute("midiPressureStatus", PAD_SETTINGS->getMidiPressureStatus());
             padData->setAttribute("midiNoteStatus", PAD_SETTINGS->getMidiNoteStatus());
             padData->setAttribute("midiCcController", PAD_SETTINGS->getMidiCcController());
@@ -1180,6 +1182,8 @@ void AppDocumentState::loadFromPreset (int presetNumber)
                 PAD_SETTINGS->setMidiMaxPressureRange(padData->getIntAttribute("midiMaxPressureRange"));
                 PAD_SETTINGS->setMidiPressureMode(padData->getIntAttribute("midiPressureMode"));
                 PAD_SETTINGS->setMidiTriggerMode(padData->getIntAttribute("midiTriggerMode"));
+                PAD_SETTINGS->setMidiIndestructible(padData->getIntAttribute("midiIndestructible"));
+                PAD_SETTINGS->setMidiSticky(padData->getIntAttribute("midiSticky"));
                 PAD_SETTINGS->setMidiPressureStatus(padData->getBoolAttribute("midiPressureStatus"));
                 PAD_SETTINGS->setMidiNoteStatus(padData->getBoolAttribute("midiNoteStatus"));
                 PAD_SETTINGS->setMidiCcController(padData->getIntAttribute("midiCcController"));

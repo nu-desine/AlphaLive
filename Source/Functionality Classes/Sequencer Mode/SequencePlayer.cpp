@@ -56,6 +56,10 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     mode = PAD_SETTINGS->getSequencerMode();
     numberOfSequences = PAD_SETTINGS->getSequencerNumberOfSequences();
     triggerMode = PAD_SETTINGS->getSequencerTriggerMode();
+    shouldLoop = PAD_SETTINGS->getSequencerShouldLoop();
+    indestructible = PAD_SETTINGS->getSequencerIndestructible();
+    shouldFinishLoop = PAD_SETTINGS->getSequencerShouldFinishLoop();
+    sticky = PAD_SETTINGS->getSequencerSticky();
     sequenceLength = PAD_SETTINGS->getSequencerLength();
     for (int row = 0; row <=NO_OF_ROWS-1; row++)
        midiNote[row] = PAD_SETTINGS->getSequencerMidiNote(row); 
@@ -838,6 +842,23 @@ void SequencePlayer::setTriggerMode (int value)
 {
     triggerMode = value;
 }
+void SequencePlayer::setShouldLoop (int value)
+{
+    shouldLoop = value;
+}
+void SequencePlayer::setIndestructible (int value)
+{
+    indestructible = value;
+}
+void SequencePlayer::setShouldFinishLoop (int value)
+{
+    shouldFinishLoop = value;
+}
+void SequencePlayer::setSticky (int value)
+{
+    sticky = value;
+}
+
 void SequencePlayer::setSequenceLength (int value)
 {
     sequenceLength = value;

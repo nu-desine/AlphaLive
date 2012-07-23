@@ -144,7 +144,6 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     
     addAndMakeVisible(triggerModeMenu = new ComboBox());
     triggerModeMenu->addListener(this);
-    triggerModeMenu->addListener(this);
     triggerModeMenu->addItem("Hold", 1);
     triggerModeMenu->addItem("Toggle", 2);
     triggerModeMenu->addItem("Toggle Release", 3);
@@ -155,7 +154,30 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     triggerModeMenu->addItem("Auto Cycle", 8);
     triggerModeMenu->setSelectedId(2, true);
     triggerModeMenu->addMouseListener(this, true);
-    triggerModeMenu->addMouseListener(this, true);
+    
+    addAndMakeVisible(loopButton = new TextButton("Loop"));
+    loopButton->addListener(this);
+    loopButton->addMouseListener(this, true);
+    loopButton->setClickingTogglesState(true);
+    loopButton->setToggleState(0, false);
+    
+    addAndMakeVisible(indestructibleButton = new TextButton("indestruct"));
+    indestructibleButton->addListener(this);
+    indestructibleButton->addMouseListener(this, true);
+    indestructibleButton->setClickingTogglesState(true);
+    indestructibleButton->setToggleState(0, false);
+    
+    addAndMakeVisible(finishLoopButton = new TextButton("Finish"));
+    finishLoopButton->addListener(this);
+    finishLoopButton->addMouseListener(this, true);
+    finishLoopButton->setClickingTogglesState(true);
+    finishLoopButton->setToggleState(0, false);
+    
+    addAndMakeVisible(stickyButton = new TextButton("Sticky"));
+    stickyButton->addListener(this);
+    stickyButton->addMouseListener(this, true);
+    stickyButton->setClickingTogglesState(true);
+    stickyButton->setToggleState(0, false);
     
     addAndMakeVisible(quantizeModeMenu = new ComboBox());
     quantizeModeMenu->addItem("Free", 1);
@@ -258,6 +280,11 @@ void GuiSequencerMode::resized()
     sequenceLengthSlider->setBounds(LEFT_CIRCLE_X, 470, COMPONENT_W, COMPONENT_H);
     triggerModeMenu->setBounds(LEFT_CIRCLE_X, 570, COMPONENT_W, COMPONENT_H);
     relativeTempoMenu->setBounds(LEFT_CIRCLE_X, 500, COMPONENT_W, COMPONENT_H);
+    
+    loopButton->setBounds(LEFT_CIRCLE_X, 593, 50, 15);
+    indestructibleButton->setBounds(LEFT_CIRCLE_X+50, 593, 50, 15);
+    finishLoopButton->setBounds(LEFT_CIRCLE_X, 608, 50, 15);
+    stickyButton->setBounds(LEFT_CIRCLE_X+50, 608, 50, 15);
     
     quantizeModeMenu->setBounds(800, 155, 100, 20);
     
@@ -413,7 +440,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
        
     
     
-    if (button == sequencerGridToggleButton)
+    else if (button == sequencerGridToggleButton)
     {
         if (sequencerGridToggleButton->getToggleState() == true) //on
         {
@@ -453,7 +480,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
     }
     
     
-    if (button == clearButton)
+    else if (button == clearButton)
     {
         bool userSelection;
         userSelection = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Are you sure?", "You cannot undo this command", "Ok", "Cancel");
@@ -463,7 +490,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
         }
     }
     
-    if (button == clearAllButton)
+    else if (button == clearAllButton)
     {
         bool userSelection;
         userSelection = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Are you sure?", "You cannot undo this command", "Ok", "Cancel");
@@ -475,29 +502,65 @@ void GuiSequencerMode::buttonClicked (Button* button)
     
     
     //the below if(SINGLE_PAD) checks are just for safety... if multi pads are selected the save buttons should be invisible.
-    if (button == saveSeqButton)
+    else if (button == saveSeqButton)
     {
         if (SINGLE_PAD)
             appDocumentStateRef.saveSequence(currentSequenceNumberSlider->getValue()-1, selectedPads[0]);
     }
     
-    if (button == loadSeqButton)
+    else if (button == loadSeqButton)
     {
         
         appDocumentStateRef.loadSequence(currentSequenceNumberSlider->getValue()-1, selectedPads);
     }
     
-    if (button == saveSeqSetButton)
+    else if (button == saveSeqSetButton)
     {
         if (SINGLE_PAD)
             appDocumentStateRef.saveSequenceSet(selectedPads[0]);
     }
     
-    if (button == loadSeqSetButton)
+   else if (button == loadSeqSetButton)
     {
         appDocumentStateRef.loadSequenceSet(selectedPads);
     }
     
+    
+    
+    else if (button == loopButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerShouldLoop(button->getToggleState());
+        }
+    }
+    
+    else if (button == indestructibleButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerIndestructible(button->getToggleState());
+        }
+    }
+    
+    else if (button == finishLoopButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerShouldFinishLoop(button->getToggleState());
+        }
+    }
+    else if (button == stickyButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerSticky(button->getToggleState());
+        }
+    }
      
 }
 
@@ -544,6 +607,10 @@ void GuiSequencerMode::updateDisplay()
         sequenceLengthSlider->setValue(i, false);
         i = PAD_SETTINGS->getSequencerTriggerMode();
         triggerModeMenu->setSelectedId(i, true);
+        loopButton->setToggleState(PAD_SETTINGS->getSequencerShouldLoop(), false);
+        indestructibleButton->setToggleState(PAD_SETTINGS->getSequencerIndestructible(), false);
+        finishLoopButton->setToggleState(PAD_SETTINGS->getSequencerShouldFinishLoop(), false);
+        stickyButton->setToggleState(PAD_SETTINGS->getSequencerSticky(), false);
         //currentSequenceNumberSlider->setValue(1);
         quantizeModeMenu->setSelectedId(PAD_SETTINGS->getSequencerQuantizeMode(), true);
         relativeTempoMenu->setSelectedId(PAD_SETTINGS->getSequencerRelativeTempoMode(), true);
@@ -553,8 +620,8 @@ void GuiSequencerMode::updateDisplay()
         //set the the range of the currentSequenceNumberSlider so that the max matches this sliders value
         currentSequenceNumberSlider->setRange(1, numberOfSequencesSlider->getValue(), 1);
 
-        saveSeqButton->setVisible(true);
-        saveSeqSetButton->setVisible(true);
+        //saveSeqButton->setVisible(true);
+        //saveSeqSetButton->setVisible(true);
         
         
     }
@@ -575,6 +642,10 @@ void GuiSequencerMode::updateDisplay()
         channelSlider->setValue(1, false);
         sequenceLengthSlider->setValue(250, false);
         triggerModeMenu->setSelectedId(2, true);
+        loopButton->setToggleState(1, false);
+        indestructibleButton->setToggleState(0, false);
+        finishLoopButton->setToggleState(0, false);
+        stickyButton->setToggleState(0, false);
         //currentSequenceNumberSlider->setValue(1);
         quantizeModeMenu->setSelectedId(1, true);
         relativeTempoMenu->setSelectedId(3, true);

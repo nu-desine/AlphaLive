@@ -966,7 +966,7 @@ void AppDocumentState::saveToPreset (int presetNumber)
             padData->setAttribute("looperShouldLoop", PAD_SETTINGS->getLooperShouldLoop());
             padData->setAttribute("looperIndestructible", PAD_SETTINGS->getLooperIndestructible());
             padData->setAttribute("looperShouldFinishLoop", PAD_SETTINGS->getLooperShouldFinishLoop());
-            padData->setAttribute("looperShouldLoop", PAD_SETTINGS->getLooperShouldLoop());
+            padData->setAttribute("looperSticky", PAD_SETTINGS->getLooperSticky());
             padData->setAttribute("looperEffect", PAD_SETTINGS->getLooperEffect());
             padData->setAttribute("looperPan", PAD_SETTINGS->getLooperPan());
             padData->setAttribute("looperGain", PAD_SETTINGS->getLooperGain());
@@ -1067,6 +1067,10 @@ void AppDocumentState::saveToPreset (int presetNumber)
             
             padData->setAttribute("sequencerNumberOfSequences", PAD_SETTINGS->getSequencerNumberOfSequences());
             padData->setAttribute("sequencerTriggerMode", PAD_SETTINGS->getSequencerTriggerMode());
+            padData->setAttribute("sequencerShouldLoop", PAD_SETTINGS->getSequencerShouldLoop());
+            padData->setAttribute("sequencerIndestructible", PAD_SETTINGS->getSequencerIndestructible());
+            padData->setAttribute("sequencerShouldFinishLoop", PAD_SETTINGS->getSequencerShouldFinishLoop());
+            padData->setAttribute("sequencerSticky", PAD_SETTINGS->getSequencerSticky());
             padData->setAttribute("sequencerChannel", PAD_SETTINGS->getSequencerChannel());
             padData->setAttribute("sequencerLength", PAD_SETTINGS->getSequencerLength());
             padData->setAttribute("sequencerQuantizeMode", PAD_SETTINGS->getSequencerQuantizeMode());
@@ -1222,6 +1226,7 @@ void AppDocumentState::loadFromPreset (int presetNumber)
                 PAD_SETTINGS->setLooperShouldLoop(padData->getIntAttribute("looperShouldLoop"));
                 PAD_SETTINGS->setLooperIndestructible(padData->getIntAttribute("looperIndestructible"));
                 PAD_SETTINGS->setLooperShouldFinishLoop(padData->getIntAttribute("looperShouldFinishLoop"));
+                PAD_SETTINGS->setLooperSticky(padData->getIntAttribute("looperSticky"));
                 PAD_SETTINGS->setLooperEffect(padData->getIntAttribute("looperEffect"));
                 PAD_SETTINGS->setLooperPan(padData->getDoubleAttribute("looperPan"));
                 PAD_SETTINGS->setLooperGain(padData->getDoubleAttribute("looperGain"));
@@ -1374,6 +1379,10 @@ void AppDocumentState::loadFromPreset (int presetNumber)
                     
                 PAD_SETTINGS->setSequencerNumberOfSequences(padData->getIntAttribute("sequencerNumberOfSequences"));
                 PAD_SETTINGS->setSequencerTriggerMode(padData->getIntAttribute("sequencerTriggerMode"));
+                PAD_SETTINGS->setSequencerShouldLoop(padData->getIntAttribute("sequencerShouldLoop"));
+                PAD_SETTINGS->setSequencerIndestructible(padData->getIntAttribute("sequencerIndestructible"));
+                PAD_SETTINGS->setSequencerShouldFinishLoop(padData->getIntAttribute("sequencerShouldFinishLoop"));
+                PAD_SETTINGS->setSequencerSticky(padData->getIntAttribute("sequencerSticky"));
                 PAD_SETTINGS->setSequencerChannel(padData->getIntAttribute("sequencerChannel"));
                 PAD_SETTINGS->setSequencerLength(padData->getIntAttribute("sequencerLength"));
                 if (padData->hasAttribute("sequencerQuantizeMode") == true)

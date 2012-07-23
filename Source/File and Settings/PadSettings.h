@@ -263,6 +263,10 @@ public:
     void setSequencerData (int sequenceNumber, int rowNumber, int columnNumber, int value, bool shouldUpdateSeqDataString=true);
     void setSequencerNumberOfSequences (int value);
     void setSequencerTriggerMode (int value);
+    void setSequencerShouldLoop (int value);
+    void setSequencerIndestructible (int value);
+    void setSequencerShouldFinishLoop (int value);
+    void setSequencerSticky (int value);
     void setSequencerChannel (int value);
     void setSequencerLength (int value);
     void setSequencerQuantizeMode (int value);
@@ -281,6 +285,10 @@ public:
     int getSequencerData (int sequenceNumber, int rowNumber, int columnNumber);
     int getSequencerNumberOfSequences();
     int getSequencerTriggerMode();
+    int getSequencerShouldLoop();
+    int getSequencerIndestructible();
+    int getSequencerShouldFinishLoop();
+    int getSequencerSticky();
     int getSequencerChannel();
     int getSequencerLength();
     int getSequencerQuantizeMode();
@@ -454,6 +462,10 @@ private:
     int sequencerData[NO_OF_SEQS][NO_OF_ROWS][NO_OF_COLUMNS]; //[sequence][row][column]
     int sequencerNumberOfSequences;
     int sequencerTriggerMode;
+    int sequencerShouldLoop;
+    int sequencerIndestructible;
+    int sequencerShouldFinishLoop;
+    int sequencerSticky;
     int sequencerChannel; //now called 'group' not 'channel' to the user
     int sequencerLength;
     int sequencerQuantizeMode;

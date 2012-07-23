@@ -166,6 +166,10 @@ PadSettings::PadSettings(int arrayIndex)
     sequencerMode = 1; 
     sequencerNumberOfSequences = 8; 
     sequencerTriggerMode = 2; 
+    sequencerShouldLoop = 1;
+    sequencerIndestructible = 0;
+    sequencerShouldFinishLoop = 0;
+    sequencerSticky = 0;
     sequencerChannel = 1;
     sequencerLength = 32;
     sequencerQuantizeMode = 1;
@@ -303,6 +307,10 @@ void PadSettings::resetData (int whatToReset)
         }
         setSequencerNumberOfSequences (8);
         setSequencerTriggerMode (2);
+        setSequencerShouldLoop(1);
+        setSequencerIndestructible(0);
+        setSequencerShouldFinishLoop(0);
+        setSequencerSticky(0);
         setSequencerChannel (1);
         setSequencerLength (32);
         setSequencerQuantizeMode (1);
@@ -1420,6 +1428,42 @@ void PadSettings::setSequencerTriggerMode(int value)
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setTriggerMode(value);
     }
 }
+void PadSettings::setSequencerShouldLoop (int value)
+{
+    sequencerShouldLoop = value;
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setShouldLoop(value);
+    }
+    
+}
+void PadSettings::setSequencerIndestructible (int value)
+{
+    sequencerIndestructible = value;
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setIndestructible(value);
+    }
+}
+void PadSettings::setSequencerShouldFinishLoop (int value)
+{
+    sequencerShouldFinishLoop = value;
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setShouldFinishLoop(value);
+    }
+}
+
+void PadSettings::setSequencerSticky (int value)
+{
+    sequencerSticky = value;
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setSticky(value);
+    }
+}
+
+
 void PadSettings::setSequencerChannel(int value)
 {
     sequencerChannel = value; 
@@ -1690,6 +1734,24 @@ int PadSettings::getSequencerTriggerMode()
 {
     return sequencerTriggerMode;
 }
+int PadSettings::getSequencerShouldLoop()
+{
+    return sequencerShouldLoop;
+}
+int PadSettings::getSequencerIndestructible()
+{
+    return sequencerIndestructible;
+}
+int PadSettings::getSequencerShouldFinishLoop()
+{
+    return sequencerShouldFinishLoop;
+}
+int PadSettings::getSequencerSticky()
+{
+    return sequencerSticky;
+}
+
+
 int PadSettings::getSequencerChannel()
 {
     return sequencerChannel;

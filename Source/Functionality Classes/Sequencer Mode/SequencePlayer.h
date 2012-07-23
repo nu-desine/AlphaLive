@@ -73,6 +73,10 @@ public:
     void setMode (int value);
     void setNumberOfSequences (int value);
     void setTriggerMode (int value);
+    void setShouldLoop (int value);
+    void setIndestructible (int value);
+    void setShouldFinishLoop (int value);
+    void setSticky (int value);
     void setSequenceLength (int value);
     void setQuantizeMode (int value);
     void setChannel (int value);
@@ -135,6 +139,7 @@ private:
     int mode;
     int numberOfSequences;
     int triggerMode;
+    int shouldLoop, indestructible, shouldFinishLoop, sticky;
     int sequenceLength;
     int quantizeMode;
     int channel;

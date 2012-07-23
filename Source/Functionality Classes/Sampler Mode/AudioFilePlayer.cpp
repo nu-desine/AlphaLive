@@ -67,7 +67,7 @@ AudioFilePlayer::AudioFilePlayer(int looperPadNumber, ModeLooper &ref, TimeSlice
     triggerModeData.pressureValue = 0;
     triggerModeData.shouldLoop = true;
     
-    prevPadValue = 0;
+    prevPadValue = pressureValue =  0;
     
     playingLastLoop = false;
     
@@ -106,194 +106,195 @@ bool AudioFilePlayer::getAudioTransportSourceStatus()
 
 void AudioFilePlayer::processAudioFile(int padValue)
 {
-    //this is needed incase audio ends on its own or is stopped via the 'exclusive mode' feature, in order to reset everything so it will trigger again properly
-    if (fileSource.isPlaying() == false && currentPlayingState == 1 && prevPadValue == 0)
+    if (currentFile != File::nonexistent && currentAudioFileSource != NULL)
     {
-        std::cout << "stream ended on its own!!";
-        currentPlayingState = 0;
-        triggerModes.reset();
-    }
-   
-    //==========================================================================================
-    // Trigger Mode stuff
-    //==========================================================================================
-    switch (triggerMode) 
-    {
-        case 1:
-            triggerModeData = triggerModes.hold(padValue);
-            break;
-        case 2:
-            triggerModeData = triggerModes.toggle(padValue);
-            break;
-        case 3:
-            triggerModeData = triggerModes.toggleRelease(padValue);
-            break;
-        case 4:
-            triggerModeData = triggerModes.latch(padValue);
-            break;
-        case 5:
-            triggerModeData = triggerModes.latchMax(padValue);
-            break;
-        case 6:
-            triggerModeData = triggerModes.trigger(padValue);
-            break;
-        default:
-            triggerModeData = triggerModes.toggle(padValue);
-            break;
-    }
-    
-    
-    
-    
-    if (triggerModeData.playingStatus == 0 && shouldFinishLoop == 1)
-    {
-        //if recieved a command to stop file but is set to finish current loop before stopping,
-        //ignore note off message and set looping status to off
-        triggerModeData.playingStatus = 2; //ignore
-        currentAudioFileSource->setLooping(false);
-        playingLastLoop = true;
-        
-        //what about if the user wants to cancel the finish loop command?
-    }
-    
-    if (playingLastLoop == false)
-    {
-        currentAudioFileSource->setLooping(shouldLoop);
-    }
-    
-    
-    
-    
-    
-    if (indestructible == 1)
-    {
-        //if set to indestructible...
-        
-        if (triggerModeData.playingStatus == 0)
+        //this is needed incase audio ends on its own or is stopped via the 'exclusive mode' feature, in order to reset everything so it will trigger again properly
+        if (fileSource.isPlaying() == false && currentPlayingState == 1 && prevPadValue == 0)
         {
-            //...and triggerModeData signifies to stop audio, DON'T LET IT...MWAHAHAHA! 
-            triggerModeData.playingStatus = 2; //ignore
-        }
-        else if (triggerModeData.playingStatus == 1 && currentPlayingState == 1 && triggerMode != 6)
-        {
-            //...and triggerModeData signifies to start playing, 
-            //but file is already playing and triggerMode does not equal 'trigger'
-            //Don't send a play command!
-            triggerModeData.playingStatus = 2; //ignore
-        }
-        
-    }
-    
-    //==========================================================================================
-    // Start/Stop stuff
-    //==========================================================================================
-    if (quantizeMode == 1) //free
-    {
-        if (triggerModeData.playingStatus == 1) //play
-        {
-            playAudioFile();
-        }
-        
-        else if (triggerModeData.playingStatus == 0) //stop
-        {
-            stopAudioFile();
+            std::cout << "stream ended on its own!!";
             currentPlayingState = 0;
-        }
-    }
-    //==========================================================================================
-    else if (quantizeMode == 2) //quantized
-    {
-        if (triggerModeData.playingStatus == 1) //play
-        {
-            currentPlayingState = 2; //waiting to play
-            
-            //add this instance of AudioFilePlayer to the waitingPadLooper Array within
-            //ModeLooper so that it is alerted of the next quantized point in time so
-            //the loop can start playing
-            modeLooperRef.addItemToWaitingPadLooper(this);
-            broadcaster.sendActionMessage("WAITING TO PLAY");
-            
-            
+            triggerModes.reset();
         }
         
-        else if (triggerModeData.playingStatus == 0) //stop
+        //==========================================================================================
+        // Trigger Mode stuff
+        //==========================================================================================
+        switch (triggerMode) 
         {
-            currentPlayingState = 3; // waiting to stop
-            
-            //add this instance of AudioFilePlayer to the waitingPadLooper Array within
-            //ModeLooper so that it is alerted of the next quantized point in time so
-            //the loop can stop playing
-            modeLooperRef.addItemToWaitingPadLooper(this);
-            broadcaster.sendActionMessage("WAITING TO STOP");
+            case 1:
+                triggerModeData = triggerModes.hold(padValue);
+                break;
+            case 2:
+                triggerModeData = triggerModes.toggle(padValue);
+                break;
+            case 3:
+                triggerModeData = triggerModes.toggleRelease(padValue);
+                break;
+            case 4:
+                triggerModeData = triggerModes.latch(padValue);
+                break;
+            case 5:
+                triggerModeData = triggerModes.latchMax(padValue);
+                break;
+            case 6:
+                triggerModeData = triggerModes.trigger(padValue);
+                break;
+            default:
+                triggerModeData = triggerModes.toggle(padValue);
+                break;
         }
-    }
-    //=========================================================================================
-    
-    
-    //==========================================================================================
-    // Pressure stuff
-    //==========================================================================================
-    
-    if (sticky == 1) //'on'
-    {
-        //modify pressure valie
-        if(padValue == 0)
+        
+        
+        
+        
+        if (triggerModeData.playingStatus == 0 && shouldFinishLoop == 1)
         {
-            //don't want to do this till the pad is repressed, not when it is first released as at the moment
-            prevPadValue = 0;
+            //if recieved a command to stop file but is set to finish current loop before stopping,
+            //ignore note off message and set looping status to off
+            triggerModeData.playingStatus = 2; //ignore
+            currentAudioFileSource->setLooping(false);
+            playingLastLoop = true;
             
+            //what about if the user wants to cancel the finish loop command?
         }
-        else
+        
+        if (playingLastLoop == false)
         {
-            if(padValue < prevPadValue)
+            currentAudioFileSource->setLooping(shouldLoop);
+        }
+        
+        
+        
+        
+        
+        
+        if (indestructible == 1)
+        {
+            //if set to indestructible...
+            
+            if (triggerModeData.playingStatus == 0)
             {
-                padValue = prevPadValue; //don't change value
+                //...and triggerModeData signifies to stop audio, DON'T LET IT...MWAHAHAHA! 
+                triggerModeData.playingStatus = 2; //ignore
+            }
+            else if (triggerModeData.playingStatus == 1 && currentPlayingState == 1 && triggerMode != 6)
+            {
+                //...and triggerModeData signifies to start playing, 
+                //but file is already playing and triggerMode does not equal 'trigger'
+                //Don't send a play command!
+                triggerModeData.playingStatus = 2; //ignore
             }
             
-            prevPadValue = padValue;
         }
         
+        //==========================================================================================
+        // Start/Stop stuff
+        //==========================================================================================
+        if (quantizeMode == 1) //free
+        {
+            if (triggerModeData.playingStatus == 1) //play
+            {
+                playAudioFile();
+            }
+            
+            else if (triggerModeData.playingStatus == 0) //stop
+            {
+                stopAudioFile();
+                currentPlayingState = 0;
+            }
+        }
+        //==========================================================================================
+        else if (quantizeMode == 2) //quantized
+        {
+            if (triggerModeData.playingStatus == 1) //play
+            {
+                currentPlayingState = 2; //waiting to play
+                
+                //add this instance of AudioFilePlayer to the waitingPadLooper Array within
+                //ModeLooper so that it is alerted of the next quantized point in time so
+                //the loop can start playing
+                modeLooperRef.addItemToWaitingPadLooper(this);
+                broadcaster.sendActionMessage("WAITING TO PLAY");
+                
+                
+            }
+            
+            else if (triggerModeData.playingStatus == 0) //stop
+            {
+                currentPlayingState = 3; // waiting to stop
+                
+                //add this instance of AudioFilePlayer to the waitingPadLooper Array within
+                //ModeLooper so that it is alerted of the next quantized point in time so
+                //the loop can stop playing
+                modeLooperRef.addItemToWaitingPadLooper(this);
+                broadcaster.sendActionMessage("WAITING TO STOP");
+            }
+        }
+        //=========================================================================================
+        
+        //==========================================================================================
+        // Pressure stuff
+        //==========================================================================================
+        
+        if (sticky == 1) //'on'
+        {
+            //modify pressure value
+            if(prevPadValue == 0)
+            {
+                pressureValue = 0;
+                
+            }
+            else
+            {
+                if(padValue > pressureValue)
+                {
+                    pressureValue = padValue;
+                }
+                //else if it is smaller, don't change the pressure value
+            }
+            
+        }
+        else // 'off'
+        {
+            pressureValue = padValue; 
+        }
+        
+        
+        
+        //determine what effect and parameter the pressure is controlling
+        switch (effect)
+        {
+            case 1: //Gain and Pan
+                gainAndPan->processAlphaTouch(pressureValue);
+                break;
+            case 2: //LPF
+                lowPassFilter->processAlphaTouch(pressureValue);
+                break;
+            case 3: //HPF
+                highPassFilter->processAlphaTouch(pressureValue);
+                break;
+            case 4: //BPF
+                bandPassFilter->processAlphaTouch(pressureValue);
+                break;
+            case 6: //Delay
+                delay->processAlphaTouch(pressureValue);
+                break;
+            case 7: //Reverb
+                reverb->processAlphaTouch(pressureValue);
+                break;
+            case 9: //Flanger
+                flanger->processAlphaTouch(pressureValue);
+                break;
+            case 10: //Tremolo
+                tremolo->processAlphaTouch(pressureValue);
+                break;
+            default:
+                break;
+        }
+        
+        prevPadValue = padValue;
+        
     }
-    else // 'off'
-    {
-       prevPadValue = padValue; 
-    }
-    
-    
-    
-    //determine what effect and parameter the pressure is controlling
-    switch (effect)
-    {
-        case 1: //Gain and Pan
-            gainAndPan->processAlphaTouch(prevPadValue);
-            break;
-        case 2: //LPF
-            lowPassFilter->processAlphaTouch(prevPadValue);
-            break;
-        case 3: //HPF
-            highPassFilter->processAlphaTouch(prevPadValue);
-            break;
-        case 4: //BPF
-            bandPassFilter->processAlphaTouch(prevPadValue);
-            break;
-        case 6: //Delay
-            delay->processAlphaTouch(prevPadValue);
-            break;
-        case 7: //Reverb
-            reverb->processAlphaTouch(prevPadValue);
-            break;
-        case 9: //Flanger
-            flanger->processAlphaTouch(prevPadValue);
-            break;
-        case 10: //Tremolo
-            tremolo->processAlphaTouch(prevPadValue);
-            break;
-        default:
-            break;
-    }
-    
-  
-    
 }
 
 //called from either the constructor, or setLooperAudioFilePath() in PadSettings

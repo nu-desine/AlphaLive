@@ -101,7 +101,7 @@ private:
     CriticalSection sharedMemory;
     
     int padNumber;
-    int prevPadValue;
+    int prevPadValue, pressureValue;
     float sampleRate_;
     
     //create an object of the TriggerModes Class and a variable of the TriggerModeData struct

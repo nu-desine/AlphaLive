@@ -145,7 +145,7 @@ void AudioFilePlayer::processAudioFile(int padValue)
         
         
         
-        if (triggerModeData.playingStatus == 0 && shouldFinishLoop == 1)
+        if (triggerModeData.playingStatus == 0 && shouldFinishLoop == 1 && indestructible == 0)
         {
             //if recieved a command to stop file but is set to finish current loop before stopping,
             //ignore note off message and set looping status to off

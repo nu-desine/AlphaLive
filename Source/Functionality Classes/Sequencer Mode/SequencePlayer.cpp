@@ -180,18 +180,6 @@ void SequencePlayer::processSequence(int padValue)
     }
     
     
-    if (triggerModeData.playingStatus == 0 && shouldFinishLoop == 1)
-    {
-        //if recieved a command to stop file but is set to finish current loop before stopping,
-        //ignore note off message and set looping status to off
-        triggerModeData.playingStatus = 2; //ignore
-        shouldLoop = false;
-        playingLastLoop = true;
-        
-        //what about if the user wants to cancel the finish loop command?
-    }
-    
-    
     if (indestructible == 1)
     {
         //if set to indestructible...
@@ -209,6 +197,39 @@ void SequencePlayer::processSequence(int padValue)
             triggerModeData.playingStatus = 2; //ignore
         }
         
+    }
+    
+    
+    if (triggerModeData.playingStatus == 0 && shouldFinishLoop == 1 && indestructible == 0)
+    {
+        //if recieved a command to stop file but is set to finish current loop before stopping,
+        //ignore note off message and set looping status to off
+        triggerModeData.playingStatus = 2; //ignore
+        shouldLoop = false;
+        playingLastLoop = true;
+        
+        //what about if the user wants to cancel the finish loop command?
+    }
+    
+    
+    //for cycle trigger Mode
+    if (triggerModeData.moveToNextSeq == true)
+    {
+        //if true, move to next seq
+        sequenceNumber++;
+        
+        if (sequenceNumber == numberOfSequences) //if goes beyond the last sequence
+        {
+            if (shouldLoop == true)
+            {
+                sequenceNumber = 0; //if reached end of seqs and is set to loop, go back to the beginning
+            }
+            else if (shouldLoop == false)
+            {
+                //stopThreadAndReset(); //if reaches end of seqs and not set to loop, stop thread
+                stopThread(timeInterval);
+            }
+        }
     }
     
     
@@ -270,26 +291,6 @@ void SequencePlayer::processSequence(int padValue)
             //the sequence can stop playing
             modeSequencerRef.addItemToWaitingPadSequencer(this);
             broadcaster.sendActionMessage("WAITING TO STOP");
-        }
-    }
-    
-    //for cycle trigger Mode
-    if (triggerModeData.moveToNextSeq == true)
-    {
-        //if true, move to next seq
-        sequenceNumber++;
-        
-        if (sequenceNumber == numberOfSequences) //if goes beyond the last sequence
-        {
-            if (shouldLoop == true)
-            {
-                sequenceNumber = 0; //if reached end of seqs and is set to loop, go back to the beginning
-            }
-            else if (shouldLoop == false)
-            {
-                //stopThreadAndReset(); //if reaches end of seqs and not set to loop, stop thread
-                stopThread(timeInterval);
-            }
         }
     }
     

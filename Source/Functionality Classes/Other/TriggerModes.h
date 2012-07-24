@@ -27,8 +27,6 @@
 struct TriggerModeData 
 {
     int playingStatus; // 0 = stop, 1 = play, 2 = ignore
-    int pressureValue; //do we need this now? as sticky isn't now contain with trigger modes the incoming pressure will always be the outgoing pressure
-    bool shouldLoop; //don't need this now as looping is defined with trigger modes
     
     //special variables for the cycle and auto-cyle play states
     bool ignorePressure; //don't think we need this anymore. was used for the cycle playstates so that the pressure wouldn't change the seq number,
@@ -36,8 +34,6 @@ struct TriggerModeData
                             //with a secondary option to use the pressure to control the seq arrangement.
                             //therefore we don't want to ignore pressure with the cycle playstates anymore.
     bool moveToNextSeq;
-    bool isLinearCycle;
-    bool isAutoCycle;
     
 };
 
@@ -79,32 +75,6 @@ public:
     //sequencer-only trigger modes
     TriggerModeData cycle (int padValue);
     TriggerModeData autoCycle (int padValue);
-    
-    /*
-    PlayStateData playOnce (int padValue);
-    PlayStateData playOnceContinuous (int padValue);
-    PlayStateData loop (int padValue);
-    PlayStateData togglePressOff (int padValue);
-    PlayStateData toggleReleaseOff (int padValue);
-    PlayStateData sticky (int padValue);
-    PlayStateData latchMaxLatch (int padValue);
-    PlayStateData latchPressLatch (int padValue);
-    PlayStateData triggerLooped (int padValue);
-    PlayStateData triggerNonLooped (int padValue);
-    
-    //Sequencer-only play states
-    PlayStateData cycleLooped (int padValue);
-    PlayStateData cycleLinear (int padValue);
-    PlayStateData autoCycleLooped (int padValue);
-    PlayStateData autoCycleLinear (int padValue);
-    
-    //new playstates
-    PlayStateData playOnceNonDestructive (int padValue);
-    PlayStateData triggerLoopedNonDestructive (int padValue);
-    PlayStateData triggerNonLoopedNonDestructive (int padValue);
-    PlayStateData cycleLinearNonDestructive (int padValue);
-    PlayStateData toggleNonDestructive (int padValue);
-     */
     
     void reset();
     

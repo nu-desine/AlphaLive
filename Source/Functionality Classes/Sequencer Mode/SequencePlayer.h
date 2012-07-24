@@ -99,7 +99,7 @@ public:
     
 private:
     int padNumber;
-    int prevPadValue;
+    int prevPadValue, pressureValue;
     int columnNumber;
     
     double currentTime;

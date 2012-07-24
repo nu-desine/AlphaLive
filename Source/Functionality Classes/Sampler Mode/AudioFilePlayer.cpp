@@ -64,8 +64,6 @@ AudioFilePlayer::AudioFilePlayer(int looperPadNumber, ModeLooper &ref, TimeSlice
     channel = PAD_SETTINGS->getLooperChannel();
     
     triggerModeData.playingStatus = 0;
-    triggerModeData.pressureValue = 0;
-    triggerModeData.shouldLoop = true;
     
     prevPadValue = pressureValue =  0;
     

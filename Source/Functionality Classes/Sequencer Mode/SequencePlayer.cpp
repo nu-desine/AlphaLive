@@ -75,11 +75,8 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     panRight = panRightPrev = PanControl::rightChanPan_(PAD_SETTINGS->getSequencerPan());
     
     triggerModeData.playingStatus = 0;
-    triggerModeData.pressureValue = 0;
-    triggerModeData.shouldLoop = true;
     triggerModeData.moveToNextSeq = false;
-    triggerModeData.ignorePressure = false;
-    triggerModeData.isLinearCycle = false;
+    
     //=====================================
     
     sequenceNumber = 0;
@@ -110,7 +107,7 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     
     broadcaster.addActionListener(this);
     
-    prevPadValue = 0;
+    prevPadValue = pressureValue =  0;
 }
 
 //=====================================================================================
@@ -133,7 +130,7 @@ SequencePlayer::~SequencePlayer()
 }
 
 //=====================================================================================
-//=Process OSC message stuff===========================================================
+//=Process input data stuff============================================================
 //=====================================================================================
 
 void SequencePlayer::processSequence(int padValue)
@@ -145,6 +142,10 @@ void SequencePlayer::processSequence(int padValue)
         currentPlayingState = 0;
         triggerModes.reset();
     }
+    
+    //==========================================================================================
+    // Trigger Mode stuff
+    //==========================================================================================
     
     switch (triggerMode) 
     {
@@ -177,56 +178,30 @@ void SequencePlayer::processSequence(int padValue)
             break;
     }
     
-    //CONTROL PRESSURE STUFF WITH triggerModeData.pressureValue NOT padValue AS STICKY MODE WOULD MODIFY THE VALUE
     
-    //===========convert pressure to steps here!===============
-    if (triggerModeData.ignorePressure == false) //ignore for certain triggerModes
+    if (indestructible == 1)
     {
-        sequenceNumber = triggerModeData.pressureValue * (numberOfSequences/511.0);
-        if (sequenceNumber > numberOfSequences-1)
-            sequenceNumber  = numberOfSequences-1;
-    }
-    
-    //for cycle triggerModes
-    if (triggerModeData.moveToNextSeq == true)
-    {
-        //if true, move to next seq
-        sequenceNumber++;
+        //if set to indestructible...
         
-        if (sequenceNumber == numberOfSequences) //if goes beyond the last sequence
+        if (triggerModeData.playingStatus == 0)
         {
-            if (triggerModeData.isLinearCycle == false)
-            {
-                sequenceNumber = 0; //if reached end of seqs and play state isn't a linear cycle, go back to the beginning
-            }
-            else if (triggerModeData.isLinearCycle == true)
-            {
-                //stopThreadAndReset(); //if reached end of seqs and play state IS a linear cycle, stop thread
-                stopThread(timeInterval);
-            }
+            //...and triggerModeData signifies to stop audio, DON'T LET IT...MWAHAHAHA! 
+            triggerModeData.playingStatus = 2; //ignore
         }
+        else if (triggerModeData.playingStatus == 1 && currentPlayingState == 1 && triggerMode != 6)
+        {
+            //...and triggerModeData signifies to start playing, 
+            //but file is already playing and triggerMode does not equal 'trigger'
+            //Don't send a play command!
+            triggerModeData.playingStatus = 2; //ignore
+        }
+        
     }
     
-    
-    //===============update sequencer grid GUI here!====================
-    //if the this instance of SequencePlayer is the one belonging to the pad 
-    //that is currently selected (and hence currently displayed)
-    if (sequenceNumber != prevSequenceNumber) //so that an update will only be sent of the sequence number has changed!
-    {
-        if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
-        {
-            if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
-            {
-            
-                prevSequenceNumber = sequenceNumber;
-                broadcaster.sendActionMessage("SEQ DISPLAY");
-            }
-        }
-    
-    }
     
     //==========================================================================================
-    //====================set the transportation of the thread here!============================
+    // Start/Stop stuff
+    //==========================================================================================
     
     //if triggerModeData.playingStatus = 2, do nothing
     
@@ -284,11 +259,117 @@ void SequencePlayer::processSequence(int padValue)
             broadcaster.sendActionMessage("WAITING TO STOP");
         }
     }
+    
+    //for cycle trigger Mode
+    if (triggerModeData.moveToNextSeq == true)
+    {
+        //if true, move to next seq
+        sequenceNumber++;
+        
+        if (sequenceNumber == numberOfSequences) //if goes beyond the last sequence
+        {
+            if (shouldLoop == true)
+            {
+                sequenceNumber = 0; //if reached end of seqs and is set to loop, go back to the beginning
+            }
+            else if (shouldLoop == false)
+            {
+                //stopThreadAndReset(); //if reaches end of seqs and not set to loop, stop thread
+                stopThread(timeInterval);
+            }
+        }
+    }
+    
+    
     //==========================================================================================
+      
+    //==========================================================================================
+    // Pressure stuff
+    //==========================================================================================
+    //the below algorithms will need to change once the pressure predominantly controls midi
+    //continuous data or DSP effects, with the sequence number being a secondary control.
+    
+    if (triggerModeData.ignorePressure == false) //ignore for certain triggerModes
+    {
+        //scale 0-511 to 0-numberOfSequences
+        //as the value will be scaled down and into an int, padValue could be rounded down to 0 even when it isn't quite 0
+        //therefore we must make sure that it is atleast at the value of 1 untill it is actually set to 0,
+        //so it doesn't mess up how the sticky feature is handled
+    
+        /*
+        float padValueFloat = padValue * (numberOfSequences/511.0);
+        if (padValueFloat > 0 && padValueFloat < 1)
+            padValue = 1;
+        else
+            padValue = padValueFloat;
+         */
+        //current problem with sequencer mode which will mean sticky mode might not function properly!!! - 
+        //a pressure value of 0 is sequence number 1, whereas in other modes a pressure value of 0 is 'off'
+        //therefore when using the above scaling algorithm which makes sure 0 isn't set till it is an absolute
+        //0, the first sequence will never be played.
+        //============================================================================================
+        //Actually, if padValue and prevPadValue are never scaled, sticky works!! so ignore the above?
+        //============================================================================================
+        
+        
+        
+        sequenceNumber = padValue * (numberOfSequences/511.0);
+        if (sequenceNumber > numberOfSequences-1)
+            sequenceNumber  = numberOfSequences-1;
         
     
+        //the below algorithm is simpler than the one in the other modes - can I do it this way for the other modes too?
+        if (sticky == 1) //'on'
+        {
+            //modify pressure value
+            if(prevPadValue == 0)
+            {
+                sequenceNumber = 0;
+                
+            }
+            else
+            {
+                //this part is the opposite of what it is in Looper Mode and Midi mode... things need to be consistent!
+                if(sequenceNumber < prevSequenceNumber)
+                {
+                     sequenceNumber = prevSequenceNumber;
+                }
+            
+            }
+            
+        }
+        else // 'off'
+        {
+            //this part is the opposite of what it is in Looper Mode and Midi mode... things need to be consistent!
+            //do nothing??
+            //pressureValue = sequenceNumber; 
+        }
+    }
+    
+    
+    
+    //===============update sequencer grid GUI here!====================
+    //if the this instance of SequencePlayer is the one belonging to the pad 
+    //that is currently selected (and hence currently displayed)
+    if (sequenceNumber != prevSequenceNumber) //so that an update will only be sent of the sequence number has changed!
+    {
+        if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
+        {
+            if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
+            {
+                
+                
+                broadcaster.sendActionMessage("SEQ DISPLAY");
+            }
+        }
+        
+    }
+    
+    prevSequenceNumber = sequenceNumber;
     prevPadValue = padValue;
 }
+
+
 
 void SequencePlayer::triggerQuantizationPoint()
 {
@@ -368,7 +449,7 @@ void SequencePlayer::run()
     {
         //in the above while loop statement, the following paramaters cause the thread to end:
         // - threadShouldExit() becomes true when stopThread is called
-        // - columnNumber becomes greater than sequenceLength when triggerModeData.shouldLoop is set to false from the current play state. see bottom of this loop.
+        // - columnNumber becomes greater than sequenceLength when shouldLoop is set to false from the current play state. see bottom of this loop.
         // - sequenceNumber becomes greater than numberOfSequences when triggerModeData.isLinearCycle is set to true from the autocyclelinear triggerMode. see bottom of this while loop
         
         
@@ -445,19 +526,12 @@ void SequencePlayer::run()
         }
         
         //=========================================================================
-        
-        
-        
+    
         columnNumber++;
-        //if the counter variable reaches the end and the current play state iss set to loop, restart the counter.
-        //otherwise the while loop will exit and the read will stop on it's own
-        if (columnNumber == sequenceLength && triggerModeData.shouldLoop == true)
-            columnNumber = 0;
         
         
-        
-        //for autocycle triggerModes
-        if (triggerModeData.isAutoCycle == true)
+        //for autocycle trigger Mode
+        if (triggerMode == 8)
         {
             if (columnNumber == sequenceLength) //if goes beyond the last column of the sequence
             {
@@ -466,8 +540,8 @@ void SequencePlayer::run()
                 
                 if (sequenceNumber == numberOfSequences) //if goes beyond the last sequence
                 {
-                    if (triggerModeData.isLinearCycle == false)
-                        sequenceNumber = 0; //if reached end of seqs and play state isn't a linear cycle, go back to the beginning
+                    if (shouldLoop == true)
+                        sequenceNumber = 0; //if reached end of seqs and is set to loop, go back to the beginning
                     
                     //else, sequencer number will greater than the number of sequences, so the while loop will not run next time
                 }
@@ -480,6 +554,14 @@ void SequencePlayer::run()
                 }
             }
         }
+        
+        
+        //if the counter variable reaches the end, and the current play state is set to loop or triggerMode is 'cycle', 
+        //restart the counter so that the sequence loops
+        //otherwise the while loop will exit and the read will stop on it's own
+        if (columnNumber == sequenceLength && shouldLoop == true || columnNumber == sequenceLength && triggerMode == 7)
+            columnNumber = 0;
+        
         
         //===============update sequencer grid GUI here!====================
         //if the this instance of SequencePlayer is the one belonging to the pad 
@@ -754,7 +836,7 @@ void SequencePlayer::actionListenerCallback (const String& message)
             columnNumberEnd++;
             //if the counter variable reaches the end and the current play state is set to loop, restart the counter.
             //otherwise the while loop will exit 
-            if (columnNumberEnd == sequenceLength && triggerModeData.shouldLoop == true)
+            if (columnNumberEnd == sequenceLength && shouldLoop == true)
                 columnNumberEnd = 0;
         }
         

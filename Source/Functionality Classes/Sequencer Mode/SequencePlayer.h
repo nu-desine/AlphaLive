@@ -151,7 +151,7 @@ private:
     
     float gain, gainPrev, panLeft, panLeftPrev, panRight, panRightPrev;
 
-    
+    bool playingLastLoop;
 };
 
 

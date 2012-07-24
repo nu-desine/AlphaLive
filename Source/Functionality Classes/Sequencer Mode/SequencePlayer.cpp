@@ -108,6 +108,7 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     broadcaster.addActionListener(this);
     
     prevPadValue = pressureValue =  0;
+    playingLastLoop = false;
 }
 
 //=====================================================================================
@@ -176,6 +177,18 @@ void SequencePlayer::processSequence(int padValue)
         default:
             triggerModeData = triggerModes.toggle(padValue);
             break;
+    }
+    
+    
+    if (triggerModeData.playingStatus == 0 && shouldFinishLoop == 1)
+    {
+        //if recieved a command to stop file but is set to finish current loop before stopping,
+        //ignore note off message and set looping status to off
+        triggerModeData.playingStatus = 2; //ignore
+        shouldLoop = false;
+        playingLastLoop = true;
+        
+        //what about if the user wants to cancel the finish loop command?
     }
     
     
@@ -533,7 +546,11 @@ void SequencePlayer::run()
         //for autocycle trigger Mode
         if (triggerMode == 8)
         {
-            if (columnNumber == sequenceLength) //if goes beyond the last column of the sequence
+            
+            if (columnNumber == sequenceLength && playingLastLoop == true)
+                signalThreadShouldExit(); //ends the 'last' loop
+            
+            else if (columnNumber == sequenceLength) //if goes beyond the last column of the sequence
             {
                 sequenceNumber++;
                 columnNumber = 0; //reset columnNumber here otherwise thread loop will exit and seq will stop
@@ -553,13 +570,16 @@ void SequencePlayer::run()
                         broadcaster.sendActionMessage("SEQ DISPLAY");
                 }
             }
+            
         }
         
         
-        //if the counter variable reaches the end, and the current play state is set to loop or triggerMode is 'cycle', 
+        //if the counter variable reaches the end, and the current play state is set to loop or triggerMode
+        //is 'cycle' and it is not currently playing the 'last loop',
         //restart the counter so that the sequence loops
-        //otherwise the while loop will exit and the read will stop on it's own
-        if (columnNumber == sequenceLength && shouldLoop == true || columnNumber == sequenceLength && triggerMode == 7)
+        //otherwise the while loop will exit and the thread will stop on it's own
+        if ((columnNumber == sequenceLength && shouldLoop == true) || 
+            (columnNumber == sequenceLength && triggerMode == 7 && playingLastLoop == false))
             columnNumber = 0;
         
         
@@ -625,6 +645,9 @@ void SequencePlayer::run()
             }
         }
     }
+    
+    playingLastLoop = false;
+    shouldLoop = PAD_SETTINGS->getSequencerShouldLoop();
     
     //tell gui pad that the sequence has finished playing
     broadcaster.sendActionMessage("PLAYING OFF");
@@ -926,7 +949,8 @@ void SequencePlayer::setTriggerMode (int value)
 }
 void SequencePlayer::setShouldLoop (int value)
 {
-    shouldLoop = value;
+    if (playingLastLoop == false)
+        shouldLoop = value;
 }
 void SequencePlayer::setIndestructible (int value)
 {

@@ -25428,8 +25428,8 @@
 				</dict>
 			</array>
 		</dict>
-		<real>364826236.22469598</real>
-		<string>{7227, 1275}</string>
+		<real>364837903.76746202</real>
+		<string>{6012, 1763}</string>
 		<string>{7462, 485}</string>
 		<string>ModeMidi::convertToMidi(int padNumber, int padValue)</string>
 		<dict>
@@ -31598,10 +31598,10 @@
 				</dict>
 			</array>
 		</dict>
-		<real>364826236.22368097</real>
-		<string>{10813, 2176}</string>
-		<string>{12579, 0}</string>
-		<string>SequencePlayer::processSequence(int padValue)</string>
+		<real>364837903.76684201</real>
+		<string>{22987, 1878}</string>
+		<string>{23149, 0}</string>
+		<string>SequencePlayer::run()</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -43655,7 +43655,7 @@
 				</dict>
 			</array>
 		</dict>
-		<real>364826236.22297698</real>
+		<real>364837903.766132</real>
 		<string>{2205, 1139}</string>
 		<string>{2862, 0}</string>
 		<string>class TriggerModes</string>
@@ -46098,9 +46098,9 @@
 				</dict>
 			</array>
 		</dict>
-		<real>364826236.22536898</real>
-		<string>{8730, 1283}</string>
-		<string>{9309, 0}</string>
+		<real>364837903.76824898</real>
+		<string>{5187, 1228}</string>
+		<string>{5382, 631}</string>
 		<string>AudioFilePlayer::processAudioFile(int padValue)</string>
 		<dict>
 			<key>$class</key>
@@ -62196,8 +62196,8 @@
 				</dict>
 			</array>
 		</dict>
-		<real>364826236.22169</real>
-		<string>{7227, 1275}</string>
+		<real>364837903.76516998</real>
+		<string>{6012, 1763}</string>
 		<string>{7462, 485}</string>
 		<dict>
 			<key>$class</key>
@@ -63691,19 +63691,19 @@
 			<array>
 				<dict>
 					<key>CF$UID</key>
-					<integer>93</integer>
+					<integer>1320</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
-					<integer>94</integer>
+					<integer>1321</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
-					<integer>95</integer>
+					<integer>1322</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
-					<integer>96</integer>
+					<integer>1323</integer>
 				</dict>
 			</array>
 			<key>NS.objects</key>
@@ -63726,9 +63726,9 @@
 				</dict>
 			</array>
 		</dict>
-		<real>364753407.81452399</real>
-		<string>{3001, 1418}</string>
-		<string>{4026, 57}</string>
+		<real>364830470.36107498</real>
+		<string>{3667, 1211}</string>
+		<string>{4700, 21}</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -65064,9 +65064,9 @@
 				</dict>
 			</array>
 		</dict>
-		<real>364826236.22189999</real>
-		<string>{8730, 1283}</string>
-		<string>{9309, 0}</string>
+		<real>364837903.76539099</real>
+		<string>{5187, 1228}</string>
+		<string>{5382, 631}</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -66403,9 +66403,9 @@
 				</dict>
 			</array>
 		</dict>
-		<real>364826236.221991</real>
-		<string>{10813, 2176}</string>
-		<string>{12579, 0}</string>
+		<real>364837903.76548398</real>
+		<string>{22987, 1878}</string>
+		<string>{23149, 0}</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -67310,7 +67310,7 @@
 				</dict>
 			</array>
 		</dict>
-		<real>364826236.22180599</real>
+		<real>364837903.76529902</real>
 		<string>{2205, 1139}</string>
 		<string>{2862, 0}</string>
 		<dict>
@@ -67784,9 +67784,9 @@
 				</dict>
 			</array>
 		</dict>
-		<real>364822352.30653399</real>
-		<string>{3151, 1112}</string>
-		<string>{3294, 0}</string>
+		<real>364830464.77938801</real>
+		<string>{3712, 1111}</string>
+		<string>{4807, 0}</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -70094,7 +70094,7 @@
 				<integer>3993</integer>
 			</dict>
 			<key>NS.time</key>
-			<real>364826235.58599102</real>
+			<real>364837657.32476002</real>
 		</dict>
 		<dict>
 			<key>$classes</key>
@@ -70105,7 +70105,7 @@
 			<key>$classname</key>
 			<string>NSDate</string>
 		</dict>
-		<string>Today at 13:37</string>
+		<string>Today at 16:47</string>
 		<integer>106</integer>
 		<dict>
 			<key>$class</key>
@@ -70206,7 +70206,7 @@
 				<integer>4001</integer>
 			</dict>
 		</dict>
-		<string>file://localhost/Users/Liam/Desktop/AlphaSphere%20Software%20Dev/AlphaLive%20NEW%20vDEV/Source/Functionality%20Classes/Sequencer%20Mode/SequencePlayer.cpp</string>
+		<string>file://localhost/Users/Liam/Desktop/AlphaSphere%20Software%20Dev/AlphaLive%20NEW%20vDEV/Source/Functionality%20Classes/Sampler%20Mode/AudioFilePlayer.h</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -70260,7 +70260,7 @@
 				<integer>4007</integer>
 			</dict>
 		</dict>
-		<string>file://localhost/Users/Liam/Desktop/AlphaSphere%20Software%20Dev/AlphaLive%20NEW%20vDEV/Source/Functionality%20Classes/Other/TriggerModes.h</string>
+		<string>file://localhost/Users/Liam/Desktop/AlphaSphere%20Software%20Dev/AlphaLive%20NEW%20vDEV/Source/Functionality%20Classes/Sequencer%20Mode/SequencePlayer.cpp</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -70278,7 +70278,7 @@
 				<integer>4009</integer>
 			</dict>
 		</dict>
-		<string>file://localhost/Users/Liam/Desktop/AlphaSphere%20Software%20Dev/AlphaLive%20NEW%20vDEV/Source/Functionality%20Classes/Other/TriggerModes.cpp</string>
+		<string>file://localhost/Users/Liam/Desktop/AlphaSphere%20Software%20Dev/AlphaLive%20NEW%20vDEV/Source/Functionality%20Classes/Other/TriggerModes.h</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -70296,7 +70296,7 @@
 				<integer>4011</integer>
 			</dict>
 		</dict>
-		<string>file://localhost/Users/Liam/Desktop/AlphaSphere%20Software%20Dev/AlphaLive%20NEW%20vDEV/Source/Functionality%20Classes/Other/PlayStates.cpp</string>
+		<string>file://localhost/Users/Liam/Desktop/AlphaSphere%20Software%20Dev/AlphaLive%20NEW%20vDEV/Source/Functionality%20Classes/Other/TriggerModes.cpp</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -70314,7 +70314,7 @@
 				<integer>4013</integer>
 			</dict>
 		</dict>
-		<string>file://localhost/Users/Liam/Desktop/AlphaSphere%20Software%20Dev/AlphaLive%20NEW%20vDEV/Source/GUI%20Classes/Views/GuiSequencerMode.cpp</string>
+		<string>file://localhost/Users/Liam/Desktop/AlphaSphere%20Software%20Dev/AlphaLive%20NEW%20vDEV/Source/Functionality%20Classes/Other/PlayStates.cpp</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -70332,7 +70332,7 @@
 				<integer>4015</integer>
 			</dict>
 		</dict>
-		<string>file://localhost/Users/Liam/Desktop/AlphaSphere%20Software%20Dev/AlphaLive%20NEW%20vDEV/Source/GUI%20Classes/Views/GuiMidiMode.cpp</string>
+		<string>file://localhost/Users/Liam/Desktop/AlphaSphere%20Software%20Dev/AlphaLive%20NEW%20vDEV/Source/GUI%20Classes/Views/GuiSequencerMode.cpp</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -70347,9 +70347,10 @@
 			<key>NS.relative</key>
 			<dict>
 				<key>CF$UID</key>
-				<integer>1808</integer>
+				<integer>4017</integer>
 			</dict>
 		</dict>
+		<string>file://localhost/Users/Liam/Desktop/AlphaSphere%20Software%20Dev/AlphaLive%20NEW%20vDEV/Source/GUI%20Classes/Views/GuiMidiMode.cpp</string>
 	</array>
 	<key>$top</key>
 	<dict>

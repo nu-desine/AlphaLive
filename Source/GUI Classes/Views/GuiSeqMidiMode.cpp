@@ -163,11 +163,11 @@ void GuiSeqMidiMode::resized()
     }
     
     
-    scaleMenu->setBounds(RIGHT_CIRCLE_X, 450, COMPONENT_W, COMPONENT_H);
-    rootNoteSlider->setBounds(RIGHT_CIRCLE_X, 480, COMPONENT_W, COMPONENT_H);
-    channelSlider->setBounds(RIGHT_CIRCLE_X, 510, COMPONENT_W, COMPONENT_H);
+    scaleMenu->setBounds(RIGHT_CIRCLE_X, 430, COMPONENT_W, COMPONENT_H);
+    rootNoteSlider->setBounds(RIGHT_CIRCLE_X, 455, COMPONENT_W, COMPONENT_H);
+    channelSlider->setBounds(RIGHT_CIRCLE_X, 480, COMPONENT_W, COMPONENT_H);
     //velocitySlider->setBounds(RIGHT_CIRCLE_X, 540, COMPONENT_W, COMPONENT_H);
-    noteLengthSlider->setBounds(RIGHT_CIRCLE_X, 570, COMPONENT_W, COMPONENT_H);
+    noteLengthSlider->setBounds(RIGHT_CIRCLE_X, 505, COMPONENT_W, COMPONENT_H);
 }
 
 

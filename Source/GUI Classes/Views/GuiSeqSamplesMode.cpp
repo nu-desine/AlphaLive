@@ -133,10 +133,10 @@ void GuiSeqSamplesMode::resized()
         i += 12.5;
     }
     
-    gainSlider->setBounds(835, 495, 45, 45);
-	panSlider->setBounds(910, 495, 45, 45);
+    gainSlider->setBounds(835, 455, 45, 45);
+	panSlider->setBounds(910, 455, 45, 45);
     
-    drumBankMenu->setBounds(RIGHT_CIRCLE_X, 560, COMPONENT_W, COMPONENT_H);
+    drumBankMenu->setBounds(RIGHT_CIRCLE_X, 520, COMPONENT_W, COMPONENT_H);
     
     
 }

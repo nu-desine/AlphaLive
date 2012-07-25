@@ -213,6 +213,8 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     saveSeqSetButton->setVisible(false);
     loadSeqSetButton->setVisible(false);
     velocityLabel->setVisible(false);
+    numberOfSequencesSlider->setVisible(false);
+    sequenceLengthSlider->setVisible(false);
     
     
     
@@ -274,17 +276,16 @@ void GuiSequencerMode::resized()
     saveSeqSetButton->setBounds(412, 600, 100, 20);
     loadSeqSetButton->setBounds(512, 600, 100, 20);
     velocityLabel->setBounds(270, 577, 40, 15);
+    numberOfSequencesSlider->setBounds(400, 390, COMPONENT_W, 15);
+    sequenceLengthSlider->setBounds(500, 390, COMPONENT_W, 15);
     
+    triggerModeMenu->setBounds(RIGHT_CIRCLE_X, 570, COMPONENT_W, COMPONENT_H);
+    relativeTempoMenu->setBounds(RIGHT_CIRCLE_X, 545, COMPONENT_W, COMPONENT_H);
     
-    numberOfSequencesSlider->setBounds(LEFT_CIRCLE_X, 440, COMPONENT_W, COMPONENT_H);
-    sequenceLengthSlider->setBounds(LEFT_CIRCLE_X, 470, COMPONENT_W, COMPONENT_H);
-    triggerModeMenu->setBounds(LEFT_CIRCLE_X, 570, COMPONENT_W, COMPONENT_H);
-    relativeTempoMenu->setBounds(LEFT_CIRCLE_X, 500, COMPONENT_W, COMPONENT_H);
-    
-    loopButton->setBounds(LEFT_CIRCLE_X, 593, 50, 15);
-    indestructibleButton->setBounds(LEFT_CIRCLE_X+50, 593, 50, 15);
-    finishLoopButton->setBounds(LEFT_CIRCLE_X, 608, 50, 15);
-    stickyButton->setBounds(LEFT_CIRCLE_X+50, 608, 50, 15);
+    loopButton->setBounds(RIGHT_CIRCLE_X, 593, 50, 15);
+    indestructibleButton->setBounds(RIGHT_CIRCLE_X+50, 593, 50, 15);
+    finishLoopButton->setBounds(RIGHT_CIRCLE_X, 608, 50, 15);
+    stickyButton->setBounds(RIGHT_CIRCLE_X+50, 608, 50, 15);
     
     quantizeModeMenu->setBounds(800, 155, 100, 20);
     
@@ -458,6 +459,8 @@ void GuiSequencerMode::buttonClicked (Button* button)
             saveSeqSetButton->setVisible(true);
             loadSeqSetButton->setVisible(true);
             velocityLabel->setVisible(true);
+            numberOfSequencesSlider->setVisible(true);
+            sequenceLengthSlider->setVisible(true);
             
         }
         else
@@ -476,6 +479,8 @@ void GuiSequencerMode::buttonClicked (Button* button)
             saveSeqSetButton->setVisible(false);
             loadSeqSetButton->setVisible(false);
             velocityLabel->setVisible(false);
+            numberOfSequencesSlider->setVisible(false);
+            sequenceLengthSlider->setVisible(false);
         }
     }
     

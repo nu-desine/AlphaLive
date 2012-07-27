@@ -65,6 +65,7 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
        midiNote[row] = PAD_SETTINGS->getSequencerMidiNote(row); 
     quantizeMode = PAD_SETTINGS->getSequencerQuantizeMode();
     channel = PAD_SETTINGS->getSequencerChannel();
+    dynamicMode = PAD_SETTINGS->getSequencerDynamicMode();
     
     midiChannel = PAD_SETTINGS->getSequencerMidiChannel();
     midiVelocity = PAD_SETTINGS->getSequencerMidiVelocity();
@@ -322,8 +323,6 @@ void SequencePlayer::processSequence(int padValue)
         else
             padValue = padValueFloat;
         
-        std::cout << "padValue: " << padValue << std::endl;
-        
     }
     //else if audio mode, no scaling required
         
@@ -343,14 +342,12 @@ void SequencePlayer::processSequence(int padValue)
                 pressureValue = padValue;
             }
             //else if it is smaller, don't change the pressure value
-            std::cout << "Pressure Value: " << pressureValue << std::endl;
         }
         
     }
     else // 'off'
     {
         pressureValue = padValue; 
-        std::cout << "Pressure Value: " << pressureValue << std::endl;
     }
       
     
@@ -365,64 +362,37 @@ void SequencePlayer::processSequence(int padValue)
         //control DSP effects
     }
     
-    /*
-    if (triggerModeData.ignorePressure == false) //ignore for certain triggerModes
+    
+    //==== control sequence arrangement with pressure====
+    if (dynamicMode == 1)
     {
-        //scale 0-511 to 0-numberOfSequences
-        //as the value will be scaled down and into an int, padValue could be rounded down to 0 even when it isn't quite 0
-        //therefore we must make sure that it is atleast at the value of 1 untill it is actually set to 0,
-        //so it doesn't mess up how the sticky feature is handled
-    
-        
-        //float padValueFloat = padValue * (numberOfSequences/511.0);
-        //if (padValueFloat > 0 && padValueFloat < 1)
-        //    padValue = 1;
-        //else
-        //    padValue = padValueFloat;
-        
-        //current problem with sequencer mode which will mean sticky mode might not function properly!!! - 
-        //a pressure value of 0 is sequence number 1, whereas in other modes a pressure value of 0 is 'off'
-        //therefore when using the above scaling algorithm which makes sure 0 isn't set till it is an absolute
-        //0, the first sequence will never be played.
-        //============================================================================================
-        //Actually, if padValue and prevPadValue are never scaled, sticky works!! so ignore the above?
-        //============================================================================================
-        
-        
-        
-        sequenceNumber = padValue * (numberOfSequences/511.0);
-        if (sequenceNumber > numberOfSequences-1)
-            sequenceNumber  = numberOfSequences-1;
-        
-    
-        //the below algorithm is simpler than the one in the other modes - can I do it this way for the other modes too?
-        if (sticky == 1) //'on'
+        if (triggerModeData.ignorePressure == false) //ignore for certain triggerModes
         {
-            //modify pressure value
-            if(prevPadValue == 0)
-            {
-                sequenceNumber = 0;
-                
-            }
-            else
-            {
-                //this part is the opposite of what it is in Looper Mode and Midi mode... things need to be consistent!
-                if(sequenceNumber < prevSequenceNumber)
-                {
-                     sequenceNumber = prevSequenceNumber;
-                }
+            //scale 0-511/0-127 to 0-numberOfSequences
             
-            }
+            //current problem with sequencer mode which will mean sticky mode might not function properly!!! - 
+            //a pressure value of 0 is sequence number 1, whereas in other modes a pressure value of 0 is 'off'
+            //therefore when using the above scaling algorithm which makes sure 0 isn't set till it is an absolute
+            //0, the first sequence will never be played.
+            //============================================================================================
+            //Actually, if padValue and prevPadValue are never scaled, sticky works!! so ignore the above!!!
+            //============================================================================================
             
-        }
-        else // 'off'
-        {
-            //this part is the opposite of what it is in Looper Mode and Midi mode... things need to be consistent!
-            //do nothing??
-            //pressureValue = sequenceNumber; 
+            
+            if (mode == 1) //midi, scale from 127
+            {
+                sequenceNumber = pressureValue * (numberOfSequences/127.0);
+                if (sequenceNumber > numberOfSequences-1)
+                    sequenceNumber  = numberOfSequences-1;
+            }
+            if (mode == 2) //audio, scale from 511
+            {
+                sequenceNumber = pressureValue * (numberOfSequences/511.0);
+                if (sequenceNumber > numberOfSequences-1)
+                    sequenceNumber  = numberOfSequences-1;
+            }
         }
     }
-    */
     
     
     //===============update sequencer grid GUI here!====================
@@ -761,10 +731,6 @@ void SequencePlayer::sendMidiPressureData()
     //so that sticky will still work correctly in all situations
     int pressureValueScaled = midiMinRange + (pressureValue * ((midiMaxRange - midiMinRange) / 127.0));
     
-    std::cout << "midiMinRange: " << midiMinRange << std::endl;
-    std::cout << "midiMaxRange: " << midiMaxRange << std::endl;
-    std::cout << "pressureValueScaled: " << pressureValueScaled << std::endl;
-    
     if (midiPressureStatus == true) //if pad pressure status is 'off'
     {
         MidiMessage message;
@@ -1095,6 +1061,10 @@ void SequencePlayer::setQuantizeMode (int value)
 void SequencePlayer::setChannel (int value)
 {
     channel = value;
+}
+void SequencePlayer::setDynamicMode (int value)
+{
+    dynamicMode = value;
 }
 
 void SequencePlayer::setMidiNote (int row, int value)

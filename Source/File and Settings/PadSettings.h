@@ -271,6 +271,7 @@ public:
     void setSequencerLength (int value);
     void setSequencerQuantizeMode (int value);
     void setSequencerRelativeTempoMode (int value);
+    void setSequencerDynamicMode (int value);
     
     void setSequencerMidiNote (int value, int arrayIndex);
     void setSequencerMidiVelocity (int value); //NO LONGER NEED THIS
@@ -298,6 +299,7 @@ public:
     int getSequencerLength();
     int getSequencerQuantizeMode();
     int getSequencerRelativeTempoMode();
+    int getSequencerDynamicMode();
     
     int getSequencerMidiNote(int arrayIndex);
     int getSequencerMidiVelocity(); //NO LONGER NEED THIS
@@ -480,6 +482,7 @@ private:
     int sequencerLength;
     int sequencerQuantizeMode;
     int sequencerRelativeTempoMode;
+    int sequencerDynamicMode;
     
     int sequencerMidiNote[NO_OF_ROWS]; //assuming there are 12 rows to a sequencer
     int sequencerMidiVelocity; //NO LONGER NEED THIS

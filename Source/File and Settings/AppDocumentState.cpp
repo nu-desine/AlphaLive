@@ -1075,6 +1075,7 @@ void AppDocumentState::saveToPreset (int presetNumber)
             padData->setAttribute("sequencerLength", PAD_SETTINGS->getSequencerLength());
             padData->setAttribute("sequencerQuantizeMode", PAD_SETTINGS->getSequencerQuantizeMode());
             padData->setAttribute("sequencerRelativeTempoMode", PAD_SETTINGS->getSequencerRelativeTempoMode());
+            padData->setAttribute("sequencerDynamicMode", PAD_SETTINGS->getSequencerDynamicMode());
             
             if (PAD_SETTINGS->getSequencerMode() == 1) //sequencer midi mode
             {
@@ -1141,6 +1142,8 @@ void AppDocumentState::saveToPreset (int presetNumber)
 
 void AppDocumentState::loadFromPreset (int presetNumber)
 {
+    //NEED TO TIDY UP THIS FUNCTION SO THERE'S NO CHECKS TO SEE IF ATTRIBUTES EXIST, AS THEY WON'T BE NEEDED ANYMORE
+    
     if (presetData[presetNumber] != nullptr && presetData[presetNumber]->hasTagName("PRESET_"+String(presetNumber)))
     {
         
@@ -1395,6 +1398,7 @@ void AppDocumentState::loadFromPreset (int presetNumber)
                     PAD_SETTINGS->setSequencerQuantizeMode(padData->getIntAttribute("sequencerQuantizeMode"));
                 if (padData->hasAttribute("sequencerRelativeTempoMode") == true)
                     PAD_SETTINGS->setSequencerRelativeTempoMode(padData->getIntAttribute("sequencerRelativeTempoMode"));
+                PAD_SETTINGS->setSequencerDynamicMode(padData->getIntAttribute("sequencerDynamicMode"));
                 
                 //sequencer midi mode
                 if (padData->getIntAttribute("sequencerMode") == 1)

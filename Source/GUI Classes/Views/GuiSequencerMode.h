@@ -86,7 +86,7 @@ private:
     AlphaSlider *currentSequenceNumberSlider, *numberOfSequencesSlider, *sequenceLengthSlider;
     ComboBox *triggerModeMenu, *quantizeModeMenu, *relativeTempoMenu;
     Label *velocityLabel;
-    TextButton *loopButton, *indestructibleButton, *finishLoopButton, *stickyButton;
+    TextButton *loopButton, *indestructibleButton, *finishLoopButton, *stickyButton, *linkButton;
     
     //int currentlySelectedPad;
     Array<int> selectedPads;

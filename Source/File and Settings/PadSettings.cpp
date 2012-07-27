@@ -164,7 +164,7 @@ PadSettings::PadSettings(int arrayIndex)
     
     
     sequencerMode = 1; 
-    sequencerNumberOfSequences = 8; 
+    sequencerNumberOfSequences = 1; 
     sequencerTriggerMode = 2; 
     sequencerShouldLoop = 1;
     sequencerIndestructible = 0;
@@ -174,6 +174,7 @@ PadSettings::PadSettings(int arrayIndex)
     sequencerLength = 32;
     sequencerQuantizeMode = 1;
     sequencerRelativeTempoMode = 3; //regular time
+    sequencerDynamicMode = 0;
     
     //set a default sequencer note midi layout of 60-72
     for (int i = 0, num = 60; i <= NO_OF_ROWS-1; i++)
@@ -310,7 +311,7 @@ void PadSettings::resetData (int whatToReset)
             }
             clearSequencerDataString(seq);
         }
-        setSequencerNumberOfSequences (8);
+        setSequencerNumberOfSequences (1);
         setSequencerTriggerMode (2);
         setSequencerShouldLoop(1);
         setSequencerIndestructible(0);
@@ -320,6 +321,7 @@ void PadSettings::resetData (int whatToReset)
         setSequencerLength (32);
         setSequencerQuantizeMode (1);
         setSequencerRelativeTempoMode(3);
+        setSequencerDynamicMode(0);
         
         for (int i = 0, num = 60; i <= NO_OF_ROWS-1; i++)
         {
@@ -1504,6 +1506,14 @@ void PadSettings::setSequencerRelativeTempoMode (int value)
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setRelativeTempoMode(sequencerRelativeTempoMode);
     }
 }
+void PadSettings::setSequencerDynamicMode (int value)
+{
+    sequencerDynamicMode = value;
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setDynamicMode(value);
+    }
+}
 
 
 //this function puts this pads sequencer data into 8 strings, one for each sequence. These strings are then used to store the sequence data into the xml files
@@ -1821,7 +1831,10 @@ int PadSettings::getSequencerRelativeTempoMode()
 {
     return sequencerRelativeTempoMode;
 }
-
+int PadSettings::getSequencerDynamicMode()
+{
+    return sequencerDynamicMode;
+}
 
 
 int PadSettings::getSequencerMidiNote(int rowNumber)

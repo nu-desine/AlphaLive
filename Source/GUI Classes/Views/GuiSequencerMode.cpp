@@ -179,6 +179,12 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     stickyButton->setClickingTogglesState(true);
     stickyButton->setToggleState(0, false);
     
+    addAndMakeVisible(linkButton = new TextButton("LINK"));
+    linkButton->addListener(this);
+    linkButton->addMouseListener(this, true);
+    linkButton->setClickingTogglesState(true);
+    linkButton->setToggleState(0, false);
+    
     addAndMakeVisible(quantizeModeMenu = new ComboBox());
     quantizeModeMenu->addItem("Free", 1);
     quantizeModeMenu->addItem("Quantized", 2);
@@ -288,6 +294,8 @@ void GuiSequencerMode::resized()
     stickyButton->setBounds(RIGHT_CIRCLE_X+50, 608, 50, 15);
     
     quantizeModeMenu->setBounds(800, 155, 100, 20);
+    
+    linkButton->setBounds(10, getHeight()-60, 50, 15);
     
 }
 
@@ -566,6 +574,16 @@ void GuiSequencerMode::buttonClicked (Button* button)
             PAD_SETTINGS->setSequencerSticky(button->getToggleState());
         }
     }
+    
+    
+    else if (button == linkButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerDynamicMode(button->getToggleState());
+        }
+    }
      
 }
 
@@ -624,6 +642,7 @@ void GuiSequencerMode::updateDisplay()
         midiMode->setNoteLengthSliderRange(sequenceLengthSlider->getValue());
         //set the the range of the currentSequenceNumberSlider so that the max matches this sliders value
         currentSequenceNumberSlider->setRange(1, numberOfSequencesSlider->getValue(), 1);
+        linkButton->setToggleState(PAD_SETTINGS->getSequencerDynamicMode(), false);
 
         //saveSeqButton->setVisible(true);
         //saveSeqSetButton->setVisible(true);
@@ -654,6 +673,7 @@ void GuiSequencerMode::updateDisplay()
         //currentSequenceNumberSlider->setValue(1);
         quantizeModeMenu->setSelectedId(1, true);
         relativeTempoMenu->setSelectedId(3, true);
+        linkButton->setToggleState(0, false);
         
         //set the range of the noteLengthSlider so that the max value matches this sliders value
         midiMode->setNoteLengthSliderRange(sequenceLengthSlider->getValue());

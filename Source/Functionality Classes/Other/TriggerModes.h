@@ -29,10 +29,7 @@ struct TriggerModeData
     int playingStatus; // 0 = stop, 1 = play, 2 = ignore
     
     //special variables for the cycle and auto-cyle play states
-    bool ignorePressure; //don't think we need this anymore. was used for the cycle playstates so that the pressure wouldn't change the seq number,
-                            //however now the default pressure feature is to apply continous midi data or control DSP effects
-                            //with a secondary option to use the pressure to control the seq arrangement.
-                            //therefore we don't want to ignore pressure with the cycle playstates anymore.
+    bool ignorePressure;
     bool moveToNextSeq;
     
 };

@@ -26,6 +26,8 @@
 #include "../../../JuceLibraryCode/JuceHeader.h"
 #include "../../Functionality Classes/Sequencer Mode/SequencerValues.h"
 #include "../Custom Components/General/AlphaSlider.h"
+#include "../Custom Components/General/GuiSwitch.h"
+#include "../Custom Components/Graphics/GuiSpeaker.h"
 
 class MainComponent;
 
@@ -66,6 +68,11 @@ private:
     Slider *noteSlider[NO_OF_ROWS];
     AlphaSlider *rootNoteSlider, *velocitySlider, *channelSlider, *noteLengthSlider;
     ComboBox *scaleMenu;
+    
+    ComboBox *pressureModeMenu;
+    AlphaSlider *pressureMinRangeSlider, *pressureMaxRangeSlider, *ccControllerSlider;
+    GuiSwitch *pressureStatusButton;
+    GuiSpeaker *speakerLeft;
     
     //int currentlySelectedPad;
     Array <int> selectedPads; 

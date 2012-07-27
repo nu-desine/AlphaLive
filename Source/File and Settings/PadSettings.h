@@ -276,6 +276,11 @@ public:
     void setSequencerMidiVelocity (int value); //NO LONGER NEED THIS
     void setSequencerMidiChannel (int value);
     void setSequencerMidiNoteLength (int value);
+    void setSequencerMidiMinPressureRange (int value);
+    void setSequencerMidiMaxPressureRange (int value);
+    void setSequencerMidiPressureMode (int value);
+    void setSequencerMidiPressureStatus (bool value);
+    void setSequencerMidiCcController (int value);
     
     void setSequencerSamplesAudioFilePath (File value, int sequencerRow);
     void setSequencerPan (float value);
@@ -298,6 +303,11 @@ public:
     int getSequencerMidiVelocity(); //NO LONGER NEED THIS
     int getSequencerMidiChannel();
     int getSequencerMidiNoteLength();
+    int getSequencerMidiMinPressureRange();
+    int getSequencerMidiMaxPressureRange();
+    int getSequencerMidiPressureMode();
+    bool getSequencerMidiPressureStatus();
+    int getSequencerMidiCcController();
     
     File getSequencerSamplesAudioFilePath (int sequencerRow);
     bool getSequencerIsLibraryFile (int sequencerRow);
@@ -475,6 +485,11 @@ private:
     int sequencerMidiVelocity; //NO LONGER NEED THIS
     int sequencerMidiChannel;
     int sequencerMidiNoteLength;
+    int sequencerMidiMinPressureRange;
+    int sequencerMidiMaxPressureRange;
+    int sequencerMidiPressureMode;
+    int sequencerMidiCcController;
+    bool sequencerMidiPressureStatus;
     
     String sequencerSamplesAudioFilePath[NO_OF_ROWS];
     float sequencerPan;

@@ -1085,6 +1085,12 @@ void AppDocumentState::saveToPreset (int presetNumber)
                 padData->setAttribute("sequencerMidiVelocity", PAD_SETTINGS->getSequencerMidiVelocity());
                 padData->setAttribute("sequencerMidiChannel", PAD_SETTINGS->getSequencerMidiChannel());
                 padData->setAttribute("sequencerMidiNoteLength", PAD_SETTINGS->getSequencerMidiNoteLength());
+                padData->setAttribute("sequencerMidiMinPressureRange", PAD_SETTINGS->getSequencerMidiMinPressureRange());
+                padData->setAttribute("sequencerMidiMaxPressureRange", PAD_SETTINGS->getSequencerMidiMaxPressureRange());
+                padData->setAttribute("sequencerMidiPressureMode", PAD_SETTINGS->getSequencerMidiPressureMode());
+                padData->setAttribute("sequencerMidiPressureStatus", PAD_SETTINGS->getSequencerMidiPressureStatus());
+                padData->setAttribute("sequencerMidiCcController", PAD_SETTINGS->getSequencerMidiCcController());
+
             }
             else if (PAD_SETTINGS->getSequencerMode() == 2) //sequencer samples mode
             {
@@ -1400,6 +1406,11 @@ void AppDocumentState::loadFromPreset (int presetNumber)
                     PAD_SETTINGS->setSequencerMidiVelocity(padData->getIntAttribute("sequencerMidiVelocity"));
                     PAD_SETTINGS->setSequencerMidiChannel(padData->getIntAttribute("sequencerMidiChannel"));
                     PAD_SETTINGS->setSequencerMidiNoteLength(padData->getIntAttribute("sequencerMidiNoteLength"));
+                    PAD_SETTINGS->setSequencerMidiMinPressureRange(padData->getIntAttribute("sequencerMidiMinPressureRange"));
+                    PAD_SETTINGS->setSequencerMidiMaxPressureRange(padData->getIntAttribute("sequencerMidiMaxPressureRange"));
+                    PAD_SETTINGS->setSequencerMidiPressureMode(padData->getIntAttribute("sequencerMidiPressureMode"));
+                    PAD_SETTINGS->setSequencerMidiPressureStatus(padData->getBoolAttribute("sequencerMidiPressureStatus"));
+                    PAD_SETTINGS->setSequencerMidiCcController(padData->getIntAttribute("sequencerMidiCcController"));
                 }
                 
                 //sequencer samples mode

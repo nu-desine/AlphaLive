@@ -116,7 +116,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     
     
     
-    //----------------pressure play state combobox-------------------------------
+    //----------------trigger mode combobox-------------------------------
     addAndMakeVisible(triggerModeMenu = new ComboBox());
     triggerModeMenu->addListener(this);
     triggerModeMenu->addMouseListener(this, true);

@@ -91,6 +91,55 @@ GuiSeqMidiMode::GuiSeqMidiMode(MainComponent &ref)
     noteLengthSlider->setValue(4, false);
     noteLengthSlider->addMouseListener(this, true);
     
+    //------------------Pressure minimum range slider------------------------------
+    addAndMakeVisible(pressureMinRangeSlider = new AlphaSlider());
+    pressureMinRangeSlider->setRange(0, 127, 1);
+    pressureMinRangeSlider->addListener(this);
+    pressureMinRangeSlider->setValue(0, false);
+    pressureMinRangeSlider->addMouseListener(this, true);
+    
+    
+    //------------------Pressure maximum range slider------------------------------
+    addAndMakeVisible(pressureMaxRangeSlider = new AlphaSlider());
+    pressureMaxRangeSlider->setRange(0, 127, 1);
+    pressureMaxRangeSlider->addListener(this);
+    pressureMaxRangeSlider->setValue(127, false);
+    pressureMaxRangeSlider->addMouseListener(this, true);
+    
+    
+    //----------------pressure mode combobox-------------------------------
+    addAndMakeVisible(pressureModeMenu = new ComboBox());
+    pressureModeMenu->addListener(this);
+    pressureModeMenu->addMouseListener(this, true);
+    
+    //don;t think it makes much sense to have PAT here
+    //pressureModeMenu->addItem("Polyphonic Aftertouch", 1);
+    pressureModeMenu->addItem("Channel Aftertouch", 1);
+    pressureModeMenu->addItem("CC Data", 2);
+    pressureModeMenu->addItem("Mod Wheel", 3);
+    pressureModeMenu->addItem("Pitch Bend (Up)", 4);
+    pressureModeMenu->addItem("Pitch Bend (Down)", 5);
+    pressureModeMenu->setSelectedId(1, true);
+    
+    //---------------CC controller Slider-------------------------------------
+    addAndMakeVisible(ccControllerSlider = new AlphaSlider());
+    ccControllerSlider->setRange(0, 127, 1);
+    ccControllerSlider->addListener(this);
+    ccControllerSlider->addMouseListener(this, true);
+    
+    ccControllerSlider->setVisible(false);
+    
+    //---------------pressure status button-------------------------------------
+    
+    addAndMakeVisible(pressureStatusButton = new GuiSwitch());
+    pressureStatusButton->addListener(this);
+    pressureStatusButton->setClickingTogglesState(true);
+    pressureStatusButton->setToggleState(true, false);
+    pressureStatusButton->addMouseListener(this, false);
+    
+    addAndMakeVisible(speakerLeft = new GuiSpeaker());
+    speakerLeft->setVisible(false);
+    
     
 }
 
@@ -128,6 +177,18 @@ void GuiSeqMidiMode::updateDisplay()
         {
             noteSlider[row]->setValue(PAD_SETTINGS->getSequencerMidiNote(row), false);
         }
+        
+        pressureMinRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMinPressureRange(), false);
+        pressureMaxRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMaxPressureRange(), false);
+        pressureModeMenu->setSelectedId(PAD_SETTINGS->getSequencerMidiPressureMode(), true);
+        ccControllerSlider->setValue(PAD_SETTINGS->getSequencerMidiCcController(), false);
+        
+        pressureStatusButton->setToggleState(PAD_SETTINGS->getSequencerMidiPressureStatus(), false);
+        //update speaker display
+        if(pressureStatusButton->getToggleStateValue()==true)
+            speakerLeft->setVisible(false);
+        else
+            speakerLeft->setVisible(true);
   
     }
     
@@ -140,6 +201,14 @@ void GuiSeqMidiMode::updateDisplay()
         channelSlider->setValue(1, false);
         velocitySlider->setValue(110, false);
         noteLengthSlider->setValue(4, false);
+        
+        pressureMinRangeSlider->setValue(0, false);
+        pressureMaxRangeSlider->setValue(127, false);
+        pressureModeMenu->setSelectedId(1, true);
+        ccControllerSlider->setValue(60, false);
+        
+        pressureStatusButton->setToggleState(true, false);
+        speakerLeft->setVisible(false);
         
         for (int row = 0, i = 60; row <= NO_OF_ROWS-1; row++)
         {
@@ -168,6 +237,16 @@ void GuiSeqMidiMode::resized()
     channelSlider->setBounds(RIGHT_CIRCLE_X, 480, COMPONENT_W, COMPONENT_H);
     //velocitySlider->setBounds(RIGHT_CIRCLE_X, 540, COMPONENT_W, COMPONENT_H);
     noteLengthSlider->setBounds(RIGHT_CIRCLE_X, 505, COMPONENT_W, COMPONENT_H);
+    
+    
+    pressureMinRangeSlider->setBounds(LEFT_CIRCLE_X, 440, COMPONENT_W, COMPONENT_H);
+    pressureMaxRangeSlider->setBounds(LEFT_CIRCLE_X, 470, COMPONENT_W, COMPONENT_H);
+    
+    pressureModeMenu->setBounds(LEFT_CIRCLE_X, 500, COMPONENT_W, COMPONENT_H);
+    ccControllerSlider->setBounds(LEFT_CIRCLE_X, 530, COMPONENT_W, COMPONENT_H);
+    pressureStatusButton->setBounds(165, 360, 45, 45);
+    
+    speakerLeft->setBounds(14, 402, 230, 230);
 }
 
 
@@ -178,6 +257,22 @@ void GuiSeqMidiMode::comboBoxChanged (ComboBox* comboBox)
     if (comboBox == scaleMenu)
     {
         setScale();
+    }
+    
+    //==============================================================================
+    //pressure mode combobox
+    else if (comboBox == pressureModeMenu)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerMidiPressureMode(comboBox->getSelectedId());
+        }
+        
+        if (comboBox->getSelectedId() == 2)
+            ccControllerSlider->setVisible(true);
+        else
+            ccControllerSlider->setVisible(false);
     }
     
 }
@@ -195,7 +290,7 @@ void GuiSeqMidiMode::sliderValueChanged (Slider* slider)
     }
     
     
-    if (slider == velocitySlider)
+    else if (slider == velocitySlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
@@ -206,7 +301,7 @@ void GuiSeqMidiMode::sliderValueChanged (Slider* slider)
     }
     
     
-    if (slider == noteLengthSlider)
+    else if (slider == noteLengthSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
@@ -220,11 +315,43 @@ void GuiSeqMidiMode::sliderValueChanged (Slider* slider)
     
     
     
-    if (slider == rootNoteSlider)
+    else if (slider == rootNoteSlider)
     {
         setScale();
     }
     
+    
+    //min pressure range slider
+    else if (slider == pressureMinRangeSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerMidiMinPressureRange(pressureMinRangeSlider->getValue());
+        }
+        
+    }
+    
+    
+    //max pressure range slider
+    else if (slider == pressureMaxRangeSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerMidiMaxPressureRange(pressureMaxRangeSlider->getValue());
+        }
+    }
+    
+    //CC Controller Number
+    else if (slider == ccControllerSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerMidiCcController(ccControllerSlider->getValue());
+        }
+    }
     
     
     
@@ -273,7 +400,20 @@ void GuiSeqMidiMode::setNoteLengthSliderRange (int maxValue)
 
 void GuiSeqMidiMode::buttonClicked (Button* button)
 {
-    
+    if(button == pressureStatusButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerMidiPressureStatus(pressureStatusButton->getToggleState());
+        }
+        
+        //update speaker display
+        if(pressureStatusButton->getToggleStateValue()==true)
+            speakerLeft->setVisible(false);
+        else
+            speakerLeft->setVisible(true);
+    }
 }
 
 

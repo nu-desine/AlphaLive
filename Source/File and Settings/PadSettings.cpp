@@ -185,6 +185,11 @@ PadSettings::PadSettings(int arrayIndex)
     sequencerMidiVelocity = 110;
     sequencerMidiChannel = 1;
     sequencerMidiNoteLength = 4;
+    sequencerMidiMinPressureRange = 0;
+    sequencerMidiMaxPressureRange = 127;
+    sequencerMidiPressureMode = 1;
+    sequencerMidiCcController = Layouts::ccLayout[padNumber];
+    sequencerMidiPressureStatus = true;
     
     for (int i = 0; i <= NO_OF_ROWS-1; i++)
     {
@@ -315,6 +320,7 @@ void PadSettings::resetData (int whatToReset)
         setSequencerLength (32);
         setSequencerQuantizeMode (1);
         setSequencerRelativeTempoMode(3);
+        
         for (int i = 0, num = 60; i <= NO_OF_ROWS-1; i++)
         {
             setSequencerMidiNote (num, i);
@@ -323,6 +329,12 @@ void PadSettings::resetData (int whatToReset)
         setSequencerMidiVelocity (110);
         setSequencerMidiChannel (1);
         setSequencerMidiNoteLength (4);
+        setSequencerMidiMinPressureRange (0);
+        setSequencerMidiMaxPressureRange (127);
+        setSequencerMidiPressureMode (1);
+        setSequencerMidiPressureStatus (true);
+        setSequencerMidiCcController (Layouts::ccLayout[padNumber]);
+        
         for (int i = 0; i <= NO_OF_ROWS-1; i++)
         {
             setSequencerSamplesAudioFilePath (File::nonexistent, i);
@@ -1615,6 +1627,47 @@ void PadSettings::setSequencerMidiNoteLength(int value)
     }
 }
 
+void PadSettings::setSequencerMidiMinPressureRange (int value)
+{
+    sequencerMidiMinPressureRange = value;
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMidiMinRange(value);
+    }
+}
+void PadSettings::setSequencerMidiMaxPressureRange (int value)
+{
+    sequencerMidiMaxPressureRange = value;
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMidiMaxRange(value);
+    }
+}
+void PadSettings::setSequencerMidiPressureMode (int value)
+{
+    sequencerMidiPressureMode = value;
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMidiPressureMode(value);
+    }
+}
+void PadSettings::setSequencerMidiPressureStatus (bool value)
+{
+    sequencerMidiPressureStatus = value;
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMidiPressureStatus(value);
+    }
+}
+void PadSettings::setSequencerMidiCcController (int value)
+{
+    sequencerMidiCcController = value;
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMidiControllerNumber(value);
+    }
+}
+
 
 
 
@@ -1786,6 +1839,26 @@ int PadSettings::getSequencerMidiChannel()
 int PadSettings::getSequencerMidiNoteLength()
 {
     return sequencerMidiNoteLength;
+}
+int PadSettings::getSequencerMidiMinPressureRange()
+{
+    return sequencerMidiMinPressureRange;
+}
+int PadSettings::getSequencerMidiMaxPressureRange()
+{
+    return sequencerMidiMaxPressureRange;
+}
+int PadSettings::getSequencerMidiPressureMode()
+{
+    return sequencerMidiPressureMode;
+}
+bool PadSettings::getSequencerMidiPressureStatus()
+{
+    return sequencerMidiPressureStatus;
+}
+int PadSettings::getSequencerMidiCcController()
+{
+    return sequencerMidiCcController;
 }
 
 

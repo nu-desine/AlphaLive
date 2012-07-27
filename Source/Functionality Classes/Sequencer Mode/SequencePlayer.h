@@ -48,6 +48,7 @@ public:
     //Midi stuff
     void triggerMidiMessage(int rowNumber, int velocity);
     void triggerMidiNoteOffMessage (int rowNumber);
+    void sendMidiPressureData();
     void sendMidiMessage(MidiMessage midiMessage);
     
     
@@ -85,6 +86,11 @@ public:
     void setMidiChannel (int value);
     void setMidiVelocity (int value); //NO LONGER NEED THIS
     void setMidiNoteLength (int value);
+    void setMidiMinRange (int value);
+    void setMidiMaxRange (int value);
+    void setMidiControllerNumber (int value);
+    void setMidiPressureMode (int value);
+    void setMidiPressureStatus (bool value);
     
     void setSamplesAudioFile (int row, File sample);
     void setSamplesGain (float value);
@@ -125,7 +131,6 @@ private:
 	AudioSourcePlayer audioPlayer;
     
     int midiNoteOffTime[NO_OF_SEQS][NO_OF_ROWS][NO_OF_COLUMNS];
-
     int midiNoteOnCounter;
     
     int sequenceNumber; // holds the sequence number determined by the pressure - 0-7
@@ -148,6 +153,11 @@ private:
     int midiChannel;
     int midiVelocity; //NO LONGER NEED THIS
     int midiNoteLength;
+    int midiMinRange;
+    int midiMaxRange;
+    int midiControllerNumber;
+    int midiPressureMode;
+    bool midiPressureStatus;
     
     float gain, gainPrev, panLeft, panLeftPrev, panRight, panRightPrev;
 

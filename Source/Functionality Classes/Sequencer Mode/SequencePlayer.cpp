@@ -69,6 +69,11 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     midiChannel = PAD_SETTINGS->getSequencerMidiChannel();
     midiVelocity = PAD_SETTINGS->getSequencerMidiVelocity();
     midiNoteLength  = PAD_SETTINGS->getSequencerMidiNoteLength();
+    midiMinRange = PAD_SETTINGS->getSequencerMidiMinPressureRange();
+    midiMaxRange = PAD_SETTINGS->getSequencerMidiMaxPressureRange();
+    midiControllerNumber = PAD_SETTINGS->getSequencerMidiCcController();
+    midiPressureMode = PAD_SETTINGS->getSequencerMidiPressureMode();
+    midiPressureStatus = PAD_SETTINGS->getSequencerMidiPressureStatus();
     
     gain = gainPrev = PAD_SETTINGS->getSequencerGain();
     panLeft = panLeftPrev = PanControl::leftChanPan_(PAD_SETTINGS->getSequencerPan());
@@ -303,6 +308,64 @@ void SequencePlayer::processSequence(int padValue)
     //the below algorithms will need to change once the pressure predominantly controls midi
     //continuous data or DSP effects, with the sequence number being a secondary control.
     
+    if (mode == 1) //midi
+    {
+        //scale 0-511 to 0-127
+        //as the value will be scaled down and into an int, padValue could be rounded down to 0 even when it isn't quite 0
+        //therefore we must make sure that it is atleast at the value of 1 untill it is actually set to 0,
+        //so it doesn't mess up how the sticky feature is handled
+        
+        float padValueFloat = padValue * (127.0 / 511.0);
+        
+        if (padValueFloat > 0 && padValueFloat < 1)
+            padValue = 1;
+        else
+            padValue = padValueFloat;
+        
+        std::cout << "padValue: " << padValue << std::endl;
+        
+    }
+    //else if audio mode, no scaling required
+        
+    //sticky stuff
+    if (sticky == 1) //'on'
+    {
+        //modify pressure value
+        if(prevPadValue == 0)
+        {
+            pressureValue = 0;
+            
+        }
+        else
+        {
+            if(padValue > pressureValue)
+            {
+                pressureValue = padValue;
+            }
+            //else if it is smaller, don't change the pressure value
+            std::cout << "Pressure Value: " << pressureValue << std::endl;
+        }
+        
+    }
+    else // 'off'
+    {
+        pressureValue = padValue; 
+        std::cout << "Pressure Value: " << pressureValue << std::endl;
+    }
+      
+    
+    //======create pressure data======
+    if (mode == 1) //midi
+    {
+        //create midi pressure data
+        sendMidiPressureData();
+    }
+    else if (mode == 2)
+    {
+        //control DSP effects
+    }
+    
+    /*
     if (triggerModeData.ignorePressure == false) //ignore for certain triggerModes
     {
         //scale 0-511 to 0-numberOfSequences
@@ -310,13 +373,13 @@ void SequencePlayer::processSequence(int padValue)
         //therefore we must make sure that it is atleast at the value of 1 untill it is actually set to 0,
         //so it doesn't mess up how the sticky feature is handled
     
-        /*
-        float padValueFloat = padValue * (numberOfSequences/511.0);
-        if (padValueFloat > 0 && padValueFloat < 1)
-            padValue = 1;
-        else
-            padValue = padValueFloat;
-         */
+        
+        //float padValueFloat = padValue * (numberOfSequences/511.0);
+        //if (padValueFloat > 0 && padValueFloat < 1)
+        //    padValue = 1;
+        //else
+        //    padValue = padValueFloat;
+        
         //current problem with sequencer mode which will mean sticky mode might not function properly!!! - 
         //a pressure value of 0 is sequence number 1, whereas in other modes a pressure value of 0 is 'off'
         //therefore when using the above scaling algorithm which makes sure 0 isn't set till it is an absolute
@@ -359,7 +422,7 @@ void SequencePlayer::processSequence(int padValue)
             //pressureValue = sequenceNumber; 
         }
     }
-    
+    */
     
     
     //===============update sequencer grid GUI here!====================
@@ -688,6 +751,56 @@ void SequencePlayer::triggerMidiNoteOffMessage (int rowNumber)
     sendMidiMessage(message);
 }
 
+void SequencePlayer::sendMidiPressureData()
+{
+    //scale 0-127 to midiMinPressure-midiMaxPressure
+    //this has to be done here and not above with the 511 to 127 scaling,
+    //as the minRange could be set higher than the maxRange, which would mean
+    //the sticky feature wouldn't work how it's meant to. 
+    //Also we need to use a new variable here to covert the midi data,
+    //so that sticky will still work correctly in all situations
+    int pressureValueScaled = midiMinRange + (pressureValue * ((midiMaxRange - midiMinRange) / 127.0));
+    
+    std::cout << "midiMinRange: " << midiMinRange << std::endl;
+    std::cout << "midiMaxRange: " << midiMaxRange << std::endl;
+    std::cout << "pressureValueScaled: " << pressureValueScaled << std::endl;
+    
+    if (midiPressureStatus == true) //if pad pressure status is 'off'
+    {
+        MidiMessage message;
+        
+        //create 'pressure' data
+        switch (midiPressureMode)
+        {
+            case 1: //channel aftertouch
+                message = MidiMessage::channelPressureChange(midiChannel, pressureValueScaled);
+                break;
+            case 2: //CC messages
+                message = MidiMessage::controllerEvent(midiChannel, midiControllerNumber, pressureValueScaled);
+                break;
+            case 3: // mod wheel
+                message = MidiMessage::controllerEvent(midiChannel, 1, pressureValueScaled);
+                break;
+            case 4: //pitch bend up
+                //convert 0-127 to 8191-16383
+                pressureValueScaled = 8192 + (pressureValueScaled * (8191.0/127.0));
+                message = MidiMessage::pitchWheel(midiChannel, pressureValueScaled);
+                break;
+            case 5: //pitch bend down
+                //convert 0-127 to 8191-0
+                pressureValueScaled = 8192 - (pressureValueScaled * (8191.0/127.0));
+                message = MidiMessage::pitchWheel(midiChannel, pressureValueScaled);
+                break;
+            default: 
+                message = MidiMessage::channelPressureChange(midiChannel, pressureValueScaled);
+                break;
+        }
+        
+        sendMidiMessage(message);
+    }
+    
+}
+
 //Output any MIDI messages
 void SequencePlayer::sendMidiMessage(MidiMessage midiMessage)
 {
@@ -696,6 +809,10 @@ void SequencePlayer::sendMidiMessage(MidiMessage midiMessage)
 	else
 		std::cout << "No MIDI output selected\n";
 }
+
+
+
+
 
 void SequencePlayer::setMidiOutputDevice (MidiOutput &midiOutput)
 {
@@ -982,10 +1099,12 @@ void SequencePlayer::setChannel (int value)
 
 void SequencePlayer::setMidiNote (int row, int value)
 {
+    //should i do a check here like in ModeMidi?
     midiNote[row] = value;
 }
 void SequencePlayer::setMidiChannel (int value)
 {
+    //should i do a check here like in ModeMidi?
     midiChannel = value;
 }
 void SequencePlayer::setMidiVelocity (int value)
@@ -996,6 +1115,56 @@ void SequencePlayer::setMidiNoteLength (int value)
 {
     midiNoteLength = value;
 }
+void SequencePlayer::setMidiMinRange (int value)
+{
+    midiMinRange = value;
+}
+
+void SequencePlayer::setMidiMaxRange (int value)
+{
+    midiMaxRange = value;
+}
+
+void SequencePlayer::setMidiControllerNumber (int value)
+{
+    //is CC number has changed and pressure is currently > 0, reset the value of the current pressure data
+    if (midiControllerNumber != value && pressureValue > 0)
+    {
+        pressureValue = 0; 
+        sendMidiPressureData();
+    }
+    
+    midiControllerNumber = value;
+}
+
+void SequencePlayer::setMidiPressureMode (int value)
+{
+    //if pressure mode has changed and pressure is currently > 0, reset the value of the current pressure data
+    if (midiPressureMode != value && pressureValue > 0)
+    {
+        pressureValue = 0; 
+        sendMidiPressureData();
+    }
+    
+    midiPressureMode = value;
+}
+
+
+void SequencePlayer::setMidiPressureStatus (bool value)
+{
+    //if pressure status has changed and pressure is currently > 0, reset the value of the current pressure data
+    if (midiPressureStatus != value && pressureValue > 0)
+    {
+        pressureValue = 0; 
+        sendMidiPressureData();
+    }
+    
+    midiPressureStatus = value;
+}
+
+
+
+
 
 void SequencePlayer::setSamplesGain (float value)
 {

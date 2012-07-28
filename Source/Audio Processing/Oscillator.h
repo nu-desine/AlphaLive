@@ -23,7 +23,7 @@
 #ifndef H_OSCILLATOR
 #define H_OSCILLATOR
 
-#include <iostream.h>
+//#include <iostream.h>
 #include <math.h>
 
 class Oscillator

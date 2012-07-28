@@ -94,23 +94,18 @@ public:
         //should this be created here? If not, where?
         appDocumentState = new AppDocumentState();
         
+        //set menu bar
+        menuModel = new MainMenuModel(*appDocumentState);
+        
         //pass in a reference to alphaLiveEngine so that the padLayout component object can be set as an observer to alphaLiveEngine
         //this ref will also be used so that the sequencerGrid object can be set as an observer to modeSequencer
         //this ref will also be used so that the presetComponent object can be set as an observer to modeController
         //pass in a ref to appDocumentState so that the Saving & Loading functions can be called by the GUI
         //this ref will also be used so that the mainComponent object can be set as an observer to appDocumentState so that the gui updates when something is loaded
-        mainWindow = new MainAppWindow(*alphaLiveEngine, *appDocumentState);
+        mainWindow = new MainAppWindow(*alphaLiveEngine, *appDocumentState, menuModel);
         
         //is this the best way of passing in this reference? could main be restructured so that mainWindow could be passed in when appDoumentState is initilised as a constructor argument?
         appDocumentState->setMainAppWindowRef (mainWindow);
-        
-        //9999999999999999
-
-        //delete loading window now as everything will be loaded at this point
-        loadingWindow = 0;
-        
-        //set menu bar
-        menuModel = new MainMenuModel(*appDocumentState);
         
         #if JUCE_MAC
         PopupMenu menu;
@@ -121,6 +116,8 @@ public:
         MenuBarModel::setMacMainMenu (menuModel, &menu);
         #endif
         
+        //delete loading window now as everything will be loaded at this point
+        loadingWindow = 0;
         
         if (StoredSettings::getInstance()->launchTask == 2)
         {
@@ -140,6 +137,7 @@ public:
         MenuBarModel::setMacMainMenu (nullptr);
         #endif
         menuModel = nullptr;
+        delete menuModel;
         
         StoredSettings::deleteInstance();
         
@@ -321,8 +319,8 @@ private:
     AppSettings *p;
     AppDocumentState *appDocumentState;
     
-    ScopedPointer<MainMenuModel> menuModel; //this was originally public... why?
-    //something to do with MainAppWindow accessing it to set up the menu bar from its constructor?
+    //ScopedPointer<MainMenuModel> menuModel;
+    MainMenuModel *menuModel;
 };
 
 //==============================================================================

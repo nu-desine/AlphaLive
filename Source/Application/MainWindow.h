@@ -42,7 +42,7 @@ class MainAppWindow   : public DocumentWindow
 {
 public:
     //==============================================================================
-    MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2);
+    MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2, MenuBarModel *menuBar_);
     ~MainAppWindow();
 
     void closeButtonPressed();
@@ -67,6 +67,7 @@ private:
     MainComponent *mainComponent;
     AlphaLiveEngine &alphaLiveEngineRef;
     AppDocumentState &appDocumentStateRef;
+    MenuBarModel *menuBar;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainAppWindow)
 };

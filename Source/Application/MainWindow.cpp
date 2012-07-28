@@ -32,18 +32,38 @@
 ScopedPointer<ApplicationCommandManager> commandManager;
 
 //==============================================================================
-MainAppWindow::MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2)
+MainAppWindow::MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2, MenuBarModel *menuBar_)
     :               DocumentWindow (JUCEApplication::getInstance()->getApplicationName(),
-                      Colours::black,
-                      5),
+                    Colours::black,
+                    5,
+                    false),
                     alphaLiveEngineRef(ref),
-                    appDocumentStateRef(ref2)
+                    appDocumentStateRef(ref2),
+                    menuBar(menuBar_)
 {
+    //create the main component
+    mainComponent = new MainComponent(alphaLiveEngineRef, appDocumentStateRef, this);
+    
+    //see here - http://www.rawmaterialsoftware.com/viewtopic.php?f=3&t=6358&hilit=windows+native+menu+bar
+    
+    #if ! JUCE_MAC
+    setMenuBar (menuBar);
+    #endif
+    
     //use native OS title bar
     setUsingNativeTitleBar(true);
     
+    addToDesktop(getDesktopWindowStyleFlags());
+    
+    //set main component to own the content of the main window
+    setContentOwned(mainComponent, false); 
+    
+    #if JUCE_MAC
+    centreWithSize (1024, 670);
+    #endif
     #if ! JUCE_MAC
-    setMenuBar (JucerApplication::getApp()->menuModel);
+    //add 23 to the height to accomadate the menu bar
+    centreWithSize (1024, 693);
     #endif
     
     // Register all the app commands..
@@ -60,16 +80,6 @@ MainAppWindow::MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2)
     // don't want the window to take focus when the title-bar is clicked..
     setWantsKeyboardFocus (false);
     
-    
-    setTitleBarHeight(20); 
-    centreWithSize (1024, 670);
-    
-    //create the main component
-    mainComponent = new MainComponent(alphaLiveEngineRef, appDocumentStateRef, this);
-    
-    //set main component to own the content of the main window
-    setContentOwned(mainComponent, false); 
-    
     //set visible here once everything else has loaded
     setVisible (true);
     
@@ -80,6 +90,7 @@ MainAppWindow::~MainAppWindow()
     #if ! JUCE_MAC
     setMenuBar (nullptr);
     #endif
+    delete menuBar;
 }
 
 void MainAppWindow::setTitleBarText (String projectName)

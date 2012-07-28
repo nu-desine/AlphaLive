@@ -26,20 +26,20 @@
 LoadingWindow::LoadingWindow()
 :               DocumentWindow (String::empty,
                                 Colours::lightgrey,
-                                0)
+                                0,
+                                false)
 
 {
-    
-    setTitleBarHeight(0); 
-    
-    centreWithSize (500, 200);
-    toFront(true);
-    
-    //MainComponent *mainComponent = new MainComponent();
     loadingComponent = new LoadingComponent();
+    
+    addToDesktop(getDesktopWindowStyleFlags());
+    setTitleBarHeight(0); 
     
     //set loading component to own the content of the loading window
     setContentOwned(loadingComponent, false); 
+    
+    centreWithSize (500, 200);
+    toFront(true);
     
     setVisible (true);
 }

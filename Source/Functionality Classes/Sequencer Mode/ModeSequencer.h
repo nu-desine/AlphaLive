@@ -61,7 +61,7 @@ public:
     
     void updatePadPlayingStatus(int padNumber, int playingStatus);
     
-    void killAll();
+    void killPad (int padNum);
     
     //AudioSource Functions
 	void prepareToPlay (int samplesPerBlockExpected,double sampleRate);

@@ -181,16 +181,16 @@ void ModeSequencer::stopExclusivePadSequencer (int channel, SequencePlayer* item
     //should there be a method here for removing objects from this array when they have finshed playing?
 }
 
-void ModeSequencer::killAll()
+void ModeSequencer::killPad (int padNum)
 {
-    for (int i = 0; i <= 47; i++)
-    {
-        if (padSequencer[i] != NULL) //if it exists..
+    //for (int i = 0; i <= 47; i++)
+    //{
+        if (padSequencer[padNum] != NULL) //if it exists..
         {
-            padSequencer[i]->stopThread(padSequencer[i]->getTimeInterval());
+            padSequencer[padNum]->stopThread(padSequencer[padNum]->getTimeInterval());
             //set playing state to 0?
         }
-    }
+    //}
 }
 
 

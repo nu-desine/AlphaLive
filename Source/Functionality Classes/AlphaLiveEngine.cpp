@@ -36,7 +36,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     
     
     recievedPad = 0;
-    recievedValue = 0;
+    recievedValue = prevPadValue = 0;
     
     pendingUpdatePadValue = 0;
     
@@ -119,6 +119,9 @@ AlphaLiveEngine::AlphaLiveEngine()
     
     //global clock stuff
     globalClock = new GlobalClock(*this);
+    
+    for (int i = 0; i <= 23; i++)
+        currentExclusivePad[i] = 100; //'100' here is used to signify an 'empty/NULL' value
     
 }
 
@@ -207,6 +210,10 @@ void AlphaLiveEngine::playPadFromMouse (int pad, int value)
 
 void AlphaLiveEngine::inputData(int pad, int value)
 {
+    //At the point the 'value' value is expected to be between 0 and 511.
+    //In the older version this was scaled in the serial input class.
+    //This range is also scaled in the Pad.cpp class for emulating pad presses.
+    
     //if the incoming data is too fast for asyncUpdater to handle and has caused a pending update,
     //and the stored pad value of the pending update is 0, force a GUI update.
     //This will occasionally be needed to reset a pad's GUI back to 'off' when mutiple pads
@@ -220,7 +227,6 @@ void AlphaLiveEngine::inputData(int pad, int value)
 
     recievedPad = pad;
     recievedValue = value;
-    
     
     
     //determine pressure mapping/sensitivity
@@ -244,9 +250,7 @@ void AlphaLiveEngine::inputData(int pad, int value)
     }
     
     //else, pressureSensitivityMode == 2 which is a linear mapping of pressure
-    
-    //std::cout << recievedPad << " " << recievedValue << std::endl;
-    
+
     
     //==========================================================================
     //route message to midi mode
@@ -277,6 +281,57 @@ void AlphaLiveEngine::inputData(int pad, int value)
     }
     //==========================================================================
 
+    //exclusive group stuff - where exactly should this stuff go??
+    //i think its here as first the note/loop/seq should be turn on and then the last pad should be turned off here
+    /*
+     if it is a pad press (prevPadValue = 0 and recievedValue > 0)
+     if recievedPad is set to exclusive mode (found in PadSettings)
+     get exclusive group number (from PadSettings)
+     if there is currently a pad stored in the current group number (-1) index of currentSelectedPad array
+     and the pad stored isn't the same as the current pad number
+     get the mode of the pad number (found in PadSettings)
+     Call the correct 'turn off' function based on the mode to stop the pad
+     replace the value at the group number index with the new pad number
+     Could the function to turn off the pad of each mode be morphed into the killAllfunctions below?
+     e.g. kill all calls the turn off function 48 times in a for loop within THIS class.
+     */
+    if (prevPadValue == 0 && recievedValue > 0) //pad press
+    {
+        if (PAD_SETTINGS->getExclusiveMode() == 1) //on
+        {
+            int exclusiveGroup = PAD_SETTINGS->getExclusiveGroup();
+            
+            if (currentExclusivePad[exclusiveGroup] != 100 && currentExclusivePad[exclusiveGroup] != recievedPad) 
+                //if not NULL and not equal to the current pad
+            {
+                int prevPad = currentExclusivePad[exclusiveGroup];
+                int prevPadMode = AppSettings::Instance()->padSettings[prevPad]->getMode();
+                
+                switch (prevPadMode)
+                {
+                    case 1:
+                        modeMidi->killPad(prevPad);
+                        break;
+                    case 2:
+                        modeLooper->killPad(prevPad);
+                        break;
+                    case 3:
+                        modeSequencer->killPad(prevPad);
+                        break;
+                    case 4:
+                        //do nothing
+                        break;
+                    default:
+                        //do nothing
+                        break;
+                }
+                
+            }
+            
+            //add new pad to the exclusive group array, replacing the old one.
+            currentExclusivePad[exclusiveGroup] = recievedPad;
+        }
+    }
     
     //update GUI asyncronously
     guiUpdateFlag = 0;
@@ -298,7 +353,8 @@ void AlphaLiveEngine::inputData(int pad, int value)
         oscOutput.transmitThruMessage(recievedPad+1, recievedValue2, oscIpAddress, oscPortNumber);
     }
     
-        
+       
+    prevPadValue = recievedValue;
 }
 
 void AlphaLiveEngine::updatePadPlayingStatus (int padNumber, int status)
@@ -329,9 +385,12 @@ void AlphaLiveEngine::handleAsyncUpdate()
 
 void AlphaLiveEngine::killAll()
 {
-    modeMidi->killAll();
-    modeLooper->killAll();
-    modeSequencer->killAll();
+    for (int i = 0; i <= 47; i++)
+    {
+        modeMidi->killPad(i);
+        modeLooper->killPad(i);
+        modeSequencer->killPad(i);
+    }
     
     if (globalClock->isThreadRunning() == true)
         globalClock->stopClock(); //currently all mode's are being killed again here

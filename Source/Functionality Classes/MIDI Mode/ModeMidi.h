@@ -46,7 +46,7 @@ public:
     
     void actionListenerCallback (const String& message);
     
-    void killAll();
+    void killPad (int padNum);
     
     void setMidiOutputDevice (MidiOutput &midiOutput);
     void setPadData (int padNumber);

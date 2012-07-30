@@ -285,7 +285,7 @@ void ModeMidi::noteOn (int padNumber)
         //get the previously triggered pad of the same group
         int prevPad = currentExclusivePad[exclusiveGroup[padNumber]];
         
-        if (currentExclusivePad[exclusiveGroup[padNumber]] != 100) //if it exists... (I DON'T UNDERSTAND THIS LINE ANYMORE!)
+        if (currentExclusivePad[exclusiveGroup[padNumber]] != 100) // 100 is used here to represent NULL
         {
             //if it isn't the same as the current pad...
             if (prevPad != padNumber)
@@ -452,17 +452,17 @@ void ModeMidi::triggerQuantizationPoint()
     }
 }
 
-void ModeMidi::killAll()
+void ModeMidi::killPad (int padNum)
 {
-    for (int i = 0; i <= 47; i++)
-    {
-        if (isCurrentlyPlaying[i] == true)
+    //for (int i = 0; i <= 47; i++)
+    //{
+        if (isCurrentlyPlaying[padNum] == true)
         {
-            noteOff(i);
-            triggerModes[i].reset();
+            noteOff(padNum);
+            triggerModes[padNum].reset();
             
         }
-    }
+   // }
     
 }
 

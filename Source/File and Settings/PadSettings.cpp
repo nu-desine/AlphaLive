@@ -44,6 +44,8 @@ PadSettings::PadSettings(int arrayIndex)
     currentState = 0;
     currentPlayingState = 0;
     currentValue = 0;
+    exclusiveMode = 0;
+    exclusiveGroup = 1;
     
     //midi mode
     midiNote = 60;
@@ -260,6 +262,8 @@ void PadSettings::resetData (int whatToReset)
     {
         setMode(0);
         setPressureSensitivityMode(2);
+        setExclusiveMode(0);
+        setExclusiveGroup(1);
     }
     
     if (whatToReset != 1)
@@ -430,6 +434,16 @@ void PadSettings::setPressureSensitivityMode (int value)
     pressureSensitivityMode = value;
 }
 
+void PadSettings::setExclusiveMode (int value)
+{
+    exclusiveMode = value;
+}
+
+void PadSettings::setExclusiveGroup (int value)
+{
+    exclusiveGroup = value;
+}
+
 
 #pragma mark Global accessor functions
 
@@ -455,6 +469,14 @@ int PadSettings::getCurrentPlayingState()
 int PadSettings::getPressureSensitivityMode()
 {
     return pressureSensitivityMode;
+}
+int PadSettings::getExclusiveMode()
+{
+    return exclusiveMode;
+}
+int PadSettings::getExclusiveGroup()
+{
+    return exclusiveGroup;
 }
 
 #pragma mark MIDI mode mutator functions

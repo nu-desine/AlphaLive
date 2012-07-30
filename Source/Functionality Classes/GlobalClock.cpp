@@ -183,9 +183,12 @@ void GlobalClock::stopClock()
 {
     if (StoredSettings::getInstance()->killOnClockStop == true)
     {
-        alphaLiveEngineRef.getModeLooper()->killAll();
-        alphaLiveEngineRef.getModeSequencer()->killAll();
-        alphaLiveEngineRef.getModeMidi()->killAll();
+        for (int i = 0; i <= 47; i++)
+        {
+            alphaLiveEngineRef.getModeLooper()->killPad(i);
+            alphaLiveEngineRef.getModeSequencer()->killPad(i);
+            alphaLiveEngineRef.getModeMidi()->killPad(i);
+        }
     }
     
     stopThread(200);

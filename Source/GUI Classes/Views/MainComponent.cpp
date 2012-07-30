@@ -229,6 +229,20 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     autoShowSettingsSwitch->setClickingTogglesState(true);
     autoShowSettingsSwitch->setToggleState(false, false);
     autoShowSettingsSwitch->addMouseListener(this, true);
+    
+    
+    addAndMakeVisible(exclusiveModeButton = new TextButton("Exc Mode"));
+    exclusiveModeButton->addListener(this);
+    exclusiveModeButton->addMouseListener(this, true);
+    exclusiveModeButton->setClickingTogglesState(true);
+    exclusiveModeButton->setToggleState(0, false);
+    
+    addAndMakeVisible(exclusiveGroupSlider = new AlphaSlider());
+    exclusiveGroupSlider->setRange(1, 24, 1);
+    exclusiveGroupSlider->addListener(this);
+    exclusiveGroupSlider->setValue(1, false);
+    exclusiveGroupSlider->addMouseListener(this, true);
+    exclusiveGroupSlider->setVisible(false);
      
     
     //create pop-up window
@@ -339,6 +353,8 @@ void MainComponent::resized()
     killswitchButton->setBounds(86, 273, 25, 25);
     
     pressureSensitivityMenu->setBounds(800, 130, 100, 20);
+    exclusiveModeButton->setBounds(820, 180, 70, 20);
+    exclusiveGroupSlider->setBounds(820, 210, 70, 20);
     
     
     autoShowSettingsSwitch->setBounds(323+5, 590+5, 35, 35);
@@ -423,7 +439,7 @@ void MainComponent::sliderValueChanged (Slider *slider)
         AppSettings::Instance()->setGlobalGain(gainSlider->sliderComponent()->getValue());
     }
     
-    if (slider == panSlider->sliderComponent())
+    else if (slider == panSlider->sliderComponent())
     {
         AppSettings::Instance()->setGlobalPan(panSlider->sliderComponent()->getValue());
         
@@ -437,12 +453,21 @@ void MainComponent::sliderValueChanged (Slider *slider)
     }
      */
     
-    if (slider == padRotate)
+    else if (slider == padRotate)
 	{
 		guiPadLayout->setVisible(false);
 		rotateFlag = 1;
 		repaint();
 	}
+    
+    else if (slider == exclusiveGroupSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setExclusiveGroup(slider->getValue());
+        }
+    } 
 }
 
 
@@ -558,6 +583,22 @@ void MainComponent::buttonClicked(Button *button)
     
     
     //==============================================================================
+    
+    else if (button == exclusiveModeButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setExclusiveMode(button->getToggleState());
+        }
+        
+        if (button->getToggleState() == true)
+            exclusiveGroupSlider->setVisible(true);
+        else
+           exclusiveGroupSlider->setVisible(false); 
+    }
+    
+    //==============================================================================
     //===PRESETS, LOADING & SAVING - now handled by the command manager below!======
     //==============================================================================
     
@@ -633,6 +674,15 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
         //set other things
         //padNumberDisplayLabel->setText("Pad " + String(currentlySelectedPad+1) + " Selected", false);
         pressureSensitivityMenu->setSelectedId(PAD_SETTINGS->getPressureSensitivityMode(), true);
+        exclusiveModeButton->setToggleState(PAD_SETTINGS->getExclusiveMode(), false);
+        exclusiveGroupSlider->setValue(PAD_SETTINGS->getExclusiveGroup(), false);
+        
+        if (exclusiveModeButton->getToggleState() == true)
+            exclusiveGroupSlider->setVisible(true);
+        else
+            exclusiveGroupSlider->setVisible(false);
+        
+        
     }
     else if (MULTI_PADS)
     {
@@ -643,6 +693,11 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
         //set other things
         //padNumberDisplayLabel->setText("All Pads Selected", false);
         pressureSensitivityMenu->setSelectedId(2, true);
+        
+        exclusiveModeButton->setToggleState(0, false);
+        exclusiveGroupSlider->setValue(1, false);
+        exclusiveGroupSlider->setVisible(false);
+        
     }
     
 

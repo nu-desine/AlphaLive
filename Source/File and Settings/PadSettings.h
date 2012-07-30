@@ -64,12 +64,16 @@ public:
     void setCurrentPlayingState (int value);
     void setCurrentValue (int value); 
     void setPressureSensitivityMode (int value);
+    void setExclusiveMode (int value);
+    void setExclusiveGroup (int value);
 
     int getMode();
     int getCurrentState();
     int getCurrentValue();
     int getCurrentPlayingState();
     int getPressureSensitivityMode();
+    int getExclusiveMode();
+    int getExclusiveGroup();
     
     //==================================================================
     //MIDI mode
@@ -362,6 +366,8 @@ private:
     int currentValue; //Holds the current modified pressire value
     
     int pressureSensitivityMode;
+    int exclusiveMode;
+    int exclusiveGroup;
     
     //==================================================================
     //MIDI mode

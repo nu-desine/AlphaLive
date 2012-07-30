@@ -187,18 +187,18 @@ void ModeLooper::stopExclusivePadLooper (int channel, AudioFilePlayer* item)
     //should there be a method here for removing objects from this array when they have finshed playing? - prefereably yes! See MIDI mode
 }
 
-void ModeLooper::killAll()
+void ModeLooper::killPad (int padNum)
 {
-    for (int i = 0; i <= 47; i++)
-    {
-        if (padLooper[i] != NULL) //if it exists..
+    //for (int i = 0; i <= 47; i++)
+    //{
+        if (padLooper[padNum] != NULL) //if it exists..
         {
-            padLooper[i]->stopAudioFile();
+            padLooper[padNum]->stopAudioFile();
             //set playing state to 0?
             
-            padLooper[i]->killAllAudio(); //to kill things like delay tails
+            padLooper[padNum]->killAllAudio(); //to kill things like delay tails
         }
-    }
+    //}
 }
 
 

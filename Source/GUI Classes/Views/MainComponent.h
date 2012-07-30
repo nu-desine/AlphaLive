@@ -180,6 +180,9 @@ private:
     PreferencesComponent *preferencesComponent;
     ProjectSettingsComponent *projectSettingsComponent;
     
+    TextButton *exclusiveModeButton;
+    AlphaSlider *exclusiveGroupSlider;
+    
     //==============================================================================
 };
 

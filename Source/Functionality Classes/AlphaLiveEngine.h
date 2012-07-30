@@ -145,7 +145,7 @@ private:
     ModeController *modeController;
     
     int recievedPad;
-    float recievedValue;
+    float recievedValue, prevPadValue;
     
     //midi output device
     MidiOutput *midiOutputDevice; //is this actually needed?
@@ -177,6 +177,12 @@ private:
     
     //global clock stuff
     GlobalClock *globalClock;
+    
+    //if a pads exclusive mode is set to 1 (on), its padNumber needs to be added to an array
+    //of an index relevant to the pads exclusive group number (index 0 = group 1, index 1 = group 2, 
+    //index 2 = group 3 etc...). This will allow pads to be easily found and turned off when a new pad
+    //of that group is triggered
+    int currentExclusivePad[23];
     
 };
 

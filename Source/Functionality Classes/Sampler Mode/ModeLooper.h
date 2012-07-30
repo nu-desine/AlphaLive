@@ -55,7 +55,7 @@ public:
     
     void stopExclusivePadLooper (int channel, AudioFilePlayer* item);
     
-    void killAll();
+    void killPad (int padNum);
     
     //quantization stuff
     void triggerQuantizationPoint();

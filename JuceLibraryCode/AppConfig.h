@@ -42,6 +42,8 @@
 
 #ifndef    JUCE_ASIO
  #define JUCE_ASIO 1
+//To allow ASIO on the windows build, put the ASIO SDK into Source/Third Party Libraries, and put
+//#include <../Source/Third Party Libraries/ASIOSDK2/common/iasiodrv.h> in juce_audio_devices.cpp file
 #endif
 
 #ifndef    JUCE_WASAPI

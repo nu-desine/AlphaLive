@@ -73,7 +73,7 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::Preferences);
         menu.addSeparator();
-        menu.addCommandItem (commandManager, StandardApplicationCommandIDs::quit);
+        menu.addCommandItem (commandManager, StandardApplicationCommandIDs::quit); //why isn't this appearing?
         #endif
     }
     else if(topLevelMenuIndex == 1) //Edit

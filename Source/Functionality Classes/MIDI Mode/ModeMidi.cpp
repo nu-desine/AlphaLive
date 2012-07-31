@@ -162,7 +162,41 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
             
                 guiPadWaitingPlayUpdater.add(padNumber);
                 broadcaster.sendActionMessage("WAITING TO PLAY");
+                
+                /*
+                 if the pad being added is set to exclusive mode
+                 check to see if any of the other waiting pads (of all modes) 
+                 are set to exlusive mode with the same exclusive group
+                 if so they should be removed and the pad gui should be updated
+                 how can this be done globally? Will killPad work?
+                 Below is a test local to midi mode
+                 */
+                
+                if (PAD_SETTINGS->getExclusiveMode() == 1)
+                {
+                    int group = PAD_SETTINGS->getExclusiveGroup();
+                    
+                    for (int i = 0; i < waitingPad.size(); i++)
+                    {
+                        if (waitingPad[i] != padNumber)
+                        {
+                            if (AppSettings::Instance()->padSettings[waitingPad[i]]->getExclusiveMode() == 1)
+                            {
+                                
+                                if (AppSettings::Instance()->padSettings[waitingPad[i]]->getExclusiveGroup() == group)
+                                {
+                                    killPad(waitingPad[i]);
+                                    waitingPad.remove(i);
+                                    
+                                }
+                            }
+                        }
+                        
+                    }
+                }
             }
+            
+            
             
             //Create 'note off' message
             else if (triggerModeData[padNumber].playingStatus == 0) //stop
@@ -410,11 +444,25 @@ void ModeMidi::triggerQuantizationPoint()
 
 void ModeMidi::killPad (int padNum)
 {
-    if (isCurrentlyPlaying[padNum] == true)
+    //if playing, send call noteOff() to send note off MIDI message which also will update the GUI
+    if (isCurrentlyPlaying[padNum] == true) //don't use currentPlayStatus like below as that
+                                            //doesn't always define when a file is truely playing
+                                        
     {
         noteOff(padNum);
         triggerModes[padNum].reset();
             
+    }
+    //if currently waiting to play or stop, just update the GUI and the relevent states
+    else if (currentPlayingStatus[padNum] == 2 ||
+             currentPlayingStatus[padNum] == 3)
+    {
+        //update GUI
+        guiPadOffUpdater.add(padNum);
+        broadcaster.sendActionMessage("OFF");
+        //update states within this class
+        currentPlayingStatus[padNum] = 0; //set pad to 'off'
+        triggerModes[padNum].reset();
     }
 }
 

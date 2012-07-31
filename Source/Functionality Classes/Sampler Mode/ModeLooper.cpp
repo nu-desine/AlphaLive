@@ -157,9 +157,8 @@ void ModeLooper::killPad (int padNum)
         //should there be a check here to see if the pad is currently playing?
         
         padLooper[padNum]->stopAudioFile();
-        //set playing state to 0?
-        
         padLooper[padNum]->killAllAudio(); //to kill things like delay tails
+        padLooper[padNum]->resetTriggerMode();
     }
 }
 

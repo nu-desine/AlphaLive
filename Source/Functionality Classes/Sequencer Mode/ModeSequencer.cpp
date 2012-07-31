@@ -146,8 +146,10 @@ void ModeSequencer::killPad (int padNum)
     {
         //should there be a check here to see if the pad is currently playing?
         
-        padSequencer[padNum]->stopThread(padSequencer[padNum]->getTimeInterval());
-            //set playing state to 0?
+        //padSequencer[padNum]->stopThread(padSequencer[padNum]->getTimeInterval());
+        padSequencer[padNum]->stopThreadAndReset();
+        
+        
     }
 }
 

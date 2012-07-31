@@ -124,6 +124,7 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
 SequencePlayer::~SequencePlayer()
 {
     stopThread(timeInterval);
+    //stopThreadAndReset();
     modeSequencerRef.updatePadPlayingStatus(padNumber, 0);
     
     for (int row = 0; row <= NO_OF_ROWS-1; row++)
@@ -141,7 +142,7 @@ SequencePlayer::~SequencePlayer()
 
 void SequencePlayer::processSequence(int padValue)
 {
-    //this is needed incase audio ends on its own or is stopped via the 'exclusive mode' feature , in order to reset everything so it will trigger again properly
+    //this is needed incase audio ends on its own or is stopped via the 'exclusive mode' feature(?) , in order to reset everything so it will trigger again properly
     if (isThreadRunning() == false && currentPlayingState == 1 && prevPadValue == 0)
     {
         std::cout << "stream ended on its own!!";
@@ -249,8 +250,11 @@ void SequencePlayer::processSequence(int padValue)
         if (triggerModeData.playingStatus == 1) //play
         {
             if (isThreadRunning() == true)
-                stopThread(timeInterval); //so that the 'trigger' play states work ()
+            {
+                //stopThread(timeInterval); //so that the 'trigger' play states work ()
                 //should I be stopping the thread or should i just do: columnNumber = 0; ????
+                columnNumber = 0;
+            }
             
             startThread();
             currentPlayingState = 1;
@@ -267,6 +271,7 @@ void SequencePlayer::processSequence(int padValue)
         {
             currentPlayingState = 0;
             stopThread(timeInterval);
+            //stopThreadAndReset();
     
         }
 
@@ -422,9 +427,14 @@ void SequencePlayer::triggerQuantizationPoint()
     if (currentPlayingState == 2) //waiting to play
     {
         if (isThreadRunning() == true)
-            stopThread(timeInterval); //so that the 'trigger' play states work ()
+        {
+            //stopThread(timeInterval); //so that the 'trigger' play states work ()
+            columnNumber = 0;
+            broadcaster.sendActionMessage("PLAYING ON");
+        }
         
         startThread();
+          
         currentPlayingState = 1;
         
         //EXCLUSIVE MODE STUFF 
@@ -679,6 +689,7 @@ void SequencePlayer::run()
         }
     }
     
+    
     playingLastLoop = false;
     shouldLoop = PAD_SETTINGS->getSequencerShouldLoop();
     
@@ -688,16 +699,23 @@ void SequencePlayer::run()
 }
 
 
-//DO I NEED THIS FUNCTION ANYMORE??
 void SequencePlayer::stopThreadAndReset()
 {
     stopThread(timeInterval);
-    
-    //this call can't be made in bottom of run() (when the thread will be finshed)
-    //as it would interupt the trigger play states
-    //triggerModes.reset();
+
+    triggerModes.reset();
     currentPlayingState = 0;
-    std::cout << "stopping sequence!" << std::endl;
+    
+    if (isThreadRunning() == false)
+    {
+        //this stuff as also at the bottom of the run() function, which won't be called
+        //if the thread isn't running
+        playingLastLoop = false;
+        shouldLoop = PAD_SETTINGS->getSequencerShouldLoop();
+        //tell gui pad that the sequence has finished playing
+        broadcaster.sendActionMessage("PLAYING OFF"); 
+    }
+    
 }
 
 
@@ -905,6 +923,7 @@ void SequencePlayer::actionListenerCallback (const String& message)
     {
         stopThread(timeInterval);
         currentPlayingState = 0;
+        //stopThreadAndReset();
     }
         
 

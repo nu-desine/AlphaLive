@@ -431,16 +431,6 @@ void PadSettings::setExclusiveMode (int value)
 void PadSettings::setExclusiveGroup (int value)
 {
     exclusiveGroup = value;
-    
-    /*
-    alphaLiveEngineRef->getModeMidi()->setExclusiveGroup(value, padNumber);
-    
-    if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
-        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setChannel(value);
-    
-    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
-        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setChannel(value);
-     */
 }
 void PadSettings::setQuantizeMode (int value)
 {

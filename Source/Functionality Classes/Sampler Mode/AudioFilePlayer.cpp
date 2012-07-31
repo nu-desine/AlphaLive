@@ -197,7 +197,7 @@ void AudioFilePlayer::processAudioFile(int padValue)
             else if (triggerModeData.playingStatus == 0) //stop
             {
                 stopAudioFile();
-                currentPlayingState = 0;
+                //currentPlayingState = 0; //now done within stopAudioFile()
             }
         }
         //==========================================================================================
@@ -356,7 +356,7 @@ void AudioFilePlayer::triggerQuantizationPoint()
     else if (currentPlayingState == 3) //waiting to stop
     {
         stopAudioFile();
-        currentPlayingState = 0;
+        //currentPlayingState = 0; //now done within stopAudioFile()
     }
 }
 
@@ -418,12 +418,13 @@ void AudioFilePlayer::stopAudioFile()
 {
     
     fileSource.stop();
-    //don't need to setPosition to 0 after stopping AND before playing. Where's best to do it though?
-    //fileSource.setPosition (0.0);
     
     playingLastLoop = false;
-    
     broadcaster.sendActionMessage("OFF");
+    
+    currentPlayingState = 0;
+    //triggerModes.reset(); //can't do this hear as this will cause instant retriggering
+                            //of files if stopAudioFile() is called from a pad press.
     
 }
 
@@ -578,6 +579,13 @@ void AudioFilePlayer::killAllAudio()
     else if (effect == 9) //tremolo
         flanger->resetBuffers();
     
+}
+
+void AudioFilePlayer::resetTriggerMode()
+{
+    //called from killPad(). Can't be called within stopAudioFile as this will cause instant retriggering
+    //of files if stopAudioFile() is called from a pad press.
+    triggerModes.reset();
 }
 
 //=========================================================================================

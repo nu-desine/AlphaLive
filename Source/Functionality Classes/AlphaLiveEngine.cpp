@@ -311,7 +311,7 @@ void AlphaLiveEngine::handleExclusiveMode (int padNum)
     //get exclusive group number
     int exclusiveGroup = AppSettings::Instance()->padSettings[padNum]->getExclusiveGroup();
     //get currently stored pad from the exclusive mode array
-    int prevPad = currentExclusivePad[exclusiveGroup];
+    int prevPad = currentExclusivePad[exclusiveGroup-1];
     
     //if a pad exists (not NULL) and not equal to the current pad
     if (prevPad != 100 && prevPad != padNum) 
@@ -342,7 +342,7 @@ void AlphaLiveEngine::handleExclusiveMode (int padNum)
     }
     
     //add new pad to the exclusive group array, replacing the old one.
-    currentExclusivePad[exclusiveGroup] = padNum;
+    currentExclusivePad[exclusiveGroup-1] = padNum;
         
 }
 

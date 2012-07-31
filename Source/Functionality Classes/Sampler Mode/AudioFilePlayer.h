@@ -87,6 +87,7 @@ public:
     void triggerQuantizationPoint();
     
     void killAllAudio(); //kills things like delay effect tails
+    void resetTriggerMode();
 
     
 private:

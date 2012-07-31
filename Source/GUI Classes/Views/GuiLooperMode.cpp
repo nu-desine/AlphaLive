@@ -105,16 +105,6 @@ GuiLooperMode::GuiLooperMode(MainComponent &ref)
     stickyButton->setClickingTogglesState(true);
     stickyButton->setToggleState(0, false);
     
-    
-    //channel slider - this feature is now referenced to 'groups' not channels
-    Image *dialImage = new Image(ImageFileFormat::loadFrom(ImageSliderBinaryData::channeldial_png, ImageSliderBinaryData::channeldial_pngSize));
-    addAndMakeVisible(channelSlider = new ImageSlider(dialImage, 16, true));
-    channelSlider->setSliderStyle(Slider::Rotary);
-    channelSlider->setRotaryParameters(0, M_PI*2, false);
-    channelSlider->setRange(1, 16, 1);
-    channelSlider->addListener(this);
-    channelSlider->addMouseListener(this, true);
-
     addAndMakeVisible(fxDial = new GuiFxDial(mainComponentRef));
 	fxDial->setInterceptsMouseClicks(false, true);
     fxDial->addMouseListener(this, false);
@@ -166,12 +156,9 @@ void GuiLooperMode::resized()
     finishLoopButton->setBounds(RIGHT_CIRCLE_X, 573, 50, 15);
     stickyButton->setBounds(RIGHT_CIRCLE_X+50, 573, 50, 15);
     
-    
-    channelSlider->setBounds(850, 251, 142, 142);
-    
     fxDial->setBounds(14, 402, 230, 230);
 	
-	quantizeModeMenu->setBounds(800, 155, 100, 20);
+	//quantizeModeMenu->setBounds(800, 155, 100, 20);
     
 	//gainSlider->setBounds(965, 150, 45, 45);
 	//panSlider->setBounds(965, 200, 45, 45);
@@ -287,16 +274,6 @@ void GuiLooperMode::sliderValueChanged (Slider* slider)
         
     }
         //==============================================================================
-        //channel slider
-        if (slider == channelSlider)
-        {
-            for (int i = 0; i < selectedPads.size(); i++)
-            {
-                int padNum = selectedPads[i];
-                PAD_SETTINGS->setLooperChannel(channelSlider->getValue());
-            }
-            
-        }
 
 }
 
@@ -401,7 +378,6 @@ void GuiLooperMode::updateDisplay()
         indestructibleButton->setToggleState(PAD_SETTINGS->getLooperIndestructible(), false);
         finishLoopButton->setToggleState(PAD_SETTINGS->getLooperShouldFinishLoop(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getLooperSticky(), false);
-        channelSlider->setValue(PAD_SETTINGS->getLooperChannel(), false);
         quantizeModeMenu->setSelectedId(PAD_SETTINGS->getLooperQuantizeMode(), true);
         
         
@@ -421,7 +397,6 @@ void GuiLooperMode::updateDisplay()
         indestructibleButton->setToggleState(0, false);
         finishLoopButton->setToggleState(0, false);
         stickyButton->setToggleState(0, false);
-        channelSlider->setValue(1, false);
         quantizeModeMenu->setSelectedId(1, true);
         
 
@@ -435,11 +410,8 @@ void GuiLooperMode::updateDisplay()
 
 void GuiLooperMode::mouseEnter (const MouseEvent &e)
 {
-    if (channelSlider->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Looper Group. Sets and displays the looper group for the selected pad/pads. If the pad is set to a group other than group 1 the loop will be in 'Exclusive Mode' - playing this loop will turn off the previously playing loop of the same group. The default group 1 allows does not enable this exclusive mode.");
-    }
-    else if (fileChooser->isMouseOver(true))
+    
+    if (fileChooser->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText("Audio File Selector. Sets and displays the filepath name of the audio file for the selected pad/pads. Use the '+' button to open a File Browser Window, or use the drop-down menu to select from recently selected files, as well as view the currently selected file.");
     }

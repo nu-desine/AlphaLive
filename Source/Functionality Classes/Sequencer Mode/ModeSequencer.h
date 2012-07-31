@@ -76,6 +76,8 @@ public:
     
     void setMidiOutputDevice (MidiOutput &midiOutput);
     
+    AlphaLiveEngine& getAlphaLiveEngineRef();
+    
 private:
     
     OwnedArray<SequencePlayer> padSequencer;

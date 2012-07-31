@@ -96,7 +96,6 @@ private:
     AppDocumentState &appDocumentStateRef;
     
     //New GUI stuff!
-    ImageSlider *channelSlider;
     GuiCircleBackground *circleBackgroundLeft, *circleBackgroundRight;
     ModeButton *modeMidiButton, *modeSamplesButton;
     ModeButton *sequencerGridToggleButton;

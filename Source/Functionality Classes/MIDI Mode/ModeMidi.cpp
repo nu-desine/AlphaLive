@@ -25,6 +25,7 @@
 #include "../Other/LayoutsAndScales.cpp"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
+#define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
 
 ModeMidi::ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref)
                 :   midiOutputDevice(&midiOutput),
@@ -32,6 +33,24 @@ ModeMidi::ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref)
 {
     for (int i = 0; i<= 47; i++)
     {
+        
+        channel[i] = PAD_SETTINGS_i->getMidiChannel();
+        note[i] = PAD_SETTINGS_i->getMidiNote();
+        velocity[i] = PAD_SETTINGS_i->getMidiVelocity();
+        minRange[i] = PAD_SETTINGS_i->getMidiMinPressureRange();
+        maxRange[i] = PAD_SETTINGS_i->getMidiMaxPressureRange();
+        controllerNumber[i] = PAD_SETTINGS_i->getMidiCcController();
+        pressureMode[i] = PAD_SETTINGS_i->getMidiPressureMode();
+        triggerModeValue[i] = PAD_SETTINGS_i->getMidiTriggerMode();
+        indestructible[i] = PAD_SETTINGS_i->getMidiIndestructible();
+        sticky[i] = PAD_SETTINGS_i->getMidiSticky();
+        pressureStatus[i] = PAD_SETTINGS_i->getMidiPressureStatus();
+        noteStatus[i] = PAD_SETTINGS_i->getMidiNoteStatus();
+        exclusiveGroup[i] = 0;
+        quantizeMode[i] = PAD_SETTINGS_i->getQuantizeMode();
+        
+        
+        /*
         channel[i] = 1;
         note[i] = 60;
         velocity[i] = 110;
@@ -46,6 +65,7 @@ ModeMidi::ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref)
         noteStatus[i] = true;
         exclusiveGroup[i] = 0;
         quantizeMode[i] = 1;
+         */
         
         //not all members of the TriggerModeData struct are needed for MIDI mode
         triggerModeData[i].playingStatus = 0;
@@ -138,7 +158,7 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
     if (noteStatus[padNumber] == true) //if pad note status is 'on'
     {
         //==========================================================================================
-        if (quantizeMode[padNumber] == 1) //free
+        if (quantizeMode[padNumber] == 0) //free
         {
             //Create 'note on' message
             if (triggerModeData[padNumber].playingStatus == 1) //play
@@ -154,7 +174,7 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
         }
         
         //==========================================================================================
-        else if (quantizeMode[padNumber] == 2) // quantized
+        else if (quantizeMode[padNumber] == 1) // quantized
         {
             //Create 'note on' message
             if (triggerModeData[padNumber].playingStatus == 1) //play
@@ -280,6 +300,13 @@ void ModeMidi::noteOn (int padNumber)
     
     
     //Exclusive mode stuff
+    if (PAD_SETTINGS->getExclusiveMode() == 1)
+    {
+        alphaLiveEngineRef.handleExclusiveMode(padNumber);
+    }
+    
+    
+    
     if (exclusiveGroup[padNumber] != 0) //if exclusive group equals something above 1, it is in 'exclusive' mode
     {
         //get the previously triggered pad of the same group
@@ -460,7 +487,6 @@ void ModeMidi::killPad (int padNum)
         triggerModes[padNum].reset();
             
     }
-
 }
 
 
@@ -506,8 +532,8 @@ void ModeMidi::setPadData (int padNumber)
     setSticky (PAD_SETTINGS->getMidiSticky(), padNumber);
     setPressureStatus (PAD_SETTINGS->getMidiPressureStatus(), padNumber);
     setNoteStatus (PAD_SETTINGS->getMidiNoteStatus(), padNumber);
-    setExclusiveGroup (PAD_SETTINGS->getMidiExclusiveGroup(), padNumber);
-    setQuantizeMode (PAD_SETTINGS->getMidiQuantizeMode(), padNumber);
+    //setExclusiveGroup (PAD_SETTINGS->getMidiExclusiveGroup(), padNumber);
+    setQuantizeMode (PAD_SETTINGS->getQuantizeMode(), padNumber);
     
 }
 

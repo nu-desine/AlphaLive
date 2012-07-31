@@ -256,6 +256,11 @@ void ModeSequencer::setMidiOutputDevice (MidiOutput &midiOutput)
     }
 }
 
+AlphaLiveEngine& ModeSequencer::getAlphaLiveEngineRef()
+{
+    return alphaLiveEngineRef;
+}
+
 void ModeSequencer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
     audioMixer.getNextAudioBlock(bufferToFill);

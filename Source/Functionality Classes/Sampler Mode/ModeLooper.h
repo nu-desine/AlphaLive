@@ -60,6 +60,8 @@ public:
     //quantization stuff
     void triggerQuantizationPoint();
     void addItemToWaitingPadLooper (AudioFilePlayer* item);
+    
+    AlphaLiveEngine& getAlphaLiveEngineRef();
 
 private:
     

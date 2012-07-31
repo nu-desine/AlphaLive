@@ -928,6 +928,9 @@ void AppDocumentState::saveToPreset (int presetNumber)
         //put data into this the temp XmlElement
         padData->setAttribute("mode", PAD_SETTINGS->getMode());
         padData->setAttribute("pressureSensitivityMode", PAD_SETTINGS->getPressureSensitivityMode());
+        padData->setAttribute("exclusiveMode", PAD_SETTINGS->getExclusiveMode());
+        padData->setAttribute("exclusiveGroup", PAD_SETTINGS->getExclusiveGroup());
+        padData->setAttribute("quantizeMode", PAD_SETTINGS->getQuantizeMode());
         
         //only save whats necessary
         if (PAD_SETTINGS->getMode() == 1) //midi mode
@@ -1181,6 +1184,10 @@ void AppDocumentState::loadFromPreset (int presetNumber)
             
             if (padData->hasAttribute("pressureSensitivityMode") == true) //if it exists (might not in older files)
                 PAD_SETTINGS->setPressureSensitivityMode(padData->getIntAttribute("pressureSensitivityMode"));
+            
+            PAD_SETTINGS->setExclusiveMode(padData->getIntAttribute("exclusiveMode"));
+            PAD_SETTINGS->setExclusiveGroup(padData->getIntAttribute("exclusiveGroup"));
+            PAD_SETTINGS->setQuantizeMode(padData->getIntAttribute("quantizeMode"));
             
             //only load needed data to reduce loading times and CPU usage, plus
             //can not load settings into seq and looper modes where the pads player objects don't exist (yet)

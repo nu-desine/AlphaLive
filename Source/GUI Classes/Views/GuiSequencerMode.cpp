@@ -95,15 +95,6 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     
     //other components
     
-    //channel/group slider
-    Image *dialImage = new Image(ImageFileFormat::loadFrom(ImageSliderBinaryData::channeldial_png, ImageSliderBinaryData::channeldial_pngSize));
-    addAndMakeVisible(channelSlider = new ImageSlider(dialImage, 16, true));
-    channelSlider->setSliderStyle(Slider::Rotary);
-    channelSlider->setRotaryParameters(0, M_PI*2, false);
-    channelSlider->setRange(1, 16, 1);
-    channelSlider->addListener(this);
-    channelSlider->addMouseListener(this, true);
-    
     addAndMakeVisible(clearButton = new TextButton("Clear"));
     clearButton->addListener(this);
     clearButton->addMouseListener(this, true);
@@ -272,8 +263,6 @@ void GuiSequencerMode::resized()
     sequencerGridToggleButton->setBounds(720, 568, 60, 60);
     sequencerGrid->setBounds(275, 410, 400, 160);
     
-    channelSlider->setBounds(850, 251, 142, 142);
-    
     clearButton->setBounds(285, 385, 50, 20);
     clearAllButton->setBounds(335, 385, 50, 20);
     currentSequenceNumberSlider->setBounds(645, 390, COMPONENT_W, 15);
@@ -293,7 +282,7 @@ void GuiSequencerMode::resized()
     finishLoopButton->setBounds(RIGHT_CIRCLE_X, 608, 50, 15);
     stickyButton->setBounds(RIGHT_CIRCLE_X+50, 608, 50, 15);
     
-    quantizeModeMenu->setBounds(800, 155, 100, 20);
+    //quantizeModeMenu->setBounds(800, 155, 100, 20);
     
     linkButton->setBounds(10, getHeight()-60, 50, 15);
     
@@ -367,16 +356,7 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
         }
         
     }
-    
-    if (slider == channelSlider)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setSequencerChannel(channelSlider->getValue());
-        }
-        
-    }
+
     
     if (slider == sequenceLengthSlider)
     {
@@ -624,8 +604,6 @@ void GuiSequencerMode::updateDisplay()
         int i;
         i = PAD_SETTINGS->getSequencerNumberOfSequences();
         numberOfSequencesSlider->setValue(i, false); 
-        i = PAD_SETTINGS->getSequencerChannel();
-        channelSlider->setValue(i, false);
         i = PAD_SETTINGS->getSequencerLength();
         sequenceLengthSlider->setValue(i, false);
         i = PAD_SETTINGS->getSequencerTriggerMode();
@@ -663,7 +641,6 @@ void GuiSequencerMode::updateDisplay()
         
         //set default values
         numberOfSequencesSlider->setValue(8, false); 
-        channelSlider->setValue(1, false);
         sequenceLengthSlider->setValue(250, false);
         triggerModeMenu->setSelectedId(2, true);
         loopButton->setToggleState(1, false);
@@ -729,11 +706,7 @@ void GuiSequencerMode::setVelocityLabelText (String velocity)
 
 void GuiSequencerMode::mouseEnter (const MouseEvent &e)
 {
-    if (channelSlider->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Sequencer Group. Sets and displays the sequencer group for the selected pad/pads. If the pad is set to a group other than group 1 the sequence will be in 'Exclusive Mode' - playing this sequence will turn off the previously playing sequence of the same group. The default group 1 allows does not enable this exclusive mode.");
-    }
-    else if (modeMidiButton->isMouseOver(true))
+    if (modeMidiButton->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText("Sequencer MIDI-Mode Button. Click this button to set the selected pad/pads to the MIDI-sequencer mode.\nThis mode allows dynamic sequences of MIDI note-on and note-off messages to be sent out of the application.");
     }

@@ -386,8 +386,8 @@ private:
     bool midiPressureStatus;
     bool midiNoteStatus;
     int midiCcController;
-    int midiExclusiveGroup;
-    int midiQuantizeMode;
+    //int midiExclusiveGroup;
+    //int midiQuantizeMode;
     
     //==================================================================
     //Looper mode
@@ -400,8 +400,8 @@ private:
     int looperEffect;
     float looperPan;
     float looperGain;
-    int looperChannel; //now called 'group' not 'channel' to the user
-    int looperQuantizeMode;
+    //int looperChannel; //now called 'group' not 'channel' to the user
+    //int looperQuantizeMode;
     
     //----fx variables------
     //Gain&Pan
@@ -487,9 +487,9 @@ private:
     int sequencerIndestructible;
     int sequencerShouldFinishLoop;
     int sequencerSticky;
-    int sequencerChannel; //now called 'group' not 'channel' to the user
+    //int sequencerChannel; //now called 'group' not 'channel' to the user
     int sequencerLength;
-    int sequencerQuantizeMode;
+    //int sequencerQuantizeMode;
     int sequencerRelativeTempoMode;
     int sequencerDynamicMode;
     

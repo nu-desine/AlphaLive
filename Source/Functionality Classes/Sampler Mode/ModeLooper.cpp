@@ -200,6 +200,10 @@ void ModeLooper::killPad (int padNum)
     }
 }
 
+AlphaLiveEngine& ModeLooper::getAlphaLiveEngineRef()
+{
+    return alphaLiveEngineRef;
+}
 
 void ModeLooper::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {

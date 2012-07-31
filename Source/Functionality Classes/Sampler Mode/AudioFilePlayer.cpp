@@ -60,7 +60,7 @@ AudioFilePlayer::AudioFilePlayer(int looperPadNumber, ModeLooper &ref, TimeSlice
     sticky = PAD_SETTINGS->getLooperSticky();
     currentPlayingState = currentPressureValue = 0;
     effect = PAD_SETTINGS->getLooperEffect();
-    quantizeMode = PAD_SETTINGS->getLooperQuantizeMode();
+    quantizeMode = PAD_SETTINGS->getQuantizeMode();
     channel = PAD_SETTINGS->getLooperChannel();
     
     triggerModeData.playingStatus = 0;
@@ -188,7 +188,7 @@ void AudioFilePlayer::processAudioFile(int padValue)
         //==========================================================================================
         // Start/Stop stuff
         //==========================================================================================
-        if (quantizeMode == 1) //free
+        if (quantizeMode == 0) //free
         {
             if (triggerModeData.playingStatus == 1) //play
             {
@@ -202,7 +202,7 @@ void AudioFilePlayer::processAudioFile(int padValue)
             }
         }
         //==========================================================================================
-        else if (quantizeMode == 2) //quantized
+        else if (quantizeMode == 1) //quantized
         {
             if (triggerModeData.playingStatus == 1) //play
             {
@@ -364,7 +364,7 @@ void AudioFilePlayer::triggerQuantizationPoint()
 
 void AudioFilePlayer::playAudioFile()
 {
-    //set to whether the audio should loop. CAN WE PUT THIS IN processAudioFile without too much CPU usage?
+    //This is now in processAudioFile() - too much too much CPU usage?
     //if (currentFile != File::nonexistent && currentAudioFileSource != NULL)
         //currentAudioFileSource->setLooping(shouldLoop);
     
@@ -398,12 +398,20 @@ void AudioFilePlayer::playAudioFile()
      */
      
     
+    /*
     if (channel != 1) //if channel equals something above 1, it is in 'exclusive' mode
     {
         //stop currently playing loop of this channel and add this instance of AudioFilePlayer 
         //to the correct index (channel number-1) of currentExclusivePadLooper array within ModeLooper
         modeLooperRef.stopExclusivePadLooper(channel, this);
     }
+     */
+    
+    if (PAD_SETTINGS->getExclusiveMode() == 1)
+    {
+        modeLooperRef.getAlphaLiveEngineRef().handleExclusiveMode(padNumber);
+    }
+    
     
     //update pad layout gui
     if (currentPlayingState != 1) //if currentlyPlayingStatus doesn't already equal 1

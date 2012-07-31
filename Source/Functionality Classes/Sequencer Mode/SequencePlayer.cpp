@@ -63,7 +63,7 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     sequenceLength = PAD_SETTINGS->getSequencerLength();
     for (int row = 0; row <=NO_OF_ROWS-1; row++)
        midiNote[row] = PAD_SETTINGS->getSequencerMidiNote(row); 
-    quantizeMode = PAD_SETTINGS->getSequencerQuantizeMode();
+    quantizeMode = PAD_SETTINGS->getQuantizeMode();
     channel = PAD_SETTINGS->getSequencerChannel();
     dynamicMode = PAD_SETTINGS->getSequencerDynamicMode();
     
@@ -245,7 +245,7 @@ void SequencePlayer::processSequence(int padValue)
     
     //if triggerModeData.playingStatus = 2, do nothing
     
-    if (quantizeMode == 1) //free
+    if (quantizeMode == 0) //free
     {
         if (triggerModeData.playingStatus == 1) //play
         {
@@ -257,6 +257,10 @@ void SequencePlayer::processSequence(int padValue)
             currentPlayingState = 1;
             
             //EXCLUSIVE MODE STUFF 
+            if (PAD_SETTINGS->getExclusiveMode() == 1)
+            {
+                broadcaster.sendActionMessage("EXCLUSIVE STOP");
+            }
             if (channel != 1) //if channel/group is 2 or above
             {
                 broadcaster.sendActionMessage("EXCLUSIVE STOP");
@@ -274,7 +278,7 @@ void SequencePlayer::processSequence(int padValue)
     }
     
     //==========================================================================================
-    else if (quantizeMode == 2) //quantized
+    else if (quantizeMode == 1) //quantized
     {
         if (triggerModeData.playingStatus == 1) //play
         {
@@ -430,6 +434,10 @@ void SequencePlayer::triggerQuantizationPoint()
         
         //EXCLUSIVE MODE STUFF 
         if (channel != 1) //if channel is 2 or above
+        {
+            broadcaster.sendActionMessage("EXCLUSIVE STOP");
+        }
+        if (PAD_SETTINGS->getExclusiveMode() == 1)
         {
             broadcaster.sendActionMessage("EXCLUSIVE STOP");
         }
@@ -895,14 +903,13 @@ void SequencePlayer::actionListenerCallback (const String& message)
     
     else if (message == "EXCLUSIVE STOP")
     {
-        //stop currently playing sequence of this channel,
-        //and add this instance of SequencePlayer to the correct index (channel number-1) 
-        //of currentExclusivePadSequencer array within ModeSequencer
-        //so that this sequence can be stopped via exclusive mode next time
+        
         
         //this is called async so that there is no noticable time delay caused when
         //doing this via quantization mode (which is caused by the time value
         //paramater within the stopThread() function.
+        
+        modeSequencerRef.getAlphaLiveEngineRef().handleExclusiveMode(padNumber);
         modeSequencerRef.stopExclusivePadSequencer(channel, this);
     }
     
@@ -1161,3 +1168,4 @@ double SequencePlayer::getTimeInterval()
 {
     return timeInterval;
 }
+

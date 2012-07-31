@@ -136,6 +136,8 @@ public:
     void triggerQuantizationPoint(); 
     
     void killAll();
+    
+    void handleExclusiveMode (int padNum);
         
 private:
     

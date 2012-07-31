@@ -72,7 +72,6 @@ private:
     
     //New GUI stuff!
     GuiFxDial *fxDial;
-    ImageSlider *channelSlider;
     AlphaImageKnob *gainSlider;
 	AlphaImageKnob *panSlider;
     GuiCircleBackground *circleBackgroundRight;

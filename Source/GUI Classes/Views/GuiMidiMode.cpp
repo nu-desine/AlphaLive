@@ -168,12 +168,6 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     
     ccControllerSlider->setVisible(false);
     
-    //---------------exclusive group Slider-----------------------------------
-    addAndMakeVisible(exclusiveGroupSlider = new AlphaSlider());
-    exclusiveGroupSlider->setRange(1, 16, 1);
-    exclusiveGroupSlider->setValue(1, false);
-    exclusiveGroupSlider->addListener(this);
-    
     //---------------trigger mode menu---------------------
     addAndMakeVisible(quantizeModeMenu = new ComboBox());
     quantizeModeMenu->addItem("Free", 1);
@@ -223,9 +217,7 @@ void GuiMidiMode::resized()
     pressureStatusButton->setBounds(165, 360, 45, 45);
     noteStatusButton->setBounds(810, 360, 45, 45);
     
-    exclusiveGroupSlider->setBounds(871, 210, COMPONENT_W, COMPONENT_H);
-    
-    quantizeModeMenu->setBounds(800, 155, 100, 20);
+    //quantizeModeMenu->setBounds(800, 155, 100, 20);
     
     
 }
@@ -346,17 +338,6 @@ void GuiMidiMode::sliderValueChanged (Slider* slider)
             PAD_SETTINGS->setMidiCcController(ccControllerSlider->getValue());
         }
     }
-    
-    
-    //Exclusive group
-    if (slider == exclusiveGroupSlider)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setMidiExclusiveGroup(exclusiveGroupSlider->getValue());
-        }
-    }
 
 }
 
@@ -452,7 +433,6 @@ void GuiMidiMode::updateDisplay()
         i = PAD_SETTINGS->getMidiCcController();
         ccControllerSlider->setValue(i, false);
         i = PAD_SETTINGS->getMidiExclusiveGroup();
-        exclusiveGroupSlider->setValue(i, false);
         quantizeModeMenu->setSelectedId(PAD_SETTINGS->getMidiQuantizeMode(), true);
         indestructibleButton->setToggleState(PAD_SETTINGS->getMidiIndestructible(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getMidiSticky(), false);
@@ -496,7 +476,6 @@ void GuiMidiMode::updateDisplay()
         noteStatusButton->setToggleState(true, false);
         noteStatusButton->setButtonText("Note Data On");
         ccControllerSlider->setValue(12, false);
-        exclusiveGroupSlider->setValue(1, false);
         quantizeModeMenu->setSelectedId(1, true);
         
         //circlePianoForScales->setVisible(false);
@@ -569,10 +548,6 @@ void GuiMidiMode::mouseEnter (const MouseEvent &e)
     else if (ccControllerSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText("MIDI CC Controller Selector. Sets and displays the MIDI CC controller number for the selected pad/pads.");
-    }
-    else if (exclusiveGroupSlider->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Exclusive Group. If the pad is set to a group other than group 1 the MIDI pad will be in 'Exclusive Mode' - playing this MIDI note will turn off the previously playing MIDI note of the same group. The default group 1 allows does not enable this exclusive mode.");
     }
     else if (quantizeModeMenu->isMouseOver(true))
     {

@@ -189,16 +189,15 @@ void ModeLooper::stopExclusivePadLooper (int channel, AudioFilePlayer* item)
 
 void ModeLooper::killPad (int padNum)
 {
-    //for (int i = 0; i <= 47; i++)
-    //{
-        if (padLooper[padNum] != NULL) //if it exists..
-        {
-            padLooper[padNum]->stopAudioFile();
-            //set playing state to 0?
-            
-            padLooper[padNum]->killAllAudio(); //to kill things like delay tails
-        }
-    //}
+    if (padLooper[padNum] != NULL) //if it exists..
+    {
+        //should there be a check here to see if the pad is currently playing?
+        
+        padLooper[padNum]->stopAudioFile();
+        //set playing state to 0?
+        
+        padLooper[padNum]->killAllAudio(); //to kill things like delay tails
+    }
 }
 
 

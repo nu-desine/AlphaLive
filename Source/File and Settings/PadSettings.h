@@ -66,6 +66,7 @@ public:
     void setPressureSensitivityMode (int value);
     void setExclusiveMode (int value);
     void setExclusiveGroup (int value);
+    void setQuantizeMode (int value);
 
     int getMode();
     int getCurrentState();
@@ -74,6 +75,7 @@ public:
     int getPressureSensitivityMode();
     int getExclusiveMode();
     int getExclusiveGroup();
+    int getQuantizeMode();
     
     //==================================================================
     //MIDI mode
@@ -368,6 +370,7 @@ private:
     int pressureSensitivityMode;
     int exclusiveMode;
     int exclusiveGroup;
+    int quantizeMode;
     
     //==================================================================
     //MIDI mode

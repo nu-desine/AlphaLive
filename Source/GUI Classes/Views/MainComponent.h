@@ -183,6 +183,8 @@ private:
     TextButton *exclusiveModeButton;
     AlphaSlider *exclusiveGroupSlider;
     
+    TextButton *quantizeModeButton;
+    
     //==============================================================================
 };
 

@@ -46,6 +46,7 @@ PadSettings::PadSettings(int arrayIndex)
     currentValue = 0;
     exclusiveMode = 0;
     exclusiveGroup = 1;
+    quantizeMode = 0; //unquantized
     
     //midi mode
     midiNote = 60;
@@ -264,6 +265,7 @@ void PadSettings::resetData (int whatToReset)
         setPressureSensitivityMode(2);
         setExclusiveMode(0);
         setExclusiveGroup(1);
+        setQuantizeMode(0);
     }
     
     if (whatToReset != 1)
@@ -443,6 +445,10 @@ void PadSettings::setExclusiveGroup (int value)
 {
     exclusiveGroup = value;
 }
+void PadSettings::setQuantizeMode (int value)
+{
+    quantizeMode = value;
+}
 
 
 #pragma mark Global accessor functions
@@ -477,6 +483,10 @@ int PadSettings::getExclusiveMode()
 int PadSettings::getExclusiveGroup()
 {
     return exclusiveGroup;
+}
+int PadSettings::getQuantizeMode()
+{
+    return quantizeMode;
 }
 
 #pragma mark MIDI mode mutator functions

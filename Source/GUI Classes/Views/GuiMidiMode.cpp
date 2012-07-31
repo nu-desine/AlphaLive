@@ -488,7 +488,7 @@ void GuiMidiMode::updateDisplay()
         pressureMinRangeSlider->setValue(0, false);
         pressureMaxRangeSlider->setValue(127, false);
         pressureModeMenu->setSelectedId(1, true);
-        triggerModeMenu->setSelectedId(2, true);
+        triggerModeMenu->setSelectedId(1, true);
         indestructibleButton->setToggleState(0, false);
         stickyButton->setToggleState(0, false);
         pressureStatusButton->setToggleState(true, false);

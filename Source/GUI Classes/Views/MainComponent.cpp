@@ -243,6 +243,12 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     exclusiveGroupSlider->setValue(1, false);
     exclusiveGroupSlider->addMouseListener(this, true);
     exclusiveGroupSlider->setVisible(false);
+    
+    addAndMakeVisible(quantizeModeButton = new TextButton("Quantize"));
+    quantizeModeButton->addListener(this);
+    quantizeModeButton->addMouseListener(this, true);
+    quantizeModeButton->setClickingTogglesState(true);
+    quantizeModeButton->setToggleState(0, false);
      
     
     //create pop-up window
@@ -355,7 +361,8 @@ void MainComponent::resized()
     pressureSensitivityMenu->setBounds(800, 130, 100, 20);
     exclusiveModeButton->setBounds(820, 180, 70, 20);
     exclusiveGroupSlider->setBounds(820, 210, 70, 20);
-    
+  
+    quantizeModeButton->setBounds(800, 100, 100, 20);
     
     autoShowSettingsSwitch->setBounds(323+5, 590+5, 35, 35);
     
@@ -598,6 +605,17 @@ void MainComponent::buttonClicked(Button *button)
            exclusiveGroupSlider->setVisible(false); 
     }
     
+    
+    else if (button == quantizeModeButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setQuantizeMode(button->getToggleState());
+        }
+        
+    }
+    
     //==============================================================================
     //===PRESETS, LOADING & SAVING - now handled by the command manager below!======
     //==============================================================================
@@ -676,6 +694,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
         pressureSensitivityMenu->setSelectedId(PAD_SETTINGS->getPressureSensitivityMode(), true);
         exclusiveModeButton->setToggleState(PAD_SETTINGS->getExclusiveMode(), false);
         exclusiveGroupSlider->setValue(PAD_SETTINGS->getExclusiveGroup(), false);
+        quantizeModeButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         
         if (exclusiveModeButton->getToggleState() == true)
             exclusiveGroupSlider->setVisible(true);
@@ -697,6 +716,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
         exclusiveModeButton->setToggleState(0, false);
         exclusiveGroupSlider->setValue(1, false);
         exclusiveGroupSlider->setVisible(false);
+        quantizeModeButton->setToggleState(0, false);
         
     }
     

@@ -454,16 +454,13 @@ void ModeMidi::triggerQuantizationPoint()
 
 void ModeMidi::killPad (int padNum)
 {
-    //for (int i = 0; i <= 47; i++)
-    //{
-        if (isCurrentlyPlaying[padNum] == true)
-        {
-            noteOff(padNum);
-            triggerModes[padNum].reset();
+    if (isCurrentlyPlaying[padNum] == true)
+    {
+        noteOff(padNum);
+        triggerModes[padNum].reset();
             
-        }
-   // }
-    
+    }
+
 }
 
 

@@ -183,14 +183,13 @@ void ModeSequencer::stopExclusivePadSequencer (int channel, SequencePlayer* item
 
 void ModeSequencer::killPad (int padNum)
 {
-    //for (int i = 0; i <= 47; i++)
-    //{
-        if (padSequencer[padNum] != NULL) //if it exists..
-        {
-            padSequencer[padNum]->stopThread(padSequencer[padNum]->getTimeInterval());
+    if (padSequencer[padNum] != NULL) //if it exists..
+    {
+        //should there be a check here to see if the pad is currently playing?
+        
+        padSequencer[padNum]->stopThread(padSequencer[padNum]->getTimeInterval());
             //set playing state to 0?
-        }
-    //}
+    }
 }
 
 

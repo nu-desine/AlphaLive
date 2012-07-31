@@ -282,31 +282,27 @@ void AlphaLiveEngine::inputData(int pad, int value)
     //==========================================================================
 
     //exclusive group stuff - where exactly should this stuff go??
-    //i think its here as first the note/loop/seq should be turn on and then the last pad should be turned off here
-    /*
-     if it is a pad press (prevPadValue = 0 and recievedValue > 0)
-     if recievedPad is set to exclusive mode (found in PadSettings)
-     get exclusive group number (from PadSettings)
-     if there is currently a pad stored in the current group number (-1) index of currentSelectedPad array
-     and the pad stored isn't the same as the current pad number
-     get the mode of the pad number (found in PadSettings)
-     Call the correct 'turn off' function based on the mode to stop the pad
-     replace the value at the group number index with the new pad number
-     Could the function to turn off the pad of each mode be morphed into the killAllfunctions below?
-     e.g. kill all calls the turn off function 48 times in a for loop within THIS class.
-     */
-    if (prevPadValue == 0 && recievedValue > 0) //pad press
+    //i think its here as first the note/loop/seq should be turned on (above) 
+    //and then the last pad should be turned off here
+    
+    //if it is a pad 'press'
+    if (prevPadValue == 0 && recievedValue > 0)
     {
-        if (PAD_SETTINGS->getExclusiveMode() == 1) //on
+        //if pad is set to exclusive mode
+        if (PAD_SETTINGS->getExclusiveMode() == 1)
         {
+            //get exclusive group number
             int exclusiveGroup = PAD_SETTINGS->getExclusiveGroup();
+            //get currently stored pad from the exlusive mode array
+            int prevPad = currentExclusivePad[exclusiveGroup];
             
-            if (currentExclusivePad[exclusiveGroup] != 100 && currentExclusivePad[exclusiveGroup] != recievedPad) 
-                //if not NULL and not equal to the current pad
+            //if a pad exists (not NULL) and not equal to the current pad
+            if (prevPad != 100 && prevPad != recievedPad) 
             {
-                int prevPad = currentExclusivePad[exclusiveGroup];
+                //get mode of prevPad
                 int prevPadMode = AppSettings::Instance()->padSettings[prevPad]->getMode();
                 
+                //kill the pad based on the mode
                 switch (prevPadMode)
                 {
                     case 1:

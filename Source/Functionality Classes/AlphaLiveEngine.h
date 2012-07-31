@@ -147,7 +147,7 @@ private:
     ModeController *modeController;
     
     int recievedPad;
-    float recievedValue, prevPadValue;
+    float recievedValue;
     
     //midi output device
     MidiOutput *midiOutputDevice; //is this actually needed?

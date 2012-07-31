@@ -72,8 +72,6 @@ public:
     void triggerQuantizationPoint();
     void addItemToWaitingPadSequencer (SequencePlayer* item);
     
-    void stopExclusivePadSequencer (int channel, SequencePlayer* item);
-    
     void setMidiOutputDevice (MidiOutput &midiOutput);
     
     AlphaLiveEngine& getAlphaLiveEngineRef();
@@ -81,11 +79,6 @@ public:
 private:
     
     OwnedArray<SequencePlayer> padSequencer;
-    
-    OwnedArray<SequencePlayer> currentExclusivePadSequencer;//holds any AudioFilePlayer objects currently playing which are of a channel
-                                                            //set to exclusive mode. Index 0 will hold channel 1, index 1 channel 2 etc...
-                                                            //This will allow looper pads to be easily found and turned off when a new pad
-                                                            //of that channel are triggered
     
     MidiOutput *midiOutputDevice; //this isn't really needed here!
     

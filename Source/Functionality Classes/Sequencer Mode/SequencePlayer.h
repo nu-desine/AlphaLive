@@ -80,7 +80,6 @@ public:
     void setSticky (int value);
     void setSequenceLength (int value);
     void setQuantizeMode (int value);
-    void setChannel (int value);
     void setDynamicMode (int value);
     
     void setMidiNote (int row, int value);
@@ -148,7 +147,6 @@ private:
     int shouldLoop, indestructible, shouldFinishLoop, sticky;
     int sequenceLength;
     int quantizeMode;
-    int channel;
     int dynamicMode;
     
     int midiNote[NO_OF_ROWS];

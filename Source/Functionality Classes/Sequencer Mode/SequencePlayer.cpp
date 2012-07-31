@@ -64,7 +64,6 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     for (int row = 0; row <=NO_OF_ROWS-1; row++)
        midiNote[row] = PAD_SETTINGS->getSequencerMidiNote(row); 
     quantizeMode = PAD_SETTINGS->getQuantizeMode();
-    channel = PAD_SETTINGS->getSequencerChannel();
     dynamicMode = PAD_SETTINGS->getSequencerDynamicMode();
     
     midiChannel = PAD_SETTINGS->getSequencerMidiChannel();
@@ -261,10 +260,6 @@ void SequencePlayer::processSequence(int padValue)
             {
                 broadcaster.sendActionMessage("EXCLUSIVE STOP");
             }
-            if (channel != 1) //if channel/group is 2 or above
-            {
-                broadcaster.sendActionMessage("EXCLUSIVE STOP");
-            }
             
         }
         
@@ -433,10 +428,6 @@ void SequencePlayer::triggerQuantizationPoint()
         currentPlayingState = 1;
         
         //EXCLUSIVE MODE STUFF 
-        if (channel != 1) //if channel is 2 or above
-        {
-            broadcaster.sendActionMessage("EXCLUSIVE STOP");
-        }
         if (PAD_SETTINGS->getExclusiveMode() == 1)
         {
             broadcaster.sendActionMessage("EXCLUSIVE STOP");
@@ -903,14 +894,11 @@ void SequencePlayer::actionListenerCallback (const String& message)
     
     else if (message == "EXCLUSIVE STOP")
     {
-        
-        
         //this is called async so that there is no noticable time delay caused when
         //doing this via quantization mode (which is caused by the time value
         //paramater within the stopThread() function.
-        
         modeSequencerRef.getAlphaLiveEngineRef().handleExclusiveMode(padNumber);
-        modeSequencerRef.stopExclusivePadSequencer(channel, this);
+
     }
     
     else if (message == "STOP THREAD")
@@ -1065,10 +1053,7 @@ void SequencePlayer::setQuantizeMode (int value)
 {
     quantizeMode = value;
 }
-void SequencePlayer::setChannel (int value)
-{
-    channel = value;
-}
+
 void SequencePlayer::setDynamicMode (int value)
 {
     dynamicMode = value;

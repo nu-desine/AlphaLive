@@ -84,7 +84,7 @@ private:
     
     TextButton *clearButton, *clearAllButton, *saveSeqButton, *saveSeqSetButton, *loadSeqButton, *loadSeqSetButton;
     AlphaSlider *currentSequenceNumberSlider, *numberOfSequencesSlider, *sequenceLengthSlider;
-    ComboBox *triggerModeMenu, *quantizeModeMenu, *relativeTempoMenu;
+    ComboBox *triggerModeMenu, *relativeTempoMenu;
     Label *velocityLabel;
     TextButton *loopButton, *indestructibleButton, *finishLoopButton, *stickyButton, *linkButton;
     

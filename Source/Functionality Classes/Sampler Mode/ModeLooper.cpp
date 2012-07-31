@@ -39,10 +39,6 @@ ModeLooper::ModeLooper(AlphaLiveEngine &ref)
         padLooper.insert(i, NULL);
         prevPadValue[i] = 0;
     }
-   // audioPlayer.setSource(&audioMixer);
-    
-    for (int i = 0; i <= 15; i++)
-        currentExclusivePadLooper.insert(i, NULL);
     
     audioTransportSourceThread = new TimeSliceThread("Looper Audio Thread");
     audioTransportSourceThread->startThread();
@@ -52,8 +48,6 @@ ModeLooper::ModeLooper(AlphaLiveEngine &ref)
 ModeLooper::~ModeLooper()
 {
     audioMixer.removeAllInputs();
-    
-    currentExclusivePadLooper.clear(false);
     padLooper.clear(true);
     
     audioTransportSourceThread->stopThread(100);
@@ -79,17 +73,6 @@ void ModeLooper::createAudioFilePlayer (int padNumber)
 //and deletes the relevant instance of AudioFilePlayer 
 void ModeLooper::deleteAudioFilePlayer (int padNumber)
 {
-    //if deleted object is currently part of the currentExclusivePadLooper array, remove it.
-    if (currentExclusivePadLooper.contains(padLooper[padNumber]))
-    {
-        //get index of array
-        int index = currentExclusivePadLooper.indexOf(padLooper[padNumber]);
-        //remove seq object from array
-        currentExclusivePadLooper.remove(index, false);
-        //fill index with NULL
-        currentExclusivePadLooper.insert(index, NULL);
-    }
-    
     //if deleted object is currently part of the waitingPadLooper array, remove it.
     //DO I NEED TO DO THIS?
     if (waitingPadLooper.contains(padLooper[padNumber]))
@@ -100,7 +83,7 @@ void ModeLooper::deleteAudioFilePlayer (int padNumber)
         waitingPadLooper.remove(index, false);
     }
     
-    std::cout << "Deleting AudioFilePlayer for pad " << padNumber <<std::endl;
+    //std::cout << "Deleting AudioFilePlayer for pad " << padNumber <<std::endl;
     audioMixer.removeInputSource(padLooper[padNumber]); //remove as input source
     padLooper.remove(padNumber); //remove object from array
     padLooper.insert(padNumber, NULL); //insert a NULL object
@@ -166,26 +149,6 @@ void ModeLooper::triggerQuantizationPoint()
     }
 }
 
-
-void ModeLooper::stopExclusivePadLooper (int channel, AudioFilePlayer* item)
-{
-    if (currentExclusivePadLooper[channel-1] != NULL) //if it exists...
-    {
-        //stop previous loop of said channel if not the same as the new one
-        if (currentExclusivePadLooper[channel-1] != item)
-            currentExclusivePadLooper[channel-1]->stopAudioFile();
-    }
-    
-    if (currentExclusivePadLooper[channel-1] != item)
-    {
-        //remove previous loop object from array
-        currentExclusivePadLooper.remove(channel-1, false);
-        //add new loop object to array
-        currentExclusivePadLooper.insert(channel-1, item);
-    }
-    
-    //should there be a method here for removing objects from this array when they have finshed playing? - prefereably yes! See MIDI mode
-}
 
 void ModeLooper::killPad (int padNum)
 {

@@ -64,7 +64,6 @@ public:
     void setSticky (int value, int pad);
     void setPressureStatus (bool value, int pad);
     void setNoteStatus (bool value, int pad);
-    void setExclusiveGroup (int value, int pad);
     void setQuantizeMode (int value, int pad);
 
 private:
@@ -90,7 +89,6 @@ private:
     int sticky[48];
     bool pressureStatus[48];
     bool noteStatus[48];
-    int exclusiveGroup[48];
     int quantizeMode[48];
     TriggerModeData triggerModeData[48];
     TriggerModes triggerModes[48];
@@ -111,12 +109,6 @@ private:
     Array<int> guiPadOffUpdater;
     Array<int> guiPadWaitingPlayUpdater;
     Array<int> guiPadWaitingStopUpdater;
-    
-    //if a pad is set to an exclusive group 2 or above it's padNumber needs to be added to an array
-    //of an index relevant to the pads group number (index 0 = group 1 (not used), index 1 = group 2, 
-    //index 2 = group 3 etc...). This will allow pads to be easily found and turned off when a new pad
-    //of that group is triggered
-    Array<int> currentExclusivePad;
     
     //quantization stuff
     Array<int> waitingPad;

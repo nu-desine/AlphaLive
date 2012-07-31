@@ -36,7 +36,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     
     
     recievedPad = 0;
-    recievedValue = prevPadValue = 0;
+    recievedValue = 0;
     
     pendingUpdatePadValue = 0;
     
@@ -281,55 +281,6 @@ void AlphaLiveEngine::inputData(int pad, int value)
     }
     //==========================================================================
 
-    /*
-    //exclusive group stuff - where exactly should this stuff go??
-    //i think its here as first the note/loop/seq should be turned on (above) 
-    //and then the last pad should be turned off here
-    
-    //if it is a pad 'press'
-    if (prevPadValue == 0 && recievedValue > 0)
-    {
-        //if pad is set to exclusive mode
-        if (PAD_SETTINGS->getExclusiveMode() == 1)
-        {
-            //get exclusive group number
-            int exclusiveGroup = PAD_SETTINGS->getExclusiveGroup();
-            //get currently stored pad from the exlusive mode array
-            int prevPad = currentExclusivePad[exclusiveGroup];
-            
-            //if a pad exists (not NULL) and not equal to the current pad
-            if (prevPad != 100 && prevPad != recievedPad) 
-            {
-                //get mode of prevPad
-                int prevPadMode = AppSettings::Instance()->padSettings[prevPad]->getMode();
-                
-                //kill the pad based on the mode
-                switch (prevPadMode)
-                {
-                    case 1:
-                        modeMidi->killPad(prevPad);
-                        break;
-                    case 2:
-                        modeLooper->killPad(prevPad);
-                        break;
-                    case 3:
-                        modeSequencer->killPad(prevPad);
-                        break;
-                    case 4:
-                        //do nothing
-                        break;
-                    default:
-                        //do nothing
-                        break;
-                }
-                
-            }
-            
-            //add new pad to the exclusive group array, replacing the old one.
-            currentExclusivePad[exclusiveGroup] = recievedPad;
-        }
-    }
-     */
     
     //update GUI asyncronously
     guiUpdateFlag = 0;
@@ -351,60 +302,48 @@ void AlphaLiveEngine::inputData(int pad, int value)
         oscOutput.transmitThruMessage(recievedPad+1, recievedValue2, oscIpAddress, oscPortNumber);
     }
     
-       
-    prevPadValue = recievedValue;
 }
 
 
 void AlphaLiveEngine::handleExclusiveMode (int padNum)
 {
-    //exclusive group stuff - where exactly should this stuff go??
-    //i think its here as first the note/loop/seq should be turned on (above) 
-    //and then the last pad should be turned off here
+
+    //get exclusive group number
+    int exclusiveGroup = AppSettings::Instance()->padSettings[padNum]->getExclusiveGroup();
+    //get currently stored pad from the exclusive mode array
+    int prevPad = currentExclusivePad[exclusiveGroup];
     
-    //if it is a pad 'press'
-    //if (prevPadValue == 0 && recievedValue > 0)
-    //{
-        //if pad is set to exclusive mode
-        //if (PAD_SETTINGS->getExclusiveMode() == 1)
-        ///{
-            //get exclusive group number
-            int exclusiveGroup = AppSettings::Instance()->padSettings[padNum]->getExclusiveGroup();
-            //get currently stored pad from the exclusive mode array
-            int prevPad = currentExclusivePad[exclusiveGroup];
-            
-            //if a pad exists (not NULL) and not equal to the current pad
-            if (prevPad != 100 && prevPad != padNum) 
-            {
-                //get mode of prevPad
-                int prevPadMode = AppSettings::Instance()->padSettings[prevPad]->getMode();
-                
-                //kill the pad based on the mode
-                switch (prevPadMode)
-                {
-                    case 1:
-                        modeMidi->killPad(prevPad);
-                        break;
-                    case 2:
-                        modeLooper->killPad(prevPad);
-                        break;
-                    case 3:
-                        modeSequencer->killPad(prevPad);
-                        break;
-                    case 4:
-                        //do nothing
-                        break;
-                    default:
-                        //do nothing
-                        break;
-                }
-                
-            }
-            
-            //add new pad to the exclusive group array, replacing the old one.
-            currentExclusivePad[exclusiveGroup] = padNum;
-        //}
-    //}
+    //if a pad exists (not NULL) and not equal to the current pad
+    if (prevPad != 100 && prevPad != padNum) 
+    {
+        //get mode of prevPad
+        int prevPadMode = AppSettings::Instance()->padSettings[prevPad]->getMode();
+        
+        //kill the pad based on the mode
+        switch (prevPadMode)
+        {
+            case 1:
+                modeMidi->killPad(prevPad);
+                break;
+            case 2:
+                modeLooper->killPad(prevPad);
+                break;
+            case 3:
+                modeSequencer->killPad(prevPad);
+                break;
+            case 4:
+                //do nothing
+                break;
+            default:
+                //do nothing
+                break;
+        }
+        
+    }
+    
+    //add new pad to the exclusive group array, replacing the old one.
+    currentExclusivePad[exclusiveGroup] = padNum;
+        
 }
 
 void AlphaLiveEngine::updatePadPlayingStatus (int padNumber, int status)

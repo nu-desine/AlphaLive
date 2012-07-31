@@ -176,12 +176,6 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     linkButton->setClickingTogglesState(true);
     linkButton->setToggleState(0, false);
     
-    addAndMakeVisible(quantizeModeMenu = new ComboBox());
-    quantizeModeMenu->addItem("Free", 1);
-    quantizeModeMenu->addItem("Quantized", 2);
-    quantizeModeMenu->setSelectedId(1, true);
-    quantizeModeMenu->addMouseListener(this, true);
-    quantizeModeMenu->addListener(this);
     
     //relative tempo menu
     addAndMakeVisible(relativeTempoMenu = new ComboBox());
@@ -282,8 +276,6 @@ void GuiSequencerMode::resized()
     finishLoopButton->setBounds(RIGHT_CIRCLE_X, 608, 50, 15);
     stickyButton->setBounds(RIGHT_CIRCLE_X+50, 608, 50, 15);
     
-    //quantizeModeMenu->setBounds(800, 155, 100, 20);
-    
     linkButton->setBounds(10, getHeight()-60, 50, 15);
     
 }
@@ -315,18 +307,6 @@ void GuiSequencerMode::comboBoxChanged (ComboBox* comboBox)
     }
     
     
-    
-    //==============================================================================
-    //trigger mode combobox
-    if (comboBox == quantizeModeMenu)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setSequencerQuantizeMode(quantizeModeMenu->getSelectedId());
-        }
-        
-    }
     
     //==============================================================================
     //relative tempo mode combobox
@@ -613,7 +593,6 @@ void GuiSequencerMode::updateDisplay()
         finishLoopButton->setToggleState(PAD_SETTINGS->getSequencerShouldFinishLoop(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getSequencerSticky(), false);
         //currentSequenceNumberSlider->setValue(1);
-        quantizeModeMenu->setSelectedId(PAD_SETTINGS->getSequencerQuantizeMode(), true);
         relativeTempoMenu->setSelectedId(PAD_SETTINGS->getSequencerRelativeTempoMode(), true);
         
         //set the range of the noteLengthSlider so that the max value matches this sliders value
@@ -648,7 +627,6 @@ void GuiSequencerMode::updateDisplay()
         finishLoopButton->setToggleState(0, false);
         stickyButton->setToggleState(0, false);
         //currentSequenceNumberSlider->setValue(1);
-        quantizeModeMenu->setSelectedId(1, true);
         relativeTempoMenu->setSelectedId(3, true);
         linkButton->setToggleState(0, false);
         
@@ -761,10 +739,6 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     else if (sequencerGrid->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText("Step-Sequencer Grid. This is where the actual sequence is editted and displayed. Like a traditional step-sequencer interface, click on a grid point (where the grid lines intersect) to create a 'note', or click on a note to delete it. Use alt-click-drag on a note to change the note's velocity/gain.");
-    }
-    else if (quantizeModeMenu->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Trigger Mode Menu. The trigger mode determines the start time/position of the sequence. 'Free' will trigger the sequence as soon as the pad is pressed, 'Quantized' will trigger the sequence at the next quantized time value set using the global clock above.");
     }
     else if (relativeTempoMenu->isMouseOver(true))
     {

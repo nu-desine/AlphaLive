@@ -68,7 +68,7 @@ public:
 private:
     //==============================================================================
 	//GUI Components
-    ComboBox *pressureModeMenu, *triggerModeMenu, *quantizeModeMenu;
+    ComboBox *pressureModeMenu, *triggerModeMenu;
     AlphaSlider *pressureMinRangeSlider, *pressureMaxRangeSlider, *ccControllerSlider;
     TextButton *indestructibleButton, *stickyButton;
     

@@ -41,9 +41,6 @@ ModeSequencer::ModeSequencer(MidiOutput &midiOutput, AlphaLiveEngine &ref)
         prevPadValue[i] = 0; //for the 'exclusive' mode
     }
     
-    for (int i = 0; i <= 15; i++)
-        currentExclusivePadSequencer.insert(i, NULL);
-    
     tempo = AppSettings::Instance()->getGlobalTempo();
     
     audioTransportSourceThread = new TimeSliceThread("Sequencer Audio Thread");
@@ -54,8 +51,6 @@ ModeSequencer::ModeSequencer(MidiOutput &midiOutput, AlphaLiveEngine &ref)
 ModeSequencer::~ModeSequencer()
 {
     audioMixer.removeAllInputs();
-    
-    currentExclusivePadSequencer.clear(false);
     padSequencer.clear(true);
     
     audioTransportSourceThread->stopThread(100);
@@ -102,16 +97,6 @@ void ModeSequencer::createSequencePlayer (int padNumber)
 
 void ModeSequencer::deleteSequencePlayer (int padNumber)
 {
-    //if deleted object is currently part of the currentExclusivePadSequencer array, remove it.
-    if (currentExclusivePadSequencer.contains(padSequencer[padNumber]))
-    {
-        //get index of array
-        int index = currentExclusivePadSequencer.indexOf(padSequencer[padNumber]);
-        //remove seq object from array
-        currentExclusivePadSequencer.remove(index, false);
-        //fill index with NULL
-        currentExclusivePadSequencer.insert(index, NULL);
-    }
     
     //if deleted object is currently part of the waitingPadSequencer array, remove it.
     //DO I NEED TO DO THIS?
@@ -154,32 +139,6 @@ void ModeSequencer::triggerQuantizationPoint()
     }
 }
 
-
-void ModeSequencer::stopExclusivePadSequencer (int channel, SequencePlayer* item)
-{
-    if (currentExclusivePadSequencer[channel-1] != NULL) //if the sequennce object exists...
-    {
-        //stop previous sequence of said channel if not the same as the new one
-        if (currentExclusivePadSequencer[channel-1] != item)
-        {
-            currentExclusivePadSequencer[channel-1]->stopThread(currentExclusivePadSequencer[channel-1]->getTimeInterval());
-            //should i be setting the playing status of said pad to 0 here?
-            //or is that what's being handled at the top of processSequence()
-            //within SequencePlayer?
-        }
-        
-    }
-    
-    if (currentExclusivePadSequencer[channel-1] != item)
-    {
-        //remove previous seq object from array
-        currentExclusivePadSequencer.remove(channel-1, false);
-        //add new seq object to array
-        currentExclusivePadSequencer.insert(channel-1, item);
-    }
-    
-    //should there be a method here for removing objects from this array when they have finshed playing?
-}
 
 void ModeSequencer::killPad (int padNum)
 {

@@ -167,14 +167,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     ccControllerSlider->addMouseListener(this, true);
     
     ccControllerSlider->setVisible(false);
-    
-    //---------------trigger mode menu---------------------
-    addAndMakeVisible(quantizeModeMenu = new ComboBox());
-    quantizeModeMenu->addItem("Free", 1);
-    quantizeModeMenu->addItem("Quantized", 2);
-    quantizeModeMenu->setSelectedId(1, true);
-    quantizeModeMenu->addMouseListener(this, true);
-    quantizeModeMenu->addListener(this);
+
     
     //these need to be on top of all other components
     addAndMakeVisible(speakerLeft = new GuiSpeaker());
@@ -217,7 +210,6 @@ void GuiMidiMode::resized()
     pressureStatusButton->setBounds(165, 360, 45, 45);
     noteStatusButton->setBounds(810, 360, 45, 45);
     
-    //quantizeModeMenu->setBounds(800, 155, 100, 20);
     
     
 }
@@ -265,18 +257,6 @@ void GuiMidiMode::comboBoxChanged (ComboBox* comboBox)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setMidiTriggerMode(triggerModeMenu->getSelectedId());
-        }
-    }
-    
-    
-    //==============================================================================
-    //trigger mode combobox
-    if (comboBox == quantizeModeMenu)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setMidiQuantizeMode(quantizeModeMenu->getSelectedId());
         }
     }
 
@@ -432,8 +412,6 @@ void GuiMidiMode::updateDisplay()
         triggerModeMenu->setSelectedId(i, true);
         i = PAD_SETTINGS->getMidiCcController();
         ccControllerSlider->setValue(i, false);
-        i = PAD_SETTINGS->getMidiExclusiveGroup();
-        quantizeModeMenu->setSelectedId(PAD_SETTINGS->getMidiQuantizeMode(), true);
         indestructibleButton->setToggleState(PAD_SETTINGS->getMidiIndestructible(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getMidiSticky(), false);
         
@@ -476,7 +454,6 @@ void GuiMidiMode::updateDisplay()
         noteStatusButton->setToggleState(true, false);
         noteStatusButton->setButtonText("Note Data On");
         ccControllerSlider->setValue(12, false);
-        quantizeModeMenu->setSelectedId(1, true);
         
         //circlePianoForScales->setVisible(false);
         circlePiano->updateDisplay();
@@ -549,10 +526,7 @@ void GuiMidiMode::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText("MIDI CC Controller Selector. Sets and displays the MIDI CC controller number for the selected pad/pads.");
     }
-    else if (quantizeModeMenu->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Trigger Mode Menu. The trigger mode determines the start time of the MIDI note. 'Free' will trigger the loop as soon as the pad is pressed, 'Quantized' will trigger the loop at the next quantized time value set using the global clock.");
-    }
+    
     
 }
 

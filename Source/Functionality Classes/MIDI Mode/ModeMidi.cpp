@@ -46,26 +46,7 @@ ModeMidi::ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref)
         sticky[i] = PAD_SETTINGS_i->getMidiSticky();
         pressureStatus[i] = PAD_SETTINGS_i->getMidiPressureStatus();
         noteStatus[i] = PAD_SETTINGS_i->getMidiNoteStatus();
-        exclusiveGroup[i] = 0;
         quantizeMode[i] = PAD_SETTINGS_i->getQuantizeMode();
-        
-        
-        /*
-        channel[i] = 1;
-        note[i] = 60;
-        velocity[i] = 110;
-        minRange[i] = 0;
-        maxRange[i] = 127;
-        controllerNumber[i] = Layouts::ccLayout[i];
-        pressureMode[i] = 1;
-        triggerModeValue[i] = 1;
-        indestructible[i] = 0;
-        sticky[i] = 0;
-        pressureStatus[i] = true;
-        noteStatus[i] = true;
-        exclusiveGroup[i] = 0;
-        quantizeMode[i] = 1;
-         */
         
         //not all members of the TriggerModeData struct are needed for MIDI mode
         triggerModeData[i].playingStatus = 0;
@@ -76,9 +57,6 @@ ModeMidi::ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref)
         prevPadValue[i] = 0;
         pressureValue[i] = 0;
     }
-    
-    for (int i = 0; i <= 15; i++)
-        currentExclusivePad.insert(i, 100); //'100' here is used to signify an 'empty/NULL' value
     
     broadcaster.addActionListener(this);
             
@@ -298,51 +276,12 @@ void ModeMidi::noteOn (int padNumber)
     
     
     
-    
     //Exclusive mode stuff
     if (PAD_SETTINGS->getExclusiveMode() == 1)
     {
         alphaLiveEngineRef.handleExclusiveMode(padNumber);
     }
     
-    
-    
-    if (exclusiveGroup[padNumber] != 0) //if exclusive group equals something above 1, it is in 'exclusive' mode
-    {
-        //get the previously triggered pad of the same group
-        int prevPad = currentExclusivePad[exclusiveGroup[padNumber]];
-        
-        if (currentExclusivePad[exclusiveGroup[padNumber]] != 100) // 100 is used here to represent NULL
-        {
-            //if it isn't the same as the current pad...
-            if (prevPad != padNumber)
-            {
-                //get the MIDI note and MIDI channel of the pad number stored in the array
-                int prevNote = AppSettings::Instance()->padSettings[prevPad]->getMidiNote();
-                int prevChannel = AppSettings::Instance()->padSettings[prevPad]->getMidiChannel();
-                
-                //stop prev note of this group
-                MidiMessage message = MidiMessage::noteOff(prevChannel, prevNote);
-                sendMidiMessage(message);
-                isCurrentlyPlaying[prevPad] = false;
-                
-                //update pad GUI
-                guiPadOffUpdater.add(prevPad);
-                broadcaster.sendActionMessage("OFF");
-                
-            }
-            
-        }
-        
-        //if it isn't the same as the current pad...
-        if (prevPad != padNumber)
-        {
-            //remove prev pad from exclusive group array
-            currentExclusivePad.remove(exclusiveGroup[padNumber]);
-            //add current pad to the exclusive group array
-            currentExclusivePad.insert(exclusiveGroup[padNumber], padNumber);
-        }
-    }
 }
 
 
@@ -364,16 +303,6 @@ void ModeMidi::noteOff (int padNumber)
     
     currentPlayingStatus[padNumber] = 0; //set pad to 'off'
     
-    //Exclusive mode stuff - need to reset the relevent index of the exclusive array
-    //so that the above note off message won't be repeated the next time a pad of the same group
-    //is triggered.
-    if (exclusiveGroup[padNumber] != 0) //if exclusive group equals something above 1, it is in 'exclusive' mode
-    {
-        //remove pad from exclusive group array
-        currentExclusivePad.remove(exclusiveGroup[padNumber]);
-        //insert the default 'NULL' value
-        currentExclusivePad.insert(exclusiveGroup[padNumber], 100);
-    }
 }
 
 
@@ -638,11 +567,6 @@ void ModeMidi::setNoteStatus (bool value, int pad)
     }
 
     noteStatus[pad] = value;
-}
-
-void ModeMidi::setExclusiveGroup (int value, int pad)
-{
-    exclusiveGroup[pad] = value-1;
 }
 
 void ModeMidi::setQuantizeMode (int value, int pad)

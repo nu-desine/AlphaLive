@@ -91,8 +91,6 @@ public:
     void setMidiPressureStatus (bool value);
     void setMidiNoteStatus (bool value);
     void setMidiCcController (int value);
-    void setMidiExclusiveGroup (int value);
-    void setMidiQuantizeMode (int value);
     
     int getMidiNote();
     int getMidiVelocity();
@@ -106,8 +104,6 @@ public:
     bool getMidiPressureStatus();
     bool getMidiNoteStatus();
     int getMidiCcController();
-    int getMidiExclusiveGroup();
-    int getMidiQuantizeMode();
     
     //==================================================================
     //Looper mode
@@ -120,8 +116,6 @@ public:
     void setLooperEffect (int value);
     void setLooperPan (float value);
     void setLooperGain (float value);
-    void setLooperChannel (int value);
-    void setLooperQuantizeMode (int value);
     
     File getLooperAudioFilePath();
     bool getLooperIsLibraryFile();
@@ -133,8 +127,6 @@ public:
     int getLooperEffect();
     float getLooperPan();
     float getLooperGain();
-    int getLooperChannel();
-    int getLooperQuantizeMode();
     
     //----Looper FX----
     //Gain&Pan
@@ -273,9 +265,7 @@ public:
     void setSequencerIndestructible (int value);
     void setSequencerShouldFinishLoop (int value);
     void setSequencerSticky (int value);
-    void setSequencerChannel (int value);
     void setSequencerLength (int value);
-    void setSequencerQuantizeMode (int value);
     void setSequencerRelativeTempoMode (int value);
     void setSequencerDynamicMode (int value);
     
@@ -301,9 +291,7 @@ public:
     int getSequencerIndestructible();
     int getSequencerShouldFinishLoop();
     int getSequencerSticky();
-    int getSequencerChannel();
     int getSequencerLength();
-    int getSequencerQuantizeMode();
     int getSequencerRelativeTempoMode();
     int getSequencerDynamicMode();
     
@@ -386,8 +374,6 @@ private:
     bool midiPressureStatus;
     bool midiNoteStatus;
     int midiCcController;
-    //int midiExclusiveGroup;
-    //int midiQuantizeMode;
     
     //==================================================================
     //Looper mode
@@ -400,8 +386,6 @@ private:
     int looperEffect;
     float looperPan;
     float looperGain;
-    //int looperChannel; //now called 'group' not 'channel' to the user
-    //int looperQuantizeMode;
     
     //----fx variables------
     //Gain&Pan
@@ -487,9 +471,7 @@ private:
     int sequencerIndestructible;
     int sequencerShouldFinishLoop;
     int sequencerSticky;
-    //int sequencerChannel; //now called 'group' not 'channel' to the user
     int sequencerLength;
-    //int sequencerQuantizeMode;
     int sequencerRelativeTempoMode;
     int sequencerDynamicMode;
     

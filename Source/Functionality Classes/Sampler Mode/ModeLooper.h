@@ -53,8 +53,6 @@ public:
     
     void updatePadPlayingStatus(int padNumber, int playingStatus);
     
-    void stopExclusivePadLooper (int channel, AudioFilePlayer* item);
-    
     void killPad (int padNum);
     
     //quantization stuff
@@ -67,18 +65,12 @@ private:
     
     OwnedArray<AudioFilePlayer> padLooper;
     
-    OwnedArray<AudioFilePlayer> currentExclusivePadLooper;  //holds any AudioFilePlayer objects currently playing which are of a channel
-                                                            //set to exclusive mode. Index 0 will hold channel 1, index 1 channel 2 etc...
-                                                            //This will allow looper pads to be easily found and turned off when a new pad
-                                                            //of that channel are triggered
-    
     //==========================================================================================
 
     //audio related
 	MixerAudioSource audioMixer;
 	AudioSourcePlayer audioPlayer;
     ScopedPointer <TimeSliceThread> audioTransportSourceThread;
-    //TimeSliceThread *audioTransportSourceThread;
     
     CriticalSection sharedMemory;
     

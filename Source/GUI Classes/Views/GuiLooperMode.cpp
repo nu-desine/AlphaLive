@@ -113,13 +113,7 @@ GuiLooperMode::GuiLooperMode(MainComponent &ref)
 	addAndMakeVisible (waveform = new DemoThumbnailComp());
 	waveform->setInterceptsMouseClicks(false, false);
     
-    addAndMakeVisible(quantizeModeMenu = new ComboBox());
-    quantizeModeMenu->addItem("Free", 1);
-    quantizeModeMenu->addItem("Quantized", 2);
-    quantizeModeMenu->setSelectedId(1, true);
-    quantizeModeMenu->addMouseListener(this, true);
-    quantizeModeMenu->addListener(this);
-    
+    /*
     addAndMakeVisible(pressureModeMenu = new ComboBox());
     //ideally, we should have an 'off' here instead of having a 'no effect' elsewhere
     pressureModeMenu->addItem("Effect processing", 1);
@@ -127,6 +121,7 @@ GuiLooperMode::GuiLooperMode(MainComponent &ref)
     pressureModeMenu->setSelectedId(1, true);
     pressureModeMenu->addMouseListener(this, true);
     pressureModeMenu->addListener(this);
+     */
     
 }
 
@@ -157,8 +152,6 @@ void GuiLooperMode::resized()
     stickyButton->setBounds(RIGHT_CIRCLE_X+50, 573, 50, 15);
     
     fxDial->setBounds(14, 402, 230, 230);
-	
-	//quantizeModeMenu->setBounds(800, 155, 100, 20);
     
 	//gainSlider->setBounds(965, 150, 45, 45);
 	//panSlider->setBounds(965, 200, 45, 45);
@@ -188,18 +181,6 @@ void GuiLooperMode::comboBoxChanged (ComboBox* comboBox)
         }
     }
     
-    
-    //==============================================================================
-    //trigger mode combobox
-    if (comboBox == quantizeModeMenu)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperQuantizeMode(quantizeModeMenu->getSelectedId());
-        }
-        
-    }
     
     //==============================================================================
     /*
@@ -378,7 +359,6 @@ void GuiLooperMode::updateDisplay()
         indestructibleButton->setToggleState(PAD_SETTINGS->getLooperIndestructible(), false);
         finishLoopButton->setToggleState(PAD_SETTINGS->getLooperShouldFinishLoop(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getLooperSticky(), false);
-        quantizeModeMenu->setSelectedId(PAD_SETTINGS->getLooperQuantizeMode(), true);
         
         
     }
@@ -397,7 +377,6 @@ void GuiLooperMode::updateDisplay()
         indestructibleButton->setToggleState(0, false);
         finishLoopButton->setToggleState(0, false);
         stickyButton->setToggleState(0, false);
-        quantizeModeMenu->setSelectedId(1, true);
         
 
         
@@ -430,10 +409,6 @@ void GuiLooperMode::mouseEnter (const MouseEvent &e)
     else if (fxDial->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText("Looper FX Dial. Sets and displays the audio processing effect that the selected pad/pads pressure controls.");
-    }
-    else if (quantizeModeMenu->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Trigger Mode Menu. The trigger mode determines the start time of the loop. 'Free' will trigger the loop as soon as the pad is pressed, 'Quantized' will trigger the loop at the next quantized time value set using the global clock.");
     }
     
 }

@@ -61,7 +61,6 @@ AudioFilePlayer::AudioFilePlayer(int looperPadNumber, ModeLooper &ref, TimeSlice
     currentPlayingState = currentPressureValue = 0;
     effect = PAD_SETTINGS->getLooperEffect();
     quantizeMode = PAD_SETTINGS->getQuantizeMode();
-    channel = PAD_SETTINGS->getLooperChannel();
     
     triggerModeData.playingStatus = 0;
     
@@ -398,15 +397,6 @@ void AudioFilePlayer::playAudioFile()
      */
      
     
-    /*
-    if (channel != 1) //if channel equals something above 1, it is in 'exclusive' mode
-    {
-        //stop currently playing loop of this channel and add this instance of AudioFilePlayer 
-        //to the correct index (channel number-1) of currentExclusivePadLooper array within ModeLooper
-        modeLooperRef.stopExclusivePadLooper(channel, this);
-    }
-     */
-    
     if (PAD_SETTINGS->getExclusiveMode() == 1)
     {
         modeLooperRef.getAlphaLiveEngineRef().handleExclusiveMode(padNumber);
@@ -685,10 +675,6 @@ void AudioFilePlayer::setEffect(int value)
 void AudioFilePlayer::setQuantizeMode (int value)
 {
     quantizeMode = value;
-}
-void AudioFilePlayer::setChannel (int value)
-{
-    channel = value;
 }
 
 void AudioFilePlayer::setGain (float value)

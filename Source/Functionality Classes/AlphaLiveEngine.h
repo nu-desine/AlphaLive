@@ -95,11 +95,9 @@ public:
     void handleAsyncUpdate();
     int getRecievedPad();
     int getRecievedValue();
-    
     void playPadFromMouse (int pad, int value);
     
     AudioDeviceManager& getAudioDeviceManager();
-    
     ModeMidi* getModeMidi(); //used by PadSettings to access the settings accessors
     ModeLooper* getModeLooper(); //used by PadSettings to access the ModeLooper instance
     ModeSequencer* getModeSequencer();  //used by PadSettings to access the ModeSequencer instance
@@ -131,13 +129,15 @@ public:
     void setOscIpAddress (String value);
     void setOscPortNumber (int value);
     
-    //global clock stuff
+    //global clock/quantize stuff
     GlobalClock* getGlobalClock(); //used by AppSettings to set the tempo
     void triggerQuantizationPoint(); 
+    void addPadToQueue (int padNum);
+    
+    //exclusive mode stuff
+    void handleExclusiveMode (int padNum);
     
     void killAll();
-    
-    void handleExclusiveMode (int padNum);
         
 private:
     
@@ -177,8 +177,9 @@ private:
     String oscIpAddress;
     int oscPortNumber;
     
-    //global clock stuff
+    //global clock/quantize stuff
     GlobalClock *globalClock;
+    Array <int> queuedPads;
     
     //if a pads exclusive mode is set to 1 (on), its padNumber needs to be added to an array
     //of an index relevant to the pads exclusive group number (index 0 = group 1, index 1 = group 2, 

@@ -42,7 +42,7 @@ public:
     void noteOff (int padNumber);
     void sendPressureData (int padNumber);
     
-    void triggerQuantizationPoint();
+    void triggerQuantizationPoint (int padNum);
     
     void actionListenerCallback (const String& message);
     
@@ -111,7 +111,7 @@ private:
     Array<int> guiPadWaitingStopUpdater;
     
     //quantization stuff
-    Array<int> waitingPad;
+    //Array<int> waitingPad;
     
 };
 

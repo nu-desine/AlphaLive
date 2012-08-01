@@ -227,7 +227,8 @@ void AudioFilePlayer::processAudioFile(int padValue)
                 //add this instance of AudioFilePlayer to the waitingPadLooper Array within
                 //ModeLooper so that it is alerted of the next quantized point in time so
                 //the loop can start playing
-                modeLooperRef.addItemToWaitingPadLooper(padNumber);
+                //modeLooperRef.addItemToWaitingPadLooper(padNumber);
+                modeLooperRef.getAlphaLiveEngineRef().addPadToQueue(padNumber);
                 broadcaster.sendActionMessage("WAITING TO PLAY");
                 
                 
@@ -240,7 +241,8 @@ void AudioFilePlayer::processAudioFile(int padValue)
                 //add this instance of AudioFilePlayer to the waitingPadLooper Array within
                 //ModeLooper so that it is alerted of the next quantized point in time so
                 //the loop can stop playing
-                modeLooperRef.addItemToWaitingPadLooper(padNumber);
+                //modeLooperRef.addItemToWaitingPadLooper(padNumber);
+                modeLooperRef.getAlphaLiveEngineRef().addPadToQueue(padNumber);
                 broadcaster.sendActionMessage("WAITING TO STOP");
             }
         }

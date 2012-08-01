@@ -69,8 +69,8 @@ public:
 	void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill);
     
     //quantization stuff
-    void triggerQuantizationPoint();
-    void addItemToWaitingPadSequencer (int padNum);
+    void triggerQuantizationPoint (int padNum);
+    //void addItemToWaitingPadSequencer (int padNum);
     
     void setMidiOutputDevice (MidiOutput &midiOutput);
     
@@ -99,7 +99,7 @@ private:
     AlphaLiveEngine &alphaLiveEngineRef;
     
     //quantization stuff
-    Array<int> waitingPadSequencer;
+    //Array<int> waitingPadSequencer;
 };
 
 

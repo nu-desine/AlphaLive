@@ -158,7 +158,8 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
             if (triggerModeData[padNumber].playingStatus == 1) //play
             {
                 currentPlayingStatus[padNumber] = 2; //waiting to play
-                waitingPad.addIfNotAlreadyThere(padNumber);
+                //waitingPad.addIfNotAlreadyThere(padNumber);
+                alphaLiveEngineRef.addPadToQueue(padNumber);
             
                 guiPadWaitingPlayUpdater.add(padNumber);
                 broadcaster.sendActionMessage("WAITING TO PLAY");
@@ -172,6 +173,7 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
                  Below is a test local to midi mode
                  */
                 
+                /*
                 if (PAD_SETTINGS->getExclusiveMode() == 1)
                 {
                     int group = PAD_SETTINGS->getExclusiveGroup();
@@ -194,6 +196,7 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
                         
                     }
                 }
+                 */
             }
             
             
@@ -202,8 +205,8 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
             else if (triggerModeData[padNumber].playingStatus == 0) //stop
             {
                 currentPlayingStatus[padNumber] = 3; // waiting to stop
-                waitingPad.addIfNotAlreadyThere(padNumber);
-                
+                //waitingPad.addIfNotAlreadyThere(padNumber);
+                alphaLiveEngineRef.addPadToQueue(padNumber);
                 
                 guiPadWaitingStopUpdater.add(padNumber);
                 broadcaster.sendActionMessage("WAITING TO STOP");
@@ -418,8 +421,17 @@ void ModeMidi::setMidiOutputDevice (MidiOutput &midiOutput)
 }
 
 
-void ModeMidi::triggerQuantizationPoint()
+void ModeMidi::triggerQuantizationPoint (int padNum)
 {
+    //get currentPlayingStatus of pad
+    int status = currentPlayingStatus[padNum];
+    //call correct function based on currentPlayingStatus
+    if (status == 2) //waiting to play
+        noteOn(padNum);
+    else if (status == 3) //waiting to stop
+        noteOff(padNum);
+    
+    /*
     if (waitingPad.size() > 0)
     {
         for (int i = 0; i < waitingPad.size(); i++)
@@ -440,6 +452,7 @@ void ModeMidi::triggerQuantizationPoint()
         //quantization points in time
         waitingPad.clear();
     }
+     */
 }
 
 void ModeMidi::killPad (int padNum)

@@ -98,6 +98,7 @@ void ModeSequencer::createSequencePlayer (int padNumber)
 void ModeSequencer::deleteSequencePlayer (int padNumber)
 {
     
+    /*
     //if deleted object is currently part of the waitingPadSequencer array, remove it.
     //DO I NEED TO DO THIS?
     if (waitingPadSequencer.contains(padNumber))
@@ -107,6 +108,7 @@ void ModeSequencer::deleteSequencePlayer (int padNumber)
         //remove seq object from array
         waitingPadSequencer.remove(index);
     }
+     */
     
     std::cout << "Deleting SequencerPlayer for pad " << padNumber <<std::endl;
     audioMixer.removeInputSource(padSequencer[padNumber]); //remove as input source
@@ -117,14 +119,22 @@ void ModeSequencer::deleteSequencePlayer (int padNumber)
 }
 
 
+/*
 void ModeSequencer::addItemToWaitingPadSequencer (int padNum)
 {
     waitingPadSequencer.addIfNotAlreadyThere(padNum);
 }
+*/
 
-
-void ModeSequencer::triggerQuantizationPoint()
+void ModeSequencer::triggerQuantizationPoint (int padNum)
 {
+    if (padSequencer[padNum]!= NULL)
+    {
+        //alert padSequencer[padNum] of a quantization point in time
+        padSequencer[padNum]->triggerQuantizationPoint();
+    }
+
+    /*
     if (waitingPadSequencer.size() > 0)
     {
         for (int i = 0; i < waitingPadSequencer.size(); i++)
@@ -137,6 +147,7 @@ void ModeSequencer::triggerQuantizationPoint()
         //quantization points in time
         waitingPadSequencer.clear();
     }
+     */
 }
 
 

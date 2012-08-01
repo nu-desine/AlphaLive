@@ -357,11 +357,43 @@ void AlphaLiveEngine::updatePadPlayingStatus (int padNumber, int status)
     
 }
 
+void AlphaLiveEngine::addPadToQueue (int padNum)
+{
+    queuedPads.addIfNotAlreadyThere(padNum);
+}
+
 void AlphaLiveEngine::triggerQuantizationPoint()
 {
-    modeLooper->triggerQuantizationPoint();
-    modeSequencer->triggerQuantizationPoint();
-    modeMidi->triggerQuantizationPoint();
+    //modeLooper->triggerQuantizationPoint();
+    //modeSequencer->triggerQuantizationPoint();
+    //modeMidi->triggerQuantizationPoint();
+    
+    if (queuedPads.size() > 0)
+    {
+        for (int i = 0; i < queuedPads.size(); i++)
+        {
+            int padMode = AppSettings::Instance()->padSettings[queuedPads[i]]->getMode();
+            
+            switch (padMode)
+            {
+                case 1:
+                    modeMidi->triggerQuantizationPoint(queuedPads[i]);
+                    break;
+                case 2:
+                    modeLooper->triggerQuantizationPoint(queuedPads[i]);
+                    break;
+                case 3:
+                    modeSequencer->triggerQuantizationPoint(queuedPads[i]);
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        //remove items from array so they no longer recieve alerts of
+        //quantization points in time
+        queuedPads.clear();
+    }
 }
 
 

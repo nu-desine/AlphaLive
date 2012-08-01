@@ -73,6 +73,7 @@ void ModeLooper::createAudioFilePlayer (int padNumber)
 //and deletes the relevant instance of AudioFilePlayer 
 void ModeLooper::deleteAudioFilePlayer (int padNumber)
 {
+    /*
     //if deleted object is currently part of the waitingPadLooper array, remove it.
     //DO I NEED TO DO THIS?
     if (waitingPadLooper.contains(padNumber))
@@ -82,6 +83,7 @@ void ModeLooper::deleteAudioFilePlayer (int padNumber)
         //remove pad from array
         waitingPadLooper.remove(index);
     }
+     */
     
     //std::cout << "Deleting AudioFilePlayer for pad " << padNumber <<std::endl;
     audioMixer.removeInputSource(padLooper[padNumber]); //remove as input source
@@ -127,14 +129,22 @@ void ModeLooper::getOscData(int padNumber, int padValue)
     prevPadValue[padNumber] = padValue;
 }
 
+/*
 void ModeLooper::addItemToWaitingPadLooper (int padNum)
 {
     waitingPadLooper.addIfNotAlreadyThere(padNum);
 }
+*/
 
-
-void ModeLooper::triggerQuantizationPoint()
+void ModeLooper::triggerQuantizationPoint (int padNum)
 {
+    if (padLooper[padNum]!= NULL)
+    {
+        //alert padLooper[padNum] of a quantization point in time
+        padLooper[padNum]->triggerQuantizationPoint();
+    }
+    
+    /*
     if (waitingPadLooper.size() > 0)
     {
         for (int i = 0; i < waitingPadLooper.size(); i++)
@@ -147,6 +157,7 @@ void ModeLooper::triggerQuantizationPoint()
         //quantization points in time
         waitingPadLooper.clear();
     }
+     */
 }
 
 

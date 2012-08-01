@@ -304,7 +304,7 @@ void SequencePlayer::processSequence(int padValue)
             //add this instance of SequencePlayer to the waitingPadSequencer Array within
             //ModeSequencer so that it is alerted of the next quantized point in time so
             //the sequence can start playing
-            modeSequencerRef.addItemToWaitingPadSequencer(this);
+            modeSequencerRef.addItemToWaitingPadSequencer(padNumber);
             broadcaster.sendActionMessage("WAITING TO PLAY");
             
             
@@ -316,7 +316,7 @@ void SequencePlayer::processSequence(int padValue)
             //add this instance of SequencePlayer to the waitingPadSequencer Array within
             //ModeSequencer so that it is alerted of the next quantized point in time so
             //the sequence can stop playing
-            modeSequencerRef.addItemToWaitingPadSequencer(this);
+            modeSequencerRef.addItemToWaitingPadSequencer(padNumber);
             broadcaster.sendActionMessage("WAITING TO STOP");
         }
     }
@@ -938,7 +938,7 @@ void SequencePlayer::actionListenerCallback (const String& message)
     
     else if (message == "STOP THREAD")
     {
-        stopThread(timeInterval);
+        stopThread(timeInterval*2);
         currentPlayingState = 0;
         //stopThreadAndReset();
     }

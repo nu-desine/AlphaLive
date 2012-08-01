@@ -70,7 +70,7 @@ public:
     
     //quantization stuff
     void triggerQuantizationPoint();
-    void addItemToWaitingPadSequencer (SequencePlayer* item);
+    void addItemToWaitingPadSequencer (int padNum);
     
     void setMidiOutputDevice (MidiOutput &midiOutput);
     
@@ -99,7 +99,7 @@ private:
     AlphaLiveEngine &alphaLiveEngineRef;
     
     //quantization stuff
-    OwnedArray<SequencePlayer> waitingPadSequencer;
+    Array<int> waitingPadSequencer;
 };
 
 

@@ -57,7 +57,7 @@ public:
     
     //quantization stuff
     void triggerQuantizationPoint();
-    void addItemToWaitingPadLooper (AudioFilePlayer* item);
+    void addItemToWaitingPadLooper (int padNum);
     
     AlphaLiveEngine& getAlphaLiveEngineRef();
 
@@ -79,7 +79,7 @@ private:
     AlphaLiveEngine &alphaLiveEngineRef;
     
     //quantization stuff
-    OwnedArray<AudioFilePlayer> waitingPadLooper;
+    Array <int> waitingPadLooper;
     
 };
 

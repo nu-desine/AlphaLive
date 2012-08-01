@@ -75,12 +75,12 @@ void ModeLooper::deleteAudioFilePlayer (int padNumber)
 {
     //if deleted object is currently part of the waitingPadLooper array, remove it.
     //DO I NEED TO DO THIS?
-    if (waitingPadLooper.contains(padLooper[padNumber]))
+    if (waitingPadLooper.contains(padNumber))
     {
         //get index of array
-        int index = waitingPadLooper.indexOf(padLooper[padNumber]);
-        //remove seq object from array
-        waitingPadLooper.remove(index, false);
+        int index = waitingPadLooper.indexOf(padNumber);
+        //remove pad from array
+        waitingPadLooper.remove(index);
     }
     
     //std::cout << "Deleting AudioFilePlayer for pad " << padNumber <<std::endl;
@@ -127,9 +127,9 @@ void ModeLooper::getOscData(int padNumber, int padValue)
     prevPadValue[padNumber] = padValue;
 }
 
-void ModeLooper::addItemToWaitingPadLooper (AudioFilePlayer* item)
+void ModeLooper::addItemToWaitingPadLooper (int padNum)
 {
-    waitingPadLooper.addIfNotAlreadyThere(item);
+    waitingPadLooper.addIfNotAlreadyThere(padNum);
 }
 
 
@@ -140,12 +140,12 @@ void ModeLooper::triggerQuantizationPoint()
         for (int i = 0; i < waitingPadLooper.size(); i++)
         {
             //alert padLooper[i] of a quantization point in time
-            waitingPadLooper[i]->triggerQuantizationPoint();
+            padLooper[waitingPadLooper[i]]->triggerQuantizationPoint();
         }
     
         //remove items from array so they no longer recieve alerts of
         //quantization points in time
-        waitingPadLooper.clear(false);
+        waitingPadLooper.clear();
     }
 }
 

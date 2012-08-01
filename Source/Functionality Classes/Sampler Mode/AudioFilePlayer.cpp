@@ -144,21 +144,38 @@ void AudioFilePlayer::processAudioFile(int padValue)
         
         
         
-        if (triggerModeData.playingStatus == 0 && shouldFinishLoop == 1 && indestructible == 0)
+        if (triggerModeData.playingStatus == 0 
+            && shouldFinishLoop == 1 
+            && indestructible == 0 
+            && currentPlayingState == 1)
         {
             //if recieved a command to stop file but is set to finish current loop before stopping,
             //ignore note off message and set looping status to off
             triggerModeData.playingStatus = 2; //ignore
             currentAudioFileSource->setLooping(false);
             playingLastLoop = true;
+            broadcaster.sendActionMessage("WAITING TO STOP");
             
             //what about if the user wants to cancel the finish loop command?
+            //curently, if the user presses the pad again it will restart call
+            //the below if else statement
+        }
+        else if (triggerModeData.playingStatus == 1 
+                 && playingLastLoop == true 
+                 && indestructible == 0 
+                 && currentPlayingState == 1)
+        {
+            std::cout << "here..." << std::endl;
+            currentAudioFileSource->setLooping(shouldLoop);
+            playingLastLoop = false;
+            triggerModeData.playingStatus = 1;
         }
         
         if (playingLastLoop == false)
         {
             currentAudioFileSource->setLooping(shouldLoop);
         }
+        
         
         
         
@@ -404,7 +421,7 @@ void AudioFilePlayer::playAudioFile()
     
     
     //update pad layout gui
-    if (currentPlayingState != 1) //if currentlyPlayingStatus doesn't already equal 1
+    if (currentPlayingState != 1 || shouldFinishLoop == true) //if currentlyPlayingStatus doesn't already equal 1
     {
         broadcaster.sendActionMessage("PLAYING");
         currentPlayingState = 1;

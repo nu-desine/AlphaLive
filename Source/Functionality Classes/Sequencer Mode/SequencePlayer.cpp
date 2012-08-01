@@ -206,15 +206,31 @@ void SequencePlayer::processSequence(int padValue)
     }
     
     
-    if (triggerModeData.playingStatus == 0 && shouldFinishLoop == 1 && indestructible == 0)
+    if (triggerModeData.playingStatus == 0 
+        && shouldFinishLoop == 1 
+        && indestructible == 0 
+        && currentPlayingState == 1)
     {
         //if recieved a command to stop file but is set to finish current loop before stopping,
         //ignore note off message and set looping status to off
         triggerModeData.playingStatus = 2; //ignore
         shouldLoop = false;
         playingLastLoop = true;
+        broadcaster.sendActionMessage("WAITING TO STOP");
         
         //what about if the user wants to cancel the finish loop command?
+        //curently, if the user presses the pad again it will restart call
+        //the below if else statement
+    }
+    else if (triggerModeData.playingStatus == 1 
+             && playingLastLoop == true 
+             && indestructible == 0 
+             && currentPlayingState == 1)
+    {
+        std::cout << "here..." << std::endl;
+        playingLastLoop = false;
+        shouldLoop = PAD_SETTINGS->getSequencerShouldLoop();
+        triggerModeData.playingStatus = 1;
     }
     
     
@@ -233,7 +249,8 @@ void SequencePlayer::processSequence(int padValue)
             else if (shouldLoop == false)
             {
                 //stopThreadAndReset(); //if reaches end of seqs and not set to loop, stop thread
-                stopThread(timeInterval);
+                //stopThread(timeInterval);
+                triggerModeData.playingStatus = 0;
             }
         }
     }
@@ -252,8 +269,8 @@ void SequencePlayer::processSequence(int padValue)
             if (isThreadRunning() == true)
             {
                 //stopThread(timeInterval); //so that the 'trigger' play states work ()
-                //should I be stopping the thread or should i just do: columnNumber = 0; ????
-                columnNumber = 0;
+                columnNumber = 0; //stopping and starting the thread causes a bigger time delay
+                broadcaster.sendActionMessage("PLAYING ON");
             }
             
             startThread();
@@ -429,7 +446,7 @@ void SequencePlayer::triggerQuantizationPoint()
         if (isThreadRunning() == true)
         {
             //stopThread(timeInterval); //so that the 'trigger' play states work ()
-            columnNumber = 0;
+            columnNumber = 0; //stopping and starting the thread causes a bigger time delay
             broadcaster.sendActionMessage("PLAYING ON");
         }
         
@@ -701,7 +718,7 @@ void SequencePlayer::run()
 
 void SequencePlayer::stopThreadAndReset()
 {
-    stopThread(timeInterval);
+    stopThread(timeInterval*2);
 
     triggerModes.reset();
     currentPlayingState = 0;

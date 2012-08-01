@@ -35,8 +35,8 @@ ScopedPointer<ApplicationCommandManager> commandManager;
 MainAppWindow::MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2, MenuBarModel *menuBar_)
     :               DocumentWindow (JUCEApplication::getInstance()->getApplicationName(),
                     Colours::black,
-                    5,
-                    false),
+                    5/*,
+                    false*/),
                     alphaLiveEngineRef(ref),
                     appDocumentStateRef(ref2),
                     menuBar(menuBar_)
@@ -45,6 +45,10 @@ MainAppWindow::MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2, MenuB
     mainComponent = new MainComponent(alphaLiveEngineRef, appDocumentStateRef, this);
     
     //see here - http://www.rawmaterialsoftware.com/viewtopic.php?f=3&t=6358&hilit=windows+native+menu+bar
+    //I have since abandomed this method, as when moving the apps window around the desktop it would leave
+    //'ghost' outlines. So now the TopLevelWindow class is intilialsed with the deafault 'addToDesktop(true)'
+    //above, and not done manually below.
+    //Though must check this doesn't screw up Windows stuff like described in the forum post.
     
     #if ! JUCE_MAC
     setMenuBar (menuBar);
@@ -53,7 +57,7 @@ MainAppWindow::MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2, MenuB
     //use native OS title bar
     setUsingNativeTitleBar(true);
     
-    addToDesktop(getDesktopWindowStyleFlags());
+    //addToDesktop(getDesktopWindowStyleFlags());
     
     //set main component to own the content of the main window
     setContentOwned(mainComponent, false); 

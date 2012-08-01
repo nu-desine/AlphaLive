@@ -62,7 +62,7 @@ public:
     void setBeatsPerBar (int value);
     void setAutoStartClock (int value);
     
-    void setLooperChannelMode (int channelNumber, int value);
+    void setSamplerChannelMode (int channelNumber, int value);
     void setSequencerChannelMode (int channelNumber, int value);
     
     void setCopyExternalFiles (bool value);
@@ -78,7 +78,7 @@ public:
     int getBeatsPerBar();
     int getAutoStartClock();
     
-    int getLooperChannelMode (int channelNumber);
+    int getSamplerChannelMode (int channelNumber);
     int getSequencerChannelMode (int channelNumber);
     
     bool getCopyExternalFiles();
@@ -125,8 +125,8 @@ private:
     
     
     //THIS STUFF is no longer needed.
-    //global looper mode
-    int looperChannelMode[6];
+    //global sampler mode
+    int samplerChannelMode[6];
     //global sequencer mode
     int sequencerChannelMode[6];
     

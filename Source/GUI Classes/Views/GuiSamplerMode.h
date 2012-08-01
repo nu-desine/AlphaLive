@@ -1,5 +1,5 @@
 //
-//  GuiLooperMode.h
+//  GuiSamplerMode.h
 //  AlphaSoft
 //
 //  Created by Liam Meredith-Lacey on 25/09/2011.
@@ -20,8 +20,8 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef H_GUILOOPERMODE
-#define H_GUILOOPERMODE
+#ifndef H_GUISAMPLERMODE
+#define H_GUISAMPLERMODE
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
 #include "../Custom Components/Effects/GuiFxDial.h"
@@ -33,15 +33,15 @@
 
 class MainComponent;
 
-class GuiLooperMode :   public Component,
+class GuiSamplerMode :   public Component,
                             public ComboBox::Listener,
                             public Slider::Listener,
                             public FilenameComponentListener,
                             public Button::Listener
 {
 public:
-    GuiLooperMode(MainComponent &ref);
-    ~GuiLooperMode();
+    GuiSamplerMode(MainComponent &ref);
+    ~GuiSamplerMode();
     
     void resized();
 	

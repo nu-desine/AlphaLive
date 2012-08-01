@@ -94,7 +94,7 @@ void GuiGainAndPan::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxGainPanGain(gainSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxGainPanGain(gainSlider->sliderComponent()->getValue());
         }
         
     }
@@ -105,7 +105,7 @@ void GuiGainAndPan::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxGainPanPan(panSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxGainPanPan(panSlider->sliderComponent()->getValue());
         }
         
     }    
@@ -115,7 +115,7 @@ void GuiGainAndPan::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxGainPanAtIntensity(intensitySlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxGainPanAtIntensity(intensitySlider->sliderComponent()->getValue());
         }
     }
     
@@ -129,7 +129,7 @@ void GuiGainAndPan::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxGainPanAlphaTouch(alphaTouchMenu->getSelectedId());
+            PAD_SETTINGS->setSamplerFxGainPanAlphaTouch(alphaTouchMenu->getSelectedId());
         }
     
     }
@@ -144,7 +144,7 @@ void GuiGainAndPan::buttonClicked (Button *button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxGainPanAtReverse(reverseButton->getToggleState());
+            PAD_SETTINGS->setSamplerFxGainPanAtReverse(reverseButton->getToggleState());
         }
         
     }
@@ -163,12 +163,12 @@ void GuiGainAndPan::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        gainSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxGainPanGain(), false);
-        panSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxGainPanPan(), false);
+        gainSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxGainPanGain(), false);
+        panSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxGainPanPan(), false);
         
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getLooperFxGainPanAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getLooperFxGainPanAtReverse(), false);
-        intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxGainPanAtIntensity(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxGainPanAlphaTouch(), true);
+        reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxGainPanAtReverse(), false);
+        intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxGainPanAtIntensity(), false);
     }
     
     else if(MULTI_PADS)

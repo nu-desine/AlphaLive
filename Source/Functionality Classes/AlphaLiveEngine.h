@@ -75,7 +75,7 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "../My IO Classes/OscInput.h"
 #include "MIDI Mode/ModeMidi.h"
-#include "Sampler Mode/ModeLooper.h"
+#include "Sampler Mode/ModeSampler.h"
 #include "Sequencer Mode/ModeSequencer.h"
 #include "Controller Mode/ModeController.h"
 #include "../Application/AbstractSubjectAndObserver.h"
@@ -99,7 +99,7 @@ public:
     
     AudioDeviceManager& getAudioDeviceManager();
     ModeMidi* getModeMidi(); //used by PadSettings to access the settings accessors
-    ModeLooper* getModeLooper(); //used by PadSettings to access the ModeLooper instance
+    ModeSampler* getModeSampler(); //used by PadSettings to access the ModeSampler instance
     ModeSequencer* getModeSequencer();  //used by PadSettings to access the ModeSequencer instance
                                         //also used to set the SequencerGrid instance as an observer to ModeSequencer
     ModeController* getModeController(); //used by PresetComponent to the PresetComponent as an observer to ModeController
@@ -142,7 +142,7 @@ public:
 private:
     
     ModeMidi *modeMidi;
-    ModeLooper *modeLooper;
+    ModeSampler *modeSampler;
     ModeSequencer *modeSequencer;
     ModeController *modeController;
     
@@ -156,7 +156,7 @@ private:
 	AudioDeviceManager audioDeviceManager;	// this wraps the actual audio device
     CriticalSection sharedMemory;
     
-    //audio stuff for mixing the modeLooper and modeSequencer objects, which are AudioSources
+    //audio stuff for mixing the modeSampler and modeSequencer objects, which are AudioSources
     MixerAudioSource audioMixer;
     AudioSourcePlayer audioPlayer;
     

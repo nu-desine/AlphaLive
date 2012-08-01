@@ -34,15 +34,15 @@ HighPassFilter::HighPassFilter(int padNumber_, float sampleRate_)
     // sample rate
     params[0] = sampleRate_;
     // cutoff frequency
-    params[1] = frequencyControlValue = PAD_SETTINGS->getLooperFxHpfFreq();
+    params[1] = frequencyControlValue = PAD_SETTINGS->getSamplerFxHpfFreq();
     // Q/Bandwidth
-    params[2] = bandwidthControlValue = PAD_SETTINGS->getLooperFxHpfBandwidth();
+    params[2] = bandwidthControlValue = PAD_SETTINGS->getSamplerFxHpfBandwidth();
     
-    mix = mixPrev = mixControlValue =  PAD_SETTINGS->getLooperFxHpfMix();
+    mix = mixPrev = mixControlValue =  PAD_SETTINGS->getSamplerFxHpfMix();
     
-    alphaTouchParam = PAD_SETTINGS->getLooperFxHpfAlphaTouch();
-    alphaTouchReverse = PAD_SETTINGS->getLooperFxHpfAtReverse();
-    alphaTouchIntensity = PAD_SETTINGS->getLooperFxHpfAtIntensity();
+    alphaTouchParam = PAD_SETTINGS->getSamplerFxHpfAlphaTouch();
+    alphaTouchReverse = PAD_SETTINGS->getSamplerFxHpfAtReverse();
+    alphaTouchIntensity = PAD_SETTINGS->getSamplerFxHpfAtIntensity();
     
 }
 

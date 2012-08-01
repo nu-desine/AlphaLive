@@ -63,84 +63,84 @@ PadSettings::PadSettings(int arrayIndex)
     //default CC layout
     midiCcController = Layouts::ccLayout[padNumber];
     
-    //looper mode
-    looperAudioFilePath = String::empty;
-    looperTriggerMode = 2; 
-    looperShouldLoop = 1;
-    looperIndestructible = 0;
-    looperShouldFinishLoop = 0;
-    looperSticky = 0;
-    looperEffect = 0;
-    looperPan = 0.5;
-    looperGain = 1.0;
+    //sampler mode
+    samplerAudioFilePath = String::empty;
+    samplerTriggerMode = 2; 
+    samplerShouldLoop = 1;
+    samplerIndestructible = 0;
+    samplerShouldFinishLoop = 0;
+    samplerSticky = 0;
+    samplerEffect = 0;
+    samplerPan = 0.5;
+    samplerGain = 1.0;
     
-    //----looper effects----
+    //----sampler effects----
     //Gain and Pan
-    looperFxGainPanGain = 0.5;
-    looperFxGainPanPan = 0.5;
-    looperFxGainPanAlphaTouch = 2;
-    looperFxGainPanAtReverse = 0;
-    looperFxGainPanAtIntensity = 1.0;
+    samplerFxGainPanGain = 0.5;
+    samplerFxGainPanPan = 0.5;
+    samplerFxGainPanAlphaTouch = 2;
+    samplerFxGainPanAtReverse = 0;
+    samplerFxGainPanAtIntensity = 1.0;
     //LPF
-    looperFxLpfMix = 0.0;
-    looperFxLpfFreq = 1000;
-    looperFxLpfBandwidth = 5;
-    looperFxLpfAlphaTouch = 2;
-    looperFxLpfAtReverse = 0;
-    looperFxLpfAtIntensity = 1.0;
+    samplerFxLpfMix = 0.0;
+    samplerFxLpfFreq = 1000;
+    samplerFxLpfBandwidth = 5;
+    samplerFxLpfAlphaTouch = 2;
+    samplerFxLpfAtReverse = 0;
+    samplerFxLpfAtIntensity = 1.0;
     //HPF
-    looperFxHpfMix = 0.0;
-    looperFxHpfFreq = 1000;
-    looperFxHpfBandwidth = 5;
-    looperFxHpfAlphaTouch = 2;
-    looperFxHpfAtReverse = 0;
-    looperFxHpfAtIntensity = 1.0;
+    samplerFxHpfMix = 0.0;
+    samplerFxHpfFreq = 1000;
+    samplerFxHpfBandwidth = 5;
+    samplerFxHpfAlphaTouch = 2;
+    samplerFxHpfAtReverse = 0;
+    samplerFxHpfAtIntensity = 1.0;
     //BPF
-    looperFxBpfMix = 0.0;
-    looperFxBpfFreq = 1000;
-    looperFxBpfBandwidth = 5;
-    looperFxBpfAlphaTouch = 2;
-    looperFxBpfAtReverse = 0;
-    looperFxBpfAtIntensity = 1.0;
+    samplerFxBpfMix = 0.0;
+    samplerFxBpfFreq = 1000;
+    samplerFxBpfBandwidth = 5;
+    samplerFxBpfAlphaTouch = 2;
+    samplerFxBpfAtReverse = 0;
+    samplerFxBpfAtIntensity = 1.0;
     //Delay
-    looperFxDelayMix = 0.0;
-    looperFxDelayTime = 500.0;
-    looperFxDelayFeedback = 0.5;
-    looperFxDelayLpfFreq = 20000.0;
-    looperFxDelayHpfFreq = 30.0;
-    looperFxDelaySync = 1;
-    looperFxDelayTimeMenu = 3;
-    looperFxDelayAlphaTouch = 2;
-    looperFxDelayAtReverse = 0;
-    looperFxDelayAtIntensity = 1.0;
+    samplerFxDelayMix = 0.0;
+    samplerFxDelayTime = 500.0;
+    samplerFxDelayFeedback = 0.5;
+    samplerFxDelayLpfFreq = 20000.0;
+    samplerFxDelayHpfFreq = 30.0;
+    samplerFxDelaySync = 1;
+    samplerFxDelayTimeMenu = 3;
+    samplerFxDelayAlphaTouch = 2;
+    samplerFxDelayAtReverse = 0;
+    samplerFxDelayAtIntensity = 1.0;
     //Reverb
-    looperFxReverbMix = 0.0;
-    looperFxReverbRoomSize = 0.5;
-    looperFxReverbDamping = 0.5;
-    looperFxReverbWidth = 0.5;
-    looperFxReverbFreezeMode = 0.2;
-    looperFxReverbAlphaTouch = 2;
-    looperFxReverbAtReverse = 0;
-    looperFxReverbAtIntensity = 1.0;
+    samplerFxReverbMix = 0.0;
+    samplerFxReverbRoomSize = 0.5;
+    samplerFxReverbDamping = 0.5;
+    samplerFxReverbWidth = 0.5;
+    samplerFxReverbFreezeMode = 0.2;
+    samplerFxReverbAlphaTouch = 2;
+    samplerFxReverbAtReverse = 0;
+    samplerFxReverbAtIntensity = 1.0;
     //Flanger
-    looperFxFlangerMix = 0.0;
-    looperFxFlangerRate = 0.25;
-    looperFxFlangerFeedback = 0.9;
-    looperFxFlangerIntensity = 0.1;
-    looperFxFlangerSync = 1;
-    looperFxFlangerRateMenu = 4;
-    looperFxFlangerAlphaTouch = 2;
-    looperFxFlangerAtReverse = 0;
-    looperFxFlangerAtIntensity = 1.0;
+    samplerFxFlangerMix = 0.0;
+    samplerFxFlangerRate = 0.25;
+    samplerFxFlangerFeedback = 0.9;
+    samplerFxFlangerIntensity = 0.1;
+    samplerFxFlangerSync = 1;
+    samplerFxFlangerRateMenu = 4;
+    samplerFxFlangerAlphaTouch = 2;
+    samplerFxFlangerAtReverse = 0;
+    samplerFxFlangerAtIntensity = 1.0;
     //Tremolo
-    looperFxTremoloDepth = 0.0;
-    looperFxTremoloRate = 5.0;
-    looperFxTremoloShape = 1;
-    looperFxTremoloSync = 1;
-    looperFxTremoloRateMenu = 3;
-    looperFxTremoloAlphaTouch = 2;
-    looperFxTremoloAtReverse = 0;
-    looperFxTremoloAtIntensity = 1.0;
+    samplerFxTremoloDepth = 0.0;
+    samplerFxTremoloRate = 5.0;
+    samplerFxTremoloShape = 1;
+    samplerFxTremoloSync = 1;
+    samplerFxTremoloRateMenu = 3;
+    samplerFxTremoloAlphaTouch = 2;
+    samplerFxTremoloAtReverse = 0;
+    samplerFxTremoloAtIntensity = 1.0;
     
     //sequencer mode
     //init all indexes of the sequencerData 3D array to 0.
@@ -246,7 +246,7 @@ void PadSettings::resetData (int whatToReset)
      whatToReset values:
      0 - reset everything
      1 - everything but MIDI mode
-     2 - everything but Looper mode
+     2 - everything but Sampler mode
      3 - everything but sequencer mode
      4 - everything but controller mode
      
@@ -279,15 +279,15 @@ void PadSettings::resetData (int whatToReset)
     
     if (whatToReset != 2)
     {
-        setLooperAudioFilePath (File::nonexistent);
-        setLooperTriggerMode (2);
-        setLooperShouldLoop(1);
-        setLooperIndestructible(0);
-        setLooperShouldFinishLoop(0);
-        setLooperSticky(0);
-        setLooperEffect (0);
-        setLooperPan (0.5);
-        setLooperGain (1.0);
+        setSamplerAudioFilePath (File::nonexistent);
+        setSamplerTriggerMode (2);
+        setSamplerShouldLoop(1);
+        setSamplerIndestructible(0);
+        setSamplerShouldFinishLoop(0);
+        setSamplerSticky(0);
+        setSamplerEffect (0);
+        setSamplerPan (0.5);
+        setSamplerGain (1.0);
         
         //what about reseting the FX values?
     }
@@ -373,15 +373,15 @@ void PadSettings::setMode(int value)
         //do i need the != part in any of the statements below? (as I'm initally checking above)
         
         
-        if (value == 2 && mode != 2) //to prevent Looper AudioFilePlayer objects being re-created
+        if (value == 2 && mode != 2) //to prevent Sampler AudioFilePlayer objects being re-created
         {
             //create an instance of AudioFilePlayer for pad 'padNumber'
-            alphaLiveEngineRef->getModeLooper()->createAudioFilePlayer(padNumber);
+            alphaLiveEngineRef->getModeSampler()->createAudioFilePlayer(padNumber);
         }
-        else if (mode == 2 && value != 2) //to prevent non-existent Looper AudioFilePlayer objects from being deleted
+        else if (mode == 2 && value != 2) //to prevent non-existent Sampler AudioFilePlayer objects from being deleted
         {
             //delete instance of AudioFilePlayer for pad 'padNumber'
-            alphaLiveEngineRef->getModeLooper()->deleteAudioFilePlayer(padNumber);
+            alphaLiveEngineRef->getModeSampler()->deleteAudioFilePlayer(padNumber);
         }
         
         
@@ -438,9 +438,9 @@ void PadSettings::setQuantizeMode (int value)
     
     alphaLiveEngineRef->getModeMidi()->setQuantizeMode(value, padNumber);
     
-    if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
     {
-        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setQuantizeMode(value);
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setQuantizeMode(value);
     }
     
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
@@ -617,16 +617,16 @@ int PadSettings::getMidiCcController()
 
 
 
-#pragma mark Looper mode mutator functions
+#pragma mark Sampler mode mutator functions
 //==================================================================
-//=Looper Mode Methods==============================================
+//=Sampler Mode Methods==============================================
 //==================================================================
 
-void PadSettings::setLooperAudioFilePath(File value)
+void PadSettings::setSamplerAudioFilePath(File value)
 {
     /*
      If the default option is set, this function creates a copy of the imported audio file in the working directory, 
-     and sets the new file path as the loopers audio file location.
+     and sets the new file path as the samplers audio file location.
      The algorithm used below ensures that there will be no obvious duplicates of audio files,
      but it also ensures that imported files with an existing name might not necessarily be a duplicate!
      
@@ -681,111 +681,111 @@ void PadSettings::setLooperAudioFilePath(File value)
         }
         
         //OLD - store just the FILE NAME of the audio file.
-        //looperAudioFilePath = value.getFileName();
+        //samplerAudioFilePath = value.getFileName();
         //NEW - store the full path of the audio file, incase the file isn't copied into the working directory
-        looperAudioFilePath = value.getFullPathName();
+        samplerAudioFilePath = value.getFullPathName();
     }
     else
-        looperAudioFilePath = String::empty; 
+        samplerAudioFilePath = String::empty; 
     
     //set the audio file within the correct AudioFilePlayer Instance if it exists
-    if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
     {
-        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setAudioFile(value);
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setAudioFile(value);
     }
 }
 
 
-void PadSettings::setLooperTriggerMode(int value)
+void PadSettings::setSamplerTriggerMode(int value)
 {
-    looperTriggerMode = value;
-    if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    samplerTriggerMode = value;
+    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
     {
-        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setTriggerMode(looperTriggerMode);
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setTriggerMode(samplerTriggerMode);
     }
 }
 
-void PadSettings::setLooperShouldLoop (int value)
+void PadSettings::setSamplerShouldLoop (int value)
 {
-    looperShouldLoop = value;
-    if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    samplerShouldLoop = value;
+    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
     {
-        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setShouldLoop(looperShouldLoop);
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setShouldLoop(samplerShouldLoop);
     }
     
 }
-void PadSettings::setLooperIndestructible (int value)
+void PadSettings::setSamplerIndestructible (int value)
 {
-    looperIndestructible = value;
-    if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    samplerIndestructible = value;
+    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
     {
-        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setIndestructible(looperIndestructible);
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setIndestructible(samplerIndestructible);
     }
 }
-void PadSettings::setLooperShouldFinishLoop (int value)
+void PadSettings::setSamplerShouldFinishLoop (int value)
 {
-    looperShouldFinishLoop = value;
-    if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    samplerShouldFinishLoop = value;
+    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
     {
-        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setShouldFinishLoop(looperShouldFinishLoop);
-    }
-}
-
-void PadSettings::setLooperSticky (int value)
-{
-    looperSticky = value;
-    if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
-    {
-        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setSticky(looperSticky);
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setShouldFinishLoop(samplerShouldFinishLoop);
     }
 }
 
-void PadSettings::setLooperEffect(int value)
+void PadSettings::setSamplerSticky (int value)
+{
+    samplerSticky = value;
+    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setSticky(samplerSticky);
+    }
+}
+
+void PadSettings::setSamplerEffect(int value)
 {
     //std::cout << "Pad " << padNumber << " set with effect " << value << std::endl;
-    looperEffect = value;
+    samplerEffect = value;
     
-    if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
     {
-        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setEffect(looperEffect);
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setEffect(samplerEffect);
     }
     
 }
-void PadSettings::setLooperPan(float value)
+void PadSettings::setSamplerPan(float value)
 {
-    looperPan = value;
-    if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    samplerPan = value;
+    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
     {
-        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setPan(looperPan);
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setPan(samplerPan);
     }
 }
-void PadSettings::setLooperGain(float value)
+void PadSettings::setSamplerGain(float value)
 {
-    looperGain = value;
-    if (alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    samplerGain = value;
+    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
     {
-        alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->setGain(looperGain);
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setGain(samplerGain);
     }
 }
 
-#pragma mark Looper mode accessor functions
+#pragma mark Sampler mode accessor functions
 
-File PadSettings::getLooperAudioFilePath()
+File PadSettings::getSamplerAudioFilePath()
 {
-    if (looperAudioFilePath != String::empty)
+    if (samplerAudioFilePath != String::empty)
     {
-        File audioFile = looperAudioFilePath;
+        File audioFile = samplerAudioFilePath;
         
         if (audioFile.existsAsFile() == false) //if for some reason it doesn't exist
         {
-            AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + looperAudioFilePath + "\"" + " for Pad " + String(padNumber+1) + " could not be found.");
+            AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + samplerAudioFilePath + "\"" + " for Pad " + String(padNumber+1) + " could not be found.");
             //IN NEXT VERSION USE A YES/NO ALERTWINDOW THAT ASKS IF YOU WOULD LIKE TO MANUALLY LOCATE THE AUDIO FILE.
             //THIS WILL BRING UP A FILEBROWSERWINDOW AND THE CHOSEN FILE WILL THEN BE MOVED TO THE CURRENT WORKING DIRECTORY AND
-            //SAVED INTO THE looperAudioFilePath STRING IN THE CORRECT FORMAT.
+            //SAVED INTO THE samplerAudioFilePath STRING IN THE CORRECT FORMAT.
             
             //set the relevent variables to nonexistent/empty
             audioFile = File::nonexistent;
-            looperAudioFilePath = String::empty;
+            samplerAudioFilePath = String::empty;
         }
         
         return audioFile;
@@ -797,586 +797,586 @@ File PadSettings::getLooperAudioFilePath()
 }
 
 
-int PadSettings::getLooperTriggerMode()
+int PadSettings::getSamplerTriggerMode()
 {
-    return looperTriggerMode;
+    return samplerTriggerMode;
 }
 
-int PadSettings::getLooperShouldLoop()
+int PadSettings::getSamplerShouldLoop()
 {
-    return looperShouldLoop;
+    return samplerShouldLoop;
 }
-int PadSettings::getLooperIndestructible()
+int PadSettings::getSamplerIndestructible()
 {
-    return looperIndestructible;
+    return samplerIndestructible;
 }
-int PadSettings::getLooperShouldFinishLoop()
+int PadSettings::getSamplerShouldFinishLoop()
 {
-    return looperShouldFinishLoop;
+    return samplerShouldFinishLoop;
 }
-int PadSettings::getLooperSticky()
+int PadSettings::getSamplerSticky()
 {
-    return looperSticky;
-}
-
-int PadSettings::getLooperEffect()
-{
-    return looperEffect;
-}
-float PadSettings::getLooperPan()
-{
-    return looperPan;
-}
-float PadSettings::getLooperGain()
-{
-    return looperGain;
+    return samplerSticky;
 }
 
+int PadSettings::getSamplerEffect()
+{
+    return samplerEffect;
+}
+float PadSettings::getSamplerPan()
+{
+    return samplerPan;
+}
+float PadSettings::getSamplerGain()
+{
+    return samplerGain;
+}
 
-#pragma mark Looper FX functions
-//---LOOPER EFFECTS---
+
+#pragma mark Sampler FX functions
+//---SAMPLER EFFECTS---
 #pragma mark Gain/Pan FX
 //Gain&Pan
-void PadSettings::setLooperFxGainPanGain (float value)
+void PadSettings::setSamplerFxGainPanGain (float value)
 {
-    looperFxGainPanGain = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setGain(value);
+    samplerFxGainPanGain = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setGain(value);
 }
-void PadSettings::setLooperFxGainPanPan (float value)
+void PadSettings::setSamplerFxGainPanPan (float value)
 {
-    looperFxGainPanPan = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setPan(value);
+    samplerFxGainPanPan = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setPan(value);
 }
-void PadSettings::setLooperFxGainPanAlphaTouch (int value)
+void PadSettings::setSamplerFxGainPanAlphaTouch (int value)
 {
-    looperFxGainPanAlphaTouch = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setAlphaTouchParam(value);
+    samplerFxGainPanAlphaTouch = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setAlphaTouchParam(value);
 }
-void PadSettings::setLooperFxGainPanAtReverse (int value)
+void PadSettings::setSamplerFxGainPanAtReverse (int value)
 {
-    looperFxGainPanAtReverse = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setAlphaTouchReverse(value);
+    samplerFxGainPanAtReverse = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setAlphaTouchReverse(value);
 }
-void PadSettings::setLooperFxGainPanAtIntensity (float value)
+void PadSettings::setSamplerFxGainPanAtIntensity (float value)
 {
-    looperFxGainPanAtIntensity = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setAlphaTouchIntensity(value);
+    samplerFxGainPanAtIntensity = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setAlphaTouchIntensity(value);
 }
-float PadSettings::getLooperFxGainPanGain()
+float PadSettings::getSamplerFxGainPanGain()
 {
-    return looperFxGainPanGain;
+    return samplerFxGainPanGain;
 }
-float PadSettings::getLooperFxGainPanPan()
+float PadSettings::getSamplerFxGainPanPan()
 {
-    return looperFxGainPanPan;
+    return samplerFxGainPanPan;
 }
-int PadSettings::getLooperFxGainPanAlphaTouch()
+int PadSettings::getSamplerFxGainPanAlphaTouch()
 {
-    return looperFxGainPanAlphaTouch;
+    return samplerFxGainPanAlphaTouch;
 }
-int PadSettings::getLooperFxGainPanAtReverse()
+int PadSettings::getSamplerFxGainPanAtReverse()
 {
-    return looperFxGainPanAtReverse;
+    return samplerFxGainPanAtReverse;
 }
-float PadSettings::getLooperFxGainPanAtIntensity()
+float PadSettings::getSamplerFxGainPanAtIntensity()
 {
-    return looperFxGainPanAtIntensity;
+    return samplerFxGainPanAtIntensity;
 }
 
 #pragma mark LPF FX
 //LPF
-void PadSettings::setLooperFxLpfMix (float value)
+void PadSettings::setSamplerFxLpfMix (float value)
 {
-    looperFxLpfMix = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setMix(looperFxLpfMix);
+    samplerFxLpfMix = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setMix(samplerFxLpfMix);
 }
-void PadSettings::setLooperFxLpfFreq (float value)
+void PadSettings::setSamplerFxLpfFreq (float value)
 {
-    looperFxLpfFreq = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setFrequency(looperFxLpfFreq);
+    samplerFxLpfFreq = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setFrequency(samplerFxLpfFreq);
 }
-void PadSettings::setLooperFxLpfBandwidth (float value)
+void PadSettings::setSamplerFxLpfBandwidth (float value)
 {
-    looperFxLpfBandwidth = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setBandwidth(looperFxLpfBandwidth);
+    samplerFxLpfBandwidth = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setBandwidth(samplerFxLpfBandwidth);
 }
-void PadSettings::setLooperFxLpfAlphaTouch (int value)
+void PadSettings::setSamplerFxLpfAlphaTouch (int value)
 {
-    looperFxLpfAlphaTouch = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setAlphaTouchParam(looperFxLpfAlphaTouch);
+    samplerFxLpfAlphaTouch = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setAlphaTouchParam(samplerFxLpfAlphaTouch);
 }
-void PadSettings::setLooperFxLpfAtReverse (int value)
+void PadSettings::setSamplerFxLpfAtReverse (int value)
 {
-    looperFxLpfAtReverse = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setAlphaTouchReverse(looperFxLpfAtReverse);
+    samplerFxLpfAtReverse = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setAlphaTouchReverse(samplerFxLpfAtReverse);
     
 }
-void PadSettings::setLooperFxLpfAtIntensity (float value)
+void PadSettings::setSamplerFxLpfAtIntensity (float value)
 {
-    looperFxLpfAtIntensity = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setAlphaTouchIntensity(looperFxLpfAtIntensity);
+    samplerFxLpfAtIntensity = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setAlphaTouchIntensity(samplerFxLpfAtIntensity);
 }
 
-float PadSettings::getLooperFxLpfMix()
+float PadSettings::getSamplerFxLpfMix()
 {
-    return looperFxLpfMix;
+    return samplerFxLpfMix;
 }
-float PadSettings::getLooperFxLpfFreq()
+float PadSettings::getSamplerFxLpfFreq()
 {
-    return looperFxLpfFreq;
+    return samplerFxLpfFreq;
 }
-float PadSettings::getLooperFxLpfBandwidth()
+float PadSettings::getSamplerFxLpfBandwidth()
 {
-    return looperFxLpfBandwidth;
+    return samplerFxLpfBandwidth;
 }
-int PadSettings::getLooperFxLpfAlphaTouch()
+int PadSettings::getSamplerFxLpfAlphaTouch()
 {
-    return looperFxLpfAlphaTouch;
+    return samplerFxLpfAlphaTouch;
 }
-int PadSettings::getLooperFxLpfAtReverse()
+int PadSettings::getSamplerFxLpfAtReverse()
 {
-    return looperFxLpfAtReverse;
+    return samplerFxLpfAtReverse;
 }
-float PadSettings::getLooperFxLpfAtIntensity()
+float PadSettings::getSamplerFxLpfAtIntensity()
 {
-    return looperFxLpfAtIntensity;
+    return samplerFxLpfAtIntensity;
 }
 
 #pragma mark HPF FX
 //HPF
-void PadSettings::setLooperFxHpfMix (float value)
+void PadSettings::setSamplerFxHpfMix (float value)
 {
-    looperFxHpfMix = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setMix(looperFxHpfMix);
+    samplerFxHpfMix = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setMix(samplerFxHpfMix);
 }
-void PadSettings::setLooperFxHpfFreq (float value)
+void PadSettings::setSamplerFxHpfFreq (float value)
 {
-    looperFxHpfFreq = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setFrequency(looperFxHpfFreq);
+    samplerFxHpfFreq = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setFrequency(samplerFxHpfFreq);
 }
-void PadSettings::setLooperFxHpfBandwidth (float value)
+void PadSettings::setSamplerFxHpfBandwidth (float value)
 {
-    looperFxHpfBandwidth = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setBandwidth(looperFxHpfBandwidth);
+    samplerFxHpfBandwidth = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setBandwidth(samplerFxHpfBandwidth);
 }
-void PadSettings::setLooperFxHpfAlphaTouch (int value)
+void PadSettings::setSamplerFxHpfAlphaTouch (int value)
 {
-    looperFxHpfAlphaTouch = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setAlphaTouchParam(looperFxHpfAlphaTouch);
+    samplerFxHpfAlphaTouch = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setAlphaTouchParam(samplerFxHpfAlphaTouch);
 }
-void PadSettings::setLooperFxHpfAtReverse (int value)
+void PadSettings::setSamplerFxHpfAtReverse (int value)
 {
-    looperFxHpfAtReverse = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setAlphaTouchReverse(looperFxHpfAtReverse);
+    samplerFxHpfAtReverse = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setAlphaTouchReverse(samplerFxHpfAtReverse);
     
 }
-void PadSettings::setLooperFxHpfAtIntensity (float value)
+void PadSettings::setSamplerFxHpfAtIntensity (float value)
 {
-    looperFxHpfAtIntensity = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setAlphaTouchIntensity(looperFxHpfAtIntensity);
+    samplerFxHpfAtIntensity = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setAlphaTouchIntensity(samplerFxHpfAtIntensity);
 }
 
-float PadSettings::getLooperFxHpfMix()
+float PadSettings::getSamplerFxHpfMix()
 {
-    return looperFxHpfMix;
+    return samplerFxHpfMix;
 }
-float PadSettings::getLooperFxHpfFreq()
+float PadSettings::getSamplerFxHpfFreq()
 {
-    return looperFxHpfFreq;
+    return samplerFxHpfFreq;
 }
-float PadSettings::getLooperFxHpfBandwidth()
+float PadSettings::getSamplerFxHpfBandwidth()
 {
-    return looperFxHpfBandwidth;
+    return samplerFxHpfBandwidth;
 }
-int PadSettings::getLooperFxHpfAlphaTouch()
+int PadSettings::getSamplerFxHpfAlphaTouch()
 {
-    return looperFxHpfAlphaTouch;
+    return samplerFxHpfAlphaTouch;
 }
-int PadSettings::getLooperFxHpfAtReverse()
+int PadSettings::getSamplerFxHpfAtReverse()
 {
-    return looperFxHpfAtReverse;
+    return samplerFxHpfAtReverse;
 }
-float PadSettings::getLooperFxHpfAtIntensity()
+float PadSettings::getSamplerFxHpfAtIntensity()
 {
-    return looperFxHpfAtIntensity;
+    return samplerFxHpfAtIntensity;
 }
 
 #pragma mark BPF FX
 //BPF
-void PadSettings::setLooperFxBpfMix (float value)
+void PadSettings::setSamplerFxBpfMix (float value)
 {
-    looperFxBpfMix = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setMix(looperFxBpfMix);
+    samplerFxBpfMix = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setMix(samplerFxBpfMix);
 }
-void PadSettings::setLooperFxBpfFreq (float value)
+void PadSettings::setSamplerFxBpfFreq (float value)
 {
-    looperFxBpfFreq = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setFrequency(looperFxBpfFreq);
+    samplerFxBpfFreq = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setFrequency(samplerFxBpfFreq);
 }
-void PadSettings::setLooperFxBpfBandwidth (float value)
+void PadSettings::setSamplerFxBpfBandwidth (float value)
 {
-    looperFxBpfBandwidth = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setBandwidth(looperFxBpfBandwidth);
+    samplerFxBpfBandwidth = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setBandwidth(samplerFxBpfBandwidth);
 }
-void PadSettings::setLooperFxBpfAlphaTouch (int value)
+void PadSettings::setSamplerFxBpfAlphaTouch (int value)
 {
-    looperFxBpfAlphaTouch = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setAlphaTouchParam(looperFxBpfAlphaTouch);
+    samplerFxBpfAlphaTouch = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setAlphaTouchParam(samplerFxBpfAlphaTouch);
 }
-void PadSettings::setLooperFxBpfAtReverse (int value)
+void PadSettings::setSamplerFxBpfAtReverse (int value)
 {
-    looperFxBpfAtReverse = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setAlphaTouchReverse(looperFxBpfAtReverse);
+    samplerFxBpfAtReverse = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setAlphaTouchReverse(samplerFxBpfAtReverse);
     
 }
-void PadSettings::setLooperFxBpfAtIntensity (float value)
+void PadSettings::setSamplerFxBpfAtIntensity (float value)
 {
-    looperFxBpfAtIntensity = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setAlphaTouchIntensity(looperFxBpfAtIntensity);
+    samplerFxBpfAtIntensity = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setAlphaTouchIntensity(samplerFxBpfAtIntensity);
 }
 
-float PadSettings::getLooperFxBpfMix()
+float PadSettings::getSamplerFxBpfMix()
 {
-    return looperFxBpfMix;
+    return samplerFxBpfMix;
 }
-float PadSettings::getLooperFxBpfFreq()
+float PadSettings::getSamplerFxBpfFreq()
 {
-    return looperFxBpfFreq;
+    return samplerFxBpfFreq;
 }
-float PadSettings::getLooperFxBpfBandwidth()
+float PadSettings::getSamplerFxBpfBandwidth()
 {
-    return looperFxBpfBandwidth;
+    return samplerFxBpfBandwidth;
 }
-int PadSettings::getLooperFxBpfAlphaTouch()
+int PadSettings::getSamplerFxBpfAlphaTouch()
 {
-    return looperFxBpfAlphaTouch;
+    return samplerFxBpfAlphaTouch;
 }
-int PadSettings::getLooperFxBpfAtReverse()
+int PadSettings::getSamplerFxBpfAtReverse()
 {
-    return looperFxBpfAtReverse;
+    return samplerFxBpfAtReverse;
 }
-float PadSettings::getLooperFxBpfAtIntensity()
+float PadSettings::getSamplerFxBpfAtIntensity()
 {
-    return looperFxBpfAtIntensity;
+    return samplerFxBpfAtIntensity;
 }
 
 #pragma mark Delay FX
 //Delay
-void PadSettings::setLooperFxDelayMix (float value)
+void PadSettings::setSamplerFxDelayMix (float value)
 {
-    looperFxDelayMix = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getDelay().setWetMix(value);
+    samplerFxDelayMix = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setWetMix(value);
 }
-void PadSettings::setLooperFxDelayTime (float value)
+void PadSettings::setSamplerFxDelayTime (float value)
 {
-    looperFxDelayTime = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getDelay().setDelayTime(value);
+    samplerFxDelayTime = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setDelayTime(value);
 }
-void PadSettings::setLooperFxDelayFeedback (float value)
+void PadSettings::setSamplerFxDelayFeedback (float value)
 {
-    looperFxDelayFeedback = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getDelay().setFeedback(value);
+    samplerFxDelayFeedback = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setFeedback(value);
 }
-void PadSettings::setLooperFxDelayLpfFreq (float value)
+void PadSettings::setSamplerFxDelayLpfFreq (float value)
 {
-    looperFxDelayLpfFreq = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getDelay().setLpfFrequency(value);
+    samplerFxDelayLpfFreq = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setLpfFrequency(value);
 }
-void PadSettings::setLooperFxDelayHpfFreq (float value)
+void PadSettings::setSamplerFxDelayHpfFreq (float value)
 {
-    looperFxDelayHpfFreq = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getDelay().setHpfFrequency(value);
+    samplerFxDelayHpfFreq = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setHpfFrequency(value);
 }
-void PadSettings::setLooperFxDelaySync (int value)
+void PadSettings::setSamplerFxDelaySync (int value)
 {
-    looperFxDelaySync = value;
+    samplerFxDelaySync = value;
 }
-void PadSettings::setLooperFxDelayTimeMenu (int value)
+void PadSettings::setSamplerFxDelayTimeMenu (int value)
 {
-    looperFxDelayTimeMenu = value;
+    samplerFxDelayTimeMenu = value;
 }
-void PadSettings::setLooperFxDelayAlphaTouch (int value)
+void PadSettings::setSamplerFxDelayAlphaTouch (int value)
 {
-    looperFxDelayAlphaTouch = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getDelay().setAlphaTouchParam(value);
+    samplerFxDelayAlphaTouch = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setAlphaTouchParam(value);
 }
-void PadSettings::setLooperFxDelayAtReverse (int value)
+void PadSettings::setSamplerFxDelayAtReverse (int value)
 {
-    looperFxDelayAtReverse = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getDelay().setAlphaTouchReverse(value);
+    samplerFxDelayAtReverse = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setAlphaTouchReverse(value);
 }
-void PadSettings::setLooperFxDelayAtIntensity (float value)
+void PadSettings::setSamplerFxDelayAtIntensity (float value)
 {
-    looperFxDelayAtIntensity = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getDelay().setAlphaTouchIntensity(value);
+    samplerFxDelayAtIntensity = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setAlphaTouchIntensity(value);
 }
-float PadSettings::getLooperFxDelayMix()
+float PadSettings::getSamplerFxDelayMix()
 {
-    return looperFxDelayMix;
+    return samplerFxDelayMix;
 }
-float PadSettings::getLooperFxDelayTime()
+float PadSettings::getSamplerFxDelayTime()
 {
-    return looperFxDelayTime;
+    return samplerFxDelayTime;
 }
-float PadSettings::getLooperFxDelayFeedback()
+float PadSettings::getSamplerFxDelayFeedback()
 {
-    return looperFxDelayFeedback;
+    return samplerFxDelayFeedback;
 }
-float PadSettings::getLooperFxDelayLpfFreq()
+float PadSettings::getSamplerFxDelayLpfFreq()
 {
-    return looperFxDelayLpfFreq;
+    return samplerFxDelayLpfFreq;
 }
-float PadSettings::getLooperFxDelayHpfFreq()
+float PadSettings::getSamplerFxDelayHpfFreq()
 {
-    return looperFxDelayHpfFreq;
+    return samplerFxDelayHpfFreq;
 }
-int PadSettings::getLooperFxDelaySync()
+int PadSettings::getSamplerFxDelaySync()
 {
-    return looperFxDelaySync;
+    return samplerFxDelaySync;
 }
-int PadSettings::getLooperFxDelayTimeMenu()
+int PadSettings::getSamplerFxDelayTimeMenu()
 {
-    return looperFxDelayTimeMenu;
+    return samplerFxDelayTimeMenu;
 }
-int PadSettings::getLooperFxDelayAlphaTouch()
+int PadSettings::getSamplerFxDelayAlphaTouch()
 {
-    return looperFxDelayAlphaTouch;
+    return samplerFxDelayAlphaTouch;
 }
-int PadSettings::getLooperFxDelayAtReverse()
+int PadSettings::getSamplerFxDelayAtReverse()
 {
-    return looperFxDelayAtReverse;
+    return samplerFxDelayAtReverse;
 }
-float PadSettings::getLooperFxDelayAtIntensity()
+float PadSettings::getSamplerFxDelayAtIntensity()
 {
-    return looperFxDelayAtIntensity;
+    return samplerFxDelayAtIntensity;
 }
 
 #pragma mark Reverb FX
 //Reverb
-void PadSettings::setLooperFxReverbMix (float value)
+void PadSettings::setSamplerFxReverbMix (float value)
 {
-    looperFxReverbMix = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getReverb().setMix(value);
+    samplerFxReverbMix = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setMix(value);
 }
-void PadSettings::setLooperFxReverbRoomSize (float value)
+void PadSettings::setSamplerFxReverbRoomSize (float value)
 {
-    looperFxReverbRoomSize = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getReverb().setRoomSize(value);
+    samplerFxReverbRoomSize = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setRoomSize(value);
 }
-void PadSettings::setLooperFxReverbDamping (float value)
+void PadSettings::setSamplerFxReverbDamping (float value)
 {
-    looperFxReverbDamping = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getReverb().setDamping(value);
+    samplerFxReverbDamping = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setDamping(value);
 }
-void PadSettings::setLooperFxReverbWidth (float value)
+void PadSettings::setSamplerFxReverbWidth (float value)
 {
-    looperFxReverbWidth = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getReverb().setWidth(value);
+    samplerFxReverbWidth = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setWidth(value);
 }
-void PadSettings::setLooperFxReverbFreezeMode (float value)
+void PadSettings::setSamplerFxReverbFreezeMode (float value)
 {
-    looperFxReverbFreezeMode = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getReverb().setFreezeMode(value);
+    samplerFxReverbFreezeMode = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setFreezeMode(value);
 }
-void PadSettings::setLooperFxReverbAlphaTouch (int value)
+void PadSettings::setSamplerFxReverbAlphaTouch (int value)
 {
-    looperFxReverbAlphaTouch = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getReverb().setAlphaTouchParam(value);
+    samplerFxReverbAlphaTouch = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setAlphaTouchParam(value);
 }
-void PadSettings::setLooperFxReverbAtReverse (int value)
+void PadSettings::setSamplerFxReverbAtReverse (int value)
 {
-    looperFxReverbAtReverse = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getReverb().setAlphaTouchReverse(value);
+    samplerFxReverbAtReverse = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setAlphaTouchReverse(value);
 }
-void PadSettings::setLooperFxReverbAtIntensity (float value)
+void PadSettings::setSamplerFxReverbAtIntensity (float value)
 {
-    looperFxReverbAtIntensity = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getReverb().setAlphaTouchIntensity(value);
+    samplerFxReverbAtIntensity = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setAlphaTouchIntensity(value);
 }
-float PadSettings::getLooperFxReverbMix()
+float PadSettings::getSamplerFxReverbMix()
 {
-    return looperFxReverbMix;
+    return samplerFxReverbMix;
 }
-float PadSettings::getLooperFxReverbRoomSize()
+float PadSettings::getSamplerFxReverbRoomSize()
 {
-    return looperFxReverbRoomSize;
+    return samplerFxReverbRoomSize;
 }
-float PadSettings::getLooperFxReverbDamping()
+float PadSettings::getSamplerFxReverbDamping()
 {
-    return looperFxReverbDamping;
+    return samplerFxReverbDamping;
 }
-float PadSettings::getLooperFxReverbWidth()
+float PadSettings::getSamplerFxReverbWidth()
 {
-    return looperFxReverbWidth;
+    return samplerFxReverbWidth;
 }
-float PadSettings::getLooperFxReverbFreezeMode()
+float PadSettings::getSamplerFxReverbFreezeMode()
 {
-    return looperFxReverbFreezeMode;
+    return samplerFxReverbFreezeMode;
 }
-int PadSettings::getLooperFxReverbAlphaTouch()
+int PadSettings::getSamplerFxReverbAlphaTouch()
 {
-    return looperFxReverbAlphaTouch;
+    return samplerFxReverbAlphaTouch;
 }
-int PadSettings::getLooperFxReverbAtReverse()
+int PadSettings::getSamplerFxReverbAtReverse()
 {
-    return looperFxReverbAtReverse;
+    return samplerFxReverbAtReverse;
 }
-float PadSettings::getLooperFxReverbAtIntensity()
+float PadSettings::getSamplerFxReverbAtIntensity()
 {
-    return looperFxReverbAtIntensity;
+    return samplerFxReverbAtIntensity;
 }
 
 #pragma mark Flanger
-void PadSettings::setLooperFxFlangerMix (double value)
+void PadSettings::setSamplerFxFlangerMix (double value)
 {
-    looperFxFlangerMix = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getFlanger().setMix(value);
+    samplerFxFlangerMix = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setMix(value);
 }
-void PadSettings::setLooperFxFlangerRate(double value)
+void PadSettings::setSamplerFxFlangerRate(double value)
 {
-    looperFxFlangerRate = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getFlanger().setRate(value);
+    samplerFxFlangerRate = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setRate(value);
 }
-void PadSettings::setLooperFxFlangerFeedback (double value)
+void PadSettings::setSamplerFxFlangerFeedback (double value)
 {
-    looperFxFlangerFeedback = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getFlanger().setFeedback(value);
+    samplerFxFlangerFeedback = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setFeedback(value);
 }
-void PadSettings::setLooperFxFlangerIntensity (double value)
+void PadSettings::setSamplerFxFlangerIntensity (double value)
 {
-    looperFxFlangerIntensity = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getFlanger().setIntensity(value);
+    samplerFxFlangerIntensity = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setIntensity(value);
 }
-void PadSettings::setLooperFxFlangerSync (int value)
+void PadSettings::setSamplerFxFlangerSync (int value)
 {
-    looperFxFlangerSync = value;
+    samplerFxFlangerSync = value;
 }
-void PadSettings::setLooperFxFlangerRateMenu (int value)
+void PadSettings::setSamplerFxFlangerRateMenu (int value)
 {
-    looperFxFlangerRateMenu = value;
+    samplerFxFlangerRateMenu = value;
 }
-void PadSettings::setLooperFxFlangerAlphaTouch (int value)
+void PadSettings::setSamplerFxFlangerAlphaTouch (int value)
 {
-    looperFxFlangerAlphaTouch = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getFlanger().setAlphaTouchParam(value);
+    samplerFxFlangerAlphaTouch = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setAlphaTouchParam(value);
 }
-void PadSettings::setLooperFxFlangerAtReverse (int value)
+void PadSettings::setSamplerFxFlangerAtReverse (int value)
 {
-    looperFxFlangerAtReverse = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getFlanger().setAlphaTouchReverse(value);
+    samplerFxFlangerAtReverse = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setAlphaTouchReverse(value);
 }
-void PadSettings::setLooperFxFlangerAtIntensity (double value)
+void PadSettings::setSamplerFxFlangerAtIntensity (double value)
 {
-    looperFxFlangerAtIntensity = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getFlanger().setAlphaTouchIntensity(value);
+    samplerFxFlangerAtIntensity = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setAlphaTouchIntensity(value);
 }
-double PadSettings::getLooperFxFlangerMix()
+double PadSettings::getSamplerFxFlangerMix()
 {
-    return looperFxFlangerMix;
+    return samplerFxFlangerMix;
 }
-double PadSettings::getLooperFxFlangerRate()
+double PadSettings::getSamplerFxFlangerRate()
 {
-    return looperFxFlangerRate;
+    return samplerFxFlangerRate;
 }
-double PadSettings::getLooperFxFlangerFeedback()
+double PadSettings::getSamplerFxFlangerFeedback()
 {
-    return looperFxFlangerFeedback;
+    return samplerFxFlangerFeedback;
 }
-double PadSettings::getLooperFxFlangerIntensity()
+double PadSettings::getSamplerFxFlangerIntensity()
 {
-    return looperFxFlangerIntensity;
+    return samplerFxFlangerIntensity;
 }
-int PadSettings::getLooperFxFlangerSync()
+int PadSettings::getSamplerFxFlangerSync()
 {
-    return looperFxFlangerSync;
+    return samplerFxFlangerSync;
 }
-int PadSettings::getLooperFxFlangerRateMenu()
+int PadSettings::getSamplerFxFlangerRateMenu()
 {
-    return looperFxFlangerRateMenu;
+    return samplerFxFlangerRateMenu;
 }
-int PadSettings::getLooperFxFlangerAlphaTouch()
+int PadSettings::getSamplerFxFlangerAlphaTouch()
 {
-    return looperFxFlangerAlphaTouch;
+    return samplerFxFlangerAlphaTouch;
 }
-int PadSettings::getLooperFxFlangerAtReverse()
+int PadSettings::getSamplerFxFlangerAtReverse()
 {
-    return looperFxFlangerAtReverse;
+    return samplerFxFlangerAtReverse;
 }
-double PadSettings::getLooperFxFlangerAtIntensity()
+double PadSettings::getSamplerFxFlangerAtIntensity()
 {
-    return looperFxFlangerAtIntensity;
+    return samplerFxFlangerAtIntensity;
 }
 
 #pragma mark Tremolo
-void PadSettings::setLooperFxTremoloDepth (double value)
+void PadSettings::setSamplerFxTremoloDepth (double value)
 {
-    looperFxTremoloDepth = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getTremolo().setDepth(value);
+    samplerFxTremoloDepth = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setDepth(value);
 }
-void PadSettings::setLooperFxTremoloRate (double value)
+void PadSettings::setSamplerFxTremoloRate (double value)
 {
-    looperFxTremoloRate = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getTremolo().setRate(value);
+    samplerFxTremoloRate = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setRate(value);
 }
-void PadSettings::setLooperFxTremoloShape (int value)
+void PadSettings::setSamplerFxTremoloShape (int value)
 {
-    looperFxTremoloShape = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getTremolo().setShape(value);
+    samplerFxTremoloShape = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setShape(value);
 }
-void PadSettings::setLooperFxTremoloSync (int value)
+void PadSettings::setSamplerFxTremoloSync (int value)
 {
-    looperFxTremoloSync = value;
+    samplerFxTremoloSync = value;
 }
-void PadSettings::setLooperFxTremoloRateMenu (int value)
+void PadSettings::setSamplerFxTremoloRateMenu (int value)
 {
-    looperFxTremoloRateMenu = value;
+    samplerFxTremoloRateMenu = value;
 }
-void PadSettings::setLooperFxTremoloAlphaTouch (int value)
+void PadSettings::setSamplerFxTremoloAlphaTouch (int value)
 {
-    looperFxTremoloAlphaTouch = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getTremolo().setAlphaTouchParam(value);
+    samplerFxTremoloAlphaTouch = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setAlphaTouchParam(value);
 }
-void PadSettings::setLooperFxTremoloAtReverse (int value)
+void PadSettings::setSamplerFxTremoloAtReverse (int value)
 {
-    looperFxTremoloAtReverse = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getTremolo().setAlphaTouchReverse(value);
+    samplerFxTremoloAtReverse = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setAlphaTouchReverse(value);
 }
-void PadSettings::setLooperFxTremoloAtIntensity (double value)
+void PadSettings::setSamplerFxTremoloAtIntensity (double value)
 {
-    looperFxTremoloAtIntensity = value;
-    alphaLiveEngineRef->getModeLooper()->getAudioFilePlayerInstance(padNumber)->getTremolo().setAlphaTouchIntensity(value);
+    samplerFxTremoloAtIntensity = value;
+    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setAlphaTouchIntensity(value);
 }
-double PadSettings::getLooperFxTremoloDepth()
+double PadSettings::getSamplerFxTremoloDepth()
 {
-    return looperFxTremoloDepth;
+    return samplerFxTremoloDepth;
 }
-double PadSettings::getLooperFxTremoloRate()
+double PadSettings::getSamplerFxTremoloRate()
 {
-    return looperFxTremoloRate;
+    return samplerFxTremoloRate;
 }
-int PadSettings::getLooperFxTremoloShape()
+int PadSettings::getSamplerFxTremoloShape()
 {
-    return looperFxTremoloShape;
+    return samplerFxTremoloShape;
 }
-int PadSettings::getLooperFxTremoloSync()
+int PadSettings::getSamplerFxTremoloSync()
 {
-    return looperFxTremoloSync;
+    return samplerFxTremoloSync;
 }
-int PadSettings::getLooperFxTremoloRateMenu()
+int PadSettings::getSamplerFxTremoloRateMenu()
 {
-    return looperFxTremoloRateMenu;
+    return samplerFxTremoloRateMenu;
 }
-int PadSettings::getLooperFxTremoloAlphaTouch()
+int PadSettings::getSamplerFxTremoloAlphaTouch()
 {
-    return looperFxTremoloAlphaTouch;
+    return samplerFxTremoloAlphaTouch;
 }
-int PadSettings::getLooperFxTremoloAtReverse()
+int PadSettings::getSamplerFxTremoloAtReverse()
 {
-    return looperFxTremoloAtReverse;
+    return samplerFxTremoloAtReverse;
 }
-double PadSettings::getLooperFxTremoloAtIntensity()
+double PadSettings::getSamplerFxTremoloAtIntensity()
 {
-    return looperFxTremoloAtIntensity;
+    return samplerFxTremoloAtIntensity;
 }
 
 
@@ -1664,7 +1664,7 @@ void PadSettings::setSequencerSamplesAudioFilePath(File value, int rowNumber)
 {
     /*
      If the default option is set, this function creates a copy of the imported audio file in the working directory, 
-     and sets the new file path as the loopers audio file location.
+     and sets the new file path as the samplers audio file location.
      The algorithm used below ensures that there will be no obvious duplicates of audio files,
      but it also ensures that imported files with an existing name might not necessarily be a duplicate!
      
@@ -1857,7 +1857,7 @@ File PadSettings::getSequencerSamplesAudioFilePath(int rowNumber)
             AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + sequencerSamplesAudioFilePath[rowNumber] + "\"" + " for Pad " + String(padNumber+1) + " could not be found.");
             //IN NEXT VERSION USE A YES/NO ALERTWINDOW THAT ASKS IF YOU WOULD LIKE TO MANUALLY LOCATE THE AUDIO FILE.
             //THIS WILL BRING UP A FILEBROWSERWINDOW AND THE CHOSEN FILE WILL THEN BE MOVED TO THE CURRENT WORKING DIRECTORY AND
-            //SAVED INTO THE looperAudioFilePath STRING IN THE CORRECT FORMAT.
+            //SAVED INTO THE samplerAudioFilePath STRING IN THE CORRECT FORMAT.
             
             //set the relevent variables to nonexistent/empty
             audioFile = File::nonexistent;

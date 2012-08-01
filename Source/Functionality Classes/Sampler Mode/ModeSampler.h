@@ -1,5 +1,5 @@
 //
-//  ModeLooper.h
+//  ModeSampler.h
 //  AlphaSoft
 //
 //  Created by Liam Meredith-Lacey on 25/09/2011.
@@ -21,8 +21,8 @@
 //
 
 
-#ifndef H_MODELOOPER
-#define H_MODELOOPER
+#ifndef H_MODESAMPLER
+#define H_MODESAMPLER
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
 #include "AudioFilePlayer.h"
@@ -30,12 +30,12 @@
 
 class AlphaLiveEngine;
 
-class ModeLooper :  public AudioSource
+class ModeSampler :  public AudioSource
 {
 public:
     //==========================================================================================
-    ModeLooper(AlphaLiveEngine &ref);
-    ~ModeLooper();
+    ModeSampler(AlphaLiveEngine &ref);
+    ~ModeSampler();
     
     //==========================================================================================
     void createAudioFilePlayer (int padNumber);
@@ -62,7 +62,7 @@ public:
 
 private:
     
-    OwnedArray<AudioFilePlayer> padLooper;
+    OwnedArray<AudioFilePlayer> padSampler;
     
     //==========================================================================================
 

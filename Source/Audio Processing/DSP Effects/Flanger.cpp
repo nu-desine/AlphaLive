@@ -25,14 +25,14 @@ Flanger::Flanger(int padNumber_, int sampleRate_)
     wetBuffer.clear();
     
     //SET DEAFULT SETTINGS HERE FROM PAD_SETTINGS
-    mix = mixPrev = mixControlValue = PAD_SETTINGS->getLooperFxFlangerMix();
+    mix = mixPrev = mixControlValue = PAD_SETTINGS->getSamplerFxFlangerMix();
     rate = rateControlValue = (AppSettings::Instance()->getGlobalTempo()/60.0) * 0.25; // sets the default rate to 1 bar
-    feedback = feedbackControlValue = PAD_SETTINGS->getLooperFxFlangerFeedback();
-    intensity = intensityControlValue = PAD_SETTINGS->getLooperFxFlangerIntensity();
+    feedback = feedbackControlValue = PAD_SETTINGS->getSamplerFxFlangerFeedback();
+    intensity = intensityControlValue = PAD_SETTINGS->getSamplerFxFlangerIntensity();
     
-    alphaTouchParam = PAD_SETTINGS->getLooperFxFlangerAlphaTouch();
-    alphaTouchReverse = PAD_SETTINGS->getLooperFxFlangerAtReverse();
-    alphaTouchIntensity = PAD_SETTINGS->getLooperFxFlangerAtIntensity();
+    alphaTouchParam = PAD_SETTINGS->getSamplerFxFlangerAlphaTouch();
+    alphaTouchReverse = PAD_SETTINGS->getSamplerFxFlangerAtReverse();
+    alphaTouchIntensity = PAD_SETTINGS->getSamplerFxFlangerAtIntensity();
     
 }
 

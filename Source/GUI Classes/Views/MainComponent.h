@@ -33,7 +33,7 @@
 #include "../../../JuceLibraryCode/JuceHeader.h"
 
 #include "GuiMidiMode.h"
-#include "GuiLooperMode.h"
+#include "GuiSamplerMode.h"
 #include "GuiSequencerMode.h"
 #include "GuiControllerMode.h"
 #include "../../Functionality Classes/AlphaLiveEngine.h"
@@ -82,7 +82,7 @@ public:
     void setCurrentlySelectedPad (Array <int> selectedPads_);
     void setToOffMode();
     void setToMidiMode();
-    void setToLooperMode();
+    void setToSamplerMode();
     void setToSequencerMode();
     void setToControllerMode();
     
@@ -117,7 +117,7 @@ private:
     AlphaSlider *tempoSlider;
 
     GuiMidiMode *guiMidiMode;
-    GuiLooperMode *guiLooperMode;
+    GuiSamplerMode *guiSamplerMode;
     GuiSequencerMode *guiSequencerMode;
     GuiControllerMode *guiControllerMode;
     
@@ -158,7 +158,7 @@ private:
     
     //Mode buttons
     ModeButton *modeOffButton;
-    ModeButton *modeLooperButton;
+    ModeButton *modeSamplerButton;
 	ModeButton *modeMidiButton;
 	ModeButton *modeSequencerButton;
 	ModeButton *modeControllerButton;

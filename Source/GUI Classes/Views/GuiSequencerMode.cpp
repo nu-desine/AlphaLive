@@ -71,7 +71,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	modeMidiButton->setRadioGroupId (1234);
     modeMidiButton->addMouseListener(this, true);
     
-    //create looper mode button
+    //create sampler mode button
 	Image *samplesModeImage = new Image(ImageFileFormat::loadFrom(BinaryData::loopsymbol_png, BinaryData::loopsymbol_pngSize)); 
 	addAndMakeVisible(modeSamplesButton = new ModeButton(samplesModeImage));
     modeSamplesButton->setClickingTogglesState(true);

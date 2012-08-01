@@ -49,7 +49,7 @@ GuiPad::GuiPad(int padNum, GuiPadLayout &ref)
 	
     //the following alpha values are for a gradient ring colour
     //change to 0.5f for solid colours
-	looperColour = Colours::green.withAlpha(0.7f);
+	samplerColour = Colours::green.withAlpha(0.7f);
 	midiColour = Colours::yellow.withAlpha(0.7f);
 	seqColour = Colours::red.withAlpha(0.7f);
 	controllerColour = Colours::blue.withAlpha(0.7f);
@@ -209,7 +209,7 @@ void GuiPad::modeChange(int value)
 		modeColour = normalColour;
 	
 	else if (value == 1)
-		modeColour = looperColour;
+		modeColour = samplerColour;
 	
 	else if (value == 2)
 		modeColour = midiColour;
@@ -305,9 +305,9 @@ void GuiPad::setPadText()
             padName = "Note " + String(PAD_SETTINGS->getMidiNote()); 
         }
         
-        else if (PAD_SETTINGS->getMode() == 2) //Looper
+        else if (PAD_SETTINGS->getMode() == 2) //Sampler
         {
-            File newFile(PAD_SETTINGS->getLooperAudioFilePath());
+            File newFile(PAD_SETTINGS->getSamplerAudioFilePath());
             padName = newFile.getFileNameWithoutExtension();
         }
         
@@ -377,7 +377,7 @@ void GuiPad::filesDropped (const StringArray& files, int /*x*/, int /*y*/)
     //std::cout << droppedFile.getFullPathName() << std::endl;
     
     //'put' audiofile into pad
-    PAD_SETTINGS->setLooperAudioFilePath(droppedFile);
+    PAD_SETTINGS->setSamplerAudioFilePath(droppedFile);
     
 	somethingIsBeingDraggedOver = false;
 	repaint();

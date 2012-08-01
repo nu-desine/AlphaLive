@@ -552,7 +552,7 @@ void GuiPadLayout::mouseEnter (const MouseEvent &e)
     {
         if (pads[i]->isMouseOver(true))
         {
-            mainComponentRef.setInfoTextBoxText("Pad " + String(i+1) + ". Click here to view and edit the settings of this pad. Right-click to view copy & paste options. Alt-Click and drag to emulate a pad press. Drag audio files here for the Looper Mode. The outer-ring colour signifies the pad's mode.");
+            mainComponentRef.setInfoTextBoxText("Pad " + String(i+1) + ". Click here to view and edit the settings of this pad. Right-click to view copy & paste options. Alt-Click and drag to emulate a pad press. Drag audio files here for the Sampler Mode. The outer-ring colour signifies the pad's mode.");
         }
     }
     

@@ -1,5 +1,5 @@
 //
-//  GuiLooperMode.cpp
+//  GuiSamplerMode.cpp
 //  AlphaSoft
 //
 //  Created by Liam Meredith-Lacey on 25/09/2011.
@@ -20,7 +20,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "GuiLooperMode.h"
+#include "GuiSamplerMode.h"
 #include "../../File and Settings/AppSettings.h"
 #include "../Binary Data/ImageSliderBinaryData.h"
 #include "GlobalValues.h"
@@ -34,7 +34,7 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-GuiLooperMode::GuiLooperMode(MainComponent &ref)
+GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 : mainComponentRef(ref)
 										
 {
@@ -126,7 +126,7 @@ GuiLooperMode::GuiLooperMode(MainComponent &ref)
 }
 
 
-GuiLooperMode::~GuiLooperMode()
+GuiSamplerMode::~GuiSamplerMode()
 {
     
     deleteAllChildren();
@@ -134,7 +134,7 @@ GuiLooperMode::~GuiLooperMode()
 }
 
 
-void GuiLooperMode::resized()
+void GuiSamplerMode::resized()
 {
     circleBackgroundRight->setBounds(780, 402, 230, 230);
 	
@@ -165,7 +165,7 @@ void GuiLooperMode::resized()
 
 
 
-void GuiLooperMode::comboBoxChanged (ComboBox* comboBox)
+void GuiSamplerMode::comboBoxChanged (ComboBox* comboBox)
 {
     //This method takes the selected IDs from the combo box and sets it to the correct
     //variable in the relevent padSettings index/es
@@ -177,7 +177,7 @@ void GuiLooperMode::comboBoxChanged (ComboBox* comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperTriggerMode(triggerModeMenu->getSelectedId());
+            PAD_SETTINGS->setSamplerTriggerMode(triggerModeMenu->getSelectedId());
         }
     }
     
@@ -191,7 +191,7 @@ void GuiLooperMode::comboBoxChanged (ComboBox* comboBox)
         if(currentlySelectedPad < 99)
         {
             //store the value of this combo box in the pad settings of that pad
-            //PAD_SETTINGS->setLooperQuantizeMode(quantizeModeMenu->getSelectedId());
+            //PAD_SETTINGS->setSamplerQuantizeMode(quantizeModeMenu->getSelectedId());
         }
         
         //if 'all pads' selected
@@ -199,7 +199,7 @@ void GuiLooperMode::comboBoxChanged (ComboBox* comboBox)
         {
             for(int i = 0; i <= 47; i++)
             {
-                //PAD_SETTINGS_i->setLooperQuantizeMode(quantizeModeMenu->getSelectedId());
+                //PAD_SETTINGS_i->setSamplerQuantizeMode(quantizeModeMenu->getSelectedId());
             }
         }
         
@@ -211,7 +211,7 @@ void GuiLooperMode::comboBoxChanged (ComboBox* comboBox)
             for(int i = (row*8)-8; i <= (row*8)-1; i++) 
             {
                 //i = pad number
-                //PAD_SETTINGS_i->setLooperQuantizeMode(quantizeModeMenu->getSelectedId());
+                //PAD_SETTINGS_i->setSamplerQuantizeMode(quantizeModeMenu->getSelectedId());
             }
         }
         
@@ -230,7 +230,7 @@ void GuiLooperMode::comboBoxChanged (ComboBox* comboBox)
 }
 
 
-void GuiLooperMode::sliderValueChanged (Slider* slider)
+void GuiSamplerMode::sliderValueChanged (Slider* slider)
 {
     //==============================================================================
     //gain slider
@@ -239,7 +239,7 @@ void GuiLooperMode::sliderValueChanged (Slider* slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperGain(gainSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerGain(gainSlider->sliderComponent()->getValue());
         }
     }
     
@@ -250,7 +250,7 @@ void GuiLooperMode::sliderValueChanged (Slider* slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperPan(panSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerPan(panSlider->sliderComponent()->getValue());
         }
         
     }
@@ -259,7 +259,7 @@ void GuiLooperMode::sliderValueChanged (Slider* slider)
 }
 
 
-void GuiLooperMode::filenameComponentChanged (FilenameComponent* filenameComponent)
+void GuiSamplerMode::filenameComponentChanged (FilenameComponent* filenameComponent)
 {
     if (filenameComponent == fileChooser)
     {
@@ -271,7 +271,7 @@ void GuiLooperMode::filenameComponentChanged (FilenameComponent* filenameCompone
             for (int i = 0; i < selectedPads.size(); i++)
             {
                 int padNum = selectedPads[i];
-                PAD_SETTINGS->setLooperAudioFilePath(audioFile);
+                PAD_SETTINGS->setSamplerAudioFilePath(audioFile);
 				
 				waveform->setFile (audioFile);
 				
@@ -291,14 +291,14 @@ void GuiLooperMode::filenameComponentChanged (FilenameComponent* filenameCompone
 
 
 
-void GuiLooperMode::buttonClicked (Button* button)
+void GuiSamplerMode::buttonClicked (Button* button)
 {
     if (button == loopButton)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperShouldLoop(button->getToggleState());
+            PAD_SETTINGS->setSamplerShouldLoop(button->getToggleState());
         }
     }
     
@@ -307,7 +307,7 @@ void GuiLooperMode::buttonClicked (Button* button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperIndestructible(button->getToggleState());
+            PAD_SETTINGS->setSamplerIndestructible(button->getToggleState());
         }
     }
     
@@ -316,7 +316,7 @@ void GuiLooperMode::buttonClicked (Button* button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperShouldFinishLoop(button->getToggleState());
+            PAD_SETTINGS->setSamplerShouldFinishLoop(button->getToggleState());
         }
     }
     else if (button == stickyButton)
@@ -324,19 +324,19 @@ void GuiLooperMode::buttonClicked (Button* button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperSticky(button->getToggleState());
+            PAD_SETTINGS->setSamplerSticky(button->getToggleState());
         }
     }
 }
 
 
-void GuiLooperMode::setCurrentlySelectedPad (Array<int> selectedPads_)
+void GuiSamplerMode::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
     selectedPads = selectedPads_;
     fxDial->setCurrentlySelectedPad(selectedPads);
 }
 
-void GuiLooperMode::updateDisplay()
+void GuiSamplerMode::updateDisplay()
 {
     //This method is used to set all the components to the currently selected pad's settings,
     //as well as to hide/dissabled any unneeded components. 
@@ -348,17 +348,17 @@ void GuiLooperMode::updateDisplay()
         //fileChooser->setVisible(true);
         //fileChooserLabel->setVisible(true);
         
-        fileChooser->setCurrentFile(PAD_SETTINGS->getLooperAudioFilePath(), true, false);
-		File audioFile(PAD_SETTINGS->getLooperAudioFilePath());
+        fileChooser->setCurrentFile(PAD_SETTINGS->getSamplerAudioFilePath(), true, false);
+		File audioFile(PAD_SETTINGS->getSamplerAudioFilePath());
 		waveform->setFile (audioFile);
 		
-        gainSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperGain(), false);
-        panSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperPan(), false);
-        triggerModeMenu->setSelectedId(PAD_SETTINGS->getLooperTriggerMode(), true);
-        loopButton->setToggleState(PAD_SETTINGS->getLooperShouldLoop(), false);
-        indestructibleButton->setToggleState(PAD_SETTINGS->getLooperIndestructible(), false);
-        finishLoopButton->setToggleState(PAD_SETTINGS->getLooperShouldFinishLoop(), false);
-        stickyButton->setToggleState(PAD_SETTINGS->getLooperSticky(), false);
+        gainSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerGain(), false);
+        panSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerPan(), false);
+        triggerModeMenu->setSelectedId(PAD_SETTINGS->getSamplerTriggerMode(), true);
+        loopButton->setToggleState(PAD_SETTINGS->getSamplerShouldLoop(), false);
+        indestructibleButton->setToggleState(PAD_SETTINGS->getSamplerIndestructible(), false);
+        finishLoopButton->setToggleState(PAD_SETTINGS->getSamplerShouldFinishLoop(), false);
+        stickyButton->setToggleState(PAD_SETTINGS->getSamplerSticky(), false);
         
         
     }
@@ -387,7 +387,7 @@ void GuiLooperMode::updateDisplay()
 
 
 
-void GuiLooperMode::mouseEnter (const MouseEvent &e)
+void GuiSamplerMode::mouseEnter (const MouseEvent &e)
 {
     
     if (fileChooser->isMouseOver(true))
@@ -404,16 +404,16 @@ void GuiLooperMode::mouseEnter (const MouseEvent &e)
     }
     else if (triggerModeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("TriggerMode Drop-down Menu. \nSets and displays the looper TriggerMode for the selected pad/pads. Looper TriggerModes determine how interation with a pad controls the playback and modification of an audio file.");
+        mainComponentRef.setInfoTextBoxText("TriggerMode Drop-down Menu. \nSets and displays the sampler TriggerMode for the selected pad/pads. Sampler TriggerModes determine how interation with a pad controls the playback and modification of an audio file.");
     }
     else if (fxDial->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Looper FX Dial. Sets and displays the audio processing effect that the selected pad/pads pressure controls.");
+        mainComponentRef.setInfoTextBoxText("Sampler FX Dial. Sets and displays the audio processing effect that the selected pad/pads pressure controls.");
     }
     
 }
 
-void GuiLooperMode::mouseExit (const MouseEvent &e)
+void GuiSamplerMode::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);

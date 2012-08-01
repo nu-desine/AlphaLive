@@ -34,7 +34,7 @@
 		0C78A3D715B467910049C0C8 /* LayoutsAndScales.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2E115B467900049C0C8 /* LayoutsAndScales.cpp */; };
 		0C78A3D815B467910049C0C8 /* PlayStates.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2E215B467900049C0C8 /* PlayStates.cpp */; };
 		0C78A3D915B467910049C0C8 /* AudioFilePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2E515B467900049C0C8 /* AudioFilePlayer.cpp */; };
-		0C78A3DA15B467910049C0C8 /* ModeLooper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2E715B467900049C0C8 /* ModeLooper.cpp */; };
+		0C78A3DA15B467910049C0C8 /* ModeSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2E715B467900049C0C8 /* ModeSampler.cpp */; };
 		0C78A3DB15B467910049C0C8 /* ModeSequencer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2EA15B467900049C0C8 /* ModeSequencer.cpp */; };
 		0C78A3DC15B467910049C0C8 /* SequenceAudioFilePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2EC15B467900049C0C8 /* SequenceAudioFilePlayer.cpp */; };
 		0C78A3DD15B467910049C0C8 /* SequencePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2EE15B467900049C0C8 /* SequencePlayer.cpp */; };
@@ -87,7 +87,7 @@
 		0C78A40D15B467910049C0C8 /* PreferencesComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A35E15B467910049C0C8 /* PreferencesComponent.cpp */; };
 		0C78A40E15B467910049C0C8 /* ProjectSettingsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A36015B467910049C0C8 /* ProjectSettingsComponent.cpp */; };
 		0C78A40F15B467910049C0C8 /* GuiControllerMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A36415B467910049C0C8 /* GuiControllerMode.cpp */; };
-		0C78A41015B467910049C0C8 /* GuiLooperMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A36615B467910049C0C8 /* GuiLooperMode.cpp */; };
+		0C78A41015B467910049C0C8 /* GuiSamplerMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A36615B467910049C0C8 /* GuiSamplerMode.cpp */; };
 		0C78A41115B467910049C0C8 /* GuiMidiMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A36815B467910049C0C8 /* GuiMidiMode.cpp */; };
 		0C78A41215B467910049C0C8 /* GuiSeqMidiMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A36A15B467910049C0C8 /* GuiSeqMidiMode.cpp */; };
 		0C78A41315B467910049C0C8 /* GuiSeqSamplesMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A36C15B467910049C0C8 /* GuiSeqSamplesMode.cpp */; };
@@ -255,8 +255,8 @@
 		0C78A2E315B467900049C0C8 /* PlayStates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayStates.h; sourceTree = "<group>"; };
 		0C78A2E515B467900049C0C8 /* AudioFilePlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilePlayer.cpp; sourceTree = "<group>"; };
 		0C78A2E615B467900049C0C8 /* AudioFilePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioFilePlayer.h; sourceTree = "<group>"; };
-		0C78A2E715B467900049C0C8 /* ModeLooper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModeLooper.cpp; sourceTree = "<group>"; };
-		0C78A2E815B467900049C0C8 /* ModeLooper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModeLooper.h; sourceTree = "<group>"; };
+		0C78A2E715B467900049C0C8 /* ModeSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModeSampler.cpp; sourceTree = "<group>"; };
+		0C78A2E815B467900049C0C8 /* ModeSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; path = ModeSampler.h; sourceTree = "<group>"; };
 		0C78A2EA15B467900049C0C8 /* ModeSequencer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModeSequencer.cpp; sourceTree = "<group>"; };
 		0C78A2EB15B467900049C0C8 /* ModeSequencer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModeSequencer.h; sourceTree = "<group>"; };
 		0C78A2EC15B467900049C0C8 /* SequenceAudioFilePlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SequenceAudioFilePlayer.cpp; sourceTree = "<group>"; };
@@ -364,8 +364,8 @@
 		0C78A36315B467910049C0C8 /* GlobalValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalValues.h; sourceTree = "<group>"; };
 		0C78A36415B467910049C0C8 /* GuiControllerMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiControllerMode.cpp; sourceTree = "<group>"; };
 		0C78A36515B467910049C0C8 /* GuiControllerMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiControllerMode.h; sourceTree = "<group>"; };
-		0C78A36615B467910049C0C8 /* GuiLooperMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiLooperMode.cpp; sourceTree = "<group>"; };
-		0C78A36715B467910049C0C8 /* GuiLooperMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiLooperMode.h; sourceTree = "<group>"; };
+		0C78A36615B467910049C0C8 /* GuiSamplerMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiSamplerMode.cpp; sourceTree = "<group>"; };
+		0C78A36715B467910049C0C8 /* GuiSamplerMode.h */ = {isa = PBXFileReference; fileEncoding = 4; path = GuiSamplerMode.h; sourceTree = "<group>"; };
 		0C78A36815B467910049C0C8 /* GuiMidiMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiMidiMode.cpp; sourceTree = "<group>"; };
 		0C78A36915B467910049C0C8 /* GuiMidiMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiMidiMode.h; sourceTree = "<group>"; };
 		0C78A36A15B467910049C0C8 /* GuiSeqMidiMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiSeqMidiMode.cpp; sourceTree = "<group>"; };
@@ -1493,8 +1493,8 @@
 		0C78A2E415B467900049C0C8 /* Sampler Mode */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A2E815B467900049C0C8 /* ModeLooper.h */,
-				0C78A2E715B467900049C0C8 /* ModeLooper.cpp */,
+				0C78A2E815B467900049C0C8 /* ModeSampler.h */,
+				0C78A2E715B467900049C0C8 /* ModeSampler.cpp */,
 				0C78A2E615B467900049C0C8 /* AudioFilePlayer.h */,
 				0C78A2E515B467900049C0C8 /* AudioFilePlayer.cpp */,
 			);
@@ -1733,8 +1733,8 @@
 				0C78A37015B467910049C0C8 /* MainComponent.cpp */,
 				0C78A36915B467910049C0C8 /* GuiMidiMode.h */,
 				0C78A36815B467910049C0C8 /* GuiMidiMode.cpp */,
-				0C78A36715B467910049C0C8 /* GuiLooperMode.h */,
-				0C78A36615B467910049C0C8 /* GuiLooperMode.cpp */,
+				0C78A36715B467910049C0C8 /* GuiSamplerMode.h */,
+				0C78A36615B467910049C0C8 /* GuiSamplerMode.cpp */,
 				0C78A36F15B467910049C0C8 /* GuiSequencerMode.h */,
 				0C78A36E15B467910049C0C8 /* GuiSequencerMode.cpp */,
 				0C78A36B15B467910049C0C8 /* GuiSeqMidiMode.h */,
@@ -3526,7 +3526,7 @@
 				0C78A3D715B467910049C0C8 /* LayoutsAndScales.cpp in Sources */,
 				0C78A3D815B467910049C0C8 /* PlayStates.cpp in Sources */,
 				0C78A3D915B467910049C0C8 /* AudioFilePlayer.cpp in Sources */,
-				0C78A3DA15B467910049C0C8 /* ModeLooper.cpp in Sources */,
+				0C78A3DA15B467910049C0C8 /* ModeSampler.cpp in Sources */,
 				0C78A3DB15B467910049C0C8 /* ModeSequencer.cpp in Sources */,
 				0C78A3DC15B467910049C0C8 /* SequenceAudioFilePlayer.cpp in Sources */,
 				0C78A3DD15B467910049C0C8 /* SequencePlayer.cpp in Sources */,
@@ -3579,7 +3579,7 @@
 				0C78A40D15B467910049C0C8 /* PreferencesComponent.cpp in Sources */,
 				0C78A40E15B467910049C0C8 /* ProjectSettingsComponent.cpp in Sources */,
 				0C78A40F15B467910049C0C8 /* GuiControllerMode.cpp in Sources */,
-				0C78A41015B467910049C0C8 /* GuiLooperMode.cpp in Sources */,
+				0C78A41015B467910049C0C8 /* GuiSamplerMode.cpp in Sources */,
 				0C78A41115B467910049C0C8 /* GuiMidiMode.cpp in Sources */,
 				0C78A41215B467910049C0C8 /* GuiSeqMidiMode.cpp in Sources */,
 				0C78A41315B467910049C0C8 /* GuiSeqSamplesMode.cpp in Sources */,

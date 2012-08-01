@@ -535,10 +535,10 @@ void AppDocumentState::savePresetToDisk (int presetNumber)
                 //search through all pads looking for audio files that need copying with the preset
                 for (int i = 0; i <= 47; i++)
                 {
-                    //look for looper audio files
+                    //look for sampler audio files
                     if (presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
                     {
-                        String newFileName(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("looperAudioFilePath"));
+                        String newFileName(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
                         
                         if (newFileName != String::empty) //if there is 'something'
                         {
@@ -697,10 +697,10 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
                 //This must be done by searching through the loaded data for audio file names and copying the files individually if they exist
                 for (int i = 0; i <= 47; i++)
                 {
-                    //look for looper audio files
+                    //look for sampler audio files
                     if (presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
                     {
-                        String newFileName(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("looperAudioFilePath"));
+                        String newFileName(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
                         
                         if (newFileName != String::empty) //if there is 'something'
                         {
@@ -724,7 +724,7 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
                                 newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + originalFile.getFileName();
                                 
                                 //re-set the path name within presetData from the full path name to just the file name
-                                presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("looperAudioFilePath", newFile.getFileName());
+                                presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("samplerAudioFilePath", newFile.getFileName());
                             }
                             
                             
@@ -813,10 +813,10 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
                 
                 for (int i = 0; i <= 47; i++)
                 {
-                    //look for looper audio files
+                    //look for sampler audio files
                     if (presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
                     {
-                        String newFileString(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("looperAudioFilePath"));
+                        String newFileString(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
                         
                         if (newFileString != String::empty) //if there is 'something'
                         {
@@ -827,7 +827,7 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
                                 File newFile(audioFileDirectory.getFullPathName()+ File::separatorString + newFileString); //should be a String?
                                 
                                 //set the saved file name to be the full path...
-                                presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("looperAudioFilePath", newFile.getFullPathName()); 
+                                presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("samplerAudioFilePath", newFile.getFullPathName()); 
                             }
                         }
                     }
@@ -942,111 +942,111 @@ void AppDocumentState::saveToPreset (int presetNumber)
             padData->setAttribute("midiNoteStatus", PAD_SETTINGS->getMidiNoteStatus());
             padData->setAttribute("midiCcController", PAD_SETTINGS->getMidiCcController());
         }
-        else if (PAD_SETTINGS->getMode() == 2) //looper mode
+        else if (PAD_SETTINGS->getMode() == 2) //sampler mode
         {
             
             if (AppSettings::Instance()->getCopyExternalFiles() == true)
             {
                 //if project currently allows audio files to be copied to project, only save the file name
-                padData->setAttribute("looperAudioFilePath", PAD_SETTINGS->getLooperAudioFilePath().getFileName());
+                padData->setAttribute("samplerAudioFilePath", PAD_SETTINGS->getSamplerAudioFilePath().getFileName());
                 
             }
             else if (AppSettings::Instance()->getCopyExternalFiles() == false)
             {
                 //else save the full pathname
-                padData->setAttribute("looperAudioFilePath", PAD_SETTINGS->getLooperAudioFilePath().getFullPathName());
+                padData->setAttribute("samplerAudioFilePath", PAD_SETTINGS->getSamplerAudioFilePath().getFullPathName());
             }
     
-            padData->setAttribute("looperTriggerMode", PAD_SETTINGS->getLooperTriggerMode());
-            padData->setAttribute("looperShouldLoop", PAD_SETTINGS->getLooperShouldLoop());
-            padData->setAttribute("looperIndestructible", PAD_SETTINGS->getLooperIndestructible());
-            padData->setAttribute("looperShouldFinishLoop", PAD_SETTINGS->getLooperShouldFinishLoop());
-            padData->setAttribute("looperSticky", PAD_SETTINGS->getLooperSticky());
-            padData->setAttribute("looperEffect", PAD_SETTINGS->getLooperEffect());
-            padData->setAttribute("looperPan", PAD_SETTINGS->getLooperPan());
-            padData->setAttribute("looperGain", PAD_SETTINGS->getLooperGain());
+            padData->setAttribute("samplerTriggerMode", PAD_SETTINGS->getSamplerTriggerMode());
+            padData->setAttribute("samplerShouldLoop", PAD_SETTINGS->getSamplerShouldLoop());
+            padData->setAttribute("samplerIndestructible", PAD_SETTINGS->getSamplerIndestructible());
+            padData->setAttribute("samplerShouldFinishLoop", PAD_SETTINGS->getSamplerShouldFinishLoop());
+            padData->setAttribute("samplerSticky", PAD_SETTINGS->getSamplerSticky());
+            padData->setAttribute("samplerEffect", PAD_SETTINGS->getSamplerEffect());
+            padData->setAttribute("samplerPan", PAD_SETTINGS->getSamplerPan());
+            padData->setAttribute("samplerGain", PAD_SETTINGS->getSamplerGain());
             
-            if (PAD_SETTINGS->getLooperEffect() == 1) //Gain and Pan
+            if (PAD_SETTINGS->getSamplerEffect() == 1) //Gain and Pan
             {
-                padData->setAttribute("looperFxGainPanGain", PAD_SETTINGS->getLooperFxGainPanGain());
-                padData->setAttribute("looperFxGainPanPan", PAD_SETTINGS->getLooperFxGainPanPan());
-                padData->setAttribute("looperFxGainPanAlphaTouch", PAD_SETTINGS->getLooperFxGainPanAlphaTouch());
-                padData->setAttribute("looperFxGainPanAtReverse", PAD_SETTINGS->getLooperFxGainPanAtReverse());
-                padData->setAttribute("looperFxGainPanAtIntensity", PAD_SETTINGS->getLooperFxGainPanAtIntensity());
+                padData->setAttribute("samplerFxGainPanGain", PAD_SETTINGS->getSamplerFxGainPanGain());
+                padData->setAttribute("samplerFxGainPanPan", PAD_SETTINGS->getSamplerFxGainPanPan());
+                padData->setAttribute("samplerFxGainPanAlphaTouch", PAD_SETTINGS->getSamplerFxGainPanAlphaTouch());
+                padData->setAttribute("samplerFxGainPanAtReverse", PAD_SETTINGS->getSamplerFxGainPanAtReverse());
+                padData->setAttribute("samplerFxGainPanAtIntensity", PAD_SETTINGS->getSamplerFxGainPanAtIntensity());
             }
-            else if (PAD_SETTINGS->getLooperEffect() == 2) //LPF
+            else if (PAD_SETTINGS->getSamplerEffect() == 2) //LPF
             {
-                padData->setAttribute("looperFxLpfMix", PAD_SETTINGS->getLooperFxLpfMix());
-                padData->setAttribute("looperFxLpfFreq", PAD_SETTINGS->getLooperFxLpfFreq());
-                padData->setAttribute("looperFxLpfBandwidth", PAD_SETTINGS->getLooperFxLpfBandwidth());
-                padData->setAttribute("looperFxLpfAlphaTouch", PAD_SETTINGS->getLooperFxLpfAlphaTouch());
-                padData->setAttribute("looperFxLpfAtReverse", PAD_SETTINGS->getLooperFxLpfAtReverse());
-                padData->setAttribute("looperFxLpfAtIntensity", PAD_SETTINGS->getLooperFxLpfAtIntensity());
+                padData->setAttribute("samplerFxLpfMix", PAD_SETTINGS->getSamplerFxLpfMix());
+                padData->setAttribute("samplerFxLpfFreq", PAD_SETTINGS->getSamplerFxLpfFreq());
+                padData->setAttribute("samplerFxLpfBandwidth", PAD_SETTINGS->getSamplerFxLpfBandwidth());
+                padData->setAttribute("samplerFxLpfAlphaTouch", PAD_SETTINGS->getSamplerFxLpfAlphaTouch());
+                padData->setAttribute("samplerFxLpfAtReverse", PAD_SETTINGS->getSamplerFxLpfAtReverse());
+                padData->setAttribute("samplerFxLpfAtIntensity", PAD_SETTINGS->getSamplerFxLpfAtIntensity());
             }
-            else if (PAD_SETTINGS->getLooperEffect() == 3) //HPF
+            else if (PAD_SETTINGS->getSamplerEffect() == 3) //HPF
             {
-                padData->setAttribute("looperFxHpfMix", PAD_SETTINGS->getLooperFxHpfMix());
-                padData->setAttribute("looperFxHpfFreq", PAD_SETTINGS->getLooperFxHpfFreq());
-                padData->setAttribute("looperFxHpfBandwidth", PAD_SETTINGS->getLooperFxHpfBandwidth());
-                padData->setAttribute("looperFxHpfAlphaTouch", PAD_SETTINGS->getLooperFxHpfAlphaTouch());
-                padData->setAttribute("looperFxHpfAtReverse", PAD_SETTINGS->getLooperFxHpfAtReverse());
-                padData->setAttribute("looperFxHpfAtIntensity", PAD_SETTINGS->getLooperFxHpfAtIntensity());
+                padData->setAttribute("samplerFxHpfMix", PAD_SETTINGS->getSamplerFxHpfMix());
+                padData->setAttribute("samplerFxHpfFreq", PAD_SETTINGS->getSamplerFxHpfFreq());
+                padData->setAttribute("samplerFxHpfBandwidth", PAD_SETTINGS->getSamplerFxHpfBandwidth());
+                padData->setAttribute("samplerFxHpfAlphaTouch", PAD_SETTINGS->getSamplerFxHpfAlphaTouch());
+                padData->setAttribute("samplerFxHpfAtReverse", PAD_SETTINGS->getSamplerFxHpfAtReverse());
+                padData->setAttribute("samplerFxHpfAtIntensity", PAD_SETTINGS->getSamplerFxHpfAtIntensity());
             }
-            else if (PAD_SETTINGS->getLooperEffect() == 4) //BPF
+            else if (PAD_SETTINGS->getSamplerEffect() == 4) //BPF
             {
-                padData->setAttribute("looperFxBpfMix", PAD_SETTINGS->getLooperFxBpfMix());
-                padData->setAttribute("looperFxBpfFreq", PAD_SETTINGS->getLooperFxBpfFreq());
-                padData->setAttribute("looperFxBpfBandwidth", PAD_SETTINGS->getLooperFxBpfBandwidth());
-                padData->setAttribute("looperFxBpfAlphaTouch", PAD_SETTINGS->getLooperFxBpfAlphaTouch());
-                padData->setAttribute("looperFxBpfAtReverse", PAD_SETTINGS->getLooperFxBpfAtReverse());
-                padData->setAttribute("looperFxBpfAtIntensity", PAD_SETTINGS->getLooperFxBpfAtIntensity());
+                padData->setAttribute("samplerFxBpfMix", PAD_SETTINGS->getSamplerFxBpfMix());
+                padData->setAttribute("samplerFxBpfFreq", PAD_SETTINGS->getSamplerFxBpfFreq());
+                padData->setAttribute("samplerFxBpfBandwidth", PAD_SETTINGS->getSamplerFxBpfBandwidth());
+                padData->setAttribute("samplerFxBpfAlphaTouch", PAD_SETTINGS->getSamplerFxBpfAlphaTouch());
+                padData->setAttribute("samplerFxBpfAtReverse", PAD_SETTINGS->getSamplerFxBpfAtReverse());
+                padData->setAttribute("samplerFxBpfAtIntensity", PAD_SETTINGS->getSamplerFxBpfAtIntensity());
             }
-            else if (PAD_SETTINGS->getLooperEffect() == 6) //Delay
+            else if (PAD_SETTINGS->getSamplerEffect() == 6) //Delay
             {
-                padData->setAttribute("looperFxDelayMix", PAD_SETTINGS->getLooperFxDelayMix());
-                padData->setAttribute("looperFxDelayTime", PAD_SETTINGS->getLooperFxDelayTime());
-                padData->setAttribute("looperFxDelayFeedback", PAD_SETTINGS->getLooperFxDelayFeedback());
-                padData->setAttribute("looperFxDelayLpfFreq", PAD_SETTINGS->getLooperFxDelayLpfFreq());
-                padData->setAttribute("looperFxDelayHpfFreq", PAD_SETTINGS->getLooperFxDelayHpfFreq());
-                padData->setAttribute("looperFxDelaySync", PAD_SETTINGS->getLooperFxDelaySync());
-                padData->setAttribute("looperFxDelayTimeMenu", PAD_SETTINGS->getLooperFxDelayTimeMenu());
-                padData->setAttribute("looperFxDelayAlphaTouch", PAD_SETTINGS->getLooperFxDelayAlphaTouch());
-                padData->setAttribute("looperFxDelayAtReverse", PAD_SETTINGS->getLooperFxDelayAtReverse());
-                padData->setAttribute("looperFxDelayAtIntensity", PAD_SETTINGS->getLooperFxDelayAtIntensity());
+                padData->setAttribute("samplerFxDelayMix", PAD_SETTINGS->getSamplerFxDelayMix());
+                padData->setAttribute("samplerFxDelayTime", PAD_SETTINGS->getSamplerFxDelayTime());
+                padData->setAttribute("samplerFxDelayFeedback", PAD_SETTINGS->getSamplerFxDelayFeedback());
+                padData->setAttribute("samplerFxDelayLpfFreq", PAD_SETTINGS->getSamplerFxDelayLpfFreq());
+                padData->setAttribute("samplerFxDelayHpfFreq", PAD_SETTINGS->getSamplerFxDelayHpfFreq());
+                padData->setAttribute("samplerFxDelaySync", PAD_SETTINGS->getSamplerFxDelaySync());
+                padData->setAttribute("samplerFxDelayTimeMenu", PAD_SETTINGS->getSamplerFxDelayTimeMenu());
+                padData->setAttribute("samplerFxDelayAlphaTouch", PAD_SETTINGS->getSamplerFxDelayAlphaTouch());
+                padData->setAttribute("samplerFxDelayAtReverse", PAD_SETTINGS->getSamplerFxDelayAtReverse());
+                padData->setAttribute("samplerFxDelayAtIntensity", PAD_SETTINGS->getSamplerFxDelayAtIntensity());
             }
-            else if (PAD_SETTINGS->getLooperEffect() == 7) //Reverb
+            else if (PAD_SETTINGS->getSamplerEffect() == 7) //Reverb
             {
-                padData->setAttribute("looperFxReverbMix", PAD_SETTINGS->getLooperFxReverbMix());
-                padData->setAttribute("looperFxReverbRoomSize", PAD_SETTINGS->getLooperFxReverbRoomSize());
-                padData->setAttribute("looperFxReverbDamping", PAD_SETTINGS->getLooperFxReverbDamping());
-                padData->setAttribute("looperFxReverbWidth", PAD_SETTINGS->getLooperFxReverbWidth());
-                padData->setAttribute("looperFxReverbFreezeMode", PAD_SETTINGS->getLooperFxReverbFreezeMode());
-                padData->setAttribute("looperFxReverbAlphaTouch", PAD_SETTINGS->getLooperFxReverbAlphaTouch());
-                padData->setAttribute("looperFxReverbAtReverse", PAD_SETTINGS->getLooperFxReverbAtReverse());
-                padData->setAttribute("looperFxReverbAtIntensity", PAD_SETTINGS->getLooperFxReverbAtIntensity());
+                padData->setAttribute("samplerFxReverbMix", PAD_SETTINGS->getSamplerFxReverbMix());
+                padData->setAttribute("samplerFxReverbRoomSize", PAD_SETTINGS->getSamplerFxReverbRoomSize());
+                padData->setAttribute("samplerFxReverbDamping", PAD_SETTINGS->getSamplerFxReverbDamping());
+                padData->setAttribute("samplerFxReverbWidth", PAD_SETTINGS->getSamplerFxReverbWidth());
+                padData->setAttribute("samplerFxReverbFreezeMode", PAD_SETTINGS->getSamplerFxReverbFreezeMode());
+                padData->setAttribute("samplerFxReverbAlphaTouch", PAD_SETTINGS->getSamplerFxReverbAlphaTouch());
+                padData->setAttribute("samplerFxReverbAtReverse", PAD_SETTINGS->getSamplerFxReverbAtReverse());
+                padData->setAttribute("samplerFxReverbAtIntensity", PAD_SETTINGS->getSamplerFxReverbAtIntensity());
             }
-            else if (PAD_SETTINGS->getLooperEffect() == 9) //Flanger
+            else if (PAD_SETTINGS->getSamplerEffect() == 9) //Flanger
             {
-                padData->setAttribute("looperFxFlangerMix", PAD_SETTINGS->getLooperFxFlangerMix());
-                padData->setAttribute("looperFxFlangerRate", PAD_SETTINGS->getLooperFxFlangerRate());
-                padData->setAttribute("looperFxFlangerFeedback", PAD_SETTINGS->getLooperFxFlangerFeedback());
-                padData->setAttribute("looperFxFlangerIntensity", PAD_SETTINGS->getLooperFxFlangerIntensity());
-                padData->setAttribute("looperFxFlangerRateMenu", PAD_SETTINGS->getLooperFxFlangerRateMenu());
-                padData->setAttribute("looperFxFlangerSync", PAD_SETTINGS->getLooperFxFlangerSync());
-                padData->setAttribute("looperFxFlangerAlphaTouch", PAD_SETTINGS->getLooperFxFlangerAlphaTouch());
-                padData->setAttribute("looperFxFlangerAtReverse", PAD_SETTINGS->getLooperFxFlangerAtReverse());
-                padData->setAttribute("looperFxFlangerAtIntensity", PAD_SETTINGS->getLooperFxFlangerAtIntensity());
+                padData->setAttribute("samplerFxFlangerMix", PAD_SETTINGS->getSamplerFxFlangerMix());
+                padData->setAttribute("samplerFxFlangerRate", PAD_SETTINGS->getSamplerFxFlangerRate());
+                padData->setAttribute("samplerFxFlangerFeedback", PAD_SETTINGS->getSamplerFxFlangerFeedback());
+                padData->setAttribute("samplerFxFlangerIntensity", PAD_SETTINGS->getSamplerFxFlangerIntensity());
+                padData->setAttribute("samplerFxFlangerRateMenu", PAD_SETTINGS->getSamplerFxFlangerRateMenu());
+                padData->setAttribute("samplerFxFlangerSync", PAD_SETTINGS->getSamplerFxFlangerSync());
+                padData->setAttribute("samplerFxFlangerAlphaTouch", PAD_SETTINGS->getSamplerFxFlangerAlphaTouch());
+                padData->setAttribute("samplerFxFlangerAtReverse", PAD_SETTINGS->getSamplerFxFlangerAtReverse());
+                padData->setAttribute("samplerFxFlangerAtIntensity", PAD_SETTINGS->getSamplerFxFlangerAtIntensity());
             }
-            else if (PAD_SETTINGS->getLooperEffect() == 10) //Tremolo
+            else if (PAD_SETTINGS->getSamplerEffect() == 10) //Tremolo
             {
-                padData->setAttribute("looperFxTremoloDepth", PAD_SETTINGS->getLooperFxTremoloDepth());
-                padData->setAttribute("looperFxTremoloRate", PAD_SETTINGS->getLooperFxTremoloRate());
-                padData->setAttribute("looperFxTremoloShape", PAD_SETTINGS->getLooperFxTremoloShape());
-                padData->setAttribute("looperFxTremoloSync", PAD_SETTINGS->getLooperFxTremoloSync());
-                padData->setAttribute("looperFxTremoloRateMenu", PAD_SETTINGS->getLooperFxTremoloRateMenu());
-                padData->setAttribute("looperFxTremoloAlphaTouch", PAD_SETTINGS->getLooperFxTremoloAlphaTouch());
-                padData->setAttribute("looperFxTremoloAtReverse", PAD_SETTINGS->getLooperFxTremoloAtReverse());
-                padData->setAttribute("looperFxTremoloAtIntensity", PAD_SETTINGS->getLooperFxTremoloAtIntensity());
+                padData->setAttribute("samplerFxTremoloDepth", PAD_SETTINGS->getSamplerFxTremoloDepth());
+                padData->setAttribute("samplerFxTremoloRate", PAD_SETTINGS->getSamplerFxTremoloRate());
+                padData->setAttribute("samplerFxTremoloShape", PAD_SETTINGS->getSamplerFxTremoloShape());
+                padData->setAttribute("samplerFxTremoloSync", PAD_SETTINGS->getSamplerFxTremoloSync());
+                padData->setAttribute("samplerFxTremoloRateMenu", PAD_SETTINGS->getSamplerFxTremoloRateMenu());
+                padData->setAttribute("samplerFxTremoloAlphaTouch", PAD_SETTINGS->getSamplerFxTremoloAlphaTouch());
+                padData->setAttribute("samplerFxTremoloAtReverse", PAD_SETTINGS->getSamplerFxTremoloAtReverse());
+                padData->setAttribute("samplerFxTremoloAtIntensity", PAD_SETTINGS->getSamplerFxTremoloAtIntensity());
             }
             
         }
@@ -1165,7 +1165,7 @@ void AppDocumentState::loadFromPreset (int presetNumber)
             PAD_SETTINGS->setQuantizeMode(padData->getIntAttribute("quantizeMode"));
             
             //only load needed data to reduce loading times and CPU usage, plus
-            //can not load settings into seq and looper modes where the pads player objects don't exist (yet)
+            //can not load settings into seq and sampler modes where the pads player objects don't exist (yet)
             
             //midi mode
             if (padData->getIntAttribute("mode") == 1)
@@ -1184,11 +1184,11 @@ void AppDocumentState::loadFromPreset (int presetNumber)
                 PAD_SETTINGS->setMidiCcController(padData->getIntAttribute("midiCcController"));
             }
             
-            //looper mode
+            //sampler mode
             else if (padData->getIntAttribute("mode") == 2)
             {
                 File newFile;
-                String newFileString = padData->getStringAttribute("looperAudioFilePath");
+                String newFileString = padData->getStringAttribute("samplerAudioFilePath");
                 
                 if (newFileString != String::empty) //to prevent trying to load in a file if there's nothing to load
                 {
@@ -1204,102 +1204,102 @@ void AppDocumentState::loadFromPreset (int presetNumber)
                         newFile = newFileString;
                     }
                     
-                    PAD_SETTINGS->setLooperAudioFilePath(newFile);
+                    PAD_SETTINGS->setSamplerAudioFilePath(newFile);
                 }
                 else
-                    PAD_SETTINGS->setLooperAudioFilePath(File::nonexistent);
+                    PAD_SETTINGS->setSamplerAudioFilePath(File::nonexistent);
                 
-                PAD_SETTINGS->setLooperTriggerMode(padData->getIntAttribute("looperTriggerMode"));
-                PAD_SETTINGS->setLooperShouldLoop(padData->getIntAttribute("looperShouldLoop"));
-                PAD_SETTINGS->setLooperIndestructible(padData->getIntAttribute("looperIndestructible"));
-                PAD_SETTINGS->setLooperShouldFinishLoop(padData->getIntAttribute("looperShouldFinishLoop"));
-                PAD_SETTINGS->setLooperSticky(padData->getIntAttribute("looperSticky"));
-                PAD_SETTINGS->setLooperEffect(padData->getIntAttribute("looperEffect"));
-                PAD_SETTINGS->setLooperPan(padData->getDoubleAttribute("looperPan"));
-                PAD_SETTINGS->setLooperGain(padData->getDoubleAttribute("looperGain"));
-                if (PAD_SETTINGS->getLooperEffect() == 1) //Gain and Pan
+                PAD_SETTINGS->setSamplerTriggerMode(padData->getIntAttribute("samplerTriggerMode"));
+                PAD_SETTINGS->setSamplerShouldLoop(padData->getIntAttribute("samplerShouldLoop"));
+                PAD_SETTINGS->setSamplerIndestructible(padData->getIntAttribute("samplerIndestructible"));
+                PAD_SETTINGS->setSamplerShouldFinishLoop(padData->getIntAttribute("samplerShouldFinishLoop"));
+                PAD_SETTINGS->setSamplerSticky(padData->getIntAttribute("samplerSticky"));
+                PAD_SETTINGS->setSamplerEffect(padData->getIntAttribute("samplerEffect"));
+                PAD_SETTINGS->setSamplerPan(padData->getDoubleAttribute("samplerPan"));
+                PAD_SETTINGS->setSamplerGain(padData->getDoubleAttribute("samplerGain"));
+                if (PAD_SETTINGS->getSamplerEffect() == 1) //Gain and Pan
                 {
-                    PAD_SETTINGS->setLooperFxGainPanGain(padData->getDoubleAttribute("looperFxGainPanGain"));
-                    PAD_SETTINGS->setLooperFxGainPanPan(padData->getDoubleAttribute("looperFxGainPanPan"));
-                    PAD_SETTINGS->setLooperFxGainPanAlphaTouch(padData->getIntAttribute("looperFxGainPanAlphaTouch"));
-                    PAD_SETTINGS->setLooperFxGainPanAtReverse(padData->getIntAttribute("looperFxGainPanAtReverse"));
-                    PAD_SETTINGS->setLooperFxGainPanAtIntensity(padData->getDoubleAttribute("looperFxGainPanAtIntensity"));
+                    PAD_SETTINGS->setSamplerFxGainPanGain(padData->getDoubleAttribute("samplerFxGainPanGain"));
+                    PAD_SETTINGS->setSamplerFxGainPanPan(padData->getDoubleAttribute("samplerFxGainPanPan"));
+                    PAD_SETTINGS->setSamplerFxGainPanAlphaTouch(padData->getIntAttribute("samplerFxGainPanAlphaTouch"));
+                    PAD_SETTINGS->setSamplerFxGainPanAtReverse(padData->getIntAttribute("samplerFxGainPanAtReverse"));
+                    PAD_SETTINGS->setSamplerFxGainPanAtIntensity(padData->getDoubleAttribute("samplerFxGainPanAtIntensity"));
                 }
-                else if (PAD_SETTINGS->getLooperEffect() == 2) //LPF
+                else if (PAD_SETTINGS->getSamplerEffect() == 2) //LPF
                 {
-                    PAD_SETTINGS->setLooperFxLpfMix(padData->getDoubleAttribute("looperFxLpfMix"));
-                    PAD_SETTINGS->setLooperFxLpfFreq(padData->getDoubleAttribute("looperFxLpfFreq"));
-                    PAD_SETTINGS->setLooperFxLpfBandwidth(padData->getDoubleAttribute("looperFxLpfBandwidth"));
-                    PAD_SETTINGS->setLooperFxLpfAlphaTouch(padData->getIntAttribute("looperFxLpfAlphaTouch"));
-                    PAD_SETTINGS->setLooperFxLpfAtReverse(padData->getIntAttribute("looperFxLpfAtReverse"));
-                    PAD_SETTINGS->setLooperFxLpfAtIntensity(padData->getDoubleAttribute("looperFxLpfAtIntensity"));
+                    PAD_SETTINGS->setSamplerFxLpfMix(padData->getDoubleAttribute("samplerFxLpfMix"));
+                    PAD_SETTINGS->setSamplerFxLpfFreq(padData->getDoubleAttribute("samplerFxLpfFreq"));
+                    PAD_SETTINGS->setSamplerFxLpfBandwidth(padData->getDoubleAttribute("samplerFxLpfBandwidth"));
+                    PAD_SETTINGS->setSamplerFxLpfAlphaTouch(padData->getIntAttribute("samplerFxLpfAlphaTouch"));
+                    PAD_SETTINGS->setSamplerFxLpfAtReverse(padData->getIntAttribute("samplerFxLpfAtReverse"));
+                    PAD_SETTINGS->setSamplerFxLpfAtIntensity(padData->getDoubleAttribute("samplerFxLpfAtIntensity"));
                         
                 }
-                else if (PAD_SETTINGS->getLooperEffect() == 3) //HPF
+                else if (PAD_SETTINGS->getSamplerEffect() == 3) //HPF
                 {
-                    PAD_SETTINGS->setLooperFxHpfMix(padData->getDoubleAttribute("looperFxHpfMix"));
-                    PAD_SETTINGS->setLooperFxHpfFreq(padData->getDoubleAttribute("looperFxHpfFreq"));
-                    PAD_SETTINGS->setLooperFxHpfBandwidth(padData->getDoubleAttribute("looperFxHpfBandwidth"));
-                    PAD_SETTINGS->setLooperFxHpfAlphaTouch(padData->getIntAttribute("looperFxHpfAlphaTouch"));
-                    PAD_SETTINGS->setLooperFxHpfAtReverse(padData->getIntAttribute("looperFxHpfAtReverse"));
-                    PAD_SETTINGS->setLooperFxHpfAtIntensity(padData->getDoubleAttribute("looperFxHpfAtIntensity"));
+                    PAD_SETTINGS->setSamplerFxHpfMix(padData->getDoubleAttribute("samplerFxHpfMix"));
+                    PAD_SETTINGS->setSamplerFxHpfFreq(padData->getDoubleAttribute("samplerFxHpfFreq"));
+                    PAD_SETTINGS->setSamplerFxHpfBandwidth(padData->getDoubleAttribute("samplerFxHpfBandwidth"));
+                    PAD_SETTINGS->setSamplerFxHpfAlphaTouch(padData->getIntAttribute("samplerFxHpfAlphaTouch"));
+                    PAD_SETTINGS->setSamplerFxHpfAtReverse(padData->getIntAttribute("samplerFxHpfAtReverse"));
+                    PAD_SETTINGS->setSamplerFxHpfAtIntensity(padData->getDoubleAttribute("samplerFxHpfAtIntensity"));
                 }
-                else if (PAD_SETTINGS->getLooperEffect() == 4) //BPF
+                else if (PAD_SETTINGS->getSamplerEffect() == 4) //BPF
                 {
-                    PAD_SETTINGS->setLooperFxBpfMix(padData->getDoubleAttribute("looperFxBpfMix"));
-                    PAD_SETTINGS->setLooperFxBpfFreq(padData->getDoubleAttribute("looperFxBpfFreq"));
-                    PAD_SETTINGS->setLooperFxBpfBandwidth(padData->getDoubleAttribute("looperFxBpfBandwidth"));
-                    PAD_SETTINGS->setLooperFxBpfAlphaTouch(padData->getIntAttribute("looperFxBpfAlphaTouch"));
-                    PAD_SETTINGS->setLooperFxBpfAtReverse(padData->getIntAttribute("looperFxBpfAtReverse"));
-                    PAD_SETTINGS->setLooperFxBpfAtIntensity(padData->getDoubleAttribute("looperFxBpfAtIntensity"));
+                    PAD_SETTINGS->setSamplerFxBpfMix(padData->getDoubleAttribute("samplerFxBpfMix"));
+                    PAD_SETTINGS->setSamplerFxBpfFreq(padData->getDoubleAttribute("samplerFxBpfFreq"));
+                    PAD_SETTINGS->setSamplerFxBpfBandwidth(padData->getDoubleAttribute("samplerFxBpfBandwidth"));
+                    PAD_SETTINGS->setSamplerFxBpfAlphaTouch(padData->getIntAttribute("samplerFxBpfAlphaTouch"));
+                    PAD_SETTINGS->setSamplerFxBpfAtReverse(padData->getIntAttribute("samplerFxBpfAtReverse"));
+                    PAD_SETTINGS->setSamplerFxBpfAtIntensity(padData->getDoubleAttribute("samplerFxBpfAtIntensity"));
                 }
-                else if (PAD_SETTINGS->getLooperEffect() == 6) //Delay
+                else if (PAD_SETTINGS->getSamplerEffect() == 6) //Delay
                 {
-                    PAD_SETTINGS->setLooperFxDelayMix(padData->getDoubleAttribute("looperFxDelayMix"));
-                    PAD_SETTINGS->setLooperFxDelayTime(padData->getDoubleAttribute("looperFxDelayTime"));
-                    PAD_SETTINGS->setLooperFxDelayFeedback(padData->getDoubleAttribute("looperFxDelayFeedback"));
-                    PAD_SETTINGS->setLooperFxDelayLpfFreq(padData->getDoubleAttribute("looperFxDelayLpfFreq"));
-                    PAD_SETTINGS->setLooperFxDelayHpfFreq(padData->getDoubleAttribute("looperFxDelayHpfFreq"));
-                    PAD_SETTINGS->setLooperFxDelaySync(padData->getIntAttribute("looperFxDelaySync"));
-                    PAD_SETTINGS->setLooperFxDelayTimeMenu(padData->getIntAttribute("looperFxDelayTimeMenu"));
-                    PAD_SETTINGS->setLooperFxDelayAlphaTouch(padData->getIntAttribute("looperFxDelayAlphaTouch"));
-                    PAD_SETTINGS->setLooperFxDelayAtReverse(padData->getIntAttribute("looperFxDelayAtReverse"));
-                    PAD_SETTINGS->setLooperFxDelayAtIntensity(padData->getDoubleAttribute("looperFxDelayAtIntensity"));
+                    PAD_SETTINGS->setSamplerFxDelayMix(padData->getDoubleAttribute("samplerFxDelayMix"));
+                    PAD_SETTINGS->setSamplerFxDelayTime(padData->getDoubleAttribute("samplerFxDelayTime"));
+                    PAD_SETTINGS->setSamplerFxDelayFeedback(padData->getDoubleAttribute("samplerFxDelayFeedback"));
+                    PAD_SETTINGS->setSamplerFxDelayLpfFreq(padData->getDoubleAttribute("samplerFxDelayLpfFreq"));
+                    PAD_SETTINGS->setSamplerFxDelayHpfFreq(padData->getDoubleAttribute("samplerFxDelayHpfFreq"));
+                    PAD_SETTINGS->setSamplerFxDelaySync(padData->getIntAttribute("samplerFxDelaySync"));
+                    PAD_SETTINGS->setSamplerFxDelayTimeMenu(padData->getIntAttribute("samplerFxDelayTimeMenu"));
+                    PAD_SETTINGS->setSamplerFxDelayAlphaTouch(padData->getIntAttribute("samplerFxDelayAlphaTouch"));
+                    PAD_SETTINGS->setSamplerFxDelayAtReverse(padData->getIntAttribute("samplerFxDelayAtReverse"));
+                    PAD_SETTINGS->setSamplerFxDelayAtIntensity(padData->getDoubleAttribute("samplerFxDelayAtIntensity"));
                 }
-                else if (PAD_SETTINGS->getLooperEffect() == 7) //Reverb
+                else if (PAD_SETTINGS->getSamplerEffect() == 7) //Reverb
                 {
-                    PAD_SETTINGS->setLooperFxReverbMix(padData->getDoubleAttribute("looperFxReverbMix"));
-                    PAD_SETTINGS->setLooperFxReverbRoomSize(padData->getDoubleAttribute("looperFxReverbRoomSize"));
-                    PAD_SETTINGS->setLooperFxReverbDamping(padData->getDoubleAttribute("looperFxReverbDamping"));
-                    PAD_SETTINGS->setLooperFxReverbWidth(padData->getDoubleAttribute("looperFxReverbWidth"));
-                    PAD_SETTINGS->setLooperFxReverbFreezeMode(padData->getDoubleAttribute("looperFxReverbFreezeMode"));
-                    PAD_SETTINGS->setLooperFxReverbAlphaTouch(padData->getIntAttribute("looperFxReverbAlphaTouch"));
-                    PAD_SETTINGS->setLooperFxReverbAtReverse(padData->getIntAttribute("looperFxReverbAtReverse"));
-                    PAD_SETTINGS->setLooperFxReverbAtIntensity(padData->getDoubleAttribute("looperFxReverbAtIntensity"));
+                    PAD_SETTINGS->setSamplerFxReverbMix(padData->getDoubleAttribute("samplerFxReverbMix"));
+                    PAD_SETTINGS->setSamplerFxReverbRoomSize(padData->getDoubleAttribute("samplerFxReverbRoomSize"));
+                    PAD_SETTINGS->setSamplerFxReverbDamping(padData->getDoubleAttribute("samplerFxReverbDamping"));
+                    PAD_SETTINGS->setSamplerFxReverbWidth(padData->getDoubleAttribute("samplerFxReverbWidth"));
+                    PAD_SETTINGS->setSamplerFxReverbFreezeMode(padData->getDoubleAttribute("samplerFxReverbFreezeMode"));
+                    PAD_SETTINGS->setSamplerFxReverbAlphaTouch(padData->getIntAttribute("samplerFxReverbAlphaTouch"));
+                    PAD_SETTINGS->setSamplerFxReverbAtReverse(padData->getIntAttribute("samplerFxReverbAtReverse"));
+                    PAD_SETTINGS->setSamplerFxReverbAtIntensity(padData->getDoubleAttribute("samplerFxReverbAtIntensity"));
                 }
-                else if (PAD_SETTINGS->getLooperEffect() == 9) //Flanger
+                else if (PAD_SETTINGS->getSamplerEffect() == 9) //Flanger
                 {
-                    PAD_SETTINGS->setLooperFxFlangerMix(padData->getDoubleAttribute("looperFxFlangerMix"));
-                    PAD_SETTINGS->setLooperFxFlangerRate(padData->getDoubleAttribute("looperFxFlangerRate"));
-                    PAD_SETTINGS->setLooperFxFlangerFeedback(padData->getDoubleAttribute("looperFxFlangerFeedback"));
-                    PAD_SETTINGS->setLooperFxFlangerIntensity(padData->getDoubleAttribute("looperFxFlangerIntensity"));
-                    PAD_SETTINGS->setLooperFxFlangerSync(padData->getIntAttribute("looperFxFlangerSync"));
-                    PAD_SETTINGS->setLooperFxFlangerRateMenu(padData->getIntAttribute("looperFxFlangerRateMenu"));
-                    PAD_SETTINGS->setLooperFxFlangerAlphaTouch(padData->getIntAttribute("looperFxFlangerAlphaTouch"));
-                    PAD_SETTINGS->setLooperFxFlangerAtReverse(padData->getIntAttribute("looperFxFlangerAtReverse"));
-                    PAD_SETTINGS->setLooperFxFlangerAtIntensity(padData->getDoubleAttribute("looperFxFlangerAtIntensity"));
+                    PAD_SETTINGS->setSamplerFxFlangerMix(padData->getDoubleAttribute("samplerFxFlangerMix"));
+                    PAD_SETTINGS->setSamplerFxFlangerRate(padData->getDoubleAttribute("samplerFxFlangerRate"));
+                    PAD_SETTINGS->setSamplerFxFlangerFeedback(padData->getDoubleAttribute("samplerFxFlangerFeedback"));
+                    PAD_SETTINGS->setSamplerFxFlangerIntensity(padData->getDoubleAttribute("samplerFxFlangerIntensity"));
+                    PAD_SETTINGS->setSamplerFxFlangerSync(padData->getIntAttribute("samplerFxFlangerSync"));
+                    PAD_SETTINGS->setSamplerFxFlangerRateMenu(padData->getIntAttribute("samplerFxFlangerRateMenu"));
+                    PAD_SETTINGS->setSamplerFxFlangerAlphaTouch(padData->getIntAttribute("samplerFxFlangerAlphaTouch"));
+                    PAD_SETTINGS->setSamplerFxFlangerAtReverse(padData->getIntAttribute("samplerFxFlangerAtReverse"));
+                    PAD_SETTINGS->setSamplerFxFlangerAtIntensity(padData->getDoubleAttribute("samplerFxFlangerAtIntensity"));
                 }
                 
-                else if (PAD_SETTINGS->getLooperEffect() == 10) //Tremolo
+                else if (PAD_SETTINGS->getSamplerEffect() == 10) //Tremolo
                 {
-                    PAD_SETTINGS->setLooperFxTremoloDepth(padData->getDoubleAttribute("looperFxTremoloDepth"));
-                    PAD_SETTINGS->setLooperFxTremoloRate(padData->getDoubleAttribute("looperFxTremoloRate"));
-                    PAD_SETTINGS->setLooperFxTremoloShape(padData->getIntAttribute("looperFxTremoloShape"));
-                    PAD_SETTINGS->setLooperFxTremoloSync(padData->getIntAttribute("looperFxTremoloSync"));
-                    PAD_SETTINGS->setLooperFxTremoloRateMenu(padData->getIntAttribute("looperFxTremoloRateMenu"));
-                    PAD_SETTINGS->setLooperFxTremoloAlphaTouch(padData->getIntAttribute("looperFxTremoloAlphaTouch"));
-                    PAD_SETTINGS->setLooperFxTremoloAtReverse(padData->getIntAttribute("looperFxTremoloAtReverse"));
-                    PAD_SETTINGS->setLooperFxTremoloAtIntensity(padData->getDoubleAttribute("looperFxTremoloAtIntensity"));
+                    PAD_SETTINGS->setSamplerFxTremoloDepth(padData->getDoubleAttribute("samplerFxTremoloDepth"));
+                    PAD_SETTINGS->setSamplerFxTremoloRate(padData->getDoubleAttribute("samplerFxTremoloRate"));
+                    PAD_SETTINGS->setSamplerFxTremoloShape(padData->getIntAttribute("samplerFxTremoloShape"));
+                    PAD_SETTINGS->setSamplerFxTremoloSync(padData->getIntAttribute("samplerFxTremoloSync"));
+                    PAD_SETTINGS->setSamplerFxTremoloRateMenu(padData->getIntAttribute("samplerFxTremoloRateMenu"));
+                    PAD_SETTINGS->setSamplerFxTremoloAlphaTouch(padData->getIntAttribute("samplerFxTremoloAlphaTouch"));
+                    PAD_SETTINGS->setSamplerFxTremoloAtReverse(padData->getIntAttribute("samplerFxTremoloAtReverse"));
+                    PAD_SETTINGS->setSamplerFxTremoloAtIntensity(padData->getDoubleAttribute("samplerFxTremoloAtIntensity"));
                 }
             }
             
@@ -1628,10 +1628,10 @@ void AppDocumentState::removeUneededAudioFiles()
                     //search through all pads looking for audio files 
                     for (int i = 0; i <= 47; i++)
                     {
-                        //look for looper audio files
+                        //look for sampler audio files
                         if (presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
                         {
-                            String originalFile(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("looperAudioFilePath"));
+                            String originalFile(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
                             
                             if (originalFile != String::empty) //if there is 'something'
                             {
@@ -1788,12 +1788,12 @@ void AppDocumentState::importAudioFiles()
             //search through all pads looking for audio files 
             for (int i = 0; i <= 47; i++)
             {
-                //look for looper audio files
+                //look for sampler audio files
                 if (presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
                 {
                     File currentFile;
                     File newFile;
-                    String fileName = presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("looperAudioFilePath");
+                    String fileName = presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath");
                     
                     if (fileName != String::empty)
                     {
@@ -1851,10 +1851,10 @@ void AppDocumentState::importAudioFiles()
                         }
                         
                         
-                        presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("looperAudioFilePath", newFile.getFileName());
+                        presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("samplerAudioFilePath", newFile.getFileName());
                         
                         if (presetNumber == currentlySelectedPreset)
-                            AppSettings::Instance()->padSettings[i]->setLooperAudioFilePath(newFile);
+                            AppSettings::Instance()->padSettings[i]->setSamplerAudioFilePath(newFile);
                     }
                 }
                 

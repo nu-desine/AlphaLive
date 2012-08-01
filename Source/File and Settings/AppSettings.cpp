@@ -56,7 +56,7 @@ AppSettings::AppSettings()
     
     for (int i = 0; i <=5; i++)
     {
-        looperChannelMode[i] = 1;
+        samplerChannelMode[i] = 1;
         sequencerChannelMode[i] = 1;
     }
     
@@ -96,7 +96,7 @@ void AppSettings::resetData()
     setGlobalTempo(120.0);
     for (int i = 0; i <=5; i++)
     {
-        setLooperChannelMode(i, 1);
+        setSamplerChannelMode(i, 1);
         setSequencerChannelMode(i, 1);
     }
     
@@ -120,7 +120,7 @@ void AppSettings::pastePadSettings (int padNumber)
     padSettings[padNumber]->setPadNumber(padNumber);
     
     //get mode, then reset mode before applying it again.
-    //This is needed so that the looper mode (and probably the seq mode) are handled properly
+    //This is needed so that the sampler mode (and probably the seq mode) are handled properly
     //as the audioFilePlayer class constructor must be called with the right pad number set beforehand, for example.
     int mode = padSettings[padNumber]->getMode();
     padSettings[padNumber]->setMode(0);
@@ -180,9 +180,9 @@ void AppSettings::setAutoStartClock (int value)
 }
 
 
-void AppSettings::setLooperChannelMode (int channelNumber, int value)
+void AppSettings::setSamplerChannelMode (int channelNumber, int value)
 {
-    looperChannelMode[channelNumber] = value;
+    samplerChannelMode[channelNumber] = value;
 }
 void AppSettings::setSequencerChannelMode(int channelNumber, int value)
 {
@@ -235,9 +235,9 @@ int AppSettings::getAutoStartClock()
     return autoStartClock;
 }
 
-int AppSettings::getLooperChannelMode (int channelNumber)
+int AppSettings::getSamplerChannelMode (int channelNumber)
 {
-    return looperChannelMode[channelNumber];
+    return samplerChannelMode[channelNumber];
 }
 
 int AppSettings::getSequencerChannelMode(int channelNumber)

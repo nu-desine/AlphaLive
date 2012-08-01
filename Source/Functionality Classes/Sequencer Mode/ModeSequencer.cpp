@@ -25,7 +25,7 @@
 #include "SequencerValues.h"
 #include "../AlphaLiveEngine.h"
 
-//#define PAD_SETTINGS padSettingsLooper[padNumber]
+//#define PAD_SETTINGS padSettingsSampler[padNumber]
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
 
 

@@ -102,7 +102,7 @@ void GuiLowpassFilter::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxLpfMix(mixSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxLpfMix(mixSlider->sliderComponent()->getValue());
         }
         
     }
@@ -113,7 +113,7 @@ void GuiLowpassFilter::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxLpfFreq(frequencySlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxLpfFreq(frequencySlider->sliderComponent()->getValue());
         }
         
     }
@@ -124,7 +124,7 @@ void GuiLowpassFilter::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxLpfBandwidth(bandwidthSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxLpfBandwidth(bandwidthSlider->sliderComponent()->getValue());
         }
     
     }
@@ -135,7 +135,7 @@ void GuiLowpassFilter::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxLpfAtIntensity(intensitySlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxLpfAtIntensity(intensitySlider->sliderComponent()->getValue());
         }
         
     }
@@ -150,7 +150,7 @@ void GuiLowpassFilter::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxLpfAlphaTouch(alphaTouchMenu->getSelectedId());
+            PAD_SETTINGS->setSamplerFxLpfAlphaTouch(alphaTouchMenu->getSelectedId());
         }
         
     }
@@ -165,7 +165,7 @@ void GuiLowpassFilter::buttonClicked (Button *button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxLpfAtReverse(reverseButton->getToggleState());
+            PAD_SETTINGS->setSamplerFxLpfAtReverse(reverseButton->getToggleState());
         }
 
     }
@@ -185,12 +185,12 @@ void GuiLowpassFilter::updateDisplay()
     {
         int padNum = selectedPads[0];
         
-        mixSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxLpfMix(), false);
-        frequencySlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxLpfFreq(), false);
-        bandwidthSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxLpfBandwidth(), false);
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getLooperFxLpfAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getLooperFxLpfAtReverse(), false);
-        intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxLpfAtIntensity(), false);
+        mixSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxLpfMix(), false);
+        frequencySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxLpfFreq(), false);
+        bandwidthSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxLpfBandwidth(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxLpfAlphaTouch(), true);
+        reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxLpfAtReverse(), false);
+        intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxLpfAtIntensity(), false);
     }
     
     

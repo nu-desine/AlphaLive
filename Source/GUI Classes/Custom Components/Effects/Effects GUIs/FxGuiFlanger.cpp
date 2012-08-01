@@ -137,7 +137,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxFlangerMix(mixSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxFlangerMix(mixSlider->sliderComponent()->getValue());
         }
         
     }
@@ -147,7 +147,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxFlangerRate(rateSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxFlangerRate(rateSlider->sliderComponent()->getValue());
         }
         
     }
@@ -158,7 +158,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxFlangerFeedback(feedbackSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxFlangerFeedback(feedbackSlider->sliderComponent()->getValue());
         }
     }
     
@@ -168,7 +168,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxFlangerIntensity(flangerIntensitySlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxFlangerIntensity(flangerIntensitySlider->sliderComponent()->getValue());
         }
         
     }
@@ -179,7 +179,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxFlangerAtIntensity(intensitySlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxFlangerAtIntensity(intensitySlider->sliderComponent()->getValue());
         }
     }
     
@@ -194,7 +194,7 @@ void GuiFlanger::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxFlangerAlphaTouch(alphaTouchMenu->getSelectedId());
+            PAD_SETTINGS->setSamplerFxFlangerAlphaTouch(alphaTouchMenu->getSelectedId());
         }
         
     }
@@ -247,8 +247,8 @@ void GuiFlanger::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxFlangerRate(lfoRate);
-            PAD_SETTINGS->setLooperFxFlangerRateMenu(rateMenu->getSelectedId());
+            PAD_SETTINGS->setSamplerFxFlangerRate(lfoRate);
+            PAD_SETTINGS->setSamplerFxFlangerRateMenu(rateMenu->getSelectedId());
         }
         
     }
@@ -263,7 +263,7 @@ void GuiFlanger::buttonClicked (Button *button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxFlangerAtReverse(reverseButton->getToggleState());
+            PAD_SETTINGS->setSamplerFxFlangerAtReverse(reverseButton->getToggleState());
         }
     }
     
@@ -272,7 +272,7 @@ void GuiFlanger::buttonClicked (Button *button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxFlangerSync(syncButton->getToggleState());
+            PAD_SETTINGS->setSamplerFxFlangerSync(syncButton->getToggleState());
         }
         
         
@@ -302,16 +302,16 @@ void GuiFlanger::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        mixSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxFlangerMix(), false);
-        rateSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxFlangerRate(), false);
-        feedbackSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxFlangerFeedback(), false);
-        flangerIntensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxFlangerIntensity(), false);
-        rateMenu->setSelectedId(PAD_SETTINGS->getLooperFxFlangerRateMenu(), true);
-        syncButton->setToggleState(PAD_SETTINGS->getLooperFxFlangerSync(), false);
+        mixSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxFlangerMix(), false);
+        rateSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxFlangerRate(), false);
+        feedbackSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxFlangerFeedback(), false);
+        flangerIntensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxFlangerIntensity(), false);
+        rateMenu->setSelectedId(PAD_SETTINGS->getSamplerFxFlangerRateMenu(), true);
+        syncButton->setToggleState(PAD_SETTINGS->getSamplerFxFlangerSync(), false);
         
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getLooperFxFlangerAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getLooperFxFlangerAtReverse(), false);
-        intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxFlangerAtIntensity(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxFlangerAlphaTouch(), true);
+        reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxFlangerAtReverse(), false);
+        intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxFlangerAtIntensity(), false);
     }
     
     else if(MULTI_PADS)

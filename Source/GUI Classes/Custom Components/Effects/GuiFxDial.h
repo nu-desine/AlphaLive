@@ -84,7 +84,7 @@ private:
     
     //FX displays
     //should all the effect objects be put into a Juce Array and accessed through that throughout the class?
-    //there seems to be a lot of 'if' checks to see which looperEffect or buttons[] instance is there...
+    //there seems to be a lot of 'if' checks to see which samplerEffect or buttons[] instance is there...
     //also theres lots of lists where all the effects need sending the same peice of data, which could be
     //done within a for loop if all the effects were in an array.
     //HANG ON, HOW DO YOU DO AN ARRAY OF DIFFERENT TYPES OF OBJECTS?

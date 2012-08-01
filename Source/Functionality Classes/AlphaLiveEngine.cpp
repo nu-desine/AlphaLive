@@ -103,12 +103,12 @@ AlphaLiveEngine::AlphaLiveEngine()
     #endif //JUCE_WINDOWS
 
     modeMidi = new ModeMidi(*midiOutputDevice, *this);
-    modeLooper = new ModeLooper(*this);
+    modeSampler = new ModeSampler(*this);
     modeSequencer = new ModeSequencer(*midiOutputDevice, *this);
     modeController = new ModeController();
     modeController->setMidiOutputDevice(*midiOutputDevice);
     
-    audioMixer.addInputSource(modeLooper,false); //add as inputsource to audioMixer
+    audioMixer.addInputSource(modeSampler,false); //add as inputsource to audioMixer
     audioMixer.addInputSource(modeSequencer,false); //add as inputsource to audioMixer
     audioPlayer.setSource(&audioMixer);
     
@@ -139,7 +139,7 @@ AlphaLiveEngine::~AlphaLiveEngine()
     audioDeviceManager.removeAudioCallback (this);//unregister the audio callback
     
     delete modeMidi;
-    delete modeLooper;
+    delete modeSampler;
     delete modeSequencer;
     delete modeController;
     
@@ -153,9 +153,9 @@ ModeMidi* AlphaLiveEngine::getModeMidi()
     return modeMidi;
 }
 
-ModeLooper* AlphaLiveEngine::getModeLooper()
+ModeSampler* AlphaLiveEngine::getModeSampler()
 {
-    return modeLooper;
+    return modeSampler;
 }
 
 ModeSequencer* AlphaLiveEngine::getModeSequencer()
@@ -260,10 +260,10 @@ void AlphaLiveEngine::inputData(int pad, int value)
     }
     //==========================================================================
     
-    //route message to looper mode
-    if (PAD_SETTINGS->getMode() == 2) //if the pressed pad is set to Looper mode
+    //route message to sampler mode
+    if (PAD_SETTINGS->getMode() == 2) //if the pressed pad is set to Sampler mode
     {
-        modeLooper->getOscData(recievedPad, recievedValue);
+        modeSampler->getOscData(recievedPad, recievedValue);
     }
     //==========================================================================
     
@@ -326,7 +326,7 @@ void AlphaLiveEngine::handleExclusiveMode (int padNum)
                 modeMidi->killPad(prevPad);
                 break;
             case 2:
-                modeLooper->killPad(prevPad);
+                modeSampler->killPad(prevPad);
                 break;
             case 3:
                 modeSequencer->killPad(prevPad);
@@ -386,7 +386,7 @@ void AlphaLiveEngine::addPadToQueue (int padNum)
                                 modeMidi->killPad(queuedPads[i]);
                                 break;
                             case 2:
-                                modeLooper->killPad(queuedPads[i]);
+                                modeSampler->killPad(queuedPads[i]);
                                 break;
                             case 3:
                                 modeSequencer->killPad(queuedPads[i]);
@@ -420,7 +420,7 @@ void AlphaLiveEngine::triggerQuantizationPoint()
                     modeMidi->triggerQuantizationPoint(queuedPads[i]);
                     break;
                 case 2:
-                    modeLooper->triggerQuantizationPoint(queuedPads[i]);
+                    modeSampler->triggerQuantizationPoint(queuedPads[i]);
                     break;
                 case 3:
                     modeSequencer->triggerQuantizationPoint(queuedPads[i]);
@@ -449,7 +449,7 @@ void AlphaLiveEngine::killAll()
     for (int i = 0; i <= 47; i++)
     {
         modeMidi->killPad(i);
-        modeLooper->killPad(i);
+        modeSampler->killPad(i);
         modeSequencer->killPad(i);
     }
     
@@ -525,7 +525,7 @@ void AlphaLiveEngine::audioDeviceIOCallback (const float** inputChannelData,
                                           int totalNumOutputChannels,
                                           int numSamples)
 {
-    //pass the audio callback on to audioPlayer, which its source set as audioMixer, which have the Looper and Sequencer modes as input sources
+    //pass the audio callback on to audioPlayer, which its source set as audioMixer, which have the Sampler and Sequencer modes as input sources
 	audioPlayer.audioDeviceIOCallback (inputChannelData, totalNumInputChannels, outputChannelData, totalNumOutputChannels, numSamples);
     
     AudioSampleBuffer buffer (outputChannelData, totalNumOutputChannels, numSamples);

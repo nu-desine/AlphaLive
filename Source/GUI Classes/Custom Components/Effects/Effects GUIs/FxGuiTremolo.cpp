@@ -133,7 +133,7 @@ void GuiTremolo::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxTremoloDepth(depthSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxTremoloDepth(depthSlider->sliderComponent()->getValue());
         }
         
     }
@@ -143,7 +143,7 @@ void GuiTremolo::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxTremoloRate(rateSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxTremoloRate(rateSlider->sliderComponent()->getValue());
         }
         
     }
@@ -154,7 +154,7 @@ void GuiTremolo::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxTremoloAtIntensity(intensitySlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxTremoloAtIntensity(intensitySlider->sliderComponent()->getValue());
         }
         
     }
@@ -170,7 +170,7 @@ void GuiTremolo::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxTremoloAlphaTouch(alphaTouchMenu->getSelectedId());
+            PAD_SETTINGS->setSamplerFxTremoloAlphaTouch(alphaTouchMenu->getSelectedId());
         }
         
     }
@@ -180,7 +180,7 @@ void GuiTremolo::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxTremoloShape(shapeMenu->getSelectedId());
+            PAD_SETTINGS->setSamplerFxTremoloShape(shapeMenu->getSelectedId());
         }
         
     }
@@ -227,8 +227,8 @@ void GuiTremolo::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxTremoloRate(lfoRate);
-            PAD_SETTINGS->setLooperFxTremoloRateMenu(rateMenu->getSelectedId());
+            PAD_SETTINGS->setSamplerFxTremoloRate(lfoRate);
+            PAD_SETTINGS->setSamplerFxTremoloRateMenu(rateMenu->getSelectedId());
         }
         
     }
@@ -243,7 +243,7 @@ void GuiTremolo::buttonClicked (Button *button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxTremoloAtReverse(reverseButton->getToggleState());
+            PAD_SETTINGS->setSamplerFxTremoloAtReverse(reverseButton->getToggleState());
         }
         
     }
@@ -253,7 +253,7 @@ void GuiTremolo::buttonClicked (Button *button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setLooperFxTremoloSync(syncButton->getToggleState());
+            PAD_SETTINGS->setSamplerFxTremoloSync(syncButton->getToggleState());
         }
         
         rateSlider->setVisible(false);
@@ -282,15 +282,15 @@ void GuiTremolo::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        depthSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxTremoloDepth(), false);
-        rateSlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxTremoloRate(), false);
-        rateMenu->setSelectedId(PAD_SETTINGS->getLooperFxTremoloRateMenu(), true);
-        syncButton->setToggleState(PAD_SETTINGS->getLooperFxTremoloSync(), false);
-        shapeMenu->setSelectedId(PAD_SETTINGS->getLooperFxTremoloShape(), true);
+        depthSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxTremoloDepth(), false);
+        rateSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxTremoloRate(), false);
+        rateMenu->setSelectedId(PAD_SETTINGS->getSamplerFxTremoloRateMenu(), true);
+        syncButton->setToggleState(PAD_SETTINGS->getSamplerFxTremoloSync(), false);
+        shapeMenu->setSelectedId(PAD_SETTINGS->getSamplerFxTremoloShape(), true);
         
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getLooperFxTremoloAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getLooperFxTremoloAtReverse(), false);
-        intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getLooperFxTremoloAtIntensity(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxTremoloAlphaTouch(), true);
+        reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxTremoloAtReverse(), false);
+        intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxTremoloAtIntensity(), false);
     }
     
     else if(MULTI_PADS)

@@ -80,7 +80,7 @@ private:
 	
 	GuiPadLayout &guiPadLayoutRef;
 
-	Colour normalColour, overColour, downColour, overlayColour, modeColour, looperColour, midiColour, seqColour, controllerColour, g1, g2;
+	Colour normalColour, overColour, downColour, overlayColour, modeColour, samplerColour, midiColour, seqColour, controllerColour, g1, g2;
 	
     
     ColourGradient *gradient;
@@ -93,7 +93,7 @@ private:
     bool isMouseInPlayMode; //when true, it means the mouse is currently being used to emulate a pad press
     bool shouldIgnoreValues;
     
-    int playingStatus;  //1 when a looper or sequencer pad which is currently playing.
+    int playingStatus;  //1 when a sampler or sequencer pad which is currently playing.
                         //when true, the pad is highlighted to show that this pad is currently playing
                         //2 when waiting to play, 3 when waiting to stop. These show different colours
                         //0 when not playing. Nothing is displayed

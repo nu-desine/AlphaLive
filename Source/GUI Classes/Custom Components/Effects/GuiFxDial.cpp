@@ -177,7 +177,7 @@ void GuiFxDial::buttonClicked(Button *button)
                 for (int i = 0; i < selectedPads.size(); i++)
                 {
                     int padNum = selectedPads[i];
-                    PAD_SETTINGS->setLooperEffect(fx);
+                    PAD_SETTINGS->setSamplerEffect(fx);
                 }
                 
 				im = *bgIm[fx];
@@ -278,7 +278,7 @@ void GuiFxDial::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        currentEffect = PAD_SETTINGS->getLooperEffect();
+        currentEffect = PAD_SETTINGS->getSamplerEffect();
         
         if (currentEffect == 1) //Gain and Pan
         {

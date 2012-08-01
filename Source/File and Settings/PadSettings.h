@@ -31,12 +31,12 @@
  */
 
 //NOTE: WHEN APPLYING SETTINGS INTO HERE FROM XML FILES (PROBABLY BY CALLING THE MUTATOR METHODS) SOMETIMES IT MIGHT TRY AND SET VALUES IN OBJECTS THAT DON'T EXIST.
-//IN THIS CASE IT MAY BE A GOOD IDEA TO PASS IN DATA FROM LOOPER MODE AND SEQUENCE MODE TO KEEP THIS CLASS KNOWING AND UPDATED AT WHAT OBJECTS EXIST OR NOT, AND ONLY APPLY THE SETTINGS IF THEY EXIST (IF OBJECT[PAD] != NULL)
-//what settings should be saved into and loaded from xmls files? how should it handle the data on the pads that isn't need yet (e.g. the seq data if the pad is noe set to a looper)?
+//IN THIS CASE IT MAY BE A GOOD IDEA TO PASS IN DATA FROM SAMPLER MODE AND SEQUENCE MODE TO KEEP THIS CLASS KNOWING AND UPDATED AT WHAT OBJECTS EXIST OR NOT, AND ONLY APPLY THE SETTINGS IF THEY EXIST (IF OBJECT[PAD] != NULL)
+//what settings should be saved into and loaded from xmls files? how should it handle the data on the pads that isn't need yet (e.g. the seq data if the pad is noe set to a sampler)?
 //don;t want unncessary data loaded up when switching between presets.
 
 #include "../../JuceLibraryCode/JuceHeader.h"
-#include "../Functionality Classes/Sampler Mode/ModeLooper.h"
+#include "../Functionality Classes/Sampler Mode/ModeSampler.h"
 #include "../Functionality Classes/Sequencer Mode/SequencerValues.h"
 
 class AlphaLiveEngine;
@@ -106,153 +106,153 @@ public:
     int getMidiCcController();
     
     //==================================================================
-    //Looper mode
-    void setLooperAudioFilePath (File value);
-    void setLooperTriggerMode (int value);
-    void setLooperShouldLoop (int value);
-    void setLooperIndestructible (int value);
-    void setLooperShouldFinishLoop (int value);
-    void setLooperSticky (int value);
-    void setLooperEffect (int value);
-    void setLooperPan (float value);
-    void setLooperGain (float value);
+    //Sampler mode
+    void setSamplerAudioFilePath (File value);
+    void setSamplerTriggerMode (int value);
+    void setSamplerShouldLoop (int value);
+    void setSamplerIndestructible (int value);
+    void setSamplerShouldFinishLoop (int value);
+    void setSamplerSticky (int value);
+    void setSamplerEffect (int value);
+    void setSamplerPan (float value);
+    void setSamplerGain (float value);
     
-    File getLooperAudioFilePath();
-    bool getLooperIsLibraryFile();
-    int getLooperTriggerMode();
-    int getLooperShouldLoop();
-    int getLooperIndestructible();
-    int getLooperShouldFinishLoop();
-    int getLooperSticky();
-    int getLooperEffect();
-    float getLooperPan();
-    float getLooperGain();
+    File getSamplerAudioFilePath();
+    bool getSamplerIsLibraryFile();
+    int getSamplerTriggerMode();
+    int getSamplerShouldLoop();
+    int getSamplerIndestructible();
+    int getSamplerShouldFinishLoop();
+    int getSamplerSticky();
+    int getSamplerEffect();
+    float getSamplerPan();
+    float getSamplerGain();
     
-    //----Looper FX----
+    //----Sampler FX----
     //Gain&Pan
-    void setLooperFxGainPanGain (float value);
-    void setLooperFxGainPanPan (float value);
-    void setLooperFxGainPanAlphaTouch (int value);
-    void setLooperFxGainPanAtReverse (int value);
-    void setLooperFxGainPanAtIntensity (float value);
-    float getLooperFxGainPanGain();
-    float getLooperFxGainPanPan();
-    int getLooperFxGainPanAlphaTouch();
-    int getLooperFxGainPanAtReverse();
-    float getLooperFxGainPanAtIntensity();
+    void setSamplerFxGainPanGain (float value);
+    void setSamplerFxGainPanPan (float value);
+    void setSamplerFxGainPanAlphaTouch (int value);
+    void setSamplerFxGainPanAtReverse (int value);
+    void setSamplerFxGainPanAtIntensity (float value);
+    float getSamplerFxGainPanGain();
+    float getSamplerFxGainPanPan();
+    int getSamplerFxGainPanAlphaTouch();
+    int getSamplerFxGainPanAtReverse();
+    float getSamplerFxGainPanAtIntensity();
     //LPF
-    void setLooperFxLpfMix (float value);
-    void setLooperFxLpfFreq (float value);
-    void setLooperFxLpfBandwidth (float value);
-    void setLooperFxLpfAlphaTouch (int value);
-    void setLooperFxLpfAtReverse (int value);
-    void setLooperFxLpfAtIntensity (float value);
-    float getLooperFxLpfMix();
-    float getLooperFxLpfFreq();
-    float getLooperFxLpfBandwidth();
-    int getLooperFxLpfAlphaTouch();
-    int getLooperFxLpfAtReverse();
-    float getLooperFxLpfAtIntensity();
+    void setSamplerFxLpfMix (float value);
+    void setSamplerFxLpfFreq (float value);
+    void setSamplerFxLpfBandwidth (float value);
+    void setSamplerFxLpfAlphaTouch (int value);
+    void setSamplerFxLpfAtReverse (int value);
+    void setSamplerFxLpfAtIntensity (float value);
+    float getSamplerFxLpfMix();
+    float getSamplerFxLpfFreq();
+    float getSamplerFxLpfBandwidth();
+    int getSamplerFxLpfAlphaTouch();
+    int getSamplerFxLpfAtReverse();
+    float getSamplerFxLpfAtIntensity();
     //HPF
-    void setLooperFxHpfMix (float value);
-    void setLooperFxHpfFreq (float value);
-    void setLooperFxHpfBandwidth (float value);
-    void setLooperFxHpfAlphaTouch (int value);
-    void setLooperFxHpfAtReverse (int value);
-    void setLooperFxHpfAtIntensity (float value);
-    float getLooperFxHpfMix();
-    float getLooperFxHpfFreq();
-    float getLooperFxHpfBandwidth();
-    int getLooperFxHpfAlphaTouch();
-    int getLooperFxHpfAtReverse();
-    float getLooperFxHpfAtIntensity();
+    void setSamplerFxHpfMix (float value);
+    void setSamplerFxHpfFreq (float value);
+    void setSamplerFxHpfBandwidth (float value);
+    void setSamplerFxHpfAlphaTouch (int value);
+    void setSamplerFxHpfAtReverse (int value);
+    void setSamplerFxHpfAtIntensity (float value);
+    float getSamplerFxHpfMix();
+    float getSamplerFxHpfFreq();
+    float getSamplerFxHpfBandwidth();
+    int getSamplerFxHpfAlphaTouch();
+    int getSamplerFxHpfAtReverse();
+    float getSamplerFxHpfAtIntensity();
     //BPF
-    void setLooperFxBpfMix (float value);
-    void setLooperFxBpfFreq (float value);
-    void setLooperFxBpfBandwidth (float value);
-    void setLooperFxBpfAlphaTouch (int value);
-    void setLooperFxBpfAtReverse (int value);
-    void setLooperFxBpfAtIntensity (float value);
-    float getLooperFxBpfMix();
-    float getLooperFxBpfFreq();
-    float getLooperFxBpfBandwidth();
-    int getLooperFxBpfAlphaTouch();
-    int getLooperFxBpfAtReverse();
-    float getLooperFxBpfAtIntensity();
+    void setSamplerFxBpfMix (float value);
+    void setSamplerFxBpfFreq (float value);
+    void setSamplerFxBpfBandwidth (float value);
+    void setSamplerFxBpfAlphaTouch (int value);
+    void setSamplerFxBpfAtReverse (int value);
+    void setSamplerFxBpfAtIntensity (float value);
+    float getSamplerFxBpfMix();
+    float getSamplerFxBpfFreq();
+    float getSamplerFxBpfBandwidth();
+    int getSamplerFxBpfAlphaTouch();
+    int getSamplerFxBpfAtReverse();
+    float getSamplerFxBpfAtIntensity();
     //delay
-    void setLooperFxDelayMix (float value);
-    void setLooperFxDelayTime (float value);
-    void setLooperFxDelayFeedback (float value);
-    void setLooperFxDelayLpfFreq (float value);
-    void setLooperFxDelayHpfFreq (float value);
-    void setLooperFxDelaySync (int value);
-    void setLooperFxDelayTimeMenu (int value);
-    void setLooperFxDelayAlphaTouch (int value);
-    void setLooperFxDelayAtReverse (int value);
-    void setLooperFxDelayAtIntensity (float value);
-    float getLooperFxDelayMix();
-    float getLooperFxDelayTime();
-    float getLooperFxDelayFeedback();
-    float getLooperFxDelayLpfFreq();
-    float getLooperFxDelayHpfFreq();
-    int getLooperFxDelaySync();
-    int getLooperFxDelayTimeMenu();
-    int getLooperFxDelayAlphaTouch();
-    int getLooperFxDelayAtReverse();
-    float getLooperFxDelayAtIntensity();
+    void setSamplerFxDelayMix (float value);
+    void setSamplerFxDelayTime (float value);
+    void setSamplerFxDelayFeedback (float value);
+    void setSamplerFxDelayLpfFreq (float value);
+    void setSamplerFxDelayHpfFreq (float value);
+    void setSamplerFxDelaySync (int value);
+    void setSamplerFxDelayTimeMenu (int value);
+    void setSamplerFxDelayAlphaTouch (int value);
+    void setSamplerFxDelayAtReverse (int value);
+    void setSamplerFxDelayAtIntensity (float value);
+    float getSamplerFxDelayMix();
+    float getSamplerFxDelayTime();
+    float getSamplerFxDelayFeedback();
+    float getSamplerFxDelayLpfFreq();
+    float getSamplerFxDelayHpfFreq();
+    int getSamplerFxDelaySync();
+    int getSamplerFxDelayTimeMenu();
+    int getSamplerFxDelayAlphaTouch();
+    int getSamplerFxDelayAtReverse();
+    float getSamplerFxDelayAtIntensity();
     //reverb
-    void setLooperFxReverbMix (float value);
-    void setLooperFxReverbRoomSize (float value);
-    void setLooperFxReverbDamping (float value);
-    void setLooperFxReverbWidth (float value);
-    void setLooperFxReverbFreezeMode (float value);
-    void setLooperFxReverbAlphaTouch (int value);
-    void setLooperFxReverbAtReverse (int value);
-    void setLooperFxReverbAtIntensity (float value);
-    float getLooperFxReverbMix();
-    float getLooperFxReverbRoomSize();
-    float getLooperFxReverbDamping();
-    float getLooperFxReverbWidth();
-    float getLooperFxReverbFreezeMode();
-    int getLooperFxReverbAlphaTouch();
-    int getLooperFxReverbAtReverse();
-    float getLooperFxReverbAtIntensity();
+    void setSamplerFxReverbMix (float value);
+    void setSamplerFxReverbRoomSize (float value);
+    void setSamplerFxReverbDamping (float value);
+    void setSamplerFxReverbWidth (float value);
+    void setSamplerFxReverbFreezeMode (float value);
+    void setSamplerFxReverbAlphaTouch (int value);
+    void setSamplerFxReverbAtReverse (int value);
+    void setSamplerFxReverbAtIntensity (float value);
+    float getSamplerFxReverbMix();
+    float getSamplerFxReverbRoomSize();
+    float getSamplerFxReverbDamping();
+    float getSamplerFxReverbWidth();
+    float getSamplerFxReverbFreezeMode();
+    int getSamplerFxReverbAlphaTouch();
+    int getSamplerFxReverbAtReverse();
+    float getSamplerFxReverbAtIntensity();
     //flanger
-    void setLooperFxFlangerMix (double value);
-    void setLooperFxFlangerRate(double value);
-    void setLooperFxFlangerFeedback (double value);
-    void setLooperFxFlangerIntensity (double value);
-    void setLooperFxFlangerSync (int value);
-    void setLooperFxFlangerRateMenu (int value);
-    void setLooperFxFlangerAlphaTouch (int value);
-    void setLooperFxFlangerAtReverse (int value);
-    void setLooperFxFlangerAtIntensity (double value);
-    double getLooperFxFlangerMix();
-    double getLooperFxFlangerRate();
-    double getLooperFxFlangerFeedback();
-    double getLooperFxFlangerIntensity();
-    int getLooperFxFlangerSync();
-    int getLooperFxFlangerRateMenu();
-    int getLooperFxFlangerAlphaTouch();
-    int getLooperFxFlangerAtReverse();
-    double getLooperFxFlangerAtIntensity();
+    void setSamplerFxFlangerMix (double value);
+    void setSamplerFxFlangerRate(double value);
+    void setSamplerFxFlangerFeedback (double value);
+    void setSamplerFxFlangerIntensity (double value);
+    void setSamplerFxFlangerSync (int value);
+    void setSamplerFxFlangerRateMenu (int value);
+    void setSamplerFxFlangerAlphaTouch (int value);
+    void setSamplerFxFlangerAtReverse (int value);
+    void setSamplerFxFlangerAtIntensity (double value);
+    double getSamplerFxFlangerMix();
+    double getSamplerFxFlangerRate();
+    double getSamplerFxFlangerFeedback();
+    double getSamplerFxFlangerIntensity();
+    int getSamplerFxFlangerSync();
+    int getSamplerFxFlangerRateMenu();
+    int getSamplerFxFlangerAlphaTouch();
+    int getSamplerFxFlangerAtReverse();
+    double getSamplerFxFlangerAtIntensity();
     //tremolo
-    void setLooperFxTremoloDepth (double value);
-    void setLooperFxTremoloRate (double value);
-    void setLooperFxTremoloShape (int value);
-    void setLooperFxTremoloSync (int value);
-    void setLooperFxTremoloRateMenu (int value);
-    void setLooperFxTremoloAlphaTouch (int value);
-    void setLooperFxTremoloAtReverse (int value);
-    void setLooperFxTremoloAtIntensity (double value);
-    double getLooperFxTremoloDepth();
-    double getLooperFxTremoloRate();
-    int getLooperFxTremoloShape();
-    int getLooperFxTremoloSync();
-    int getLooperFxTremoloRateMenu();
-    int getLooperFxTremoloAlphaTouch();
-    int getLooperFxTremoloAtReverse();
-    double getLooperFxTremoloAtIntensity();
+    void setSamplerFxTremoloDepth (double value);
+    void setSamplerFxTremoloRate (double value);
+    void setSamplerFxTremoloShape (int value);
+    void setSamplerFxTremoloSync (int value);
+    void setSamplerFxTremoloRateMenu (int value);
+    void setSamplerFxTremoloAlphaTouch (int value);
+    void setSamplerFxTremoloAtReverse (int value);
+    void setSamplerFxTremoloAtIntensity (double value);
+    double getSamplerFxTremoloDepth();
+    double getSamplerFxTremoloRate();
+    int getSamplerFxTremoloShape();
+    int getSamplerFxTremoloSync();
+    int getSamplerFxTremoloRateMenu();
+    int getSamplerFxTremoloAlphaTouch();
+    int getSamplerFxTremoloAtReverse();
+    double getSamplerFxTremoloAtIntensity();
     
     
     //==================================================================
@@ -349,7 +349,7 @@ private:
     
     //==================================================================
     //Global
-    int mode; // 0 = off, 1 = midi, 2 = looper, 3 = sequencer, 4 = controller
+    int mode; // 0 = off, 1 = midi, 2 = sampler, 3 = sequencer, 4 = controller
     int prevMode;
     int currentState; //Hods the current physical state. 1 = pressed, 0 = not pressed
     int currentPlayingState; //Holds the current PLAYING state. 0 = off, 1 = on
@@ -376,87 +376,87 @@ private:
     int midiCcController;
     
     //==================================================================
-    //Looper mode
-    String looperAudioFilePath;
-    int looperTriggerMode;
-    int looperShouldLoop;
-    int looperIndestructible;
-    int looperShouldFinishLoop;
-    int looperSticky;
-    int looperEffect;
-    float looperPan;
-    float looperGain;
+    //Sampler mode
+    String samplerAudioFilePath;
+    int samplerTriggerMode;
+    int samplerShouldLoop;
+    int samplerIndestructible;
+    int samplerShouldFinishLoop;
+    int samplerSticky;
+    int samplerEffect;
+    float samplerPan;
+    float samplerGain;
     
     //----fx variables------
     //Gain&Pan
-    float looperFxGainPanGain;
-    float looperFxGainPanPan;
-    int looperFxGainPanAlphaTouch;
-    int looperFxGainPanAtReverse;
-    float looperFxGainPanAtIntensity;
+    float samplerFxGainPanGain;
+    float samplerFxGainPanPan;
+    int samplerFxGainPanAlphaTouch;
+    int samplerFxGainPanAtReverse;
+    float samplerFxGainPanAtIntensity;
     //LPF
-    float looperFxLpfMix;
-    float looperFxLpfFreq;
-    float looperFxLpfBandwidth;
-    int looperFxLpfAlphaTouch;
-    int looperFxLpfAtReverse;
-    float looperFxLpfAtIntensity;
+    float samplerFxLpfMix;
+    float samplerFxLpfFreq;
+    float samplerFxLpfBandwidth;
+    int samplerFxLpfAlphaTouch;
+    int samplerFxLpfAtReverse;
+    float samplerFxLpfAtIntensity;
     //HPF
-    float looperFxHpfMix;
-    float looperFxHpfFreq;
-    float looperFxHpfBandwidth;
-    int looperFxHpfAlphaTouch;
-    int looperFxHpfAtReverse;
-    float looperFxHpfAtIntensity;
+    float samplerFxHpfMix;
+    float samplerFxHpfFreq;
+    float samplerFxHpfBandwidth;
+    int samplerFxHpfAlphaTouch;
+    int samplerFxHpfAtReverse;
+    float samplerFxHpfAtIntensity;
     //BPF
-    float looperFxBpfMix;
-    float looperFxBpfFreq;
-    float looperFxBpfBandwidth;
-    int looperFxBpfAlphaTouch;
-    int looperFxBpfAtReverse;
-    float looperFxBpfAtIntensity;
+    float samplerFxBpfMix;
+    float samplerFxBpfFreq;
+    float samplerFxBpfBandwidth;
+    int samplerFxBpfAlphaTouch;
+    int samplerFxBpfAtReverse;
+    float samplerFxBpfAtIntensity;
     //Delay
-    float looperFxDelayMix;
-    float looperFxDelayTime;
-    float looperFxDelayFeedback;
-    float looperFxDelayLpfFreq;
-    float looperFxDelayHpfFreq;
-    int looperFxDelaySync;
-    int looperFxDelayTimeMenu;
-    int looperFxDelayAlphaTouch;
-    int looperFxDelayAtReverse;
-    float looperFxDelayAtIntensity;
+    float samplerFxDelayMix;
+    float samplerFxDelayTime;
+    float samplerFxDelayFeedback;
+    float samplerFxDelayLpfFreq;
+    float samplerFxDelayHpfFreq;
+    int samplerFxDelaySync;
+    int samplerFxDelayTimeMenu;
+    int samplerFxDelayAlphaTouch;
+    int samplerFxDelayAtReverse;
+    float samplerFxDelayAtIntensity;
     
     //Reverb
-    float looperFxReverbMix;
-    float looperFxReverbRoomSize;
-    float looperFxReverbDamping;
-    float looperFxReverbWidth;
-    float looperFxReverbFreezeMode;
-    int looperFxReverbAlphaTouch;
-    int looperFxReverbAtReverse;
-    float looperFxReverbAtIntensity;
+    float samplerFxReverbMix;
+    float samplerFxReverbRoomSize;
+    float samplerFxReverbDamping;
+    float samplerFxReverbWidth;
+    float samplerFxReverbFreezeMode;
+    int samplerFxReverbAlphaTouch;
+    int samplerFxReverbAtReverse;
+    float samplerFxReverbAtIntensity;
     
     //Flanger
-    double looperFxFlangerMix;
-    double looperFxFlangerRate;
-    double looperFxFlangerFeedback;
-    double looperFxFlangerIntensity;
-    int looperFxFlangerSync;
-    int looperFxFlangerRateMenu;
-    int looperFxFlangerAlphaTouch;
-    int looperFxFlangerAtReverse;
-    double looperFxFlangerAtIntensity;
+    double samplerFxFlangerMix;
+    double samplerFxFlangerRate;
+    double samplerFxFlangerFeedback;
+    double samplerFxFlangerIntensity;
+    int samplerFxFlangerSync;
+    int samplerFxFlangerRateMenu;
+    int samplerFxFlangerAlphaTouch;
+    int samplerFxFlangerAtReverse;
+    double samplerFxFlangerAtIntensity;
     
     //Tremolo
-    double looperFxTremoloDepth;
-    double looperFxTremoloRate;
-    int looperFxTremoloShape;
-    int looperFxTremoloSync;
-    int looperFxTremoloRateMenu;
-    int looperFxTremoloAlphaTouch;
-    int looperFxTremoloAtReverse;
-    float looperFxTremoloAtIntensity;
+    double samplerFxTremoloDepth;
+    double samplerFxTremoloRate;
+    int samplerFxTremoloShape;
+    int samplerFxTremoloSync;
+    int samplerFxTremoloRateMenu;
+    int samplerFxTremoloAlphaTouch;
+    int samplerFxTremoloAtReverse;
+    float samplerFxTremoloAtIntensity;
     
     
     

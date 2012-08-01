@@ -22,14 +22,14 @@
 
 #include "AudioFilePlayer.h"
 #include "../../File and Settings/AppSettings.h"
-#include "ModeLooper.h"
+#include "ModeSampler.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
 
 
-AudioFilePlayer::AudioFilePlayer(int looperPadNumber, ModeLooper &ref, TimeSliceThread* audioTransportSourceThread_)
-                                    :   padNumber(looperPadNumber),
-                                        modeLooperRef(ref)
+AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSliceThread* audioTransportSourceThread_)
+                                    :   padNumber(samplerPadNumber),
+                                        modeSamplerRef(ref)
 {
     audioTransportSourceThread = audioTransportSourceThread_;
     
@@ -50,16 +50,16 @@ AudioFilePlayer::AudioFilePlayer(int looperPadNumber, ModeLooper &ref, TimeSlice
     //grab the setting values (so that if this object is deleted and recreated, it will hold the previous settings)
     //do i need to enter shared memory here?
     //do ALL effect paramters need setting here? Can I do this in the dedicated effect classes? Would be neater that way
-    gain = gainPrev = PAD_SETTINGS->getLooperGain();
-    panLeft = panLeftPrev = PanControl::leftChanPan_(PAD_SETTINGS->getLooperPan());
-    panRight = panRightPrev = PanControl::rightChanPan_(PAD_SETTINGS->getLooperPan());
-    triggerMode = PAD_SETTINGS->getLooperTriggerMode();
-    shouldLoop = PAD_SETTINGS->getLooperShouldLoop();
-    indestructible = PAD_SETTINGS->getLooperIndestructible();
-    shouldFinishLoop = PAD_SETTINGS->getLooperShouldFinishLoop();
-    sticky = PAD_SETTINGS->getLooperSticky();
+    gain = gainPrev = PAD_SETTINGS->getSamplerGain();
+    panLeft = panLeftPrev = PanControl::leftChanPan_(PAD_SETTINGS->getSamplerPan());
+    panRight = panRightPrev = PanControl::rightChanPan_(PAD_SETTINGS->getSamplerPan());
+    triggerMode = PAD_SETTINGS->getSamplerTriggerMode();
+    shouldLoop = PAD_SETTINGS->getSamplerShouldLoop();
+    indestructible = PAD_SETTINGS->getSamplerIndestructible();
+    shouldFinishLoop = PAD_SETTINGS->getSamplerShouldFinishLoop();
+    sticky = PAD_SETTINGS->getSamplerSticky();
     currentPlayingState = currentPressureValue = 0;
-    effect = PAD_SETTINGS->getLooperEffect();
+    effect = PAD_SETTINGS->getSamplerEffect();
     quantizeMode = PAD_SETTINGS->getQuantizeMode();
     
     triggerModeData.playingStatus = 0;
@@ -70,8 +70,8 @@ AudioFilePlayer::AudioFilePlayer(int looperPadNumber, ModeLooper &ref, TimeSlice
     
     
     //call this here incase a loop has been 'dropped' onto a pad before this AudioFilePlayer instance actually exists,
-    //which means that it wouldn't have been called from setLooperAudioFilePath().
-    setAudioFile(PAD_SETTINGS->getLooperAudioFilePath());
+    //which means that it wouldn't have been called from setSamplerAudioFilePath().
+    setAudioFile(PAD_SETTINGS->getSamplerAudioFilePath());
     
     broadcaster.addActionListener(this);
 }
@@ -87,7 +87,7 @@ AudioFilePlayer::~AudioFilePlayer()
     delete flanger;
     delete tremolo;
     
-    modeLooperRef.updatePadPlayingStatus(padNumber, 0);
+    modeSamplerRef.updatePadPlayingStatus(padNumber, 0);
     fileSource.setSource(0);//unload the current file
 	deleteAndZero(currentAudioFileSource);//delete the current file
 }
@@ -226,7 +226,7 @@ void AudioFilePlayer::processAudioFile(int padValue)
                 //add this objects padNumber to the queuedPads Array within AlphaLiveEngine
                 //so that it is alerted of the next quantized point in time so
                 //the sample can start playing
-                modeLooperRef.getAlphaLiveEngineRef().addPadToQueue(padNumber);
+                modeSamplerRef.getAlphaLiveEngineRef().addPadToQueue(padNumber);
                 broadcaster.sendActionMessage("WAITING TO PLAY");
                 
                 
@@ -239,7 +239,7 @@ void AudioFilePlayer::processAudioFile(int padValue)
                 //add this objects padNumber to the queuedPads Array within AlphaLiveEngine
                 //so that it is alerted of the next quantized point in time so
                 //the sample can stop playing
-                modeLooperRef.getAlphaLiveEngineRef().addPadToQueue(padNumber);
+                modeSamplerRef.getAlphaLiveEngineRef().addPadToQueue(padNumber);
                 broadcaster.sendActionMessage("WAITING TO STOP");
             }
         }
@@ -310,7 +310,7 @@ void AudioFilePlayer::processAudioFile(int padValue)
     }
 }
 
-//called from either the constructor, or setLooperAudioFilePath() in PadSettings
+//called from either the constructor, or setSamplerAudioFilePath() in PadSettings
 void AudioFilePlayer::setAudioFile (File audioFile_)
 {
     if (audioFile_ != File::nonexistent)
@@ -415,7 +415,7 @@ void AudioFilePlayer::playAudioFile()
     
     if (PAD_SETTINGS->getExclusiveMode() == 1)
     {
-        modeLooperRef.getAlphaLiveEngineRef().handleExclusiveMode(padNumber);
+        modeSamplerRef.getAlphaLiveEngineRef().handleExclusiveMode(padNumber);
     }
     
     
@@ -447,16 +447,16 @@ void AudioFilePlayer::stopAudioFile()
 void AudioFilePlayer::actionListenerCallback (const String& message)
 {
     if (message == "WAITING TO PLAY")
-        modeLooperRef.updatePadPlayingStatus(padNumber, 2);
+        modeSamplerRef.updatePadPlayingStatus(padNumber, 2);
     
     else if (message == "WAITING TO STOP")
-        modeLooperRef.updatePadPlayingStatus(padNumber, 3);
+        modeSamplerRef.updatePadPlayingStatus(padNumber, 3);
     
     else if (message == "PLAYING")
-        modeLooperRef.updatePadPlayingStatus(padNumber, 1);
+        modeSamplerRef.updatePadPlayingStatus(padNumber, 1);
     
     else if (message == "OFF")
-        modeLooperRef.updatePadPlayingStatus(padNumber, 0);
+        modeSamplerRef.updatePadPlayingStatus(padNumber, 0);
     
 }
 
@@ -535,7 +535,7 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
     if (fileSource.hasStreamFinished() == true) //if the audio file has ended on its own, automatically update the pad GUI
         //NOTE - hasStreamFinshed could be used above where I've been manually checking if the stream has ended on its own
     {
-        //can't directly call modeLooperRef.updatePadPlayingStatus(padNumber, false) to update the pad GUI as
+        //can't directly call modeSamplerRef.updatePadPlayingStatus(padNumber, false) to update the pad GUI as
         //we are currently in ther audio thread here and calling it causes some form of objective C leak. Therefore we
         //are using a Async action broadcaster so that it doesn't cause any time-critical pauses in the thread which i think
         broadcaster.sendActionMessage("OFF");

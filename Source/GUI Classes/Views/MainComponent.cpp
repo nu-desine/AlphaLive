@@ -88,7 +88,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     
     //Mode Gui's
     addAndMakeVisible(guiMidiMode = new GuiMidiMode(*this));
-    addAndMakeVisible(guiLooperMode = new GuiLooperMode(*this));
+    addAndMakeVisible(guiSamplerMode = new GuiSamplerMode(*this));
     addAndMakeVisible(guiSequencerMode = new GuiSequencerMode(*alphaLiveEngineRef.getModeSequencer(), *this, appDocumentStateRef)); //pass in a ref to modeSequencer instance
     guiSequencerMode->setInterceptsMouseClicks(false, true);
     addAndMakeVisible(guiControllerMode = new GuiControllerMode(*this));
@@ -118,13 +118,13 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeOffButton->addMouseListener(this, false);
     
     
-    //create looper mode button
-	Image *looperModeImage = new Image(ImageFileFormat::loadFrom(BinaryData::loopsymbol_png, BinaryData::loopsymbol_pngSize)); 
-	addAndMakeVisible(modeLooperButton = new ModeButton(looperModeImage));
-	modeLooperButton->addListener(this);
-    modeLooperButton->setOpaque(false);
-	modeLooperButton->setRadioGroupId (1234);
-    modeLooperButton->addMouseListener(this, false);
+    //create sampler mode button
+	Image *samplerModeImage = new Image(ImageFileFormat::loadFrom(BinaryData::loopsymbol_png, BinaryData::loopsymbol_pngSize)); 
+	addAndMakeVisible(modeSamplerButton = new ModeButton(samplerModeImage));
+	modeSamplerButton->addListener(this);
+    modeSamplerButton->setOpaque(false);
+	modeSamplerButton->setRadioGroupId (1234);
+    modeSamplerButton->addMouseListener(this, false);
 	
 	//create midi mode button
 	Image *midiModeImage = new Image(ImageFileFormat::loadFrom(BinaryData::midisymbol_png, BinaryData::midisymbol_pngSize)); 
@@ -294,7 +294,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     
     //currentlySelectedPad = 99; //'all pads'
     guiMidiMode->setVisible(false);
-    guiLooperMode->setVisible(false);
+    guiSamplerMode->setVisible(false);
     guiSequencerMode->setVisible(false);
     guiControllerMode->setVisible(false);
     speakerLeft->setVisible(true);
@@ -321,7 +321,7 @@ void MainComponent::resized()
 {
     //Mode Gui's
     guiMidiMode->setBounds(0, 0, getWidth(), getHeight());
-    guiLooperMode->setBounds(0, 0, getWidth(), getHeight());
+    guiSamplerMode->setBounds(0, 0, getWidth(), getHeight());
     guiSequencerMode->setBounds(0, 0, getWidth(), getHeight());
     guiControllerMode->setBounds(0, 0, getWidth(), getHeight());
     
@@ -337,7 +337,7 @@ void MainComponent::resized()
     //Native MainComponent components
 	modeOffButton->setBounds(725, 5, 45, 45);
     modeMidiButton->setBounds(767, 5, 65, 65);
-    modeLooperButton->setBounds(829, 5, 65, 65);
+    modeSamplerButton->setBounds(829, 5, 65, 65);
 	modeSequencerButton->setBounds(891, 5, 65, 65);
 	modeControllerButton->setBounds(953, 5, 65, 65);
     
@@ -545,9 +545,9 @@ void MainComponent::buttonClicked(Button *button)
         }
     } 
     
-    else if (button == modeLooperButton)
+    else if (button == modeSamplerButton)
     {
-        setToLooperMode();
+        setToSamplerMode();
         buttonIndex = 2;
         
         for (int i = 0; i < selectedPads.size(); i++)
@@ -648,7 +648,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
     //in order to display the right settings from appSettings
     AppSettings::Instance()->setCurrentlySelectedPad(selectedPads);
     guiMidiMode->setCurrentlySelectedPad(selectedPads);
-    guiLooperMode->setCurrentlySelectedPad(selectedPads);
+    guiSamplerMode->setCurrentlySelectedPad(selectedPads);
     guiSequencerMode->setCurrentlySelectedPad(selectedPads);
     guiControllerMode->setCurrentlySelectedPad(selectedPads);
     //presetComponent->setCurrentlySelectedPad(selectedPads);
@@ -672,10 +672,10 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
             modeMidiButton->setToggleState(true, false);
         }
         
-        if (PAD_SETTINGS->getMode() == 2) //looper mode
+        if (PAD_SETTINGS->getMode() == 2) //sampler mode
         {
-            setToLooperMode();
-            modeLooperButton->setToggleState(true, false);
+            setToSamplerMode();
+            modeSamplerButton->setToggleState(true, false);
         }
     
         if (PAD_SETTINGS->getMode() == 3) //sequencer mode
@@ -761,7 +761,7 @@ void MainComponent::buttonStateChanged (Button* button)
 void MainComponent::setToOffMode()
 {
     guiMidiMode->setVisible(false);
-    guiLooperMode->setVisible(false);
+    guiSamplerMode->setVisible(false);
     guiSequencerMode->setVisible(false);
     guiControllerMode->setVisible(false);
     speakerLeft->setVisible(true);
@@ -773,7 +773,7 @@ void MainComponent::setToOffMode()
 void MainComponent::setToMidiMode()
 {
     guiMidiMode->setVisible(true);
-    guiLooperMode->setVisible(false);
+    guiSamplerMode->setVisible(false);
     guiSequencerMode->setVisible(false);
     guiControllerMode->setVisible(false);
     speakerLeft->setVisible(false);
@@ -787,27 +787,27 @@ void MainComponent::setToMidiMode()
 
     
 }
-void MainComponent::setToLooperMode()
+void MainComponent::setToSamplerMode()
 {
     guiMidiMode->setVisible(false);
-    guiLooperMode->setVisible(true);
+    guiSamplerMode->setVisible(true);
     guiSequencerMode->setVisible(false);
     guiControllerMode->setVisible(false);
     speakerLeft->setVisible(false);
     speakerRight->setVisible(false);
     circleBackground->setVisible(false);
     
-    //update the display of the looper mode so it shows the
+    //update the display of the sampler mode so it shows the
     //currently selected pad's settings, and makes any unneeded
     //components invisble or dissabled
-    guiLooperMode->updateDisplay();
+    guiSamplerMode->updateDisplay();
 
     
 }
 void MainComponent::setToSequencerMode()
 {
     guiMidiMode->setVisible(false);
-    guiLooperMode->setVisible(false);
+    guiSamplerMode->setVisible(false);
     guiSequencerMode->setVisible(true);
     guiControllerMode->setVisible(false);
     speakerLeft->setVisible(false);
@@ -821,7 +821,7 @@ void MainComponent::setToSequencerMode()
 void MainComponent::setToControllerMode()
 {
     guiMidiMode->setVisible(false);
-    guiLooperMode->setVisible(false);
+    guiSamplerMode->setVisible(false);
     guiSequencerMode->setVisible(false);
     guiControllerMode->setVisible(true);
     speakerLeft->setVisible(false);
@@ -916,9 +916,9 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     {
         setInfoTextBoxText ("MIDI-Mode Button. Click this button to put MIDI functionality onto the selected pad/pads.This enables the AlphaSphere to act as a virtual MIDI device.");
     }
-    else if (e.eventComponent == modeLooperButton)
+    else if (e.eventComponent == modeSamplerButton)
     {
-        setInfoTextBoxText ("Looper-Mode Button. Click this button to put Looper functionality onto the selected pad/pads. This enables audio files to be triggered, looped, and manipulated.");
+        setInfoTextBoxText ("Sampler-Mode Button. Click this button to put Sampler functionality onto the selected pad/pads. This enables audio files to be triggered, looped, and manipulated.");
     }
     else if (e.eventComponent == modeSequencerButton)
     {

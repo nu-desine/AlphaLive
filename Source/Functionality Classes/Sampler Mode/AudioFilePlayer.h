@@ -36,14 +36,14 @@
 #include "../../Audio Processing/PanControl.h"
 
 
-class ModeLooper;
+class ModeSampler;
 
 
 class AudioFilePlayer : public AudioSource,
                         public ActionListener
 {
 public:
-    AudioFilePlayer(int looperPadNumber, ModeLooper &ref, TimeSliceThread* audioTransportSourceThread_); //DO I NEED THE MODELOOPER REF ANYMORE?
+    AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSliceThread* audioTransportSourceThread_); //DO I NEED THE MODESAMPLER REF ANYMORE?
     ~AudioFilePlayer();
     
     //AudioSource Functions
@@ -96,7 +96,7 @@ private:
 	AudioTransportSource fileSource; //this controls the playback of a positionable audio stream, handling the starting/stopping and sample-rate conversion
 	File currentFile;
     AudioFormatReaderSource* currentAudioFileSource;
-    TimeSliceThread *audioTransportSourceThread; //this can't be a ScopedPointer as it will be equal to the scoped pointer within ModeLooper, so when deleting an instance of AudioFilePlayer it gets complicated as things will automatically try to be deleted when they might not exist anymore!
+    TimeSliceThread *audioTransportSourceThread; //this can't be a ScopedPointer as it will be equal to the scoped pointer within ModeSampler, so when deleting an instance of AudioFilePlayer it gets complicated as things will automatically try to be deleted when they might not exist anymore!
     
     CriticalSection sharedMemory;
     
@@ -108,7 +108,7 @@ private:
     TriggerModes triggerModes;
     TriggerModeData triggerModeData;
     
-    ModeLooper &modeLooperRef;
+    ModeSampler &modeSamplerRef;
     
     
     //settings

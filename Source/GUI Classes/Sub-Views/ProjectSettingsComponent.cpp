@@ -315,7 +315,7 @@ void GeneralProjSettingsComponent::buttonClicked (Button* button)
             
             if (shouldImport == true)
             {
-                //check all pads of ALL presets to see if set to Looper Mode of Samples Sequencer Mode
+                //check all pads of ALL presets to see if set to Sampler Mode of Samples Sequencer Mode
                 //if so, copy any audio files which aren't currently in the Projects Directory and
                 //change the saved file path
                 

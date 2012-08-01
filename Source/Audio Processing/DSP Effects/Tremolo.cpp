@@ -18,13 +18,13 @@ Tremolo::Tremolo(int padNumber_, int sampleRate_)
     
     //setSampleRate(sampleRate_); //do actually i need to do this here?
     
-    depth = depthControlValue =  PAD_SETTINGS->getLooperFxTremoloDepth();
+    depth = depthControlValue =  PAD_SETTINGS->getSamplerFxTremoloDepth();
     rate = rateControlValue = (AppSettings::Instance()->getGlobalTempo()/60.0) * 1; //sets the default value to 1/4
-    shape = shapeControlValue = PAD_SETTINGS->getLooperFxTremoloShape();
+    shape = shapeControlValue = PAD_SETTINGS->getSamplerFxTremoloShape();
     
-    alphaTouchParam = PAD_SETTINGS->getLooperFxDelayAlphaTouch();
-    alphaTouchReverse = PAD_SETTINGS->getLooperFxDelayAtReverse();
-    alphaTouchIntensity = PAD_SETTINGS->getLooperFxDelayAtIntensity();
+    alphaTouchParam = PAD_SETTINGS->getSamplerFxDelayAlphaTouch();
+    alphaTouchReverse = PAD_SETTINGS->getSamplerFxDelayAtReverse();
+    alphaTouchIntensity = PAD_SETTINGS->getSamplerFxDelayAtIntensity();
     
 }
 

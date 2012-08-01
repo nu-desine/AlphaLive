@@ -60,8 +60,6 @@ ModeLooper::~ModeLooper()
 //and creates an instance of AudioFilePlayer which handles the playing of audio files
 void ModeLooper::createAudioFilePlayer (int padNumber)
 {
-    
-    std::cout << "Creating AudioFilePlayer for pad " << padNumber <<std::endl;
     padLooper.remove(padNumber); //remove NULL object
     padLooper.insert(padNumber, new AudioFilePlayer(padNumber, *this, audioTransportSourceThread)); //add AudioFilePlayer object
     audioMixer.addInputSource(padLooper[padNumber],false); //add as inputsource to audioMixer
@@ -73,19 +71,6 @@ void ModeLooper::createAudioFilePlayer (int padNumber)
 //and deletes the relevant instance of AudioFilePlayer 
 void ModeLooper::deleteAudioFilePlayer (int padNumber)
 {
-    /*
-    //if deleted object is currently part of the waitingPadLooper array, remove it.
-    //DO I NEED TO DO THIS?
-    if (waitingPadLooper.contains(padNumber))
-    {
-        //get index of array
-        int index = waitingPadLooper.indexOf(padNumber);
-        //remove pad from array
-        waitingPadLooper.remove(index);
-    }
-     */
-    
-    //std::cout << "Deleting AudioFilePlayer for pad " << padNumber <<std::endl;
     audioMixer.removeInputSource(padLooper[padNumber]); //remove as input source
     padLooper.remove(padNumber); //remove object from array
     padLooper.insert(padNumber, NULL); //insert a NULL object
@@ -129,13 +114,6 @@ void ModeLooper::getOscData(int padNumber, int padValue)
     prevPadValue[padNumber] = padValue;
 }
 
-/*
-void ModeLooper::addItemToWaitingPadLooper (int padNum)
-{
-    waitingPadLooper.addIfNotAlreadyThere(padNum);
-}
-*/
-
 void ModeLooper::triggerQuantizationPoint (int padNum)
 {
     if (padLooper[padNum]!= NULL)
@@ -144,20 +122,6 @@ void ModeLooper::triggerQuantizationPoint (int padNum)
         padLooper[padNum]->triggerQuantizationPoint();
     }
     
-    /*
-    if (waitingPadLooper.size() > 0)
-    {
-        for (int i = 0; i < waitingPadLooper.size(); i++)
-        {
-            //alert padLooper[i] of a quantization point in time
-            padLooper[waitingPadLooper[i]]->triggerQuantizationPoint();
-        }
-    
-        //remove items from array so they no longer recieve alerts of
-        //quantization points in time
-        waitingPadLooper.clear();
-    }
-     */
 }
 
 

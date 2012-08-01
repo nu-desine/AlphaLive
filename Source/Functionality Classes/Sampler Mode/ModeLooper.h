@@ -57,7 +57,6 @@ public:
     
     //quantization stuff
     void triggerQuantizationPoint (int padNum);
-    //void addItemToWaitingPadLooper (int padNum);
     
     AlphaLiveEngine& getAlphaLiveEngineRef();
 
@@ -77,9 +76,6 @@ private:
     int prevPadValue[48];
     
     AlphaLiveEngine &alphaLiveEngineRef;
-    
-    //quantization stuff
-    //Array <int> waitingPadLooper;
     
 };
 

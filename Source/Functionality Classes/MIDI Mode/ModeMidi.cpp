@@ -158,7 +158,6 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
             if (triggerModeData[padNumber].playingStatus == 1) //play
             {
                 currentPlayingStatus[padNumber] = 2; //waiting to play
-                //waitingPad.addIfNotAlreadyThere(padNumber);
                 alphaLiveEngineRef.addPadToQueue(padNumber);
             
                 guiPadWaitingPlayUpdater.add(padNumber);
@@ -172,7 +171,6 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
             else if (triggerModeData[padNumber].playingStatus == 0) //stop
             {
                 currentPlayingStatus[padNumber] = 3; // waiting to stop
-                //waitingPad.addIfNotAlreadyThere(padNumber);
                 alphaLiveEngineRef.addPadToQueue(padNumber);
                 
                 guiPadWaitingStopUpdater.add(padNumber);
@@ -235,10 +233,6 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
     {
         pressureValue[padNumber] = padValue; 
     }
-    
-    //std::cout << "Pad Value: " << padValue << std::endl;
-    //std::cout << "Prev Pad Value: " << prevPadValue[padNumber] << std::endl;
-    //std::cout << "pressure val: " << pressureValue[padNumber] << std::endl;
     
     //create pressure MIDI data
     sendPressureData(padNumber);
@@ -397,29 +391,6 @@ void ModeMidi::triggerQuantizationPoint (int padNum)
         noteOn(padNum);
     else if (status == 3) //waiting to stop
         noteOff(padNum);
-    
-    /*
-    if (waitingPad.size() > 0)
-    {
-        for (int i = 0; i < waitingPad.size(); i++)
-        {
-            //get pad number of waitingPad
-            int pad = waitingPad[i];
-            //get currentPlayingStatus of said pad
-            int status = currentPlayingStatus[pad];
-            //call correct function based on currentPlayingStatus
-            if (status == 2) //waiting to play
-                noteOn(pad);
-            else if (status == 3) //waiting to stop
-                noteOff(pad);
-                
-        }
-        
-        //remove items from array so they no longer recieve alerts of
-        //quantization points in time
-        waitingPad.clear();
-    }
-     */
 }
 
 void ModeMidi::killPad (int padNum)
@@ -489,7 +460,6 @@ void ModeMidi::setPadData (int padNumber)
     setSticky (PAD_SETTINGS->getMidiSticky(), padNumber);
     setPressureStatus (PAD_SETTINGS->getMidiPressureStatus(), padNumber);
     setNoteStatus (PAD_SETTINGS->getMidiNoteStatus(), padNumber);
-    //setExclusiveGroup (PAD_SETTINGS->getMidiExclusiveGroup(), padNumber);
     setQuantizeMode (PAD_SETTINGS->getQuantizeMode(), padNumber);
     
 }

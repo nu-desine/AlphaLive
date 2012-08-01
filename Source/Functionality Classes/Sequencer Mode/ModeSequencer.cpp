@@ -88,7 +88,6 @@ void ModeSequencer::getOscData(int padNumber, int padValue)
 
 void ModeSequencer::createSequencePlayer (int padNumber)
 {
-    std::cout << "Creating SequencePlayer for pad " << padNumber <<std::endl;
     padSequencer.remove(padNumber); //remove NULL object
     padSequencer.insert(padNumber, new SequencePlayer(padNumber, *midiOutputDevice, *this, audioTransportSourceThread)); 
     //add SequencePlayer object
@@ -97,34 +96,11 @@ void ModeSequencer::createSequencePlayer (int padNumber)
 
 void ModeSequencer::deleteSequencePlayer (int padNumber)
 {
-    
-    /*
-    //if deleted object is currently part of the waitingPadSequencer array, remove it.
-    //DO I NEED TO DO THIS?
-    if (waitingPadSequencer.contains(padNumber))
-    {
-        //get index of array
-        int index = waitingPadSequencer.indexOf(padNumber);
-        //remove seq object from array
-        waitingPadSequencer.remove(index);
-    }
-     */
-    
-    std::cout << "Deleting SequencerPlayer for pad " << padNumber <<std::endl;
     audioMixer.removeInputSource(padSequencer[padNumber]); //remove as input source
     padSequencer.remove(padNumber); //remove object from array
     padSequencer.insert(padNumber, NULL); //insert a NULL object
-    
-
 }
 
-
-/*
-void ModeSequencer::addItemToWaitingPadSequencer (int padNum)
-{
-    waitingPadSequencer.addIfNotAlreadyThere(padNum);
-}
-*/
 
 void ModeSequencer::triggerQuantizationPoint (int padNum)
 {
@@ -134,20 +110,6 @@ void ModeSequencer::triggerQuantizationPoint (int padNum)
         padSequencer[padNum]->triggerQuantizationPoint();
     }
 
-    /*
-    if (waitingPadSequencer.size() > 0)
-    {
-        for (int i = 0; i < waitingPadSequencer.size(); i++)
-        {
-            //alert padLooper[i] of a quantization point in time
-            padSequencer[waitingPadSequencer[i]]->triggerQuantizationPoint();
-        }
-        
-        //remove items from array so they no longer recieve alerts of
-        //quantization points in time
-        waitingPadSequencer.clear();
-    }
-     */
 }
 
 

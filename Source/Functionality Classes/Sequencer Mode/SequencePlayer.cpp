@@ -301,10 +301,9 @@ void SequencePlayer::processSequence(int padValue)
         {
             currentPlayingState = 2; //waiting to play
             
-            //add this instance of SequencePlayer to the waitingPadSequencer Array within
-            //ModeSequencer so that it is alerted of the next quantized point in time so
+            //add this objects padNumber to the queuedPads Array within AlphaLiveEngine
+            //so that it is alerted of the next quantized point in time so
             //the sequence can start playing
-            //modeSequencerRef.addItemToWaitingPadSequencer(padNumber);
             modeSequencerRef.getAlphaLiveEngineRef().addPadToQueue(padNumber);
             broadcaster.sendActionMessage("WAITING TO PLAY");
             
@@ -314,10 +313,9 @@ void SequencePlayer::processSequence(int padValue)
         {
             currentPlayingState = 3; // waiting to stop
             
-            //add this instance of SequencePlayer to the waitingPadSequencer Array within
-            //ModeSequencer so that it is alerted of the next quantized point in time so
+            //add this objects padNumber to the queuedPads Array within AlphaLiveEngine
+            //so that it is alerted of the next quantized point in time so
             //the sequence can stop playing
-            //modeSequencerRef.addItemToWaitingPadSequencer(padNumber);
             modeSequencerRef.getAlphaLiveEngineRef().addPadToQueue(padNumber);
             broadcaster.sendActionMessage("WAITING TO STOP");
         }

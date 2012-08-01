@@ -110,9 +110,6 @@ private:
     Array<int> guiPadWaitingPlayUpdater;
     Array<int> guiPadWaitingStopUpdater;
     
-    //quantization stuff
-    //Array<int> waitingPad;
-    
 };
 
 

@@ -407,9 +407,6 @@ void AlphaLiveEngine::addPadToQueue (int padNum)
 
 void AlphaLiveEngine::triggerQuantizationPoint()
 {
-    //modeLooper->triggerQuantizationPoint();
-    //modeSequencer->triggerQuantizationPoint();
-    //modeMidi->triggerQuantizationPoint();
     
     if (queuedPads.size() > 0)
     {
@@ -536,33 +533,6 @@ void AlphaLiveEngine::audioDeviceIOCallback (const float** inputChannelData,
     info.buffer = &buffer;
     info.startSample = 0;
     info.numSamples = numSamples;
-    
-    /*
-    //OLD METHOD FOR GAIN AND PAN
-	//streams audio into the outputChannelData buffer so this is both our input and output buffer.
-	float *inOutL, *inOutR; 
-	inOutL = outputChannelData[0];
-	inOutR = outputChannelData[1];
-    
-    sharedMemory.enter();
-    
-	while(numSamples--)
-	{
-        //gain
-        *inOutL = *inOutL * gain;
-        *inOutR = *inOutR * gain;
-        
-        //pan
-        *inOutL = panControl.leftChanPan(*inOutL);
-        *inOutR = panControl.rightChanPan(*inOutR);
-        
-        //output samples
-		inOutL++;
-		inOutR++;
-	}
-    
-	sharedMemory.exit();
-     */
     
     //gain and pan
     sharedMemory.enter();

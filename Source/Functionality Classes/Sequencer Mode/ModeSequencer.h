@@ -70,7 +70,6 @@ public:
     
     //quantization stuff
     void triggerQuantizationPoint (int padNum);
-    //void addItemToWaitingPadSequencer (int padNum);
     
     void setMidiOutputDevice (MidiOutput &midiOutput);
     
@@ -85,7 +84,6 @@ private:
     //audio related
 	MixerAudioSource audioMixer;
     ScopedPointer <TimeSliceThread> audioTransportSourceThread;
-    //TimeSliceThread *audioTransportSourceThread;
     CriticalSection sharedMemory;
     
     int prevPadValue[48];
@@ -97,9 +95,6 @@ private:
     float tempo;
     
     AlphaLiveEngine &alphaLiveEngineRef;
-    
-    //quantization stuff
-    //Array<int> waitingPadSequencer;
 };
 
 

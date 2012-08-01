@@ -165,7 +165,6 @@ void AudioFilePlayer::processAudioFile(int padValue)
                  && indestructible == 0 
                  && currentPlayingState == 1)
         {
-            std::cout << "here..." << std::endl;
             currentAudioFileSource->setLooping(shouldLoop);
             playingLastLoop = false;
             triggerModeData.playingStatus = 1;
@@ -224,10 +223,9 @@ void AudioFilePlayer::processAudioFile(int padValue)
             {
                 currentPlayingState = 2; //waiting to play
                 
-                //add this instance of AudioFilePlayer to the waitingPadLooper Array within
-                //ModeLooper so that it is alerted of the next quantized point in time so
-                //the loop can start playing
-                //modeLooperRef.addItemToWaitingPadLooper(padNumber);
+                //add this objects padNumber to the queuedPads Array within AlphaLiveEngine
+                //so that it is alerted of the next quantized point in time so
+                //the sample can start playing
                 modeLooperRef.getAlphaLiveEngineRef().addPadToQueue(padNumber);
                 broadcaster.sendActionMessage("WAITING TO PLAY");
                 
@@ -238,10 +236,9 @@ void AudioFilePlayer::processAudioFile(int padValue)
             {
                 currentPlayingState = 3; // waiting to stop
                 
-                //add this instance of AudioFilePlayer to the waitingPadLooper Array within
-                //ModeLooper so that it is alerted of the next quantized point in time so
-                //the loop can stop playing
-                //modeLooperRef.addItemToWaitingPadLooper(padNumber);
+                //add this objects padNumber to the queuedPads Array within AlphaLiveEngine
+                //so that it is alerted of the next quantized point in time so
+                //the sample can stop playing
                 modeLooperRef.getAlphaLiveEngineRef().addPadToQueue(padNumber);
                 broadcaster.sendActionMessage("WAITING TO STOP");
             }

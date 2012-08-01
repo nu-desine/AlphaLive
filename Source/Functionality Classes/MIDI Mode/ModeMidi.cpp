@@ -164,39 +164,6 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
                 guiPadWaitingPlayUpdater.add(padNumber);
                 broadcaster.sendActionMessage("WAITING TO PLAY");
                 
-                /*
-                 if the pad being added is set to exclusive mode
-                 check to see if any of the other waiting pads (of all modes) 
-                 are set to exlusive mode with the same exclusive group
-                 if so they should be removed and the pad gui should be updated
-                 how can this be done globally? Will killPad work?
-                 Below is a test local to midi mode
-                 */
-                
-                /*
-                if (PAD_SETTINGS->getExclusiveMode() == 1)
-                {
-                    int group = PAD_SETTINGS->getExclusiveGroup();
-                    
-                    for (int i = 0; i < waitingPad.size(); i++)
-                    {
-                        if (waitingPad[i] != padNumber)
-                        {
-                            if (AppSettings::Instance()->padSettings[waitingPad[i]]->getExclusiveMode() == 1)
-                            {
-                                
-                                if (AppSettings::Instance()->padSettings[waitingPad[i]]->getExclusiveGroup() == group)
-                                {
-                                    killPad(waitingPad[i]);
-                                    waitingPad.remove(i);
-                                    
-                                }
-                            }
-                        }
-                        
-                    }
-                }
-                 */
             }
             
             

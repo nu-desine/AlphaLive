@@ -360,6 +360,49 @@ void AlphaLiveEngine::updatePadPlayingStatus (int padNumber, int status)
 void AlphaLiveEngine::addPadToQueue (int padNum)
 {
     queuedPads.addIfNotAlreadyThere(padNum);
+
+    //If the pad being added is set to exclusive mode,
+    //check to see if any of the other queued pads 
+    //are set to exlusive mode with the same exclusive group.
+    //If so they should be removed and the pad gui should be updated
+    
+    if (AppSettings::Instance()->padSettings[padNum]->getExclusiveMode() == 1)
+    {
+        int group = AppSettings::Instance()->padSettings[padNum]->getExclusiveGroup();
+        
+        for (int i = 0; i < queuedPads.size(); i++)
+        {
+            if (queuedPads[i] != padNum)
+            {
+                if (AppSettings::Instance()->padSettings[queuedPads[i]]->getExclusiveMode() == 1)
+                {
+                    if (AppSettings::Instance()->padSettings[queuedPads[i]]->getExclusiveGroup() == group)
+                    {
+                        int padMode = AppSettings::Instance()->padSettings[queuedPads[i]]->getMode();
+                        
+                        switch (padMode)
+                        {
+                            case 1:
+                                modeMidi->killPad(queuedPads[i]);
+                                break;
+                            case 2:
+                                modeLooper->killPad(queuedPads[i]);
+                                break;
+                            case 3:
+                                modeSequencer->killPad(queuedPads[i]);
+                                break;
+                            default:
+                                break;
+                        }
+                        
+                        queuedPads.remove(i);
+                        
+                    }
+                }
+            }
+            
+        }
+    }
 }
 
 void AlphaLiveEngine::triggerQuantizationPoint()

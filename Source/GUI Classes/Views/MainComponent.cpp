@@ -651,7 +651,6 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
     guiSamplerMode->setCurrentlySelectedPad(selectedPads);
     guiSequencerMode->setCurrentlySelectedPad(selectedPads);
     guiControllerMode->setCurrentlySelectedPad(selectedPads);
-    //presetComponent->setCurrentlySelectedPad(selectedPads);
     
     
     //==============================================================================
@@ -705,18 +704,148 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
     }
     else if (MULTI_PADS)
     {
-        //set to a default setting
+        /*
+        //set to a default settings
         setToOffMode();
         modeOffButton->setToggleState(true, false);
-
-        //set other things
-        //padNumberDisplayLabel->setText("All Pads Selected", false);
         pressureSensitivityMenu->setSelectedId(2, true);
-        
         exclusiveModeButton->setToggleState(0, false);
         exclusiveGroupSlider->setValue(1, false);
         exclusiveGroupSlider->setVisible(false);
         quantizeModeButton->setToggleState(0, false);
+         
+         */
+        
+        //could we use a function here to compare settings instead?
+        //use an enum to represent the PAD_SETTINGS->get....? which is passed in,
+        //along with the value of the corresponding setting of the first pad
+        //and then returns a boolean which tells us whether to set the default value or not
+        
+        
+        int mode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMode();
+        
+        //loop through all selected pads except for the first one
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            //if setting of this pad does NOT match setting of last pad, set default and break
+            if (PAD_SETTINGS->getMode() != mode_)
+            {
+                setToOffMode();
+                modeOffButton->setToggleState(true, false);
+                break;
+            }
+            //if this is the last 'natural' interaction, displayed the setting that matches all the pads
+            if (i == selectedPads.size()-1)
+            {
+                if (mode_ == 0) //off mode
+                {
+                    setToOffMode();
+                    modeOffButton->setToggleState(true, false);
+                }
+                if (mode_ == 1) //midi mode
+                {
+                    setToMidiMode();
+                    modeMidiButton->setToggleState(true, false);
+                }
+                if (mode_ == 2) //sampler mode
+                {
+                    setToSamplerMode();
+                    modeSamplerButton->setToggleState(true, false);
+                }
+                if (mode_ == 3) //sequencer mode
+                {
+                    setToSequencerMode();
+                    modeSequencerButton->setToggleState(true, false);
+                }
+                if (mode_ == 4) //controller mode
+                {
+                    setToControllerMode();
+                    modeControllerButton->setToggleState(true, false);
+                }
+            }
+        }
+        
+        
+        int pressureSens_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getPressureSensitivityMode();
+        
+        //loop through all selected pads expect for the first one
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            //if setting of this pad does NOT match setting of last pad, set default and break
+            if (PAD_SETTINGS->getPressureSensitivityMode() != pressureSens_)
+            {
+                pressureSensitivityMenu->setSelectedId(0, true);
+                break;
+            }
+            //if this is the last 'natural' iteraction, displayed the setting that matches all the pads
+            if (i == selectedPads.size()-1)
+                pressureSensitivityMenu->setSelectedId(pressureSens_, true);
+        }
+        
+        
+        int exclusiveMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getExclusiveMode();
+        
+        //loop through all selected pads expect for the first one
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            //if setting of this pad does NOT match setting of last pad, set default and break
+            if (PAD_SETTINGS->getExclusiveMode() != exclusiveMode_)
+            {
+                exclusiveModeButton->setToggleState(0, false);
+                exclusiveGroupSlider->setVisible(false);
+                break;
+            }
+            //if this is the last 'natural' iteraction, displayed the setting that matches all the pads
+            if (i == selectedPads.size()-1)
+            {
+                exclusiveModeButton->setToggleState(exclusiveMode_, false);
+                if (exclusiveModeButton->getToggleState() == true)
+                    exclusiveGroupSlider->setVisible(true);
+                else
+                    exclusiveGroupSlider->setVisible(false);
+            }
+        }
+        
+        int exclusiveGroup_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getExclusiveGroup();
+        
+        //loop through all selected pads expect for the first one
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            //if setting of this pad does NOT match setting of last pad, set default and break
+            if (PAD_SETTINGS->getExclusiveGroup() != exclusiveGroup_)
+            {
+                exclusiveGroupSlider->setValue(1, false);
+                break;
+            }
+            //if this is the last 'natural' iteraction, displayed the setting that matches all the pads
+            if (i == selectedPads.size()-1)
+                exclusiveGroupSlider->setValue(exclusiveGroup_, false);
+        }
+        
+        
+        int quantizeMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getQuantizeMode();
+        
+        //loop through all selected pads expect for the first one
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            //if setting of this pad does NOT match setting of last pad, set default and break
+            if (PAD_SETTINGS->getQuantizeMode() != quantizeMode_)
+            {
+                quantizeModeButton->setToggleState(0, false);
+                break;
+            }
+            //if this is the last 'natural' iteraction, displayed the setting that matches all the pads
+            if (i == selectedPads.size()-1)
+                quantizeModeButton->setToggleState(quantizeMode_, false);
+        }
+      
+        
+        
         
     }
     

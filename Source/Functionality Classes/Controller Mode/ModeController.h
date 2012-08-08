@@ -27,7 +27,7 @@
 #include "../../Application/AbstractSubjectAndObserver.h"
 #include "../../My IO Classes/OscOutput.h"
 
-class ModeController :  public Subject, //so this class can be observed by the preset component
+class ModeController :  public Subject, //so this class can be observed by the scene component
                         public AsyncUpdater
 {
 
@@ -40,7 +40,7 @@ public:
     
     void getOscData(int pad, int value);
     
-    void changePreset();
+    void changeScene();
     
     //void actionListenerCallback (const String& message);
     void handleAsyncUpdate();
@@ -52,7 +52,7 @@ private:
     int padNumber;
     int padValue;
     
-    //preset switcher stuff
+    //scene switcher stuff
     int prevPadValue[48];
     
     OscOutput oscOutput;

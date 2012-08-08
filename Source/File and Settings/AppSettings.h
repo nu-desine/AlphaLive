@@ -134,7 +134,7 @@ private:
     ScopedPointer<PadSettings> copiedPadSettings;
     
     //========================================================================================================
-    //variables which are global to the whole project and aren't changeable between individual presets.
+    //variables which are global to the whole project and aren't changeable between individual scenes.
     //Would it make more sense to not have them in AppSettings?
     //========================================================================================================
     

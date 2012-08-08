@@ -44,7 +44,7 @@
 #include "../Custom Components/General/GuiSwitch.h"
 #include "../Custom Components/Graphics/GuiPopUpWindow.h"
 #include "../Custom Components/General/AlphaSlider.h"
-#include "../Custom Components/Scene/PresetComponent.h"
+#include "../Custom Components/Scene/SceneComponent.h"
 #include "../../File and Settings/AppDocumentState.h"
 #include "../../Application/AbstractSubjectAndObserver.h"
 #include "../Custom Components/General/AlphaImageKnob.h"
@@ -111,7 +111,7 @@ public:
 private:
     //==============================================================================
     TextButton *loadButton, *saveButton, *saveAsButton;
-    TextButton *clearPresetsButton;
+    TextButton *clearScenesButton;
     TextButton *cleanUpProjectButton;
     
     AlphaSlider *tempoSlider;
@@ -127,7 +127,7 @@ private:
     //int currentlySelectedPad;
     Array <int> selectedPads;
     
-    PresetComponent *presetComponent;
+    SceneComponent *sceneComponent;
     
     TextEditor *infoTextBox;
     

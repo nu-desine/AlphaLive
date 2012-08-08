@@ -49,9 +49,9 @@ void ModeController::getOscData(int pad, int value)
     padNumber = pad;
     padValue = value;
     
-    if (PAD_SETTINGS->getControllerControl() == 2) //preset switcher
+    if (PAD_SETTINGS->getControllerControl() == 2) //scene switcher
     {
-        changePreset(); 
+        changeScene(); 
     }
     else if (PAD_SETTINGS->getControllerControl() == 3) //osc controller
     {
@@ -77,14 +77,14 @@ void ModeController::getOscData(int pad, int value)
     
     }
     
-    else if (PAD_SETTINGS->getControllerControl() == 5) //MIDI program change & preset switcher
+    else if (PAD_SETTINGS->getControllerControl() == 5) //MIDI program change & scene switcher
     {
         if (prevPadValue[padNumber] == 0 && padValue > 0)
         {
             MidiMessage message = MidiMessage::programChange(PAD_SETTINGS->getControllerMidiProgramChangeChannel(), PAD_SETTINGS->getControllerMidiProgramChangeNumber());
             sendMidiMessage(message);
             
-            changePreset(); 
+            changeScene(); 
         }
         
        
@@ -94,8 +94,8 @@ void ModeController::getOscData(int pad, int value)
 }
 
 
-//called when pad is set to the preset switcher control
-void ModeController::changePreset()
+//called when pad is set to the scene switcher control
+void ModeController::changeScene()
 {
     if (prevPadValue[padNumber] == 0 && padValue > 0)
     {

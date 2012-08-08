@@ -72,7 +72,7 @@ private:
     
     ComboBox *controlMenu;
     
-    AlphaSlider *presetNumberSlider, *oscPortNumberSlider;
+    AlphaSlider *sceneNumberSlider, *oscPortNumberSlider;
     AlphaSlider *midiProgramChangeNumberSlider, *midiProgramChangeChannelSlider;
     Label *oscIpAddressEditor;
     

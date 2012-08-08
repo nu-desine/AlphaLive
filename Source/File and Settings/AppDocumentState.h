@@ -22,9 +22,9 @@
 
 /*
  DESCRIPTION OF PROBLEMS I'VE BEEN HAVING WITH THIS CLASS.
- I've encountered many problems when trying to get loading and saving performances and presets to work, and here are things to know to make sure things work.
- When creating a copy of one of the presetData XmlElement objects or adding one as a child eleent to a new element, remember that the
- presetData objects are pointers which means you must make sure you are creating a new copy/child of the ACTUAL OBJECT, not a copy of the pointer, as
+ I've encountered many problems when trying to get loading and saving performances and scenes to work, and here are things to know to make sure things work.
+ When creating a copy of one of the sceneData XmlElement objects or adding one as a child eleent to a new element, remember that the
+ sceneData objects are pointers which means you must make sure you are creating a new copy/child of the ACTUAL OBJECT, not a copy of the pointer, as
  this new pointer would still point to the original object and then when the copy of the element is deleted it would also delete the orginal element! (double delete exceptions / double deletion asserts)
  So either create a deep copy of the XmlElement or make sure you remove child elements from the new XmlElements if they contain pointers to the original object.
  All this is explained at http://www.rawmaterialsoftware.com/viewtopic.php?f=2&t=8182&p=46208#p46208
@@ -63,11 +63,11 @@
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "../Application/AbstractSubjectAndObserver.h"
-#include "../GUI Classes/Custom Components/Scene/PresetValues.h"
+#include "../GUI Classes/Custom Components/Scene/SceneValues.h"
 
 
 /*
- This class handles ALL the loading and saving of settings, including presets, within the application.
+ This class handles ALL the loading and saving of settings, including scenes, within the application.
  All settings and documents are in the form of XmlElement objects.
  */
 class MainAppWindow;
@@ -84,14 +84,14 @@ public:
     void saveProject();
     void saveProjectAs();
     void loadProject(bool openBrowser, File fileToOpen = File::nonexistent);
-    void savePresetToDisk (int presetNumber);
-    bool loadPresetFromDisk(int presetNumber);
+    void saveSceneToDisk (int sceneNumber);
+    bool loadSceneFromDisk(int sceneNumber);
     
     void saveProjectSettings();
     void loadProjectSettings();
-    void saveToPreset (int presetNumber);
-    void loadFromPreset (int presetNumber);
-    void clearPreset (int presetNumber);
+    void saveToScene (int sceneNumber);
+    void loadFromScene (int sceneNumber);
+    void clearScene (int sceneNumber);
     
     void saveSequence (int currentlySelectedSeqNumber, int currentlySelectedPad);
     void loadSequence (int currentlySeletedSeqNumber, Array<int> selectedPads_);
@@ -99,28 +99,28 @@ public:
     void loadSequenceSet (Array<int> selectedPads_);
     
     int getGuiUpdateFlag();
-    int getPresetToUpdate();
-    int getPresetStatus();
+    int getSceneToUpdate();
+    int getSceneStatus();
     
     void removeUneededAudioFiles();
     void importAudioFiles();   
-    void setCurrentlySelectedPreset(int value);
+    void setCurrentlySelectedScene(int value);
     
     static void registerRecentFile (const File& file);
     
 private:
     
-    OwnedArray<XmlElement> presetData;
+    OwnedArray<XmlElement> sceneData;
     ScopedPointer <XmlElement> projectData;
     
     //guiUpdateFlag is accessed by the observer class (mainComponent) so it knows what part of the GUI it should be updating.
     // 0 = settings (default)
-    // 1 = presetComponent (so that when a performance is loaded the included presets can be selected)
+    // 1 = sceneComponent (so that when a performance is loaded the included scenes can be selected)
     int guiUpdateFlag;
-    //accessed by the observer class (mainComponent) so it knows what slot in the presetComponent it needs to update
-    int presetToUpdate;
-    //accessed by the observer class (mainComponent) so it knows what to set the selected preset GUI to (0 = empty, 1 = filled)
-    int presetStatus;
+    //accessed by the observer class (mainComponent) so it knows what slot in the sceneComponent it needs to update
+    int sceneToUpdate;
+    //accessed by the observer class (mainComponent) so it knows what to set the selected scene GUI to (0 = empty, 1 = filled)
+    int sceneStatus;
     
     File currentProjectFile; //the currently open perfomance/project
     
@@ -128,7 +128,7 @@ private:
     
     bool shouldDisplayAlertWindow;
     
-    int currentlySelectedPreset;
+    int currentlySelectedScene;
     
 };
 

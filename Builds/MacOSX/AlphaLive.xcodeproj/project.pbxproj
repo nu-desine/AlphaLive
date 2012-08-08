@@ -74,8 +74,8 @@
 		0C78A3FF15B467910049C0C8 /* GuiPad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A33D15B467900049C0C8 /* GuiPad.cpp */; };
 		0C78A40015B467910049C0C8 /* GuiPadLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A33F15B467900049C0C8 /* GuiPadLayout.cpp */; };
 		0C78A40115B467910049C0C8 /* GuiPadRow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A34115B467900049C0C8 /* GuiPadRow.cpp */; };
-		0C78A40215B467910049C0C8 /* PresetComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A34415B467900049C0C8 /* PresetComponent.cpp */; };
-		0C78A40315B467910049C0C8 /* PresetSlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A34615B467900049C0C8 /* PresetSlot.cpp */; };
+		0C78A40215B467910049C0C8 /* SceneComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A34415B467900049C0C8 /* SceneComponent.cpp */; };
+		0C78A40315B467910049C0C8 /* SceneSlot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A34615B467900049C0C8 /* SceneSlot.cpp */; };
 		0C78A40415B467910049C0C8 /* SequencerGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A34A15B467900049C0C8 /* SequencerGrid.cpp */; };
 		0C78A40515B467910049C0C8 /* SequencerGridEndBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A34C15B467900049C0C8 /* SequencerGridEndBlock.cpp */; };
 		0C78A40615B467910049C0C8 /* SequencerGridPlayHead.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A34E15B467900049C0C8 /* SequencerGridPlayHead.cpp */; };
@@ -337,11 +337,11 @@
 		0C78A34015B467900049C0C8 /* GuiPadLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiPadLayout.h; sourceTree = "<group>"; };
 		0C78A34115B467900049C0C8 /* GuiPadRow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiPadRow.cpp; sourceTree = "<group>"; };
 		0C78A34215B467900049C0C8 /* GuiPadRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiPadRow.h; sourceTree = "<group>"; };
-		0C78A34415B467900049C0C8 /* PresetComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PresetComponent.cpp; sourceTree = "<group>"; };
-		0C78A34515B467900049C0C8 /* PresetComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresetComponent.h; sourceTree = "<group>"; };
-		0C78A34615B467900049C0C8 /* PresetSlot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PresetSlot.cpp; sourceTree = "<group>"; };
-		0C78A34715B467900049C0C8 /* PresetSlot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresetSlot.h; sourceTree = "<group>"; };
-		0C78A34815B467900049C0C8 /* PresetValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresetValues.h; sourceTree = "<group>"; };
+		0C78A34415B467900049C0C8 /* SceneComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneComponent.cpp; sourceTree = "<group>"; };
+		0C78A34515B467900049C0C8 /* SceneComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; path = SceneComponent.h; sourceTree = "<group>"; };
+		0C78A34615B467900049C0C8 /* SceneSlot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneSlot.cpp; sourceTree = "<group>"; };
+		0C78A34715B467900049C0C8 /* SceneSlot.h */ = {isa = PBXFileReference; fileEncoding = 4; path = SceneSlot.h; sourceTree = "<group>"; };
+		0C78A34815B467900049C0C8 /* SceneValues.h */ = {isa = PBXFileReference; fileEncoding = 4; path = SceneValues.h; sourceTree = "<group>"; };
 		0C78A34A15B467900049C0C8 /* SequencerGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerGrid.cpp; sourceTree = "<group>"; };
 		0C78A34B15B467900049C0C8 /* SequencerGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequencerGrid.h; sourceTree = "<group>"; };
 		0C78A34C15B467900049C0C8 /* SequencerGridEndBlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerGridEndBlock.cpp; sourceTree = "<group>"; };
@@ -1677,11 +1677,11 @@
 		0C78A34315B467900049C0C8 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A34815B467900049C0C8 /* PresetValues.h */,
-				0C78A34515B467900049C0C8 /* PresetComponent.h */,
-				0C78A34415B467900049C0C8 /* PresetComponent.cpp */,
-				0C78A34715B467900049C0C8 /* PresetSlot.h */,
-				0C78A34615B467900049C0C8 /* PresetSlot.cpp */,
+				0C78A34815B467900049C0C8 /* SceneValues.h */,
+				0C78A34515B467900049C0C8 /* SceneComponent.h */,
+				0C78A34415B467900049C0C8 /* SceneComponent.cpp */,
+				0C78A34715B467900049C0C8 /* SceneSlot.h */,
+				0C78A34615B467900049C0C8 /* SceneSlot.cpp */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -3579,8 +3579,8 @@
 				0C78A3FF15B467910049C0C8 /* GuiPad.cpp in Sources */,
 				0C78A40015B467910049C0C8 /* GuiPadLayout.cpp in Sources */,
 				0C78A40115B467910049C0C8 /* GuiPadRow.cpp in Sources */,
-				0C78A40215B467910049C0C8 /* PresetComponent.cpp in Sources */,
-				0C78A40315B467910049C0C8 /* PresetSlot.cpp in Sources */,
+				0C78A40215B467910049C0C8 /* SceneComponent.cpp in Sources */,
+				0C78A40315B467910049C0C8 /* SceneSlot.cpp in Sources */,
 				0C78A40415B467910049C0C8 /* SequencerGrid.cpp in Sources */,
 				0C78A40515B467910049C0C8 /* SequencerGridEndBlock.cpp in Sources */,
 				0C78A40615B467910049C0C8 /* SequencerGridPlayHead.cpp in Sources */,

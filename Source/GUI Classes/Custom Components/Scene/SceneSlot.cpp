@@ -1,5 +1,5 @@
 //
-//  PresetSlot.cpp
+//  SceneSlot.cpp
 //  AlphaSoft
 //
 //  Created by Liam Meredith-Lacey on 31/10/2011.
@@ -20,13 +20,13 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "PresetSlot.h"
-#include "PresetComponent.h"
+#include "SceneSlot.h"
+#include "SceneComponent.h"
 #include "AppSettings.h"
 
-PresetSlot::PresetSlot (int slotNumber_, PresetComponent &ref)
+SceneSlot::SceneSlot (int slotNumber_, SceneComponent &ref)
                     :   slotNumber(slotNumber_),
-                        presetComponentRef(ref)
+                        sceneComponentRef(ref)
 {
     //set this component to have keyboard focus
     //setWantsKeyboardFocus(true);
@@ -37,17 +37,17 @@ PresetSlot::PresetSlot (int slotNumber_, PresetComponent &ref)
     
 }
 
-PresetSlot::~PresetSlot()
+SceneSlot::~SceneSlot()
 {
     
 }
 
-void PresetSlot::resized()
+void SceneSlot::resized()
 {
     
 }
 
-void PresetSlot::paint (Graphics &g)
+void SceneSlot::paint (Graphics &g)
 {
     //std::cout << "Status = " << status << std::endl;
     
@@ -91,11 +91,11 @@ void PresetSlot::paint (Graphics &g)
 }
 
 
-void PresetSlot::mouseDown (const MouseEvent &e)
+void SceneSlot::mouseDown (const MouseEvent &e)
 { 
-    /*how presets should work:
-     - shift-click on any slot to saved the current settings into that preset. The slot should then be display as 'selected'.
-     - click on any 'filled' slot to load settings from the clicked preset. The slot should then be displayed as selected,
+    /*how scenes should work:
+     - shift-click on any slot to saved the current settings into that scene. The slot should then be display as 'selected'.
+     - click on any 'filled' slot to load settings from the clicked scene. The slot should then be displayed as selected,
         with the previously selected pad now just displayed as 'filled'.
      - You can also reclick on a selected slot to load it back up? Or would this cause errors in terms of losing data by forgetting to hold shift when attempting to save?
      
@@ -107,7 +107,7 @@ void PresetSlot::mouseDown (const MouseEvent &e)
     if (e.mods.isShiftDown()==true) //if shift is currently down
     {
         status = 1; //set as 'filled'
-        presetComponentRef.slotClicked(this);//call callback function, where it will 'save' the data
+        sceneComponentRef.slotClicked(this);//call callback function, where it will 'save' the data
         
         status = 2; //set as 'selected'
         repaint(); //update display
@@ -115,22 +115,22 @@ void PresetSlot::mouseDown (const MouseEvent &e)
     else if (status == 1 && e.mods.isPopupMenu() == false) //if clicked on a 'filled' slot but it isn't a 'right click'
     {
         status = 2; //set as selected
-        presetComponentRef.slotClicked(this); //call callback function, where it will 'load' the data
+        sceneComponentRef.slotClicked(this); //call callback function, where it will 'load' the data
         repaint();
     }
     
     
-    //right click to bring up the popup menu to allow single presets to be loaded and saved to disk
+    //right click to bring up the popup menu to allow single scenes to be loaded and saved to disk
     if (e.mods.isPopupMenu() == true)
     {
         
         PopupMenu menu;
         
-        menu.addItem(1, "Import preset...");
-        if (status != 0) //if there is something store in the preset slot
+        menu.addItem(1, "Import scene...");
+        if (status != 0) //if there is something store in the scene slot
         {
-            menu.addItem(2, "Export preset...");
-            menu.addItem(3, "Clear and remove preset...");
+            menu.addItem(2, "Export scene...");
+            menu.addItem(3, "Clear and remove scene...");
         }
         
         
@@ -140,17 +140,17 @@ void PresetSlot::mouseDown (const MouseEvent &e)
         {
             // user dismissed the menu without picking anything
         }
-        else if (result == 1) // load preset
+        else if (result == 1) // load scene
         {
-            loadPreset();
+            loadScene();
         }
-        else if (result == 2) // save preset
+        else if (result == 2) // save scene
         {
-            savePreset();
+            saveScene();
         }
-        else if (result == 3) // clear and remove (except for preset 0) preset
+        else if (result == 3) // clear and remove (except for scene 0) scene
         {
-            clearPreset();
+            clearScene();
         }
     }
     
@@ -158,13 +158,13 @@ void PresetSlot::mouseDown (const MouseEvent &e)
 
 
 
-void PresetSlot::mouseEnter	(const MouseEvent & e)
+void SceneSlot::mouseEnter	(const MouseEvent & e)
 {
     mouseIsOver = true;
     repaint();
 }
 
-void PresetSlot::mouseExit	(const MouseEvent & e)
+void SceneSlot::mouseExit	(const MouseEvent & e)
 {
     mouseIsOver = false;
     repaint();
@@ -173,53 +173,53 @@ void PresetSlot::mouseExit	(const MouseEvent & e)
 
 
 
-void PresetSlot::setStatus (int value)
+void SceneSlot::setStatus (int value)
 {
     status = value;
     repaint();
 }
 
-int PresetSlot::getStatus()
+int SceneSlot::getStatus()
 {
     return status;
 }
 
 
-void PresetSlot::savePreset()
+void SceneSlot::saveScene()
 {
-    presetComponentRef.getAppDocumentState().savePresetToDisk(slotNumber);
+    sceneComponentRef.getAppDocumentState().saveSceneToDisk(slotNumber);
 }
 
 
 
-void PresetSlot::loadPreset()
+void SceneSlot::loadScene()
 {
-    //presetComponentRef.setSelectedPresetNumber(slotNumber);
-    bool shouldLoad = presetComponentRef.getAppDocumentState().loadPresetFromDisk(slotNumber);
+    //sceneComponentRef.setSelectedSceneNumber(slotNumber);
+    bool shouldLoad = sceneComponentRef.getAppDocumentState().loadSceneFromDisk(slotNumber);
     
     if (shouldLoad == true) //when the filebrowser 'cancel' button isn't pressed
     {
         status = 2;
-        presetComponentRef.slotClicked(this); //call callback function, where it will 'load' the data
+        sceneComponentRef.slotClicked(this); //call callback function, where it will 'load' the data
         repaint();
     }
 }
 
 
-void PresetSlot::clearPreset()
+void SceneSlot::clearScene()
 {
     if (slotNumber != 0)
     {
-        presetComponentRef.getAppDocumentState().clearPreset(slotNumber);
+        sceneComponentRef.getAppDocumentState().clearScene(slotNumber);
         
         if (status == 2) //if currently 'selected'
         {
-            //set default preset 0 as 'selected' and load its settings
-            presetComponentRef.selectDefaultPreset();
+            //set default scene 0 as 'selected' and load its settings
+            sceneComponentRef.selectDefaultScene();
         }
         setStatus(0);
     }
-    else //if this is preset 0 
+    else //if this is scene 0 
     {
         //set slot to 'selected' but reset global data and mode 0 for each pad
         //reset all current padSettings 
@@ -231,11 +231,11 @@ void PresetSlot::clearPreset()
         AppSettings::Instance()->resetData();
         
         status = 1; //set as 'filled'
-        presetComponentRef.disableSaveAlertWindow();
-        presetComponentRef.slotClicked(this);//call callback function, where it will 'save' the data
+        sceneComponentRef.disableSaveAlertWindow();
+        sceneComponentRef.slotClicked(this);//call callback function, where it will 'save' the data
         status = 2; //set as 'selected'
         repaint(); //update display
-        presetComponentRef.slotClicked(this);
+        sceneComponentRef.slotClicked(this);
         
     }
 }

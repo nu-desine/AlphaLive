@@ -32,23 +32,23 @@
 
 AppDocumentState::AppDocumentState()
 {
-    for (int i = 0; i <= NO_OF_PRESETS-1; i++)
+    for (int i = 0; i <= NO_OF_SCENES-1; i++)
     {
-        presetData.insert(i, new XmlElement("PRESET_" + String(i)));
+        sceneData.insert(i, new XmlElement("SCENE_" + String(i)));
     }
     
     projectData = new XmlElement("PROJECT_SETTINGS");
     
     guiUpdateFlag = 0;
-    presetToUpdate = 0;
-    presetStatus = 0;
+    sceneToUpdate = 0;
+    sceneStatus = 0;
     
     currentProjectFile = File::nonexistent;
     
     mainAppWindowRef = nullptr;
     
     shouldDisplayAlertWindow = true;
-    currentlySelectedPreset = 0;
+    currentlySelectedScene = 0;
 }
 
 
@@ -67,10 +67,10 @@ void AppDocumentState::createNewProject()
     /*
      - ask the user if they want to save the current project
      - reset all settings; pad and global, and the project settings
-     - clear all presetData XmlElements
+     - clear all sceneData XmlElements
      - reset the currentWorkingDirectory back to the temp directory. Clear it's current contents
      - set the currectProjectFile to nonexistent
-     - reset the presetComponent
+     - reset the sceneComponent
      - reset the window title bar text
      
      */
@@ -119,29 +119,29 @@ void AppDocumentState::createNewProject()
         File::getSpecialLocation(File::tempDirectory).deleteRecursively();
         File::getSpecialLocation(File::tempDirectory).setAsCurrentWorkingDirectory();
         
-        //========= clear all XmlElement objects and update the presetComponent display ===========
+        //========= clear all XmlElement objects and update the sceneComponent display ===========
         
-        //let the observer know it will need to update the presetComponent GUI next time it is 'notified'
+        //let the observer know it will need to update the sceneComponent GUI next time it is 'notified'
         guiUpdateFlag = 1;
         
         projectData->removeAllAttributes();
         
-        for (int i = 0; i <= NO_OF_PRESETS-1; i++)
+        for (int i = 0; i <= NO_OF_SCENES-1; i++)
         {
-            //accessed by observer in order to update the relevent preset slot's GUI
-            presetToUpdate = i;
+            //accessed by observer in order to update the relevent scene slot's GUI
+            sceneToUpdate = i;
             
-            //clear the xmlelement for the current preset number
-            clearPreset(i);
+            //clear the xmlelement for the current scene number
+            clearScene(i);
             
-            //display GUI preset slot as empty
-            presetStatus = 0;
+            //display GUI scene slot as empty
+            sceneStatus = 0;
         
-            //set the first preset to be display as 'selected'
+            //set the first scene to be display as 'selected'
             if (i == 0)
             {
-                presetStatus = 2;
-                setCurrentlySelectedPreset(0);
+                sceneStatus = 2;
+                setCurrentlySelectedScene(0);
             }
             
             //update display
@@ -152,7 +152,7 @@ void AppDocumentState::createNewProject()
         guiUpdateFlag = 0;
         
         //save the reset settings, then call update the main display
-        saveToPreset(0);
+        saveToScene(0);
         notifyObs();
         
         //change the window title bar text
@@ -171,9 +171,9 @@ void AppDocumentState::saveProject()
     
     else //replace currentProjectFile
     {
-        //first, need to save the current project and preset settings
+        //first, need to save the current project and scene settings
         saveProjectSettings();
-        saveToPreset(currentlySelectedPreset);
+        saveToScene(currentlySelectedScene);
         
         currentProjectFile.deleteFile();
         currentProjectFile.create(); //create the file
@@ -182,22 +182,22 @@ void AppDocumentState::saveProject()
 
         performanceSettings.addChildElement(projectData);
         
-        for (int i = 0; i <= NO_OF_PRESETS-1; i++)
+        for (int i = 0; i <= NO_OF_SCENES-1; i++)
         {
-            performanceSettings.addChildElement(presetData[i]);
+            performanceSettings.addChildElement(sceneData[i]);
         }
         
         String xmlDoc = performanceSettings.createDocument(String::empty, false);
         currentProjectFile.appendText(xmlDoc);
         
-        //remove projectData and presetData child elements from performanceSettings so that they aren't deleted when
+        //remove projectData and sceneData child elements from performanceSettings so that they aren't deleted when
         //performanceSettings goes out of scope.
         
         performanceSettings.removeChildElement(projectData, false);
         
-        for (int i = 0; i <= NO_OF_PRESETS-1; i++)
+        for (int i = 0; i <= NO_OF_SCENES-1; i++)
         {
-            performanceSettings.removeChildElement(presetData[i], false);
+            performanceSettings.removeChildElement(sceneData[i], false);
         }
         
         if (shouldDisplayAlertWindow == true)
@@ -257,8 +257,8 @@ void AppDocumentState::saveProjectAs()
         
         if (overwrite == true)
         {
-            //first, need to save the current project and preset settings
-            saveToPreset(currentlySelectedPreset);
+            //first, need to save the current project and scene settings
+            saveToScene(currentlySelectedScene);
             saveProjectSettings();
             
             savedDirectory.createDirectory();
@@ -269,22 +269,22 @@ void AppDocumentState::saveProjectAs()
             
             performanceSettings.addChildElement(projectData);
             
-            for (int i = 0; i <= NO_OF_PRESETS-1; i++)
+            for (int i = 0; i <= NO_OF_SCENES-1; i++)
             {
-                performanceSettings.addChildElement(presetData[i]);
+                performanceSettings.addChildElement(sceneData[i]);
             }
             
             String xmlDoc = performanceSettings.createDocument(String::empty, false);
             savedFile.appendText(xmlDoc);
             
-            //remove projectData and presetData child elements from performanceSettings so that they aren't deleted when
+            //remove projectData and sceneData child elements from performanceSettings so that they aren't deleted when
             //performanceSettings goes out of scope.
             
             performanceSettings.removeChildElement(projectData, false);
             
-            for (int i = 0; i <= NO_OF_PRESETS-1; i++)
+            for (int i = 0; i <= NO_OF_SCENES-1; i++)
             {
-                performanceSettings.removeChildElement(presetData[i], false);
+                performanceSettings.removeChildElement(sceneData[i], false);
             }
             
             //set the current open document to the document just saved
@@ -356,7 +356,7 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
         
         if (shouldLoad || openBrowser == false)
         {
-            //let the observer know it will need to update the presetComponent GUI next time it is 'notified'
+            //let the observer know it will need to update the sceneComponent GUI next time it is 'notified'
             guiUpdateFlag = 1;
             
             //get file
@@ -405,37 +405,37 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
                 //therefore when loadedXml goes out of scope and delete's projSettingsXml, it doesn't effect projectData
                 //in anyway.
                 
-                //=========load the child elements of loadedXml and put them in the presetData objects===========
-                for (int i = 0; i <= NO_OF_PRESETS-1; i++)
+                //=========load the child elements of loadedXml and put them in the sceneData objects===========
+                for (int i = 0; i <= NO_OF_SCENES-1; i++)
                 {
-                    //accessed by observer in order to update the relevent preset slot's GUI
-                    presetToUpdate = i;
+                    //accessed by observer in order to update the relevent scene slot's GUI
+                    sceneToUpdate = i;
                     
-                    //clear the xmlelement for the current preset number
-                    clearPreset(i);
+                    //clear the xmlelement for the current scene number
+                    clearScene(i);
                     
-                    //put the loaded xml data into the xmlelement for the current preset
-                    XmlElement* childToInsert = loadedXml->getChildByName("PRESET_" + String(i));
-                    presetData.insert (i, childToInsert);
-                    //remove presetData childelement from loadedXml so it isn't deleted when loadedXml goes out of scope!
+                    //put the loaded xml data into the xmlelement for the current scene
+                    XmlElement* childToInsert = loadedXml->getChildByName("SCENE_" + String(i));
+                    sceneData.insert (i, childToInsert);
+                    //remove sceneData childelement from loadedXml so it isn't deleted when loadedXml goes out of scope!
                     loadedXml->removeChildElement (childToInsert, false);
                     
-                    if (presetData[i]->getNumChildElements() > 0) //if this preset contains something
+                    if (sceneData[i]->getNumChildElements() > 0) //if this scene contains something
                     {
-                        //display GUI preset slot as filled 
-                        presetStatus = 1;
+                        //display GUI scene slot as filled 
+                        sceneStatus = 1;
                     }
-                    else if (presetData[i]->getNumChildElements() == 0) //if this preset contains nothing
+                    else if (sceneData[i]->getNumChildElements() == 0) //if this scene contains nothing
                     {
-                        //display GUI preset slot as empty
-                        presetStatus = 0;
+                        //display GUI scene slot as empty
+                        sceneStatus = 0;
                     }
                     
-                    //set the first preset to be display as 'selected'
+                    //set the first scene to be display as 'selected'
                     if (i == 0)
                     {
-                        presetStatus = 2;
-                        setCurrentlySelectedPreset(0);
+                        sceneStatus = 2;
+                        setCurrentlySelectedScene(0);
                     }
                     
                     //update display
@@ -445,8 +445,8 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
                 //let the observer know it will need to update the settings display next time it is 'notified'
                 guiUpdateFlag = 0;
                 
-                //call loadFromPreset to load the settings of preset 0 into the application
-                loadFromPreset(0);
+                //call loadFromScene to load the settings of scene 0 into the application
+                loadFromScene(0);
                 
                 currentProjectFile = loadedFile;
                 
@@ -485,10 +485,10 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
 
 
 
-void AppDocumentState::savePresetToDisk (int presetNumber)
+void AppDocumentState::saveSceneToDisk (int sceneNumber)
 {
-    //first save the current settings to the current preset (saves the user having to first save into the preset and then save to disk!)
-    saveToPreset(presetNumber);
+    //first save the current settings to the current scene (saves the user having to first save into the scene and then save to disk!)
+    saveToScene(sceneNumber);
     
     //navigate to app directory
     FileChooser saveFileChooser("Create an AlphaLive Scene file to save...", 
@@ -518,7 +518,7 @@ void AppDocumentState::savePresetToDisk (int presetNumber)
         if (overwrite == true)
         {
             //------
-            //MOVE ANY NEEDED AUDIO FILES INTO THE DEDICATED AUDIO FILES DIRECTORY FOR THIS PRESET
+            //MOVE ANY NEEDED AUDIO FILES INTO THE DEDICATED AUDIO FILES DIRECTORY FOR THIS SCENE
             //DO NOT CHANGE THE WORKING DIRECTORY HERE
             //------
             
@@ -532,13 +532,13 @@ void AppDocumentState::savePresetToDisk (int presetNumber)
             if (AppSettings::Instance()->getCopyExternalFiles() == true)
             {
                 
-                //search through all pads looking for audio files that need copying with the preset
+                //search through all pads looking for audio files that need copying with the scene
                 for (int i = 0; i <= 47; i++)
                 {
                     //look for sampler audio files
-                    if (presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
+                    if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
                     {
-                        String newFileName(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
+                        String newFileName(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
                         
                         if (newFileName != String::empty) //if there is 'something'
                         {
@@ -553,7 +553,7 @@ void AppDocumentState::savePresetToDisk (int presetNumber)
                                 //get the original audio file in question
                                 originalFile = File::getCurrentWorkingDirectory().getFullPathName()+ File::separatorString + newFileName;
                                 
-                                //create an new file in presets "Audio Files" folder;
+                                //create an new file in scenes "Audio Files" folder;
                                 File newFile (audioFileDirectory.getFullPathName() + File::separatorString + newFileName);
                                 
                                 if (originalFile.existsAsFile() == true) //if the file exists (which it should)
@@ -565,18 +565,18 @@ void AppDocumentState::savePresetToDisk (int presetNumber)
                                 {
                                     AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + newFileName + "\"" + " for Pad " + String(i+1) + " could not be found.");
                                     //do something here so the loaded data is string::empty and NOT the missing audio file name
-                                    //can i do this here or does it need to be done in the loadforpreset method?
+                                    //can i do this here or does it need to be done in the loadforscene method?
                                 }
                             
                             }
                         }
                     }
                     //look for sequencer audio files
-                    else if (presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 3)
+                    else if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 3)
                     {
                         for (int row = 0; row <= NO_OF_ROWS-1; row++)
                         {
-                            String newFileName(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row)));
+                            String newFileName(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row)));
                             
                             if (newFileName != String::empty) //if there is 'something'
                             {
@@ -591,7 +591,7 @@ void AppDocumentState::savePresetToDisk (int presetNumber)
                                     //get the original audio file in question
                                     originalFile = File::getCurrentWorkingDirectory().getFullPathName()+ File::separatorString + newFileName;
                                     
-                                    //create an new file in presets "Audio Files" folder;
+                                    //create an new file in scenes "Audio Files" folder;
                                     File newFile (audioFileDirectory.getFullPathName() + File::separatorString + newFileName);
                                     
                                     if (originalFile.existsAsFile() == true) //if the file exists (which it should)
@@ -603,7 +603,7 @@ void AppDocumentState::savePresetToDisk (int presetNumber)
                                     {
                                         AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + newFileName + "\"" + " for Pad " + String(i+1) + " could not be found.");
                                         //do something here so the loaded data is string::empty and NOT the missing audio file name
-                                        //can i do this here or does it need to be done in the loadforpreset method?
+                                        //can i do this here or does it need to be done in the loadforscene method?
                                     }
                                     
                                 }
@@ -621,8 +621,8 @@ void AppDocumentState::savePresetToDisk (int presetNumber)
             savedFile.deleteFile();
             savedFile.create(); //create the file
             
-            //can't just save the presetData[presetNumber] xmlelement straight into file, as the tag name needs to be different, so a new xmlelement must be
-            //created which imports the child elements from presetData[presetNumber]
+            //can't just save the sceneData[sceneNumber] xmlelement straight into file, as the tag name needs to be different, so a new xmlelement must be
+            //created which imports the child elements from sceneData[sceneNumber]
             
             //create xmlelement to be saved
             XmlElement *toBeSaved = new XmlElement("ALPHALIVE_SCENE_VERSION_1");
@@ -630,9 +630,9 @@ void AppDocumentState::savePresetToDisk (int presetNumber)
             //import child elements
             for (int i = 0; i <= 47; i++)
             {
-                toBeSaved->addChildElement(new XmlElement(*presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))));
+                toBeSaved->addChildElement(new XmlElement(*sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))));
             }
-            toBeSaved->addChildElement(new XmlElement(*presetData[presetNumber]->getChildByName("GLOBAL_DATA")));
+            toBeSaved->addChildElement(new XmlElement(*sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")));
             
             //save to file
             String xmlDoc = toBeSaved->createDocument(String::empty, false);
@@ -651,7 +651,7 @@ void AppDocumentState::savePresetToDisk (int presetNumber)
 
 
 
-bool AppDocumentState::loadPresetFromDisk(int presetNumber)
+bool AppDocumentState::loadSceneFromDisk(int sceneNumber)
 {
 
     //navigate to app directory
@@ -669,21 +669,21 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
         
         if (loadedXml != nullptr && loadedXml->hasTagName("ALPHALIVE_SCENE_VERSION_1"))
         {
-            //clear the xmlelement for the currently selected preset number
-            clearPreset(presetNumber);
+            //clear the xmlelement for the currently selected scene number
+            clearScene(sceneNumber);
             
-            //put the loaded xml data into the xmlelement for the current preset
+            //put the loaded xml data into the xmlelement for the current scene
             //howcome i need to load each child individually here but not anywhere else (where i just load/save first child and it weird does the same for the others)???
             for ( int i = 0; i <= 47; i++)
             {
                 XmlElement* childToInsert = loadedXml->getChildByName("PAD_DATA_"+String(i));
-                presetData[presetNumber]->addChildElement(childToInsert);
+                sceneData[sceneNumber]->addChildElement(childToInsert);
                 loadedXml->removeChildElement(childToInsert, false);
             }
             XmlElement* childToInsert = loadedXml->getChildByName("GLOBAL_DATA");
-            presetData[presetNumber]->addChildElement(childToInsert);
+            sceneData[sceneNumber]->addChildElement(childToInsert);
             
-            //remove presetData childelement from loadedXml so it isn't deleted when loadedXml goes out of scope!
+            //remove sceneData childelement from loadedXml so it isn't deleted when loadedXml goes out of scope!
             loadedXml->removeChildElement (childToInsert, false);
             
             //------------
@@ -698,9 +698,9 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
                 for (int i = 0; i <= 47; i++)
                 {
                     //look for sampler audio files
-                    if (presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
+                    if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
                     {
-                        String newFileName(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
+                        String newFileName(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
                         
                         if (newFileName != String::empty) //if there is 'something'
                         {
@@ -723,8 +723,8 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
                                 originalFile = newFileName;
                                 newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + originalFile.getFileName();
                                 
-                                //re-set the path name within presetData from the full path name to just the file name
-                                presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("samplerAudioFilePath", newFile.getFileName());
+                                //re-set the path name within sceneData from the full path name to just the file name
+                                sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("samplerAudioFilePath", newFile.getFileName());
                             }
                             
                             
@@ -733,7 +733,7 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
                                 if (newFile.existsAsFile() == false) //if it doesn't already exist
                                 {
                                     originalFile.copyFileTo(newFile); 
-                                    std::cout << "Copying audio file from loaded preset's dir to current working dir!\n";
+                                    std::cout << "Copying audio file from loaded scene's dir to current working dir!\n";
                                 }
                             }
                             else
@@ -747,12 +747,12 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
                     
                     
                     //look for sequencer audio files
-                    else if (presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 3)
+                    else if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 3)
                     {
                         for (int row = 0; row <= NO_OF_ROWS-1; row++)
                         {
                             
-                            String newFileName(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row)));
+                            String newFileName(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row)));
                             
                             if (newFileName != String::empty) //if there is 'something'
                             {
@@ -775,8 +775,8 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
                                     originalFile = newFileName;
                                     newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + originalFile.getFileName();
                                     
-                                    //re-set the path name within presetData from the full path name to just the file name
-                                    presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("sequencerSamplesAudioFilePath"+String(row), newFile.getFileName());
+                                    //re-set the path name within sceneData from the full path name to just the file name
+                                    sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("sequencerSamplesAudioFilePath"+String(row), newFile.getFileName());
                                 }
                                 
                                 
@@ -785,7 +785,7 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
                                     if (newFile.existsAsFile() == false) //if it doesn't already exist
                                     {
                                         originalFile.copyFileTo(newFile); 
-                                        std::cout << "Copying audio file from loaded preset's dir to current working dir!\n";
+                                        std::cout << "Copying audio file from loaded scene's dir to current working dir!\n";
                                     }
                                 }
                                 else
@@ -802,7 +802,7 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
             else if (AppSettings::Instance()->getCopyExternalFiles() == false)
             {
                 //This else if statement is needed in case the option to copy 
-                //external files is currently false when importing presets
+                //external files is currently false when importing scenes
                 //which have their audio files stored in the directory 
                 //(and hence only the file NAME (not path) is saved), as the audio files
                 //will not be found once in the new project. The names need 
@@ -814,9 +814,9 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
                 for (int i = 0; i <= 47; i++)
                 {
                     //look for sampler audio files
-                    if (presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
+                    if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
                     {
-                        String newFileString(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
+                        String newFileString(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
                         
                         if (newFileString != String::empty) //if there is 'something'
                         {
@@ -827,18 +827,18 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
                                 File newFile(audioFileDirectory.getFullPathName()+ File::separatorString + newFileString); //should be a String?
                                 
                                 //set the saved file name to be the full path...
-                                presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("samplerAudioFilePath", newFile.getFullPathName()); 
+                                sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("samplerAudioFilePath", newFile.getFullPathName()); 
                             }
                         }
                     }
                     
                     //look for sequencer audio files
-                    else if (presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 3)
+                    else if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 3)
                     {
                         for (int row = 0; row <= NO_OF_ROWS-1; row++)
                         {
                             
-                            String newFileString(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row)));
+                            String newFileString(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row)));
                             if (newFileString != String::empty) //if there is 'something'
                             {
                                 //if the string saved is just the file name...
@@ -846,9 +846,9 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
                                 {
                                     //... get the full path name of the file...
                                     File newFile(audioFileDirectory.getFullPathName()+ File::separatorString + newFileString); //should be a String?
-                                    //... a re-set the path name within presetData, NOT PadSettings as this data hasn't been loaded
+                                    //... a re-set the path name within sceneData, NOT PadSettings as this data hasn't been loaded
                                     //into PadSettings yet
-                                    presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("sequencerSamplesAudioFilePath"+String(row), newFile.getFullPathName());
+                                    sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("sequencerSamplesAudioFilePath"+String(row), newFile.getFullPathName());
                                 }
                             }
                         }
@@ -880,7 +880,7 @@ bool AppDocumentState::loadPresetFromDisk(int presetNumber)
 void AppDocumentState::saveProjectSettings()
 {
     //reset/clear XmlElement.
-    if (projectData != nullptr) //if there is data in the preset's XmlElement
+    if (projectData != nullptr) //if there is data in the scene's XmlElement
         projectData->removeAllAttributes();
 
     projectData->setAttribute("copyExternalFiles", AppSettings::Instance()->getCopyExternalFiles());
@@ -898,10 +898,10 @@ void AppDocumentState::loadProjectSettings()
 
 
 
-void AppDocumentState::saveToPreset (int presetNumber)
+void AppDocumentState::saveToScene (int sceneNumber)
 {
     //reset/clear XmlElement.
-    clearPreset(presetNumber);
+    clearScene(sceneNumber);
     
     //===global settings===
     XmlElement *globalData  = new XmlElement ("GLOBAL_DATA");
@@ -1107,15 +1107,15 @@ void AppDocumentState::saveToPreset (int presetNumber)
         else if (PAD_SETTINGS->getMode() == 4) //controller mode
         {
             padData->setAttribute("controllerControl", PAD_SETTINGS->getControllerControl());
-            padData->setAttribute("controllerPresetNumber", PAD_SETTINGS->getControllerPresentNumber());
+            padData->setAttribute("controllerSceneNumber", PAD_SETTINGS->getControllerPresentNumber());
             padData->setAttribute("controllerOscIpAddress", PAD_SETTINGS->getControllerOscIpAddress());
             padData->setAttribute("controllerOscPortNumber", PAD_SETTINGS->getControllerOscPort());
             padData->setAttribute("controllerMidiProgramChangeNumber", PAD_SETTINGS->getControllerMidiProgramChangeNumber());
             padData->setAttribute("controllerMidiProgramChangeChannel", PAD_SETTINGS->getControllerMidiProgramChangeChannel());
         }
         
-        //add temp xmlElement as a child element of the main preset XmlElement
-        presetData[presetNumber]->addChildElement(new XmlElement(*padData));
+        //add temp xmlElement as a child element of the main scene XmlElement
+        sceneData[sceneNumber]->addChildElement(new XmlElement(*padData));
         
         delete padData;
     }
@@ -1123,7 +1123,7 @@ void AppDocumentState::saveToPreset (int presetNumber)
     //add globalData as child element.
     //WHY DO I HAVE TO DO THIS HERE AND NOT BEFORE DOING THE PADDATA STUFF?
     //caused hours of confusion and crashing if this was done first
-    presetData[presetNumber]->addChildElement(new XmlElement(*globalData));
+    sceneData[sceneNumber]->addChildElement(new XmlElement(*globalData));
     
     delete globalData;
 }
@@ -1131,15 +1131,15 @@ void AppDocumentState::saveToPreset (int presetNumber)
 
 
 
-void AppDocumentState::loadFromPreset (int presetNumber)
+void AppDocumentState::loadFromScene (int sceneNumber)
 {
     //NEED TO TIDY UP THIS FUNCTION SO THERE'S NO CHECKS TO SEE IF ATTRIBUTES EXIST, AS THEY WON'T BE NEEDED ANYMORE
     
-    if (presetData[presetNumber] != nullptr && presetData[presetNumber]->hasTagName("PRESET_"+String(presetNumber)))
+    if (sceneData[sceneNumber] != nullptr && sceneData[sceneNumber]->hasTagName("SCENE_"+String(sceneNumber)))
     {
         
         //===global settings===
-        XmlElement *globalData = new XmlElement(*presetData[presetNumber]->getChildByName("GLOBAL_DATA"));
+        XmlElement *globalData = new XmlElement(*sceneData[sceneNumber]->getChildByName("GLOBAL_DATA"));
         
         AppSettings::Instance()->setGlobalGain(globalData->getDoubleAttribute("globalGain"));
         AppSettings::Instance()->setGlobalPan(globalData->getDoubleAttribute("globalPan"));
@@ -1155,7 +1155,7 @@ void AppDocumentState::loadFromPreset (int presetNumber)
         for (int i = 0; i <= 47; i++)
         {
             
-            XmlElement *padData = new XmlElement(*presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))); //creates a deep copy of presetData, not just a copy of the pointer
+            XmlElement *padData = new XmlElement(*sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))); //creates a deep copy of sceneData, not just a copy of the pointer
             
             PAD_SETTINGS->setMode(padData->getIntAttribute("mode"));
             PAD_SETTINGS->setPressureSensitivityMode(padData->getIntAttribute("pressureSensitivityMode"));
@@ -1392,7 +1392,7 @@ void AppDocumentState::loadFromPreset (int presetNumber)
             else if (padData->getIntAttribute("mode") == 4)
             {
                 PAD_SETTINGS->setControllerControl(padData->getIntAttribute("controllerControl"));
-                PAD_SETTINGS->setControllerPresetNumber(padData->getIntAttribute("controllerPresetNumber"));
+                PAD_SETTINGS->setControllerSceneNumber(padData->getIntAttribute("controllerSceneNumber"));
                 
                 PAD_SETTINGS->setControllerOscIpAddress(padData->getStringAttribute("controllerOscIpAddress"));
                 PAD_SETTINGS->setControllerOscPort(padData->getIntAttribute("controllerOscPortNumber"));
@@ -1413,13 +1413,13 @@ void AppDocumentState::loadFromPreset (int presetNumber)
 }
 
 
-void AppDocumentState::clearPreset (int presetNumber)
+void AppDocumentState::clearScene (int sceneNumber)
 {
     
     //reset/clear XmlElement.
-    if (presetData[presetNumber] != nullptr) //if there is data in the preset's XmlElement
+    if (sceneData[sceneNumber] != nullptr) //if there is data in the scene's XmlElement
     {
-        presetData[presetNumber]->deleteAllChildElements();
+        sceneData[sceneNumber]->deleteAllChildElements();
     }
 }
 
@@ -1603,35 +1603,35 @@ void AppDocumentState::removeUneededAudioFiles()
         bool shouldCleanUp = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Clean Up Project", "This command will go through the current project's Audio Files directory and delete any files which aren't currently being used. Over time this will prevent an excessive build-up of redundant data. It was also reset any unused mode settings to default values. Please note that you can not undo this command!");
         if (shouldCleanUp == true)
         {
-            //this function must check all the settings of all the presetData elements,
+            //this function must check all the settings of all the sceneData elements,
             //and delete any audio files in the project Audio Files directory that aren't included in these settings.
             //need to move all the currently used audio files somewhere, delete any that are left, and move the used ones back
             //Is is the best way to do it?
             
-            //first must save the current settings into the current preset to prevent missing audio files errors once the clean up has been completed.
+            //first must save the current settings into the current scene to prevent missing audio files errors once the clean up has been completed.
             //For example, if you imported in a new audio file and then instantly cleaned up without saving the new settings it might delete the current
-            //audio file as a reference to it wouldn't be found in any of the presetData elements, so when the clean up is complete the audio file would 
+            //audio file as a reference to it wouldn't be found in any of the sceneData elements, so when the clean up is complete the audio file would 
             //now be missing.
-            //instead of saving, you could load up the preset data for the current preset which would delete the current settings that havent been saved. What would be more natural?
-            saveToPreset(currentlySelectedPreset);
+            //instead of saving, you could load up the scene data for the current scene which would delete the current settings that havent been saved. What would be more natural?
+            saveToScene(currentlySelectedScene);
             
             File tempAudioDirectory = File::getCurrentWorkingDirectory().getParentDirectory().getFullPathName() + File::separatorString + "tempDir";
             tempAudioDirectory.createDirectory();
             
-            //search through all presets
-            for (int presetNumber = 0; presetNumber <= NO_OF_PRESETS-1; presetNumber++)
+            //search through all scenes
+            for (int sceneNumber = 0; sceneNumber <= NO_OF_SCENES-1; sceneNumber++)
             {
                 
-                if (presetData[presetNumber]->getNumChildElements() > 0) //if the preset XmlElement contains data
+                if (sceneData[sceneNumber]->getNumChildElements() > 0) //if the scene XmlElement contains data
                 {
                     
                     //search through all pads looking for audio files 
                     for (int i = 0; i <= 47; i++)
                     {
                         //look for sampler audio files
-                        if (presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
+                        if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
                         {
-                            String originalFile(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
+                            String originalFile(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
                             
                             if (originalFile != String::empty) //if there is 'something'
                             {
@@ -1679,11 +1679,11 @@ void AppDocumentState::removeUneededAudioFiles()
                             }
                         }
                         //look for sequencer audio files
-                        else if (presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 3)
+                        else if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 3)
                         {
                             for (int row = 0; row <= NO_OF_ROWS-1; row++)
                             {
-                                String originalFile(presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row)));
+                                String originalFile(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row)));
                                 
                                 if (originalFile != String::empty) //if there is 'something'
                                 {
@@ -1778,22 +1778,22 @@ void AppDocumentState::importAudioFiles()
     //this function is called if copyExternalFilesSwitch is set to on/true
     //==============================================================================================
     
-    saveToPreset(currentlySelectedPreset);
+    saveToScene(currentlySelectedScene);
     
-    //search through all presets
-    for (int presetNumber = 0; presetNumber <= NO_OF_PRESETS-1; presetNumber++)
+    //search through all scenes
+    for (int sceneNumber = 0; sceneNumber <= NO_OF_SCENES-1; sceneNumber++)
     {
-        if (presetData[presetNumber]->getNumChildElements() > 0) //if the preset XmlElement contains data
+        if (sceneData[sceneNumber]->getNumChildElements() > 0) //if the scene XmlElement contains data
         {
             //search through all pads looking for audio files 
             for (int i = 0; i <= 47; i++)
             {
                 //look for sampler audio files
-                if (presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
+                if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
                 {
                     File currentFile;
                     File newFile;
-                    String fileName = presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath");
+                    String fileName = sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath");
                     
                     if (fileName != String::empty)
                     {
@@ -1851,21 +1851,21 @@ void AppDocumentState::importAudioFiles()
                         }
                         
                         
-                        presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("samplerAudioFilePath", newFile.getFileName());
+                        sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("samplerAudioFilePath", newFile.getFileName());
                         
-                        if (presetNumber == currentlySelectedPreset)
+                        if (sceneNumber == currentlySelectedScene)
                             AppSettings::Instance()->padSettings[i]->setSamplerAudioFilePath(newFile);
                     }
                 }
                 
                 //look for sequencer audio files
-                else if (presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 3)
+                else if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 3)
                 {
                     for (int row = 0; row <= NO_OF_ROWS-1; row++)
                     {
                         File currentFile;
                         File newFile;
-                        String fileName = presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row));
+                        String fileName = sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row));
                         
                         if (fileName != String::empty)
                         {
@@ -1923,9 +1923,9 @@ void AppDocumentState::importAudioFiles()
                             }
                             
                             
-                            presetData[presetNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("sequencerSamplesAudioFilePath"+String(row), newFile.getFileName());
+                            sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("sequencerSamplesAudioFilePath"+String(row), newFile.getFileName());
                             
-                            if (presetNumber == currentlySelectedPreset)
+                            if (sceneNumber == currentlySelectedScene)
                                 AppSettings::Instance()->padSettings[i]->setSequencerSamplesAudioFilePath(newFile, row);
                         }
                     }
@@ -1934,7 +1934,7 @@ void AppDocumentState::importAudioFiles()
         }
     }
     
-    //loadFromPreset(currentlySelectedPreset);
+    //loadFromScene(currentlySelectedScene);
 }
 
 void AppDocumentState::registerRecentFile (const File& file)
@@ -1945,10 +1945,10 @@ void AppDocumentState::registerRecentFile (const File& file)
 }
 
 
-void AppDocumentState::setCurrentlySelectedPreset(int value)
+void AppDocumentState::setCurrentlySelectedScene(int value)
 {
-    currentlySelectedPreset = value;
-    std::cout << "Currently Selected Preset = " << currentlySelectedPreset << std::endl;
+    currentlySelectedScene = value;
+    std::cout << "Currently Selected Scene = " << currentlySelectedScene << std::endl;
 }
 
 
@@ -1956,11 +1956,11 @@ int AppDocumentState::getGuiUpdateFlag()
 {
     return guiUpdateFlag;
 }
-int AppDocumentState::getPresetToUpdate()
+int AppDocumentState::getSceneToUpdate()
 {
-    return presetToUpdate;
+    return sceneToUpdate;
 }
-int AppDocumentState::getPresetStatus()
+int AppDocumentState::getSceneStatus()
 {
-    return presetStatus;
+    return sceneStatus;
 }

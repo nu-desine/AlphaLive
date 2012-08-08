@@ -87,8 +87,8 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         menu.addCommandItem(commandManager, CommandIDs::ProjectSettings);
         menu.addCommandItem(commandManager, CommandIDs::CleanUpProject);
         menu.addSeparator();
-        menu.addCommandItem(commandManager, CommandIDs::LoadPreset);
-        menu.addCommandItem(commandManager, CommandIDs::SavePreset);
+        menu.addCommandItem(commandManager, CommandIDs::LoadScene);
+        menu.addCommandItem(commandManager, CommandIDs::SaveScene);
         #if !JUCE_MAC // add the prefrences and quit to the file menu on non-Mac platforms
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::Preferences);
@@ -101,8 +101,8 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         menu.addCommandItem (commandManager, CommandIDs::CopyPadSettings);
         menu.addCommandItem (commandManager, CommandIDs::PastePadSettings);
         menu.addSeparator();
-        menu.addCommandItem(commandManager, CommandIDs::ClearPreset);
-        menu.addCommandItem(commandManager, CommandIDs::ClearAllPresets);
+        menu.addCommandItem(commandManager, CommandIDs::ClearScene);
+        menu.addCommandItem(commandManager, CommandIDs::ClearAllScenes);
     }
     else if (topLevelMenuIndex == 2) //Options
     {

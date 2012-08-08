@@ -1,5 +1,5 @@
 //
-//  PresetValues.h
+//  SceneValues.h
 //  AlphaSoft
 //
 //  Created by Liam Meredith-Lacey on 18/11/2011.
@@ -20,4 +20,4 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#define NO_OF_PRESETS 20
+#define NO_OF_SCENES 20

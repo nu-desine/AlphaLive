@@ -632,7 +632,7 @@ void GuiCirclePianoForScales::mouseDown (const MouseEvent &e)
     
     if (midiNoteLabel->isMouseOver(true))
     {
-        //right click to bring up the popup menu to allow single presets to be loaded and saved to disk
+        //right click to bring up the popup menu to allow single scenes to be loaded and saved to disk
         if (e.mods.isPopupMenu() == true)
         {
             

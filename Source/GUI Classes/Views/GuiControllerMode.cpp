@@ -22,7 +22,7 @@
 
 #include "GuiControllerMode.h"
 #include "GlobalValues.h"
-#include "../Custom Components/Scene/PresetValues.h"
+#include "../Custom Components/Scene/SceneValues.h"
 #include "../../File and Settings/AppSettings.h"
 #include "MainComponent.h"
 
@@ -44,18 +44,18 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
     controlMenu->addListener(this);
     controlMenu->addMouseListener(this, true);
     controlMenu->addItem("None Selected...", 1);
-    controlMenu->addItem("Preset Switcher", 2);
+    controlMenu->addItem("Scene Switcher", 2);
     controlMenu->addItem("MIDI Program Change", 4);
-    controlMenu->addItem("Preset & MIDI Program Switcher", 5);
+    controlMenu->addItem("Scene & MIDI Program Switcher", 5);
     controlMenu->addItem("OSC Ouput", 3);
     controlMenu->setSelectedId(1, true);
     
-    addAndMakeVisible(presetNumberSlider = new AlphaSlider());
-    presetNumberSlider->setRange(1, NO_OF_PRESETS, 1);
-    presetNumberSlider->addListener(this);
-    presetNumberSlider->setValue(1, false);
-    presetNumberSlider->addMouseListener(this, true);
-    presetNumberSlider->setVisible(false);
+    addAndMakeVisible(sceneNumberSlider = new AlphaSlider());
+    sceneNumberSlider->setRange(1, NO_OF_SCENES, 1);
+    sceneNumberSlider->addListener(this);
+    sceneNumberSlider->setValue(1, false);
+    sceneNumberSlider->addMouseListener(this, true);
+    sceneNumberSlider->setVisible(false);
     
     //for some reason using a textEditor was creating gui problems, so using a label instead now
     addAndMakeVisible(oscIpAddressEditor = new Label());
@@ -112,7 +112,7 @@ void GuiControllerMode::resized()
     controlMenu->setBounds(RIGHT_CIRCLE_X, 445, COMPONENT_W, COMPONENT_H);
     
     //only one of these (or a group of these) will be displayed at any time depending on the value of control menu
-    presetNumberSlider->setBounds(RIGHT_CIRCLE_X, 480, COMPONENT_W, COMPONENT_H);
+    sceneNumberSlider->setBounds(RIGHT_CIRCLE_X, 480, COMPONENT_W, COMPONENT_H);
 
     oscIpAddressEditor->setBounds(RIGHT_CIRCLE_X, 480, COMPONENT_W, COMPONENT_H);
     oscPortNumberSlider-> setBounds(RIGHT_CIRCLE_X, 505, COMPONENT_W, COMPONENT_H);
@@ -154,16 +154,16 @@ void GuiControllerMode::comboBoxChanged (ComboBox* comboBox)
         //==============set what other components are visible===============
         
         //first set other componets invisble (saves having to set the visibility of each one in each next if statement)... 
-        presetNumberSlider->setVisible(false);
+        sceneNumberSlider->setVisible(false);
         oscIpAddressEditor->setVisible(false);
         oscPortNumberSlider->setVisible(false);
         midiProgramChangeNumberSlider->setVisible(false);
         midiProgramChangeChannelSlider->setVisible(false);
         
         //...and then set the right one visible
-        if (controlMenu->getSelectedId() == 2) //preset switcher control selected
+        if (controlMenu->getSelectedId() == 2) //scene switcher control selected
         {
-            presetNumberSlider->setVisible(true);
+            sceneNumberSlider->setVisible(true);
         }
         else if(controlMenu->getSelectedId() == 3) //OSC output control selected
         {
@@ -175,9 +175,9 @@ void GuiControllerMode::comboBoxChanged (ComboBox* comboBox)
             midiProgramChangeNumberSlider->setVisible(true);
             midiProgramChangeChannelSlider->setVisible(true);
         }
-        else if(controlMenu->getSelectedId() == 5) //Dual Preset/MIDI program change
+        else if(controlMenu->getSelectedId() == 5) //Dual Scene/MIDI program change
         {
-            presetNumberSlider->setVisible(true);
+            sceneNumberSlider->setVisible(true);
             midiProgramChangeNumberSlider->setVisible(true);
             midiProgramChangeChannelSlider->setVisible(true);
         }
@@ -194,12 +194,12 @@ void GuiControllerMode::sliderValueChanged (Slider* slider)
 {
     
     //channel slider
-    if (slider == presetNumberSlider)
+    if (slider == sceneNumberSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setControllerPresetNumber(presetNumberSlider->getValue());
+            PAD_SETTINGS->setControllerSceneNumber(sceneNumberSlider->getValue());
         }
     }
     
@@ -291,7 +291,7 @@ void GuiControllerMode::updateDisplay()
     {
         int padNum = selectedPads[0];
         controlMenu->setSelectedId(PAD_SETTINGS->getControllerControl(), true);
-        presetNumberSlider->setValue(PAD_SETTINGS->getControllerPresentNumber(), false);
+        sceneNumberSlider->setValue(PAD_SETTINGS->getControllerPresentNumber(), false);
         oscIpAddressEditor->setText(PAD_SETTINGS->getControllerOscIpAddress(), false);
         oscPortNumberSlider->setValue(PAD_SETTINGS->getControllerOscPort(), false);
         midiProgramChangeNumberSlider->setValue(PAD_SETTINGS->getControllerMidiProgramChangeNumber(), false);
@@ -302,7 +302,7 @@ void GuiControllerMode::updateDisplay()
     else if(MULTI_PADS)
     {
         controlMenu->setSelectedId(1, true);
-        presetNumberSlider->setValue(1, false);
+        sceneNumberSlider->setValue(1, false);
         oscIpAddressEditor->setText("127.0.0.1", false);
         oscPortNumberSlider->setValue(5004, false);
         midiProgramChangeNumberSlider->setValue(1, false);
@@ -312,16 +312,16 @@ void GuiControllerMode::updateDisplay()
 
     // ============show/hide relevent components==============
     //first set other componets invisble (saves having to set the visibility of each one in each next if statement)... 
-    presetNumberSlider->setVisible(false);
+    sceneNumberSlider->setVisible(false);
     oscIpAddressEditor->setVisible(false);
     oscPortNumberSlider->setVisible(false);
     midiProgramChangeNumberSlider->setVisible(false);
     midiProgramChangeChannelSlider->setVisible(false);
     
     //...and then set the right one visible
-    if (controlMenu->getSelectedId() == 2) //preset switcher control selected
+    if (controlMenu->getSelectedId() == 2) //scene switcher control selected
     {
-        presetNumberSlider->setVisible(true);
+        sceneNumberSlider->setVisible(true);
     }
     else if(controlMenu->getSelectedId() == 3) //OSC output control selected
     {
@@ -333,9 +333,9 @@ void GuiControllerMode::updateDisplay()
         midiProgramChangeNumberSlider->setVisible(true);
         midiProgramChangeChannelSlider->setVisible(true);
     }
-    else if(controlMenu->getSelectedId() == 5) //Dual Preset/MIDI program change
+    else if(controlMenu->getSelectedId() == 5) //Dual Scene/MIDI program change
     {
-        presetNumberSlider->setVisible(true);
+        sceneNumberSlider->setVisible(true);
         midiProgramChangeNumberSlider->setVisible(true);
         midiProgramChangeChannelSlider->setVisible(true);
     }
@@ -351,9 +351,9 @@ void GuiControllerMode::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText("Control Drop-Down Menu. Sets and displays the control for the selected pad/pads.");
     }
-    else if (presetNumberSlider->isMouseOver(true))
+    else if (sceneNumberSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Preset Number Selector. Sets and displays the preset number for the selected pad/pads. When the pad is pressed it will cause settings to be loaded from the selected preset.");
+        mainComponentRef.setInfoTextBoxText("Scene Number Selector. Sets and displays the scene number for the selected pad/pads. When the pad is pressed it will cause settings to be loaded from the selected scene.");
     }
     else if (oscIpAddressEditor->isMouseOver(true))
     {

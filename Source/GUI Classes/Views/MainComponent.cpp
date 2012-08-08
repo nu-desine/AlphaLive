@@ -172,12 +172,12 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     saveAsButton->setCommandToTrigger(commandManager, CommandIDs::SaveAs, false);
     saveAsButton->addMouseListener(this, false);
     
-    addAndMakeVisible(presetComponent = new PresetComponent(appDocumentStateRef, *alphaLiveEngineRef.getModeController())); //pass in appDocumentStateRef so that appDocumentStateRef function calls can be made within presetComponent
-    presetComponent->addMouseListener(this, true);
+    addAndMakeVisible(sceneComponent = new SceneComponent(appDocumentStateRef, *alphaLiveEngineRef.getModeController())); //pass in appDocumentStateRef so that appDocumentStateRef function calls can be made within sceneComponent
+    sceneComponent->addMouseListener(this, true);
     
-    addAndMakeVisible(clearPresetsButton = new TextButton("Clear All"));
-    clearPresetsButton->setCommandToTrigger(commandManager, CommandIDs::ClearAllPresets, false);
-    clearPresetsButton->addMouseListener(this, false);
+    addAndMakeVisible(clearScenesButton = new TextButton("Clear All"));
+    clearScenesButton->setCommandToTrigger(commandManager, CommandIDs::ClearAllScenes, false);
+    clearScenesButton->addMouseListener(this, false);
     
     addAndMakeVisible(cleanUpProjectButton = new TextButton("Clean Up Project"));
     cleanUpProjectButton->setCommandToTrigger(commandManager, CommandIDs::CleanUpProject, false);
@@ -341,8 +341,8 @@ void MainComponent::resized()
     saveButton->setBounds(5, 30, 100, 20);
     saveAsButton->setBounds(5, 55, 100, 20);
     
-    presetComponent->setBounds(110, 5, 80, 60);
-    clearPresetsButton->setBounds(125, 66, 50, 15);
+    sceneComponent->setBounds(110, 5, 80, 60);
+    clearScenesButton->setBounds(125, 66, 50, 15);
     
     cleanUpProjectButton->setBounds(200, 5, 100, 20);
 
@@ -394,7 +394,7 @@ void MainComponent::paint(juce::Graphics &g)
 }
 
 
-//observers update function, called everytime settings are loaded from file or a preset to update the GUI to the correct display
+//observers update function, called everytime settings are loaded from file or a scene to update the GUI to the correct display
 bool MainComponent::update(const Subject& theChangedSubject)
 {
     if (&theChangedSubject == &appDocumentStateRef)
@@ -424,10 +424,10 @@ bool MainComponent::update(const Subject& theChangedSubject)
         }
         
         
-        //update presetComponent display
+        //update sceneComponent display
         else if (appDocumentStateRef.getGuiUpdateFlag() == 1)
         {
-            presetComponent->setSlotStatus(appDocumentStateRef.getPresetToUpdate(), appDocumentStateRef.getPresetStatus());
+            sceneComponent->setSlotStatus(appDocumentStateRef.getSceneToUpdate(), appDocumentStateRef.getSceneStatus());
         }
     }
     
@@ -606,7 +606,7 @@ void MainComponent::buttonClicked(Button *button)
     }
     
     //==============================================================================
-    //===PRESETS, LOADING & SAVING - now handled by the command manager below!======
+    //===SCENES, LOADING & SAVING - now handled by the command manager below!======
     //==============================================================================
     
     //=================Now handled by the command manager======================
@@ -1049,27 +1049,27 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     }
     else if (e.eventComponent == loadButton)
     {
-        setInfoTextBoxText ("Load Performance. Allows a set of presets to be loaded into the application.");
+        setInfoTextBoxText ("Load Performance. Allows a set of scenes to be loaded into the application.");
     }
     else if (e.eventComponent == saveButton)
     {
-        setInfoTextBoxText ("Save Performance. Allows a set of presets to be saved to the computer.");
+        setInfoTextBoxText ("Save Performance. Allows a set of scenes to be saved to the computer.");
     }
     else if (e.eventComponent == saveAsButton)
     {
-        setInfoTextBoxText ("Save Performance As. Allows a set of presets to be saved to the computer with a given name.");
+        setInfoTextBoxText ("Save Performance As. Allows a set of scenes to be saved to the computer with a given name.");
     }
     else if (e.eventComponent == cleanUpProjectButton)
     {
         setInfoTextBoxText ("Clean-up project. Deletes any unneeded audio files from the current project's 'Audio Files' directory. Use this command regularly to prevent an excessive build-up of redundant data.");
     }
-        else if (presetComponent->isMouseOver(true))
+        else if (sceneComponent->isMouseOver(true))
     {
-        setInfoTextBoxText ("Presets. Allows application settings to be saved into indvidual presets that can then be saved to disk as a group. Shift-Click a slot to save a preset to the object, or click to load a preset from the object. Right-click to save and load single presets.");
+        setInfoTextBoxText ("Scenes. Allows application settings to be saved into indvidual scenes that can then be saved to disk as a group. Shift-Click a slot to save a scene to the object, or click to load a scene from the object. Right-click to save and load single scenes.");
     }
-    else if (e.eventComponent == clearPresetsButton)
+    else if (e.eventComponent == clearScenesButton)
     {
-        setInfoTextBoxText ("Clear Presets. Allows all preset slots in the preset object to be cleared.");
+        setInfoTextBoxText ("Clear Scenes. Allows all scene slots in the scene object to be cleared.");
     }
     else if (tempoSlider->isMouseOver(true)==true)
     {
@@ -1177,13 +1177,13 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::About,
         CommandIDs::Preferences,
         CommandIDs::ProjectSettings,
-        CommandIDs::SavePreset,
-        CommandIDs::LoadPreset,
+        CommandIDs::SaveScene,
+        CommandIDs::LoadScene,
         CommandIDs::DisableHelpBox,
         CommandIDs::CopyPadSettings,
         CommandIDs::PastePadSettings,
-        CommandIDs::ClearPreset,
-        CommandIDs::ClearAllPresets,
+        CommandIDs::ClearScene,
+        CommandIDs::ClearAllScenes,
         CommandIDs::KillSwitch,
         CommandIDs::StartStopClock
     };
@@ -1223,16 +1223,16 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
 						CommandCategories::FileCommands, 0);
         result.defaultKeypresses.add (KeyPress ('p', cmd|alt, 0));
     }
-    else if (commandID == CommandIDs::SavePreset)
+    else if (commandID == CommandIDs::SaveScene)
     {
-        result.setInfo (translate("Export Preset..."),
-						"Saves the currently selected preset settings to file.",
+        result.setInfo (translate("Export Scene..."),
+						"Saves the currently selected scene settings to file.",
 						CommandCategories::FileCommands, 0);
     }
-    else if(commandID == CommandIDs::LoadPreset)
+    else if(commandID == CommandIDs::LoadScene)
 	{
-		result.setInfo (translate("Import Preset..."),
-						"Loads an individual preset settings into the currently selected preset.",
+		result.setInfo (translate("Import Scene..."),
+						"Loads an individual scene settings into the currently selected scene.",
 						CommandCategories::FileCommands, 0);
 	}
     else if(commandID == CommandIDs::DisableHelpBox)
@@ -1260,17 +1260,17 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
         result.setActive(SINGLE_PAD);
 	}
     
-    else if (commandID == CommandIDs::ClearPreset)
+    else if (commandID == CommandIDs::ClearScene)
     {
-		result.setInfo (translate("Clear Preset"),
-						"Clears and removes the currently selected preset.",
+		result.setInfo (translate("Clear Scene"),
+						"Clears and removes the currently selected scene.",
 						CommandCategories::EditCommands, 0);
 		
 	}
-    else if (commandID == CommandIDs::ClearAllPresets)
+    else if (commandID == CommandIDs::ClearAllScenes)
     {
-		result.setInfo (translate("Clear All Presets"),
-						"Clears and removes all presets.",
+		result.setInfo (translate("Clear All Scenes"),
+						"Clears and removes all scenes.",
 						CommandCategories::EditCommands, 0);
 	}
     
@@ -1333,14 +1333,14 @@ bool MainComponent::perform (const InvocationInfo& info)
         projectSettingsComponent->grabKeyboardFocus();
 	}
     
-    else if(info.commandID == CommandIDs::SavePreset)
+    else if(info.commandID == CommandIDs::SaveScene)
 	{
-		presetComponent->getSelectedPresetSlot()->savePreset();
+		sceneComponent->getSelectedSceneSlot()->saveScene();
 	}
     
-    else if(info.commandID == CommandIDs::LoadPreset)
+    else if(info.commandID == CommandIDs::LoadScene)
 	{
-		presetComponent->getSelectedPresetSlot()->loadPreset();
+		sceneComponent->getSelectedSceneSlot()->loadScene();
 	}
     
     else if(info.commandID == CommandIDs::DisableHelpBox)
@@ -1361,12 +1361,12 @@ bool MainComponent::perform (const InvocationInfo& info)
 		guiPadLayout->pastePadSettings();
 	}
     
-    else if(info.commandID == CommandIDs::ClearPreset)
+    else if(info.commandID == CommandIDs::ClearScene)
 	{
-		presetComponent->getSelectedPresetSlot()->clearPreset();
+		sceneComponent->getSelectedSceneSlot()->clearScene();
 	}
     
-    else if(info.commandID == CommandIDs::ClearAllPresets)
+    else if(info.commandID == CommandIDs::ClearAllScenes)
 	{
 		bool userSelection;
         userSelection = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Are you sure?", "You cannot undo this command", "Ok", "Cancel");
@@ -1374,14 +1374,14 @@ bool MainComponent::perform (const InvocationInfo& info)
         if (userSelection == true)
         {
             //reset/clear xml objects
-            //DONT CLEAR PRESET 0 AS THIS ALWAYS NEED TO BE FILLED
+            //DONT CLEAR SCENE 0 AS THIS ALWAYS NEED TO BE FILLED
             for (int i = 1; i <= 9; i++)
             {
-                appDocumentStateRef.clearPreset(i);
+                appDocumentStateRef.clearScene(i);
             }
             
             //reset/clear gui
-            presetComponent->clearAll();
+            sceneComponent->clearAll();
         }
 	}
     

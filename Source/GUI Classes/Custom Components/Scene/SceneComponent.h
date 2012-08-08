@@ -1,5 +1,5 @@
 //
-//  PresetComponent.h
+//  SceneComponent.h
 //  AlphaSoft
 //
 //  Created by Liam Meredith-Lacey on 31/10/2011.
@@ -20,34 +20,34 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef H_PRESETCOMPONENT
-#define H_PRESETCOMPONENT
+#ifndef H_SCENECOMPONENT
+#define H_SCENECOMPONENT
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "PresetSlot.h"
+#include "SceneSlot.h"
 #include "AppDocumentState.h"
-#include "PresetValues.h"
+#include "SceneValues.h"
 #include "ModeController.h"
 #include "AbstractSubjectAndObserver.h"
 
-class PresetComponent : public Component,
+class SceneComponent : public Component,
                         public Observer //so this class can observe ModeController
 {
 public:
-    PresetComponent(AppDocumentState &ref, ModeController &ref2);
-    ~PresetComponent();
+    SceneComponent(AppDocumentState &ref, ModeController &ref2);
+    ~SceneComponent();
     
     void resized();
     void paint (Graphics &g);
     
     void clearAll();
-    void slotClicked(PresetSlot *presetSlot);
+    void slotClicked(SceneSlot *sceneSlot);
     
-    int getSelectedPresetNumber();
-    void setSelectedPresetNumber(int value);
+    int getSelectedSceneNumber();
+    void setSelectedSceneNumber(int value);
     
     void setSlotStatus (int slotNumber, int statusValue);
-    void selectDefaultPreset();
+    void selectDefaultScene();
     
     //override the Observer virtual update function
     bool update(const Subject& theChangedSubject);
@@ -55,15 +55,15 @@ public:
     //void setCurrentlySelectedPad (Array<int> selectedPads_); //why did i have this here????!!!!
     void disableSaveAlertWindow();
     
-    //access by the preset slots to call the loadPresetToDisk and savePresetToDisk functions
+    //access by the scene slots to call the loadSceneToDisk and saveSceneToDisk functions
     AppDocumentState& getAppDocumentState();
     
-    PresetSlot* getSelectedPresetSlot();
+    SceneSlot* getSelectedSceneSlot();
     
 private:
     
-    PresetSlot *slot[NO_OF_PRESETS];
-    int selectedPresetNumber;
+    SceneSlot *slot[NO_OF_SCENES];
+    int selectedSceneNumber;
     
     AppDocumentState &appDocumentStateRef;
     

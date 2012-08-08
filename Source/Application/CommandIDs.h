@@ -33,11 +33,11 @@ namespace CommandIDs
     static const int ProjectSettings        = 0x20004;
     static const int CleanUpProject         = 0x20005;
     
-    static const int SavePreset             = 0x20006;
-    static const int LoadPreset             = 0x20007;
+    static const int SaveScene             = 0x20006;
+    static const int LoadScene             = 0x20007;
     
-    static const int ClearPreset            = 0x20008;
-    static const int ClearAllPresets        = 0x20009;
+    static const int ClearScene            = 0x20008;
+    static const int ClearAllScenes        = 0x20009;
     
     static const int CopyPadSettings        = 0x20016; //use StandardApplicationCommandIDs here?
     static const int PastePadSettings       = 0x20017; //use StandardApplicationCommandIDs here?

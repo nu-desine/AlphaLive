@@ -33,7 +33,7 @@
 //NOTE: WHEN APPLYING SETTINGS INTO HERE FROM XML FILES (PROBABLY BY CALLING THE MUTATOR METHODS) SOMETIMES IT MIGHT TRY AND SET VALUES IN OBJECTS THAT DON'T EXIST.
 //IN THIS CASE IT MAY BE A GOOD IDEA TO PASS IN DATA FROM SAMPLER MODE AND SEQUENCE MODE TO KEEP THIS CLASS KNOWING AND UPDATED AT WHAT OBJECTS EXIST OR NOT, AND ONLY APPLY THE SETTINGS IF THEY EXIST (IF OBJECT[PAD] != NULL)
 //what settings should be saved into and loaded from xmls files? how should it handle the data on the pads that isn't need yet (e.g. the seq data if the pad is noe set to a sampler)?
-//don;t want unncessary data loaded up when switching between presets.
+//don;t want unncessary data loaded up when switching between scenes.
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "../Functionality Classes/Sampler Mode/ModeSampler.h"
@@ -324,7 +324,7 @@ public:
     //==================================================================
     //Controller Mode
     void setControllerControl (int value);
-    void setControllerPresetNumber (int value);
+    void setControllerSceneNumber (int value);
     void setControllerOscIpAddress (String value);
     void setControllerOscPort (int value);
     void setControllerMidiProgramChangeNumber (int value);
@@ -498,7 +498,7 @@ private:
     //==================================================================
     //Controller Mode
     int controllerControl; //type of control
-    int controllerPresetNumber; //if control is set to preset switcher, this selects the preset number
+    int controllerSceneNumber; //if control is set to scene switcher, this selects the scene number
     String controllerOscIpAddress;
     int controllerOscPort;
     int controllerMidiProgramChangeNumber;

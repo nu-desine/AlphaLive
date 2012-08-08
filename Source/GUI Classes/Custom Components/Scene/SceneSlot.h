@@ -1,5 +1,5 @@
 //
-//  PresetSlot.h
+//  SceneSlot.h
 //  AlphaSoft
 //
 //  Created by Liam Meredith-Lacey on 31/10/2011.
@@ -19,21 +19,21 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-#ifndef H_PRESETSLOT
-#define H_PRESETSLOT
+#ifndef H_SCENESLOT
+#define H_SCENESLOT
 
-//represets a single slot/hole in the preset component.
+//represets a single slot/hole in the scene component.
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-class PresetComponent;
+class SceneComponent;
 
-class PresetSlot :  public Component
+class SceneSlot :  public Component
                     
 {
 public:
-    PresetSlot(int slotNumber_, PresetComponent &ref);
-    ~PresetSlot();
+    SceneSlot(int slotNumber_, SceneComponent &ref);
+    ~SceneSlot();
     
     void mouseDown (const MouseEvent &e);
     void mouseEnter	(const MouseEvent & e);
@@ -45,9 +45,9 @@ public:
     void setStatus (int value);
     int getStatus();
     
-    void savePreset();
-    void loadPreset();
-    void clearPreset();
+    void saveScene();
+    void loadScene();
+    void clearScene();
     
 private:
     
@@ -64,7 +64,7 @@ private:
     int slotNumber;
     String slotNumberString;
     
-    PresetComponent &presetComponentRef;
+    SceneComponent &sceneComponentRef;
     
 };
 

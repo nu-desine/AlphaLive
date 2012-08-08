@@ -102,7 +102,7 @@ public:
     ModeSampler* getModeSampler(); //used by PadSettings to access the ModeSampler instance
     ModeSequencer* getModeSequencer();  //used by PadSettings to access the ModeSequencer instance
                                         //also used to set the SequencerGrid instance as an observer to ModeSequencer
-    ModeController* getModeController(); //used by PresetComponent to the PresetComponent as an observer to ModeController
+    ModeController* getModeController(); //used by SceneComponent to set the SceneComponent as an observer to ModeController
     
     void audioDeviceAboutToStart(AudioIODevice* device);
 	void audioDeviceStopped();

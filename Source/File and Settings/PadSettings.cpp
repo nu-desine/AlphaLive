@@ -198,7 +198,7 @@ PadSettings::PadSettings(int arrayIndex)
     
     //controller mode
     controllerControl = 1;
-    controllerPresetNumber = 1;
+    controllerSceneNumber = 1;
     controllerOscIpAddress = "127.0.0.1";
     controllerOscPort = 5004;
     controllerMidiProgramChangeNumber = 1;
@@ -232,13 +232,13 @@ void PadSettings::setPadNumber (int value)
 
 void PadSettings::resetData (int whatToReset)
 {
-    //this is going to be called when 'reset all' is clicked on the preset component
-    //and when the 'delete preset' option is chosen for a single preset
+    //this is going to be called when 'reset all' is clicked on the scene component
+    //and when the 'delete scene' option is chosen for a single scene
     
     /*
      whatToReset is a flag variable that lets this the program know exactly what data needs to be reset.
      
-     If this is called from the preset component 'reset all' button or the 'delete preset' drop down item,
+     If this is called from the scene component 'reset all' button or the 'delete scene' drop down item,
      Everything must be reset including the mode.
      If this is called from the 'clean up project' button or from when a new project is loaded,
      only the data from the modes which this pad isn't set to needs to be reset back to the default values.
@@ -341,7 +341,7 @@ void PadSettings::resetData (int whatToReset)
     if (whatToReset != 4)
     {
         setControllerControl(1);
-        setControllerPresetNumber(1);
+        setControllerSceneNumber(1);
         setControllerOscIpAddress("127.0.0.1");
         setControllerOscPort(5004);
         setControllerMidiProgramChangeNumber(1);
@@ -1892,9 +1892,9 @@ void PadSettings::setControllerControl (int value)
 {
     controllerControl = value;
 }
-void PadSettings::setControllerPresetNumber (int value)
+void PadSettings::setControllerSceneNumber (int value)
 {
-    controllerPresetNumber = value;
+    controllerSceneNumber = value;
 }
 void PadSettings::setControllerOscIpAddress (String value)
 {
@@ -1921,7 +1921,7 @@ int PadSettings::getControllerControl()
 }
 int PadSettings::getControllerPresentNumber()
 {
-    return controllerPresetNumber;
+    return controllerSceneNumber;
 }
 String PadSettings::getControllerOscIpAddress()
 {

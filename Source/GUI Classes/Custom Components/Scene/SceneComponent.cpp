@@ -1,5 +1,5 @@
 //
-//  PresetComponent.cpp
+//  SceneComponent.cpp
 //  AlphaSoft
 //
 //  Created by Liam Meredith-Lacey on 31/10/2011.
@@ -20,13 +20,13 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "PresetComponent.h"
+#include "SceneComponent.h"
 #include "AppSettings.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 
 
-PresetComponent::PresetComponent(AppDocumentState &ref, ModeController &ref2)
+SceneComponent::SceneComponent(AppDocumentState &ref, ModeController &ref2)
                                 :   appDocumentStateRef(ref),
                                     mSubject(ref2)
 {
@@ -35,20 +35,20 @@ PresetComponent::PresetComponent(AppDocumentState &ref, ModeController &ref2)
     
     shouldShowSaveWindow = false; //to prevent the 'saved'alertwindow to be shown on start up and in other situtions
     
-    for (int i = 0; i <= NO_OF_PRESETS-1; i++)
+    for (int i = 0; i <= NO_OF_SCENES-1; i++)
     {
-        addAndMakeVisible(slot[i] = new PresetSlot(i, *this));
+        addAndMakeVisible(slot[i] = new SceneSlot(i, *this));
     }
     
-    //by default first preset slot (preset 0) should be filled with default settings and selected
-    //the below code basically saves the default empty settings to the first preset when you launch the app
-    selectedPresetNumber = 0;
+    //by default first scene slot (scene 0) should be filled with default settings and selected
+    //the below code basically saves the default empty settings to the first scene when you launch the app
+    selectedSceneNumber = 0;
     slot[0]->setStatus(1);
     slotClicked(slot[0]);
     slot[0]->setStatus(2);
 }
 
-PresetComponent::~PresetComponent()
+SceneComponent::~SceneComponent()
 {
     deleteAllChildren();
     
@@ -56,10 +56,10 @@ PresetComponent::~PresetComponent()
     mSubject.detach(this);
 }
 
-void PresetComponent::resized()
+void SceneComponent::resized()
 {
     //draw slots (4 rows of 5)
-    for (int i = 0, col = 2, row = 2, counter = 0; i <= NO_OF_PRESETS-1; i++)
+    for (int i = 0, col = 2, row = 2, counter = 0; i <= NO_OF_SCENES-1; i++)
     {
         slot[i]->setBounds(col, row, (getWidth()-4)/5, (getHeight()-4)/4);
         col += (getWidth()-4)/5;
@@ -75,7 +75,7 @@ void PresetComponent::resized()
     }  
 }
 
-void PresetComponent::paint (Graphics &g)
+void SceneComponent::paint (Graphics &g)
 {
     //draw background
     //g.setColour(Colours::darkgrey);
@@ -84,14 +84,14 @@ void PresetComponent::paint (Graphics &g)
     g.fillRoundedRectangle(0, 0, getWidth(), getHeight(), 5.0);
 }
 
-void PresetComponent::clearAll()
+void SceneComponent::clearAll()
 {
-    //DONT CLEAR PRESET 0 AS IT SHOULD ALWAYS BE FILLED
-    for (int i = 1; i <= NO_OF_PRESETS-1; i++)
+    //DONT CLEAR SCENE 0 AS IT SHOULD ALWAYS BE FILLED
+    for (int i = 1; i <= NO_OF_SCENES-1; i++)
     {
-        //clear preset data
-        appDocumentStateRef.clearPreset(i);
-        //clear preset slot GUI
+        //clear scene data
+        appDocumentStateRef.clearScene(i);
+        //clear scene slot GUI
         slot[i]->setStatus(0);
     }
     
@@ -119,35 +119,35 @@ void PresetComponent::clearAll()
 }
 
 
-//called whenever a preset slot is clicked on
-void PresetComponent::slotClicked(PresetSlot *presetSlot)
+//called whenever a scene slot is clicked on
+void SceneComponent::slotClicked(SceneSlot *sceneSlot)
 {
     //find which slot was clicked on
-    for (int i = 0; i <= NO_OF_PRESETS-1; i++)
+    for (int i = 0; i <= NO_OF_SCENES-1; i++)
     {
-        if (presetSlot == slot[i])
+        if (sceneSlot == slot[i])
         {
-            //set the selected preset number
-            selectedPresetNumber = i;
+            //set the selected scene number
+            selectedSceneNumber = i;
             
-            appDocumentStateRef.setCurrentlySelectedPreset(i);
+            appDocumentStateRef.setCurrentlySelectedScene(i);
             
             
             //get status of slot clicked
-            int status = presetSlot->getStatus();
+            int status = sceneSlot->getStatus();
             
-            //--- SAVE DATA T0 PRESET----
+            //--- SAVE DATA T0 SCENE----
             if (status == 1)
             {
                 //save current app data
-                appDocumentStateRef.saveToPreset(i);
+                appDocumentStateRef.saveToScene(i);
                 
-                std::cout << "Current settings have been saved into preset " + String(i) << std::endl;
+                std::cout << "Current settings have been saved into scene " + String(i) << std::endl;
                 
                 //de-select any other slecected slots
-                for (int j = 0; j <= NO_OF_PRESETS-1; j++)
+                for (int j = 0; j <= NO_OF_SCENES-1; j++)
                 {
-                    if (slot[j] != presetSlot && slot[j]->getStatus() == 2) //if slot doesn't equal clicked slot, and slot's status = 2 (selected)
+                    if (slot[j] != sceneSlot && slot[j]->getStatus() == 2) //if slot doesn't equal clicked slot, and slot's status = 2 (selected)
                     {
                         slot[j]->setStatus(1); //set status to filled but not sleceted
                     }
@@ -155,24 +155,24 @@ void PresetComponent::slotClicked(PresetSlot *presetSlot)
                 
                 if (shouldShowSaveWindow == true)
                 {
-                AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Saved!", "The current settings have been saved to preset " + String(i+1));
+                AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Saved!", "The current settings have been saved to scene " + String(i+1));
                 }
                 
                 shouldShowSaveWindow = true; 
             }
             
-            //--- LOAD UP PRESET DATA ----
+            //--- LOAD UP SCENE DATA ----
             else if (status == 2) //if clicked on a filled slot
             {
                 //save current app data
-                appDocumentStateRef.loadFromPreset(i); //or should the 'loading' be done from somewhere else?
+                appDocumentStateRef.loadFromScene(i); //or should the 'loading' be done from somewhere else?
                 
-                std::cout << "Settings have been loaded from preset " + String(i) << std::endl;
+                std::cout << "Settings have been loaded from scene " + String(i) << std::endl;
                 
                 //de-select any other slecected slots
-                for (int i = 0; i <= NO_OF_PRESETS-1; i++)
+                for (int i = 0; i <= NO_OF_SCENES-1; i++)
                 {
-                    if (slot[i] != presetSlot && slot[i]->getStatus() == 2) //if slot doesn't equal clicked slot, and slot's status = 2 (selected)
+                    if (slot[i] != sceneSlot && slot[i]->getStatus() == 2) //if slot doesn't equal clicked slot, and slot's status = 2 (selected)
                     {
                         slot[i]->setStatus(1); //set status to filled but not sleceted
                     }
@@ -183,19 +183,19 @@ void PresetComponent::slotClicked(PresetSlot *presetSlot)
 }
 
 
-int PresetComponent::getSelectedPresetNumber()
+int SceneComponent::getSelectedSceneNumber()
 {
-    return selectedPresetNumber;
+    return selectedSceneNumber;
 }
 
 
-void PresetComponent::setSlotStatus (int slotNumber, int statusValue)
+void SceneComponent::setSlotStatus (int slotNumber, int statusValue)
 {
     slot[slotNumber]->setStatus(statusValue);
 }
 
 
-void PresetComponent::selectDefaultPreset()
+void SceneComponent::selectDefaultScene()
 {
     slot[0]->setStatus(2);
     slotClicked(slot[0]); //'clicked' with a status of '2' will load the data
@@ -203,17 +203,17 @@ void PresetComponent::selectDefaultPreset()
 }
 
 
-//observers update function, called everytime a pad set to the controller mode asks to load up preset settings
-bool PresetComponent::update(const Subject& theChangedSubject)
+//observers update function, called everytime a pad set to the controller mode asks to load up scene settings
+bool SceneComponent::update(const Subject& theChangedSubject)
 {
     if (&theChangedSubject == &mSubject)
     {
-        std::cout << "Attempting to change preset!\n";
+        std::cout << "Attempting to change scene!\n";
         
         int presNumber = AppSettings::Instance()->padSettings[mSubject.getPadNumber()]->getControllerPresentNumber()-1;
         
-        //change currently selected preset
-        if (slot[presNumber]->getStatus() != 0) //if the preset slot isn't empty
+        //change currently selected scene
+        if (slot[presNumber]->getStatus() != 0) //if the scene slot isn't empty
         {
             //load up slot data 
             slot[presNumber]->setStatus(2);
@@ -226,28 +226,28 @@ bool PresetComponent::update(const Subject& theChangedSubject)
 
 
 /*
-void PresetComponent::setCurrentlySelectedPad (Array<int> selectedPads_)
+void SceneComponent::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
     selectedPads = selectedPads_;
 }
  */
 
-AppDocumentState& PresetComponent::getAppDocumentState()
+AppDocumentState& SceneComponent::getAppDocumentState()
 {
     return appDocumentStateRef;
 }
 
-void PresetComponent::setSelectedPresetNumber(int value)
+void SceneComponent::setSelectedSceneNumber(int value)
 {
-    selectedPresetNumber = value;
+    selectedSceneNumber = value;
 }
 
-void PresetComponent::disableSaveAlertWindow()
+void SceneComponent::disableSaveAlertWindow()
 {
     shouldShowSaveWindow = false;
 }
 
-PresetSlot* PresetComponent::getSelectedPresetSlot()
+SceneSlot* SceneComponent::getSelectedSceneSlot()
 {
-    return slot[selectedPresetNumber];
+    return slot[selectedSceneNumber];
 }

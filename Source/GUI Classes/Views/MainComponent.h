@@ -105,7 +105,7 @@ public:
     
     void setIsClockRunning (bool value);
     
-    
+    void setLocalisation();
     
     
 private:
@@ -138,6 +138,8 @@ private:
     TextButton *killswitchButton;
     
     bool isClockRunning;
+    
+    LocalisedStrings *trans;
     
     //==============================================================================
     //NEW GUI!!

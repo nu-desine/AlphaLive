@@ -470,7 +470,7 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
             }
             else if (loadedXml != nullptr && loadedXml->hasTagName("PERFORMANCE"))
             {
-               AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Cannot Open File", "The selected AlphaLive Project file cannot be opened with this version of AlphaLive.");  
+               AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, translate("Cannot Open File"), translate("The selected AlphaLive Project file cannot be opened with this version of AlphaLive."));  
             }
             else
             {

@@ -104,9 +104,9 @@ private:
     AlphaLiveEngine &alphaLiveEngineRef;
 
     
-    Label *directoryLabel, *midiNoteDisplayTypeLabel, *launchTaskLabel;
+    Label *directoryLabel, *midiNoteDisplayTypeLabel, *launchTaskLabel, *languageLabel;
     Label *killOnClockStopLabel;
-    ComboBox *midiNoteDisplayTypeMenu, *launchTaskMenu;
+    ComboBox *midiNoteDisplayTypeMenu, *launchTaskMenu, *languageMenu;
     TextButton *killOnClockStopButton;
     FilenameComponent *appProjectDirChooser;
     

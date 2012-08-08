@@ -39,9 +39,29 @@ MainMenuModel::~MainMenuModel()
 
 StringArray MainMenuModel::getMenuBarNames()
 {
+
+    //OLD METHOD - caused an assertion when trying to display non-standard characters (e.g. japanese characters)
+    /*
+    //const char* const names[] = { file.toUTF8(), edit.toUTF8(), options.toUTF8(), controls.toUTF8(), help.toUTF8(), 0 };
     const char* const names[] = { "File", "Edit", "Options", "Controls", "Help", 0 };
-    
     return StringArray ((const char**) names);
+     */
+    
+    StringArray names;
+    
+    String file(translate("File"));
+    String edit(translate("Edit"));
+    String options(translate("Options"));
+    String controls(translate("Controls"));
+    String help(translate("Help"));
+    
+    names.add(file);
+    names.add(edit);
+    names.add(options);
+    names.add(controls);
+    names.add(help);
+    
+    return names;
 }
 
 PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& menuName)
@@ -58,7 +78,7 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         StoredSettings::getInstance()->recentFiles.createPopupMenuItems (recentFiles, 100, true, true);
         recentFiles.addSeparator();
         recentFiles.addItem(99, "Clear Menu");
-        menu.addSubMenu ("Open Recent", recentFiles, StoredSettings::getInstance()->recentFiles.getNumFiles() > 0);
+        menu.addSubMenu (translate("Open Recent"), recentFiles, StoredSettings::getInstance()->recentFiles.getNumFiles() > 0);
         
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::Save);

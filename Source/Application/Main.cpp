@@ -64,14 +64,14 @@ public:
         std::cout << "Running on Linux..." << std::endl;
         #endif
         
+        //call this function incase it is the first time the app is run on a computer
+        StoredSettings::getInstance()->setDefaultValues();
+        
         commandManager = new ApplicationCommandManager();
         commandManager->registerAllCommandsForTarget (this);
          
         // Create temporary loading window. think about how to implement a realtime progress bar in here!
         loadingWindow = new LoadingWindow();
-        
-        //call this function incase it is the first time the app is run on a computer
-        StoredSettings::getInstance()->setDefaultValues();
         
         //WOULD IT MAKE MORE SENSE TO DO THE BELOW STUFF IN THE CONSTRUCTOR OF APPDOCUMENTSTATE?
         //delete the current temp directory (incase of previous app crash that wouldn't have deleted the temp file)
@@ -97,11 +97,7 @@ public:
         //set menu bar
         menuModel = new MainMenuModel(*appDocumentState);
         
-        //pass in a reference to alphaLiveEngine so that the padLayout component object can be set as an observer to alphaLiveEngine
-        //this ref will also be used so that the sequencerGrid object can be set as an observer to modeSequencer
-        //this ref will also be used so that the presetComponent object can be set as an observer to modeController
-        //pass in a ref to appDocumentState so that the Saving & Loading functions can be called by the GUI
-        //this ref will also be used so that the mainComponent object can be set as an observer to appDocumentState so that the gui updates when something is loaded
+        //create main app window
         mainWindow = new MainAppWindow(*alphaLiveEngine, *appDocumentState, menuModel);
         
         //is this the best way of passing in this reference? could main be restructured so that mainWindow could be passed in when appDoumentState is initilised as a constructor argument?

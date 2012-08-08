@@ -1,0 +1,18 @@
+language: German
+countries: de
+
+"Preferences..." = "Einstellungen..."
+"Off-Mode Button. Click this button to disable/mute the selected pad/pads." = "Off-Mode-Taste. Klicken Sie auf diese Schaltfläche zu deaktivieren / Stummschalten des gewählten Pads / Pads."
+"The selected AlphaLive Project file cannot be opened with this version of AlphaLive." = "Das ausgewählte Projekt Alphalive-Datei kann nicht mit dieser Version von Alphalive geöffnet werden."
+"Cannot Open File" = "Kann Datei nicht öffnen"
+"OK" = "Ja"
+"Cancel" = "Stornieren"
+"File" = "Datei"
+"Edit" = "Bearbeiten"
+"Options" = "Optionen"
+"Controls" = "Steuerung"
+"Help" = "Hilfe"
+"Open" = "Geöffnet"
+"Language: " = "Sprache: "
+"Restart Application" = "Anwendung neu starten"
+"Please restart AlphaLive for the language change to be fully implemented." = "Bitte starten Sie Alphalive für die Änderung der Sprache vollständig umgesetzt zu werden."

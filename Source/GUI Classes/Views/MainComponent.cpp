@@ -43,6 +43,12 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
                             appDocumentStateRef(ref2),
                             owner(owner_)
 {
+    blackChrome = nullptr;
+    infoTextBox = nullptr;
+    
+    //language/localisation stuff
+    setLocalisation();
+    
     //========command manager stuff==================
 	commandManager->registerAllCommandsForTarget (this);
     
@@ -51,9 +57,9 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     
     //Look-and-feel stuff
     blackChrome = new LookAndFeel();
-    blackChrome->setDefaultSansSerifTypefaceName("Times New Roman"); //what does this actually do?
-	blackChrome->setDefaultLookAndFeel(blackChrome);
-    //Font::setFallbackFontName("Times New Roman");
+    if (StoredSettings::getInstance()->language == 4) //japanese
+        blackChrome->setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
+    blackChrome->setDefaultLookAndFeel(blackChrome);
 	
 	blackChrome->setColour(ComboBox::backgroundColourId, Colours::transparentBlack);
 	blackChrome->setColour(ComboBox::textColourId, Colours::silver);
@@ -154,7 +160,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //Global clock bar
     addAndMakeVisible(globalClock = new GuiGlobalClock(*this, alphaLiveEngineRef));
 	
-    addAndMakeVisible(loadButton = new TextButton("Open"));
+    addAndMakeVisible(loadButton = new TextButton(translate("Open")));
     loadButton->setCommandToTrigger(commandManager, CommandIDs::Open, false);
     loadButton->addMouseListener(this, false);
     
@@ -177,15 +183,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     cleanUpProjectButton->setCommandToTrigger(commandManager, CommandIDs::CleanUpProject, false);
     cleanUpProjectButton->addMouseListener(this, true);
     
-    //label that displays the currently selected/group of pad
-    /*
-    addAndMakeVisible(padNumberDisplayLabel = new Label("pad display label", "All Pads Selected"));
-    padNumberDisplayLabel->setColour(Label::textColourId, Colours::lightgrey);
-    padNumberDisplayLabel->setJustificationType(Justification::topLeft);
-    //what font shall we have? Copperplate, Bank Gothic, Calibri, Candara, Consolas, Lucida Console, Courier, BlairMdITC TT?
-    Font newFont("Grixel Acme 7 Wide", 25, Font::bold);
-    padNumberDisplayLabel->setFont(newFont);
-     */
     
     //create gain slider
     addAndMakeVisible(gainSlider = new AlphaImageKnob(2));
@@ -284,7 +281,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     infoTextBox->setColour(TextEditor::backgroundColourId, Colours::black.withAlpha(1.0f));
     infoTextBox->setColour(TextEditor::outlineColourId, Colours::transparentBlack);
     infoTextBox->setCaretVisible(false);
-    Font infoFont("Arial", 11, Font::plain);
+    Font infoFont(11, Font::plain);
     infoTextBox->setFont(infoFont);
     infoTextBox->addMouseListener(this, true);
     infoTextBox->setPopupMenuEnabled(false);
@@ -306,7 +303,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 
 MainComponent::~MainComponent()
 {
-    
     deleteAllChildren();
     delete blackChrome;
     
@@ -452,13 +448,6 @@ void MainComponent::sliderValueChanged (Slider *slider)
         
     }
     
-    /*
-    if (slider == tempoSlider)
-    {
-        AppSettings::Instance()->setGlobalTempo(tempoSlider->getValue());
-        
-    }
-     */
     
     else if (slider == padRotate)
 	{
@@ -1039,7 +1028,8 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     
     if (e.eventComponent == modeOffButton)
     {
-        setInfoTextBoxText ("Off-Mode Button. Click this button to disable/mute the selected pad/pads.");
+        setInfoTextBoxText (translate("Off-Mode Button. Click this button to disable/mute the selected pad/pads."));
+        
     }
     else if (e.eventComponent == modeMidiButton)
     {
@@ -1127,6 +1117,52 @@ void MainComponent::mouseExit (const MouseEvent &e)
 }
 
 
+
+void MainComponent::setLocalisation()
+{
+    trans = nullptr;
+    
+    if (StoredSettings::getInstance()->language == 1) //english
+    {
+        LocalisedStrings::setCurrentMappings(0);
+        
+        if (blackChrome != nullptr)
+            blackChrome->setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn")); //will set to fallback
+    }
+    else if (StoredSettings::getInstance()->language == 3) //german
+    {
+        File transFile("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Translation files/ger_trans");
+        trans = new LocalisedStrings (transFile);
+        LocalisedStrings::setCurrentMappings(trans);
+        
+        if (blackChrome != nullptr)
+            blackChrome->setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
+    }
+    else if (StoredSettings::getInstance()->language == 4) //japanese
+    {
+        File transFile ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Translation files/jap_trans");
+        trans = new LocalisedStrings (transFile);
+        
+        LocalisedStrings::setCurrentMappings(trans);
+        
+        if (blackChrome != nullptr)
+            blackChrome->setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
+        
+    }
+    
+     
+    if (infoTextBox != nullptr)
+    {
+        Font infoFont(11, Font::plain);
+        infoTextBox->setFont(infoFont);
+    }
+    
+    
+    //commandManager->commandStatusChanged();
+    owner->repaint();
+}
+
+
 //=========================command manager stuff=================================
 ApplicationCommandTarget* MainComponent::getNextCommandTarget()
 {
@@ -1168,13 +1204,13 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
 	
     if(commandID == CommandIDs::About)
     {
-		result.setInfo (String("About AlphaLive"),
+		result.setInfo (translate("About AlphaLive"),
 						"Opens the application 'about' view.",
 						CommandCategories::OtherCommands, 0);
 	}
 	else if(commandID == CommandIDs::Preferences)
     {
-		result.setInfo ("Preferences...",
+		result.setInfo (translate("Preferences..."),
 						"Opens the application preferences view.",
 						CommandCategories::OtherCommands, 0);
 		result.defaultKeypresses.add (KeyPress (',', cmd, 0));
@@ -1182,26 +1218,26 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
     
     else if (commandID == CommandIDs::ProjectSettings)
     {
-        result.setInfo ("Project Settings...",
+        result.setInfo (translate("Project Settings..."),
 						"Opens the Project Settings view.",
 						CommandCategories::FileCommands, 0);
         result.defaultKeypresses.add (KeyPress ('p', cmd|alt, 0));
     }
     else if (commandID == CommandIDs::SavePreset)
     {
-        result.setInfo ("Export Preset...",
+        result.setInfo (translate("Export Preset..."),
 						"Saves the currently selected preset settings to file.",
 						CommandCategories::FileCommands, 0);
     }
     else if(commandID == CommandIDs::LoadPreset)
 	{
-		result.setInfo ("Import Preset...",
+		result.setInfo (translate("Import Preset..."),
 						"Loads an individual preset settings into the currently selected preset.",
 						CommandCategories::FileCommands, 0);
 	}
     else if(commandID == CommandIDs::DisableHelpBox)
 	{
-		result.setInfo ("Disable Help Box",
+		result.setInfo (translate("Disable Help Box"),
 						"Disables the help box to reduce CPU usage.",
 						CommandCategories::OptionCommands, 0);
         result.setTicked(! isInfoBoxEnabled);
@@ -1209,7 +1245,7 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
     
     else if(commandID == CommandIDs::CopyPadSettings)
 	{
-		result.setInfo ("Copy Pad Settings",
+		result.setInfo (translate("Copy Pad Settings"),
 						"Copy's the settings of the currently selected pad.",
 						CommandCategories::FileCommands, 0);
 		result.defaultKeypresses.add (KeyPress ('c', cmd, 0));
@@ -1217,7 +1253,7 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
 	}
     else if(commandID == CommandIDs::PastePadSettings)
 	{
-		result.setInfo ("Paste Pad Settings",
+		result.setInfo (translate("Paste Pad Settings"),
 						"Paste's settings to the currently selected pads.",
 						CommandCategories::FileCommands, 0);
 		result.defaultKeypresses.add (KeyPress ('v', cmd, 0));
@@ -1226,21 +1262,21 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
     
     else if (commandID == CommandIDs::ClearPreset)
     {
-		result.setInfo ("Clear Preset",
+		result.setInfo (translate("Clear Preset"),
 						"Clears and removes the currently selected preset.",
 						CommandCategories::EditCommands, 0);
 		
 	}
     else if (commandID == CommandIDs::ClearAllPresets)
     {
-		result.setInfo ("Clear All Presets",
+		result.setInfo (translate("Clear All Presets"),
 						"Clears and removes all presets.",
 						CommandCategories::EditCommands, 0);
 	}
     
     else if (commandID == CommandIDs::KillSwitch)
     {
-		result.setInfo ("Killswitch",
+		result.setInfo (translate("Killswitch"),
 						"Kills all playing sound and any hanging MIDI notes.",
 						CommandCategories::ControlCommands, 0);
         result.defaultKeypresses.add (KeyPress ('k', cmd, 0));
@@ -1250,13 +1286,13 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
     {
         if (isClockRunning == false)
         {
-            result.setInfo ("Start Clock",
+            result.setInfo (translate("Start Clock"),
                             "Starts the global clock.",
                             CommandCategories::ControlCommands, 0);
         }
         else
         {
-            result.setInfo ("Stop Clock",
+            result.setInfo (translate("Stop Clock"),
                             "Stops the global clock.",
                             CommandCategories::ControlCommands, 0);
         }

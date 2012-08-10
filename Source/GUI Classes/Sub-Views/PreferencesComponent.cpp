@@ -226,8 +226,8 @@ GeneralSettingsComponent::~GeneralSettingsComponent()
 
 void GeneralSettingsComponent::resized()
 {
-    languageLabel->setBounds(60, 10, 120, 20);
-    languageMenu->setBounds(200, 10, 150, 20);
+    //languageLabel->setBounds(60, 10, 120, 20);
+    //languageMenu->setBounds(200, 10, 150, 20);
     
     appProjectDirChooser->setBounds(200, 50, 210, 20);
     directoryLabel->setBounds(60, 50, 120, 20);

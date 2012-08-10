@@ -1122,14 +1122,12 @@ void MainComponent::setLocalisation()
 {
     trans = nullptr;
     
-    if (StoredSettings::getInstance()->language == 1) //english
-    {
-        LocalisedStrings::setCurrentMappings(0);
-        
-        if (blackChrome != nullptr)
-            blackChrome->setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn")); //will set to fallback
-    }
-    else if (StoredSettings::getInstance()->language == 3) //german
+    static String countryCode = SystemStats::getDisplayLanguage();
+    
+    //countryCode will equal ISO 639-1 or ISO 639-2 codes as listed here:
+    //http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+    
+    if (countryCode == "de" || countryCode == "deu") //german
     {
         File transFile("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Translation files/ger_trans");
         trans = new LocalisedStrings (transFile);
@@ -1138,7 +1136,7 @@ void MainComponent::setLocalisation()
         if (blackChrome != nullptr)
             blackChrome->setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
     }
-    else if (StoredSettings::getInstance()->language == 4) //japanese
+    else if (countryCode == "ja" || countryCode == "jpn") //japanese
     {
         File transFile ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Translation files/jap_trans");
         trans = new LocalisedStrings (transFile);
@@ -1148,6 +1146,13 @@ void MainComponent::setLocalisation()
         if (blackChrome != nullptr)
             blackChrome->setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
         
+    }
+    else //english
+    {
+        LocalisedStrings::setCurrentMappings(0);
+        
+        if (blackChrome != nullptr)
+            blackChrome->setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn")); //will set to fallback
     }
     
      

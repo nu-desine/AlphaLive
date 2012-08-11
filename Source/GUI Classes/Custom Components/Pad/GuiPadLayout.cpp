@@ -511,11 +511,9 @@ void GuiPadLayout::buttonClicked(Button *button)
     
     
     
-    if (selectedPads.size() > 0)
-    {
-        //pass on the selected pads to mainComponent, which then passes it further into the application..
-        mainComponentRef.setCurrentlySelectedPad(selectedPads);
-    }
+    
+    //pass on the selected pads to mainComponent, which then passes it further into the application..
+    mainComponentRef.setCurrentlySelectedPad(selectedPads);
 	
 }
 

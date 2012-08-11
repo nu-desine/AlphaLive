@@ -26,17 +26,18 @@
 #include "../../../JuceLibraryCode/JuceHeader.h"
 #include "../../Functionality Classes/AlphaLiveEngine.h"
 #include "../Custom Components/General/AlphaSlider.h"
-#include "../Custom Components/GuiBeatIndicator.h"
 #include "../../Application/AbstractSubjectAndObserver.h"
-#include "../Custom Components/General/GuiSwitch.h"
+//#include "../Custom Components/General/GuiSwitch.h"
+#include "../Custom Components/General/SettingsButton.h"
+#include "../Custom Components/General/AlphaTextButton.h"
 
 class MainComponent;
 
 class GuiGlobalClock    :   public Component,
-                            public Slider::Listener,
-                            public Button::Listener,
-                            public ComboBox::Listener,
-                            public Observer //so this class can observe GlobalClock
+public Slider::Listener,
+public Button::Listener,
+public ComboBox::Listener,
+public Observer //so this class can observe GlobalClock
 {
 public:
     GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2);
@@ -63,16 +64,19 @@ private:
     MainComponent &mainComponentRef;
     AlphaLiveEngine &alphaLiveEngineRef;
     
-    Label *barNumberLabel, *beatNumberLabel;
-    AlphaSlider *tempoSlider, *beatsPerBarSlider;
-    ComboBox *quantizationMenu;
-    TextButton *transportButton;
-    GuiSwitch *autoStartSwitch;
-    
-    GuiBeatIndicator *beatIndicator;
-    ComponentAnimator *animator;
-    
-    
+    AlphaSlider *tempoSlider;
+    //GuiSwitch *autoStartSwitch;
+	
+	int currentBeatNumber, currentBeatStore;
+	
+	float countGap, countSeg, segStart, segEnd;
+	
+	Path barCount, quantiseBg, barsBg;
+	
+	AlphaTextButton *transportButton, *twoFour, *threeFour, *fourFour, *fiveFour, *sixFour, *sevenFour;
+	
+	SettingsButton *fourBar, *twoBar, *oneBar, *oneBeat, *halfBeat, *quarterBeat;
+
     
 };
 

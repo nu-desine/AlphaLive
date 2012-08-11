@@ -53,6 +53,8 @@ public:
     
     void setNoteDisplayType (int value);
     void setNoteLabelText (int noteNumber);
+    
+    void setActive (bool value);
 	
 private:
 	Label *midiNoteLabel;

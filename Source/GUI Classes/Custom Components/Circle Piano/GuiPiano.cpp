@@ -334,3 +334,12 @@ void GuiPiano::setNoteDisplayType (int value)
     noteDisplayType = value;
 }
 
+void GuiPiano::setActive (bool value)
+{
+    setInterceptsMouseClicks(false, value);
+    
+    if (value == true)
+        setAlpha(1.0f);
+    else
+        setAlpha(0.3f);
+}

@@ -29,6 +29,7 @@
 #include "GlobalValues.h"
 #include "../../Application/CommandIDs.h"
 #include "../../File and Settings/StoredSettings.h"
+#include "../Binary Data/BinaryDataNew.h"
 
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
@@ -43,7 +44,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
                             appDocumentStateRef(ref2),
                             owner(owner_)
 {
-    blackChrome = nullptr;
+    //blackChrome = nullptr;
     infoTextBox = nullptr;
     
     //language/localisation stuff
@@ -56,6 +57,9 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     appDocumentStateRef.attach(this);
     
     //Look-and-feel stuff
+    alphaGUI.setUsingNativeAlertWindows(true);
+    setLookAndFeel(&alphaGUI);
+    /*
     blackChrome = new LookAndFeel();
     if (StoredSettings::getInstance()->language == 4) //japanese
         blackChrome->setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
@@ -79,25 +83,26 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     blackChrome->setColour(TextButton::buttonOnColourId, Colours::orange);
 	blackChrome->setColour(Slider::rotarySliderFillColourId, Colours::silver);
 	blackChrome->setColour(Slider::rotarySliderOutlineColourId, Colours::grey);
-    
-    
     blackChrome->setUsingNativeAlertWindows(true);
+     */
     
     //load Gui Images
     //load binary data into Image
-    backgroundImage = ImageFileFormat::loadFrom(BinaryData::main2_png, BinaryData::main2_pngSize);
+    backgroundImage = ImageCache::getFromMemory(BinaryDataNew::interfacemain_png, BinaryDataNew::interfacemain_pngSize);
+	padsOff = ImageCache::getFromMemory(BinaryDataNew::padsoff_png, BinaryDataNew::padsoff_pngSize);
+	padsOn = ImageCache::getFromMemory(BinaryDataNew::padson_png, BinaryDataNew::padson_pngSize);
+	modeOff = ImageCache::getFromMemory(BinaryDataNew::modeoff_png, BinaryDataNew::modeoff_pngSize);
+	padsBg = ImageCache::getFromMemory(BinaryDataNew::padsbg_png, BinaryDataNew::padsbg_pngSize);
     
-    //--------------------------------------------------------------------------
-    addAndMakeVisible(speakerLeft = new GuiSpeaker());
-    addAndMakeVisible(speakerRight = new GuiSpeaker());
-    addAndMakeVisible(circleBackground = new GuiCircleBackground());
     
     //Mode Gui's
-    addAndMakeVisible(guiMidiMode = new GuiMidiMode(*this));
-    addAndMakeVisible(guiSamplerMode = new GuiSamplerMode(*this));
-    addAndMakeVisible(guiSequencerMode = new GuiSequencerMode(*alphaLiveEngineRef.getModeSequencer(), *this, appDocumentStateRef)); //pass in a ref to modeSequencer instance
+    addChildComponent(guiMidiMode = new GuiMidiMode(*this));
+    addChildComponent(guiSamplerMode = new GuiSamplerMode(*this));
+    addChildComponent(guiSequencerMode = new GuiSequencerMode(*alphaLiveEngineRef.getModeSequencer(), *this, appDocumentStateRef)); //pass in a ref to modeSequencer instance
     guiSequencerMode->setInterceptsMouseClicks(false, true);
-    addAndMakeVisible(guiControllerMode = new GuiControllerMode(*this));
+    addChildComponent(guiControllerMode = new GuiControllerMode(*this));
+    
+    addChildComponent(guiGlobalPadSettings = new GuiGlobalPadSettings(*this));
     
     
     //Pad Layout
@@ -105,35 +110,37 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     guiPadLayout->addMouseListener(this, false);
 	guiPadLayout->setInterceptsMouseClicks(false, true);
     
-    addAndMakeVisible(padDisplayTextMenu = new ComboBox());
-    padDisplayTextMenu->addListener(this);
-    padDisplayTextMenu->addMouseListener(this, true);
-    padDisplayTextMenu->addItem("Pad Numbers", 1);
-    padDisplayTextMenu->addItem("Pad Contents", 2);
-    padDisplayTextMenu->setSelectedId(1, true);
     
     //--------------------------------------------------------------------------
     //Mode Buttons
     
     //create off mode button
-	Image *offModeImage = new Image(ImageFileFormat::loadFrom(BinaryData::offsymbol_png, BinaryData::offsymbol_pngSize)); 
+	Image *offModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::offsymbol_png, BinaryDataNew::offsymbol_pngSize)); 
 	addAndMakeVisible(modeOffButton = new ModeButton(offModeImage));
 	modeOffButton->addListener(this);
     modeOffButton->setOpaque(false);
 	modeOffButton->setRadioGroupId (1234);
     modeOffButton->addMouseListener(this, false);
+	
+	//create curve mode button
+	Image *globalSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::offsymbol_png, BinaryDataNew::offsymbol_pngSize)); 
+	addAndMakeVisible(globalSettingsButton = new ModeButton(globalSettingsImage));
+	globalSettingsButton->addListener(this);
+    globalSettingsButton->setOpaque(false);
+	//globalSettingsButton->setRadioGroupId (1234);
+    globalSettingsButton->addMouseListener(this, false);
     
     
-    //create sampler mode button
-	Image *samplerModeImage = new Image(ImageFileFormat::loadFrom(BinaryData::loopsymbol_png, BinaryData::loopsymbol_pngSize)); 
-	addAndMakeVisible(modeSamplerButton = new ModeButton(samplerModeImage));
+    //create looper mode button
+	Image *looperModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::loopsymbol_png, BinaryDataNew::loopsymbol_pngSize)); 
+	addAndMakeVisible(modeSamplerButton = new ModeButton(looperModeImage));
 	modeSamplerButton->addListener(this);
     modeSamplerButton->setOpaque(false);
 	modeSamplerButton->setRadioGroupId (1234);
     modeSamplerButton->addMouseListener(this, false);
 	
 	//create midi mode button
-	Image *midiModeImage = new Image(ImageFileFormat::loadFrom(BinaryData::midisymbol_png, BinaryData::midisymbol_pngSize)); 
+	Image *midiModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::midisymbol_png, BinaryDataNew::midisymbol_pngSize)); 
 	addAndMakeVisible(modeMidiButton = new ModeButton(midiModeImage));
 	modeMidiButton->addListener(this);
     modeMidiButton->setOpaque(false);
@@ -141,7 +148,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeMidiButton->addMouseListener(this, false);
 	
 	//create sequencer mode button
-	Image *sequencerModeImage = new Image(ImageFileFormat::loadFrom(BinaryData::sequencersymbol_png, BinaryData::sequencersymbol_pngSize)); 
+	Image *sequencerModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::sequencersymbol_png, BinaryDataNew::sequencersymbol_pngSize)); 
 	addAndMakeVisible(modeSequencerButton = new ModeButton(sequencerModeImage));
 	modeSequencerButton->addListener(this);
     modeSequencerButton->setOpaque(false);
@@ -149,8 +156,8 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeSequencerButton->addMouseListener(this, false);
 	
     //createa controller mode button
-	Image *controlModeImage = new Image(ImageFileFormat::loadFrom(BinaryData::controlsymbol_png, BinaryData::controlsymbol_pngSize)); 
-	addAndMakeVisible(modeControllerButton = new ModeButton(controlModeImage));
+	Image *controllerModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::controlsymbol_png, BinaryDataNew::controlsymbol_pngSize)); 
+	addAndMakeVisible(modeControllerButton = new ModeButton(controllerModeImage));
 	modeControllerButton->addListener(this);
     modeControllerButton->setOpaque(false);
 	modeControllerButton->setRadioGroupId (1234);
@@ -159,22 +166,23 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     
     //Global clock bar
     addAndMakeVisible(globalClock = new GuiGlobalClock(*this, alphaLiveEngineRef));
+    globalClock->setInterceptsMouseClicks(false, true);
 	
-    addAndMakeVisible(loadButton = new TextButton(translate("Open")));
-    loadButton->setCommandToTrigger(commandManager, CommandIDs::Open, false);
-    loadButton->addMouseListener(this, false);
+    addAndMakeVisible(openButton = new AlphaTextButton());
+    openButton->setButtonText("OPEN");
+    openButton->setCommandToTrigger(commandManager, CommandIDs::Open, false);
+    openButton->addMouseListener(this, false);
     
-    addAndMakeVisible(saveButton = new TextButton("Save"));
+    addAndMakeVisible(saveButton = new AlphaTextButton());
+    saveButton->setButtonText("SAVE");
     saveButton->setCommandToTrigger(commandManager, CommandIDs::Save, false);
     saveButton->addMouseListener(this, false);
     
-    addAndMakeVisible(saveAsButton = new TextButton("Save As"));
-    saveAsButton->setCommandToTrigger(commandManager, CommandIDs::SaveAs, false);
-    saveAsButton->addMouseListener(this, false);
     
     addAndMakeVisible(sceneComponent = new SceneComponent(appDocumentStateRef, *alphaLiveEngineRef.getModeController())); //pass in appDocumentStateRef so that appDocumentStateRef function calls can be made within sceneComponent
     sceneComponent->addMouseListener(this, true);
     
+    /*
     addAndMakeVisible(clearScenesButton = new TextButton("Clear All"));
     clearScenesButton->setCommandToTrigger(commandManager, CommandIDs::ClearAllScenes, false);
     clearScenesButton->addMouseListener(this, false);
@@ -182,6 +190,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     addAndMakeVisible(cleanUpProjectButton = new TextButton("Clean Up Project"));
     cleanUpProjectButton->setCommandToTrigger(commandManager, CommandIDs::CleanUpProject, false);
     cleanUpProjectButton->addMouseListener(this, true);
+     */
     
     
     //create gain slider
@@ -204,14 +213,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     killswitchButton->setCommandToTrigger(commandManager, CommandIDs::KillSwitch, false);
     killswitchButton->addMouseListener(this, true);
     
-    //create tempo slider (IncDecButtons)
-    addAndMakeVisible(tempoSlider = new AlphaSlider());
-    tempoSlider->setRange(20.0, 360.0, 0.1);
-    tempoSlider->addListener(this);
-    tempoSlider->setTextBoxStyle(Slider::TextBoxAbove, false, 45, 15);
-    tempoSlider->setValue(120.0, false);
-    tempoSlider->addMouseListener(this, true);
-    
     
     addAndMakeVisible(pressureSensitivityMenu = new ComboBox());
     pressureSensitivityMenu->addListener(this);
@@ -221,11 +222,13 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     pressureSensitivityMenu->addItem("Sensitive", 3);
     pressureSensitivityMenu->setSelectedId(2);
     
+    /*
     addAndMakeVisible(autoShowSettingsSwitch = new GuiSwitch());
     autoShowSettingsSwitch->addListener(this);
     autoShowSettingsSwitch->setClickingTogglesState(true);
     autoShowSettingsSwitch->setToggleState(false, false);
     autoShowSettingsSwitch->addMouseListener(this, true);
+     */
     
     
     addAndMakeVisible(exclusiveModeButton = new TextButton("Exc Mode"));
@@ -249,11 +252,12 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
      
     
     //create pop-up window
-    addAndMakeVisible(popUpWindow = new GuiPopUpWindow());
-    popUpWindow->setVisible(false);
+    //addAndMakeVisible(popUpWindow = new GuiPopUpWindow());
+    //popUpWindow->setVisible(false);
     
     //addAndMakeVisible(tooltip = new TooltipWindow());
     
+    /*
     //'rotate pad display' stuff
     addAndMakeVisible(padRotate = new Slider);
 	padRotate->setSliderStyle(Slider::Rotary);
@@ -267,13 +271,16 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	pivotX = 0;
 	pivotY = 0;
 	offskew = 0;
+     */
+    
+    addAndMakeVisible(midiPiano = new GuiPiano());
+    midiPiano->addMouseListener(this, true);
+    
+    addAndMakeVisible(toolbox = new Toolbox());
     
     addChildComponent(aboutComponent = new AboutComponent(*this));
-    //aboutComponent->setVisible(true);
     addChildComponent(preferencesComponent = new PreferencesComponent(*this, alphaLiveEngineRef));
-    //preferencesComponent->setVisible(true);
     addChildComponent(projectSettingsComponent = new ProjectSettingsComponent(*this, alphaLiveEngineRef, appDocumentStateRef));
-    //projectSettingsComponent->setVisible(true);
     
     addAndMakeVisible(infoTextBox = new TextEditor());
     infoTextBox->setMultiLine(true);
@@ -288,23 +295,26 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 
     isInfoBoxEnabled = true;
     isClockRunning = false;
-    
-    //currentlySelectedPad = 99; //'all pads'
-    guiMidiMode->setVisible(false);
-    guiSamplerMode->setVisible(false);
-    guiSequencerMode->setVisible(false);
-    guiControllerMode->setVisible(false);
-    speakerLeft->setVisible(true);
-    speakerRight->setVisible(true);
-    circleBackground->setVisible(true);
 
+    noPadsSelected = 1;
+	noModeSelected = 1;
+    
+    modeOffButton->setVisible(false);
+    modeMidiButton->setVisible(false);
+    modeSamplerButton->setVisible(false);
+    modeSequencerButton->setVisible(false);
+    modeControllerButton->setVisible(false);
+    globalSettingsButton->setVisible(false);
+    toolbox->setVisible(false); //or maybe it links to projects directory?
+    midiPiano->setActive(false);
+    
 }
 
 
 MainComponent::~MainComponent()
 {
     deleteAllChildren();
-    delete blackChrome;
+    //delete blackChrome;
     
     //detach this class from the subject class
     //appDocumentStateRef.detach(this);
@@ -320,50 +330,41 @@ void MainComponent::resized()
     guiSamplerMode->setBounds(0, 0, getWidth(), getHeight());
     guiSequencerMode->setBounds(0, 0, getWidth(), getHeight());
     guiControllerMode->setBounds(0, 0, getWidth(), getHeight());
+	guiGlobalPadSettings->setBounds(0, 0, getWidth(), getHeight());
+	
+	midiPiano->setBounds(0, 0, 660, 685);
     
-    //'no mode' stuff
-    speakerLeft->setBounds(14, 402, 230, 230);
-    speakerRight->setBounds(780, 402, 230, 230);
-    circleBackground->setBounds(850, 251, 142, 142);
+    toolbox->setBounds(760, 17, 247, 107);
     
     //Centre pad Layout Gui
-    guiPadLayout->setBounds(0, 7, getWidth(), getHeight()-30);
-    padRotate->setBounds(200, 95, 60, 60);
+    guiPadLayout->setBounds(0, 0, getWidth(), getHeight()-30);
+    //padRotate->setBounds(244, 568, 60, 60);
+    //padRotate->setBounds(200, 95, 60, 60);
     
     //Native MainComponent components
-	modeOffButton->setBounds(725, 5, 45, 45);
-    modeMidiButton->setBounds(767, 5, 65, 65);
-    modeSamplerButton->setBounds(829, 5, 65, 65);
-	modeSequencerButton->setBounds(891, 5, 65, 65);
-	modeControllerButton->setBounds(953, 5, 65, 65);
+	modeOffButton->setBounds(672, 205, 40, 40);
+	globalSettingsButton->setBounds(632, 562, 50, 50);
+    modeMidiButton->setBounds(736, 163, 50, 50);
+    modeSamplerButton->setBounds(812, 148, 50, 50);
+	modeSequencerButton->setBounds(890, 158, 50, 50);
+	modeControllerButton->setBounds(960, 191, 50, 50);
+	
+	
+    openButton->setBounds(38, 6, 42, 42);
+    saveButton->setBounds(90, 6, 42, 42);
     
-    loadButton->setBounds(5, 5, 100, 20);
-    saveButton->setBounds(5, 30, 100, 20);
-    saveAsButton->setBounds(5, 55, 100, 20);
+    sceneComponent->setBounds(5, 10, 20, getHeight());
+    //clearPresetsButton->setBounds(7, 646, 16, 16);
     
-    sceneComponent->setBounds(110, 5, 80, 60);
-    clearScenesButton->setBounds(125, 66, 50, 15);
+    globalClock->setBounds(479, 0, 266, 144);
     
-    cleanUpProjectButton->setBounds(200, 5, 100, 20);
-
-    globalClock->setBounds(10, 120, 180, 75);
-
     infoTextBox->setBounds(0, getHeight()-30, getWidth(), 30);
     
-    gainSlider->setBounds(45, 318, 45, 45);
-	panSlider->setBounds(109, 318, 45, 45);
-    killswitchButton->setBounds(86, 273, 25, 25);
+    //pressureSensitivityMenu->setBounds(800, 130, 100, 20);
+    //exclusiveModeButton->setBounds(820, 180, 70, 20);
+    //exclusiveGroupSlider->setBounds(820, 210, 70, 20);
+    //quantizeModeButton->setBounds(800, 100, 100, 20);
     
-    pressureSensitivityMenu->setBounds(800, 130, 100, 20);
-    exclusiveModeButton->setBounds(820, 180, 70, 20);
-    exclusiveGroupSlider->setBounds(820, 210, 70, 20);
-  
-    quantizeModeButton->setBounds(800, 100, 100, 20);
-    
-    autoShowSettingsSwitch->setBounds(323+5, 590+5, 35, 35);
-    
-    popUpWindow->setBounds(150, 340, 725, 300);
-
     pivotX = guiPadLayout->getX() + (guiPadLayout->getWidth() * 0.5);
 	pivotY = guiPadLayout->getY() + (guiPadLayout->getHeight() * 0.5);
 	offskew = guiPadLayout->getY();
@@ -378,18 +379,48 @@ void MainComponent::resized()
 
 void MainComponent::paint(juce::Graphics &g)
 {
-    //std::cout << "Paint main component...";
+    //Rectangle<int> rect = g.getClipBounds();
+    //std::cout << "Painting main: " << rect.getX() << " " << rect.getY() << " " << rect.getRight() << " " << rect.getBottom() << std::endl;
     
     g.setOrigin(0, 0);
-	g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight()-30, 0, 0, 1600, 1000);
+	g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), 0, 0, backgroundImage.getWidth(), backgroundImage.getHeight());
     
-    if (rotateFlag == 1)  
+    
+    //if (rotateFlag == 1)  
+    //{
+	//	g.setOrigin(0, 7);
+	//	g.drawImageTransformed(rotatedPadsImage, (AffineTransform::rotation ((float) (padRotate->getValue() / (180.0 / double_Pi)), getWidth()*0.5, (getHeight()-30/*-30 as the image doesn't go all the way to the bottom of the component, due to the help box now being there*/)*0.5)), false);
+	//	g.setOrigin(0, 0);
+    
+	//}
+	
+	
+	if (noPadsSelected == 1) 
     {
-		g.setOrigin(0, 7);
-		g.drawImageTransformed(rotatedPadsImage, (AffineTransform::rotation ((float) (padRotate->getValue() / (180.0 / double_Pi)), getWidth()*0.5, (getHeight()-30/*-30 as the image doesn't go all the way to the bottom of the component, due to the help box now being there*/)*0.5)), false);
-		g.setOrigin(0, 0);
-    
+		g.drawImage(padsOff, 0, 0, getWidth(), getHeight(), 0, 0, padsOff.getWidth(), padsOff.getHeight());
+		g.drawImage(modeOff, 0, 0, getWidth(), getHeight(), 0, 0, modeOff.getWidth(), modeOff.getHeight());
+	}	
+	else if (noPadsSelected == 0) 
+    {
+		g.drawImage(padsOn, 0, 0, getWidth(), getHeight(), 0, 0, padsOn.getWidth(), padsOn.getHeight());
+		
+		g.setColour(Colours::black);
+		
+		g.fillRect(753, 10, 261, 121);
+		
+		g.setColour(Colours::grey.withAlpha(0.3f));
+		
+		g.drawRect(753, 10, 261, 121, 2);
+		
+		g.setColour(Colours::black);
 	}
+	
+	if (noModeSelected == 1) 
+    {
+		g.drawImage(modeOff, 0, 0, getWidth(), getHeight(), 0, 0, modeOff.getWidth(), modeOff.getHeight());
+	}
+	
+	g.drawImage(padsBg, 0, 0, getWidth(), getHeight(), 0, 0, padsBg.getWidth(), padsBg.getHeight());
     
 }
 
@@ -410,7 +441,7 @@ bool MainComponent::update(const Subject& theChangedSubject)
             //there is still some inefficiency in that these things will be updated everytime a sequence is loaded... sort this out?!!
             gainSlider->sliderComponent()->setValue(AppSettings::Instance()->getGlobalGain(), false); 
             panSlider->sliderComponent()->setValue(AppSettings::Instance()->getGlobalPan(), false);
-            tempoSlider->setValue(AppSettings::Instance()->getGlobalTempo(), false);
+            //tempoSlider->setValue(AppSettings::Instance()->getGlobalTempo(), false);
             
             //set the mode colour ring of each pad
             for (int i = 0; i <= 47; i++)
@@ -577,6 +608,42 @@ void MainComponent::buttonClicked(Button *button)
         }
     }
     
+    else if (button == globalSettingsButton)
+	{
+       
+		
+		guiMidiMode->setVisible(false);
+		guiSamplerMode->setVisible(false);
+		guiSequencerMode->setVisible(false);
+		guiControllerMode->setVisible(false);
+		
+		if (button->getToggleState()==true) 
+        {
+             std::cout << "here"<< std::endl;
+			guiGlobalPadSettings->setVisible(true);
+		}
+        
+		else 
+        {
+			
+			if (modeMidiButton->getToggleState()==true)
+				guiMidiMode->setVisible(true);
+				
+			else if (modeSamplerButton->getToggleState()==true)
+				guiSamplerMode->setVisible(true);
+				
+			else if (modeSequencerButton->getToggleState()==true)
+				guiSequencerMode->setVisible(true);
+				
+			else if (modeControllerButton->getToggleState()==true)
+				guiControllerMode->setVisible(true);
+            
+            guiGlobalPadSettings->setVisible(false);
+				
+		}
+		
+	}
+    
     
     //==============================================================================
     
@@ -612,10 +679,12 @@ void MainComponent::buttonClicked(Button *button)
     //=================Now handled by the command manager======================
     
    
+    /*
     else if (button == autoShowSettingsSwitch)
     {
         guiPadLayout->setShouldDisplaySettings(autoShowSettingsSwitch->getToggleState());
     }
+     */
     
 }
 
@@ -625,21 +694,55 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
 {
     /*
     for (int i = 0; i < selectedPads.size(); i++)
-    {
         std::cout << "Pad " << selectedPads[i] << " is selected!\n";
-    }
+     
     std::cout << std::endl;
      */
     
+    if (selectedPads_.size() == 0) //no pads selected
+    {
+        noPadsSelected = 1;
+		modeOffButton->setVisible(false);
+		modeMidiButton->setVisible(false);
+		modeSamplerButton->setVisible(false);
+		modeSequencerButton->setVisible(false);
+		modeControllerButton->setVisible(false);
+		globalSettingsButton->setVisible(false);
+        toolbox->setVisible(false); //or maybe it links to projects directory?
+        midiPiano->setActive(false);
+		repaint();
+    }
+    else if (selectedPads_.size() > 0 && selectedPads.size() == 0) //if previously there were no pads selected,
+                                                            //but now is.
+    {
+        noPadsSelected = 0;
+		modeOffButton->setVisible(true);
+		modeMidiButton->setVisible(true);
+		modeSamplerButton->setVisible(true);
+		modeSequencerButton->setVisible(true);
+		modeControllerButton->setVisible(true);
+		globalSettingsButton->setVisible(true);
+        toolbox->setVisible(true); //or maybe it links to projects directory?
+        midiPiano->setActive(true);
+		repaint();
+    }
+    
     selectedPads = selectedPads_;
     
-    //pass in the currently selected pads to the mode GUIs for them to use
-    //in order to display the right settings from appSettings
-    AppSettings::Instance()->setCurrentlySelectedPad(selectedPads);
-    guiMidiMode->setCurrentlySelectedPad(selectedPads);
-    guiSamplerMode->setCurrentlySelectedPad(selectedPads);
-    guiSequencerMode->setCurrentlySelectedPad(selectedPads);
-    guiControllerMode->setCurrentlySelectedPad(selectedPads);
+    
+    
+    if (selectedPads.size() > 0)
+    {
+        //pass in the currently selected pads to the mode GUIs for them to use
+        //in order to display the right settings from appSettings
+        AppSettings::Instance()->setCurrentlySelectedPad(selectedPads);
+        guiMidiMode->setCurrentlySelectedPad(selectedPads);
+        guiSamplerMode->setCurrentlySelectedPad(selectedPads);
+        guiSequencerMode->setCurrentlySelectedPad(selectedPads);
+        guiControllerMode->setCurrentlySelectedPad(selectedPads);
+        guiGlobalPadSettings->setCurrentlySelectedPad(selectedPads);
+        
+    }
     
     
     //==============================================================================
@@ -882,10 +985,12 @@ void MainComponent::setToOffMode()
     guiSamplerMode->setVisible(false);
     guiSequencerMode->setVisible(false);
     guiControllerMode->setVisible(false);
-    speakerLeft->setVisible(true);
-    speakerRight->setVisible(true);
-    circleBackground->setVisible(true);
     
+    midiPiano->setActive(false);
+    globalSettingsButton->setEnabled(false);
+    globalSettingsButton->setAlpha(0.3f);
+	noModeSelected = 1;
+	repaint();
     
 }
 void MainComponent::setToMidiMode()
@@ -894,14 +999,17 @@ void MainComponent::setToMidiMode()
     guiSamplerMode->setVisible(false);
     guiSequencerMode->setVisible(false);
     guiControllerMode->setVisible(false);
-    speakerLeft->setVisible(false);
-    speakerRight->setVisible(false);
-    circleBackground->setVisible(false);
     
     //update the display of the midi mode so it shows the
     //currently selected pad's settings, and makes any uneeded
     //components invisble or dissabled
     guiMidiMode->updateDisplay();
+    
+    globalSettingsButton->setEnabled(true);
+    globalSettingsButton->setAlpha(1.0f);
+    midiPiano->setActive(true);
+	noModeSelected = 0;
+	repaint();
 
     
 }
@@ -911,14 +1019,17 @@ void MainComponent::setToSamplerMode()
     guiSamplerMode->setVisible(true);
     guiSequencerMode->setVisible(false);
     guiControllerMode->setVisible(false);
-    speakerLeft->setVisible(false);
-    speakerRight->setVisible(false);
-    circleBackground->setVisible(false);
     
     //update the display of the sampler mode so it shows the
     //currently selected pad's settings, and makes any unneeded
     //components invisble or dissabled
     guiSamplerMode->updateDisplay();
+    
+    globalSettingsButton->setEnabled(true);
+    globalSettingsButton->setAlpha(1.0f);
+    midiPiano->setActive(false);
+	noModeSelected = 0;
+	repaint();
 
     
 }
@@ -928,12 +1039,14 @@ void MainComponent::setToSequencerMode()
     guiSamplerMode->setVisible(false);
     guiSequencerMode->setVisible(true);
     guiControllerMode->setVisible(false);
-    speakerLeft->setVisible(false);
-    speakerRight->setVisible(false);
-    circleBackground->setVisible(false);
     
     guiSequencerMode->updateDisplay();
     
+    globalSettingsButton->setEnabled(true);
+    globalSettingsButton->setAlpha(1.0f);
+    midiPiano->setActive(true);
+	noModeSelected = 0;
+	repaint();
 }
 
 void MainComponent::setToControllerMode()
@@ -942,11 +1055,14 @@ void MainComponent::setToControllerMode()
     guiSamplerMode->setVisible(false);
     guiSequencerMode->setVisible(false);
     guiControllerMode->setVisible(true);
-    speakerLeft->setVisible(false);
-    speakerRight->setVisible(false);
-    circleBackground->setVisible(false);
     
     guiControllerMode->updateDisplay();
+    
+    globalSettingsButton->setEnabled(true);
+    globalSettingsButton->setAlpha(1.0f);
+    midiPiano->setActive(false);
+	noModeSelected = 0;
+	repaint();
 }
 
 
@@ -1047,7 +1163,7 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     {
         setInfoTextBoxText ("Controller-Mode Button. Click this button to put Controller functionality onto the selected pad/pads. This enables certain components within the application to be controlled by pads.");
     }
-    else if (e.eventComponent == loadButton)
+    else if (e.eventComponent == openButton)
     {
         setInfoTextBoxText ("Load Performance. Allows a set of scenes to be loaded into the application.");
     }
@@ -1055,25 +1171,9 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     {
         setInfoTextBoxText ("Save Performance. Allows a set of scenes to be saved to the computer.");
     }
-    else if (e.eventComponent == saveAsButton)
-    {
-        setInfoTextBoxText ("Save Performance As. Allows a set of scenes to be saved to the computer with a given name.");
-    }
-    else if (e.eventComponent == cleanUpProjectButton)
-    {
-        setInfoTextBoxText ("Clean-up project. Deletes any unneeded audio files from the current project's 'Audio Files' directory. Use this command regularly to prevent an excessive build-up of redundant data.");
-    }
         else if (sceneComponent->isMouseOver(true))
     {
         setInfoTextBoxText ("Scenes. Allows application settings to be saved into indvidual scenes that can then be saved to disk as a group. Shift-Click a slot to save a scene to the object, or click to load a scene from the object. Right-click to save and load single scenes.");
-    }
-    else if (e.eventComponent == clearScenesButton)
-    {
-        setInfoTextBoxText ("Clear Scenes. Allows all scene slots in the scene object to be cleared.");
-    }
-    else if (tempoSlider->isMouseOver(true)==true)
-    {
-        setInfoTextBoxText ("Global Tempo Selector. Sets and displays the tempo which controls the playback speed of sequences.");
     }
     else if (gainSlider->isMouseOver(true)==true)
     {
@@ -1100,11 +1200,12 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     {
         setInfoTextBoxText("Kill Switch. Instantly stops the clock and any playing pads.");
     }
+    /*
     else if (autoShowSettingsSwitch->isMouseOver(true))
     {
         setInfoTextBoxText("'Show Pad Settings When Pressed' Option. If this switch is set to 'on' the pad settings will  beautomatically displayed when a pad is pressed. It is recommended that you only use this feature for editing projects and not playing/performing.");
     }
-    
+    */
     
     
 }
@@ -1120,6 +1221,7 @@ void MainComponent::mouseExit (const MouseEvent &e)
 
 void MainComponent::setLocalisation()
 {
+    /*
     trans = nullptr;
     
     static String countryCode = SystemStats::getDisplayLanguage();
@@ -1165,6 +1267,7 @@ void MainComponent::setLocalisation()
     
     //commandManager->commandStatusChanged();
     owner->repaint();
+     */
 }
 
 

@@ -44,6 +44,7 @@
 #include "../Custom Components/General/GuiSwitch.h"
 #include "../Custom Components/Graphics/GuiPopUpWindow.h"
 #include "../Custom Components/General/AlphaSlider.h"
+#include "../Custom Components/General/AlphaTextButton.h"
 #include "../Custom Components/Scene/SceneComponent.h"
 #include "../../File and Settings/AppDocumentState.h"
 #include "../../Application/AbstractSubjectAndObserver.h"
@@ -52,7 +53,10 @@
 #include "../Sub-Views/AboutComponent.h"
 #include "../Sub-Views/PreferencesComponent.h"
 #include "../Sub-Views/ProjectSettingsComponent.h"
-
+#include "../Sub-Views/Toolbox.h"
+#include "../Sub-Views/GuiGlobalPadSettings.h"
+#include "../Custom Components/Circle Piano/GuiPiano.h"
+#include "../AlphaLiveLookandFeel.h"
 
 class MainComponent :   public Component,
                         public Button::Listener,
@@ -110,16 +114,24 @@ public:
     
 private:
     //==============================================================================
-    TextButton *loadButton, *saveButton, *saveAsButton;
-    TextButton *clearScenesButton;
-    TextButton *cleanUpProjectButton;
     
-    AlphaSlider *tempoSlider;
+    AlphaLiveLookandFeel alphaGUI;
+	//LookAndFeel *blackChrome;
+    
+    Image backgroundImage, padsOff, padsOn, modeOff, padsBg;
+    
+    
+    AlphaTextButton *openButton, *saveButton;
+    //TextButton *clearScenesButton;
+    //TextButton *cleanUpProjectButton;
+    
+    //AlphaSlider *tempoSlider;
 
     GuiMidiMode *guiMidiMode;
     GuiSamplerMode *guiSamplerMode;
     GuiSequencerMode *guiSequencerMode;
     GuiControllerMode *guiControllerMode;
+    GuiGlobalPadSettings *guiGlobalPadSettings;
     
     AlphaLiveEngine &alphaLiveEngineRef;
     AppDocumentState &appDocumentStateRef;
@@ -141,13 +153,11 @@ private:
     
     LocalisedStrings *trans;
     
-    //==============================================================================
-    //NEW GUI!!
-    LookAndFeel *blackChrome;
-    Image backgroundImage;
+    DocumentWindow* owner;
+    
+    int noPadsSelected, noModeSelected;
     
     GuiPadLayout *guiPadLayout;
-    
     AlphaImageKnob *gainSlider, *panSlider;
 
     //'rotate pad display' stuff
@@ -164,18 +174,21 @@ private:
 	ModeButton *modeMidiButton;
 	ModeButton *modeSequencerButton;
 	ModeButton *modeControllerButton;
+    ModeButton *globalSettingsButton;
     
+    /*
     //should this stuff be in it's own component?
     GuiSpeaker *speakerLeft, *speakerRight;
     GuiCircleBackground *circleBackground;
     
     GuiPopUpWindow *popUpWindow;
-    GuiGlobalClock *globalClock;
-    GuiSwitch *autoShowSettingsSwitch;
+     */
     
-    //TooltipWindow *tooltip;
-    //menu bar stuff
-    DocumentWindow* owner; //is this needed anymore?
+    GuiGlobalClock *globalClock;
+    GuiPiano *midiPiano;
+    Toolbox *toolbox;
+    
+    //GuiSwitch *autoShowSettingsSwitch;
 
     
     AboutComponent *aboutComponent;

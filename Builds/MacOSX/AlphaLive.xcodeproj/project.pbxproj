@@ -18,6 +18,7 @@
 		0C52F2A215D6983300E76547 /* GuiPiano.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C52F2A015D6983300E76547 /* GuiPiano.cpp */; };
 		0C52F2AB15D69D6000E76547 /* SettingsButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C52F2A915D69D5C00E76547 /* SettingsButton.cpp */; };
 		0C52F2AE15D69E2C00E76547 /* Toolbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C52F2AC15D69E2C00E76547 /* Toolbox.cpp */; };
+		0C52F2B415D6BF4E00E76547 /* GuiGlobalPadSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C52F2B215D6BF4D00E76547 /* GuiGlobalPadSettings.cpp */; };
 		0C78A3C115B467910049C0C8 /* AbstractSubjectAndObserver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2AC15B467900049C0C8 /* AbstractSubjectAndObserver.cpp */; };
 		0C78A3C215B467910049C0C8 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2B015B467900049C0C8 /* Main.cpp */; };
 		0C78A3C315B467910049C0C8 /* MainMenuModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2B115B467900049C0C8 /* MainMenuModel.cpp */; };
@@ -231,6 +232,8 @@
 		0C52F2AA15D69D5E00E76547 /* SettingsButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsButton.h; sourceTree = "<group>"; };
 		0C52F2AC15D69E2C00E76547 /* Toolbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Toolbox.cpp; sourceTree = "<group>"; };
 		0C52F2AD15D69E2C00E76547 /* Toolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Toolbox.h; sourceTree = "<group>"; };
+		0C52F2B215D6BF4D00E76547 /* GuiGlobalPadSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiGlobalPadSettings.cpp; sourceTree = "<group>"; };
+		0C52F2B315D6BF4E00E76547 /* GuiGlobalPadSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiGlobalPadSettings.h; sourceTree = "<group>"; };
 		0C68958415D123AA00848D62 /* ger_trans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ger_trans; sourceTree = "<group>"; };
 		0C78A2AC15B467900049C0C8 /* AbstractSubjectAndObserver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractSubjectAndObserver.cpp; sourceTree = "<group>"; };
 		0C78A2AD15B467900049C0C8 /* AbstractSubjectAndObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractSubjectAndObserver.h; sourceTree = "<group>"; };
@@ -1768,6 +1771,8 @@
 				0C78A36015B467910049C0C8 /* ProjectSettingsComponent.cpp */,
 				0C52F2AD15D69E2C00E76547 /* Toolbox.h */,
 				0C52F2AC15D69E2C00E76547 /* Toolbox.cpp */,
+				0C52F2B315D6BF4E00E76547 /* GuiGlobalPadSettings.h */,
+				0C52F2B215D6BF4D00E76547 /* GuiGlobalPadSettings.cpp */,
 			);
 			path = "Sub-Views";
 			sourceTree = "<group>";
@@ -3679,6 +3684,7 @@
 				0C52F2A215D6983300E76547 /* GuiPiano.cpp in Sources */,
 				0C52F2AB15D69D6000E76547 /* SettingsButton.cpp in Sources */,
 				0C52F2AE15D69E2C00E76547 /* Toolbox.cpp in Sources */,
+				0C52F2B415D6BF4E00E76547 /* GuiGlobalPadSettings.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

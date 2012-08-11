@@ -85,10 +85,6 @@ public:
         
         //all functionality is done within this class!
         alphaLiveEngine = new AlphaLiveEngine();
-        
-        //would be nice if you could send the alphaLiveEngine reference (or pointer in this case)
-        //as an init parameter above, but as the AppSettings::Instance is used in so many place
-        //it became very messy and send the correct reference/pointer into every call
         AppSettings::Instance()->setAlphaLiveEngineRef(alphaLiveEngine);
         
         //should this be created here? If not, where?
@@ -100,7 +96,6 @@ public:
         //create main app window
         mainWindow = new MainAppWindow(*alphaLiveEngine, *appDocumentState, menuModel);
         
-        //is this the best way of passing in this reference? could main be restructured so that mainWindow could be passed in when appDoumentState is initilised as a constructor argument?
         appDocumentState->setMainAppWindowRef (mainWindow);
         
         #if JUCE_MAC

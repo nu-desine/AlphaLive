@@ -1,6 +1,6 @@
 //
 //  AlphaSlider.h
-//  AlphaSoft
+//  AlphaLive
 //
 //  Created by Liam Meredith-Lacey on 31/10/2011.
 //  Copyright 2011 nu desine.
@@ -18,6 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 //
 // Class that hold the custom settings for the IncDecButton Slider used throughout the App.
 // Allows certain aspects of multiple sliders to be updated from just here!
@@ -28,12 +29,33 @@
 
 #include "../../../../JuceLibraryCode/JuceHeader.h"
 
-class AlphaSlider : public Slider
+class AlphaSlider : public Slider,
+					public Slider::Listener,
+					public Label::Listener
+	
 {
 public:
     AlphaSlider();
     ~AlphaSlider();
+	//void resized();
+	void paint(Graphics& g);
+	
+	void sliderValueChanged (Slider *slider);
+	void labelTextChanged (Label* labelThatHasChanged);
+	void sliderDragEnded (Slider *slider);
+
+	
+	bool hitTest (int x, int y);
+	
+	
+	
 private:
+	
+	Path thePath;
+	Label *sliderValue;
+	Colour arrowUpColour, arrowDownColour;
+	int i, valueStore;
+	
     
 };
 

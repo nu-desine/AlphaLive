@@ -1,6 +1,6 @@
 //
 //  SceneSlot.h
-//  AlphaSoft
+//  AlphaLive
 //
 //  Created by Liam Meredith-Lacey on 31/10/2011.
 //  Copyright 2011 nu desine.
@@ -24,7 +24,7 @@
 
 //represets a single slot/hole in the scene component.
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "../../../../JuceLibraryCode/JuceHeader.h"
 
 class SceneComponent;
 

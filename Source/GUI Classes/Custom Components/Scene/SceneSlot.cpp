@@ -22,7 +22,8 @@
 
 #include "SceneSlot.h"
 #include "SceneComponent.h"
-#include "AppSettings.h"
+#include "../../../File and Settings/AppSettings.h"
+#include "../../AlphaLiveLookandFeel.h"
 
 SceneSlot::SceneSlot (int slotNumber_, SceneComponent &ref)
                     :   slotNumber(slotNumber_),
@@ -55,34 +56,34 @@ void SceneSlot::paint (Graphics &g)
     if (status == 0) //empty
     {
         //g.setColour(Colours::black);
-        ColourGradient seqGradient(Colours::black, (getWidth()*0.3),(getHeight()*0.3), Colours::darkgrey, (getWidth()),(getHeight()), true);
+        ColourGradient seqGradient(Colours::black, (getWidth()*0.5), 0, Colours::darkgrey.withAlpha(0.5f), (getWidth()),(getHeight()), true);
         g.setGradientFill(seqGradient);
     }
     else if (status == 1) //Filled but not selected
     {
-        ColourGradient seqGradient(Colours::white, (getWidth()*0.45),(getHeight()*0.45), Colours::grey, (getWidth()),(getHeight()), true);
+        ColourGradient seqGradient(Colours::white, (getWidth()*0.5), 0, Colours::grey, (getWidth()*0.5),(getHeight()), true);
         g.setGradientFill(seqGradient);
     }
     else if (status == 2) //selected
     {
-        ColourGradient seqGradient(Colours::skyblue, (getWidth()*0.45),(getHeight()*0.45), Colours::blue, (getWidth()),(getHeight()), true);
+        ColourGradient seqGradient(AlphaColours::lightblue, (getWidth()*0.5), 0, AlphaColours::blue, (getWidth()*0.5),(getHeight()), true);
         g.setGradientFill(seqGradient);
     }
     
     //draw circle
-    g.fillEllipse(0, 0, getWidth()*0.9, getHeight()*0.9);
+    g.fillEllipse(0, 0, getWidth(), getHeight());
     
     
     //highlight slot when mouse is over
     if (mouseIsOver == true)
     {
         g.setColour(Colours::white.withAlpha(0.5f));
-        g.fillEllipse(0, 0, getWidth()*0.9, getHeight()*0.9);
+        g.fillEllipse(0, 0, getWidth(), getHeight());
         
         //text
         g.setColour(Colours::black);
         g.setFont(9);
-        g.drawFittedText(slotNumberString, (getWidth()*0.1), 0, (getWidth()*0.8), getHeight(), Justification::centred, 1);
+        g.drawFittedText(slotNumberString, 0, 0, getWidth(), getHeight(), Justification::centred, 1);
     }
     
     

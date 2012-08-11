@@ -21,7 +21,7 @@
 //
 
 #include "SceneComponent.h"
-#include "AppSettings.h"
+#include "../../../File and Settings/AppSettings.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 
@@ -59,29 +59,24 @@ SceneComponent::~SceneComponent()
 void SceneComponent::resized()
 {
     //draw slots (4 rows of 5)
-    for (int i = 0, col = 2, row = 2, counter = 0; i <= NO_OF_SCENES-1; i++)
+    for (int i = 0, counter = 0; i <= NO_OF_SCENES-1; i++)
     {
-        slot[i]->setBounds(col, row, (getWidth()-4)/5, (getHeight()-4)/4);
-        col += (getWidth()-4)/5;
+        slot[i]->setBounds(0, counter, getWidth(), getWidth());
         
-        counter++;
-        
-        if (counter == 5) //draw next row
-        {
-            row += ((getHeight()-4)/4);
-            col = 2;
-            counter = 0;
-        }
-    }  
+        counter = counter + 32;											
+		
+    } 
 }
 
 void SceneComponent::paint (Graphics &g)
 {
+    /*
     //draw background
     //g.setColour(Colours::darkgrey);
     ColourGradient seqGradient(Colours::grey, (getWidth()*0.5),(getHeight()*0.5), Colours::darkgrey, (getWidth()),(getHeight()), true);
     g.setGradientFill(seqGradient);
     g.fillRoundedRectangle(0, 0, getWidth(), getHeight(), 5.0);
+     */
 }
 
 void SceneComponent::clearAll()

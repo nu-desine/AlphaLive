@@ -23,12 +23,12 @@
 #ifndef H_SCENECOMPONENT
 #define H_SCENECOMPONENT
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "../../../../JuceLibraryCode/JuceHeader.h"
 #include "SceneSlot.h"
-#include "AppDocumentState.h"
+#include "../../../File and Settings/AppDocumentState.h"
 #include "SceneValues.h"
-#include "ModeController.h"
-#include "AbstractSubjectAndObserver.h"
+#include "../../../Functionality Classes/Controller Mode/ModeController.h"
+#include "../../../Application/AbstractSubjectAndObserver.h"
 
 class SceneComponent : public Component,
                         public Observer //so this class can observe ModeController

@@ -1,9 +1,9 @@
 /*
- *  ModeButton.h
+ *  SettingsButton.h
  *  AlphaLive
  *
- *  Created by Sam Davies on 14/09/2011.
- //  Copyright 2011 nu desine.
+ *  Created by Sam Davies on 13/06/2012.
+ //  Copyright 2012 nu desine.
  //
  //  This file is part of AlphaLive.
  //
@@ -18,30 +18,25 @@
  //
  //  You should have received a copy of the GNU General Public License
  //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
-#ifndef MODEBUTTON_H
-#define MODEBUTTON_H
+#ifndef SETTINGSBUTTON_H
+#define SETTINGSBUTTON_H
 
 #include "../../../../JuceLibraryCode/JuceHeader.h"
 
-class ModeButton :	public Button
+
+class SettingsButton :	public Button
 
 
 {
 public:
     
-    //==============================================================================
-    /** Creates an imagebutton toggle.
-     
-     @param image               the image to be applied to the button
-     
-     */
-    ModeButton(Image* modeSymbol);
+ 
+    SettingsButton(const String& buttonName, float _startRadians, float _endRadians, float _theWidth, float _textRotation, float _textAngle, float _textRadius);
     
-    /** Destructor. */
-    ~ModeButton();
+	
+    ~SettingsButton();
 	
     
 	void resized();
@@ -50,25 +45,22 @@ public:
     void buttonStateChanged();
 	bool hitTest (int x, int y);
 	
-    
+	
     
 private:
-    //==============================================================================
     
-    
-	
-	//Image OffImage, OverImage, OnImage, ClickImage;
 	float normalOpacity, overOpacity, downOpacity, onOpacity;
     Colour normalOverlay, overOverlay, downOverlay, onOverlay;
-	Image *symbol;
 	
-	Path hitPath;
-    
-	//Image getCurrentImage() const;
+	String theText;
 	
+	float startRadians, endRadians, theWidth, textRotation, textAngle, textRadius;
 	
-    
+	int i;
+	
+	Path thePath;
+	
 };    
 
 
-#endif //MODEBUTTON_H
+#endif //SETTINGSBUTTON_H

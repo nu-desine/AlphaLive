@@ -115,8 +115,7 @@ public:
 private:
     //==============================================================================
     
-    AlphaLiveLookandFeel alphaGUI;
-	//LookAndFeel *blackChrome;
+    AlphaLiveLookandFeel alphaLiveLookAndFeel;
     
     Image backgroundImage, padsOff, padsOn, modeOff, padsBg;
     

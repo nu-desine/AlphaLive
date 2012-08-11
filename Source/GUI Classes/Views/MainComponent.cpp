@@ -44,7 +44,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
                             appDocumentStateRef(ref2),
                             owner(owner_)
 {
-    //blackChrome = nullptr;
     infoTextBox = nullptr;
     
     //language/localisation stuff
@@ -57,34 +56,9 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     appDocumentStateRef.attach(this);
     
     //Look-and-feel stuff
-    alphaGUI.setUsingNativeAlertWindows(true);
-    setLookAndFeel(&alphaGUI);
-    /*
-    blackChrome = new LookAndFeel();
-    if (StoredSettings::getInstance()->language == 4) //japanese
-        blackChrome->setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
-    blackChrome->setDefaultLookAndFeel(blackChrome);
-	
-	blackChrome->setColour(ComboBox::backgroundColourId, Colours::transparentBlack);
-	blackChrome->setColour(ComboBox::textColourId, Colours::silver);
-	blackChrome->setColour(ComboBox::buttonColourId, Colours::silver);
-	blackChrome->setColour(ComboBox::outlineColourId, Colours::silver);
-	blackChrome->setColour(PopupMenu::backgroundColourId, Colours::lightgrey.withAlpha(0.9f));
-	blackChrome->setColour(PopupMenu::textColourId, Colours::black);
-	blackChrome->setColour(PopupMenu::headerTextColourId, Colours::silver);
-	blackChrome->setColour(PopupMenu::highlightedBackgroundColourId, Colours::grey.withAlpha(0.9f));
-	blackChrome->setColour(PopupMenu::highlightedTextColourId, Colours::black);
-	blackChrome->setColour(TextEditor::backgroundColourId, Colours::transparentBlack);
-	blackChrome->setColour(TextEditor::textColourId, Colours::silver);
-	blackChrome->setColour(TextEditor::highlightColourId, Colours::white.withAlpha(0.5f));
-	blackChrome->setColour(TextEditor::outlineColourId, Colours::silver);
-	blackChrome->setColour(TextEditor::focusedOutlineColourId, Colours::white.withAlpha(0.5f));
-	blackChrome->setColour(TextButton::buttonColourId, Colours::lightgrey);
-    blackChrome->setColour(TextButton::buttonOnColourId, Colours::orange);
-	blackChrome->setColour(Slider::rotarySliderFillColourId, Colours::silver);
-	blackChrome->setColour(Slider::rotarySliderOutlineColourId, Colours::grey);
-    blackChrome->setUsingNativeAlertWindows(true);
-     */
+    LookAndFeel::setDefaultLookAndFeel (&alphaLiveLookAndFeel);
+    alphaLiveLookAndFeel.setUsingNativeAlertWindows(true);
+    
     
     //load Gui Images
     //load binary data into Image
@@ -1221,8 +1195,8 @@ void MainComponent::mouseExit (const MouseEvent &e)
 
 void MainComponent::setLocalisation()
 {
-    /*
-    trans = nullptr;
+    
+    //trans = nullptr;
     
     static String countryCode = SystemStats::getDisplayLanguage();
     
@@ -1235,39 +1209,26 @@ void MainComponent::setLocalisation()
         trans = new LocalisedStrings (transFile);
         LocalisedStrings::setCurrentMappings(trans);
         
-        if (blackChrome != nullptr)
-            blackChrome->setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
+        alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
     }
     else if (countryCode == "ja" || countryCode == "jpn") //japanese
     {
         File transFile ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Translation files/jap_trans");
         trans = new LocalisedStrings (transFile);
-        
         LocalisedStrings::setCurrentMappings(trans);
-        
-        if (blackChrome != nullptr)
-            blackChrome->setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
+        alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
         
     }
     else //english
     {
         LocalisedStrings::setCurrentMappings(0);
-        
-        if (blackChrome != nullptr)
-            blackChrome->setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn")); //will set to fallback
-    }
-    
-     
-    if (infoTextBox != nullptr)
-    {
-        Font infoFont(11, Font::plain);
-        infoTextBox->setFont(infoFont);
+        alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn")); //will set to fallback
     }
     
     
     //commandManager->commandStatusChanged();
-    owner->repaint();
-     */
+    //owner->repaint();
+     
 }
 
 

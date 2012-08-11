@@ -3,14 +3,28 @@
  *  sdaJuce
  *
  *  Created by Sam Davies on 19/09/2011.
- *  Copyright 2011 __MyCompanyName__.
- *
+ //  Copyright 2011 nu desine.
+ //
+ //  This file is part of AlphaLive.
+ //
+ //  AlphaLive is free software: you can redistribute it and/or modify
+ //  it under the terms of the GNU General Public License, version 2, 
+ //  as published by the Free Software Foundation.
+ //  
+ //  AlphaLive is distributed in the hope that it will be useful,
+ //  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ //  GNU General Public License for more details.
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "GuiPad.h"
-#include "PadBinaryData.h"
+#include "../../Binary Data/PadBinaryData.h"
 #include "GuiPadLayout.h"
-#include "AppSettings.h"
+#include "../../../File and Settings/AppSettings.h"
+#include "../../AlphaLiveLookandFeel.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
 
@@ -30,29 +44,50 @@ GuiPad::GuiPad(int padNum, GuiPadLayout &ref)
 	padName << padNum + 1;
     
     //Set the image of the pad depending on the pad number.
-    //If the number is the start of a row (0, 8, 16, 24, 32, 40) load the white pad image
-    if (padNumber == 0 || padNumber == 8 || padNumber == 16 || padNumber == 24 || padNumber == 32 || padNumber == 40)
-        image = ImageCache::getFromMemory(PadBinaryData::pad2_png, PadBinaryData::pad2_pngSize);
-    else 
-        image = ImageCache::getFromMemory(PadBinaryData::pad_png, PadBinaryData::pad_pngSize);
-
+    /* //If the number is the start of a row (0, 8, 16, 24, 32, 40) load the white pad image
+     if (padNumber == 16)
+     image = ImageCache::getFromMemory(PadBinaryData::greypad_png, PadBinaryData::greypad_pngSize);
+     else if (padNumber == 24 || padNumber == 8)
+     image = ImageCache::getFromMemory(PadBinaryData::greypad1_png, PadBinaryData::greypad1_pngSize);
+     else if (padNumber == 32 || padNumber == 0)
+     image = ImageCache::getFromMemory(PadBinaryData::greypad2_png, PadBinaryData::greypad2_pngSize);
+     else if (padNumber == 40)
+     image = ImageCache::getFromMemory(PadBinaryData::greypad3_png, PadBinaryData::greypad3_pngSize);
+     else if (padNumber > 40)
+     image = ImageCache::getFromMemory(PadBinaryData::pad3_png, PadBinaryData::pad3_pngSize);	
+     else if ((padNumber > 0 && padNumber < 8) || (padNumber > 32 && padNumber < 40))
+     image = ImageCache::getFromMemory(PadBinaryData::pad2_png, PadBinaryData::pad2_pngSize);
+     else if ((padNumber > 24 && padNumber < 32) || (padNumber > 8 && padNumber < 16))
+     image = ImageCache::getFromMemory(PadBinaryData::pad1_png, PadBinaryData::pad1_pngSize);
+     else 
+     image = ImageCache::getFromMemory(PadBinaryData::pad_png, PadBinaryData::pad_pngSize);
+     
+     */
 	
-// path for shapebutton
+	//midiImage = ImageCache::getFromMemory(BinaryData::midisymbol_png, BinaryData::midisymbol_pngSize);
+	//loopImage = ImageCache::getFromMemory(BinaryData::loopsymbol_png, BinaryData::loopsymbol_pngSize);
+	//seqImage = ImageCache::getFromMemory(BinaryData::sequencersymbol_png, BinaryData::sequencersymbol_pngSize);
+	//controlImage = ImageCache::getFromMemory(BinaryData::controlsymbol_png, BinaryData::controlsymbol_pngSize);
+	
+	
+	
+    // path for shapebutton
+    
 	Path myPath;
-	myPath.addEllipse (0.0f, 0.0f, 100.0f, 100.0f);
+	myPath.addEllipse (0.0f, 0.0f, 100, 100);
 	
 	normalColour = Colours::transparentBlack;
-	overColour = Colours::white.withAlpha(0.3f);
-	downColour = Colours::white.withAlpha(0.6f);
+	overColour = Colours::white.withAlpha(0.2f);
+	downColour = Colours::white.withAlpha(0.3f);
     
     overlayColour = Colours::transparentBlack;
 	
     //the following alpha values are for a gradient ring colour
     //change to 0.5f for solid colours
-	samplerColour = Colours::green.withAlpha(0.7f);
-	midiColour = Colours::yellow.withAlpha(0.7f);
-	seqColour = Colours::red.withAlpha(0.7f);
-	controllerColour = Colours::blue.withAlpha(0.7f);
+	samplerColour = Colours::orange.withAlpha(0.2f);
+	midiColour = Colours::yellow.withAlpha(0.2f);
+	sequencerColour = Colours::red.withAlpha(0.2f);
+	controllerColour = Colours::purple.withAlpha(0.2f);
 	
 	
 	//create shape button with listener reference from guipadlayout
@@ -60,14 +95,20 @@ GuiPad::GuiPad(int padNum, GuiPadLayout &ref)
 	sb->setShape (myPath , true, false, false);
 	sb->setClickingTogglesState (true);
 	sb->addListener(&guiPadLayoutRef);
-
+    
 	addAndMakeVisible (sb, 3);
-
+    
     lastTime = Time::currentTimeMillis();
-
-    gradient = new ColourGradient(g1, (getWidth()*0.5),(getHeight()*0.5), g2, (getWidth()*0.8),(getHeight()*0.8), true);
+    
+    
     gradientOuterColourAlpha = gradientInnerColourAlpha = 0;
-    oscGradientOuterColour = oscGradientInnerColour = Colours::red.withAlpha(0.0f);
+    oscGradientOuterColour = oscGradientInnerColour = Colours::white.withAlpha(0.0f);
+	
+	modeOpacity = 0.05f;
+	
+	padColour = Colours::lightgrey.withAlpha(0.6f);
+	padOuterColour = Colours::darkgrey.withAlpha(0.9f);
+    padInnerColour = Colours::darkgrey.withAlpha(0.3f);
     
     somethingIsBeingDraggedOver = false;
 	
@@ -83,7 +124,7 @@ GuiPad::GuiPad(int padNum, GuiPadLayout &ref)
 GuiPad::~GuiPad()
 {
 	deleteAllChildren();
-    delete gradient;
+    //delete gradient;
 }
 
 
@@ -91,8 +132,8 @@ GuiPad::~GuiPad()
 //==============================================================================
 void GuiPad::resized()
 {
-    hitPath.addEllipse(0.0f, 0.0f, getWidth(), getHeight());
-	sb->setBounds (0, 0, getWidth(), getHeight());
+    hitPath.addEllipse((getWidth()*0.08), (getHeight()*0.08), (getWidth()*0.84), (getHeight()*0.84));
+	sb->setBounds ((getWidth()*0.05), (getHeight()*0.05), (getWidth()*0.9), (getHeight()*0.9));
 }
 
 
@@ -100,13 +141,21 @@ void GuiPad::resized()
 
 void GuiPad::paint (Graphics& g)
 {
-    //std::cout << "Paint pad...";
+    //Rectangle<int> rect = g.getClipBounds();
+    //std::cout << "Painting pad " << padNumber << ": " << rect.getX() << " " << rect.getY() << " " << rect.getRight() << " " << rect.getBottom() << std::endl;
 	
     //main image
-    g.drawImage(image, 0, 0, getWidth(), getHeight(), 0, 0, 100, 100);
+    //g.drawImage(image, 0, 0, getWidth(), getHeight(), 0, 0, image.getWidth(), image.getHeight());
+	g.setColour(padColour);
+	g.drawEllipse(getWidth()*0.05, getHeight()*0.05, getWidth()*0.9, getHeight()*0.9, 2.0f);
+    ColourGradient padGradient(padInnerColour, (getWidth()*0.5),(getHeight()*0.5), padOuterColour, (getWidth()*0.8),(getHeight()*0.8), true);
+    g.setGradientFill(padGradient);
+    
+	g.fillEllipse((getWidth()*0.05), (getHeight()*0.05), (getWidth()*0.9), (getHeight()*0.9));
+    
     
     //button 'on' overlay
-    g.setColour(overlayColour);
+	g.setColour(overlayColour);
     g.fillEllipse((getWidth()*0.08), (getHeight()*0.08), (getWidth()*0.84), (getHeight()*0.84));
     
     //text
@@ -115,17 +164,22 @@ void GuiPad::paint (Graphics& g)
     g.drawFittedText(padName, (getWidth()*0.1), 0, (getWidth()*0.8), getHeight(), Justification::centred, 1);
     
     //mode ring
+	
+	
+	
+	//g.setColour(modeColour);
+    //	g.drawEllipse(getWidth()*0.03, getHeight()*0.03, getWidth()*0.94, getHeight()*0.94, 2.0f);
+	
     //ColourGradient ringGradient(Colours::transparentWhite, (getWidth()/3)*2, (getHeight()/3)*2, modeColour, 0, 0, false);
     //g.setColour(modeColour);
     
-    ColourGradient ringGradient(Colours::transparentWhite, getWidth(), getHeight(), modeColour, 0, 0, false);
+    ColourGradient ringGradient(Colours::transparentWhite, (getWidth()*0.5), (getHeight()*0.6), modeColour, (getWidth()*0.5), 0, false);
     g.setGradientFill(ringGradient);
-    
-    g.drawEllipse((getWidth()*0.08), (getHeight()*0.08), (getWidth()*0.84), (getHeight()*0.84), 3);
+    g.fillEllipse((getWidth()*0.08), (getHeight()*0.08), (getWidth()*0.84), (getHeight()*0.84));
     
     //osc gradient (should this be in a seperate component so that repainting is less CPU-heavy)?
-    oscGradientOuterColour = Colours::orange.withAlpha(float(gradientOuterColourAlpha));
-    oscGradientInnerColour = Colours::orange.withAlpha(float(gradientInnerColourAlpha));
+    oscGradientOuterColour = Colours::white.withAlpha(float(gradientOuterColourAlpha));
+    oscGradientInnerColour = Colours::white.withAlpha(float(gradientInnerColourAlpha));
     ColourGradient oscGradient(oscGradientInnerColour, (getWidth()*0.5),(getHeight()*0.5), oscGradientOuterColour, (getWidth()*0.8),(getHeight()*0.8), true);
     g.setGradientFill(oscGradient);
     g.fillEllipse((getWidth()*0.05), (getHeight()*0.05), (getWidth()*0.9), (getHeight()*0.9));
@@ -157,6 +211,7 @@ void GuiPad::paint (Graphics& g)
         g.setColour(Colours::brown.withAlpha(0.7f));
         g.drawEllipse(getWidth()*0.25, getHeight()*0.25, getWidth()*0.51, getHeight()*0.51, getWidth()/8);
     }
+
 
 
 }
@@ -209,13 +264,13 @@ void GuiPad::modeChange(int value)
 		modeColour = normalColour;
 	
 	else if (value == 1)
-		modeColour = samplerColour;
-	
-	else if (value == 2)
 		modeColour = midiColour;
 	
+	else if (value == 2)
+		modeColour = samplerColour;
+	
 	else if (value == 3)
-		modeColour = seqColour;
+		modeColour = sequencerColour;
 	
 	else if (value == 4)
 		modeColour = controllerColour;
@@ -232,25 +287,21 @@ void GuiPad::toggleChange()
 	//function to be called when togglestate changes to apply overlay colour
 	i = sb->getToggleState();
 	
-	if (i == 0) {
+	if (i == 0) 
+    {
 		
 		sb->setClickingTogglesState (true);
 		
 		overlayColour = Colours::transparentBlack;
-		g1 = Colours::transparentBlack;
-		g2 = Colours::transparentBlack;
-		gradient->setColour(0, g1);
-		gradient->setColour(1, g2);
+		
 	}
-	else {
+	else 
+    {
 		
 		sb->setClickingTogglesState (false);
 		
-		overlayColour = Colours::blue.withAlpha(0.6f);
-		g1 = Colours::darkblue;
-		g2 = Colours::aqua;
-		gradient->setColour(0, g1);
-		gradient->setColour(1, g2);
+		overlayColour = AlphaColours::blue.withAlpha(0.6f);
+		
 		
 	}
 	repaint();

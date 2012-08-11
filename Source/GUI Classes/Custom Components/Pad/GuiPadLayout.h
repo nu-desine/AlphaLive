@@ -3,18 +3,31 @@
  *  sdaJuce
  *
  *  Created by Sam Davies on 22/09/2011.
- *  Copyright 2011 __MyCompanyName__.
- *
+ //  Copyright 2011 nu desine.
+ //
+ //  This file is part of AlphaLive.
+ //
+ //  AlphaLive is free software: you can redistribute it and/or modify
+ //  it under the terms of the GNU General Public License, version 2, 
+ //  as published by the Free Software Foundation.
+ //  
+ //  AlphaLive is distributed in the hope that it will be useful,
+ //  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ //  GNU General Public License for more details.
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef GUIPADLAYOUT_H
 #define GUIPADLAYOUT_H
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "../../../../JuceLibraryCode/JuceHeader.h"
 #include "GuiPad.h"
 #include "GuiPadRow.h"
-#include "AbstractSubjectAndObserver.h"
-#include "AlphaLiveEngine.h"
+#include "../../../Application/AbstractSubjectAndObserver.h"
+#include "../../../Functionality Classes/AlphaLiveEngine.h"
 
 class MainComponent;
 
@@ -77,7 +90,7 @@ private:
 	Colour normalColour, overColour, downColour;
 
 	Image snap;
-	GuiPadRow *globalSb, *row1Sb, *row2Sb, *row3Sb, *row4Sb, *row5Sb, *row6Sb;
+	GuiPadRow *globalSb, *row1Sb, *row2Sb, *row3Sb, *row4Sb, *row5Sb, *row6Sb, *row7Sb;
 	
 	float sin1, sin2, sinN1, sinN2, sin3, sin4, sin5, sin6, sin7, sinN3, sinN4, sinN5, sinN6, sinN7, sin8, sin9, sin10, sin11, sinN8, sinN9, sinN10, sinN11;
 	float cos1, cos2, cosN1, cosN2, cos3, cos4, cos5, cos6, cos7, cosN3, cosN4, cosN5, cosN6, cosN7, cos8, cos9, cos10, cos11, cosN8, cosN9, cosN10, cosN11;

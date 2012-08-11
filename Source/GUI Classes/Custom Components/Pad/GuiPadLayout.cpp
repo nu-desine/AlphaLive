@@ -3,13 +3,26 @@
  *  sdaJuce
  *
  *  Created by Sam Davies on 22/09/2011.
- *  Copyright 2011 __MyCompanyName__.
- *
+ //  Copyright 2011 nu desine.
+ //
+ //  This file is part of AlphaLive.
+ //
+ //  AlphaLive is free software: you can redistribute it and/or modify
+ //  it under the terms of the GNU General Public License, version 2, 
+ //  as published by the Free Software Foundation.
+ //  
+ //  AlphaLive is distributed in the hope that it will be useful,
+ //  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ //  GNU General Public License for more details.
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "GuiPadLayout.h"
-#include "PadBinaryData.h"
-#include "MainComponent.h"
+#include "../../Binary Data/PadBinaryData.h"
+#include "../../Views/MainComponent.h"
 
 GuiPadLayout::GuiPadLayout(AlphaLiveEngine &subject, MainComponent &ref)
                             :   Component ("GuiPadLayout"),
@@ -23,12 +36,12 @@ GuiPadLayout::GuiPadLayout(AlphaLiveEngine &subject, MainComponent &ref)
     mSubject.attach(this);
     
     //adds buttons to select rows using custom button GuiPadRow
-    row6Sb =  new GuiPadRow();
-    row5Sb =  new GuiPadRow();
-    row4Sb =  new GuiPadRow();
-    row3Sb =  new GuiPadRow();
-    row2Sb =  new GuiPadRow();
-    row1Sb =  new GuiPadRow();
+    row6Sb =  new GuiPadRow(40);
+    row5Sb =  new GuiPadRow(62);
+    row4Sb =  new GuiPadRow(78);
+    row3Sb =  new GuiPadRow(103);
+    row2Sb =  new GuiPadRow(83);
+    row1Sb =  new GuiPadRow(55);
     
     row1Sb->addListener(this);
 	addAndMakeVisible(row1Sb);
@@ -60,12 +73,18 @@ GuiPadLayout::GuiPadLayout(AlphaLiveEngine &subject, MainComponent &ref)
 	//row6Sb->toBehind(row5Sb);
     row6Sb->addMouseListener(this, true);
     
-    globalSb = new GuiPadRow();
+    globalSb = new GuiPadRow(58);
 	globalSb->addListener(this);
 	addAndMakeVisible(globalSb);
 	//globalSb->toBehind(pads[0]);
     globalSb->addMouseListener(this, true);
-
+	
+	row7Sb = new GuiPadRow(65);
+	row7Sb->addListener(this);
+	addAndMakeVisible(row7Sb);
+	//globalSb->toBehind(pads[0]);
+    row7Sb->addMouseListener(this, true);
+    
 	
 	//adds 48 instances of GuiPad component with toggle-state active
 	for (int i = 0; i <= 47; i++) 
@@ -77,7 +96,7 @@ GuiPadLayout::GuiPadLayout(AlphaLiveEngine &subject, MainComponent &ref)
 	}
 	
 	//path for hit test - DO WE NEED A HIT TEST FOR THIS COMPONENT?
-	hitPath.addEllipse (230.0f, 30.0f, 590.0f, 590.0f);
+	hitPath.addEllipse (220.0f, 40.0f, 570.0f, 570.0f);
 	
 	pStore = 0;
 	rotateValue = 0;
@@ -143,7 +162,6 @@ GuiPadLayout::GuiPadLayout(AlphaLiveEngine &subject, MainComponent &ref)
     
     shouldDisplaySettings = false;
     //currentlySelectedPad = 99;
-    
     selectedPads.clear(); //should I call clearQuick() instead?
 	
 }
@@ -158,6 +176,7 @@ GuiPadLayout::~GuiPadLayout()
 	delete row4Sb;
 	delete row5Sb;
 	delete row6Sb;
+    delete row7Sb;
     
     //detach this class from the subject class
     mSubject.detach(this);
@@ -168,70 +187,72 @@ GuiPadLayout::~GuiPadLayout()
 void GuiPadLayout::resized()
 {
 	
+	setCentrePosition(384, 295);
 	globalSb->centreWithSize(58, 58);
     
-    row6Sb->centreWithSize(113, 113);
-	row5Sb->centreWithSize(173, 173);
-	row4Sb->centreWithSize(259, 259);
-	row3Sb->centreWithSize(377, 377);
-	row2Sb->centreWithSize(466, 466);
-	row1Sb->centreWithSize(528, 528);
+    row6Sb->centreWithSize(95, 95);
+	row5Sb->centreWithSize(161, 161);
+	row4Sb->centreWithSize(241, 241);
+	row3Sb->centreWithSize(352, 352);
+	row2Sb->centreWithSize(439, 439);
+	row1Sb->centreWithSize(496, 496);
+	row7Sb->centreWithSize(557, 557);
 	
 	
     //adds 48 pads using an equation that takes centre point, distance from centre and angle
-    pads[45]->setBounds((((getWidth() *0.5) - 19) + (50 * sin1)), (((getHeight() *0.5) - 19) + (50 * cos1)) ,38, 38);
-	pads[46]->setBounds((((getWidth() *0.5) - 19) + (50 * sin2)), (((getHeight() *0.5) - 19) + (50 * cos2)) ,38, 38);	
-	pads[47]->setBounds((((getWidth() *0.5) - 19) + (50 * sin2)), (((getHeight() *0.5) - 19) + (50 * cosN2)) ,38, 38);
-	pads[40]->setBounds((((getWidth() *0.5) - 19) + (50 * sin1)), (((getHeight() *0.5) - 19) + (50 * cosN1)) ,38, 38);	
-	pads[41]->setBounds((((getWidth() *0.5) - 19) + (50 * sinN1)), (((getHeight() *0.5) - 19) + (50 * cosN1)) ,38, 38);
-	pads[42]->setBounds((((getWidth() *0.5) - 19) + (50 * sinN2)), (((getHeight() *0.5) - 19) + (50 * cosN2)) ,38, 38);
-	pads[43]->setBounds((((getWidth() *0.5) - 19) + (50 * sinN2)), (((getHeight() *0.5) - 19) + (50 * cos2)) ,38, 38);
-	pads[44]->setBounds((((getWidth() *0.5) - 19) + (50 * sinN1)), (((getHeight() *0.5) - 19) + (50 * cos1)) ,38, 38);
+    pads[45]->setBounds((((getWidth() *0.5) - 18) + (48 * sin1)), (((getHeight() *0.5) - 18) + (48 * cos1)) ,36, 36);
+	pads[46]->setBounds((((getWidth() *0.5) - 18) + (48 * sin2)), (((getHeight() *0.5) - 18) + (48 * cos2)) ,36, 36);	
+	pads[47]->setBounds((((getWidth() *0.5) - 18) + (48 * sin2)), (((getHeight() *0.5) - 18) + (48 * cosN2)) ,36, 36);
+	pads[40]->setBounds((((getWidth() *0.5) - 18) + (48 * sin1)), (((getHeight() *0.5) - 18) + (48 * cosN1)) ,36, 36);	
+	pads[41]->setBounds((((getWidth() *0.5) - 18) + (48 * sinN1)), (((getHeight() *0.5) - 18) + (48 * cosN1)) ,36, 36);
+	pads[42]->setBounds((((getWidth() *0.5) - 18) + (48 * sinN2)), (((getHeight() *0.5) - 18) + (48 * cosN2)) ,36, 36);
+	pads[43]->setBounds((((getWidth() *0.5) - 18) + (48 * sinN2)), (((getHeight() *0.5) - 18) + (48 * cos2)) ,36, 36);
+	pads[44]->setBounds((((getWidth() *0.5) - 18) + (48 * sinN1)), (((getHeight() *0.5) - 18) + (48 * cos1)) ,36, 36);
 	
-	pads[36]->setBounds((((getWidth() *0.5) - 24) + (86 * sin3)), (((getHeight() *0.5) - 24) + (86 * cos3)) ,48, 48);
-	pads[37]->setBounds((((getWidth() *0.5) - 24) + (86 * 1)), (((getHeight() *0.5) - 24) + (86 * 0)) ,48, 48);
-	pads[38]->setBounds((((getWidth() *0.5) - 24) + (86 * sin3)), (((getHeight() *0.5) - 24) + (86 * cosN3)) ,48, 48);
-	pads[39]->setBounds((((getWidth() *0.5) - 24) + (86 * 0)), (((getHeight() *0.5) - 24) + (86 * -1)) ,48, 48);
-	pads[32]->setBounds((((getWidth() *0.5) - 24) + (86 * sinN3)), (((getHeight() *0.5) - 24) + (86 * cosN3)) ,48, 48);
-	pads[33]->setBounds((((getWidth() *0.5) - 24) + (86 * -1)), (((getHeight() *0.5) - 24) + (86 * 0)) ,48, 48);
-	pads[34]->setBounds((((getWidth() *0.5) - 24) + (86 * sinN3)), (((getHeight() *0.5) - 24) + (86 * cos3)) ,48, 48);
-	pads[35]->setBounds((((getWidth() *0.5) - 24) + (86 * 0)), (((getHeight() *0.5) - 24) + (86 * 1)) ,48, 48);
+	pads[36]->setBounds((((getWidth() *0.5) - 22) + (82 * sin3)), (((getHeight() *0.5) - 22) + (82 * cos3)) ,44, 44);
+	pads[37]->setBounds((((getWidth() *0.5) - 22) + (82 * 1)), (((getHeight() *0.5) - 22) + (82 * 0)) ,44, 44);
+	pads[38]->setBounds((((getWidth() *0.5) - 22) + (82 * sin3)), (((getHeight() *0.5) - 22) + (82 * cosN3)) ,44, 44);
+	pads[39]->setBounds((((getWidth() *0.5) - 22) + (82 * 0)), (((getHeight() *0.5) - 22) + (82 * -1)) ,44, 44);
+	pads[32]->setBounds((((getWidth() *0.5) - 22) + (82 * sinN3)), (((getHeight() *0.5) - 22) + (82 * cosN3)) ,44, 44);
+	pads[33]->setBounds((((getWidth() *0.5) - 22) + (82 * -1)), (((getHeight() *0.5) - 22) + (82 * 0)) ,44, 44);
+	pads[34]->setBounds((((getWidth() *0.5) - 22) + (82 * sinN3)), (((getHeight() *0.5) - 22) + (82 * cos3)) ,44, 44);
+	pads[35]->setBounds((((getWidth() *0.5) - 22) + (82 * 0)), (((getHeight() *0.5) - 22) + (82 * 1)) ,44, 44);
 	
-	pads[27]->setBounds((((getWidth() *0.5) - 36) + (127 * sin2)), (((getHeight() *0.5) - 36) + (127 * cos2)) ,72, 72);
-	pads[28]->setBounds((((getWidth() *0.5) - 36) + (127 * sin2)), (((getHeight() *0.5) - 36) + (127 * cosN2)) ,72, 72);
-	pads[29]->setBounds((((getWidth() *0.5) - 36) + (127 * sin1)), (((getHeight() *0.5) - 36) + (127 * cosN1)) ,72, 72);
-	pads[30]->setBounds((((getWidth() *0.5) - 36) + (127 * sinN1)), (((getHeight() *0.5) - 36) + (127 * cosN1)) ,72, 72);
-	pads[31]->setBounds((((getWidth() *0.5) - 36) + (127 * sinN2)), (((getHeight() *0.5) - 36) + (127 * cosN2)) ,72, 72);
-	pads[24]->setBounds((((getWidth() *0.5) - 36) + (127 * sinN2)), (((getHeight() *0.5) - 36) + (127 * cos2)) ,72, 72);
-	pads[25]->setBounds((((getWidth() *0.5) - 36) + (127 * sinN1)), (((getHeight() *0.5) - 36) + (127 * cos1)) ,72, 72);
-	pads[26]->setBounds((((getWidth() *0.5) - 36) + (127 * sin1)), (((getHeight() *0.5) - 36) + (127 * cos1)) ,72, 72);
+	pads[27]->setBounds((((getWidth() *0.5) - 34) + (124 * sin2)), (((getHeight() *0.5) - 34) + (124 * cos2)) ,68, 68);
+	pads[28]->setBounds((((getWidth() *0.5) - 34) + (124 * sin2)), (((getHeight() *0.5) - 34) + (124 * cosN2)) ,68, 68);
+	pads[29]->setBounds((((getWidth() *0.5) - 34) + (124 * sin1)), (((getHeight() *0.5) - 34) + (124 * cosN1)) ,68, 68);
+	pads[30]->setBounds((((getWidth() *0.5) - 34) + (124 * sinN1)), (((getHeight() *0.5) - 34) + (124 * cosN1)) ,68, 68);
+	pads[31]->setBounds((((getWidth() *0.5) - 34) + (124 * sinN2)), (((getHeight() *0.5) - 34) + (124 * cosN2)) ,68, 68);
+	pads[24]->setBounds((((getWidth() *0.5) - 34) + (124 * sinN2)), (((getHeight() *0.5) - 34) + (124 * cos2)) ,68, 68);
+	pads[25]->setBounds((((getWidth() *0.5) - 34) + (124 * sinN1)), (((getHeight() *0.5) - 34) + (124 * cos1)) ,68, 68);
+	pads[26]->setBounds((((getWidth() *0.5) - 34) + (124 * sin1)), (((getHeight() *0.5) - 34) + (124 * cos1)) ,68, 68);
 	
-	pads[18]->setBounds((((getWidth() *0.5) - 43) + (185 * 1)), (((getHeight() *0.5) - 43) + (185 * 0)) ,86, 86);
-	pads[19]->setBounds((((getWidth() *0.5) - 43) + (185 * sin3)), (((getHeight() *0.5) - 43) + (185 * cosN3)) ,86, 86);
-	pads[20]->setBounds((((getWidth() *0.5) - 43) + (185 * 0)), (((getHeight() *0.5) - 43) + (185 * -1)) ,86, 86);
-	pads[21]->setBounds((((getWidth() *0.5) - 43) + (185 * sinN3)), (((getHeight() *0.5) - 43) + (185 * cosN3)) ,86, 86);
-	pads[22]->setBounds((((getWidth() *0.5) - 43) + (185 * -1)), (((getHeight() *0.5) - 43) + (185 * 0)) ,86, 86);
-	pads[23]->setBounds((((getWidth() *0.5) - 43) + (185 * sinN3)), (((getHeight() *0.5) - 43) + (185 * cos3)) ,86, 86);
-	pads[16]->setBounds((((getWidth() *0.5) - 43) + (185 * 0)), (((getHeight() *0.5) - 43) + (185 * 1)) ,86, 86);
-	pads[17]->setBounds((((getWidth() *0.5) - 43) + (185 * sin3)), (((getHeight() *0.5) - 43) + (185 * cos3)) ,86, 86);
+	pads[18]->setBounds((((getWidth() *0.5) - 42) + (179 * 1)), (((getHeight() *0.5) - 42) + (179 * 0)) ,84, 84);
+	pads[19]->setBounds((((getWidth() *0.5) - 43) + (179 * sin3)), (((getHeight() *0.5) - 43) + (179 * cosN3)) ,84, 84);
+	pads[20]->setBounds((((getWidth() *0.5) - 43) + (179 * 0)), (((getHeight() *0.5) - 43) + (179 * -1)) ,84, 84);
+	pads[21]->setBounds((((getWidth() *0.5) - 43) + (179 * sinN3)), (((getHeight() *0.5) - 43) + (179 * cosN3)) ,84, 84);
+	pads[22]->setBounds((((getWidth() *0.5) - 43) + (179 * -1)), (((getHeight() *0.5) - 43) + (179 * 0)) ,84, 84);
+	pads[23]->setBounds((((getWidth() *0.5) - 43) + (179 * sinN3)), (((getHeight() *0.5) - 43) + (179 * cos3)) ,84, 84);
+	pads[16]->setBounds((((getWidth() *0.5) - 43) + (179 * 0)), (((getHeight() *0.5) - 43) + (179 * 1)) ,84, 84);
+	pads[17]->setBounds((((getWidth() *0.5) - 43) + (179 * sin3)), (((getHeight() *0.5) - 43) + (179 * cos3)) ,84, 84);
 	
-	pads[9]->setBounds((((getWidth() *0.5) - 36) + (230 * sin2)), (((getHeight() *0.5) - 36) + (230 * cosN2)) ,72, 72);
-	pads[10]->setBounds((((getWidth() *0.5) - 36) + (230 * sin1)), (((getHeight() *0.5) - 36) + (230 * cosN1)) ,72, 72);
-	pads[11]->setBounds((((getWidth() *0.5) - 36) + (230 * sinN1)), (((getHeight() *0.5) - 36) + (230 * cosN1)) ,72, 72);
-	pads[12]->setBounds((((getWidth() *0.5) - 36) + (230 * sinN2)), (((getHeight() *0.5) - 36) + (230 * cosN2)) ,72, 72);
-	pads[13]->setBounds((((getWidth() *0.5) - 36) + (230 * sinN2)), (((getHeight() *0.5) - 36) + (230 * cos2)) ,72, 72);
-	pads[14]->setBounds((((getWidth() *0.5) - 36) + (230 * sinN1)), (((getHeight() *0.5) - 36) + (230 * cos1)) ,72, 72);
-	pads[15]->setBounds((((getWidth() *0.5) - 36) + (230 * sin1)), (((getHeight() *0.5) - 36) + (230 * cos1)) ,72, 72);
-	pads[8]->setBounds((((getWidth() *0.5) - 36) + (230 * sin2)), (((getHeight() *0.5) - 36) + (230 * cos2)) ,72, 72);
- 
-	pads[0]->setBounds((((getWidth() *0.5) - 24) + (260 * sin3)), (((getHeight() *0.5) - 24) + (260 * cosN3)) ,48, 48);
-	pads[1]->setBounds((((getWidth() *0.5) - 24) + (260 * 0)), (((getHeight() *0.5) - 24) + (260 * -1)) ,48, 48);
-	pads[2]->setBounds((((getWidth() *0.5) - 24) + (260 * sinN3)), (((getHeight() *0.5) - 24) + (260 * cosN3)) ,48, 48);
-	pads[3]->setBounds((((getWidth() *0.5) - 24) + (260 * -1)), (((getHeight() *0.5) - 24) + (260 * 0)) ,48, 48);
-	pads[4]->setBounds((((getWidth() *0.5) - 24) + (260 * sinN3)), (((getHeight() *0.5) - 24) + (260 * cos3)) ,48, 48);
-	pads[5]->setBounds((((getWidth() *0.5) - 24) + (260 * 0)), (((getHeight() *0.5) - 24) + (260 * 1)) ,48, 48);
-	pads[6]->setBounds((((getWidth() *0.5) - 24) + (260 * sin3)), (((getHeight() *0.5) - 24) + (260 * cos3)) ,48, 48);
-	pads[7]->setBounds((((getWidth() *0.5) - 24) + (260 * 1)), (((getHeight() *0.5) - 24) + (260 * 0)) ,48, 48);
+	pads[9]->setBounds((((getWidth() *0.5) - 34) + (217 * sin2)), (((getHeight() *0.5) - 34) + (217 * cosN2)) ,68, 68);
+	pads[10]->setBounds((((getWidth() *0.5) - 34) + (217 * sin1)), (((getHeight() *0.5) - 34) + (217 * cosN1)) ,68, 68);
+	pads[11]->setBounds((((getWidth() *0.5) - 34) + (217 * sinN1)), (((getHeight() *0.5) - 34) + (217 * cosN1)) ,68, 68);
+	pads[12]->setBounds((((getWidth() *0.5) - 34) + (217 * sinN2)), (((getHeight() *0.5) - 34) + (217 * cosN2)) ,68, 68);
+	pads[13]->setBounds((((getWidth() *0.5) - 34) + (217 * sinN2)), (((getHeight() *0.5) - 34) + (217 * cos2)) ,68, 68);
+	pads[14]->setBounds((((getWidth() *0.5) - 34) + (217 * sinN1)), (((getHeight() *0.5) - 34) + (217 * cos1)) ,68, 68);
+	pads[15]->setBounds((((getWidth() *0.5) - 34) + (217 * sin1)), (((getHeight() *0.5) - 34) + (217 * cos1)) ,68, 68);
+	pads[8]->setBounds((((getWidth() *0.5) - 34) + (217 * sin2)), (((getHeight() *0.5) - 34) + (217 * cos2)) ,68, 68);
+    
+	pads[0]->setBounds((((getWidth() *0.5) - 22) + (250 * sin3)), (((getHeight() *0.5) - 22) + (250 * cosN3)) ,44, 44);
+	pads[1]->setBounds((((getWidth() *0.5) - 22) + (250 * 0)), (((getHeight() *0.5) - 22) + (250 * -1)) ,44, 44);
+	pads[2]->setBounds((((getWidth() *0.5) - 22) + (250 * sinN3)), (((getHeight() *0.5) - 22) + (250 * cosN3)) ,44, 44);
+	pads[3]->setBounds((((getWidth() *0.5) - 22) + (250 * -1)), (((getHeight() *0.5) - 22) + (250 * 0)) ,44, 44);
+	pads[4]->setBounds((((getWidth() *0.5) - 22) + (250 * sinN3)), (((getHeight() *0.5) - 22) + (250 * cos3)) ,44, 44);
+	pads[5]->setBounds((((getWidth() *0.5) - 22) + (250 * 0)), (((getHeight() *0.5) - 22) + (250 * 1)) ,44, 44);
+	pads[6]->setBounds((((getWidth() *0.5) - 22) + (250 * sin3)), (((getHeight() *0.5) - 22) + (250 * cos3)) ,44, 44);
+	pads[7]->setBounds((((getWidth() *0.5) - 22) + (250 * 1)), (((getHeight() *0.5) - 22) + (250 * 0)) ,44, 44);
 	
 }
 
@@ -308,7 +329,8 @@ void GuiPadLayout::paint (Graphics& g)
 		//transformation to rotate pads back to original angle
 		pads[i]->setTransform (AffineTransform::rotation ((float) (rotateValue / (180.0 / double_Pi)), pivotX , pivotY));	
 		
-		}
+    }
+	
 	
 	
 }
@@ -328,8 +350,6 @@ bool GuiPadLayout::hitTest (int x, int y)
  
 void GuiPadLayout::buttonClicked(Button *button)
 {
-	//function to listen for button clicks and turn on whichever pad or row has been clicked on and turn off the previous pad or row
-    
     //get modifier key so we can handle cmd-clicks and shift-clicks when selecting pads
     ModifierKeys modifier = ModifierKeys::getCurrentModifiers();
     
@@ -462,7 +482,7 @@ void GuiPadLayout::buttonClicked(Button *button)
     
     
     //global button...
-	if (button == globalSb)
+	else if (button == globalSb)
     {
 		for (int i = 0; i <=47; i++) 
         {
@@ -479,6 +499,18 @@ void GuiPadLayout::buttonClicked(Button *button)
 		}
 	}
 	
+    //deselect all row button...
+    else if (button == row7Sb)
+    {
+        //Is there any logic to having cmd-click and shift-click actions here?
+        
+        selectedPads.clear(); //should I call clearQuick() instead?
+        for (int i = 0; i <=47; i++)
+            turnOff(i);
+    }
+    
+    
+    
     if (selectedPads.size() > 0)
     {
         //pass on the selected pads to mainComponent, which then passes it further into the application..

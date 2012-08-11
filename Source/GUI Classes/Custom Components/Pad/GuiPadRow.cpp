@@ -3,18 +3,32 @@
  *  sdaJuce
  *
  *  Created by Sam Davies on 14/10/2011.
- *  Copyright 2011 __MyCompanyName__.
- *
+ //  Copyright 2011 nu desine.
+ //
+ //  This file is part of AlphaLive.
+ //
+ //  AlphaLive is free software: you can redistribute it and/or modify
+ //  it under the terms of the GNU General Public License, version 2, 
+ //  as published by the Free Software Foundation.
+ //  
+ //  AlphaLive is distributed in the hope that it will be useful,
+ //  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ //  GNU General Public License for more details.
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "GuiPadRow.h"
 
 
-GuiPadRow::GuiPadRow() : Button ("GuiPadRow")
+GuiPadRow::GuiPadRow(int pathWidth) : Button ("GuiPadRow"),
+                                        shapeWidth(pathWidth)
 {
 	normalColour = Colours::transparentBlack;
-	overColour = Colours::white.withAlpha(0.5f);
-	downColour = Colours::white.withAlpha(0.6f);
+	overColour = Colours::white.withAlpha(0.2f);
+	downColour = Colours::white.withAlpha(0.3f);
     
 
 
@@ -26,6 +40,7 @@ GuiPadRow::~GuiPadRow()
 
 void GuiPadRow::resized()
 {
+    /*
     //use two INVISIBLE circles (paths) to create the true 'hitPath' for the hitTest method,
     //which will theorectically be the outline/edge of the bigger circle (hitPath).
     //This is done by using a smaller circle (hitPathCover) to 'cover' all but the edge
@@ -34,6 +49,16 @@ void GuiPadRow::resized()
     //the position of this circle needs to make the hitPath circle the same size as
     //the visible circles drawn within the paintButton() function below
     hitPathCover.addEllipse(30.0f, 30.0f, getWidth()-60, getHeight()-60);
+     */
+    
+    //use two INVISIBLE circles (paths) to create the true 'hitPath' for the hitTest method,
+    //which will theorectically be the outline/edge of the bigger circle (hitPath).
+    //This is done by using a smaller circle (hitPathCover) to 'cover' all but the edge
+    //of the bigger circle.
+    hitPath.addEllipse (0.0f, 0.0f, getWidth(), getHeight());
+    //the position of this circle needs to make the hitPath circle the same size as
+    //the visible circles drawn within the paintButton() function below
+    hitPathCover.addEllipse(shapeWidth*0.5, shapeWidth*0.5, getWidth()-shapeWidth, getHeight()-shapeWidth);
     
 }
 
@@ -49,24 +74,24 @@ void GuiPadRow::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
 		case 0:
 			g.setColour(normalColour);
 			//g.fillEllipse(0, 0, getWidth(), getHeight());
-            g.drawEllipse(15, 15, getWidth()-30, getHeight()-30, 30);
+            g.drawEllipse((shapeWidth*0.25), (shapeWidth*0.25), getWidth()-(shapeWidth*0.5), getHeight()-(shapeWidth*0.5), shapeWidth*0.5);
             break;
 			
 		case 1:
 			g.setColour(overColour);
 			//g.fillEllipse(0, 0, getWidth(), getHeight());
-            g.drawEllipse(15, 15, getWidth()-30, getHeight()-30, 30);
+            g.drawEllipse((shapeWidth*0.25), (shapeWidth*0.25), getWidth()-(shapeWidth*0.5), getHeight()-(shapeWidth*0.5), shapeWidth*0.5);
             break;
 			
 		case 2:
 			g.setColour(downColour);
 			//g.fillEllipse(0, 0, getWidth(), getHeight());
-            g.drawEllipse(15, 15, getWidth()-30, getHeight()-30, 30);
+            g.drawEllipse((shapeWidth*0.25), (shapeWidth*0.25), getWidth()-(shapeWidth*0.5), getHeight()-(shapeWidth*0.5), shapeWidth*0.5);
             break;
             
 		default:
 			break;
-    
+            
 	}
 	
 	

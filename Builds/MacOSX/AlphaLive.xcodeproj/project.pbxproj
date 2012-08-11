@@ -1711,8 +1711,8 @@
 				0C78A33D15B467900049C0C8 /* GuiPad.cpp */,
 				0C78A34015B467900049C0C8 /* GuiPadLayout.h */,
 				0C78A33F15B467900049C0C8 /* GuiPadLayout.cpp */,
-				0C78A34115B467900049C0C8 /* GuiPadRow.cpp */,
 				0C78A34215B467900049C0C8 /* GuiPadRow.h */,
+				0C78A34115B467900049C0C8 /* GuiPadRow.cpp */,
 			);
 			path = Pad;
 			sourceTree = "<group>";

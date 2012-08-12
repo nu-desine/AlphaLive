@@ -33,10 +33,12 @@
 #include "../Custom Components/Graphics/GuiSpeaker.h"
 #include "../Custom Components/General/AlphaSlider.h"
 #include "../Custom Components/General/AlphaImageKnob.h"
+#include "../Custom Components/General/AlphaTextButton.h"
+#include "../Custom Components/General/SettingsButton.h"
 
 class MainComponent;
 
-class GuiMidiMode : public Component,
+class GuiMidiMode :     public Component,
                         public ComboBox::Listener,
                         public Slider::Listener,
                         public Button::Listener
@@ -64,30 +66,24 @@ public:
     void mouseExit (const MouseEvent &e);
     
     
-    
 private:
     //==============================================================================
-	//GUI Components
-    ComboBox *pressureModeMenu, *triggerModeMenu;
-    AlphaSlider *pressureMinRangeSlider, *pressureMaxRangeSlider, *ccControllerSlider;
-    TextButton *indestructibleButton, *stickyButton;
+    void setDisplay(int settingsType); //sets whether the trigger (1) or pressure (2) settings are display. 
     
-    //int currentlySelectedPad;
     Array<int> selectedPads;
-    
     MainComponent &mainComponentRef;
     
-    //==============================================================================
-    //New GUI stuff!
-    ImageSlider *channelSlider;
-    AlphaImageKnob *velocitySlider;
-    GuiCirclePiano *circlePiano;
-    GuiCirclePianoForScales *circlePianoForScales;
-    GuiCirclePianoOneOctave *circlePianoOneOctave;
+	//GUI Components
+    AlphaTextButton *triggerSettingsButton, *pressureSettingsButton, *quantiseButton; //should the quantize button be global now? think so :)
+    AlphaSlider *pressureMinRangeSlider, *pressureMaxRangeSlider, *ccControllerSlider;
+    AlphaTextButton *indestructibleButton, *stickyButton;
     GuiSwitch *pressureStatusButton, *noteStatusButton;
-    GuiCircleBackground *circleBackgroundLeft, *circleBackgroundRight;
-    GuiSpeaker *speakerLeft, *speakerRight;
     
+    GuiCircleBackground *notSelected;
+    
+    OwnedArray<AlphaTextButton> channelButtons;
+    OwnedArray<SettingsButton> triggerModeButtons;
+    OwnedArray<SettingsButton> pressureModeButtons;
     
 };
 

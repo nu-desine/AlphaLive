@@ -24,27 +24,26 @@
 
 AlphaTextButton::AlphaTextButton()
 {
-	
 	thePath.addEllipse(0, 0, 100, 100);
-	
+}
+
+AlphaTextButton::AlphaTextButton(String buttonText)
+{
+    thePath.addEllipse(0, 0, 100, 100);
+    
+    setButtonText(buttonText);
 }
 
 AlphaTextButton::~AlphaTextButton()
-{
-	
-	
+{		
 }
 
 void AlphaTextButton::resized()
 {
-	
 	thePath.addEllipse(0, 0, getWidth(), getHeight());
-	
 }
 
 bool AlphaTextButton::hitTest (int x, int y)
 {
-
 	return thePath.contains(x, y);
-	
 }

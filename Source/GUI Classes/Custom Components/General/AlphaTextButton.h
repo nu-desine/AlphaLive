@@ -31,6 +31,7 @@ class AlphaTextButton : public TextButton
 {
 public:
     AlphaTextButton();
+    AlphaTextButton(String buttonText);
     ~AlphaTextButton();
 	void resized();
 	bool hitTest (int x, int y);

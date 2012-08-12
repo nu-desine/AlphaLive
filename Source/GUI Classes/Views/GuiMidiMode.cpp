@@ -43,50 +43,118 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
                                     : mainComponentRef(ref)
 {
     
-    //currentlySelectedPad = 99;
+    //----------------trigger settings button-------------------
+	
+	addAndMakeVisible(triggerSettingsButton = new AlphaTextButton("TRIGGER"));
+	//triggerSettingsButton->setButtonText("TRIGGER");
+	triggerSettingsButton->setRadioGroupId (1234);
+	triggerSettingsButton->setClickingTogglesState(true);
+	triggerSettingsButton->setToggleState(false, false);	
+	triggerSettingsButton->addListener(this);
+	triggerSettingsButton->addMouseListener(this, true);
+	triggerSettingsButton->setOpaque(false);
+    triggerSettingsButton->setToggleState(true, false);
+	
+	//----------------pressure settings button-------------------
+	
+	addAndMakeVisible(pressureSettingsButton = new AlphaTextButton("PRESSURE"));
+	//pressureSettingsButton->setButtonText("PRESSURE");
+	pressureSettingsButton->setRadioGroupId (1234);
+	pressureSettingsButton->setClickingTogglesState(true);
+	pressureSettingsButton->setToggleState(false, false);	
+	pressureSettingsButton->addListener(this);
+	pressureSettingsButton->addMouseListener(this, true);
+	pressureSettingsButton->setOpaque(false);
     
-    //general graphics stuff
-    addAndMakeVisible(circleBackgroundLeft = new GuiCircleBackground());
-    addAndMakeVisible(circleBackgroundRight = new GuiCircleBackground());
+    
+    //----------------------Trigger mode buttons------------------
+    for (int i = 0; i < 4; i++)
+    {
+        if (i == 0)
+        triggerModeButtons.insert(i, new SettingsButton("STANDARD", (270 * (M_PI / 180)), 
+                                                            (315 * (M_PI / 180)),
+                                                            0.4f, -90, 0.45, 0.75));
+        else if (i == 1)
+            triggerModeButtons.insert(i, new SettingsButton("TOGGLE", (315 * (M_PI / 180)),
+                                                            (2 * M_PI) , 0.4f, -90, 0.45, 0.68));
+        else if (i == 2)
+            triggerModeButtons.insert(i, new SettingsButton("LATCH", 0.0f, (45 * (M_PI / 180)), 
+                                                            0.4f, 90, 0.55, 0.3));
+        else if (i == 3)
+            triggerModeButtons.insert(i, new SettingsButton("TRIGGER", (45 * (M_PI / 180)), 
+                                                            (90 * (M_PI / 180)), 0.4f, 90, 0.55, 0.25));
+        
+        triggerModeButtons[i]->addListener(this);
+        triggerModeButtons[i]->setOpaque(false);
+        triggerModeButtons[i]->setRadioGroupId (43);
+        triggerModeButtons[i]->addMouseListener(this, false);
+        addAndMakeVisible(triggerModeButtons[i]);
+    }
+    
+    triggerModeButtons[0]->setToggleState(true, false);
+    
+    
+    //--------------pressure mode buttons--------------------------
+	for (int i = 0; i < 6; i++)
+    {
+        if (i == 0)
+            pressureModeButtons.insert(i, new SettingsButton("PAT", (270 * (M_PI / 180)), 
+                                                             (315 * (M_PI / 180)), 0.4f, -90, 0.45, 0.7));
+        if (i == 1)
+            pressureModeButtons.insert(i, new SettingsButton("CAT", (315 * (M_PI / 180)),
+                                                             (2 * M_PI) , 0.4f, -90, 0.45, 0.7));
+        if (i == 2)
+            pressureModeButtons.insert(i, new SettingsButton("M.Wh", 0.0f, (45 * (M_PI / 180)), 
+                                                             0.4f, 90, 0.55, 0.5));
+        if (i == 3)
+            pressureModeButtons.insert(i, new SettingsButton("CC", (45 * (M_PI / 180)), (90 * (M_PI / 180)), 
+                                                             0.4f, 90, 0.55, 0.5));
+        if (i == 4)
+            pressureModeButtons.insert(i, new SettingsButton("PB UP", (225 * (M_PI / 180)), 
+                                                             (270 * (M_PI / 180)),0.4f, -90, 0.45, 0.7));
+        if (i == 5)
+            pressureModeButtons.insert(i, new SettingsButton("PB DOWN", (180 * (M_PI / 180)),
+                                                             (225 * (M_PI/ 180)) , 0.4f, -90, 0.45, 0.7));
+        
+        pressureModeButtons[i]->addListener(this);
+        pressureModeButtons[i]->setOpaque(false);
+        pressureModeButtons[i]->setRadioGroupId (53);
+        pressureModeButtons[i]->addMouseListener(this, false);
+        addChildComponent(pressureModeButtons[i]);
+    }
+    
+    pressureModeButtons[0]->setToggleState(true, false);
+    
+     
+    //---------------channel buttons---------------------
+	for (int i = 0; i <= 15; i++)
+	{
+		channelButtons.insert(i, new AlphaTextButton());
+		channelButtons[i]->setButtonText(String(i + 1));
+		channelButtons[i]->setClickingTogglesState(true);
+		channelButtons[i]->setToggleState(false, false);	
+		channelButtons[i]->setRadioGroupId (12);
+		channelButtons[i]->addListener(this);
+        channelButtons[i]->addMouseListener(this, true);
+		channelButtons[i]->setOpaque(false);
+        addAndMakeVisible(channelButtons[i]);
+		
+	}
+    
+    channelButtons[0]->setToggleState(true, false);
 
-    //--------scales circular piano (for selecting root note and scale)--------
-    addAndMakeVisible(circlePianoForScales = new GuiCirclePianoForScales());
-    circlePianoForScales->setInterceptsMouseClicks(false, true);
-    circlePianoForScales->addMouseListener(this, true);
-    
-    //--------layout circular piano (for selecting key, octave, and layout)--------
-    addAndMakeVisible(circlePianoOneOctave = new GuiCirclePianoOneOctave());
-    circlePianoOneOctave->setInterceptsMouseClicks(false, true);
-    circlePianoOneOctave->addMouseListener(this, true);
-    
-    //---------------note number circular piano-----------------------------
-    addAndMakeVisible(circlePiano = new GuiCirclePiano());
-	circlePiano->setInterceptsMouseClicks(false, true);
-    circlePiano->addMouseListener(this, true);
-    
-    
-    //------------------Velocity slider------------------------------
-    addAndMakeVisible(velocitySlider = new AlphaImageKnob(0));
-    velocitySlider->sliderComponent()->setRange(0, 127, 1);
-    velocitySlider->sliderComponent()->addListener(this);
-    velocitySlider->sliderComponent()->setValue(110, true);
-    velocitySlider->sliderComponent()->addMouseListener(this, true);
-    
-    
-    //------------------Channel slider------------------------------
-    //create channel dial
-	Image *dialImage = new Image(ImageFileFormat::loadFrom(ImageSliderBinaryData::channeldial_png, ImageSliderBinaryData::channeldial_pngSize));
-    addAndMakeVisible(channelSlider = new ImageSlider(dialImage, 16, true));
-    channelSlider->setSliderStyle(Slider::Rotary);
-    channelSlider->setRotaryParameters(0, M_PI*2, false);
-    channelSlider->setRange(1, 16, 1);
-    channelSlider->addListener(this);
-    channelSlider->setOpaque(false);
-    channelSlider->addMouseListener(this, false);
-    
+    //----------------quantise button-------------------
+	
+	addAndMakeVisible(quantiseButton = new AlphaTextButton("Q"));
+	//quantiseButton->setButtonText("Q");
+	quantiseButton->setClickingTogglesState(true);
+	quantiseButton->setToggleState(false, false);	
+	quantiseButton->addListener(this);
+	quantiseButton->addMouseListener(this, true);
+	quantiseButton->setOpaque(false);
     
     //------------------Pressure minimum range slider------------------------------
-    addAndMakeVisible(pressureMinRangeSlider = new AlphaSlider());
+    addChildComponent(pressureMinRangeSlider = new AlphaSlider());
     pressureMinRangeSlider->setRange(0, 127, 1);
     pressureMinRangeSlider->addListener(this);
     pressureMinRangeSlider->setValue(0, false);
@@ -94,137 +162,178 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     
     
     //------------------Pressure maximum range slider------------------------------
-    addAndMakeVisible(pressureMaxRangeSlider = new AlphaSlider());
+    addChildComponent(pressureMaxRangeSlider = new AlphaSlider());
     pressureMaxRangeSlider->setRange(0, 127, 1);
     pressureMaxRangeSlider->addListener(this);
     pressureMaxRangeSlider->setValue(127, false);
     pressureMaxRangeSlider->addMouseListener(this, true);
     
-    
-    //----------------pressure mode combobox-------------------------------
-    addAndMakeVisible(pressureModeMenu = new ComboBox());
-    pressureModeMenu->addListener(this);
-    pressureModeMenu->addMouseListener(this, true);
-    
-    pressureModeMenu->addItem("Polyphonic Aftertouch", 1);
-    pressureModeMenu->addItem("Channel Aftertouch", 3);
-    pressureModeMenu->addItem("CC Data", 2);
-    pressureModeMenu->addItem("Mod Wheel", 6);
-    pressureModeMenu->addItem("Pitch Bend (Up)", 4);
-    pressureModeMenu->addItem("Pitch Bend (Down)", 5);
-    pressureModeMenu->setSelectedId(1, true);
-    
-    
-    
-    //----------------trigger mode combobox-------------------------------
-    addAndMakeVisible(triggerModeMenu = new ComboBox());
-    triggerModeMenu->addListener(this);
-    triggerModeMenu->addMouseListener(this, true);
-    triggerModeMenu->addListener(this);
-    triggerModeMenu->addItem("Hold", 1);
-    triggerModeMenu->addItem("Toggle", 2);
-    triggerModeMenu->addItem("Toggle Release", 3);
-    triggerModeMenu->addItem("Latch", 4);
-    triggerModeMenu->addItem("Latch Max", 5);
-    triggerModeMenu->addItem("Trigger", 6);
-    triggerModeMenu->setSelectedId(1, true);
-    triggerModeMenu->addMouseListener(this, true);
-    
-    addAndMakeVisible(indestructibleButton = new TextButton("indestruct"));
+    addAndMakeVisible(indestructibleButton = new AlphaTextButton("indestruct"));
     indestructibleButton->addListener(this);
     indestructibleButton->addMouseListener(this, true);
     indestructibleButton->setClickingTogglesState(true);
-    indestructibleButton->setToggleState(0, false);
+    indestructibleButton->setToggleState(false, false);
     
-    addAndMakeVisible(stickyButton = new TextButton("Sticky"));
+    addChildComponent(stickyButton = new AlphaTextButton("Sticky"));
     stickyButton->addListener(this);
     stickyButton->addMouseListener(this, true);
     stickyButton->setClickingTogglesState(true);
-    stickyButton->setToggleState(0, false);
+    stickyButton->setToggleState(false, false);
+
     
+    //---------------CC controller Slider-------------------------------------
+    addChildComponent(ccControllerSlider = new AlphaSlider());
+    ccControllerSlider->setRange(0, 127, 1);
+    ccControllerSlider->addListener(this);
+    ccControllerSlider->addMouseListener(this, true);
+    
+
+    //---------------status off bg-------------------------------------
+    addChildComponent(notSelected = new GuiCircleBackground());
     
     
     //---------------pressure status button-------------------------------------
     
-    addAndMakeVisible(pressureStatusButton = new GuiSwitch());
+    addChildComponent(pressureStatusButton = new GuiSwitch());
     pressureStatusButton->addListener(this);
     pressureStatusButton->setClickingTogglesState(true);
     pressureStatusButton->setToggleState(true, false);
     pressureStatusButton->addMouseListener(this, false);
-
-
+    
+    
     //---------------note status button-------------------------------------
     addAndMakeVisible(noteStatusButton = new GuiSwitch());
     noteStatusButton->addListener(this);
     noteStatusButton->setClickingTogglesState(true);
     noteStatusButton->setToggleState(true, false);
     noteStatusButton->addMouseListener(this, true);
-    
-    //---------------CC controller Slider-------------------------------------
-    addAndMakeVisible(ccControllerSlider = new AlphaSlider());
-    ccControllerSlider->setRange(0, 127, 1);
-    ccControllerSlider->addListener(this);
-    ccControllerSlider->addMouseListener(this, true);
-    
-    ccControllerSlider->setVisible(false);
-
-    
-    //these need to be on top of all other components
-    addAndMakeVisible(speakerLeft = new GuiSpeaker());
-    speakerLeft->setVisible(false);
-    addAndMakeVisible(speakerRight = new GuiSpeaker());
-    speakerRight->setVisible(false);
+   
 }
 
 GuiMidiMode::~GuiMidiMode()
 {
+    channelButtons.clear();
+    triggerModeButtons.clear();
+    pressureModeButtons.clear();
     deleteAllChildren();
 }
 
 //==============================================================================
 void GuiMidiMode::resized()
 {
-    circleBackgroundLeft->setBounds(14, 402, 230, 230);
-    circleBackgroundRight->setBounds(780, 402, 230, 230);
-    speakerLeft->setBounds(14, 402, 230, 230);
-    speakerRight->setBounds(780, 402, 230, 230);
+    notSelected->setBounds(0, 0, getWidth(), getHeight());
+	
+    noteStatusButton->setBounds(816, 393, 58, 58);
+	pressureStatusButton->setBounds(816, 393, 58, 58);
+	
+	channelButtons[0]->setBounds(649,439,21, 21);
+	channelButtons[1]->setBounds(656,467,21, 21);
+	channelButtons[2]->setBounds(667,495,21, 21);
+	channelButtons[3]->setBounds(682,520,21, 21);
+	channelButtons[4]->setBounds(700,542,21, 21);
+	channelButtons[5]->setBounds(722,562,21, 21);
+	channelButtons[6]->setBounds(747,577,21, 21);
+	channelButtons[7]->setBounds(774,589,21, 21);
+	
+	channelButtons[8]->setBounds(803,596,21, 21);
+	channelButtons[9]->setBounds(832,599,21, 21);
+	channelButtons[10]->setBounds(861,597,21, 21);
+	channelButtons[11]->setBounds(890,590,21, 21);
+	channelButtons[12]->setBounds(917,579,21, 21);
+	channelButtons[13]->setBounds(942,564,21, 21);
+	channelButtons[14]->setBounds(965,545,21, 21);
+	channelButtons[15]->setBounds(984,523,21, 21);
+	
+	quantiseButton->setBounds(681, 288,32, 32);
+	triggerSettingsButton->setBounds(789, 221,42, 42);
+	pressureSettingsButton->setBounds(847, 219,42, 42);
+	
+	triggerModeButtons[0]->setBounds(728, 305, 234, 234);
+	triggerModeButtons[1]->setBounds(728, 305, 234, 234);
+	triggerModeButtons[2]->setBounds(728, 305, 234, 234);
+	triggerModeButtons[3]->setBounds(728, 305, 234, 234);
+	
+	indestructibleButton->setBounds(853, 496,32, 32);
+	
+	stickyButton->setBounds(853, 496,32, 32);
     
-    //the following three sets only one is visible at any time
-    //circlePianoOneOctave->setBounds(780, 402, 230, 230);
-    //circlePianoForScales->setBounds(780, 402, 230, 230);
-    circlePiano->setBounds(780, 402, 230, 230);
-    
-    //----------------------------------------------------------------------------------------------
-    velocitySlider->setBounds(873, 495, 45, 45);
-    channelSlider->setBounds(850, 251, 142, 142);
-    
-    pressureMinRangeSlider->setBounds(LEFT_CIRCLE_X, 440, COMPONENT_W, COMPONENT_H);
-    pressureMaxRangeSlider->setBounds(LEFT_CIRCLE_X, 470, COMPONENT_W, COMPONENT_H);
-    
-    pressureModeMenu->setBounds(LEFT_CIRCLE_X, 500, COMPONENT_W, COMPONENT_H);
-    ccControllerSlider->setBounds(LEFT_CIRCLE_X, 530, COMPONENT_W, COMPONENT_H);
-    triggerModeMenu->setBounds(LEFT_CIRCLE_X, 570, COMPONENT_W, COMPONENT_H);
-    indestructibleButton->setBounds(LEFT_CIRCLE_X, 593, 50, 15);
-    stickyButton->setBounds(LEFT_CIRCLE_X+50, 593, 50, 15);
-    
-    pressureStatusButton->setBounds(165, 360, 45, 45);
-    noteStatusButton->setBounds(810, 360, 45, 45);
-    
-    
-    
+    pressureMinRangeSlider->setBounds(800, 540, 42, 42);
+    pressureMaxRangeSlider->setBounds(848, 540, 42, 42);
+	
+	pressureModeButtons[0]->setBounds(728, 305, 234, 234);
+	pressureModeButtons[1]->setBounds(728, 305, 234, 234);
+	pressureModeButtons[2]->setBounds(728, 305, 234, 234);
+	pressureModeButtons[3]->setBounds(728, 305, 234, 234);
+	pressureModeButtons[4]->setBounds(728, 305, 234, 234);
+	pressureModeButtons[5]->setBounds(728, 305, 234, 234);
+	
+	ccControllerSlider->setBounds(890, 431, 58, 58);
+
 }
 
 void GuiMidiMode::paint (Graphics& g)
 {
-    
+    //std::cout << "Paint midi mode... ";
+	ColourGradient fillGradient(AlphaColours::nearlyblack,845 , 461, Colours::black, 845 , 383, false);
+	g.setGradientFill(fillGradient);
+	
+	g.fillEllipse(802, 379, 86, 86);
+	
+	g.setColour(Colours::black);
+	
+	g.fillEllipse(786,218, 48, 48);
+	g.fillEllipse(844,216, 48, 48);
+	
+	g.fillEllipse(678,285, 38, 38);
+	g.fillEllipse(850,493, 38, 38);
+	
+	g.fillEllipse(646,436, 27, 27);
+	g.fillEllipse(653,464, 27, 27);
+	g.fillEllipse(664,492, 27, 27);
+	g.fillEllipse(679,517, 27, 27);
+	g.fillEllipse(697,539, 27, 27);
+	g.fillEllipse(719,559, 27, 27);
+	g.fillEllipse(744,574, 27, 27);
+	g.fillEllipse(771,586, 27, 27);
+	
+	g.fillEllipse(800,593, 27, 27);
+	g.fillEllipse(829,596, 27, 27);
+	g.fillEllipse(858,594, 27, 27);
+	g.fillEllipse(887,587, 27, 27);
+	g.fillEllipse(914,576, 27, 27);
+	g.fillEllipse(939,561, 27, 27);
+	g.fillEllipse(962,542, 27, 27);
+	g.fillEllipse(981,520, 27, 27);
+	
+	g.setColour(Colours::grey.withAlpha(0.3f));
+	
+	g.drawEllipse(678,285, 38, 38, 1.0);
+	g.drawEllipse(850,493, 38, 38, 1.0);
+	
+	g.drawEllipse(646,436, 27, 27, 1.0);
+	g.drawEllipse(653,464, 27, 27, 1.0);
+	g.drawEllipse(664,492, 27, 27, 1.0);
+	g.drawEllipse(679,517, 27, 27, 1.0);
+	g.drawEllipse(697,539, 27, 27, 1.0);
+	g.drawEllipse(719,559, 27, 27, 1.0);
+	g.drawEllipse(744,574, 27, 27, 1.0);
+	g.drawEllipse(771,586, 27, 27, 1.0);
+	
+	g.drawEllipse(800,593, 27, 27, 1.0);
+	g.drawEllipse(829,596, 27, 27, 1.0);
+	g.drawEllipse(858,594, 27, 27, 1.0);
+	g.drawEllipse(887,587, 27, 27, 1.0);
+	g.drawEllipse(914,576, 27, 27, 1.0);
+	g.drawEllipse(939,561, 27, 27, 1.0);
+	g.drawEllipse(962,542, 27, 27, 1.0);
+	g.drawEllipse(981,520, 27, 27, 1.0);
+
 }
 
 
 void GuiMidiMode::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
     selectedPads = selectedPads_;
-    circlePiano->setCurrentlySelectedPad(selectedPads);
-    //circlePianoForScales->setCurrentlySelectedPad(padNumber);
 }
 
 //==============================================================================
@@ -233,38 +342,13 @@ void GuiMidiMode::comboBoxChanged (ComboBox* comboBox)
     //This method takes the selected IDs from the combo box and sets it to the correct
     //variable in the relevent padSettings index/es
     
-    //==============================================================================
-    //pressure mode combobox
-    if (comboBox == pressureModeMenu)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setMidiPressureMode(pressureModeMenu->getSelectedId());
-        }
-        
-        if (pressureModeMenu->getSelectedId() == 2)
-            ccControllerSlider->setVisible(true);
-        else
-            ccControllerSlider->setVisible(false);
-    }
-    
-    //==============================================================================
-    //pressure triggerMode combo box
-    else if (comboBox == triggerModeMenu)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setMidiTriggerMode(triggerModeMenu->getSelectedId());
-        }
-    }
 
 }
+    
 
 void GuiMidiMode::sliderValueChanged (Slider* slider)
 {
-    
+    /*
     //velocity slider
     if (slider == velocitySlider->sliderComponent())
     {
@@ -274,18 +358,7 @@ void GuiMidiMode::sliderValueChanged (Slider* slider)
             PAD_SETTINGS->setMidiVelocity(velocitySlider->sliderComponent()->getValue());
         }
     }
-    
-    
-    //channel slider
-    if (slider == channelSlider)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setMidiChannel(channelSlider->getValue());
-        }
-        
-    }
+     */
 
     //min pressure range slider
     if (slider == pressureMinRangeSlider)
@@ -321,10 +394,19 @@ void GuiMidiMode::sliderValueChanged (Slider* slider)
 
 }
 
+
+
 void GuiMidiMode::buttonClicked (Button* button)
 {
+    if(button == triggerSettingsButton)
+		setDisplay(1);        
+		
+	
+	else if(button == pressureSettingsButton)
+        setDisplay(2);
     
-    if(button == pressureStatusButton)
+   
+    else if(button == pressureStatusButton)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
@@ -332,11 +414,10 @@ void GuiMidiMode::buttonClicked (Button* button)
             PAD_SETTINGS->setMidiPressureStatus(pressureStatusButton->getToggleState());
         }
         
-        //update speaker display
         if(pressureStatusButton->getToggleStateValue()==true)
-            speakerLeft->setVisible(false);
+            notSelected->setVisible(false);
         else
-            speakerLeft->setVisible(true);
+            notSelected->setVisible(true);
     }
     
     
@@ -348,11 +429,10 @@ void GuiMidiMode::buttonClicked (Button* button)
             PAD_SETTINGS->setMidiNoteStatus(noteStatusButton->getToggleState());
         }
         
-        //update speaker display
         if(noteStatusButton->getToggleStateValue()==true)
-            speakerRight->setVisible(false);
+            notSelected->setVisible(false);
         else
-            speakerRight->setVisible(true);
+            notSelected->setVisible(true);
         
     }
     
@@ -374,10 +454,63 @@ void GuiMidiMode::buttonClicked (Button* button)
             PAD_SETTINGS->setMidiSticky(button->getToggleState());
         }
     }
+    
+    
+    //channel buttons
+    for (int chan = 0; chan < 16; chan++)
+    {
+        if (button == channelButtons[chan])
+        {
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setMidiChannel(chan + 1);
+            }
+            
+            break;
+        }
+        
+    }
+    
+    //triggerMode buttons
+    for (int trig = 0; trig < 4; trig++)
+    {
+        if (button == triggerModeButtons[trig])
+        {
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setMidiTriggerMode(trig);
+            }
+            
+            break;
+        }
+    }
+    
+    //pressureMode buttons
+    for (int pres = 0; pres < 6; pres++)
+    {
+        if (button == pressureModeButtons[pres])
+        {
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setMidiPressureMode(pres);
+            }
+            
+            if (pres == 3)
+                ccControllerSlider->setVisible(true);
+            else
+                ccControllerSlider->setVisible(false);
+            
+            break;
+        }
+    }
 }
 
 void GuiMidiMode::updateDisplay()
 {
+    
     //This method is used to set all the components to the currently selected pad's settings,
     //as well as to hide/dissabled any unneeded components. 
     
@@ -386,98 +519,119 @@ void GuiMidiMode::updateDisplay()
     {
         int padNum = selectedPads[0];
         
-        //update circle piano component
-        circlePiano->updateDisplay();
-        //circlePiano->setVisible(true);
-        
-        //circlePianoOneOctave->setVisible(false);
-        //circlePianoForScales->setVisible(false);
-        
         //get the settings of the pad selected (in padMenu ComboBox)
         //set the stored values on the GUI components
         //Don't broadcast any changes to the component Listeners. Only want to update the GUI here
-        int i;
-        i = PAD_SETTINGS->getMidiNote();
-        i = PAD_SETTINGS->getMidiVelocity();
-        velocitySlider->sliderComponent()->setValue(i, true);
-        i = PAD_SETTINGS->getMidiChannel();
-        channelSlider->setValue(i, false);
-        i = PAD_SETTINGS->getMidiMinPressureRange();
-        pressureMinRangeSlider->setValue(i, false);
-        i = PAD_SETTINGS->getMidiMaxPressureRange();
-        pressureMaxRangeSlider->setValue(i, false);
-        i = PAD_SETTINGS->getMidiPressureMode();
-        pressureModeMenu->setSelectedId(i, true);
-        i = PAD_SETTINGS->getMidiTriggerMode();
-        triggerModeMenu->setSelectedId(i, true);
-        i = PAD_SETTINGS->getMidiCcController();
-        ccControllerSlider->setValue(i, false);
+        
+        //velocitySlider->sliderComponent()->setValue(PAD_SETTINGS->getMidiVelocity(), true);
+        channelButtons[PAD_SETTINGS->getMidiChannel()-1]->setToggleState(true, false);
+        pressureMinRangeSlider->setValue(PAD_SETTINGS->getMidiMinPressureRange(), false);
+        pressureMaxRangeSlider->setValue(PAD_SETTINGS->getMidiMaxPressureRange(), false);
+        pressureModeButtons[PAD_SETTINGS->getMidiPressureMode()]->setToggleState(true, false);
+        triggerModeButtons[PAD_SETTINGS->getMidiTriggerMode()]->setToggleState(true, false);
+        ccControllerSlider->setValue(PAD_SETTINGS->getMidiCcController(), false);
         indestructibleButton->setToggleState(PAD_SETTINGS->getMidiIndestructible(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getMidiSticky(), false);
         
-        bool b;
-        
-        b = PAD_SETTINGS->getMidiPressureStatus();
-        pressureStatusButton->setToggleState(b, false);
-        //update speaker display
-        if(pressureStatusButton->getToggleStateValue()==true)
-            speakerLeft->setVisible(false);
-        else
-            speakerLeft->setVisible(true);
-        
-        b = PAD_SETTINGS->getMidiNoteStatus();
-        noteStatusButton->setToggleState(b, false);
-        //update speaker display
-        if(noteStatusButton->getToggleStateValue()==true)
-            speakerRight->setVisible(false);
-        else
-            speakerRight->setVisible(true);
+        pressureStatusButton->setToggleState(PAD_SETTINGS->getMidiPressureStatus(), false);
+        noteStatusButton->setToggleState(PAD_SETTINGS->getMidiNoteStatus(), false);
         
     }
     
     else if(MULTI_PADS)
     {
-        //circlePianoOneOctave->updateDisplay();
-        //circlePianoOneOctave->setVisible(true);
-        
         //set default values
-        velocitySlider->sliderComponent()->setValue(110, true);
-        channelSlider->setValue(1, false);
+        //velocitySlider->sliderComponent()->setValue(110, true);
+        channelButtons[0]->setToggleState(true, false);
         pressureMinRangeSlider->setValue(0, false);
         pressureMaxRangeSlider->setValue(127, false);
-        pressureModeMenu->setSelectedId(1, true);
-        triggerModeMenu->setSelectedId(1, true);
+        pressureModeButtons[0]->setToggleState(true, false); //ideally nothing should be selected here
+        triggerModeButtons[0]->setToggleState(true, false); // '' ''
         indestructibleButton->setToggleState(0, false);
         stickyButton->setToggleState(0, false);
-        pressureStatusButton->setToggleState(true, false);
-        pressureStatusButton->setButtonText("Pressure Data On");
-        noteStatusButton->setToggleState(true, false);
-        noteStatusButton->setButtonText("Note Data On");
         ccControllerSlider->setValue(12, false);
-        
-        //circlePianoForScales->setVisible(false);
-        circlePiano->updateDisplay();
-        //circlePiano->setVisible(true);
-        speakerLeft->setVisible(false);
-        speakerRight->setVisible(false);
+        pressureStatusButton->setToggleState(true, false);
+        noteStatusButton->setToggleState(true, false);
         
     }
 
+    //set visibility of certain components
     
-    if (pressureModeMenu->getSelectedId() == 2)
-    {
-        ccControllerSlider->setVisible(true);
-    }
-    else
-    {
-        ccControllerSlider->setVisible(false);
-    }
+    notSelected->setVisible(false);
+    
+    if (triggerSettingsButton->getToggleState() == true)
+        setDisplay(1);
+    else if (pressureSettingsButton->getToggleState() == true)
+        setDisplay(2);
 
+}
+
+void GuiMidiMode::setDisplay(int settingsType)
+{
+    if (settingsType == 1) //trigger settings
+    {
+        
+        noteStatusButton->setVisible(true);
+        for (int i = 0; i < 4; i++)
+            triggerModeButtons[i]->setVisible(true);
+        
+        indestructibleButton->setVisible(true);
+        
+        
+        pressureStatusButton->setVisible(false);
+        for (int i = 0; i < 6; i++)
+            pressureModeButtons[i]->setVisible(false);
+        
+        stickyButton->setVisible(false);
+        pressureMinRangeSlider->setVisible(false);
+        pressureMaxRangeSlider->setVisible(false);
+        ccControllerSlider->setVisible(false);
+        
+        if(noteStatusButton->getToggleStateValue()==true)
+            notSelected->setVisible(false);
+        else
+            notSelected->setVisible(true);
+        
+        
+    }
+    
+    else if (settingsType == 2) //pressure settings
+    {
+        
+        noteStatusButton->setVisible(false);
+        for (int i = 0; i < 4; i++)
+            triggerModeButtons[i]->setVisible(false);
+        
+        indestructibleButton->setVisible(false);
+        
+        
+        pressureStatusButton->setVisible(true);
+        for (int i = 0; i < 6; i++)
+            pressureModeButtons[i]->setVisible(true);
+        
+        if(pressureModeButtons[3]->getToggleStateValue() == true)
+            ccControllerSlider->setVisible(true);
+        else
+            ccControllerSlider->setVisible(false);
+        
+        stickyButton->setVisible(true);
+        pressureMinRangeSlider->setVisible(true);
+        pressureMaxRangeSlider->setVisible(true);
+        
+        
+        if(pressureStatusButton->getToggleStateValue()==true)
+            notSelected->setVisible(false);
+        else
+            notSelected->setVisible(true);
+
+    }
+    
 }
 
 
 void GuiMidiMode::mouseEnter (const MouseEvent &e)
 {
+    /*
     if (e.eventComponent == channelSlider)
     {
         mainComponentRef.setInfoTextBoxText("MIDI Channel Dial. Sets and displays the selected pads MIDI channel.");
@@ -526,7 +680,7 @@ void GuiMidiMode::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText("MIDI CC Controller Selector. Sets and displays the MIDI CC controller number for the selected pad/pads.");
     }
-    
+    */
     
 }
 

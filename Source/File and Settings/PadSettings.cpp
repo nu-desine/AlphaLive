@@ -54,8 +54,8 @@ PadSettings::PadSettings(int arrayIndex)
     midiChannel = 1;
     midiMinPressureRange = 0;
     midiMaxPressureRange = 127;
-    midiPressureMode = 1;
-    midiTriggerMode = 1;
+    midiPressureMode = 0;
+    midiTriggerMode = 0;
     midiIndestructible = 0;
     midiSticky = 0;
     midiPressureStatus = true;
@@ -268,8 +268,8 @@ void PadSettings::resetData (int whatToReset)
         setMidiChannel(1);
         setMidiMinPressureRange(0);
         setMidiMaxPressureRange(127);
-        setMidiPressureMode(1);
-        setMidiTriggerMode(1);
+        setMidiPressureMode(0);
+        setMidiTriggerMode(0);
         setMidiIndestructible(0);
         setMidiSticky(0);
         setMidiPressureStatus (true);

@@ -12,7 +12,7 @@
 #include "../../../../JuceLibraryCode/JuceHeader.h"
 
 
-class GuiSwitch :	public Button
+class GuiSwitch :	public TextButton
 
 {
 public:
@@ -29,7 +29,6 @@ public:
 private:
 	
 	Path hitPath;
-	Image offIm, onIm;
 	
 };
 

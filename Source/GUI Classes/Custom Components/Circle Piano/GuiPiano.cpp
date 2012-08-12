@@ -105,7 +105,7 @@ GuiPiano::GuiPiano() : Component ("GuiPiano")
 	for (int i = 0; i <= 119; i++)
 	{
 		
-		keyNumber << i;
+		keyNumber = String(i);
 		
 		int noteIndex = ((i + 1) % 12);		
 		
@@ -187,7 +187,6 @@ void GuiPiano::buttonClicked(Button *button)
 {
 	for (int i = 0; i <= 119; i++)
 	{
-		
         if (button == keys[i])
         {
             
@@ -342,4 +341,5 @@ void GuiPiano::setActive (bool value)
         setAlpha(1.0f);
     else
         setAlpha(0.3f);
+    
 }

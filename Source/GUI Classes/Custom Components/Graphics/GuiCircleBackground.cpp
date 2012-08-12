@@ -22,13 +22,14 @@
 
 #include "GuiCircleBackground.h"
 #include "../../Binary Data/BinaryData.h"
-
+#include "../../Binary Data/BinaryDataNew.h"
+#include "../../AlphaLiveLookandFeel.h"
 
 GuiCircleBackground::GuiCircleBackground()
 {
-    //image = ImageFileFormat::loadFrom(BinaryData::circlebgthin_png, BinaryData::circlebgthin_pngSize);
-    image = ImageCache::getFromMemory(BinaryData::circlebgthin_png, BinaryData::circlebgthin_pngSize);
-    hitPath.addEllipse (0.0f, 0.0f, 230.0f, 230.0f);
+    
+    image = ImageCache::getFromMemory(BinaryDataNew::modeoff_png, BinaryDataNew::modeoff_pngSize);
+    
     
 }
 
@@ -39,17 +40,25 @@ GuiCircleBackground::~GuiCircleBackground()
 
 void GuiCircleBackground::resized()
 {
-    hitPath.addEllipse(0.0f, 0.0f, getWidth(), getHeight());
+    
+	hitPath.addEllipse (683, 261, 324, 324);
     
 }
 
 void GuiCircleBackground::paint (Graphics &g)
 {
     g.drawImage(image, 0, 0, getWidth(), getHeight(), 0, 0, image.getWidth(), image.getHeight());
+	
+	ColourGradient fillGradient(AlphaColours::nearlyblack,845 , 461, Colours::black, 845 , 383, false);
+	g.setGradientFill(fillGradient);
+	
+	g.fillEllipse(802, 379, 86, 86);
     
 }
 
 bool GuiCircleBackground::hitTest (int x, int y)
 {
-    return hitPath.contains(x, y);
+	
+	return hitPath.contains(x, y);
+	
 }

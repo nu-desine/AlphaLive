@@ -65,7 +65,8 @@ private:
     
 	OwnedArray<Path> keysPath;
 	OwnedArray<GuiKeys> keys;
-	
+	Array <int> selectedKeys;
+    
 	Path hitPath;
 	
 	String keyNumber;

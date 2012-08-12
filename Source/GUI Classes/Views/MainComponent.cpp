@@ -671,12 +671,6 @@ void MainComponent::buttonClicked(Button *button)
 //this function is called every time a user selects a pad on the GUI
 void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
 {
-    /*
-    for (int i = 0; i < selectedPads.size(); i++)
-        std::cout << "Pad " << selectedPads[i] << " is selected!\n";
-     
-    std::cout << std::endl;
-     */
     
     if (selectedPads_.size() == 0) //no pads selected
     {
@@ -689,7 +683,13 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
 		globalSettingsButton->setVisible(false);
         toolbox->setVisible(false); //or maybe it links to projects directory?
         midiPiano->setActive(false);
-		repaint();
+        
+        guiMidiMode->setVisible(false);
+        guiSamplerMode->setVisible(false);
+        guiSequencerMode->setVisible(false);
+        guiControllerMode->setVisible(false);
+		
+        repaint();
     }
     else if (selectedPads_.size() > 0 && selectedPads.size() == 0) //if previously there were no pads selected,
                                                             //but now is.

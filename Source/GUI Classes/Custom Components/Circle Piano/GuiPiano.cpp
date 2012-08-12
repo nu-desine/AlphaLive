@@ -52,8 +52,6 @@ GuiPiano::GuiPiano() : Component ("GuiPiano")
 	segEndBlack = ((317 * (M_PI / 180)) - (keyGapBlack + (keyGapBlack * 0.5)));
 	segStartBlack = segEndBlack - keySegBlack;
 	
-	keyValue = 60;
-    selectedKeys.addIfNotAlreadyThere(keyValue);
 	
 	for (int i = 0; i <= 119; i++) 
 	{
@@ -112,7 +110,6 @@ GuiPiano::GuiPiano() : Component ("GuiPiano")
 
 		keys[i]->setClickingTogglesState(true);
 		keys[i]->setToggleState(false, false);	
-		//keys[i]->setRadioGroupId (12);
 		keys[i]->addListener(this);
         keys[i]->addMouseListener(this, true);
 		keys[i]->setOpaque(false);
@@ -165,7 +162,7 @@ void GuiPiano::buttonClicked(Button *button)
 	{
         if (button == keys[i])
         {
-            
+            //=========================================================================
             //regular click to set the selected pad/s a single note
             if (modifier.isCommandDown() == false)
             {
@@ -187,25 +184,28 @@ void GuiPiano::buttonClicked(Button *button)
                         PAD_SETTINGS->setMidiNote(i);
                     }
                 }
-                
-                keyValue = i;//do we need keyValue anymore?
-                
+            
                 
                 
                 break;
             }
             
+            //=========================================================================
+            //cmd-click to select mutiple pads
             else if (modifier.isCommandDown() == true)
             {
                 //don't clear the keys
                 
-                //if the number of selected keys is less than or equal to the number of selected pads
+                //if the number of selected keys is less than the number of selected pads
                 if (selectedKeys.size() < selectedPads.size())
                 {
+                    //add the key
                     setKeyDisplay (i, true);
                     selectedKeys.addIfNotAlreadyThere(i);
                     
-                    for (int j = 0; j < selectedPads.size(); j++)
+                    //cycle through the selected keys in the order they were selected,
+                    //applying them to the selected pads in chronilogical order
+                    for (int j = 0; j < selectedKeys.size(); j++)
                     {
                         int padNum = selectedPads[j];
                         
@@ -214,28 +214,17 @@ void GuiPiano::buttonClicked(Button *button)
                             PAD_SETTINGS->setMidiNote(selectedKeys[j]);
                         }
                     }
-                    
                 }
                 
+                break;
             }
-            
-        
+            //=========================================================================
         }
 	}
-
-}
-
-
-void GuiPiano::setNote()
-{
-   
-	
-	
 }
 
 
 
-//called when a pad is selected from the pad layout
 void GuiPiano::setCurrentlySelectedPad (Array <int> selectedPads_)
 {
 	selectedPads = selectedPads_;
@@ -243,13 +232,15 @@ void GuiPiano::setCurrentlySelectedPad (Array <int> selectedPads_)
 
 
 
-//called when a pad with midi mode on it needs to be displayed
 void GuiPiano::updateDisplay()
 {
     //first clear all keys
     for (int i = 0; i < 120; i++)
         setKeyDisplay(i, false);
+    
+    selectedKeys.clear();
 
+    //=========================================================================
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
@@ -257,10 +248,12 @@ void GuiPiano::updateDisplay()
         if (PAD_SETTINGS->getMode() == 1) //Midi Mode
         {
             setKeyDisplay (PAD_SETTINGS->getMidiNote(), true);
+            selectedKeys.addIfNotAlreadyThere(PAD_SETTINGS->getMidiNote());
         }
         
     }
     
+    //=========================================================================
     if(MULTI_PADS)
     {
     
@@ -273,9 +266,11 @@ void GuiPiano::updateDisplay()
             {
                 padNum = selectedPads[i];
                 setKeyDisplay (PAD_SETTINGS->getMidiNote(), true);
+                selectedKeys.addIfNotAlreadyThere(PAD_SETTINGS->getMidiNote());
             }
         }
     }
+    //=========================================================================
 }
 
 void GuiPiano::mouseDown (const MouseEvent &e)
@@ -323,9 +318,6 @@ void GuiPiano::mouseEnter (const MouseEvent &e)
         //===display note number when hovering mouse over a piano key===
         if (keys[i]->isMouseOver(true))
         {
-            //std::cout << i << " toggle state: " << keys[i]->getToggleState() << std::endl;
-            //int newNote = (transposeValue * 12) + i;
-           // setNoteLabelText(newNote);
             midiNoteLabel->setColour(Label::textColourId, Colours::orange);
         }
     }

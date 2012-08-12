@@ -71,7 +71,6 @@ private:
 	
 	String keyNumber;
 	
-    int keyValue; //holds the index number of the currently selected piano key button
     int noteNumber; //holds the current MIDI note number and key index number
     
 	float keyWidth, keySegWhite, keyGapWhite, keySegBlack, keyGapBlack, segStartWhite, segStartBlack, segEndWhite, segEndBlack;

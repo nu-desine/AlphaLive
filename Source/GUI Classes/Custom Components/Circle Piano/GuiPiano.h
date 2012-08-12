@@ -48,15 +48,18 @@ public:
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);
     
-    void setCurrentlySelectedPad (int padNumber);
+    void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
     
     void setNoteDisplayType (int value);
     void setNoteLabelText (int noteNumber);
     
     void setActive (bool value);
+    void setKeyDisplay (int keyNumber, bool isOn);
 	
 private:
+    Array <int> selectedPads;
+    
 	Label *midiNoteLabel;
     int noteDisplayType; //0 = MIDI Note Number, 1 = MIDI Note Name
     
@@ -68,10 +71,8 @@ private:
 	String keyNumber;
 	
     int keyValue; //holds the index number of the currently selected piano key button
-    int note; //holds the current MIDI note number
+    int noteNumber; //holds the current MIDI note number and key index number
     
-    int currentlySelectedPad;
-	
 	float keyWidth, keySegWhite, keyGapWhite, keySegBlack, keyGapBlack, segStartWhite, segStartBlack, segEndWhite, segEndBlack;
     
 };

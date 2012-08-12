@@ -513,7 +513,6 @@ void MainComponent::buttonClicked(Button *button)
     //get the selected button and set the right mode to screen
     if (button == modeOffButton)
     {
-        setToOffMode();
         buttonIndex = 0;
         
         for (int i = 0; i < selectedPads.size(); i++)
@@ -523,11 +522,12 @@ void MainComponent::buttonClicked(Button *button)
             //set the Gui pads to have a ring of colour signifying the pad's current mode
             guiPadLayout->modeChange(padNum, buttonIndex);
         }
+        
+        setToOffMode();
     }
     
     else if (button == modeMidiButton)
     {
-        setToMidiMode();
         buttonIndex = 1;
         
         for (int i = 0; i < selectedPads.size(); i++)
@@ -537,11 +537,12 @@ void MainComponent::buttonClicked(Button *button)
             //set the Gui pads to have a ring of colour signifying the pad's current mode
             guiPadLayout->modeChange(padNum, buttonIndex);
         }
+        
+        setToMidiMode();
     } 
     
     else if (button == modeSamplerButton)
     {
-        setToSamplerMode();
         buttonIndex = 2;
         
         for (int i = 0; i < selectedPads.size(); i++)
@@ -551,11 +552,12 @@ void MainComponent::buttonClicked(Button *button)
             //set the Gui pads to have a ring of colour signifying the pad's current mode
             guiPadLayout->modeChange(padNum, buttonIndex);
         }
+        
+        setToSamplerMode();
     }
     
     else if (button == modeSequencerButton)
     {
-        setToSequencerMode();
         buttonIndex = 3;
         
         for (int i = 0; i < selectedPads.size(); i++)
@@ -566,11 +568,12 @@ void MainComponent::buttonClicked(Button *button)
             guiPadLayout->modeChange(padNum, buttonIndex);
         }
         
+        setToSequencerMode();
+        
     }
     
     else if (button == modeControllerButton)
     {
-        setToControllerMode();
         buttonIndex = 4;
         
         for (int i = 0; i < selectedPads.size(); i++)
@@ -580,6 +583,8 @@ void MainComponent::buttonClicked(Button *button)
             //set the Gui pads to have a ring of colour signifying the pad's current mode
             guiPadLayout->modeChange(padNum, buttonIndex);
         }
+        
+        setToControllerMode();
     }
     
     else if (button == globalSettingsButton)
@@ -697,7 +702,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
 		modeControllerButton->setVisible(true);
 		globalSettingsButton->setVisible(true);
         toolbox->setVisible(true); //or maybe it links to projects directory?
-        midiPiano->setActive(true);
+        //midiPiano->setActive(true);
 		repaint();
     }
     
@@ -715,7 +720,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
         guiSequencerMode->setCurrentlySelectedPad(selectedPads);
         guiControllerMode->setCurrentlySelectedPad(selectedPads);
         guiGlobalPadSettings->setCurrentlySelectedPad(selectedPads);
-        
+        midiPiano->setCurrentlySelectedPad(selectedPads);
     }
     
     
@@ -982,6 +987,7 @@ void MainComponent::setToMidiMode()
     globalSettingsButton->setEnabled(true);
     globalSettingsButton->setAlpha(1.0f);
     midiPiano->setActive(true);
+    midiPiano->updateDisplay();
 	noModeSelected = 0;
 	repaint();
 
@@ -1019,6 +1025,7 @@ void MainComponent::setToSequencerMode()
     globalSettingsButton->setEnabled(true);
     globalSettingsButton->setAlpha(1.0f);
     midiPiano->setActive(true);
+    midiPiano->updateDisplay();
 	noModeSelected = 0;
 	repaint();
 }

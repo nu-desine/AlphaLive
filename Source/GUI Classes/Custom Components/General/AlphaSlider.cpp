@@ -36,14 +36,14 @@ AlphaSlider::AlphaSlider()
 	addListener(this);
 	
 	
-	addAndMakeVisible(sliderValue = new Label());
-	sliderValue->setFont(Font(11));
-	sliderValue->setText(String(getValue()), false);
-    sliderValue->setColour(Label::textColourId, Colours::white);
-    sliderValue->setColour(Label::backgroundColourId, Colours::transparentBlack);
-    sliderValue->setJustificationType(Justification::centred);
-    sliderValue->setEditable(false, true, true);
-    sliderValue->addListener(this);
+	addAndMakeVisible(sliderValueLabel = new Label());
+	sliderValueLabel->setFont(Font(11));
+	sliderValueLabel->setText(String(getValue()), false);
+    sliderValueLabel->setColour(Label::textColourId, Colours::white);
+    sliderValueLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
+    sliderValueLabel->setJustificationType(Justification::centred);
+    sliderValueLabel->setEditable(false, true, true);
+    sliderValueLabel->addListener(this);
 	
 	i = 0;
 	
@@ -81,12 +81,12 @@ void AlphaSlider::paint(Graphics& g)
 	
 	if (i == 0) {
 		
-		sliderValue->setText(String(getValue()), false);
+		sliderValueLabel->setText(String(getValue()), false);
 		i = 1;
 		
 	}
 	
-	sliderValue->setBounds((getWidth()*0.15), (getHeight()*0.35), (getWidth()*0.7), (getHeight()*0.3));
+	sliderValueLabel->setBounds((getWidth()*0.15), (getHeight()*0.35), (getWidth()*0.7), (getHeight()*0.3));
 	
 	valueStore = getValue();
 
@@ -96,7 +96,7 @@ void AlphaSlider::sliderValueChanged (Slider *slider)
 
 {
 	
-	sliderValue->setText(String(getValue()), false);
+	sliderValueLabel->setText(String(getValue()), false);
 	
 	if (getValue() < valueStore) {
 		
@@ -129,7 +129,7 @@ void AlphaSlider::labelTextChanged (Label* labelThatHasChanged)
 
 {
 	
-	setValue(sliderValue->getText().getFloatValue(), true, true);
+	setValue(sliderValueLabel->getText().getFloatValue(), true, true);
 	
 	arrowDownColour = Colours::grey.withAlpha(0.3f);
 	arrowUpColour = Colours::grey.withAlpha(0.3f);
@@ -138,6 +138,20 @@ void AlphaSlider::labelTextChanged (Label* labelThatHasChanged)
 	
 }
 
+void AlphaSlider::setComponentValue (double value)
+{
+    setValue(value, false);
+    
+    //the below alg. needs changing as what if we want to display things to 2 decimal places? Though will that currently fit?
+    if (getInterval() >= 1)
+    {
+        sliderValueLabel->setText(String(value), false);
+    }
+    else
+    {
+        sliderValueLabel->setText(String(value, 1), false);
+    }
+}
 
 
 bool AlphaSlider::hitTest (int x, int y)

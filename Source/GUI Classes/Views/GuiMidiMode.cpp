@@ -157,7 +157,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     addChildComponent(pressureMinRangeSlider = new AlphaSlider());
     pressureMinRangeSlider->setRange(0, 127, 1);
     pressureMinRangeSlider->addListener(this);
-    pressureMinRangeSlider->setValue(0, false);
+    pressureMinRangeSlider->setComponentValue(0);
     pressureMinRangeSlider->addMouseListener(this, true);
     
     
@@ -165,7 +165,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     addChildComponent(pressureMaxRangeSlider = new AlphaSlider());
     pressureMaxRangeSlider->setRange(0, 127, 1);
     pressureMaxRangeSlider->addListener(this);
-    pressureMaxRangeSlider->setValue(127, false);
+    pressureMaxRangeSlider->setComponentValue(127);
     pressureMaxRangeSlider->addMouseListener(this, true);
     
     addAndMakeVisible(indestructibleButton = new AlphaTextButton("indestruct"));
@@ -525,11 +525,11 @@ void GuiMidiMode::updateDisplay()
         
         //velocitySlider->sliderComponent()->setValue(PAD_SETTINGS->getMidiVelocity(), true);
         channelButtons[PAD_SETTINGS->getMidiChannel()-1]->setToggleState(true, false);
-        pressureMinRangeSlider->setValue(PAD_SETTINGS->getMidiMinPressureRange(), false);
-        pressureMaxRangeSlider->setValue(PAD_SETTINGS->getMidiMaxPressureRange(), false);
+        pressureMinRangeSlider->setComponentValue(PAD_SETTINGS->getMidiMinPressureRange());
+        pressureMaxRangeSlider->setComponentValue(PAD_SETTINGS->getMidiMaxPressureRange());
         pressureModeButtons[PAD_SETTINGS->getMidiPressureMode()]->setToggleState(true, false);
         triggerModeButtons[PAD_SETTINGS->getMidiTriggerMode()]->setToggleState(true, false);
-        ccControllerSlider->setValue(PAD_SETTINGS->getMidiCcController(), false);
+        ccControllerSlider->setComponentValue(PAD_SETTINGS->getMidiCcController());
         indestructibleButton->setToggleState(PAD_SETTINGS->getMidiIndestructible(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getMidiSticky(), false);
         
@@ -543,13 +543,13 @@ void GuiMidiMode::updateDisplay()
         //set default values
         //velocitySlider->sliderComponent()->setValue(110, true);
         channelButtons[0]->setToggleState(true, false);
-        pressureMinRangeSlider->setValue(0, false);
-        pressureMaxRangeSlider->setValue(127, false);
+        pressureMinRangeSlider->setComponentValue(0);
+        pressureMaxRangeSlider->setComponentValue(127);
         pressureModeButtons[0]->setToggleState(true, false); //ideally nothing should be selected here
         triggerModeButtons[0]->setToggleState(true, false); // '' ''
         indestructibleButton->setToggleState(0, false);
         stickyButton->setToggleState(0, false);
-        ccControllerSlider->setValue(12, false);
+        ccControllerSlider->setComponentValue(12);
         pressureStatusButton->setToggleState(true, false);
         noteStatusButton->setToggleState(true, false);
         

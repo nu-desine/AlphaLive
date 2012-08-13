@@ -22,6 +22,8 @@
  7 - Reverb
  8 - Flanger
  9 - Tremolo
+ 
+ However in the functionality side the indexes are +1, so 0 can be used for 'no effect'
  */
 
 #include "../../../../JuceLibraryCode/JuceHeader.h"

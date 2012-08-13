@@ -35,18 +35,28 @@
 GuiTremolo::GuiTremolo(MainComponent &ref)
 :           mainComponentRef(ref)
 {
-    addAndMakeVisible(depthSlider = new AlphaImageKnob(2));
-    depthSlider->sliderComponent()->setRange(0.0, 1.0);
-    depthSlider->sliderComponent()->setValue(0.7, false);
-    depthSlider->sliderComponent()->addListener(this);
-    depthSlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(depthSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
+	depthSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    depthSlider->setRange(0.0, 1.0);
+    depthSlider->setValue(0.7, false);
+    depthSlider->addListener(this);
+    depthSlider->addMouseListener(this, true);
     
-    addAndMakeVisible(rateSlider = new AlphaImageKnob(2));
-    rateSlider->sliderComponent()->setRange(0.0, 50.0);
-    rateSlider->sliderComponent()->setValue(5.0, false);
-    rateSlider->sliderComponent()->addListener(this);
-    rateSlider->sliderComponent()->addMouseListener(this, true);
-    rateSlider->setVisible(false);
+	addAndMakeVisible(rateSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
+	rateSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    rateSlider->setRange(0, 50.0);
+    rateSlider->setValue(5.0, false);
+    rateSlider->addListener(this);
+    rateSlider->addMouseListener(this, true);
+    
+    addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
+	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    intensitySlider->setRange(0.0, 1.0);
+    intensitySlider->setValue(0.5, false);
+    intensitySlider->addListener(this);
+    intensitySlider->addMouseListener(this, true);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
+    
     
     addAndMakeVisible(rateMenu = new ComboBox());
     rateMenu->addListener(this);
@@ -61,7 +71,7 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     //what about other values, such as the d's and t's in Logic's tremolo?
     rateMenu->setSelectedId(3, true);
     
-    addAndMakeVisible(syncButton = new TextButton("sync", "Tempo Sync"));
+    addAndMakeVisible(syncButton = new AlphaTextButton("SYNC"));
     syncButton->setClickingTogglesState(true);
     syncButton->setToggleState(1, false);
     syncButton->addListener(this);
@@ -87,18 +97,11 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     alphaTouchMenu->addItem("Wave Shape", 4);
     alphaTouchMenu->setSelectedId(1, true);
     
-    addAndMakeVisible(reverseButton = new TextButton("Invert", "Invert"));
+    addAndMakeVisible(reverseButton = new AlphaTextButton("INVERT"));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);
     reverseButton->addMouseListener(this, true);
     
-    addAndMakeVisible(intensitySlider = new AlphaImageKnob(2));
-    intensitySlider->sliderComponent()->setRange(0.0, 1.0);
-    intensitySlider->sliderComponent()->setValue(1.0, false);
-    intensitySlider->sliderComponent()->addListener(this);
-    intensitySlider->sliderComponent()->addMouseListener(this, true);
-    
-    //currentlySelectedPad = 99;
     tempo = AppSettings::Instance()->getGlobalTempo();
     
     setInterceptsMouseClicks(false, true);
@@ -113,48 +116,56 @@ GuiTremolo::~GuiTremolo()
 
 void GuiTremolo::resized()
 {
-    depthSlider->setBounds(getWidth()/2-(40/2), 40, 40, 40);
-    rateSlider->setBounds((getWidth()/3)-35, 70, 40, 40);
-    rateMenu->setBounds((getWidth()/3)-35, 85, 50, 15);
-    syncButton->setBounds(((getWidth()/2)-(35/2))-3, 85, 40, 15);
-    shapeMenu->setBounds(((getWidth()/3)*2)-10, 85, 50, 15);
+    //this needs rearranging
+    //maybe the sync button going above the rate menu.
+    //and the sticky and invert button are spaced equally at the bottom (should be applied to every effect)
+    //with the shape menu central under the alphatouch menu
     
-    alphaTouchMenu->setBounds(65, 125, 100, 15);
-    reverseButton->setBounds(68, 155, 40, 20);
-    intensitySlider->setBounds(120, 145, 40, 40);
+    depthSlider->setBounds(97, 97, 130, 130);
+    rateSlider->setBounds(87, 87, 150, 150);
+    intensitySlider->setBounds(77, 77, 170, 170);
+    
+    alphaTouchMenu->setBounds(119, 192, 87, 20);
+    reverseButton->setBounds(211,211, 32, 32);
+    
+    rateMenu->setBounds(119, 52, 87, 20);
+    shapeMenu->setBounds(80, 213, 87, 20);
+    syncButton->setBounds(130, 235, 32, 32);
+    
+
 }
 
 
 
 void GuiTremolo::sliderValueChanged (Slider *slider)
 {
-    if (slider == depthSlider->sliderComponent())
+    if (slider == depthSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxTremoloDepth(depthSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxTremoloDepth(depthSlider->getValue());
         }
         
     }
     
-    else if (slider == rateSlider->sliderComponent())
+    else if (slider == rateSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxTremoloRate(rateSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxTremoloRate(rateSlider->getValue());
         }
         
     }
     
     
-    else if (slider == intensitySlider->sliderComponent())
+    else if (slider == intensitySlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxTremoloAtIntensity(intensitySlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxTremoloAtIntensity(intensitySlider->getValue());
         }
         
     }
@@ -222,7 +233,7 @@ void GuiTremolo::comboBoxChanged (ComboBox *comboBox)
                  
         }
         
-        rateSlider->sliderComponent()->setValue(lfoRate, false);
+        rateSlider->setValue(lfoRate, false);
         
         for (int i = 0; i < selectedPads.size(); i++)
         {
@@ -282,28 +293,28 @@ void GuiTremolo::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        depthSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxTremoloDepth(), false);
-        rateSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxTremoloRate(), false);
+        depthSlider->setValue(PAD_SETTINGS->getSamplerFxTremoloDepth(), false);
+        rateSlider->setValue(PAD_SETTINGS->getSamplerFxTremoloRate(), false);
         rateMenu->setSelectedId(PAD_SETTINGS->getSamplerFxTremoloRateMenu(), true);
         syncButton->setToggleState(PAD_SETTINGS->getSamplerFxTremoloSync(), false);
         shapeMenu->setSelectedId(PAD_SETTINGS->getSamplerFxTremoloShape(), true);
         
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxTremoloAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxTremoloAtReverse(), false);
-        intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxTremoloAtIntensity(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getSamplerFxTremoloAtIntensity(), false);
     }
     
     else if(MULTI_PADS)
     {
-        depthSlider->sliderComponent()->setValue(0.7, false);
-        rateSlider->sliderComponent()->setValue(5.0, false);
+        depthSlider->setValue(0.7, false);
+        rateSlider->setValue(5.0, false);
         rateMenu->setSelectedId(3, true);
         syncButton->setToggleState(true, false);
         shapeMenu->setSelectedId(2, true);
         
         alphaTouchMenu->setSelectedId(1, true);
         reverseButton->setToggleState(0, false);
-        intensitySlider->sliderComponent()->setValue(1.0, false);
+        intensitySlider->setValue(1.0, false);
     }
     
     

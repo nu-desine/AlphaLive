@@ -154,9 +154,9 @@ AlphaLiveLookandFeel::AlphaLiveLookandFeel()
 		
         Slider::backgroundColourId,                 0x00000000,
         Slider::thumbColourId,                      textButtonColour,
-        Slider::trackColourId,                      0xff1a56ab,
-        Slider::rotarySliderFillColourId,           0xff1a56ab,
-        Slider::rotarySliderOutlineColourId,        0xff1c1c1c,
+        Slider::trackColourId,                      AlphaColours::blue_,
+        Slider::rotarySliderFillColourId,           AlphaColours::blue_,
+        Slider::rotarySliderOutlineColourId,        0xff1c1c1c, //0xff3c3c3c
         Slider::textBoxTextColourId,                0xffffffff,
         Slider::textBoxBackgroundColourId,          0x00000000,
         Slider::textBoxHighlightColourId,           textHighlightColour,

@@ -32,35 +32,36 @@
 GuiReverb::GuiReverb(MainComponent &ref)
                         : mainComponentRef(ref)
 {
-    addAndMakeVisible(mixSlider = new AlphaImageKnob(2));
-    mixSlider->sliderComponent()->setRange(0.0, 1.0);
-    mixSlider->sliderComponent()->setValue(0.7, false);
-    mixSlider->sliderComponent()->addListener(this);
-    mixSlider->sliderComponent()->addMouseListener(this, true);
     
-    addAndMakeVisible(roomSizeSlider = new AlphaImageKnob(2));
-    roomSizeSlider->sliderComponent()->setRange(0.0, 1.0);
-    roomSizeSlider->sliderComponent()->setValue(0.5, false);
-    roomSizeSlider->sliderComponent()->addListener(this);
-    roomSizeSlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(mixSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
+	mixSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    mixSlider->setRange(0.0, 1.0);
+    mixSlider->setValue(0.7, false);
+    mixSlider->addListener(this);
+    mixSlider->addMouseListener(this, true);
     
-    addAndMakeVisible(dampingSlider = new AlphaImageKnob(2));
-    dampingSlider->sliderComponent()->setRange(0.0, 1.0);
-    dampingSlider->sliderComponent()->setValue(0.5, false);
-    dampingSlider->sliderComponent()->addListener(this);
-    dampingSlider->sliderComponent()->addMouseListener(this, true);
+	addAndMakeVisible(roomSizeSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
+	roomSizeSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    roomSizeSlider->setRange(0, 1.0);
+    roomSizeSlider->setValue(0.5, false);
+    roomSizeSlider->addListener(this);
+    roomSizeSlider->addMouseListener(this, true);
     
-    addAndMakeVisible(widthSlider = new AlphaImageKnob(2));
-    widthSlider->sliderComponent()->setRange(0.0, 1.0);
-    widthSlider->sliderComponent()->setValue(0.5, false);
-    widthSlider->sliderComponent()->addListener(this);
-    widthSlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(dampingSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
+	dampingSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    dampingSlider->setRange(0.0, 1.0);
+    dampingSlider->setValue(0.5, false);
+    dampingSlider->addListener(this);
+    dampingSlider->addMouseListener(this, true);
     
-    addAndMakeVisible(freezeModeSlider = new AlphaImageKnob(2));
-    freezeModeSlider->sliderComponent()->setRange(0.0, 1.0);
-    freezeModeSlider->sliderComponent()->setValue(0.2, false);
-    freezeModeSlider->sliderComponent()->addListener(this);
-    freezeModeSlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(widthSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
+	widthSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    widthSlider->setRange(0.0, 1.0);
+    widthSlider->setValue(0.5, false);
+    widthSlider->addListener(this);
+    widthSlider->addMouseListener(this, true);
+    
+    
     
     addAndMakeVisible(alphaTouchMenu = new ComboBox());
     alphaTouchMenu->addListener(this);
@@ -70,21 +71,21 @@ GuiReverb::GuiReverb(MainComponent &ref)
     alphaTouchMenu->addItem("Room Size", 3);
     alphaTouchMenu->addItem("Damping", 4);
     alphaTouchMenu->addItem("Width", 5);
-    //alphaTouchMenu->addItem("Freeze Mode", 6);
     alphaTouchMenu->setSelectedId(1, true);
     
-    addAndMakeVisible(reverseButton = new TextButton("Invert", "Invert"));
+    addAndMakeVisible(reverseButton = new AlphaTextButton("INVERT"));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);
     reverseButton->addMouseListener(this, true);
     
-    addAndMakeVisible(intensitySlider = new AlphaImageKnob(2));
-    intensitySlider->sliderComponent()->setRange(0.0, 1.0);
-    intensitySlider->sliderComponent()->setValue(1.0, false);
-    intensitySlider->sliderComponent()->addListener(this);
-    intensitySlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
+	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    intensitySlider->setRange(0.0, 1.0);
+    intensitySlider->setValue(1.0, false);
+    intensitySlider->addListener(this);
+    intensitySlider->addMouseListener(this, true);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
     
-    //currentlySelectedPad = 99;
     
     setInterceptsMouseClicks(false, true);
 }
@@ -98,78 +99,68 @@ GuiReverb::~GuiReverb()
 
 void GuiReverb::resized()
 {
-    mixSlider->setBounds(getWidth()/3, 40, 35, 35);
-    roomSizeSlider->setBounds(((getWidth()/3)*2)-35, 40, 35, 35);
-    dampingSlider->setBounds((getWidth()/3)-35, 70, 35, 35);
-    //freezeModeSlider->setBounds((getWidth()/2)-(35/2), 70, 35, 35);
-    widthSlider->setBounds((getWidth()/3)*2, 70, 35, 35);
+    mixSlider->setBounds(97, 97, 130, 130);
+    roomSizeSlider->setBounds(87, 87, 150, 150);
+    dampingSlider->setBounds(77, 77, 170, 170);
+	widthSlider->setBounds(67, 67, 190, 190);
+    intensitySlider->setBounds(57, 57, 210, 210);
     
-    alphaTouchMenu->setBounds(65, 125, 100, 15);
-    reverseButton->setBounds(68, 155, 40, 20);
-    intensitySlider->setBounds(120, 145, 40, 40);
+    alphaTouchMenu->setBounds(119, 192, 87, 20);
+    reverseButton->setBounds(211,211, 32, 32);
 }
 
 
 
 void GuiReverb::sliderValueChanged (Slider *slider)
 {
-    if (slider == mixSlider->sliderComponent())
+    if (slider == mixSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbMix(mixSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxReverbMix(mixSlider->getValue());
         }
         
     }
     
-    else if (slider == roomSizeSlider->sliderComponent())
+    else if (slider == roomSizeSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbRoomSize(roomSizeSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxReverbRoomSize(roomSizeSlider->getValue());
         }
         
     }
     
-    else if (slider == dampingSlider->sliderComponent())
+    else if (slider == dampingSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbDamping(dampingSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxReverbDamping(dampingSlider->getValue());
         }
         
     }
     
-    else if (slider == widthSlider->sliderComponent())
+    else if (slider == widthSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbWidth(widthSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxReverbWidth(widthSlider->getValue());
         }
         
     }
     
-    else if (slider == freezeModeSlider->sliderComponent())
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbFreezeMode(freezeModeSlider->sliderComponent()->getValue());
-        }
-        
-    }
 
     
-    else if (slider == intensitySlider->sliderComponent())
+    else if (slider == intensitySlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbAtIntensity(intensitySlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxReverbAtIntensity(intensitySlider->getValue());
         }
     }
     
@@ -216,28 +207,26 @@ void GuiReverb::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        mixSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxReverbMix(), false);
-        roomSizeSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxReverbRoomSize(), false);
-        dampingSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxReverbDamping(), false);
-        widthSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxReverbWidth(), false);
-        freezeModeSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxReverbFreezeMode(), false);
+        mixSlider->setValue(PAD_SETTINGS->getSamplerFxReverbMix(), false);
+        roomSizeSlider->setValue(PAD_SETTINGS->getSamplerFxReverbRoomSize(), false);
+        dampingSlider->setValue(PAD_SETTINGS->getSamplerFxReverbDamping(), false);
+        widthSlider->setValue(PAD_SETTINGS->getSamplerFxReverbWidth(), false);
         
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxReverbAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxReverbAtReverse(), false);
-        intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxReverbAtIntensity(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getSamplerFxReverbAtIntensity(), false);
     }
     
     else if(MULTI_PADS)
     {
-        mixSlider->sliderComponent()->setValue(0.7, false);
-        roomSizeSlider->sliderComponent()->setValue(0.5, false);
-        dampingSlider->sliderComponent()->setValue(0.5, false);
-        widthSlider->sliderComponent()->setValue(0.5, false);
-        freezeModeSlider->sliderComponent()->setValue(0.2, false);
+        mixSlider->setValue(0.7, false);
+        roomSizeSlider->setValue(0.5, false);
+        dampingSlider->setValue(0.5, false);
+        widthSlider->setValue(0.5, false);
         
         alphaTouchMenu->setSelectedId(1, true);
         reverseButton->setToggleState(0, false);
-        intensitySlider->sliderComponent()->setValue(1.0, false);
+        intensitySlider->setValue(1.0, false);
     }
     
     
@@ -260,10 +249,6 @@ void GuiReverb::mouseEnter (const MouseEvent &e)
     else if (widthSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText("Reverb Width Control. Sets the reverb width for the selected pad/pads. A larger width will create a wider reverb sound in the stereo spread.");
-    }
-    else if (freezeModeSlider->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Reverb Freeze Mode Control. Sets the reverb freeze mode level for the selected pad/pads. Values over 0.5 will put the reverb into a continuous feedback loop.");
     }
         
     else if (alphaTouchMenu->isMouseOver(true))

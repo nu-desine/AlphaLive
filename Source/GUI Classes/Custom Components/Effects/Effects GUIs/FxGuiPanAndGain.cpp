@@ -23,6 +23,7 @@
 #include "FxGuiPanAndGain.h"
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
+//#include "../../../AlphaLiveLookandFeel.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
@@ -32,17 +33,19 @@
 GuiGainAndPan::GuiGainAndPan(MainComponent &ref)
                             : mainComponentRef(ref)
 {
-    addAndMakeVisible(gainSlider = new AlphaImageKnob(2));
-    gainSlider->sliderComponent()->setRange(0.0, 1.0);
-    gainSlider->sliderComponent()->setValue(0.5, false);
-    gainSlider->sliderComponent()->addListener(this);
-    gainSlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(gainSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
+	gainSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    gainSlider->setRange(0.0, 1.0);
+    gainSlider->setValue(0.5, false);
+    gainSlider->addListener(this);
+    gainSlider->addMouseListener(this, true);
     
-    addAndMakeVisible(panSlider = new AlphaImageKnob(2, true));
-    panSlider->sliderComponent()->setRange(0.0, 1.0);
-    panSlider->sliderComponent()->setValue(0.5, false);
-    panSlider->sliderComponent()->addListener(this);
-    panSlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(panSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
+	panSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    panSlider->setRange(0.0, 1.0);
+    panSlider->setValue(0.5, false);
+    panSlider->addListener(this);
+    panSlider->addMouseListener(this, true);
     
     addAndMakeVisible(alphaTouchMenu = new ComboBox());
     alphaTouchMenu->addListener(this);
@@ -52,16 +55,18 @@ GuiGainAndPan::GuiGainAndPan(MainComponent &ref)
     alphaTouchMenu->addItem("Pan", 3);
     alphaTouchMenu->setSelectedId(1, true);
     
-    addAndMakeVisible(reverseButton = new TextButton("Invert", "Invert"));
+    addAndMakeVisible(reverseButton = new AlphaTextButton("INVERT"));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);
     reverseButton->addMouseListener(this, true);
     
-    addAndMakeVisible(intensitySlider = new AlphaImageKnob(2));
-    intensitySlider->sliderComponent()->setRange(0.0, 1.0);
-    intensitySlider->sliderComponent()->setValue(1.0, false);
-    intensitySlider->sliderComponent()->addListener(this);
-    intensitySlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
+	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    intensitySlider->setRange(0.0, 1.0);
+    intensitySlider->setValue(1.0, false);
+    intensitySlider->addListener(this);
+    intensitySlider->addMouseListener(this, true);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
     
     //currentlySelectedPad = 99;
     
@@ -77,45 +82,45 @@ GuiGainAndPan::~GuiGainAndPan()
 
 void GuiGainAndPan::resized()
 {
-    gainSlider->setBounds(65, 55, 40, 40);
-    panSlider->setBounds(128, 55, 40, 40);
-    
-    alphaTouchMenu->setBounds(65, 125, 100, 15);
-    reverseButton->setBounds(68, 155, 40, 20);
-    intensitySlider->setBounds(120, 145, 40, 40);
+    gainSlider->setBounds(97, 97, 130, 130);
+    panSlider->setBounds(87, 87, 150, 150);
+    intensitySlider->setBounds(77, 77, 170, 170);
+	
+    alphaTouchMenu->setBounds(119, 192, 87, 20);
+    reverseButton->setBounds(211,211, 32, 32);
 }
 
 
 
 void GuiGainAndPan::sliderValueChanged (Slider *slider)
 {
-    if (slider == gainSlider->sliderComponent())
+    if (slider == gainSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxGainPanGain(gainSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxGainPanGain(gainSlider->getValue());
         }
         
     }
     
     
-    if (slider == panSlider->sliderComponent())
+    if (slider == panSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxGainPanPan(panSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxGainPanPan(panSlider->getValue());
         }
         
     }    
     
-    if (slider == intensitySlider->sliderComponent())
+    if (slider == intensitySlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxGainPanAtIntensity(intensitySlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxGainPanAtIntensity(intensitySlider->getValue());
         }
     }
     
@@ -163,21 +168,21 @@ void GuiGainAndPan::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        gainSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxGainPanGain(), false);
-        panSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxGainPanPan(), false);
+        gainSlider->setValue(PAD_SETTINGS->getSamplerFxGainPanGain(), false);
+        panSlider->setValue(PAD_SETTINGS->getSamplerFxGainPanPan(), false);
         
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxGainPanAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxGainPanAtReverse(), false);
-        intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxGainPanAtIntensity(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getSamplerFxGainPanAtIntensity(), false);
     }
     
     else if(MULTI_PADS)
     {
-        gainSlider->sliderComponent()->setValue(0.5, false);
-        panSlider->sliderComponent()->setValue(0.5, false);
+        gainSlider->setValue(0.5, false);
+        panSlider->setValue(0.5, false);
         alphaTouchMenu->setSelectedId(1, true);
         reverseButton->setToggleState(0, false);
-        intensitySlider->sliderComponent()->setValue(1.0, false);
+        intensitySlider->setValue(1.0, false);
     }
     
 }

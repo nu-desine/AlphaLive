@@ -28,6 +28,8 @@
 
 #include "../../../../../JuceLibraryCode/JuceHeader.h"
 #include "../../General/AlphaImageKnob.h"
+#include "../../General/AlphaRotarySlider.h"
+#include "../../General/AlphaTextButton.h"
 
 class MainComponent;
 
@@ -56,13 +58,12 @@ public:
 private:
     MainComponent &mainComponentRef;
     
-    AlphaImageKnob *wetMixSlider, *feedbackSlider, *delayTimeSlider, *lpfFrequencySlider, *hpfFrequencySlider;
+    AlphaRotarySlider *wetMixSlider, *feedbackSlider, *delayTimeSlider, *lpfFrequencySlider, *hpfFrequencySlider;
     
     ComboBox *alphaTouchMenu, *delayTimeMenu;
-    TextButton *reverseButton, *syncButton;
-    AlphaImageKnob *intensitySlider;
+    AlphaTextButton *reverseButton, *syncButton;
+    AlphaRotarySlider *intensitySlider;
     
-    //int currentlySelectedPad;
     Array<int> selectedPads;
     float tempo;
     

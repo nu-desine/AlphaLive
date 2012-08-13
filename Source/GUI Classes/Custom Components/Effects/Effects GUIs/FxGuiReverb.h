@@ -25,13 +25,15 @@
 
 #include "../../../../../JuceLibraryCode/JuceHeader.h"
 #include "../../General/AlphaImageKnob.h"
+#include "../../General/AlphaRotarySlider.h"
+#include "../../General/AlphaTextButton.h"
 
 class MainComponent;
 
-class GuiReverb :    public Component,
-public Slider::Listener,
-public ComboBox::Listener,
-public Button::Listener
+class GuiReverb :       public Component,
+                        public Slider::Listener,
+                        public ComboBox::Listener,
+                        public Button::Listener
 {
 public:
     GuiReverb(MainComponent &ref);
@@ -51,13 +53,12 @@ public:
 private:
     MainComponent &mainComponentRef;
     
-    AlphaImageKnob *mixSlider, *roomSizeSlider, *dampingSlider, *widthSlider, *freezeModeSlider;
+    AlphaRotarySlider *mixSlider, *roomSizeSlider, *dampingSlider, *widthSlider;
     
     ComboBox *alphaTouchMenu;
-    TextButton *reverseButton;
-    AlphaImageKnob *intensitySlider;
+    AlphaTextButton *reverseButton;
+    AlphaRotarySlider *intensitySlider;
     
-    //int currentlySelectedPad;
     Array<int> selectedPads;
     
 };

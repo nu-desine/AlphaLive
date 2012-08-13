@@ -63,7 +63,6 @@ public:
     void setShouldFinishLoop (int value);
     void setSticky (int value);
     void setEffect (int value);
-    void setPressureStatus (bool value);
     void setQuantizeMode (int value);
     
     int getCurrentPlayingState();
@@ -118,7 +117,6 @@ private:
     int currentPlayingState; //0 - off, 1 - playing, 2 - waiting to play, 3 - waiting to stop 
     int currentPressureValue;
     int quantizeMode;
-    bool pressureStatus;
     
     //audio signal processing stuff - now dynamically created and deleted when needed
     float gain, gainPrev, panLeft, panLeftPrev, panRight, panRightPrev;

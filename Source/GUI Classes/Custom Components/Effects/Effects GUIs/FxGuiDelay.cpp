@@ -32,24 +32,42 @@
 GuiDelay::GuiDelay(MainComponent &ref)
 :           mainComponentRef(ref)
 {
-    addAndMakeVisible(wetMixSlider = new AlphaImageKnob(2));
-    wetMixSlider->sliderComponent()->setRange(0.0, 1.0);
-    wetMixSlider->sliderComponent()->setValue(0.7, false);
-    wetMixSlider->sliderComponent()->addListener(this);
-    wetMixSlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(wetMixSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
+	wetMixSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    wetMixSlider->setRange(0.0, 1.0);
+    wetMixSlider->setValue(0.7, false);
+    wetMixSlider->addListener(this);
+    wetMixSlider->addMouseListener(this, true);
     
-    addAndMakeVisible(feedbackSlider = new AlphaImageKnob(2));
-    feedbackSlider->sliderComponent()->setRange(0.0, 1.0);
-    feedbackSlider->sliderComponent()->setValue(0.5, false);
-    feedbackSlider->sliderComponent()->addListener(this);
-    feedbackSlider->sliderComponent()->addMouseListener(this, true);
+	addAndMakeVisible(feedbackSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
+	feedbackSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    feedbackSlider->setRange(0, 1.0);
+    feedbackSlider->setValue(0.5, false);
+    feedbackSlider->addListener(this);
+    feedbackSlider->addMouseListener(this, true);
     
-    addAndMakeVisible(delayTimeSlider = new AlphaImageKnob(1)); //how many decimal points?
-    delayTimeSlider->sliderComponent()->setRange(0.0, 4000.0);
-    delayTimeSlider->sliderComponent()->setValue(500.0, false);
-    delayTimeSlider->sliderComponent()->addListener(this);
-    delayTimeSlider->sliderComponent()->addMouseListener(this, true);
-    delayTimeSlider->setVisible(false);
+    addAndMakeVisible(delayTimeSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
+	delayTimeSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    delayTimeSlider->setRange(0.0, 4000.0);
+    delayTimeSlider->setValue(500.0, false);
+    delayTimeSlider->addListener(this);
+    delayTimeSlider->addMouseListener(this, true);
+    
+    addAndMakeVisible(lpfFrequencySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
+	lpfFrequencySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    lpfFrequencySlider->setRange(30, 20000, 1);
+    lpfFrequencySlider->setValue(20000, false);
+    lpfFrequencySlider->addListener(this);
+    lpfFrequencySlider->addMouseListener(this, true);
+    
+    addAndMakeVisible(hpfFrequencySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
+	hpfFrequencySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    hpfFrequencySlider->setRange(30, 20000);
+    hpfFrequencySlider->setValue(30, false);
+    hpfFrequencySlider->addListener(this);
+    hpfFrequencySlider->addMouseListener(this, true);
+    
+
     
     addAndMakeVisible(delayTimeMenu = new ComboBox());
     delayTimeMenu->addListener(this);
@@ -61,23 +79,12 @@ GuiDelay::GuiDelay(MainComponent &ref)
     delayTimeMenu->addItem("Quarter Beat", 5);
     delayTimeMenu->setSelectedId(3, true);
     
-    addAndMakeVisible(syncButton = new TextButton("sync", "Tempo Sync"));
+    addAndMakeVisible(syncButton = new AlphaTextButton("SYNC"));
     syncButton->setClickingTogglesState(true);
     syncButton->setToggleState(1, false);
     syncButton->addListener(this);
     syncButton->addMouseListener(this, true);
-    
-    addAndMakeVisible(lpfFrequencySlider = new AlphaImageKnob(0));
-    lpfFrequencySlider->sliderComponent()->setRange(30, 20000, 1);
-    lpfFrequencySlider->sliderComponent()->setValue(20000, false);
-    lpfFrequencySlider->sliderComponent()->addListener(this);
-    lpfFrequencySlider->sliderComponent()->addMouseListener(this, true);
-    
-    addAndMakeVisible(hpfFrequencySlider = new AlphaImageKnob(0));
-    hpfFrequencySlider->sliderComponent()->setRange(30, 20000, 1);
-    hpfFrequencySlider->sliderComponent()->setValue(30, false);
-    hpfFrequencySlider->sliderComponent()->addListener(this);
-    hpfFrequencySlider->sliderComponent()->addMouseListener(this, true);
+
     
     addAndMakeVisible(alphaTouchMenu = new ComboBox());
     alphaTouchMenu->addListener(this);
@@ -90,18 +97,19 @@ GuiDelay::GuiDelay(MainComponent &ref)
     alphaTouchMenu->addItem("HPF Frequency", 6);
     alphaTouchMenu->setSelectedId(1, true);
     
-    addAndMakeVisible(reverseButton = new TextButton("Invert", "Invert"));
+    addAndMakeVisible(reverseButton = new AlphaTextButton("INVERT"));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);
     reverseButton->addMouseListener(this, true);
     
-    addAndMakeVisible(intensitySlider = new AlphaImageKnob(2));
-    intensitySlider->sliderComponent()->setRange(0.0, 1.0);
-    intensitySlider->sliderComponent()->setValue(1.0, false);
-    intensitySlider->sliderComponent()->addListener(this);
-    intensitySlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 230));
+	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    intensitySlider->setRange(0.0, 1.0);
+    intensitySlider->setValue(1.0, false);
+    intensitySlider->addListener(this);
+    intensitySlider->addMouseListener(this, true);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
     
-    //currentlySelectedPad = 99;
     tempo = AppSettings::Instance()->getGlobalTempo();
     
     setInterceptsMouseClicks(false, true);
@@ -116,78 +124,81 @@ GuiDelay::~GuiDelay()
 
 void GuiDelay::resized()
 {
-    feedbackSlider->setBounds(getWidth()/3, 40, 35, 35);
-    lpfFrequencySlider->setBounds(((getWidth()/3)*2)-35, 40, 35, 35);
-    wetMixSlider->setBounds((getWidth()/3)-35, 70, 35, 35);
-    hpfFrequencySlider->setBounds((getWidth()/3)*2, 70, 35, 35);
-    delayTimeSlider->setBounds((getWidth()/2)-(35/2), 70, 35, 35);
-    delayTimeMenu->setBounds(((getWidth()/2)-(35/2))-10, 80, 50, 15);
-    syncButton->setBounds(((getWidth()/2)-(35/2))-3, 105, 40, 15);
+    wetMixSlider->setBounds(97, 97, 130, 130);
+    feedbackSlider->setBounds(87, 87, 150, 150);
+    delayTimeSlider->setBounds(77, 77, 170, 170);
+	lpfFrequencySlider->setBounds(67, 67, 190, 190);
+    hpfFrequencySlider->setBounds(57, 57, 210, 210);
     
-    alphaTouchMenu->setBounds(65, 125, 100, 15);
-    reverseButton->setBounds(68, 155, 40, 20);
-    intensitySlider->setBounds(120, 145, 40, 40);
+    alphaTouchMenu->setBounds(119, 192, 87, 20);
+    reverseButton->setBounds(211,211, 32, 32);
+    intensitySlider->setBounds(47, 47, 230, 230);
+    
+    delayTimeMenu->setBounds(119, 22, 87, 20);
+    syncButton->setBounds(130, 235, 32, 32);
+    
+    
 }
 
 
 
 void GuiDelay::sliderValueChanged (Slider *slider)
 {
-    if (slider == wetMixSlider->sliderComponent())
+    if (slider == wetMixSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelayMix(wetMixSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxDelayMix(wetMixSlider->getValue());
         }
     }
     
-    else if (slider == delayTimeSlider->sliderComponent())
+    else if (slider == delayTimeSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelayTime(delayTimeSlider->sliderComponent()->getValue());
-        }
-        
-    }
-    
-    else if (slider == feedbackSlider->sliderComponent())
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelayFeedback(feedbackSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxDelayTime(delayTimeSlider->getValue());
         }
         
     }
     
-    else if (slider == lpfFrequencySlider->sliderComponent())
+    else if (slider == feedbackSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelayLpfFreq(lpfFrequencySlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxDelayFeedback(feedbackSlider->getValue());
         }
         
     }
     
-    else if (slider == hpfFrequencySlider->sliderComponent())
+    else if (slider == lpfFrequencySlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelayHpfFreq(hpfFrequencySlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxDelayLpfFreq(lpfFrequencySlider->getValue());
         }
         
     }
     
-    else if (slider == intensitySlider->sliderComponent())
+    else if (slider == hpfFrequencySlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelayAtIntensity(intensitySlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxDelayHpfFreq(hpfFrequencySlider->getValue());
+        }
+        
+    }
+    
+    else if (slider == intensitySlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSamplerFxDelayAtIntensity(intensitySlider->getValue());
         }
         
     }
@@ -236,7 +247,7 @@ void GuiDelay::comboBoxChanged (ComboBox *comboBox)
                 break;
         }
         
-        delayTimeSlider->sliderComponent()->setValue(delayTime, false);
+        delayTimeSlider->setValue(delayTime, false);
         
         for (int i = 0; i < selectedPads.size(); i++)
         {
@@ -296,32 +307,32 @@ void GuiDelay::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        wetMixSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxDelayMix(), false);
-        delayTimeSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxDelayTime(), false);
+        wetMixSlider->setValue(PAD_SETTINGS->getSamplerFxDelayMix(), false);
+        delayTimeSlider->setValue(PAD_SETTINGS->getSamplerFxDelayTime(), false);
         delayTimeMenu->setSelectedId(PAD_SETTINGS->getSamplerFxDelayTimeMenu(), true);
-        feedbackSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxDelayFeedback(), false);
-        lpfFrequencySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxDelayLpfFreq(), false);
-        hpfFrequencySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxDelayHpfFreq(), false);
+        feedbackSlider->setValue(PAD_SETTINGS->getSamplerFxDelayFeedback(), false);
+        lpfFrequencySlider->setValue(PAD_SETTINGS->getSamplerFxDelayLpfFreq(), false);
+        hpfFrequencySlider->setValue(PAD_SETTINGS->getSamplerFxDelayHpfFreq(), false);
         syncButton->setToggleState(PAD_SETTINGS->getSamplerFxDelaySync(), false);
         
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxDelayAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxDelayAtReverse(), false);
-        intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxDelayAtIntensity(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getSamplerFxDelayAtIntensity(), false);
     }
     
     else if(MULTI_PADS)
     {
-        wetMixSlider->sliderComponent()->setValue(0.7, false);
-        delayTimeSlider->sliderComponent()->setValue(500.0, false);
+        wetMixSlider->setValue(0.7, false);
+        delayTimeSlider->setValue(500.0, false);
         delayTimeMenu->setSelectedId(3, true);
-        feedbackSlider->sliderComponent()->setValue(0.5, false);
-        lpfFrequencySlider->sliderComponent()->setValue(5000, false);
-        hpfFrequencySlider->sliderComponent()->setValue(50, false);
+        feedbackSlider->setValue(0.5, false);
+        lpfFrequencySlider->setValue(5000, false);
+        hpfFrequencySlider->setValue(50, false);
         syncButton->setToggleState(1, false);
         
         alphaTouchMenu->setSelectedId(1, true);
         reverseButton->setToggleState(0, false);
-        intensitySlider->sliderComponent()->setValue(1.0, false);
+        intensitySlider->setValue(1.0, false);
     }
     
     

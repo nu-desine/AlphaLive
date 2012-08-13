@@ -963,7 +963,6 @@ void AppDocumentState::saveToScene (int sceneNumber)
             padData->setAttribute("samplerShouldFinishLoop", PAD_SETTINGS->getSamplerShouldFinishLoop());
             padData->setAttribute("samplerSticky", PAD_SETTINGS->getSamplerSticky());
             padData->setAttribute("samplerEffect", PAD_SETTINGS->getSamplerEffect());
-            padData->setAttribute("samplerPressureStatus", PAD_SETTINGS->getSamplerPressureStatus());
             padData->setAttribute("samplerPan", PAD_SETTINGS->getSamplerPan());
             padData->setAttribute("samplerGain", PAD_SETTINGS->getSamplerGain());
             
@@ -1002,7 +1001,7 @@ void AppDocumentState::saveToScene (int sceneNumber)
                 padData->setAttribute("samplerFxBpfAtReverse", PAD_SETTINGS->getSamplerFxBpfAtReverse());
                 padData->setAttribute("samplerFxBpfAtIntensity", PAD_SETTINGS->getSamplerFxBpfAtIntensity());
             }
-            else if (PAD_SETTINGS->getSamplerEffect() == 6) //Delay
+            else if (PAD_SETTINGS->getSamplerEffect() == 7) //Delay
             {
                 padData->setAttribute("samplerFxDelayMix", PAD_SETTINGS->getSamplerFxDelayMix());
                 padData->setAttribute("samplerFxDelayTime", PAD_SETTINGS->getSamplerFxDelayTime());
@@ -1015,7 +1014,7 @@ void AppDocumentState::saveToScene (int sceneNumber)
                 padData->setAttribute("samplerFxDelayAtReverse", PAD_SETTINGS->getSamplerFxDelayAtReverse());
                 padData->setAttribute("samplerFxDelayAtIntensity", PAD_SETTINGS->getSamplerFxDelayAtIntensity());
             }
-            else if (PAD_SETTINGS->getSamplerEffect() == 7) //Reverb
+            else if (PAD_SETTINGS->getSamplerEffect() == 8) //Reverb
             {
                 padData->setAttribute("samplerFxReverbMix", PAD_SETTINGS->getSamplerFxReverbMix());
                 padData->setAttribute("samplerFxReverbRoomSize", PAD_SETTINGS->getSamplerFxReverbRoomSize());
@@ -1216,7 +1215,6 @@ void AppDocumentState::loadFromScene (int sceneNumber)
                 PAD_SETTINGS->setSamplerShouldFinishLoop(padData->getIntAttribute("samplerShouldFinishLoop"));
                 PAD_SETTINGS->setSamplerSticky(padData->getIntAttribute("samplerSticky"));
                 PAD_SETTINGS->setSamplerEffect(padData->getIntAttribute("samplerEffect"));
-                PAD_SETTINGS->setSamplerPressureStatus(padData->getIntAttribute("samplerPressureStatus"));
                 PAD_SETTINGS->setSamplerPan(padData->getDoubleAttribute("samplerPan"));
                 PAD_SETTINGS->setSamplerGain(padData->getDoubleAttribute("samplerGain"));
                 if (PAD_SETTINGS->getSamplerEffect() == 1) //Gain and Pan
@@ -1255,7 +1253,7 @@ void AppDocumentState::loadFromScene (int sceneNumber)
                     PAD_SETTINGS->setSamplerFxBpfAtReverse(padData->getIntAttribute("samplerFxBpfAtReverse"));
                     PAD_SETTINGS->setSamplerFxBpfAtIntensity(padData->getDoubleAttribute("samplerFxBpfAtIntensity"));
                 }
-                else if (PAD_SETTINGS->getSamplerEffect() == 6) //Delay
+                else if (PAD_SETTINGS->getSamplerEffect() == 7) //Delay
                 {
                     PAD_SETTINGS->setSamplerFxDelayMix(padData->getDoubleAttribute("samplerFxDelayMix"));
                     PAD_SETTINGS->setSamplerFxDelayTime(padData->getDoubleAttribute("samplerFxDelayTime"));
@@ -1268,7 +1266,7 @@ void AppDocumentState::loadFromScene (int sceneNumber)
                     PAD_SETTINGS->setSamplerFxDelayAtReverse(padData->getIntAttribute("samplerFxDelayAtReverse"));
                     PAD_SETTINGS->setSamplerFxDelayAtIntensity(padData->getDoubleAttribute("samplerFxDelayAtIntensity"));
                 }
-                else if (PAD_SETTINGS->getSamplerEffect() == 7) //Reverb
+                else if (PAD_SETTINGS->getSamplerEffect() == 8) //Reverb
                 {
                     PAD_SETTINGS->setSamplerFxReverbMix(padData->getDoubleAttribute("samplerFxReverbMix"));
                     PAD_SETTINGS->setSamplerFxReverbRoomSize(padData->getDoubleAttribute("samplerFxReverbRoomSize"));

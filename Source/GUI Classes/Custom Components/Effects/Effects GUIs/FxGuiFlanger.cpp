@@ -32,30 +32,34 @@
 GuiFlanger::GuiFlanger(MainComponent &ref)
 :           mainComponentRef(ref)
 {
-    addAndMakeVisible(mixSlider = new AlphaImageKnob(2));
-    mixSlider->sliderComponent()->setRange(0.0, 1.0);
-    mixSlider->sliderComponent()->setValue(0.7, false);
-    mixSlider->sliderComponent()->addListener(this);
-    mixSlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(mixSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
+	mixSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    mixSlider->setRange(0.0, 1.0);
+    mixSlider->setValue(0.7, false);
+    mixSlider->addListener(this);
+    mixSlider->addMouseListener(this, true);
     
-    addAndMakeVisible(rateSlider = new AlphaImageKnob(2));
-    rateSlider->sliderComponent()->setRange(0.0, 20.0);
-    rateSlider->sliderComponent()->setValue(0.25, false);
-    rateSlider->sliderComponent()->addListener(this);
-    rateSlider->sliderComponent()->addMouseListener(this, true);
-    rateSlider->setVisible(false);
+	addAndMakeVisible(rateSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
+	rateSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    rateSlider->setRange(0, 20.0);
+    rateSlider->setValue(0.25, false);
+    rateSlider->addListener(this);
+    rateSlider->addMouseListener(this, true);
     
-    addAndMakeVisible(feedbackSlider = new AlphaImageKnob(2));
-    feedbackSlider->sliderComponent()->setRange(0.0, 1.0);
-    feedbackSlider->sliderComponent()->setValue(0.9, false);
-    feedbackSlider->sliderComponent()->addListener(this);
-    feedbackSlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(feedbackSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
+	feedbackSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    feedbackSlider->setRange(0.0, 1.0);
+    feedbackSlider->setValue(0.9, false);
+    feedbackSlider->addListener(this);
+    feedbackSlider->addMouseListener(this, true);
     
-    addAndMakeVisible(flangerIntensitySlider = new AlphaImageKnob(2)); //LFO depth
-    flangerIntensitySlider->sliderComponent()->setRange(0.0, 1.0);
-    flangerIntensitySlider->sliderComponent()->setValue(0.1, false);
-    flangerIntensitySlider->sliderComponent()->addListener(this);
-    flangerIntensitySlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(flangerIntensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190)); //LFO depth
+	flangerIntensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    flangerIntensitySlider->setRange(0.0, 1.0);
+    flangerIntensitySlider->setValue(0.1, false);
+    flangerIntensitySlider->addListener(this);
+    flangerIntensitySlider->addMouseListener(this, true);
+    
     
     addAndMakeVisible(rateMenu = new ComboBox());
     rateMenu->addListener(this);
@@ -71,7 +75,7 @@ GuiFlanger::GuiFlanger(MainComponent &ref)
     rateMenu->addItem("1/32", 9);
     rateMenu->setSelectedId(4, true);
     
-    addAndMakeVisible(syncButton = new TextButton("sync", "Tempo Sync"));
+    addAndMakeVisible(syncButton = new AlphaTextButton("SYNC"));
     syncButton->setClickingTogglesState(true);
     syncButton->setToggleState(1, false);
     syncButton->addListener(this);
@@ -88,18 +92,19 @@ GuiFlanger::GuiFlanger(MainComponent &ref)
     alphaTouchMenu->addItem("Intensity", 5);
     alphaTouchMenu->setSelectedId(1, true);
     
-    addAndMakeVisible(reverseButton = new TextButton("Invert", "Invert"));
+    addAndMakeVisible(reverseButton = new AlphaTextButton("INVERT"));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);
     reverseButton->addMouseListener(this, true);
     
-    addAndMakeVisible(intensitySlider = new AlphaImageKnob(2));
-    intensitySlider->sliderComponent()->setRange(0.0, 1.0);
-    intensitySlider->sliderComponent()->setValue(1.0, false);
-    intensitySlider->sliderComponent()->addListener(this);
-    intensitySlider->sliderComponent()->addMouseListener(this, true);
-    
-    //currentlySelectedPad = 99;
+    addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
+	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    intensitySlider->setRange(0.0, 1.0);
+    intensitySlider->setValue(1.0, false);
+    intensitySlider->addListener(this);
+    intensitySlider->addMouseListener(this, true);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
+
     tempo = AppSettings::Instance()->getGlobalTempo();
     
     setInterceptsMouseClicks(false, true);
@@ -115,71 +120,71 @@ GuiFlanger::~GuiFlanger()
 void GuiFlanger::resized()
 {
     
-    flangerIntensitySlider->setBounds(((getWidth()/3)*2)-35, 40, 35, 35);
-    mixSlider->setBounds((getWidth()/3)-35, 70, 35, 35);
-    rateSlider->setBounds((getWidth()/3)*2, 70, 35, 35);
-    rateMenu->setBounds(((getWidth()/3)*2)-10, 85, 50, 15);
-    feedbackSlider->setBounds(getWidth()/3, 40, 35, 35);
-    syncButton->setBounds(((getWidth()/2)-(35/2))-3, 85, 40, 15);
-     
+    mixSlider->setBounds(97, 97, 130, 130);
+    rateSlider->setBounds(87, 87, 150, 150);
+    feedbackSlider->setBounds(77, 77, 170, 170);
+	flangerIntensitySlider->setBounds(67, 67, 190, 190);
     
-    alphaTouchMenu->setBounds(65, 125, 100, 15);
-    reverseButton->setBounds(68, 155, 40, 20);
-    intensitySlider->setBounds(120, 145, 40, 40);
+    alphaTouchMenu->setBounds(119, 192, 87, 20);
+    reverseButton->setBounds(211,211, 32, 32);
+    intensitySlider->setBounds(57, 57, 210, 210);
+    
+    rateMenu->setBounds(119, 22, 87, 20);
+    syncButton->setBounds(130, 235, 32, 32);
 }
 
 
 
 void GuiFlanger::sliderValueChanged (Slider *slider)
 {
-    if (slider == mixSlider->sliderComponent())
+    if (slider == mixSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxFlangerMix(mixSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxFlangerMix(mixSlider->getValue());
         }
         
     }
 
-    else if (slider == rateSlider->sliderComponent())
+    else if (slider == rateSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxFlangerRate(rateSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxFlangerRate(rateSlider->getValue());
         }
         
     }
     
     
-    else if (slider == feedbackSlider->sliderComponent())
+    else if (slider == feedbackSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxFlangerFeedback(feedbackSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxFlangerFeedback(feedbackSlider->getValue());
         }
     }
     
     
-    else if (slider == flangerIntensitySlider->sliderComponent())
+    else if (slider == flangerIntensitySlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxFlangerIntensity(flangerIntensitySlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxFlangerIntensity(flangerIntensitySlider->getValue());
         }
         
     }
     
     
-    else if (slider == intensitySlider->sliderComponent())
+    else if (slider == intensitySlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxFlangerAtIntensity(intensitySlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxFlangerAtIntensity(intensitySlider->getValue());
         }
     }
     
@@ -242,7 +247,7 @@ void GuiFlanger::comboBoxChanged (ComboBox *comboBox)
         }
          
         
-        rateSlider->sliderComponent()->setValue(lfoRate, false);
+        rateSlider->setValue(lfoRate, false);
         
         for (int i = 0; i < selectedPads.size(); i++)
         {
@@ -302,30 +307,30 @@ void GuiFlanger::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        mixSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxFlangerMix(), false);
-        rateSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxFlangerRate(), false);
-        feedbackSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxFlangerFeedback(), false);
-        flangerIntensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxFlangerIntensity(), false);
+        mixSlider->setValue(PAD_SETTINGS->getSamplerFxFlangerMix(), false);
+        rateSlider->setValue(PAD_SETTINGS->getSamplerFxFlangerRate(), false);
+        feedbackSlider->setValue(PAD_SETTINGS->getSamplerFxFlangerFeedback(), false);
+        flangerIntensitySlider->setValue(PAD_SETTINGS->getSamplerFxFlangerIntensity(), false);
         rateMenu->setSelectedId(PAD_SETTINGS->getSamplerFxFlangerRateMenu(), true);
         syncButton->setToggleState(PAD_SETTINGS->getSamplerFxFlangerSync(), false);
         
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxFlangerAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxFlangerAtReverse(), false);
-        intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxFlangerAtIntensity(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getSamplerFxFlangerAtIntensity(), false);
     }
     
     else if(MULTI_PADS)
     {
-        mixSlider->sliderComponent()->setValue(0.7, false);
-        rateSlider->sliderComponent()->setValue(0.25, false);
-        feedbackSlider->sliderComponent()->setValue(0.9, false);
-        flangerIntensitySlider->sliderComponent()->setValue(0.1, false);
+        mixSlider->setValue(0.7, false);
+        rateSlider->setValue(0.25, false);
+        feedbackSlider->setValue(0.9, false);
+        flangerIntensitySlider->setValue(0.1, false);
         rateMenu->setSelectedId(3, true); //??????????????????
         syncButton->setToggleState(1, false);
         
         alphaTouchMenu->setSelectedId(1, true);
         reverseButton->setToggleState(0, false);
-        intensitySlider->sliderComponent()->setValue(1.0, false);
+        intensitySlider->setValue(1.0, false);
     }
     
     

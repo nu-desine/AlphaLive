@@ -71,7 +71,6 @@ PadSettings::PadSettings(int arrayIndex)
     samplerShouldFinishLoop = 0;
     samplerSticky = 0;
     samplerEffect = 0;
-    samplerPressureStatus = 0;
     samplerPan = 0.5;
     samplerGain = 1.0;
     
@@ -287,7 +286,6 @@ void PadSettings::resetData (int whatToReset)
         setSamplerShouldFinishLoop(0);
         setSamplerSticky(0);
         setSamplerEffect (0);
-        setSamplerPressureStatus(false);
         setSamplerPan (0.5);
         setSamplerGain (1.0);
         
@@ -753,17 +751,7 @@ void PadSettings::setSamplerEffect(int value)
     }
     
 }
-void PadSettings::setSamplerPressureStatus(bool value)
-{
 
-    samplerPressureStatus = value;
-    
-    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
-    {
-        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setPressureStatus(value);
-    }
-    
-}
 void PadSettings::setSamplerPan(float value)
 {
     samplerPan = value;
@@ -836,10 +824,7 @@ int PadSettings::getSamplerEffect()
 {
     return samplerEffect;
 }
-bool PadSettings::getSamplerPressureStatus()
-{
-    return samplerPressureStatus;
-}
+
 float PadSettings::getSamplerPan()
 {
     return samplerPan;

@@ -20,6 +20,9 @@
  //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//would be good if this class was more user friendly for developers
+//so that there's a more logical way to set the objects arguments in relation to its bounds
+
 #ifndef H_ALPHAROTARYSLIDER
 #define H_ALPHAROTARYSLIDER
 

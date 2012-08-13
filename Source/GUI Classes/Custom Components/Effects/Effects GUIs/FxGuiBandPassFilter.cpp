@@ -23,6 +23,7 @@
 #include "FxGuiBandPassFilter.h"
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
+//#include "../../../AlphaLiveLookandFeel.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
@@ -32,23 +33,26 @@
 GuiBandPassFilter::GuiBandPassFilter(MainComponent &ref)
 : mainComponentRef(ref)
 {
-    addAndMakeVisible(mixSlider = new AlphaImageKnob(2));
-    mixSlider->sliderComponent()->setRange(0.0, 1.0);
-    mixSlider->sliderComponent()->setValue(1.0, false);
-    mixSlider->sliderComponent()->addListener(this);
-    mixSlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(mixSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
+	mixSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    mixSlider->setRange(0.0, 1.0);
+    mixSlider->setValue(1.0, false);
+    mixSlider->addListener(this);
+    mixSlider->addMouseListener(this, true);
     
-    addAndMakeVisible(frequencySlider = new AlphaImageKnob(0));
-    frequencySlider->sliderComponent()->setRange(30, 20000, 1);
-    frequencySlider->sliderComponent()->setValue(1000, false);
-    frequencySlider->sliderComponent()->addListener(this);
-    frequencySlider->sliderComponent()->addMouseListener(this, true);
+	addAndMakeVisible(frequencySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
+	frequencySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    frequencySlider->setRange(30, 20000, 1);
+    frequencySlider->setValue(1000, false);
+    frequencySlider->addListener(this);
+    frequencySlider->addMouseListener(this, true);
     
-    addAndMakeVisible(bandwidthSlider = new AlphaImageKnob(2));
-    bandwidthSlider->sliderComponent()->setRange(1.0, 100.0);
-    bandwidthSlider->sliderComponent()->setValue(5, false);
-    bandwidthSlider->sliderComponent()->addListener(this);
-    bandwidthSlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(bandwidthSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
+	bandwidthSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    bandwidthSlider->setRange(0.0, 100.0);
+    bandwidthSlider->setValue(5, false);
+    bandwidthSlider->addListener(this);
+    bandwidthSlider->addMouseListener(this, true);
     
     addAndMakeVisible(alphaTouchMenu = new ComboBox());
     alphaTouchMenu->addListener(this);
@@ -59,18 +63,19 @@ GuiBandPassFilter::GuiBandPassFilter(MainComponent &ref)
     alphaTouchMenu->addItem("Bandwidth/Resonance", 4);
     alphaTouchMenu->setSelectedId(1, true);
     
-    addAndMakeVisible(reverseButton = new TextButton("Invert", "Invert"));
+    addAndMakeVisible(reverseButton = new AlphaTextButton("INVERT"));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);
     reverseButton->addMouseListener(this, true);
     
-    addAndMakeVisible(intensitySlider = new AlphaImageKnob(2));
-    intensitySlider->sliderComponent()->setRange(0.0, 1.0);
-    intensitySlider->sliderComponent()->setValue(1.0, false);
-    intensitySlider->sliderComponent()->addListener(this);
-    intensitySlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
+	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    intensitySlider->setRange(0.0, 1.0);
+    intensitySlider->setValue(1.0, false);
+    intensitySlider->addListener(this);
+    intensitySlider->addMouseListener(this, true);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
     
-    //currentlySelectedPad = 99;
     
     setInterceptsMouseClicks(false, true);
 }
@@ -84,57 +89,57 @@ GuiBandPassFilter::~GuiBandPassFilter()
 
 void GuiBandPassFilter::resized()
 {
-    mixSlider->setBounds(getWidth()/2-(40/2), 40, 40, 40);
-    frequencySlider->setBounds(65, 70, 40, 40);
-    bandwidthSlider->setBounds(128, 70, 40, 40);
+    mixSlider->setBounds(97, 97, 130, 130);
+    frequencySlider->setBounds(87, 87, 150, 150);
+    bandwidthSlider->setBounds(77, 77, 170, 170);
+	intensitySlider->setBounds(67, 67, 190, 190);
     
-    alphaTouchMenu->setBounds(65, 125, 100, 15);
-    reverseButton->setBounds(68, 155, 40, 20);
-    intensitySlider->setBounds(120, 145, 40, 40);
+    alphaTouchMenu->setBounds(119, 192, 87, 20);
+    reverseButton->setBounds(211,211, 32, 32);
 }
 
 
 
 void GuiBandPassFilter::sliderValueChanged (Slider *slider)
 {
-    if (slider == mixSlider->sliderComponent())
+    if (slider == mixSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxBpfMix(mixSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxBpfMix(mixSlider->getValue());
         }
     }
     
     
-    if (slider == frequencySlider->sliderComponent())
+    if (slider == frequencySlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxBpfFreq(frequencySlider->sliderComponent()->getValue());
-        }
-        
-    }
-    
-    
-    if (slider == bandwidthSlider->sliderComponent())
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxBpfBandwidth(bandwidthSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxBpfFreq(frequencySlider->getValue());
         }
         
     }
     
     
-    if (slider == intensitySlider->sliderComponent())
+    if (slider == bandwidthSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxBpfAtIntensity(intensitySlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerFxBpfBandwidth(bandwidthSlider->getValue());
+        }
+        
+    }
+    
+    
+    if (slider == intensitySlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSamplerFxBpfAtIntensity(intensitySlider->getValue());
         }
     }
     
@@ -181,22 +186,22 @@ void GuiBandPassFilter::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        mixSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxBpfMix(), false);
-        frequencySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxBpfFreq(), false);
-        bandwidthSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxBpfBandwidth(), false);
+        mixSlider->setValue(PAD_SETTINGS->getSamplerFxBpfMix(), false);
+        frequencySlider->setValue(PAD_SETTINGS->getSamplerFxBpfFreq(), false);
+        bandwidthSlider->setValue(PAD_SETTINGS->getSamplerFxBpfBandwidth(), false);
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxBpfAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxBpfAtReverse(), false);
-        intensitySlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerFxBpfAtIntensity(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getSamplerFxBpfAtIntensity(), false);
     }
     
     else if(MULTI_PADS)
     {
-        mixSlider->sliderComponent()->setValue(1.0, false);
-        frequencySlider->sliderComponent()->setValue(1000, false);
-        bandwidthSlider->sliderComponent()->setValue(5.0, false);
+        mixSlider->setValue(1.0, false);
+        frequencySlider->setValue(1000, false);
+        bandwidthSlider->setValue(5.0, false);
         alphaTouchMenu->setSelectedId(1, true);
         reverseButton->setToggleState(0, false);
-        intensitySlider->sliderComponent()->setValue(1.0, false);
+        intensitySlider->setValue(1.0, false);
     }
     
 }

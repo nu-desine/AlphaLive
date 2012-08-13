@@ -37,25 +37,25 @@ GuiFxDial::GuiFxDial(MainComponent &ref) :  Component ("GuiFxDial"),
     for (int i = 0; i < 10; i++)
     {
         if (i == 0)
-            fxButtons.insert(i, new SettingsButton("GAIN", (27 * (M_PI / 180)), (54 * (M_PI / 180)), 0.75f, -5, 0.3, 0.3));
+            fxButtons.insert(i, new SettingsButton(translate("GAIN"), (27 * (M_PI / 180)), (54 * (M_PI / 180)), 0.75f, -5, 0.3, 0.3));
         else if (i == 1)
-            fxButtons.insert(i, new SettingsButton("LPF", (54 * (M_PI / 180)), (81 * (M_PI / 180)), 0.75f, -5, 0.38, 0.3));
+            fxButtons.insert(i, new SettingsButton(translate("LPF"), (54 * (M_PI / 180)), (81 * (M_PI / 180)), 0.75f, -5, 0.38, 0.3));
         else if (i == 2)
-            fxButtons.insert(i, new SettingsButton("HPF", (81 * (M_PI / 180)), (108 * (M_PI / 180)), 0.75f, -5, 0.35, 0.3));
+            fxButtons.insert(i, new SettingsButton(translate("HPF"), (81 * (M_PI / 180)), (108 * (M_PI / 180)), 0.75f, -5, 0.35, 0.3));
         else if (i == 3)
-            fxButtons.insert(i, new SettingsButton("BPF", (108 * (M_PI / 180)), (135 * (M_PI / 180)), 0.75f, 185, 0.6, 0.37));
+            fxButtons.insert(i, new SettingsButton(translate("BPF"), (108 * (M_PI / 180)), (135 * (M_PI / 180)), 0.75f, 185, 0.6, 0.37));
         else if (i == 4)
-            fxButtons.insert(i, new SettingsButton("DRIVE", (135 * (M_PI / 180)), (162 * (M_PI / 180)), 0.75f, 185, 0.7, 0.37));
+            fxButtons.insert(i, new SettingsButton(translate("DRIVE"), (135 * (M_PI / 180)), (162 * (M_PI / 180)), 0.75f, 185, 0.7, 0.37));
         else if (i == 5)
-            fxButtons.insert(i, new SettingsButton("CRUSH", (162 * (M_PI / 180)), (189 * (M_PI / 180)), 0.75f,  185, 0.73, 0.37));
+            fxButtons.insert(i, new SettingsButton(translate("CRUSH"), (162 * (M_PI / 180)), (189 * (M_PI / 180)), 0.75f,  185, 0.73, 0.37));
         else if (i == 6)
-            fxButtons.insert(i, new SettingsButton("DELAY", (189 * (M_PI / 180)), (216 * (M_PI / 180)), 0.75f, 185, 0.7, 0.37));
+            fxButtons.insert(i, new SettingsButton(translate("DELAY"), (189 * (M_PI / 180)), (216 * (M_PI / 180)), 0.75f, 185, 0.7, 0.37));
         else if (i == 7)
-            fxButtons.insert(i, new SettingsButton("REVERB", (216 * (M_PI / 180)), (243 * (M_PI / 180)), 0.75f, 188, 0.75, 0.37));
+            fxButtons.insert(i, new SettingsButton(translate("REVERB"), (216 * (M_PI / 180)), (243 * (M_PI / 180)), 0.75f, 188, 0.75, 0.37));
         else if (i == 8)
-            fxButtons.insert(i, new SettingsButton("FLANGER", (243 * (M_PI / 180)), (270 * (M_PI / 180)), 0.75f, 188, 0.75, 0.37));
+            fxButtons.insert(i, new SettingsButton(translate("FLANGER"), (243 * (M_PI / 180)), (270 * (M_PI / 180)), 0.75f, 188, 0.75, 0.37));
         else if (i == 9)
-            fxButtons.insert(i, new SettingsButton("TREMOLO", (270 * (M_PI / 180)), (297 * (M_PI / 180)), 0.75f, 190, 0.85, 0.37));
+            fxButtons.insert(i, new SettingsButton(translate("TREMOLO"), (270 * (M_PI / 180)), (297 * (M_PI / 180)), 0.75f, 190, 0.85, 0.37));
         
         fxButtons[i]->addListener(this);
         fxButtons[i]->setOpaque(false);
@@ -147,7 +147,7 @@ void GuiFxDial::buttonClicked(Button *button)
                 for (int i = 0; i < selectedPads.size(); i++)
                 {
                     int padNum = selectedPads[i];
-                    PAD_SETTINGS->setSamplerEffect(fx);
+                    PAD_SETTINGS->setSamplerEffect(fx+1);
                 }
                 
                 //repaint(); // repaint with bounds!! what is ths repaint? do we need it anymore?
@@ -255,24 +255,24 @@ void GuiFxDial::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        currentEffect = PAD_SETTINGS->getSamplerEffect();
+        currentEffect = PAD_SETTINGS->getSamplerEffect() - 1;
         
-        if (currentEffect == 1) //Gain and Pan
+        if (currentEffect == 0) //Gain and Pan
         {
             gainAndPan->updateDisplay();
             gainAndPan->setVisible(true);
         }
-        else if (currentEffect == 2) //LPF
+        else if (currentEffect == 1) //LPF
         {
             lowpassFilter->updateDisplay();
             lowpassFilter->setVisible(true);
         }
-        else if (currentEffect == 3) //HPF
+        else if (currentEffect == 2) //HPF
         {
             highPassFilter->updateDisplay();
             highPassFilter->setVisible(true);
         }
-        else if (currentEffect == 4) //BPF
+        else if (currentEffect == 3) //BPF
         {
             bandPassFilter->updateDisplay();
             bandPassFilter->setVisible(true);
@@ -287,12 +287,12 @@ void GuiFxDial::updateDisplay()
             reverb->updateDisplay();
             reverb->setVisible(true);
         }
-        else if (currentEffect == 9) //Flanger
+        else if (currentEffect == 8) //Flanger
         {
             flanger->updateDisplay();
             flanger->setVisible(true);
         }
-        else if (currentEffect == 10) //Tremolo
+        else if (currentEffect == 9) //Tremolo
         {
             tremolo->updateDisplay();
             tremolo->setVisible(true);
@@ -305,8 +305,9 @@ void GuiFxDial::updateDisplay()
         currentEffect = 0;
     }
     
-    
-    fxButtons[currentEffect]->setToggleState(true, false);
+  
+    if (currentEffect >= 0)
+        fxButtons[currentEffect]->setToggleState(true, false);
     
     //repaint(); //repaint with bounds! Need to call repaint here?
 

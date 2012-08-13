@@ -280,65 +280,7 @@ void GuiSamplerMode::paint (Graphics& g)
 
 void GuiSamplerMode::comboBoxChanged (ComboBox* comboBox)
 {
-    //This method takes the selected IDs from the combo box and sets it to the correct
-    //variable in the relevent padSettings index/es
     
-    /*
-    //==============================================================================
-    //play state combobox
-    if (comboBox == triggerModeMenu)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerTriggerMode(triggerModeMenu->getSelectedId());
-        }
-    }
-    */
-    
-    //==============================================================================
-    /*
-    //pressure mode combobox
-    if (comboBox == pressureModeMenu)
-    {
-        //if individual pad number is selected
-        if(currentlySelectedPad < 99)
-        {
-            //store the value of this combo box in the pad settings of that pad
-            //PAD_SETTINGS->setSamplerQuantizeMode(quantizeModeMenu->getSelectedId());
-        }
-        
-        //if 'all pads' selected
-        if(currentlySelectedPad == 99)
-        {
-            for(int i = 0; i <= 47; i++)
-            {
-                //PAD_SETTINGS_i->setSamplerQuantizeMode(quantizeModeMenu->getSelectedId());
-            }
-        }
-        
-        //if a 'row' is selected
-        if(currentlySelectedPad > 99)
-        {
-            int row = currentlySelectedPad - 99; 
-            
-            for(int i = (row*8)-8; i <= (row*8)-1; i++) 
-            {
-                //i = pad number
-                //PAD_SETTINGS_i->setSamplerQuantizeMode(quantizeModeMenu->getSelectedId());
-            }
-        }
-        
-        if (pressureModeMenu->getSelectedId() == 1) //DSP effects
-        {
-            fxDial->setVisible(true);
-        }
-        else if (pressureModeMenu->getSelectedId() == 2) //playback manipulation
-        {
-            fxDial->setVisible(false);
-        }
-    }
-     */
 
 
 }
@@ -460,7 +402,19 @@ void GuiSamplerMode::buttonClicked (Button* button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerPressureStatus(button->getToggleState());
+            
+            if (button->getToggleState() == false)
+            {
+                PAD_SETTINGS->setSamplerEffect(0);
+            }
+            else if (button->getToggleState() == true)
+            {
+                PAD_SETTINGS->setSamplerEffect(1); //set default effect
+                fxDial->updateDisplay();
+            }
+                
+            
+            //PAD_SETTINGS->setSamplerPressureStatus(button->getToggleState());
         }
         
         if(pressureStatusButton->getToggleStateValue()==true)
@@ -572,8 +526,11 @@ void GuiSamplerMode::updateDisplay()
         indestructibleButton->setToggleState(PAD_SETTINGS->getSamplerIndestructible(), false);
         finishLoopButton->setToggleState(PAD_SETTINGS->getSamplerShouldFinishLoop(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getSamplerSticky(), false);
-        pressureStatusButton->setToggleState(PAD_SETTINGS->getSamplerPressureStatus(), false);
         
+        if (PAD_SETTINGS->getSamplerEffect() == 0)
+            pressureStatusButton->setToggleState(false, false);
+        else
+            pressureStatusButton->setToggleState(true, false);
     }
 
     else if (MULTI_PADS)

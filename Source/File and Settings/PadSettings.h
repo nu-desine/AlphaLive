@@ -114,7 +114,6 @@ public:
     void setSamplerShouldFinishLoop (int value);
     void setSamplerSticky (int value);
     void setSamplerEffect (int value);
-    void setSamplerPressureStatus (bool value);
     void setSamplerPan (float value);
     void setSamplerGain (float value);
     
@@ -126,7 +125,6 @@ public:
     int getSamplerShouldFinishLoop();
     int getSamplerSticky();
     int getSamplerEffect();
-    bool getSamplerPressureStatus();
     float getSamplerPan();
     float getSamplerGain();
     
@@ -386,7 +384,6 @@ private:
     int samplerShouldFinishLoop;
     int samplerSticky;
     int samplerEffect;
-    bool samplerPressureStatus;
     float samplerPan;
     float samplerGain;
     

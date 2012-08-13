@@ -25,6 +25,8 @@
 
 #include "../../../../../JuceLibraryCode/JuceHeader.h"
 #include "../../General/AlphaImageKnob.h"
+#include "../../General/AlphaRotarySlider.h"
+#include "../../General/AlphaTextButton.h"
 
 class MainComponent;
 
@@ -51,11 +53,11 @@ public:
 private:
     MainComponent &mainComponentRef;
     
-    AlphaImageKnob *mixSlider, *frequencySlider, *bandwidthSlider;
+    AlphaRotarySlider *mixSlider, *frequencySlider, *bandwidthSlider;
     
     ComboBox *alphaTouchMenu;
     TextButton *reverseButton;
-    AlphaImageKnob *intensitySlider;
+    AlphaRotarySlider *intensitySlider;
     
     //int currentlySelectedPad;
     Array<int> selectedPads;

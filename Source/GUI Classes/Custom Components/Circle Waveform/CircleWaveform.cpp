@@ -360,10 +360,10 @@ public:
                       const double sampleRate, const int numChannels, const int samplesPerThumbSample,
                       LevelDataSource* levelData, const OwnedArray<ThumbData>& channels)
     {
-		 
+        
 		
-				
-        refillCache ((area.getWidth()*2), startTime, endTime, sampleRate,
+        
+        refillCache ((area.getWidth()*4), startTime, endTime, sampleRate,
                      numChannels, samplesPerThumbSample, levelData, channels);
 		
         if (isPositiveAndBelow (channelNum, numChannelsCached))
@@ -373,7 +373,7 @@ public:
 			
 			if (! clip.isEmpty())
             {
-				const float numSam = (area.getWidth()*4);
+				const float numSam = (area.getWidth()*8);
                 const float topY = (float) area.getY();
                 const float bottomY = (float) area.getBottom();
                 const float midY = (topY + bottomY) * 0.5f;
@@ -384,8 +384,8 @@ public:
 				
 				
                 const MinMaxValue* cacheData = getData (channelNum, 0);
-            
-				const float radius = (area.getWidth() * 0.38);
+                
+				const float radius = (area.getWidth() * 0.45);
 				
 				
 				float x0 = 0;
@@ -414,7 +414,7 @@ public:
 						
 						minVal = (midY - cacheData->getMinValue() * vscale + 0.3f);
 						
-						line = (maxVal - minVal) * 0.15;
+						line = (maxVal - minVal) * 0.11;
 						
 						
 						angle = ((360 / numSam) * x);
@@ -446,7 +446,7 @@ public:
 							
 						}
 						
-
+                        
 						
 						if (x > (numSam / 4) && x <= ((numSam / 4) * 2))
 						{
@@ -480,9 +480,9 @@ public:
 						}
 						
 						if(angle > (2 * M_PI))
-						   {
-							   w = 0;
-						   }
+                        {
+                            w = 0;
+                        }
 						
 						
 						
@@ -490,7 +490,7 @@ public:
 						
 						g.drawLine(Line< float >::Line(x0, y0, x1, y1));
 						
-					
+                        
 						
 						++cacheData;
 						++x;

@@ -24,7 +24,7 @@
 
 
 DemoThumbnailComp::DemoThumbnailComp() :   thumbnailCache (5),
-                        thumbnail (512, formatManager, thumbnailCache)
+thumbnail (512, formatManager, thumbnailCache)
 {
     startTime = endTime = 0;
     formatManager.registerBasicFormats();
@@ -54,24 +54,25 @@ void DemoThumbnailComp::setZoomFactor (double amount)
 }
 
 /*
-void DemoThumbnailComp::mouseWheelMove (const MouseEvent&, float wheelIncrementX, float wheelIncrementY)
-{
-    if (thumbnail.getTotalLength() > 0)
-    {
-        double newStart = startTime + (wheelIncrementX + wheelIncrementY) * (endTime - startTime) / 10.0;
-        newStart = jlimit (0.0, thumbnail.getTotalLength() - (endTime - startTime), newStart);
-        endTime = newStart + (endTime - startTime);
-        startTime = newStart;
-        repaint();
-    }
-}
+ void DemoThumbnailComp::mouseWheelMove (const MouseEvent&, float wheelIncrementX, float wheelIncrementY)
+ {
+ if (thumbnail.getTotalLength() > 0)
+ {
+ double newStart = startTime + (wheelIncrementX + wheelIncrementY) * (endTime - startTime) / 10.0;
+ newStart = jlimit (0.0, thumbnail.getTotalLength() - (endTime - startTime), newStart);
+ endTime = newStart + (endTime - startTime);
+ startTime = newStart;
+ repaint();
+ 
+ }
+ }
  */
 
 void DemoThumbnailComp::paint (Graphics& g)
 {
     g.fillAll (Colours::transparentBlack);
     
-    g.setColour (Colours::white.withAlpha(0.8f));
+    g.setColour (Colours::white.withAlpha(0.5f));
     
     if (thumbnail.getTotalLength() > 0)
     {
@@ -83,12 +84,12 @@ void DemoThumbnailComp::paint (Graphics& g)
     
     //HOW SHOULD WE REPRESENT THAT THERE IS NO AUDIOFILE CURRENTLY SELECTED?
     /*
-    else
-    {
-        g.setFont (14.0f);
-        g.drawFittedText ("(No audio file selected)", 0, 0, getWidth(), getHeight(),
-                          Justification::centred, 2);
-    }
+     else
+     {
+     g.setFont (14.0f);
+     g.drawFittedText ("(No audio file selected)", 0, 0, getWidth(), getHeight(),
+     Justification::centred, 2);
+     }
      */
 }
 

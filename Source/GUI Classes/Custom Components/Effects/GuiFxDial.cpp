@@ -22,112 +22,65 @@ GuiFxDial::GuiFxDial(MainComponent &ref) :  Component ("GuiFxDial"),
                                             mainComponentRef(ref)
 
 {
-	image = ImageFileFormat::loadFrom(PressureBinaryData::circle_png, PressureBinaryData::circle_pngSize);
 	
-	im = ImageFileFormat::loadFrom(PressureBinaryData::b1bg_png, PressureBinaryData::b1bg_pngSize);
-	
-	keyOffIm.insert(0, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b1off_png, PressureBinaryData::b1off_pngSize)));
-	keyOffIm.insert(1, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b2off_png, PressureBinaryData::b2off_pngSize)));
-	keyOffIm.insert(2, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b3off_png, PressureBinaryData::b3off_pngSize)));
-	keyOffIm.insert(3, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b4off_png, PressureBinaryData::b4off_pngSize)));
-	keyOffIm.insert(4, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b5off_png, PressureBinaryData::b5off_pngSize)));
-	keyOffIm.insert(5, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b6off_png, PressureBinaryData::b6off_pngSize)));
-	keyOffIm.insert(6, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b7off_png, PressureBinaryData::b7off_pngSize)));
-	keyOffIm.insert(7, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b8off_png, PressureBinaryData::b8off_pngSize)));
-	keyOffIm.insert(8, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b9off_png, PressureBinaryData::b9off_pngSize)));
-	keyOffIm.insert(9, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b10off_png, PressureBinaryData::b10off_pngSize)));
-	keyOffIm.insert(10, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b11off_png, PressureBinaryData::b11off_pngSize)));
-	keyOffIm.insert(11, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b12off_png, PressureBinaryData::b12off_pngSize)));
-	keyOffIm.insert(12, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b13off_png, PressureBinaryData::b13off_pngSize)));
-    keyOverIm.insert(0, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b1over_png, PressureBinaryData::b1over_pngSize)));
-	keyOverIm.insert(1, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b2over_png, PressureBinaryData::b2over_pngSize)));
-	keyOverIm.insert(2, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b3over_png, PressureBinaryData::b3over_pngSize)));
-	keyOverIm.insert(3, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b4over_png, PressureBinaryData::b4over_pngSize)));
-	keyOverIm.insert(4, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b5over_png, PressureBinaryData::b5over_pngSize)));
-	keyOverIm.insert(5, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b6over_png, PressureBinaryData::b6over_pngSize)));
-	keyOverIm.insert(6, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b7over_png, PressureBinaryData::b7over_pngSize)));
-	keyOverIm.insert(7, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b8over_png, PressureBinaryData::b8over_pngSize)));
-	keyOverIm.insert(8, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b9over_png, PressureBinaryData::b9over_pngSize)));
-	keyOverIm.insert(9, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b10over_png, PressureBinaryData::b10over_pngSize)));
-    keyOverIm.insert(10, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b11over_png, PressureBinaryData::b11over_pngSize)));
-	keyOverIm.insert(11, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b12over_png, PressureBinaryData::b12over_pngSize)));
-	keyOverIm.insert(12, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b13over_png, PressureBinaryData::b13over_pngSize)));
-	keyDownIm.insert(0, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b1down_png, PressureBinaryData::b1down_pngSize)));
-	keyDownIm.insert(1, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b2down_png, PressureBinaryData::b2down_pngSize)));
-	keyDownIm.insert(2, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b3down_png, PressureBinaryData::b3down_pngSize)));
-	keyDownIm.insert(3, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b4down_png, PressureBinaryData::b4down_pngSize)));
-	keyDownIm.insert(4, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b5down_png, PressureBinaryData::b5down_pngSize)));
-	keyDownIm.insert(5, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b6down_png, PressureBinaryData::b6down_pngSize)));
-	keyDownIm.insert(6, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b7down_png, PressureBinaryData::b7down_pngSize)));
-	keyDownIm.insert(7, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b8down_png, PressureBinaryData::b8down_pngSize)));
-	keyDownIm.insert(8, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b9down_png, PressureBinaryData::b9down_pngSize)));
-	keyDownIm.insert(9, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b10down_png, PressureBinaryData::b10down_pngSize)));
-	keyDownIm.insert(10, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b11down_png, PressureBinaryData::b11down_pngSize)));
-	keyDownIm.insert(11, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b12down_png, PressureBinaryData::b12down_pngSize)));
-	keyDownIm.insert(12, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b13down_png, PressureBinaryData::b13down_pngSize)));
-	bgIm.insert(0, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b1bg_png, PressureBinaryData::b1bg_pngSize)));
-	bgIm.insert(1, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b2bg_png, PressureBinaryData::b2bg_pngSize)));
-	bgIm.insert(2, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b3bg_png, PressureBinaryData::b3bg_pngSize)));
-	bgIm.insert(3, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b4bg_png, PressureBinaryData::b4bg_pngSize)));
-	bgIm.insert(4, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b5bg_png, PressureBinaryData::b5bg_pngSize)));
-	bgIm.insert(5, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b6bg_png, PressureBinaryData::b6bg_pngSize)));
-	bgIm.insert(6, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b7bg_png, PressureBinaryData::b7bg_pngSize)));
-	bgIm.insert(7, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b8bg_png, PressureBinaryData::b8bg_pngSize)));
-	bgIm.insert(8, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b9bg_png, PressureBinaryData::b9bg_pngSize)));
-	bgIm.insert(9, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b10bg_png, PressureBinaryData::b10bg_pngSize)));
-	bgIm.insert(10, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b11bg_png, PressureBinaryData::b11bg_pngSize)));
-	bgIm.insert(11, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b12bg_png, PressureBinaryData::b12bg_pngSize)));
-	bgIm.insert(12, new Image(ImageFileFormat::loadFrom(PressureBinaryData::b13bg_png, PressureBinaryData::b13bg_pngSize)));
-	
-	for (int i = 0; i <= 12; i++) 
-    {
-		buttons.insert(i, new GuiFxButtons(keyOffIm[i], keyOverIm[i], keyDownIm[i]));
-		addAndMakeVisible(buttons[i]);
-		buttons[i]->setRadioGroupId (800);
-		buttons[i]->addListener(this);
-        buttons[i]->addMouseListener(this, true);
-		buttons[i]->setOpaque(false);
-		
-		//if (i == 0)
-		//{
-            //do we actually need to do anything here???
-			//buttons[i]->triggerClick();
-		//}
-        
-	}
-    
-    //TEMPORARY -DONT FORGET TO CHANGE THIS!
-    buttons[5]->setEnabled(false);
-    buttons[5]->setAlpha(0.4f);
-    buttons[8]->setEnabled(false);
-    buttons[8]->setAlpha(0.4f);
-    buttons[11]->setEnabled(false);
-    buttons[11]->setAlpha(0.4f);
-    buttons[12]->setEnabled(false);
-    buttons[12]->setAlpha(0.4f);
-    
-	
-	hitPath.addEllipse (0.0f, 0.0f, 230.0f, 230.0f);
-    
     addAndMakeVisible(gainAndPan = new GuiGainAndPan(mainComponentRef));
-    addAndMakeVisible(lowpassFilter = new GuiLowpassFilter(mainComponentRef));
-    addAndMakeVisible(highPassFilter = new GuiHighPassFilter(mainComponentRef));
-    addAndMakeVisible(bandPassFilter = new GuiBandPassFilter(mainComponentRef));
-    addAndMakeVisible(delay = new GuiDelay(mainComponentRef));
-    addAndMakeVisible(reverb = new GuiReverb(mainComponentRef));
-    addAndMakeVisible(flanger = new GuiFlanger(mainComponentRef));
-    addAndMakeVisible(tremolo = new GuiTremolo(mainComponentRef));
-     
-    //hide all fx Gui's to start with...
-    hideAllFx();
+    addChildComponent(lowpassFilter = new GuiLowpassFilter(mainComponentRef));
+    addChildComponent(highPassFilter = new GuiHighPassFilter(mainComponentRef));
+    addChildComponent(bandPassFilter = new GuiBandPassFilter(mainComponentRef));
+    addChildComponent(delay = new GuiDelay(mainComponentRef));
+    addChildComponent(reverb = new GuiReverb(mainComponentRef));
+    addChildComponent(flanger = new GuiFlanger(mainComponentRef));
+    addChildComponent(tremolo = new GuiTremolo(mainComponentRef));
     
-    //currentlySelectedPad = 99;
+    
+    //----------------------FX buttons------------------
+    for (int i = 0; i < 10; i++)
+    {
+        if (i == 0)
+            fxButtons.insert(i, new SettingsButton("GAIN", (27 * (M_PI / 180)), (54 * (M_PI / 180)), 0.75f, -5, 0.3, 0.3));
+        else if (i == 1)
+            fxButtons.insert(i, new SettingsButton("LPF", (54 * (M_PI / 180)), (81 * (M_PI / 180)), 0.75f, -5, 0.38, 0.3));
+        else if (i == 2)
+            fxButtons.insert(i, new SettingsButton("HPF", (81 * (M_PI / 180)), (108 * (M_PI / 180)), 0.75f, -5, 0.35, 0.3));
+        else if (i == 3)
+            fxButtons.insert(i, new SettingsButton("BPF", (108 * (M_PI / 180)), (135 * (M_PI / 180)), 0.75f, 185, 0.6, 0.37));
+        else if (i == 4)
+            fxButtons.insert(i, new SettingsButton("DRIVE", (135 * (M_PI / 180)), (162 * (M_PI / 180)), 0.75f, 185, 0.7, 0.37));
+        else if (i == 5)
+            fxButtons.insert(i, new SettingsButton("CRUSH", (162 * (M_PI / 180)), (189 * (M_PI / 180)), 0.75f,  185, 0.73, 0.37));
+        else if (i == 6)
+            fxButtons.insert(i, new SettingsButton("DELAY", (189 * (M_PI / 180)), (216 * (M_PI / 180)), 0.75f, 185, 0.7, 0.37));
+        else if (i == 7)
+            fxButtons.insert(i, new SettingsButton("REVERB", (216 * (M_PI / 180)), (243 * (M_PI / 180)), 0.75f, 188, 0.75, 0.37));
+        else if (i == 8)
+            fxButtons.insert(i, new SettingsButton("FLANGER", (243 * (M_PI / 180)), (270 * (M_PI / 180)), 0.75f, 188, 0.75, 0.37));
+        else if (i == 9)
+            fxButtons.insert(i, new SettingsButton("TREMOLO", (270 * (M_PI / 180)), (297 * (M_PI / 180)), 0.75f, 190, 0.85, 0.37));
+        
+        fxButtons[i]->addListener(this);
+        fxButtons[i]->setOpaque(false);
+        fxButtons[i]->setRadioGroupId (43);
+        fxButtons[i]->addMouseListener(this, false);
+        addAndMakeVisible(fxButtons[i]);
+                             
+    }
+    
+    fxButtons[0]->setToggleState(true, false);
+    
 
-    
+    //TEMPORARY
+    fxButtons[4]->setEnabled(false);
+    fxButtons[4]->setAlpha(0.6f);
+    fxButtons[5]->setEnabled(false);
+    fxButtons[5]->setAlpha(0.6f);
+
+   
 }
 
 GuiFxDial::~GuiFxDial()
 {
+    fxButtons.clear();
+    
     delete gainAndPan;
     delete lowpassFilter;
     delete highPassFilter;
@@ -151,28 +104,45 @@ void GuiFxDial::resized()
     reverb->setBounds(0, 0, getWidth(), getHeight());
     flanger->setBounds(0, 0, getWidth(), getHeight());
     tremolo->setBounds(0, 0, getWidth(), getHeight());
+    
+    //can we give the below more specific bounds?
+    //if not the below can be put into a for loop
+    fxButtons[0]->setBounds(0, 0, getWidth(), getHeight());
+	fxButtons[1]->setBounds(0, 0, getWidth(), getHeight());
+	fxButtons[2]->setBounds(0, 0, getWidth(), getHeight());
+	fxButtons[3]->setBounds(0, 0, getWidth(), getHeight());
+	fxButtons[4]->setBounds(0, 0, getWidth(), getHeight());
+	fxButtons[5]->setBounds(0, 0, getWidth(), getHeight());
+	fxButtons[6]->setBounds(0, 0, getWidth(), getHeight());
+	fxButtons[7]->setBounds(0, 0, getWidth(), getHeight());
+	fxButtons[8]->setBounds(0, 0, getWidth(), getHeight());
+	fxButtons[9]->setBounds(0, 0, getWidth(), getHeight());
+
 
 }
 
 void GuiFxDial::paint (Graphics& g)
 {
-	g.drawImage(image, 0, 0, getWidth(), getHeight(), 0, 0, 800, 800);
-	g.drawImage(im, getWidth()*0.05, getHeight()*0.05, getWidth()*0.9, getHeight()*0.9, 0, 0, 230, 230);
+	g.setColour(Colours::black);
+	g.fillEllipse(208,208, 38, 38);
 	
-	for (int i = 0; i <= 12; i++) 
-    {
-		buttons[i]->setBounds(0.0f, 0.0f, getWidth(), getHeight());
-	}
+	Path pieSeg;
+	pieSeg.addPieSegment(119, 119, 86, 86, (125 * (M_PI / 180)), (235 * (M_PI / 180)), 0.2f);
+	g.fillPath(pieSeg);
+	
+	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.drawEllipse(208,208, 38, 38, 1.0f);
 	
 }
+
 
 void GuiFxDial::buttonClicked(Button *button)
 {
     hideAllFx();
     
-	for (int fx = 0; fx <=12; fx++)
+	for (int fx = 0; fx < 10; fx++)
     {
-        if (button == buttons[fx])
+        if (button == fxButtons[fx])
 			{
                 for (int i = 0; i < selectedPads.size(); i++)
                 {
@@ -180,47 +150,54 @@ void GuiFxDial::buttonClicked(Button *button)
                     PAD_SETTINGS->setSamplerEffect(fx);
                 }
                 
-				im = *bgIm[fx];
-                repaint(); // repaint with bounds!!
+                //repaint(); // repaint with bounds!! what is ths repaint? do we need it anymore?
 			}
 	}
     
-    if (button == buttons[1]) //Gain and Pan
+    if (button == fxButtons[0]) //Gain and Pan
     {
         gainAndPan->updateDisplay();
         gainAndPan->setVisible(true);
     }
-    else if (button == buttons[2]) //LPF
+    else if (button == fxButtons[1]) //LPF
     {
         lowpassFilter->updateDisplay();
         lowpassFilter->setVisible(true);
     }
-    else if (button == buttons[3]) //HPF
+    else if (button == fxButtons[2]) //HPF
     {
         highPassFilter->updateDisplay();
         highPassFilter->setVisible(true);
     }
-    else if (button == buttons[4]) //BPF
+    else if (button == fxButtons[3]) //BPF
     {
         bandPassFilter->updateDisplay();
         bandPassFilter->setVisible(true);
     }
-    else if (button == buttons[6]) //Delay
+    else if (button == fxButtons[4]) //Overdrive
+    {
+        
+    }
+    else if (button == fxButtons[5]) //Bitcrusher
+    {
+        
+    }
+    else if (button == fxButtons[6]) //Delay
     {
         delay->updateDisplay();
         delay->setVisible(true);
     }
-    else if (button == buttons[7]) //Reverb
+    else if (button == fxButtons[7]) //Reverb
     {
         reverb->updateDisplay();
         reverb->setVisible(true);
     }
-    else if (button == buttons[9]) //Flanger
+    else if (button == fxButtons[8]) //Flanger
     {
         flanger->updateDisplay();
         flanger->setVisible(true);
     }
-    else if (button == buttons[10]) //Tremolo
+    else if (button == fxButtons[9]) //Tremolo
     {
         tremolo->updateDisplay();
         tremolo->setVisible(true);
@@ -324,17 +301,20 @@ void GuiFxDial::updateDisplay()
     }
 
     else if(MULTI_PADS)
+    {
         currentEffect = 0;
+    }
     
-    //update button state and background image
-    buttons[currentEffect]->setToggleState(true, false);
-    im = *bgIm[currentEffect];
-    repaint(); //repaint with bounds!
+    
+    fxButtons[currentEffect]->setToggleState(true, false);
+    
+    //repaint(); //repaint with bounds! Need to call repaint here?
 
 }
 
 void GuiFxDial::mouseEnter (const MouseEvent &e)
 {
+    /*
     if (buttons[0]->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText("No Effect. The pressure of the selected pad/pads will not control any effect.");
@@ -387,6 +367,7 @@ void GuiFxDial::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText("Pitchshifter. Allows the pressure of the selected pad/pads to manipulate audio with a pitchshifter. Coming Soon!");
     }
+     */
 }
 
 void GuiFxDial::mouseExit (const MouseEvent &e)

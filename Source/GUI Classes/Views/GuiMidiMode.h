@@ -60,7 +60,7 @@ public:
     void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
     
-    void setScale();
+    //void setScale();
     
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);

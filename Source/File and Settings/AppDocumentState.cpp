@@ -963,6 +963,7 @@ void AppDocumentState::saveToScene (int sceneNumber)
             padData->setAttribute("samplerShouldFinishLoop", PAD_SETTINGS->getSamplerShouldFinishLoop());
             padData->setAttribute("samplerSticky", PAD_SETTINGS->getSamplerSticky());
             padData->setAttribute("samplerEffect", PAD_SETTINGS->getSamplerEffect());
+            padData->setAttribute("samplerPressureStatus", PAD_SETTINGS->getSamplerPressureStatus());
             padData->setAttribute("samplerPan", PAD_SETTINGS->getSamplerPan());
             padData->setAttribute("samplerGain", PAD_SETTINGS->getSamplerGain());
             
@@ -1215,6 +1216,7 @@ void AppDocumentState::loadFromScene (int sceneNumber)
                 PAD_SETTINGS->setSamplerShouldFinishLoop(padData->getIntAttribute("samplerShouldFinishLoop"));
                 PAD_SETTINGS->setSamplerSticky(padData->getIntAttribute("samplerSticky"));
                 PAD_SETTINGS->setSamplerEffect(padData->getIntAttribute("samplerEffect"));
+                PAD_SETTINGS->setSamplerPressureStatus(padData->getIntAttribute("samplerPressureStatus"));
                 PAD_SETTINGS->setSamplerPan(padData->getDoubleAttribute("samplerPan"));
                 PAD_SETTINGS->setSamplerGain(padData->getDoubleAttribute("samplerGain"));
                 if (PAD_SETTINGS->getSamplerEffect() == 1) //Gain and Pan

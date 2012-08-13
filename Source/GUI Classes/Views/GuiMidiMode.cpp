@@ -248,6 +248,8 @@ void GuiMidiMode::resized()
 	triggerSettingsButton->setBounds(789, 221,42, 42);
 	pressureSettingsButton->setBounds(847, 219,42, 42);
 	
+    //can we give the below more specific bounds?
+    //if not the below can be put into a for loop
 	triggerModeButtons[0]->setBounds(728, 305, 234, 234);
 	triggerModeButtons[1]->setBounds(728, 305, 234, 234);
 	triggerModeButtons[2]->setBounds(728, 305, 234, 234);
@@ -260,6 +262,8 @@ void GuiMidiMode::resized()
     pressureMinRangeSlider->setBounds(800, 540, 42, 42);
     pressureMaxRangeSlider->setBounds(848, 540, 42, 42);
 	
+    //can we give the below more specific bounds?
+    //if not the below can be put into a for loop
 	pressureModeButtons[0]->setBounds(728, 305, 234, 234);
 	pressureModeButtons[1]->setBounds(728, 305, 234, 234);
 	pressureModeButtons[2]->setBounds(728, 305, 234, 234);
@@ -592,6 +596,7 @@ void GuiMidiMode::setDisplay(int settingsType)
         else
             notSelected->setVisible(true);
         
+        //should we be calling repaint here? Compare will Sampler Mode
         
     }
     
@@ -624,6 +629,7 @@ void GuiMidiMode::setDisplay(int settingsType)
         else
             notSelected->setVisible(true);
 
+        //should we be calling repaint here? Compare will Sampler Mode
     }
     
 }

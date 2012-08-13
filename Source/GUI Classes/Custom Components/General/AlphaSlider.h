@@ -25,6 +25,7 @@
 //It should then have a function called setValue which mimcs the sliders function, but sets the slider and label value.
 //the class should appear to be a Juce::slider as much as possible, therefore 'reimplementing' the most popular slider functions which in turn call the slider functions.
 //it could just have a getSlider(*slider) function that will in turn allow acces to the slider functions, but would not be very user friendly.
+//However if this class isn't a slider any parent classes with need as access to the slider component to add a listener to it.
 // For now I have added a setComponentValue() function to set the slider value as well as the label. This must be called instead of calling the Slider function setValue()
 // externally without sending a notification, otherwise the label won't be updated. However if you call setValue(value, true) it should be ok, though we don't call this much.
 //also there seems to be high CPU usage and eventual lagging when using the slider part lots. why? something to do with what it is repainting?

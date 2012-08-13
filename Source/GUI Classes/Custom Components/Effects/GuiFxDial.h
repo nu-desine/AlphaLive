@@ -11,25 +11,23 @@
 #define GUIFXDIAL_H
 
 /*
- The buttons array 'show' the Fx controls for each effect with the following indexes:
- 0 - Off
- 1 - Gain/Pan
- 2 - LPF
- 3 - HPF
- 4 - BPF
- 5 - Distortion
+ The SettingsButtons array displays the GUI classes of each the effects with the following indexes:
+ 0 - Gain/Pan
+ 1 - LPF
+ 2 - HPF
+ 3 - BPF
+ 4 - Overdrive
+ 5 - Bitcrusher
  6 - Delay
  7 - Reverb
- 8 - Chorus
- 9 - Flanger
- 10 - Tremolo
- 11 - Vibrato
- 12 - Pitchshifter
+ 8 - Flanger
+ 9 - Tremolo
  */
 
 #include "../../../../JuceLibraryCode/JuceHeader.h"
 #include "GuiFxButtons.h"
 #include "../General/AlphaImageKnob.h"
+#include "../General/SettingsButton.h"
 #include "Effects GUIs/FxGuiPanAndGain.h"
 #include "Effects GUIs/FxGuiLowPassFilter.h"
 #include "Effects GUIs/FxGuiHighPassFilter.h"
@@ -38,6 +36,7 @@
 #include "Effects GUIs/FxGuiReverb.h"
 #include "Effects GUIs/FxGuiFlanger.h"
 #include "Effects GUIs/FxGuiTremolo.h"
+
 
 class MainComponent;
 
@@ -64,23 +63,11 @@ public:
 	
 private:
 	
-	OwnedArray<Image> keyOffIm;
-	OwnedArray<Image> keyOverIm;
-	OwnedArray<Image> keyDownIm;
-	OwnedArray<Image> bgIm;
-	
-	OwnedArray<GuiFxButtons> buttons;
-	
-	Image image;
-	Image im;
-	
-	
-	Path hitPath;
-    
-    //int currentlySelectedPad;
     Array<int> selectedPads;
-    
     MainComponent &mainComponentRef;
+    Path hitPath;
+    
+	OwnedArray <SettingsButton> fxButtons;
     
     //FX displays
     //should all the effect objects be put into a Juce Array and accessed through that throughout the class?

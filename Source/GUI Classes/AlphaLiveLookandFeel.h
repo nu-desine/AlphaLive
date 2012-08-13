@@ -42,7 +42,7 @@ public:
 	
 	~AlphaLiveLookandFeel();
 	
-	/*virtual */void drawButtonBackground (Graphics& g,
+	void drawButtonBackground (Graphics& g,
                                        Button& button,
                                        const Colour& backgroundColour,
                                        bool isMouseOverButton,
@@ -79,7 +79,7 @@ public:
     
     
 	
-	const Font getPopupMenuFont(); // << why isn't this overriding??
+	const Font getPopupMenuFont(); // << why isn't this overriding?? Think its working now
     
     void drawPopupMenuItem (Graphics& g,
                             int width, int height,
@@ -102,7 +102,7 @@ public:
 	
     
     
-	int getDefaultScrollbarWidth(); //<-- why is this not working properly for the fileListComponent? need to scroll it first to adjust the size.
+	int getDefaultScrollbarWidth(); //<-- why is this not working properly for the fileListComponent? need to scroll it first to adjust the size. Think its working now.
                                     //it is to do with fileListComponent or just the way i've layed it all out in the tabbedcomponent?
    	
 private:

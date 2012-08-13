@@ -29,6 +29,9 @@
 #include "../Custom Components/Graphics/GuiCircleBackground.h"
 #include "../Custom Components/Circle Waveform/DemoThumbnailComp.h"
 #include "../Custom Components/General/AlphaImageKnob.h"
+#include "../Custom Components/General/AlphaTextButton.h"
+#include "../Custom Components/General/SettingsButton.h"
+#include "../Custom Components/General/GuiSwitch.h"
 
 
 class MainComponent;
@@ -44,8 +47,8 @@ public:
     ~GuiSamplerMode();
     
     void resized();
+    void paint (Graphics& g);
 	
-    
     //derived Listener functions
     void comboBoxChanged (ComboBox* comboBox);
     void sliderValueChanged (Slider* slider);
@@ -61,22 +64,23 @@ public:
     
 private:
     
-    FilenameComponent *fileChooser;
-    ComboBox *triggerModeMenu;
-    TextButton *loopButton, *indestructibleButton, *finishLoopButton, *stickyButton;
+    void setDisplay(int settingsType); //sets whether the trigger (1) or pressure (2) settings are display. 
     
-    //int currentlySelectedPad;
     Array<int> selectedPads;
-    
     MainComponent &mainComponentRef;
     
-    //New GUI stuff!
-    GuiFxDial *fxDial;
-    AlphaImageKnob *gainSlider;
-	AlphaImageKnob *panSlider;
-    GuiCircleBackground *circleBackgroundRight;
+    ScopedPointer <FilenameComponent> fileChooser;
+    ScopedPointer <AlphaTextButton> loopButton, indestructibleButton, finishLoopButton, stickyButton;
+    ScopedPointer <AlphaTextButton> triggerSettingsButton, pressureSettingsButton, quantiseButton; //quantise button should probably now be global.
+
+    ScopedPointer <GuiSwitch> pressureStatusButton;
+    OwnedArray<SettingsButton> triggerModeButtons;
+    ScopedPointer <GuiFxDial> fxDial;
+    //AlphaImageKnob *gainSlider;
+	//AlphaImageKnob *panSlider;
+    ScopedPointer <GuiCircleBackground> notSelected;
 	
-	DemoThumbnailComp *waveform;
+	ScopedPointer <DemoThumbnailComp> waveform;
 	
 	
 	

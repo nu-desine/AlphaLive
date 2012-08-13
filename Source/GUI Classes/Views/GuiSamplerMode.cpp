@@ -38,10 +38,42 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 : mainComponentRef(ref)
 										
 {
-    //currentlySelectedPad = 99;
     
-    //create circle background graphic
-    addAndMakeVisible(circleBackgroundRight = new GuiCircleBackground());
+    //----------------quantise button-------------------
+	
+	addAndMakeVisible(quantiseButton = new AlphaTextButton("Q"));
+	quantiseButton->setClickingTogglesState(true);
+	quantiseButton->setToggleState(false, false);	
+	quantiseButton->addListener(this);
+	quantiseButton->addMouseListener(this, true);
+	quantiseButton->setOpaque(false);
+	
+	
+	//----------------trigger settings button-------------------
+	
+	addAndMakeVisible(triggerSettingsButton = new AlphaTextButton("TRIGGER"));
+	triggerSettingsButton->setRadioGroupId (1234);
+	triggerSettingsButton->setClickingTogglesState(true);
+	triggerSettingsButton->setToggleState(false, false);	
+	triggerSettingsButton->addListener(this);
+	triggerSettingsButton->addMouseListener(this, true);
+	triggerSettingsButton->setOpaque(false);
+    triggerSettingsButton->setToggleState(true, false);
+	
+	//----------------pressure settings button-------------------
+	
+	addAndMakeVisible(pressureSettingsButton = new AlphaTextButton("PRESSURE"));
+	pressureSettingsButton->setRadioGroupId (1234);
+	pressureSettingsButton->setClickingTogglesState(true);
+	pressureSettingsButton->setToggleState(false, false);	
+	pressureSettingsButton->addListener(this);
+	pressureSettingsButton->addMouseListener(this, true);
+	pressureSettingsButton->setOpaque(false);
+
+    
+    addAndMakeVisible (waveform = new DemoThumbnailComp());
+	waveform->setInterceptsMouseClicks(false, false);
+    
     
     fileChooser = new FilenameComponent ("audiofile",
 										 File::nonexistent,
@@ -55,6 +87,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	addAndMakeVisible (fileChooser);
     fileChooser->addMouseListener(this, true);
     
+    /*
     //create gain slider
     addAndMakeVisible(gainSlider = new AlphaImageKnob(2));
     gainSlider->sliderComponent()->setRange(0.0, 2.0);
@@ -68,8 +101,9 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     panSlider->sliderComponent()->addListener(this);
     panSlider->sliderComponent()->setValue(0.5, false);
     panSlider->sliderComponent()->addMouseListener(this, true);
+     */
 
-    
+    /*
     addAndMakeVisible(triggerModeMenu = new ComboBox());
     triggerModeMenu->addListener(this);
     triggerModeMenu->addItem("Hold", 1);
@@ -80,48 +114,75 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     triggerModeMenu->addItem("Trigger", 6);
     triggerModeMenu->setSelectedId(2, true);
     triggerModeMenu->addMouseListener(this, true);
+     */
     
-    addAndMakeVisible(loopButton = new TextButton("Loop"));
+    //----------------------Trigger mode buttons------------------
+    for (int i = 0; i < 4; i++)
+    {
+        if (i == 0)
+            triggerModeButtons.insert(i, new SettingsButton("STANDARD", (270 * (M_PI / 180)), 
+                                                            (315 * (M_PI / 180)),
+                                                            0.4f, -90, 0.45, 0.75));
+        else if (i == 1)
+            triggerModeButtons.insert(i, new SettingsButton("TOGGLE", (315 * (M_PI / 180)),
+                                                            (2 * M_PI) , 0.4f, -90, 0.45, 0.68));
+        else if (i == 2)
+            triggerModeButtons.insert(i, new SettingsButton("LATCH", 0.0f, (45 * (M_PI / 180)), 
+                                                            0.4f, 90, 0.55, 0.3));
+        else if (i == 3)
+            triggerModeButtons.insert(i, new SettingsButton("TRIGGER", (45 * (M_PI / 180)), 
+                                                            (90 * (M_PI / 180)), 0.4f, 90, 0.55, 0.25));
+        
+        triggerModeButtons[i]->addListener(this);
+        triggerModeButtons[i]->setOpaque(false);
+        triggerModeButtons[i]->setRadioGroupId (43);
+        triggerModeButtons[i]->addMouseListener(this, false);
+        addAndMakeVisible(triggerModeButtons[i]);
+    }
+    
+    triggerModeButtons[1]->setToggleState(true, false);
+    
+    addAndMakeVisible(loopButton = new AlphaTextButton("Loop"));
     loopButton->addListener(this);
     loopButton->addMouseListener(this, true);
     loopButton->setClickingTogglesState(true);
-    loopButton->setToggleState(0, false);
+    loopButton->setToggleState(1, false);
     
-    addAndMakeVisible(indestructibleButton = new TextButton("indestruct"));
+    addAndMakeVisible(indestructibleButton = new AlphaTextButton("indestruct"));
     indestructibleButton->addListener(this);
     indestructibleButton->addMouseListener(this, true);
     indestructibleButton->setClickingTogglesState(true);
     indestructibleButton->setToggleState(0, false);
     
-    addAndMakeVisible(finishLoopButton = new TextButton("Finish"));
+    addAndMakeVisible(finishLoopButton = new AlphaTextButton("Finish"));
     finishLoopButton->addListener(this);
     finishLoopButton->addMouseListener(this, true);
     finishLoopButton->setClickingTogglesState(true);
     finishLoopButton->setToggleState(0, false);
     
-    addAndMakeVisible(stickyButton = new TextButton("Sticky"));
+    addChildComponent(fxDial = new GuiFxDial(mainComponentRef));
+	fxDial->setInterceptsMouseClicks(false, true);
+    fxDial->addMouseListener(this, false);
+    
+    addChildComponent(stickyButton = new AlphaTextButton("Sticky"));
     stickyButton->addListener(this);
     stickyButton->addMouseListener(this, true);
     stickyButton->setClickingTogglesState(true);
     stickyButton->setToggleState(0, false);
     
-    addAndMakeVisible(fxDial = new GuiFxDial(mainComponentRef));
-	fxDial->setInterceptsMouseClicks(false, true);
-    fxDial->addMouseListener(this, false);
-	
-	
-	addAndMakeVisible (waveform = new DemoThumbnailComp());
-	waveform->setInterceptsMouseClicks(false, false);
     
-    /*
-    addAndMakeVisible(pressureModeMenu = new ComboBox());
-    //ideally, we should have an 'off' here instead of having a 'no effect' elsewhere
-    pressureModeMenu->addItem("Effect processing", 1);
-    pressureModeMenu->addItem("Playback manipulation", 2);
-    pressureModeMenu->setSelectedId(1, true);
-    pressureModeMenu->addMouseListener(this, true);
-    pressureModeMenu->addListener(this);
-     */
+    //---------------status off bg-------------------------------------
+    addAndMakeVisible(notSelected = new GuiCircleBackground());
+	//notSelected->setInterceptsMouseClicks(false, false);
+	notSelected->setVisible(false);
+	
+	//---------------pressure status button-------------------------------------
+    
+    addAndMakeVisible(pressureStatusButton = new GuiSwitch());
+    pressureStatusButton->addListener(this);
+    pressureStatusButton->setClickingTogglesState(true);
+    pressureStatusButton->setToggleState(true, false);
+    pressureStatusButton->addMouseListener(this, false);
     
 }
 
@@ -129,37 +190,89 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 GuiSamplerMode::~GuiSamplerMode()
 {
     
-    deleteAllChildren();
+    //deleteAllChildren();
     
 }
 
 
 void GuiSamplerMode::resized()
 {
-    circleBackgroundRight->setBounds(780, 402, 230, 230);
+    notSelected->setBounds(0, 0, getWidth(), getHeight());
+	pressureStatusButton->setBounds(816, 393, 58, 58);
 	
-    waveform->setBounds(790, 412, 210, 210);
+    waveform->setBounds(683, 261, 324, 324);
 	
-    fileChooser->setBounds(RIGHT_CIRCLE_X, 475, COMPONENT_W, COMPONENT_H);
+    fileChooser->setBounds(787, 393, 116, 80);
+	
+	quantiseButton->setBounds(681, 288,32, 32);
+	triggerSettingsButton->setBounds(789, 221,42, 42);
+	pressureSettingsButton->setBounds(847, 219,42, 42);
+	
+	triggerModeButtons[0]->setBounds(728, 305, 234, 234);
+	triggerModeButtons[1]->setBounds(728, 305, 234, 234);
+	triggerModeButtons[2]->setBounds(728, 305, 234, 234);
+	triggerModeButtons[3]->setBounds(728, 305, 234, 234);
+	
+	loopButton->setBounds(894, 472,32, 32);
+	indestructibleButton->setBounds(853, 496,32, 32);
+	finishLoopButton->setBounds(918, 431,32, 32);
+	
+	stickyButton->setBounds(853, 496,32, 32);
+	
+    // gainSlider->setBounds(845, 495, 45, 45);
+	//panSlider->setBounds(900, 495, 45, 45);
     
-    gainSlider->setBounds(845, 495, 45, 45);
-	panSlider->setBounds(900, 495, 45, 45);
-        
-    triggerModeMenu->setBounds(RIGHT_CIRCLE_X, 538, COMPONENT_W, COMPONENT_H);
-    loopButton->setBounds(RIGHT_CIRCLE_X, 558, 50, 15);
-    indestructibleButton->setBounds(RIGHT_CIRCLE_X+50, 558, 50, 15);
-    finishLoopButton->setBounds(RIGHT_CIRCLE_X, 573, 50, 15);
-    stickyButton->setBounds(RIGHT_CIRCLE_X+50, 573, 50, 15);
-    
-    fxDial->setBounds(14, 402, 230, 230);
-    
-	//gainSlider->setBounds(965, 150, 45, 45);
-	//panSlider->setBounds(965, 200, 45, 45);
-    
-    //test playback manipulation stuff
-    //pressureModeMenu->setBounds(10, getHeight()-60, 50, 20);
+    fxDial->setBounds(683, 261, 324, 324);
 
-    
+}
+
+void GuiSamplerMode::paint (Graphics& g)
+{
+    float xBrowseButton = 787 + (116 * 0.25);
+	float yBrowseButton = 393;
+	float widthBrowseButton = 58;
+	
+	
+	ColourGradient fillGradient(AlphaColours::nearlyblack,845 , 461, Colours::black, 845 , 383, false);
+	g.setGradientFill(fillGradient);
+	
+	g.fillEllipse(802, 379, 86, 86);
+	
+	g.setColour(Colours::black);
+	
+	g.fillEllipse(786,218, 48, 48);
+	g.fillEllipse(844,216, 48, 48);
+	
+	g.fillEllipse(678,285, 38, 38);
+	g.fillEllipse(850,493, 38, 38);
+	
+	if(triggerSettingsButton->getToggleStateValue()==true)
+	{
+        g.fillEllipse(891,469, 38, 38);
+        g.fillEllipse(915,428, 38, 38);
+		
+		Path pieSeg;
+        pieSeg.addPieSegment(802, 379, 86, 86, (125 * (M_PI / 180)), (235 * (M_PI / 180)), 0.2f);
+        g.fillPath(pieSeg);
+	}
+	
+	
+	
+	g.fillEllipse(xBrowseButton, yBrowseButton, widthBrowseButton, widthBrowseButton);
+	
+	g.setColour(Colours::grey.withAlpha(0.3f));
+	
+	g.drawEllipse(678,285, 38, 38, 1.0);
+	g.drawEllipse(850,493, 38, 38, 1.0);
+	
+	if(triggerSettingsButton->getToggleStateValue()==true)
+	{
+        g.drawEllipse(891,469, 38, 38, 1.0);
+        g.drawEllipse(915,428, 38, 38, 1.0);
+	}
+	
+	g.drawEllipse((xBrowseButton + (widthBrowseButton * 0.1)), (yBrowseButton + (widthBrowseButton * 0.1)),
+				  (widthBrowseButton * 0.8),(widthBrowseButton * 0.8), 1.0f);
 }
 
 
@@ -170,6 +283,7 @@ void GuiSamplerMode::comboBoxChanged (ComboBox* comboBox)
     //This method takes the selected IDs from the combo box and sets it to the correct
     //variable in the relevent padSettings index/es
     
+    /*
     //==============================================================================
     //play state combobox
     if (comboBox == triggerModeMenu)
@@ -180,7 +294,7 @@ void GuiSamplerMode::comboBoxChanged (ComboBox* comboBox)
             PAD_SETTINGS->setSamplerTriggerMode(triggerModeMenu->getSelectedId());
         }
     }
-    
+    */
     
     //==============================================================================
     /*
@@ -232,6 +346,7 @@ void GuiSamplerMode::comboBoxChanged (ComboBox* comboBox)
 
 void GuiSamplerMode::sliderValueChanged (Slider* slider)
 {
+    /*
     //==============================================================================
     //gain slider
     if (slider == gainSlider->sliderComponent())
@@ -255,6 +370,7 @@ void GuiSamplerMode::sliderValueChanged (Slider* slider)
         
     }
         //==============================================================================
+     */
 
 }
 
@@ -291,9 +407,19 @@ void GuiSamplerMode::filenameComponentChanged (FilenameComponent* filenameCompon
 
 
 
+
+
 void GuiSamplerMode::buttonClicked (Button* button)
 {
-    if (button == loopButton)
+    if(button == triggerSettingsButton)
+		setDisplay(1);        
+    
+	
+	else if(button == pressureSettingsButton)
+        setDisplay(2);
+    
+    
+    else if (button == loopButton)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
@@ -327,6 +453,94 @@ void GuiSamplerMode::buttonClicked (Button* button)
             PAD_SETTINGS->setSamplerSticky(button->getToggleState());
         }
     }
+    
+    
+    else if(button == pressureStatusButton)
+	{
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSamplerPressureStatus(button->getToggleState());
+        }
+        
+        if(pressureStatusButton->getToggleStateValue()==true)
+            notSelected->setVisible(false);
+        else
+            notSelected->setVisible(true);
+		
+	}
+    
+    
+    //triggerMode buttons
+    for (int trig = 0; trig < 4; trig++)
+    {
+        if (button == triggerModeButtons[trig])
+        {
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setSamplerTriggerMode(trig);
+            }
+            
+            break;
+        }
+    }
+}
+
+
+
+void GuiSamplerMode::setDisplay(int settingsType)
+{
+    if (settingsType == 1) //trigger settings
+    {
+        
+        waveform->setVisible(true);
+        fileChooser->setVisible(true);
+        
+        for (int i = 0; i < 4; i++)
+            triggerModeButtons[i]->setVisible(true);
+        
+        loopButton->setVisible(true);
+        indestructibleButton->setVisible(true);
+        finishLoopButton->setVisible(true);
+        
+        
+        fxDial->setVisible(false);
+        pressureStatusButton->setVisible(false);
+        notSelected->setVisible(false);
+        stickyButton->setVisible(false);
+        
+        repaint(750, 200, 274, 469); 
+        
+    }
+    
+    else if (settingsType == 2) //pressure settings
+    {
+        
+        waveform->setVisible(false);
+        fileChooser->setVisible(false);
+        
+        for (int i = 0; i < 4; i++)
+            triggerModeButtons[i]->setVisible(false);
+        
+        loopButton->setVisible(false);
+        indestructibleButton->setVisible(false);
+        finishLoopButton->setVisible(false);
+        
+        fxDial->setVisible(true);
+        pressureStatusButton->setVisible(true);
+        stickyButton->setVisible(true);
+        
+        if(pressureStatusButton->getToggleStateValue()==true)
+            notSelected->setVisible(false);
+        else
+            notSelected->setVisible(true);
+        
+        repaint(750, 200, 274, 469);
+        
+        
+    }
+    
 }
 
 
@@ -338,6 +552,7 @@ void GuiSamplerMode::setCurrentlySelectedPad (Array<int> selectedPads_)
 
 void GuiSamplerMode::updateDisplay()
 {
+    
     //This method is used to set all the components to the currently selected pad's settings,
     //as well as to hide/dissabled any unneeded components. 
     
@@ -345,43 +560,49 @@ void GuiSamplerMode::updateDisplay()
     if (SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        //fileChooser->setVisible(true);
-        //fileChooserLabel->setVisible(true);
         
         fileChooser->setCurrentFile(PAD_SETTINGS->getSamplerAudioFilePath(), true, false);
 		File audioFile(PAD_SETTINGS->getSamplerAudioFilePath());
 		waveform->setFile (audioFile);
 		
-        gainSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerGain(), false);
-        panSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerPan(), false);
-        triggerModeMenu->setSelectedId(PAD_SETTINGS->getSamplerTriggerMode(), true);
+        //gainSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerGain(), false);
+        //panSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerPan(), false);
+        triggerModeButtons[PAD_SETTINGS->getSamplerTriggerMode()]->setToggleState(true, false);
         loopButton->setToggleState(PAD_SETTINGS->getSamplerShouldLoop(), false);
         indestructibleButton->setToggleState(PAD_SETTINGS->getSamplerIndestructible(), false);
         finishLoopButton->setToggleState(PAD_SETTINGS->getSamplerShouldFinishLoop(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getSamplerSticky(), false);
-        
+        pressureStatusButton->setToggleState(PAD_SETTINGS->getSamplerPressureStatus(), false);
         
     }
 
     else if (MULTI_PADS)
     {
-        //fileChooser->setVisible(false);
-        //fileChooserLabel->setVisible(false);
         
         //set default values
         fileChooser->setCurrentFile(File::nonexistent, false, false);
-        gainSlider->sliderComponent()->setValue(0.7, false);
-        panSlider->sliderComponent()->setValue(0.5, false);
-        triggerModeMenu->setSelectedId(2, true);
+        waveform->setFile (File::nonexistent);
+        //gainSlider->sliderComponent()->setValue(0.7, false);
+        //panSlider->sliderComponent()->setValue(0.5, false);
+        triggerModeButtons[0]->setToggleState(true, false); //ideally nothing should be selected here
         loopButton->setToggleState(1, false);
         indestructibleButton->setToggleState(0, false);
         finishLoopButton->setToggleState(0, false);
         stickyButton->setToggleState(0, false);
-        
-
-        
+        pressureStatusButton->setToggleState(false, false);
     }
 
+    
+    //set visibility of certain components
+    
+    notSelected->setVisible(false);
+    
+    if (triggerSettingsButton->getToggleState() == true)
+        setDisplay(1);
+    else if (pressureSettingsButton->getToggleState() == true)
+        setDisplay(2);
+    
+    
     fxDial->updateDisplay();
 }
 
@@ -389,7 +610,7 @@ void GuiSamplerMode::updateDisplay()
 
 void GuiSamplerMode::mouseEnter (const MouseEvent &e)
 {
-    
+    /*
     if (fileChooser->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText("Audio File Selector. Sets and displays the filepath name of the audio file for the selected pad/pads. Use the '+' button to open a File Browser Window, or use the drop-down menu to select from recently selected files, as well as view the currently selected file.");
@@ -410,6 +631,7 @@ void GuiSamplerMode::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText("Sampler FX Dial. Sets and displays the audio processing effect that the selected pad/pads pressure controls.");
     }
+     */
     
 }
 

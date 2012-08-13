@@ -65,12 +65,13 @@ PadSettings::PadSettings(int arrayIndex)
     
     //sampler mode
     samplerAudioFilePath = String::empty;
-    samplerTriggerMode = 2; 
+    samplerTriggerMode = 1; 
     samplerShouldLoop = 1;
     samplerIndestructible = 0;
     samplerShouldFinishLoop = 0;
     samplerSticky = 0;
     samplerEffect = 0;
+    samplerPressureStatus = 0;
     samplerPan = 0.5;
     samplerGain = 1.0;
     
@@ -280,12 +281,13 @@ void PadSettings::resetData (int whatToReset)
     if (whatToReset != 2)
     {
         setSamplerAudioFilePath (File::nonexistent);
-        setSamplerTriggerMode (2);
+        setSamplerTriggerMode (1);
         setSamplerShouldLoop(1);
         setSamplerIndestructible(0);
         setSamplerShouldFinishLoop(0);
         setSamplerSticky(0);
         setSamplerEffect (0);
+        setSamplerPressureStatus(false);
         setSamplerPan (0.5);
         setSamplerGain (1.0);
         
@@ -751,6 +753,17 @@ void PadSettings::setSamplerEffect(int value)
     }
     
 }
+void PadSettings::setSamplerPressureStatus(bool value)
+{
+
+    samplerPressureStatus = value;
+    
+    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setPressureStatus(value);
+    }
+    
+}
 void PadSettings::setSamplerPan(float value)
 {
     samplerPan = value;
@@ -822,6 +835,10 @@ int PadSettings::getSamplerSticky()
 int PadSettings::getSamplerEffect()
 {
     return samplerEffect;
+}
+bool PadSettings::getSamplerPressureStatus()
+{
+    return samplerPressureStatus;
 }
 float PadSettings::getSamplerPan()
 {

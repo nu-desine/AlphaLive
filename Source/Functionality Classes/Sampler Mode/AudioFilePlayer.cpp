@@ -60,6 +60,7 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     sticky = PAD_SETTINGS->getSamplerSticky();
     currentPlayingState = currentPressureValue = 0;
     effect = PAD_SETTINGS->getSamplerEffect();
+    pressureStatus = PAD_SETTINGS->getSamplerPressureStatus();
     quantizeMode = PAD_SETTINGS->getQuantizeMode();
     
     triggerModeData.playingStatus = 0;
@@ -275,34 +276,37 @@ void AudioFilePlayer::processAudioFile(int padValue)
         
         
         //determine what effect and parameter the pressure is controlling
-        switch (effect)
+        if (pressureStatus == true)
         {
-            case 1: //Gain and Pan
-                gainAndPan->processAlphaTouch(pressureValue);
-                break;
-            case 2: //LPF
-                lowPassFilter->processAlphaTouch(pressureValue);
-                break;
-            case 3: //HPF
-                highPassFilter->processAlphaTouch(pressureValue);
-                break;
-            case 4: //BPF
-                bandPassFilter->processAlphaTouch(pressureValue);
-                break;
-            case 6: //Delay
-                delay->processAlphaTouch(pressureValue);
-                break;
-            case 7: //Reverb
-                reverb->processAlphaTouch(pressureValue);
-                break;
-            case 9: //Flanger
-                flanger->processAlphaTouch(pressureValue);
-                break;
-            case 10: //Tremolo
-                tremolo->processAlphaTouch(pressureValue);
-                break;
-            default:
-                break;
+            switch (effect)
+            {
+                case 0: //Gain and Pan
+                    gainAndPan->processAlphaTouch(pressureValue);
+                    break;
+                case 1: //LPF
+                    lowPassFilter->processAlphaTouch(pressureValue);
+                    break;
+                case 2: //HPF
+                    highPassFilter->processAlphaTouch(pressureValue);
+                    break;
+                case 3: //BPF
+                    bandPassFilter->processAlphaTouch(pressureValue);
+                    break;
+                case 6: //Delay
+                    delay->processAlphaTouch(pressureValue);
+                    break;
+                case 7: //Reverb
+                    reverb->processAlphaTouch(pressureValue);
+                    break;
+                case 8: //Flanger
+                    flanger->processAlphaTouch(pressureValue);
+                    break;
+                case 9: //Tremolo
+                    tremolo->processAlphaTouch(pressureValue);
+                    break;
+                default:
+                    break;
+            }
         }
         
         prevPadValue = padValue;
@@ -474,34 +478,37 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
     if (/*fileSource.isPlaying() == true &&*/ effect != 0)
     {
         
-        switch (effect) 
+        if (pressureStatus == true)
         {
-            case 1: //Gain and Pan
-                gainAndPan->processAudio(bufferToFill);
-                break;
-            case 2: //LPF
-                lowPassFilter->processAudio(bufferToFill);
-                break;
-            case 3://HPF
-                highPassFilter->processAudio(bufferToFill);
-                break;
-            case 4: //BPF
-                bandPassFilter->processAudio(bufferToFill);
-                break;
-            case 6: //Delay
-                delay->processAudio(bufferToFill);
-                break;
-            case 7: //Reverb
-                reverb->processAudio(bufferToFill);
-                break;
-            case 9: //Flanger
-                flanger->processAudio(bufferToFill);
-                break;
-            case 10: //Tremolo
-                tremolo->processAudio(bufferToFill);
-                break;
-            default:
-                break;
+            switch (effect) 
+            {
+                case 0: //Gain and Pan
+                    gainAndPan->processAudio(bufferToFill);
+                    break;
+                case 1: //LPF
+                    lowPassFilter->processAudio(bufferToFill);
+                    break;
+                case 2://HPF
+                    highPassFilter->processAudio(bufferToFill);
+                    break;
+                case 3: //BPF
+                    bandPassFilter->processAudio(bufferToFill);
+                    break;
+                case 6: //Delay
+                    delay->processAudio(bufferToFill);
+                    break;
+                case 7: //Reverb
+                    reverb->processAudio(bufferToFill);
+                    break;
+                case 8: //Flanger
+                    flanger->processAudio(bufferToFill);
+                    break;
+                case 9: //Tremolo
+                    tremolo->processAudio(bufferToFill);
+                    break;
+                default:
+                    break;
+            }
         }
          
     }
@@ -551,34 +558,37 @@ void AudioFilePlayer::prepareToPlay (int samplesPerBlockExpected,double sampleRa
     
     sampleRate_ = sampleRate;
     
-    switch (effect)
+    if (pressureStatus == true)
     {
-        case 1:
-            gainAndPan->setSampleRate(sampleRate);
-            break;
-        case 2:
-            lowPassFilter->setSampleRate(sampleRate);
-            break;
-        case 3:
-            highPassFilter->setSampleRate(sampleRate);
-            break;
-        case 4:
-            bandPassFilter->setSampleRate(sampleRate);
-            break;
-        case 6:
-            delay->setSampleRate(sampleRate);
-            break;
-        case 7:
-            reverb->setSampleRate(sampleRate);
-            break;
-        case 9:
-            flanger->setSampleRate(sampleRate);
-            break;
-        case 10:
-            tremolo->setSampleRate(sampleRate);
-            break;
-        default:
-            break;
+        switch (effect)
+        {
+            case 0:
+                gainAndPan->setSampleRate(sampleRate);
+                break;
+            case 1:
+                lowPassFilter->setSampleRate(sampleRate);
+                break;
+            case 2:
+                highPassFilter->setSampleRate(sampleRate);
+                break;
+            case 3:
+                bandPassFilter->setSampleRate(sampleRate);
+                break;
+            case 6:
+                delay->setSampleRate(sampleRate);
+                break;
+            case 7:
+                reverb->setSampleRate(sampleRate);
+                break;
+            case 8:
+                flanger->setSampleRate(sampleRate);
+                break;
+            case 9:
+                tremolo->setSampleRate(sampleRate);
+                break;
+            default:
+                break;
+        }
     }
         
 }
@@ -592,7 +602,7 @@ void AudioFilePlayer::killAllAudio()
 {
     if (effect == 6) //delay
         delay->resetBuffers();
-    else if (effect == 9) //tremolo
+    else if (effect == 8) //flanger
         flanger->resetBuffers();
     
 }
@@ -623,19 +633,19 @@ void AudioFilePlayer::setEffect(int value)
         //first, delete the current effect...
         switch (effect)
         {
-            case 1:
+            case 0:
                 delete gainAndPan;
                 gainAndPan = nullptr;
                 break;
-            case 2:
+            case 1:
                 delete lowPassFilter;
                 lowPassFilter = nullptr;
                 break;
-            case 3:
+            case 2:
                 delete highPassFilter;
                 highPassFilter = nullptr;
                 break;
-            case 4:
+            case 3:
                 delete bandPassFilter;
                 bandPassFilter = nullptr;
                 break;
@@ -647,11 +657,11 @@ void AudioFilePlayer::setEffect(int value)
                 delete reverb;
                 reverb = nullptr;
                 break;
-            case 9:
+            case 8:
                 delete flanger;
                 flanger = nullptr;
                 break;
-            case 10:
+            case 9:
                 delete tremolo;
                 tremolo = nullptr;
                 break;
@@ -662,16 +672,16 @@ void AudioFilePlayer::setEffect(int value)
         //Next, create the new effect...
         switch (value)
         {
-            case 1:
+            case 0:
                 gainAndPan = new GainAndPan (padNumber, sampleRate_);
                 break;
-            case 2:
+            case 1:
                 lowPassFilter = new LowpassFilter (padNumber, sampleRate_);
                 break;
-            case 3:
+            case 2:
                 highPassFilter = new HighPassFilter (padNumber, sampleRate_);
                 break;
-            case 4:
+            case 3:
                 bandPassFilter = new BandPassFilter (padNumber, sampleRate_);
                 break;
             case 6:
@@ -680,10 +690,10 @@ void AudioFilePlayer::setEffect(int value)
             case 7:
                 reverb = new ReverbClass (padNumber, sampleRate_);
                 break;
-            case 9:
+            case 8:
                 flanger = new Flanger (padNumber, sampleRate_);
                 break;
-            case 10:
+            case 9:
                 tremolo = new Tremolo (padNumber, sampleRate_);
                 break;
             default:
@@ -696,6 +706,16 @@ void AudioFilePlayer::setEffect(int value)
     sharedMemory.exit();
 
 }
+
+void AudioFilePlayer::setPressureStatus (bool value)
+{
+    sharedMemory.enter();
+    
+    pressureStatus = value;
+    
+    sharedMemory.exit();
+}
+
 void AudioFilePlayer::setQuantizeMode (int value)
 {
     quantizeMode = value;

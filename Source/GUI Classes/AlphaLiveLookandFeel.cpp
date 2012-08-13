@@ -469,7 +469,7 @@ void AlphaLiveLookandFeel::drawLabel (Graphics& g, Label& label)
     //http://www.rawmaterialsoftware.com/viewtopic.php?f=2&t=8311
     label.setColour (TextEditor::textColourId, Colours::white);
     
-    //HACK - added this to set the combobox text colour - for some reason the offical way isn't working!
+    //HACK - added this to set the combobox text colour - for some reason the offical way isn't working! << it is now!! :)
    // label.setColour (Label::textColourId, Colours::white);
     
     g.fillAll (label.findColour (Label::backgroundColourId));

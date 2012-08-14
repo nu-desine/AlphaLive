@@ -97,11 +97,10 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeOffButton->addMouseListener(this, false);
 	
 	//create curve mode button
-	Image *globalSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::offsymbol_png, BinaryDataNew::offsymbol_pngSize)); 
+	Image *globalSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::padsettingssymbol_png, BinaryDataNew::padsettingssymbol_pngSize)); 
 	addAndMakeVisible(globalSettingsButton = new ModeButton(globalSettingsImage));
 	globalSettingsButton->addListener(this);
     globalSettingsButton->setOpaque(false);
-	//globalSettingsButton->setRadioGroupId (1234);
     globalSettingsButton->addMouseListener(this, false);
     
     
@@ -598,8 +597,18 @@ void MainComponent::buttonClicked(Button *button)
 		
 		if (button->getToggleState()==true) 
         {
-             std::cout << "here"<< std::endl;
 			guiGlobalPadSettings->setVisible(true);
+            
+            modeOffButton->setEnabled(false);
+            modeOffButton->setAlpha(0.3f);
+            modeMidiButton->setEnabled(false);
+            modeMidiButton->setAlpha(0.3f);
+            modeSamplerButton->setEnabled(false);
+            modeSamplerButton->setAlpha(0.3f);
+            modeSequencerButton->setEnabled(false);
+            modeSequencerButton->setAlpha(0.3f);
+            modeControllerButton->setEnabled(false);
+            modeControllerButton->setAlpha(0.3f);
 		}
         
 		else 
@@ -618,6 +627,17 @@ void MainComponent::buttonClicked(Button *button)
 				guiControllerMode->setVisible(true);
             
             guiGlobalPadSettings->setVisible(false);
+            
+            modeOffButton->setEnabled(true);
+            modeOffButton->setAlpha(1.0f);
+            modeMidiButton->setEnabled(true);
+            modeMidiButton->setAlpha(1.0f);
+            modeSamplerButton->setEnabled(true);
+            modeSamplerButton->setAlpha(1.0f);
+            modeSequencerButton->setEnabled(true);
+            modeSequencerButton->setAlpha(1.0f);
+            modeControllerButton->setEnabled(true);
+            modeControllerButton->setAlpha(1.0f);
 				
 		}
 		

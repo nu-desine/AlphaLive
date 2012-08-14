@@ -28,7 +28,7 @@
 GuiCircleBackground::GuiCircleBackground()
 {
     
-    image = ImageCache::getFromMemory(BinaryDataNew::modeoff_png, BinaryDataNew::modeoff_pngSize);
+    image = ImageCache::getFromMemory(BinaryDataNew::statusoff_png, BinaryDataNew::statusoff_pngSize);
     
     
 }

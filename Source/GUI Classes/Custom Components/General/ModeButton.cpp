@@ -30,7 +30,7 @@
 
 ModeButton::ModeButton (Image* modeSymbol)
 :   Button ("ModeButton"),
-symbol(modeSymbol)
+    symbol(modeSymbol)
 {
 	setClickingTogglesState(true);
 	
@@ -41,8 +41,8 @@ symbol(modeSymbol)
     overOverlay   = Colours::white;
     downOpacity   = 0.5f;
     downOverlay   = Colours::white;
-	onOpacity   = 0.9f;
-    onOverlay   = AlphaColours::blue;
+	onOpacity   = 1.0f;
+    onOverlay   = Colours::white;
 	
 }
 
@@ -65,24 +65,26 @@ void ModeButton::resized()
 void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown)
 {
 	
-    
+
 	
-    
-    switch (getToggleState() ? (isButtonDown ? 5 : (isMouseOverButton ? 4 : 3))
+	 
+		 switch (getToggleState() ? (isButtonDown ? 5 : (isMouseOverButton ? 4 : 3))
 			: (isButtonDown ? 2 : (isMouseOverButton ? 1 : 0)))
     {
 		case 0:
         {
             
+			g.setColour(Colours::black);
+			g.fillEllipse(0, 0, getWidth(), getHeight());
 			
-			ColourGradient fillGradient(Colours::black, (getWidth()*0.5), (getHeight()*0.6), AlphaColours::nearlyblack, (getWidth()*0.5), 0, false);
+			ColourGradient fillGradient(Colours::black, (getWidth()*0.5), (getHeight()*0.6), Colours::white.withAlpha(0.1f), (getWidth()*0.5), 0, false);
 			g.setGradientFill(fillGradient);
 			g.fillEllipse(0, 0, getWidth(), getHeight());
 			
 			ColourGradient highlightGradient(Colours::transparentBlack, (getWidth()*0.5), (getHeight()*0.8), Colours::silver.withAlpha(0.3f), (getWidth()*0.5), 0, false);
 			g.setGradientFill(highlightGradient);
 			g.drawEllipse((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), (getHeight()*0.025));
-            
+
 			
 			g.drawImage (* symbol,
 						 0, 0, getWidth(), getHeight(),
@@ -93,7 +95,10 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 		case 1:
         {
             
-            ColourGradient fillGradient(Colours::black, (getWidth()*0.5), (getHeight()*0.6), AlphaColours::nearlyblack, (getWidth()*0.5), 0, false);
+			g.setColour(Colours::black);
+			g.fillEllipse(0, 0, getWidth(), getHeight());
+			
+            ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.9), Colours::black, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
 			g.fillEllipse(0, 0, getWidth(), getHeight());
 			
@@ -109,14 +114,16 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			g.drawImage (* symbol,
 						 0, 0, getWidth(), getHeight(),
                          0, 0, 50, 50, true);
-            
+		
             break;
         }
 			
 		case 2:
         {
-            
-            ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.9), Colours::black, (getWidth()*0.5), (getHeight()*0.3), false);
+			g.setColour(Colours::black);
+			g.fillEllipse(0, 0, getWidth(), getHeight());
+			
+            ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.4), Colours::black, (getWidth()*0.5), 0, false);
 			g.setGradientFill(fillGradient);
 			g.fillEllipse(0, 0, getWidth(), getHeight());
 			
@@ -138,8 +145,11 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			
 		case 3:
         {
-            
-			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.9), Colours::black, (getWidth()*0.5), (getHeight()*0.3), false);
+           
+			g.setColour(AlphaColours::blue);
+			g.fillEllipse(0, 0, getWidth(), getHeight());
+			
+			ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.7), AlphaColours::blue, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
 			g.fillEllipse(0, 0, getWidth(), getHeight());
 			
@@ -163,8 +173,10 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			
 		case 4:
         {
-            
-			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.9), Colours::black, (getWidth()*0.5), (getHeight()*0.3), false);
+			g.setColour(AlphaColours::blue);
+			g.fillEllipse(0, 0, getWidth(), getHeight());
+			
+			ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.7), AlphaColours::blue, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
 			g.fillEllipse(0, 0, getWidth(), getHeight());
 			
@@ -186,8 +198,10 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			
 		case 5:
         {
-            
-            ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.9), Colours::black, (getWidth()*0.5), (getHeight()*0.3), false);
+			g.setColour(AlphaColours::blue);
+			g.fillEllipse(0, 0, getWidth(), getHeight());
+			
+			ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.7), AlphaColours::blue, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
 			g.fillEllipse(0, 0, getWidth(), getHeight());
 			
@@ -210,7 +224,7 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 		default:
 			break;
     }
-    
+	 
 	
 }
 
@@ -221,13 +235,13 @@ void ModeButton::clicked()
     //[UserCode_clicked] -- Add your code here...
     //[/UserCode_clicked]
 	
-    
+
 }
 
 void ModeButton::buttonStateChanged()
 {
-    //
-    
+   //
+
 }
 
 bool ModeButton::hitTest (int x, int y)
@@ -236,7 +250,6 @@ bool ModeButton::hitTest (int x, int y)
 	return hitPath.contains(x, y);
 	
 }
-
 
 
 

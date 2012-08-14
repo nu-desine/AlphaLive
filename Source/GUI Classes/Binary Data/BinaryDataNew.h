@@ -6,7 +6,7 @@
 namespace BinaryDataNew
 {
     extern const char*  controlsymbol_png;
-    const int           controlsymbol_pngSize = 4375;
+    const int           controlsymbol_pngSize = 3671;
 
     extern const char*  interfacemain_png;
     const int           interfacemain_pngSize = 148720;
@@ -15,19 +15,22 @@ namespace BinaryDataNew
     const int           loading_pngSize = 143883;
 
     extern const char*  loopsymbol_png;
-    const int           loopsymbol_pngSize = 4203;
+    const int           loopsymbol_pngSize = 3646;
 
     extern const char*  midisymbol_png;
-    const int           midisymbol_pngSize = 4052;
+    const int           midisymbol_pngSize = 3312;
 
     extern const char*  modeoff_png;
     const int           modeoff_pngSize = 60204;
 
     extern const char*  offsymbol_png;
-    const int           offsymbol_pngSize = 4309;
+    const int           offsymbol_pngSize = 3400;
 
     extern const char*  padsbg_png;
     const int           padsbg_pngSize = 543891;
+
+    extern const char*  padsettingssymbol_png;
+    const int           padsettingssymbol_pngSize = 4066;
 
     extern const char*  padsoff_png;
     const int           padsoff_pngSize = 66756;
@@ -36,7 +39,10 @@ namespace BinaryDataNew
     const int           padson_pngSize = 84132;
 
     extern const char*  sequencersymbol_png;
-    const int           sequencersymbol_pngSize = 4274;
+    const int           sequencersymbol_pngSize = 4458;
+
+    extern const char*  statusoff_png;
+    const int           statusoff_pngSize = 57530;
 
 };
 

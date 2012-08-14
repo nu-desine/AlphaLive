@@ -34,8 +34,7 @@
 GuiControllerMode::GuiControllerMode(MainComponent &ref)
                                             :   mainComponentRef(ref)
 {
-    //currentlySelectedPad = 99;
-    
+    /*
     addAndMakeVisible(speakerLeft = new GuiSpeaker());
     addAndMakeVisible(circleBackgroundSmall = new GuiCircleBackground());
     addAndMakeVisible(circleBackgroundRight = new GuiCircleBackground());
@@ -49,6 +48,34 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
     controlMenu->addItem("Scene & MIDI Program Switcher", 5);
     controlMenu->addItem("OSC Ouput", 3);
     controlMenu->setSelectedId(1, true);
+     */
+    
+    for (int i = 0; i < 4; i++)
+    {
+        if (i == 0)
+            controlButtons.insert(i, new SettingsButton(translate("SCENE SWITCH"), (270 * (M_PI / 180)), 
+                                                        (315 * (M_PI / 180)),
+                                                        0.3f, -90, 0.45, 0.8));
+        if (i == 1)
+            controlButtons.insert(i, new SettingsButton(translate("MIDI PROGRAM"), (315 * (M_PI / 180)),
+                                                        (2 * M_PI) , 0.3f, -90, 0.45, 0.8));
+        if (i == 2)
+            controlButtons.insert(i, new SettingsButton(translate("SCENE/PROGRAM"), 0.0f, (45 * (M_PI / 180)), 
+                                                        0.3f, 90, 0.55, 0.2));
+        if (i == 3)
+            controlButtons.insert(i, new SettingsButton(translate("OSC MESSAGE"), (45 * (M_PI / 180)), 
+                                                        (90 * (M_PI / 180)), 0.3f, 90, 0.55, 0.3));
+        
+        controlButtons[i]->addListener(this);
+        controlButtons[i]->setOpaque(false);
+        controlButtons[i]->setRadioGroupId (43);
+        controlButtons[i]->addMouseListener(this, false);
+        addAndMakeVisible(controlButtons[i]);
+        
+    }
+    
+    controlButtons[0]->setToggleState(true, false);
+    
     
     addAndMakeVisible(sceneNumberSlider = new AlphaSlider());
     sceneNumberSlider->setRange(1, NO_OF_SCENES, 1);
@@ -58,7 +85,7 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
     sceneNumberSlider->setVisible(false);
     
     //for some reason using a textEditor was creating gui problems, so using a label instead now
-    addAndMakeVisible(oscIpAddressEditor = new Label());
+    addChildComponent(oscIpAddressEditor = new Label());
     oscIpAddressEditor->setText("127.0.0.1", false);
     oscIpAddressEditor->setColour(Label::textColourId, Colours::grey);
     oscIpAddressEditor->setColour(Label::backgroundColourId, Colours::lightgrey);
@@ -66,29 +93,46 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
     oscIpAddressEditor->setEditable(true);
     oscIpAddressEditor->addMouseListener(this, true);
     oscIpAddressEditor->addListener(this);
-    oscIpAddressEditor->setVisible(false);
     //AT SOME POINT USE LABEL::CREATEEDITORCOMPONENT() TO SET INPUT RESTRICTIONS TO THE EDITOR
     
-    addAndMakeVisible(oscPortNumberSlider = new AlphaSlider());
+    addChildComponent(oscPortNumberSlider = new AlphaSlider());
     oscPortNumberSlider->setRange(0, 65535, 1);
     oscPortNumberSlider->addListener(this);
     oscPortNumberSlider->setValue(5004, false);
     oscPortNumberSlider->addMouseListener(this, true);
-    oscPortNumberSlider->setVisible(false);
     
-    addAndMakeVisible(midiProgramChangeNumberSlider = new AlphaSlider());
+    addChildComponent(midiProgramChangeNumberSlider = new AlphaSlider());
     midiProgramChangeNumberSlider->setRange(0, 127, 1);
     midiProgramChangeNumberSlider->setValue(1, false);
     midiProgramChangeNumberSlider->addListener(this);
     midiProgramChangeNumberSlider->addMouseListener(this, true);
     midiProgramChangeNumberSlider->setVisible(false);
     
+    //---------------channel buttons---------------------
+	
+	
+	for (int i = 0; i <= 15; i++)
+	{
+		midiChannelButtons.insert(i, new AlphaTextButton());
+		midiChannelButtons[i]->setButtonText(String(i + 1));
+		midiChannelButtons[i]->setClickingTogglesState(true);
+		midiChannelButtons[i]->setToggleState(false, false);	
+		midiChannelButtons[i]->setRadioGroupId (12);
+		midiChannelButtons[i]->addListener(this);
+        midiChannelButtons[i]->addMouseListener(this, true);
+		midiChannelButtons[i]->setOpaque(false);
+        
+        addChildComponent(midiChannelButtons[i]);
+	}
+    
+    /*
     addAndMakeVisible(midiProgramChangeChannelSlider = new AlphaSlider());
     midiProgramChangeChannelSlider->setRange(1, 16, 1);
     midiProgramChangeChannelSlider->setValue(1, false);
     midiProgramChangeChannelSlider->addListener(this);
     midiProgramChangeChannelSlider->addMouseListener(this, true);
     midiProgramChangeChannelSlider->setVisible(false);
+     */
 
 
     
@@ -98,6 +142,8 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
 
 GuiControllerMode::~GuiControllerMode()
 {
+    controlButtons.clear();
+    midiChannelButtons.clear();
     deleteAllChildren();
 }
 
@@ -105,20 +151,36 @@ GuiControllerMode::~GuiControllerMode()
 
 void GuiControllerMode::resized()
 {
-    speakerLeft->setBounds(14, 402, 230, 230);
-    circleBackgroundSmall->setBounds(850, 251, 142, 142);
-    circleBackgroundRight->setBounds(780, 402, 230, 230);
-    
-    controlMenu->setBounds(RIGHT_CIRCLE_X, 445, COMPONENT_W, COMPONENT_H);
+	
+	controlButtons[0]->setBounds(684, 261, 322, 322);
+	controlButtons[1]->setBounds(684, 261, 322, 322);
+	controlButtons[2]->setBounds(684, 261, 322, 322);
+	controlButtons[3]->setBounds(684, 261, 322, 322);
     
     //only one of these (or a group of these) will be displayed at any time depending on the value of control menu
-    sceneNumberSlider->setBounds(RIGHT_CIRCLE_X, 480, COMPONENT_W, COMPONENT_H);
-
-    oscIpAddressEditor->setBounds(RIGHT_CIRCLE_X, 480, COMPONENT_W, COMPONENT_H);
-    oscPortNumberSlider-> setBounds(RIGHT_CIRCLE_X, 505, COMPONENT_W, COMPONENT_H);
+    sceneNumberSlider->setBounds(816, 393, 58, 58);
+	
+    oscIpAddressEditor->setBounds(900, 430, 98, 20);
+    oscPortNumberSlider-> setBounds(816, 393, 58, 58);
     
-    midiProgramChangeNumberSlider->setBounds(RIGHT_CIRCLE_X, 505, COMPONENT_W, COMPONENT_H);
-    midiProgramChangeChannelSlider->setBounds(RIGHT_CIRCLE_X, 530, COMPONENT_W, COMPONENT_H);
+    midiProgramChangeNumberSlider->setBounds(816, 393, 58, 58);
+	
+	midiChannelButtons[0]->setBounds(649,439,21, 21);
+	midiChannelButtons[1]->setBounds(656,467,21, 21);
+	midiChannelButtons[2]->setBounds(667,495,21, 21);
+	midiChannelButtons[3]->setBounds(682,520,21, 21);
+	midiChannelButtons[4]->setBounds(700,542,21, 21);
+	midiChannelButtons[5]->setBounds(722,562,21, 21);
+	midiChannelButtons[6]->setBounds(747,577,21, 21);
+	midiChannelButtons[7]->setBounds(774,589,21, 21);
+	midiChannelButtons[8]->setBounds(803,596,21, 21);
+	midiChannelButtons[9]->setBounds(832,599,21, 21);
+	midiChannelButtons[10]->setBounds(861,597,21, 21);
+	midiChannelButtons[11]->setBounds(890,590,21, 21);
+	midiChannelButtons[12]->setBounds(917,579,21, 21);
+	midiChannelButtons[13]->setBounds(942,564,21, 21);
+	midiChannelButtons[14]->setBounds(965,545,21, 21);
+	midiChannelButtons[15]->setBounds(984,523,21, 21);
 }
 
 
@@ -126,6 +188,65 @@ void GuiControllerMode::resized()
 void GuiControllerMode::paint (Graphics& g)
 {
     
+	ColourGradient fillGradient(AlphaColours::nearlyblack,845 , 461, Colours::black, 845 , 383, false);
+	g.setGradientFill(fillGradient);
+	
+	g.fillEllipse(802, 379, 86, 86);
+	
+	if (drawButtons == 1) 
+    {
+		drawButtonsBackground(g);
+	}
+    
+}
+
+
+
+void GuiControllerMode::drawButtonsBackground(Graphics &g)
+{
+	//this draws an outline around the midi channel buttons
+    
+	g.setColour(Colours::black);
+	
+	g.fillEllipse(646,436, 27, 27);
+	g.fillEllipse(653,464, 27, 27);
+	g.fillEllipse(664,492, 27, 27);
+	g.fillEllipse(679,517, 27, 27);
+	g.fillEllipse(697,539, 27, 27);
+	g.fillEllipse(719,559, 27, 27);
+	g.fillEllipse(744,574, 27, 27);
+	g.fillEllipse(771,586, 27, 27);
+	
+	g.fillEllipse(800,593, 27, 27);
+	g.fillEllipse(829,596, 27, 27);
+	g.fillEllipse(858,594, 27, 27);
+	g.fillEllipse(887,587, 27, 27);
+	g.fillEllipse(914,576, 27, 27);
+	g.fillEllipse(939,561, 27, 27);
+	g.fillEllipse(962,542, 27, 27);
+	g.fillEllipse(981,520, 27, 27);
+	
+	
+	g.setColour(Colours::grey.withAlpha(0.3f));
+	
+	
+	g.drawEllipse(646,436, 27, 27, 1.0);
+	g.drawEllipse(653,464, 27, 27, 1.0);
+	g.drawEllipse(664,492, 27, 27, 1.0);
+	g.drawEllipse(679,517, 27, 27, 1.0);
+	g.drawEllipse(697,539, 27, 27, 1.0);
+	g.drawEllipse(719,559, 27, 27, 1.0);
+	g.drawEllipse(744,574, 27, 27, 1.0);
+	g.drawEllipse(771,586, 27, 27, 1.0);
+    g.drawEllipse(800,593, 27, 27, 1.0);
+	g.drawEllipse(829,596, 27, 27, 1.0);
+	g.drawEllipse(858,594, 27, 27, 1.0);
+	g.drawEllipse(887,587, 27, 27, 1.0);
+	g.drawEllipse(914,576, 27, 27, 1.0);
+	g.drawEllipse(939,561, 27, 27, 1.0);
+	g.drawEllipse(962,542, 27, 27, 1.0);
+	g.drawEllipse(981,520, 27, 27, 1.0);
+	
 }
 
 
@@ -140,6 +261,7 @@ void GuiControllerMode::setCurrentlySelectedPad (Array <int> selectedPads_)
 
 void GuiControllerMode::comboBoxChanged (ComboBox* comboBox)
 {
+    /*
     //==============================================================================
     //pressure mode combobox
     if (comboBox == controlMenu)
@@ -186,7 +308,7 @@ void GuiControllerMode::comboBoxChanged (ComboBox* comboBox)
     }
     
     //==============================================================================
-
+*/
     
 }
 
@@ -230,6 +352,7 @@ void GuiControllerMode::sliderValueChanged (Slider* slider)
     }
     
     
+    /*
     //MIDI program change channel slider
     else if (slider == midiProgramChangeChannelSlider)
     {
@@ -240,6 +363,7 @@ void GuiControllerMode::sliderValueChanged (Slider* slider)
         }
         
     }
+     */
 
     
 }
@@ -279,6 +403,39 @@ void GuiControllerMode::textEditorTextChanged (TextEditor& editor)
 void GuiControllerMode::buttonClicked (Button* button)
 {
     
+    for (int control = 0; control < 4; control++)
+    {
+        if (button == controlButtons[control])
+        {
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setControllerControl(control + 1);
+            }
+            
+            //set what components are displayed
+            setDisplay(control);            
+
+            break;
+        }
+    }
+    
+    //channel buttons
+    for (int chan = 0; chan < 16; chan++)
+    {
+        if (button == midiChannelButtons[chan])
+        {
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setControllerMidiProgramChangeChannel(chan + 1);
+            }
+            
+            break;
+        }
+        
+    }
+    
 }
 
 void GuiControllerMode::updateDisplay()
@@ -290,63 +447,92 @@ void GuiControllerMode::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        controlMenu->setSelectedId(PAD_SETTINGS->getControllerControl(), true);
-        sceneNumberSlider->setValue(PAD_SETTINGS->getControllerPresentNumber(), false);
+        controlButtons[PAD_SETTINGS->getControllerControl()]->setToggleState(true, false);
+        sceneNumberSlider->setComponentValue(PAD_SETTINGS->getControllerPresentNumber());
         oscIpAddressEditor->setText(PAD_SETTINGS->getControllerOscIpAddress(), false);
-        oscPortNumberSlider->setValue(PAD_SETTINGS->getControllerOscPort(), false);
-        midiProgramChangeNumberSlider->setValue(PAD_SETTINGS->getControllerMidiProgramChangeNumber(), false);
-        midiProgramChangeChannelSlider->setValue(PAD_SETTINGS->getControllerMidiProgramChangeChannel(), false);
+        oscPortNumberSlider->setComponentValue(PAD_SETTINGS->getControllerOscPort());
+        midiProgramChangeNumberSlider->setComponentValue(PAD_SETTINGS->getControllerMidiProgramChangeNumber());
+        midiChannelButtons[PAD_SETTINGS->getControllerMidiProgramChangeChannel()-1]->setToggleState(true, false);
         
+        setDisplay(PAD_SETTINGS->getControllerControl());
     }
     
     else if(MULTI_PADS)
     {
-        controlMenu->setSelectedId(1, true);
-        sceneNumberSlider->setValue(1, false);
+        controlButtons[0]->setToggleState(true, false);
+        sceneNumberSlider->setComponentValue(1);
         oscIpAddressEditor->setText("127.0.0.1", false);
-        oscPortNumberSlider->setValue(5004, false);
-        midiProgramChangeNumberSlider->setValue(1, false);
-        midiProgramChangeChannelSlider->setValue(1, false);
+        oscPortNumberSlider->setComponentValue(5004);
+        midiProgramChangeNumberSlider->setComponentValue(1);
+        midiChannelButtons[0]->setToggleState(true, false);
+        
+        setDisplay(0);
     }
-    
-
-    // ============show/hide relevent components==============
-    //first set other componets invisble (saves having to set the visibility of each one in each next if statement)... 
-    sceneNumberSlider->setVisible(false);
-    oscIpAddressEditor->setVisible(false);
-    oscPortNumberSlider->setVisible(false);
-    midiProgramChangeNumberSlider->setVisible(false);
-    midiProgramChangeChannelSlider->setVisible(false);
-    
-    //...and then set the right one visible
-    if (controlMenu->getSelectedId() == 2) //scene switcher control selected
-    {
-        sceneNumberSlider->setVisible(true);
-    }
-    else if(controlMenu->getSelectedId() == 3) //OSC output control selected
-    {
-        oscIpAddressEditor->setVisible(true);
-        oscPortNumberSlider->setVisible(true);
-    }
-    else if(controlMenu->getSelectedId() == 4) //MIDI program change
-    {
-        midiProgramChangeNumberSlider->setVisible(true);
-        midiProgramChangeChannelSlider->setVisible(true);
-    }
-    else if(controlMenu->getSelectedId() == 5) //Dual Scene/MIDI program change
-    {
-        sceneNumberSlider->setVisible(true);
-        midiProgramChangeNumberSlider->setVisible(true);
-        midiProgramChangeChannelSlider->setVisible(true);
-    }
-
-    
     
 }
 
 
+
+
+void GuiControllerMode::setDisplay (int controlSelected)
+{
+    //==============set what other components are visible===============
+    
+    //first set other componets invisble (saves having to set the visibility of each one in each next if statement)
+    sceneNumberSlider->setVisible(false);
+    oscIpAddressEditor->setVisible(false);
+    oscPortNumberSlider->setVisible(false);
+    midiProgramChangeNumberSlider->setVisible(false);
+    for (int i = 0; i <= 15; i++)
+        midiChannelButtons[i]->setVisible(false);
+    
+    //...and then set the right one visible
+    if (controlSelected == 0) //scene switcher control selected
+    {
+        sceneNumberSlider->setVisible(true);
+        drawButtons = 0;
+        repaint(600, 200, 424, 469); // << SET REPAINT BOUNDS
+    }
+    else if(controlSelected == 1) //MIDI program change
+    {
+        midiProgramChangeNumberSlider->setBounds(816, 393, 58, 58);
+        midiProgramChangeNumberSlider->setVisible(true);
+        
+        for (int i = 0; i <= 15; i++)
+            midiChannelButtons[i]->setVisible(true);
+        
+        drawButtons = 1;
+        repaint(600, 200, 424, 469); // << SET REPAINT BOUNDS
+    }
+    else if(controlSelected == 2) //Dual Preset/MIDI program change
+    {
+        midiProgramChangeNumberSlider->setBounds(816, 480, 58, 58);
+        sceneNumberSlider->setVisible(true);
+        midiProgramChangeNumberSlider->setVisible(true);
+        
+        for (int i = 0; i <= 15; i++)
+            midiChannelButtons[i]->setVisible(true);
+        
+        drawButtons = 1;
+        repaint(600, 200, 424, 469); // << SET REPAINT BOUNDS
+        
+    }
+    else if(controlSelected == 3) //OSC output control selected
+    {
+        oscIpAddressEditor->setVisible(true);
+        oscPortNumberSlider->setVisible(true);
+        drawButtons = 0;
+        repaint(600, 200, 424, 469); // << SET REPAINT BOUNDS
+    }
+
+    
+}
+
+
+
 void GuiControllerMode::mouseEnter (const MouseEvent &e)
 {
+    /*
     if (controlMenu->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText("Control Drop-Down Menu. Sets and displays the control for the selected pad/pads.");
@@ -372,7 +558,7 @@ void GuiControllerMode::mouseEnter (const MouseEvent &e)
         mainComponentRef.setInfoTextBoxText("MIDI Program Change Channel Selector. Sets and displays the MIDI Program Change Channel for the selected pad/pads.");
     }
     
-    
+    */
 }
 
 void GuiControllerMode::mouseExit (const MouseEvent &e)

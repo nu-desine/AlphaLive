@@ -1,6 +1,6 @@
 //
 //  TestGuiControllerMode.h
-//  AlphaSoft
+//  AlphaLive
 //
 //  Created by Liam Meredith-Lacey on 29/09/2011.
 //  Copyright 2011 nu desine.
@@ -27,6 +27,8 @@
 #include "../Custom Components/Graphics/GuiSpeaker.h"
 #include "../Custom Components/Graphics/GuiCircleBackground.h"
 #include "../Custom Components/General/AlphaSlider.h"
+#include "../Custom Components/General/SettingsButton.h"
+#include "../Custom Components/General/AlphaTextButton.h"
 
 class MainComponent;
 
@@ -45,8 +47,11 @@ public:
     void resized();
     void paint (Graphics& g);
     
+    void drawButtonsBackground (Graphics& g);
+    
     void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
+    void setDisplay (int controlSelected);
     
     //==============================================================================
     //derived Listener functions
@@ -63,19 +68,22 @@ public:
     //==============================================================================
 private:
     
-    //int currentlySelectedPad;
     Array<int> selectedPads;
     MainComponent &mainComponentRef;
     
-    GuiSpeaker *speakerLeft;
-    GuiCircleBackground *circleBackgroundSmall, *circleBackgroundRight;
+    //GuiSpeaker *speakerLeft;
+    //GuiCircleBackground *circleBackgroundSmall, *circleBackgroundRight;
     
-    ComboBox *controlMenu;
+    //ComboBox *controlMenu;
+    
+    OwnedArray <SettingsButton> controlButtons;
     
     AlphaSlider *sceneNumberSlider, *oscPortNumberSlider;
-    AlphaSlider *midiProgramChangeNumberSlider, *midiProgramChangeChannelSlider;
+    AlphaSlider *midiProgramChangeNumberSlider;// *midiProgramChangeChannelSlider;
+    OwnedArray<AlphaTextButton> midiChannelButtons;
     Label *oscIpAddressEditor;
     
+    int drawButtons;
     
 };
 

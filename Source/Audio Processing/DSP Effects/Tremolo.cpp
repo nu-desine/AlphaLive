@@ -22,9 +22,9 @@ Tremolo::Tremolo(int padNumber_, int sampleRate_)
     rate = rateControlValue = (AppSettings::Instance()->getGlobalTempo()/60.0) * 1; //sets the default value to 1/4
     shape = shapeControlValue = PAD_SETTINGS->getSamplerFxTremoloShape();
     
-    alphaTouchParam = PAD_SETTINGS->getSamplerFxDelayAlphaTouch();
-    alphaTouchReverse = PAD_SETTINGS->getSamplerFxDelayAtReverse();
-    alphaTouchIntensity = PAD_SETTINGS->getSamplerFxDelayAtIntensity();
+    alphaTouchParam = PAD_SETTINGS->getSamplerFxTremoloAlphaTouch();
+    alphaTouchReverse = PAD_SETTINGS->getSamplerFxTremoloAtReverse();
+    alphaTouchIntensity = PAD_SETTINGS->getSamplerFxTremoloAtIntensity();
     
 }
 
@@ -54,6 +54,8 @@ void Tremolo::processAudio (const AudioSourceChannelInfo& bufferToFill)
     //increment through each pair of samples
     for (int i = 0; i < bufferToFill.numSamples; ++i)
     {
+        //changing the depth below needs to be done with a gain ramp for smoothness
+        
         //process LFO
         lfoValue = lfo->process(rate, shape);
         //scale and offset output so the osc can be used as an LFO

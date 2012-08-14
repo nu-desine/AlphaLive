@@ -77,7 +77,7 @@ GuiDelay::GuiDelay(MainComponent &ref)
     delayTimeMenu->addItem("1 Beat", 3);
     delayTimeMenu->addItem("Half Beat", 4);
     delayTimeMenu->addItem("Quarter Beat", 5);
-    delayTimeMenu->setSelectedId(3, true);
+    delayTimeMenu->setSelectedId(4, true);
     
     addAndMakeVisible(syncButton = new AlphaTextButton("SYNC"));
     syncButton->setClickingTogglesState(true);

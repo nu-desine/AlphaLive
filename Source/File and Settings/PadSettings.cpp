@@ -76,70 +76,70 @@ PadSettings::PadSettings(int arrayIndex)
     
     //----sampler effects----
     //Gain and Pan
-    samplerFxGainPanGain = 0.5;
+    samplerFxGainPanGain = 1.0;
     samplerFxGainPanPan = 0.5;
     samplerFxGainPanAlphaTouch = 2;
-    samplerFxGainPanAtReverse = 0;
+    samplerFxGainPanAtReverse = 1;
     samplerFxGainPanAtIntensity = 1.0;
     //LPF
-    samplerFxLpfMix = 0.0;
-    samplerFxLpfFreq = 1000;
+    samplerFxLpfMix = 1.0;
+    samplerFxLpfFreq = 500;
     samplerFxLpfBandwidth = 5;
-    samplerFxLpfAlphaTouch = 2;
+    samplerFxLpfAlphaTouch = 3;
     samplerFxLpfAtReverse = 0;
     samplerFxLpfAtIntensity = 1.0;
     //HPF
-    samplerFxHpfMix = 0.0;
-    samplerFxHpfFreq = 1000;
+    samplerFxHpfMix = 1.0;
+    samplerFxHpfFreq = 500;
     samplerFxHpfBandwidth = 5;
-    samplerFxHpfAlphaTouch = 2;
+    samplerFxHpfAlphaTouch = 3;
     samplerFxHpfAtReverse = 0;
     samplerFxHpfAtIntensity = 1.0;
     //BPF
-    samplerFxBpfMix = 0.0;
-    samplerFxBpfFreq = 1000;
+    samplerFxBpfMix = 1.0;
+    samplerFxBpfFreq = 500;
     samplerFxBpfBandwidth = 5;
-    samplerFxBpfAlphaTouch = 2;
+    samplerFxBpfAlphaTouch = 3;
     samplerFxBpfAtReverse = 0;
     samplerFxBpfAtIntensity = 1.0;
     //Delay
-    samplerFxDelayMix = 0.0;
+    samplerFxDelayMix = 0.7;
     samplerFxDelayTime = 500.0;
     samplerFxDelayFeedback = 0.5;
     samplerFxDelayLpfFreq = 20000.0;
     samplerFxDelayHpfFreq = 30.0;
     samplerFxDelaySync = 1;
-    samplerFxDelayTimeMenu = 3;
-    samplerFxDelayAlphaTouch = 2;
+    samplerFxDelayTimeMenu = 4;
+    samplerFxDelayAlphaTouch = 4;
     samplerFxDelayAtReverse = 0;
     samplerFxDelayAtIntensity = 1.0;
     //Reverb
-    samplerFxReverbMix = 0.0;
-    samplerFxReverbRoomSize = 0.5;
+    samplerFxReverbMix = 0.7;
+    samplerFxReverbRoomSize = 0.25;
     samplerFxReverbDamping = 0.5;
     samplerFxReverbWidth = 0.5;
     samplerFxReverbFreezeMode = 0.2;
-    samplerFxReverbAlphaTouch = 2;
+    samplerFxReverbAlphaTouch = 3;
     samplerFxReverbAtReverse = 0;
     samplerFxReverbAtIntensity = 1.0;
     //Flanger
-    samplerFxFlangerMix = 0.0;
+    samplerFxFlangerMix = 0.7;
     samplerFxFlangerRate = 0.25;
     samplerFxFlangerFeedback = 0.9;
     samplerFxFlangerIntensity = 0.1;
     samplerFxFlangerSync = 1;
     samplerFxFlangerRateMenu = 4;
-    samplerFxFlangerAlphaTouch = 2;
+    samplerFxFlangerAlphaTouch = 5;
     samplerFxFlangerAtReverse = 0;
     samplerFxFlangerAtIntensity = 1.0;
     //Tremolo
-    samplerFxTremoloDepth = 0.0;
+    samplerFxTremoloDepth = 1.0;
     samplerFxTremoloRate = 5.0;
     samplerFxTremoloShape = 1;
     samplerFxTremoloSync = 1;
     samplerFxTremoloRateMenu = 3;
     samplerFxTremoloAlphaTouch = 2;
-    samplerFxTremoloAtReverse = 0;
+    samplerFxTremoloAtReverse = 1;
     samplerFxTremoloAtIntensity = 1.0;
     
     //sequencer mode

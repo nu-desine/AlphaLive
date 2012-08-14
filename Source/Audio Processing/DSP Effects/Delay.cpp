@@ -20,7 +20,7 @@ Delay::Delay(int padNumber_, int sampleRate_)
     wetBuffer(2, 44100), //buffer size only needs to be the size of bufferToFill below. how do i set that here?
     padNumber(padNumber_)
 {
-    delayTime = 60000.0/AppSettings::Instance()->getGlobalTempo(); //set's a default time of 1 beat
+    delayTime = 30000.0/AppSettings::Instance()->getGlobalTempo(); //set's a default time of half beat
     setSampleRate(sampleRate_); //this sets the delaySamples and delaySamplesControlValue default values too
     
     //Delay buffers

@@ -59,7 +59,11 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     shouldFinishLoop = PAD_SETTINGS->getSamplerShouldFinishLoop();
     sticky = PAD_SETTINGS->getSamplerSticky();
     currentPlayingState = currentPressureValue = 0;
-    effect = PAD_SETTINGS->getSamplerEffect();
+    //set effect to default 0, and then call set effect to create the effect object
+    //This alg. prevents any crashes caused within prepareToPlay when trying to
+    //set the sampleRate, where the effect object must exist
+    effect = 0;
+    setEffect(PAD_SETTINGS->getSamplerEffect());
     quantizeMode = PAD_SETTINGS->getQuantizeMode();
     
     triggerModeData.playingStatus = 0;

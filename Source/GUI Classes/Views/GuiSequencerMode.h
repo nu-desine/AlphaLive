@@ -35,6 +35,12 @@
 #include "../Custom Components/Graphics/GuiPopUpWindow.h"
 #include "../Custom Components/General/AlphaSlider.h"
 #include "../../File and Settings/AppDocumentState.h"
+#include "../Custom Components/General/SettingsButton.h"
+#include "../Custom Components/General/GuiSwitch.h"
+#include "../Custom Components/General/AlphaTextButton.h"
+#include "../Custom Components/Effects/GuiFxDial.h"
+#include "../Custom Components/General/AlphaPopUpButton.h"
+#include "../Custom Components/General/AlphaRotarySlider.h"
 
 class MainComponent;
 
@@ -43,6 +49,7 @@ class GuiSequencerMode :    public Component,
                                 public Button::Listener,
                                 public Slider::Listener,
                                 public ComboBox::Listener,
+                                public Label::Listener,
                                 public Observer //so this class can 'observe' modeSequencer
 {
 public:
@@ -51,13 +58,15 @@ public:
     ~GuiSequencerMode();
     
     void resized();
+    void paint (Graphics& g);
     
     //==============================================================================
     //derived Listener functions
     void comboBoxChanged (ComboBox* comboBox);
+    void sliderDragStarted (Slider* slider);
     void sliderValueChanged (Slider* slider);
     void buttonClicked (Button* button);
-    //bool hitTest (int x, int y);
+    void labelTextChanged (Label* labelThatHasChanged);	
     
     //override the Observer virtual update function
     bool update(const Subject& theChangedSubject);
@@ -70,38 +79,63 @@ public:
     void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
     
+    void hideComponents();
+    void setDisplay (int settingsType); // 1 = trigger settings, 2 = pressure settings, 3 = sequence settings
+    
     void setToMidiMode();
     void setToSamplesMode();
     
-    void setVelocityLabelText (String velocity);
+    void setParameterLabelText (String param);
     
     
 private:
     
-    GuiSeqMidiMode *midiMode;
-    GuiSeqSamplesMode *samplesMode;
-    SequencerGrid *sequencerGrid;
-    
-    TextButton *clearButton, *clearAllButton, *saveSeqButton, *saveSeqSetButton, *loadSeqButton, *loadSeqSetButton;
-    AlphaSlider *currentSequenceNumberSlider, *numberOfSequencesSlider, *sequenceLengthSlider;
-    ComboBox *triggerModeMenu, *relativeTempoMenu;
-    Label *velocityLabel;
-    TextButton *loopButton, *indestructibleButton, *finishLoopButton, *stickyButton, *linkButton;
-    
-    //int currentlySelectedPad;
     Array<int> selectedPads;
-    
     ModeSequencer &modeSequencerRef;
     MainComponent &mainComponentRef;
     AppDocumentState &appDocumentStateRef;
     
-    //New GUI stuff!
-    GuiCircleBackground *circleBackgroundLeft, *circleBackgroundRight;
+    //GuiSeqMidiMode *midiMode;
+    //GuiSeqSamplesMode *samplesMode;
+    SequencerGrid *sequencerGrid;
+    
+    //TextButton *clearButton, *clearAllButton, *saveSeqButton, *saveSeqSetButton, *loadSeqButton, *loadSeqSetButton;
+    
+    AlphaSlider *currentSequenceNumberSlider, *sequenceLengthSlider; //*numberOfSequencesSlider;
+    //ComboBox *triggerModeMenu, *relativeTempoMenu;
+    //Label *velocityLabel;
+    Label *parameterLabel, *currentParameterLabel;
+    
+    AlphaTextButton *triggerSettingsButton, *pressureSettingsButton, *sequenceSettingsButton, *quantiseButton;
+    AlphaTextButton *modeMidiButton, *modeSamplesButton, *nextSequenceButton, *previousSequenceButton;
+    AlphaTextButton *loopButton, *indestructibleButton, *finishLoopButton, *stickyButton, *linkButton;
+    
+    AlphaRotarySlider *numberOfSequencesSlider, *relativeTempoSlider, *noteLengthSlider, *audioGainSlider, *audioPanSlider;
+    
+    //GuiCircleBackground *circleBackgroundLeft, *circleBackgroundRight;
+    GuiCircleBackground *notSelected;
+    
+    GuiFxDial *fxDial;
+    
+    /*
     ModeButton *modeMidiButton, *modeSamplesButton;
     ModeButton *sequencerGridToggleButton;
     GuiPopUpWindow *popUpWindow;
+     */
     
-    //int lastTime;
+    OwnedArray<SettingsButton> triggerModeButtons;
+    OwnedArray<SettingsButton> midiPressureModeButtons;
+    OwnedArray<AlphaTextButton> channelButtons;
+	OwnedArray<AlphaTextButton> audioRowButtons;
+    
+    GuiSwitch *pressureStatusButton;
+    
+    SettingsButton *addStep, *removeStep;
+	DrawableButton *previewButton;
+	
+	AlphaSlider *ccControllerSlider;
+	Label *sequenceLength;
+	AlphaPopUpButton *popUpButton;
     
 };
 

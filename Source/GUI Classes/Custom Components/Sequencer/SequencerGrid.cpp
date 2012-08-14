@@ -379,5 +379,5 @@ bool SequencerGrid::update(const Subject& theChangedSubject)
 
 void SequencerGrid::setVelocityLabelText (String velocity)
 {
-    guiSequencerMode.setVelocityLabelText(velocity);
+    //guiSequencerMode.setVelocityLabelText(velocity);
 }

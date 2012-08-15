@@ -48,6 +48,8 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     
     //language/localisation stuff
     setLocalisation();
+	
+	//test comment
     
     //========command manager stuff==================
 	commandManager->registerAllCommandsForTarget (this);

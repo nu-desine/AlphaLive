@@ -1,0 +1,66 @@
+// !$*UTF8*$!
+{
+	1321578FCA21CAA9DF2E9344 /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = B9D3AAE415DC09DA0015E86C /* AlphaLive */;
+		activeTarget = 9E30D4441171F6DB43C90854 /* AlphaLive */;
+		codeSenseManager = B9D3AB0315DC09FA0015E86C /* Code sense */;
+		executables = (
+			B9D3AAE415DC09DA0015E86C /* AlphaLive */,
+		);
+		perUserDictionary = {
+			PBXPerProjectTemplateStateSaveDate = 366741978;
+			PBXWorkspaceStateSaveDate = 366741978;
+		};
+		sourceControlManager = B9D3AB0215DC09FA0015E86C /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	9E30D4441171F6DB43C90854 /* AlphaLive */ = {
+		activeExec = 0;
+		executables = (
+			B9D3AAE415DC09DA0015E86C /* AlphaLive */,
+		);
+	};
+	B9D3AAE415DC09DA0015E86C /* AlphaLive */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		dataTipCustomDataFormattersEnabled = 1;
+		dataTipShowTypeColumn = 1;
+		dataTipSortType = 0;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = AlphaLive;
+		showTypeColumn = 0;
+		sourceDirectories = (
+		);
+	};
+	B9D3AB0215DC09FA0015E86C /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	B9D3AB0315DC09FA0015E86C /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+}

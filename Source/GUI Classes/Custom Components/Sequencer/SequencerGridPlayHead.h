@@ -23,8 +23,8 @@
 #ifndef H_SEQUENCERGRIDPLAYHEAD
 #define H_SEQUENCERGRIDPLAYHEAD
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "SequencerValues.h"
+#include "../../../../JuceLibraryCode/JuceHeader.h"
+#include "../../../Functionality Classes/Sequencer Mode/SequencerValues.h"
 
 class SequencerGridPlayHead :   public Component
 {
@@ -40,6 +40,7 @@ public:
 private:
     
     float linePosition;
+    Path playheadPath;
 
 };
 

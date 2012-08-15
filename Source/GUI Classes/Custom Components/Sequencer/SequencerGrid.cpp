@@ -21,8 +21,8 @@
 //
 
 #include "SequencerGrid.h"
-#include "AppSettings.h"
-#include "SequencerBinaryData.h"
+#include "../../../File and Settings/AppSettings.h"
+#include "../../Binary Data/SequencerBinaryData.h"
 #include "GuiSequencerMode.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
@@ -36,10 +36,12 @@ SequencerGrid::SequencerGrid(ModeSequencer &ref, GuiSequencerMode &ref2)
                                         :   mSubject(ref),
                                             guiSequencerMode(ref2)
 {
-    backgroundImage = ImageFileFormat::loadFrom(SequencerBinaryData::seqgridbg_png, SequencerBinaryData::seqgridbg_pngSize);
+    //backgroundImage = ImageFileFormat::loadFrom(SequencerBinaryData::seqgridbg_png, SequencerBinaryData::seqgridbg_pngSize);
     
     //init playHead
     addAndMakeVisible(playHead = new SequencerGridPlayHead());
+    
+    theAngle = 0;
     
     //init all grid points
     for (int row = 0; row <= NO_OF_ROWS-1; row++)
@@ -63,7 +65,7 @@ SequencerGrid::SequencerGrid(ModeSequencer &ref, GuiSequencerMode &ref2)
         }
     }
     
-    addAndMakeVisible(endBlock = new SequencerGridEndBlock());
+    //addAndMakeVisible(endBlock = new SequencerGridEndBlock());
     
     currentSequenceNumber = 1;
     
@@ -82,19 +84,16 @@ SequencerGrid::~SequencerGrid()
 
 void SequencerGrid::resized()
 {
-    
     playHead->setBounds(0, 0, getWidth(), getHeight());
     
-    //arrange all gridPoints
-    for (int column = 0; column <= NO_OF_COLUMNS-1; column++) //i iterates through the column numbers from left to right
+	for (int row = 0; row <= NO_OF_ROWS-1; row++)
     {
-        int rowReverse = 0; //k iterates upwards to set the vertical position 
-        for (int row = NO_OF_ROWS-1; row >= 0; row--) //j iterates through row numbers from bottom to top
+		int gaps = row * 9;
+		
+        for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
         {
-            gridPoint[row][column]->setBounds((GRID_POINT_W*float(column)) + (GRID_POINT_W/2.0), (GRID_POINT_H*float(rowReverse)) + (GRID_POINT_H/2.0), GRID_POINT_W, GRID_POINT_H);
-            rowReverse++;
+            gridPoint[row][column]->setBounds(gaps, gaps, (getWidth() - (gaps*2)), (getHeight()- (gaps*2)));
         }
-        
     }
 }
 
@@ -185,42 +184,86 @@ void SequencerGrid::paint (Graphics &g)
     //draw background
     //g.setColour(Colours::white);
     //g.fillRect(0, 0, getWidth(), getHeight());
-    g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), 0, 0, backgroundImage.getWidth(), backgroundImage.getHeight());
+    //g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), 0, 0, backgroundImage.getWidth(), backgroundImage.getHeight());
     
-    //draw vertical lines
-    for (int i = 0, j = 0; i <=SEQ_HORIZONTAL_STEPS; i++)
+	//Rectangle<int> rect = g.getClipBounds();
+    //std::cout << "Painting sequencer: " << rect.getX() << " " << rect.getY() << " " << rect.getRight() << " " << rect.getBottom() << std::endl;
+	
+	
+    //draw lines
+    for (int i = 0, j = 1; i <=SEQ_HORIZONTAL_STEPS; i++)
     {
         //j is used as a counter to different lines after every 1 regular lines
         
         if (j == 1)
-            g.setColour(Colours::orange);
+            g.setColour(Colours::grey.withAlpha(0.9f));
         else
-           g.setColour(Colours::darkgrey);
+            g.setColour(Colours::grey.withAlpha(0.3f));
+		
+		float theAngle = ((2 * M_PI) / (SEQ_HORIZONTAL_STEPS-1)) * i;
+		float sinX = sin(theAngle);
+		float cosY = -cos(theAngle);
+		
+		float midRadius = (getWidth() * 0.5) - (9 * (SEQ_VERTICAL_STEPS-1));
+		//midRadius = midRadius + (((getWidth() * 0.5) * (1 - theWidth)) * textRadius);
+		
+		float xCo = (getWidth() * 0.5) + (midRadius * sinX);
+		
+		float yCo =	(getHeight() * 0.5) + (midRadius * cosY);
+		
+		float xCo2 = (getWidth() * 0.5) + ((getWidth() * 0.5) * sinX);
+		
+		float yCo2 = (getHeight() * 0.5) + ((getHeight() * 0.5) * cosY);
         
-        g.drawLine((GRID_POINT_W)*float(i), 0, (GRID_POINT_W)*float(i), getHeight());
+        g.drawLine(xCo, yCo, xCo2, yCo2, 1.0);
         
         j++;
         if (j == 5)
             j = 1;
     }
     
-    //draw horizontal lines
-    for (int i = 0, j = 0; i <=SEQ_VERTICAL_STEPS; i++)
-    {
-        if (j == 0) //as lines are drawn top to bottom, not bottom to top like they should be
-            g.setColour(Colours::orange);
-        else
-            g.setColour(Colours::darkgrey);
-
-        g.drawLine(0, (GRID_POINT_H)*float(i), getWidth(), (GRID_POINT_H)*float(i));
-        
-        j++;
-        if (j == 4)
-            j = 0;
-    }
-  
-    //resize end block
+    //draw circular lines
+    /*for (int i = 0, j = 0; i <=SEQ_VERTICAL_STEPS; i++)
+     {
+     if (j == 0) //as lines are drawn top to bottom, not bottom to top like they should be
+     g.setColour(Colours::orange);
+     else
+     g.setColour(Colours::darkgrey);
+     
+     g.drawLine(0, (GRID_POINT_H)*float(i), getWidth(), (GRID_POINT_H)*float(i));
+     
+     j++;
+     if (j == 4)
+     j = 0;
+     }
+	 */
+	g.setColour(Colours::grey.withAlpha(0.3f));
+	
+	for (int i = 0, j = 9; i <=SEQ_VERTICAL_STEPS-1; i++)
+	{
+		int gaps = i * j;
+		
+		g.drawEllipse(gaps, gaps, (getWidth() - (gaps*2)), (getHeight()- (gaps*2)), 1);
+		
+	}
+	/*
+     blockPath.clear();
+     g.setColour(Colours::black.withAlpha(0.8f));
+     
+     theAngle = ((2 * M_PI) / (SEQ_HORIZONTAL_STEPS-1)) * (PAD_SETTINGS->getSequencerLength());
+     
+     blockPath.addPieSegment(0, 0, getWidth(), getHeight(), theAngle, (2 * M_PI), 0.3f);
+     
+     g.fillPath(blockPath, getTransform());
+	 */
     
+    //resize end block
+    //endBlock->setBounds(float(PAD_SETTINGS->getSequencerLength()+1)*GRID_POINT_W, 0, getWidth()-(float(PAD_SETTINGS->getSequencerLength()+1)*GRID_POINT_W), getHeight());
+    
+    
+    
+    
+    /*
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
@@ -234,6 +277,7 @@ void SequencerGrid::paint (Graphics &g)
         //NOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE ME
         //NOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE MENOTICE ME NOTICE ME
     }
+     */
 }
 
 
@@ -369,7 +413,7 @@ bool SequencerGrid::update(const Subject& theChangedSubject)
                 }
             }
             
-            playHead->setLinePostion(float(currentColumnNumber)*GRID_POINT_W);
+            playHead->setLinePostion(float(currentColumnNumber));
         }
     }
     
@@ -379,5 +423,5 @@ bool SequencerGrid::update(const Subject& theChangedSubject)
 
 void SequencerGrid::setVelocityLabelText (String velocity)
 {
-    //guiSequencerMode.setVelocityLabelText(velocity);
+    guiSequencerMode.setParameterLabelText(velocity);
 }

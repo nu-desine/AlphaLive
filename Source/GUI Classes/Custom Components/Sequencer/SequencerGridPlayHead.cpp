@@ -41,10 +41,16 @@ void SequencerGridPlayHead::resized()
 
 void SequencerGridPlayHead::paint (Graphics &g)
 {
-  
-    g.setColour(Colours::red);
-    
-    g.drawLine(linePosition, 0.0, linePosition, getHeight(), 5.0);
+    playheadPath.clear();
+    g.setColour(Colours::grey.withAlpha(0.3f));
+	
+	float theAngle = ((2 * M_PI) / (SEQ_HORIZONTAL_STEPS-1)) * linePosition;
+	float theAngleEnd = ((2 * M_PI) / (SEQ_HORIZONTAL_STEPS-1)) * (linePosition-1);
+	
+	
+	playheadPath.addPieSegment(0, 0, getWidth(), getHeight(), theAngleEnd, theAngle, 0.3f);
+	
+	g.fillPath(playheadPath, getTransform());
 }
 
 void SequencerGridPlayHead::setLinePostion (float position)

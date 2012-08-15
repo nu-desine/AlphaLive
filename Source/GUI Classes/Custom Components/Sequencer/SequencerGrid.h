@@ -23,12 +23,12 @@
 #ifndef H_SEQUENCERGRID
 #define H_SEQUENCERGRID
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "../../../../JuceLibraryCode/JuceHeader.h"
 #include "SequencerGridPoint.h"
 #include "SequencerGridPlayHead.h"
-#include "SequencerValues.h"
-#include "AbstractSubjectAndObserver.h"
-#include "ModeSequencer.h"
+#include "../../../Functionality Classes/Sequencer Mode/SequencerValues.h"
+#include "../../../Application/AbstractSubjectAndObserver.h"
+#include "../../../Functionality Classes/Sequencer Mode/ModeSequencer.h"
 #include "SequencerGridEndBlock.h"
 
 class GuiSequencerMode;
@@ -63,15 +63,16 @@ private:
 	//==============================================================================
 	//array that holds the grid point components
     SequencerGridPoint *gridPoint[NO_OF_ROWS][NO_OF_COLUMNS];
-    
     SequencerGridPlayHead *playHead;
+    
+    Path blockPath;
     
     //array that holds the status data for each point (of all sequences in one sequencer)
     //do we really need this? should we just read direct from padsettings instead of using this
     int sequencerData[NO_OF_SEQS][NO_OF_ROWS][NO_OF_COLUMNS];
     
     int currentSequenceNumber;
-    //int currentlySelectedPad;
+ 
     Array<int> selectedPads;
     
     //create a reference to the subject that you want this class to observe
@@ -88,6 +89,8 @@ private:
     int lastTime;
     
     GuiSequencerMode &guiSequencerMode;
+    
+    float theAngle;
         	
 };
 

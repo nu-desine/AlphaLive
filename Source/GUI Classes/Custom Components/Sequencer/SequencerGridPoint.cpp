@@ -22,6 +22,7 @@
 
 #include "SequencerGridPoint.h"
 #include "SequencerGrid.h"
+#include "../../AlphaLiveLookandFeel.h"
 
 SequencerGridPoint::SequencerGridPoint(int rowNumber, int columnNumber, SequencerGrid &ref)
                                         :   row(rowNumber),
@@ -30,6 +31,9 @@ SequencerGridPoint::SequencerGridPoint(int rowNumber, int columnNumber, Sequence
 {
     status = 0;
     shouldChangeVelocity = false;
+	
+	endRadians = (((2 * M_PI) / (SEQ_HORIZONTAL_STEPS-1)) * (column + 1)) - (0.5 * (M_PI / 180));
+	startRadians = (((2 * M_PI) / (SEQ_HORIZONTAL_STEPS-1)) * column) + (0.5 * (M_PI / 180));
     
 }
 
@@ -46,20 +50,28 @@ void SequencerGridPoint::resized()
 
 void SequencerGridPoint::paint (Graphics &g)
 {
+    thePath.clear();
     
     if (status == 0)
         g.setColour(Colours::transparentWhite); //off
     else //1-127
     {
-        ColourGradient seqGradient(Colours::white.withAlpha(float(status*(1.0/127.0))), (getWidth()*0.5),(getHeight()*0.5), Colours::lightgrey.withAlpha(float(status*(1.0/127.0))), (getWidth()*0.8),(getHeight()*0.8), true);
-        g.setGradientFill(seqGradient);
-        //g.fillEllipse((getWidth()*0.05), (getHeight()*0.05), (getWidth()*0.9), (getHeight()*0.9));
-        //g.setColour(Colours::black); //on
+        /*ColourGradient seqGradient(Colours::white.withAlpha(float(status*(1.0/127.0))), (getWidth()*0.5),(getHeight()*0.5), Colours::lightgrey.withAlpha(float(status*(1.0/127.0))), (getWidth()*0.8),(getHeight()*0.8), true);
+         g.setGradientFill(seqGradient);
+         //g.fillEllipse((getWidth()*0.05), (getHeight()*0.05), (getWidth()*0.9), (getHeight()*0.9));
+         //g.setColour(Colours::black); //on*/
+		
+		g.setColour(AlphaColours::blue.withAlpha(float(status*(1.0/127.0))));
     }
-        
+	
     
-    //draw circle
-    g.fillEllipse(0, 0, getWidth()*0.9, getHeight()*0.9);
+	theWidth = getWidth() - 16;
+	theWidth = theWidth / getWidth();
+	
+	
+	thePath.addPieSegment(0, 0, getWidth(), getHeight(), startRadians, endRadians, theWidth);
+    
+    g.fillPath(thePath, getTransform());
     
 }
 
@@ -150,5 +162,10 @@ void SequencerGridPoint::mouseEnter (const MouseEvent &e)
 void SequencerGridPoint::mouseExit (const MouseEvent &e)
 {
     parent.setVelocityLabelText(String::empty);
+}
+
+bool SequencerGridPoint::hitTest (int x, int y)
+{
+	return thePath.contains(x, y);
 }
 

@@ -22,7 +22,7 @@
 #ifndef H_SEQUENCERGRIDPOINT
 #define H_SEQUENCERGRIDPOINT
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "../../../../JuceLibraryCode/JuceHeader.h"
 
 class SequencerGrid;
 
@@ -44,6 +44,8 @@ public:
     int getStatus();
     void setStatus (int value);
     
+    bool hitTest (int x, int y);
+    
 	//==============================================================================
 private:
 	//==============================================================================
@@ -56,6 +58,8 @@ private:
     bool shouldChangeVelocity; //true when an alt-click to change velocity has been performed
     int initialVelocity;
 
+    Path thePath;
+	float startRadians, endRadians, theWidth;
     
 };
 

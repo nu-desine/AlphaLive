@@ -1737,12 +1737,12 @@
 			children = (
 				0C78A34B15B467900049C0C8 /* SequencerGrid.h */,
 				0C78A34A15B467900049C0C8 /* SequencerGrid.cpp */,
-				0C78A34C15B467900049C0C8 /* SequencerGridEndBlock.cpp */,
-				0C78A34D15B467900049C0C8 /* SequencerGridEndBlock.h */,
-				0C78A34E15B467900049C0C8 /* SequencerGridPlayHead.cpp */,
-				0C78A34F15B467900049C0C8 /* SequencerGridPlayHead.h */,
-				0C78A35015B467900049C0C8 /* SequencerGridPoint.cpp */,
 				0C78A35115B467900049C0C8 /* SequencerGridPoint.h */,
+				0C78A35015B467900049C0C8 /* SequencerGridPoint.cpp */,
+				0C78A34F15B467900049C0C8 /* SequencerGridPlayHead.h */,
+				0C78A34E15B467900049C0C8 /* SequencerGridPlayHead.cpp */,
+				0C78A34D15B467900049C0C8 /* SequencerGridEndBlock.h */,
+				0C78A34C15B467900049C0C8 /* SequencerGridEndBlock.cpp */,
 			);
 			path = Sequencer;
 			sourceTree = "<group>";

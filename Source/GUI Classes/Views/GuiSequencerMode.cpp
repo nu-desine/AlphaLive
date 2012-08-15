@@ -42,6 +42,8 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
                                                 mainComponentRef(ref2),
                                                 appDocumentStateRef(ref3)
 {
+    sequenceLength = 32;
+    currentSequenceNumber = 1;
     /*
     //mode GUIs
     addAndMakeVisible(midiMode = new GuiSeqMidiMode(mainComponentRef));
@@ -58,35 +60,34 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     addAndMakeVisible(sequencerGrid = new SequencerGrid(modeSequencerRef, *this));
     sequencerGrid->addMouseListener(this, true);
     
-    
+    /*
     //do we actually need this anymore?
     addChildComponent(currentSequenceNumberSlider = new AlphaSlider());
     currentSequenceNumberSlider->setRange(1, NO_OF_SEQS, 1);
     currentSequenceNumberSlider->addListener(this);
     currentSequenceNumberSlider->setValue(1, false);
     currentSequenceNumberSlider->addMouseListener(this, true);
+     */
     
+    /*
     //do we actually need this anymore
     addChildComponent(sequenceLengthSlider = new AlphaSlider());
     sequenceLengthSlider->setRange(1, NO_OF_COLUMNS, 1);
     sequenceLengthSlider->addListener(this);
     sequenceLengthSlider->setValue(NO_OF_COLUMNS, false);
     sequenceLengthSlider->addMouseListener(this, true);
+     */
     
      
-    
     //----------------number of sequences slider-------------------
-	
-	
 	addAndMakeVisible(numberOfSequencesSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	numberOfSequencesSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
-	numberOfSequencesSlider->setRange(1, NO_OF_SEQS, 1);
+	numberOfSequencesSlider->setRange(0, NO_OF_SEQS, 1);
     numberOfSequencesSlider->addListener(this);
-    numberOfSequencesSlider->setValue(NO_OF_SEQS, false);
+    numberOfSequencesSlider->setValue(1, false);
     numberOfSequencesSlider->addMouseListener(this, true);
 	
 	//--------------- relative tempo slider-------------------
-	
 	addChildComponent(relativeTempoSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	relativeTempoSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
 	relativeTempoSlider->setRange(1, 5, 1);
@@ -95,7 +96,6 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     relativeTempoSlider->addMouseListener(this, true);
 	
 	//--------------- midi note length slider-------------------
-	
 	addChildComponent(noteLengthSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	noteLengthSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
 	noteLengthSlider->setRange(1, NO_OF_COLUMNS, 1);
@@ -104,7 +104,6 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     noteLengthSlider->addMouseListener(this, true);
 	
 	//--------------- audio gain slider-------------------
-	
 	addChildComponent(audioGainSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	audioGainSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
 	audioGainSlider->setRange(0.0, 2.0);
@@ -113,7 +112,6 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     audioGainSlider->addMouseListener(this, true);
 	
 	//--------------- audio pan slider-------------------
-	
 	addChildComponent(audioPanSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	audioPanSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
 	audioPanSlider->setRange(0.0, 1.0, 0.01);
@@ -128,7 +126,6 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	fxDial->setVisible(false);
     
     //----------------quantise button-------------------
-	
 	addAndMakeVisible(quantiseButton = new AlphaTextButton("Q"));
 	quantiseButton->setClickingTogglesState(true);
 	quantiseButton->setToggleState(false, false);	
@@ -137,7 +134,6 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	quantiseButton->setOpaque(false);
 	
     //----------------sequence settings button-------------------
-	
 	addAndMakeVisible(sequenceSettingsButton = new AlphaTextButton("SEQUENCE"));
 	sequenceSettingsButton->setRadioGroupId (1234);
 	sequenceSettingsButton->setClickingTogglesState(true);
@@ -148,7 +144,6 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     sequenceSettingsButton->setToggleState(true, false);
 	
 	//----------------trigger settings button-------------------
-	
 	addAndMakeVisible(triggerSettingsButton = new AlphaTextButton("TRIGGER"));
 	triggerSettingsButton->setRadioGroupId (1234);
 	triggerSettingsButton->setClickingTogglesState(true);
@@ -158,7 +153,6 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	triggerSettingsButton->setOpaque(false);
 	
 	//----------------pressure settings button-------------------
-	
 	addAndMakeVisible(pressureSettingsButton = new AlphaTextButton("PRESSURE"));
 	pressureSettingsButton->setRadioGroupId (1234);
 	pressureSettingsButton->setClickingTogglesState(true);
@@ -168,7 +162,6 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	pressureSettingsButton->setOpaque(false);
 	
 	//----------------sequence MIDI button-------------------
-	
 	addAndMakeVisible(modeMidiButton = new AlphaTextButton("MIDI"));
 	modeMidiButton->setRadioGroupId (123);
 	modeMidiButton->setClickingTogglesState(true);
@@ -179,7 +172,6 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     modeMidiButton->setToggleState(true, false);
 	
 	//----------------sequence Samples button-------------------
-	
 	addAndMakeVisible(modeSamplesButton = new AlphaTextButton("AUDIO"));
 	modeSamplesButton->setRadioGroupId (123);
 	modeSamplesButton->setClickingTogglesState(true);
@@ -188,39 +180,30 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	modeSamplesButton->addMouseListener(this, true);
 	modeSamplesButton->setOpaque(false);
 	
-	
 	//---------------channel buttons---------------------
-	
 	for (int i = 0; i <= 15; i++)
 	{
 		channelButtons.insert(i, new AlphaTextButton());
 		channelButtons[i]->setButtonText(String(i + 1));
-		
 		channelButtons[i]->setClickingTogglesState(true);
 		channelButtons[i]->setToggleState(false, false);	
 		channelButtons[i]->setRadioGroupId (12);
 		channelButtons[i]->addListener(this);
         channelButtons[i]->addMouseListener(this, true);
 		channelButtons[i]->setOpaque(false);
-        
         addAndMakeVisible(channelButtons[i]);
 	}
     
     channelButtons[0]->setToggleState(true, false);
 	
 	//---------------audio row buttons---------------------
-	
-	
 	for (int i = 0; i <= 11; i++)
 	{
 		audioRowButtons.insert(i, new AlphaTextButton());
-		
 		audioRowButtons[i]->setButtonText(String(i + 1)) ;
-		
 		audioRowButtons[i]->setClickingTogglesState(false);
 		audioRowButtons[i]->addListener(this);
         audioRowButtons[i]->addMouseListener(this, true);
-        
         addChildComponent(audioRowButtons[i]);
 	}
 	
@@ -231,19 +214,19 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     ccControllerSlider->addListener(this);
     ccControllerSlider->addMouseListener(this, true);
     
-    addChildComponent(addStep = new SettingsButton("+", (135 * (M_PI / 180)), 
+    addAndMakeVisible(plusButton = new SettingsButton("+", (135 * (M_PI / 180)), 
                                                    (160 * (M_PI / 180)),
                                                    0.7f, -5, 0.2, 0.27));
-	addStep->setClickingTogglesState(false);
-	addStep->addListener(this);
-	addStep->addMouseListener(this, false);
+	plusButton->setClickingTogglesState(false);
+	plusButton->addListener(this);
+	plusButton->addMouseListener(this, false);
 	
-	addChildComponent(removeStep = new SettingsButton("-", (200 * (M_PI / 180)), 
+	addAndMakeVisible(minusButton = new SettingsButton("-", (200 * (M_PI / 180)), 
                                                       (225 * (M_PI / 180)),
                                                       0.7f, -5, 0.3, 0.27));
-	removeStep->setClickingTogglesState(false);
-	removeStep->addListener(this);
-	removeStep->addMouseListener(this, false);
+	minusButton->setClickingTogglesState(false);
+	minusButton->addListener(this);
+	minusButton->addMouseListener(this, false);
     
     addAndMakeVisible(parameterLabel = new Label());
 	parameterLabel->setFont(Font(9));
@@ -460,8 +443,10 @@ bool GuiSequencerMode::update(const Subject& theChangedSubject)
     {
         if (modeSequencerRef.getWhatShouldUpdateFlag() == 2) ///if notified by an 'update seq number' call
         {
-            //update the currentSequenceNumberSlider which in turns changes the sequence displayed in sequencerGrid
-            currentSequenceNumberSlider->setValue(modeSequencerRef.getCurrentSequenceNumber()+1, true);
+            //update the currentSequenceNumber
+            currentSequenceNumber = modeSequencerRef.getCurrentSequenceNumber()+1;
+            setCurrentSequenceNumber();
+            
         }
     }
     
@@ -477,8 +462,8 @@ void GuiSequencerMode::resized()
 	nextSequenceButton->setBounds(677, 342, 17, 17);
 	previousSequenceButton->setBounds(662, 401, 17, 17);
     
-	addStep->setBounds(802, 379, 86, 86);
-    removeStep->setBounds(802, 379, 86, 86);
+	plusButton->setBounds(802, 379, 86, 86);
+    minusButton->setBounds(802, 379, 86, 86);
 	
 	parameterLabel->setBounds(832,453,26,10);
 	currentParameterLabel->setBounds(821, 398, 48, 48);
@@ -784,7 +769,7 @@ void GuiSequencerMode::sliderDragStarted (Slider* slider)
 
 void GuiSequencerMode::sliderValueChanged (Slider* slider)
 {
-    
+    //=============central rotary sliders=====================
     if (slider == relativeTempoSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
@@ -829,10 +814,10 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
 		setParameterLabelText(String(audioPanSlider->getValue()));
     }
     
-    
-    
-    if (slider == numberOfSequencesSlider)
+    else if (slider == numberOfSequencesSlider)
     {
+        if (slider->getValue() == 0)
+            slider->setValue(1, false);
         
         for (int i = 0; i < selectedPads.size(); i++)
         {
@@ -840,11 +825,23 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
             PAD_SETTINGS->setSequencerNumberOfSequences(numberOfSequencesSlider->getValue());
         }
         
+        setParameterLabelText(String(slider->getValue()));
+        
+        if (slider->getValue() < currentSequenceNumber)
+        {
+            currentSequenceNumber = slider->getValue();
+            setCurrentSequenceNumber();
+        }
+            
         //set the the range of the currentSequenceNumberSlider so that the max matches this sliders value
-        currentSequenceNumberSlider->setRange(1, numberOfSequencesSlider->getValue(), 1);
+        //currentSequenceNumberSlider->setRange(1, numberOfSequencesSlider->getValue(), 1);
     }
 
+    //=======================================================
     
+    
+    
+    /*
     if (slider == sequenceLengthSlider)
     {
         //set the range of the noteLengthSlider so that the max value matches this sliders value
@@ -859,8 +856,10 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
         }
         
     }
+     */
     
     
+    /*
     if (slider == currentSequenceNumberSlider)
     {
         //if individual pad number is selected
@@ -876,6 +875,7 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
         }
         
     }
+     */
 
     
 }
@@ -883,42 +883,76 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
 void GuiSequencerMode::buttonClicked (Button* button)
 {
     
-    if (button == addStep || button == removeStep)
+    if (button == plusButton || button == minusButton)
 	{
-        if (button == addStep)
+        if (button == plusButton)
             controlDisplayId++;
-        else if (button == removeStep)
+        else if (button == minusButton)
             controlDisplayId--;
         
         setRotaryControlDisplay();
+        
+        //use buttons to change sequence length
+        if (sequenceSettingsButton->getToggleState() == true)
+        {
+            if (button == plusButton)
+                sequenceLength++;
+            else if (button == minusButton)
+                sequenceLength--;
+            
+            if (sequenceLength > 32)
+                sequenceLength = 32;
+            else if (sequenceLength < 1)
+                sequenceLength = 1;
+            
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setSequencerLength(sequenceLength);
+            }
+            
+            setParameterLabelText(String(sequenceLength));
+            
+        }
+        
+        
 	}
 	
 	
-	else if (button == previewButton) 
+	else if (button == nextSequenceButton || button == previousSequenceButton)
+	{
+        if (button == nextSequenceButton)
+            currentSequenceNumber++;
+        else if (button == previousSequenceButton)
+            currentSequenceNumber--;
+        
+        if (currentSequenceNumber > numberOfSequencesSlider->getValue())
+            currentSequenceNumber = numberOfSequencesSlider->getValue();
+        else if (currentSequenceNumber < 1)
+            currentSequenceNumber = 1;
+        
+        setCurrentSequenceNumber();
+	
+	}
+    
+    else if (button == previewButton) 
     {
 		
-	}
-	
-	else if (button == nextSequenceButton)
-	{
-		currentSequenceNumberSlider->setValue(currentSequenceNumberSlider->getValue() + 1, true, true);
-	}
-	
-	else if (button == previousSequenceButton)
-	{
-		currentSequenceNumberSlider->setValue(currentSequenceNumberSlider->getValue() - 1, true, true);
 	}
 	
 	else if(button == popUpButton)
 	{
 		PopupMenu menu;
         
-        menu.addItem(1, "Load sequence...");
-		menu.addItem(2, "Load sequence set...");
-		menu.addItem(3, "Save sequence...");
-		menu.addItem(4, "Save sequence set...");
-		menu.addItem(5, "Clear...");
-		menu.addItem(6, "Clear all...");
+        menu.addItem(1, translate("Load sequence..."));
+		menu.addItem(2, translate("Load sequence set..."));
+        if (SINGLE_PAD)
+        {
+            menu.addItem(3, translate("Save sequence..."));
+            menu.addItem(4, translate("Save sequence set..."));
+        }
+		menu.addItem(5, translate("Clear..."));
+		menu.addItem(6, translate("Clear all..."));
         
         const int result = menu.show();
         
@@ -928,24 +962,24 @@ void GuiSequencerMode::buttonClicked (Button* button)
         }
         else if (result == 1) // load preset
         {
-			//appDocumentStateRef.loadSequence(currentSequenceNumberSlider->getValue()-1, currentlySelectedPad);
+			appDocumentStateRef.loadSequence(currentSequenceNumber-1, selectedPads);
         }
-        else if (result == 2) // save preset
+        else if (result == 2) // load sequence set
         {
-			//appDocumentStateRef.loadSequenceSet(currentlySelectedPad);
+			appDocumentStateRef.loadSequenceSet(selectedPads);
         }
-        else if (result == 3) // clear and remove (except for preset 0) preset
+        else if (result == 3) // save sequence
         {
-			//appDocumentStateRef.saveSequence(currentSequenceNumberSlider->getValue()-1, currentlySelectedPad);
+			appDocumentStateRef.saveSequence(currentSequenceNumber-1, selectedPads[0]);
         }
-		else if (result == 4)
+		else if (result == 4) // save sequence set
 		{
-			//appDocumentStateRef.saveSequenceSet(currentlySelectedPad);
+			appDocumentStateRef.saveSequenceSet(selectedPads[0]);
 		}
 		else if (result == 5)
 		{
 			bool userSelection;
-			userSelection = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Are you sure?", "You cannot undo this command", "Ok", "Cancel");
+			userSelection = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("Are you sure?"), translate("You cannot undo this command"));
 			if (userSelection == true)
 			{
 				sequencerGrid->clear();
@@ -954,7 +988,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
 		else if (result == 6)
 		{
 			bool userSelection;
-			userSelection = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Are you sure?", "You cannot undo this command", "Ok", "Cancel");
+			userSelection = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("Are you sure?"), translate("You cannot undo this command"));
 			if (userSelection == true)
 			{
 				sequencerGrid->clearAll();
@@ -1242,8 +1276,8 @@ void GuiSequencerMode::hideComponents()
     noteLengthSlider->setVisible(false);
     audioGainSlider->setVisible(false);
     audioPanSlider->setVisible(false);
-    addStep->setVisible(false);
-    removeStep->setVisible(false);
+    plusButton->setVisible(false);
+    minusButton->setVisible(false);
     parameterLabel->setVisible(false);
     currentParameterLabel->setVisible(false);
     //setParameterLabelText(String::empty);
@@ -1271,8 +1305,8 @@ void GuiSequencerMode::setDisplay (int settingsType)
         
         parameterLabel->setVisible(true);
         currentParameterLabel->setVisible(true);
-        addStep->setVisible(true);
-        removeStep->setVisible(true);
+        plusButton->setVisible(true);
+        minusButton->setVisible(true);
         
     }
     
@@ -1308,8 +1342,8 @@ void GuiSequencerMode::setDisplay (int settingsType)
     else if (settingsType == 3) //sequence settings
     {
         sequencerGrid->setVisible(true);
-        addStep->setVisible(true);
-        removeStep->setVisible(true);
+        plusButton->setVisible(true);
+        minusButton->setVisible(true);
         parameterLabel->setVisible(true);
         popUpButton->setVisible(true);
         previewButton->setVisible(true);
@@ -1421,7 +1455,7 @@ void GuiSequencerMode::updateDisplay()
         sequencerGrid->setPlayHeadPos(0); //??
 
         numberOfSequencesSlider->setValue(PAD_SETTINGS->getSequencerNumberOfSequences(), false); 
-        sequenceLengthSlider->setValue(PAD_SETTINGS->getSequencerLength(), false);
+        sequenceLength = PAD_SETTINGS->getSequencerLength();
         triggerModeButtons[PAD_SETTINGS->getSequencerTriggerMode()]->setToggleState(true, false);
         loopButton->setToggleState(PAD_SETTINGS->getSequencerShouldLoop(), false);
         indestructibleButton->setToggleState(PAD_SETTINGS->getSequencerIndestructible(), false);
@@ -1429,7 +1463,7 @@ void GuiSequencerMode::updateDisplay()
         stickyButton->setToggleState(PAD_SETTINGS->getSequencerSticky(), false);
         //currentSequenceNumberSlider->setValue(1);
         relativeTempoSlider->setValue(PAD_SETTINGS->getSequencerRelativeTempoMode(), false);
-        currentSequenceNumberSlider->setRange(1, numberOfSequencesSlider->getValue(), 1);
+        //currentSequenceNumberSlider->setRange(1, numberOfSequencesSlider->getValue(), 1);
         linkButton->setToggleState(PAD_SETTINGS->getSequencerDynamicMode(), false);
         
         
@@ -1473,8 +1507,8 @@ void GuiSequencerMode::updateDisplay()
     
     //update sequencerGrid GUI based on currently selected pad and currently selected sequence number
     sequencerGrid->setCurrentlySelectedPad(selectedPads); //why is this called here and not above?
-    currentSequenceNumberSlider->setValue(1);
-    sequencerGrid->setCurrentSequenceNumber(currentSequenceNumberSlider->getValue());
+    //currentSequenceNumberSlider->setValue(1);
+    //sequencerGrid->setCurrentSequenceNumber(currentSequenceNumberSlider->getValue());
     
     
 }
@@ -1529,38 +1563,32 @@ void GuiSequencerMode::setParameterLabelText (String value)
 		
 		if (numberOfSequencesSlider->isVisible())
 		{
-            int padNum = selectedPads[0];
-            parameterLabel->setText(String(PAD_SETTINGS->getSequencerLength()), false);
-			
-		}
+            //here want to display sequenceLength, NOT number of sequences.
+            //Is this too convoluted?
+            parameterLabel->setText(String(sequenceLength), false);
+            //parameterLabel->setText(String(numberOfSequencesSlider->getValue()), false);
+        }
 		
 		else if (relativeTempoSlider->isVisible())
 		{
-			
 			currentParameterLabel->setText("TEMPO", false);
 			parameterLabel->setText(String(relativeTempoSlider->getValue()), false);
-			
 		}
 		
 		else if (noteLengthSlider->isVisible())
 		{
-			
 			currentParameterLabel->setText("N LENGTH", false);
 			parameterLabel->setText(String(noteLengthSlider->getValue()), false);
-			
 		}
 		
 		else if (audioGainSlider->isVisible())
 		{
-			
 			currentParameterLabel->setText("GAIN", false);
 			parameterLabel->setText(String(audioGainSlider->getValue()), false);
-			
 		}
 		
 		else if (audioPanSlider->isVisible())
 		{
-			
 			currentParameterLabel->setText("PAN", false);
 			parameterLabel->setText(String(audioPanSlider->getValue()), false);
 			
@@ -1569,6 +1597,16 @@ void GuiSequencerMode::setParameterLabelText (String value)
     
 }
 
+
+void GuiSequencerMode::setCurrentSequenceNumber()
+{
+    if (sequenceSettingsButton->getToggleState() == true)
+    {
+        popUpButton->setButtonText(String(currentSequenceNumber));
+        sequencerGrid->setCurrentSequenceNumber(currentSequenceNumber);
+        //do i need to do an alternative to the above line if multiple pads are selected?
+    }
+}
 
 
 
@@ -1644,7 +1682,6 @@ void GuiSequencerMode::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
-    
     
     if (e.eventComponent == numberOfSequencesSlider)
 		setParameterLabelText(String::empty);

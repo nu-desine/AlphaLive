@@ -75,6 +75,7 @@ public:
     void mouseExit (const MouseEvent &e);
     
     //==============================================================================
+    void setCurrentSequenceNumber();
     
     void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
@@ -104,10 +105,13 @@ private:
     
     //TextButton *clearButton, *clearAllButton, *saveSeqButton, *saveSeqSetButton, *loadSeqButton, *loadSeqSetButton;
     
-    AlphaSlider *currentSequenceNumberSlider, *sequenceLengthSlider; //*numberOfSequencesSlider;
+    //AlphaSlider *currentSequenceNumberSlider, *sequenceLengthSlider; //*numberOfSequencesSlider;
     //ComboBox *triggerModeMenu, *relativeTempoMenu;
     //Label *velocityLabel;
     Label *parameterLabel, *currentParameterLabel;
+    
+    int sequenceLength; //this is controlled by the plus/minus buttons when in viewing sequencer settings
+    int currentSequenceNumber;
     
     AlphaTextButton *triggerSettingsButton, *pressureSettingsButton, *sequenceSettingsButton, *quantiseButton;
     AlphaTextButton *modeMidiButton, *modeSamplesButton, *nextSequenceButton, *previousSequenceButton;
@@ -133,11 +137,11 @@ private:
     
     GuiSwitch *pressureStatusButton;
     
-    SettingsButton *addStep, *removeStep;
+    SettingsButton *plusButton, *minusButton;
 	DrawableButton *previewButton;
 	
 	AlphaSlider *ccControllerSlider;
-	Label *sequenceLength;
+	//Label *sequenceLength;
 	AlphaPopUpButton *popUpButton;
     
 };

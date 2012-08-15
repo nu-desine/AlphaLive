@@ -44,40 +44,11 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 {
     sequenceLength = 32;
     currentSequenceNumber = 1;
-    /*
-    //mode GUIs
-    addAndMakeVisible(midiMode = new GuiSeqMidiMode(mainComponentRef));
-    midiMode->setVisible(false);
-    midiMode->setInterceptsMouseClicks(false, true);
-    addAndMakeVisible(samplesMode = new GuiSeqSamplesMode(mainComponentRef));
-    samplesMode->setVisible(true);
-    samplesMode->setInterceptsMouseClicks(false, true);
-    */
-    
     controlDisplayId = 0;
     
     //grid
     addAndMakeVisible(sequencerGrid = new SequencerGrid(modeSequencerRef, *this));
     sequencerGrid->addMouseListener(this, true);
-    
-    /*
-    //do we actually need this anymore?
-    addChildComponent(currentSequenceNumberSlider = new AlphaSlider());
-    currentSequenceNumberSlider->setRange(1, NO_OF_SEQS, 1);
-    currentSequenceNumberSlider->addListener(this);
-    currentSequenceNumberSlider->setValue(1, false);
-    currentSequenceNumberSlider->addMouseListener(this, true);
-     */
-    
-    /*
-    //do we actually need this anymore
-    addChildComponent(sequenceLengthSlider = new AlphaSlider());
-    sequenceLengthSlider->setRange(1, NO_OF_COLUMNS, 1);
-    sequenceLengthSlider->addListener(this);
-    sequenceLengthSlider->setValue(NO_OF_COLUMNS, false);
-    sequenceLengthSlider->addMouseListener(this, true);
-     */
-    
      
     //----------------number of sequences slider-------------------
 	addAndMakeVisible(numberOfSequencesSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
@@ -183,18 +154,18 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	//---------------channel buttons---------------------
 	for (int i = 0; i <= 15; i++)
 	{
-		channelButtons.insert(i, new AlphaTextButton());
-		channelButtons[i]->setButtonText(String(i + 1));
-		channelButtons[i]->setClickingTogglesState(true);
-		channelButtons[i]->setToggleState(false, false);	
-		channelButtons[i]->setRadioGroupId (12);
-		channelButtons[i]->addListener(this);
-        channelButtons[i]->addMouseListener(this, true);
-		channelButtons[i]->setOpaque(false);
-        addAndMakeVisible(channelButtons[i]);
+		midiChannelButtons.insert(i, new AlphaTextButton());
+		midiChannelButtons[i]->setButtonText(String(i + 1));
+		midiChannelButtons[i]->setClickingTogglesState(true);
+		midiChannelButtons[i]->setToggleState(false, false);	
+		midiChannelButtons[i]->setRadioGroupId (12);
+		midiChannelButtons[i]->addListener(this);
+        midiChannelButtons[i]->addMouseListener(this, true);
+		midiChannelButtons[i]->setOpaque(false);
+        addAndMakeVisible(midiChannelButtons[i]);
 	}
     
-    channelButtons[0]->setToggleState(true, false);
+    midiChannelButtons[0]->setToggleState(true, false);
 	
 	//---------------audio row buttons---------------------
 	for (int i = 0; i <= 11; i++)
@@ -213,6 +184,22 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     ccControllerSlider->setRange(0, 127, 1);
     ccControllerSlider->addListener(this);
     ccControllerSlider->addMouseListener(this, true);
+    
+    //------------------Pressure minimum range slider------------------------------
+    addChildComponent(midiPressureMinRangeSlider = new AlphaSlider());
+    midiPressureMinRangeSlider->setRange(0, 127, 1);
+    midiPressureMinRangeSlider->addListener(this);
+    midiPressureMinRangeSlider->setComponentValue(0);
+    midiPressureMinRangeSlider->addMouseListener(this, true);
+    
+    
+    //------------------Pressure maximum range slider------------------------------
+    addChildComponent(midiPressureMaxRangeSlider = new AlphaSlider());
+    midiPressureMaxRangeSlider->setRange(0, 127, 1);
+    midiPressureMaxRangeSlider->addListener(this);
+    midiPressureMaxRangeSlider->setComponentValue(127);
+    midiPressureMaxRangeSlider->addMouseListener(this, true);
+    
     
     addAndMakeVisible(plusButton = new SettingsButton("+", (135 * (M_PI / 180)), 
                                                    (160 * (M_PI / 180)),
@@ -307,14 +294,6 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     
     midiPressureModeButtons[0]->setToggleState(true, false);
     
-    /*
-    addAndMakeVisible(numberOfSequencesSlider = new AlphaSlider());
-    numberOfSequencesSlider->setRange(1, NO_OF_SEQS, 1);
-    numberOfSequencesSlider->addListener(this);
-    numberOfSequencesSlider->setValue(NO_OF_SEQS, false);
-    numberOfSequencesSlider->addMouseListener(this, true);
-     */
-    
     addChildComponent(loopButton = new AlphaTextButton("LOOP"));
     loopButton->addListener(this);
     loopButton->addMouseListener(this, true);
@@ -393,29 +372,6 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	previousSequenceButton->setButtonText("-");
 	previousSequenceButton->addListener(this);
 	previousSequenceButton->addMouseListener(this, true);
-
-    
-    /*
-    //relative tempo menu
-    addAndMakeVisible(relativeTempoMenu = new ComboBox());
-    relativeTempoMenu->addListener(this);
-    relativeTempoMenu->addMouseListener(this, true);
-    relativeTempoMenu->addItem("Quarter Time", 1);
-    relativeTempoMenu->addItem("Half Time", 2);
-    relativeTempoMenu->addItem("Regular Time", 3);
-    relativeTempoMenu->addItem("Double Time", 4);
-    relativeTempoMenu->addItem("Quadrupal Time", 5);
-    relativeTempoMenu->setSelectedId(3, true);
-    */
-     
-    /*
-    //Velocity Label
-    addAndMakeVisible(velocityLabel = new Label());
-    velocityLabel->setColour(Label::textColourId, Colours::silver);
-    //velocityLabel->setColour(Label::backgroundColourId, Colours::lightgrey.withAlpha(0.3f));
-    velocityLabel->addMouseListener(this, true);
-     */
-
     
     //attach this class to the subject class
     modeSequencerRef.attach(this);
@@ -426,7 +382,7 @@ GuiSequencerMode::~GuiSequencerMode()
 {
     triggerModeButtons.clear();
     midiPressureModeButtons.clear();
-    channelButtons.clear();
+    midiChannelButtons.clear();
 	audioRowButtons.clear();
     
     deleteAllChildren();
@@ -480,22 +436,22 @@ void GuiSequencerMode::resized()
 	
 	pressureStatusButton->setBounds(816, 393, 58, 58);
 	
-	channelButtons[0]->setBounds(649,439,21, 21);
-	channelButtons[1]->setBounds(656,467,21, 21);
-	channelButtons[2]->setBounds(667,495,21, 21);
-	channelButtons[3]->setBounds(682,520,21, 21);
-	channelButtons[4]->setBounds(700,542,21, 21);
-	channelButtons[5]->setBounds(722,562,21, 21);
-	channelButtons[6]->setBounds(747,577,21, 21);
-	channelButtons[7]->setBounds(774,589,21, 21);
-	channelButtons[8]->setBounds(803,596,21, 21);
-	channelButtons[9]->setBounds(832,599,21, 21);
-	channelButtons[10]->setBounds(861,597,21, 21);
-	channelButtons[11]->setBounds(890,590,21, 21);
-	channelButtons[12]->setBounds(917,579,21, 21);
-	channelButtons[13]->setBounds(942,564,21, 21);
-	channelButtons[14]->setBounds(965,545,21, 21);
-	channelButtons[15]->setBounds(984,523,21, 21);
+	midiChannelButtons[0]->setBounds(649,439,21, 21);
+	midiChannelButtons[1]->setBounds(656,467,21, 21);
+	midiChannelButtons[2]->setBounds(667,495,21, 21);
+	midiChannelButtons[3]->setBounds(682,520,21, 21);
+	midiChannelButtons[4]->setBounds(700,542,21, 21);
+	midiChannelButtons[5]->setBounds(722,562,21, 21);
+	midiChannelButtons[6]->setBounds(747,577,21, 21);
+	midiChannelButtons[7]->setBounds(774,589,21, 21);
+	midiChannelButtons[8]->setBounds(803,596,21, 21);
+	midiChannelButtons[9]->setBounds(832,599,21, 21);
+	midiChannelButtons[10]->setBounds(861,597,21, 21);
+	midiChannelButtons[11]->setBounds(890,590,21, 21);
+	midiChannelButtons[12]->setBounds(917,579,21, 21);
+	midiChannelButtons[13]->setBounds(942,564,21, 21);
+	midiChannelButtons[14]->setBounds(965,545,21, 21);
+	midiChannelButtons[15]->setBounds(984,523,21, 21);
 	
 	audioRowButtons[0]->setBounds(649,439,21, 21);
 	audioRowButtons[1]->setBounds(656,467,21, 21);
@@ -540,6 +496,8 @@ void GuiSequencerMode::resized()
 	midiPressureModeButtons[5]->setBounds(728, 305, 234, 234);
 	
 	ccControllerSlider->setBounds(890, 431, 58, 58);
+    midiPressureMinRangeSlider->setBounds(800, 540, 42, 42);
+    midiPressureMaxRangeSlider->setBounds(848, 540, 42, 42);
 	
 	fxDial->setBounds(683, 261, 324, 324);
 
@@ -724,42 +682,13 @@ void GuiSequencerMode::setCurrentlySelectedPad (Array<int> selectedPads_)
     selectedPads = selectedPads_;
     fxDial->setCurrentlySelectedPad(selectedPads);
     
-    //midiMode->setCurrentlySelectedPad(selectedPads);
-    //samplesMode->setCurrentlySelectedPad(selectedPads);
-    
     //updateDisplay();    
 }
 
 
 void GuiSequencerMode::comboBoxChanged (ComboBox* comboBox)
 {
-    /*
-    //==============================================================================
-    //play state combobox
-    if (comboBox == triggerModeMenu)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setSequencerTriggerMode(triggerModeMenu->getSelectedId());
-        }
-        
-    }
     
-    
-    
-    //==============================================================================
-    //relative tempo mode combobox
-    if (comboBox == relativeTempoMenu)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setSequencerRelativeTempoMode(relativeTempoMenu->getSelectedId());
-        }
-        
-    }
-    */
 }
 
 void GuiSequencerMode::sliderDragStarted (Slider* slider)
@@ -836,48 +765,41 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
         //set the the range of the currentSequenceNumberSlider so that the max matches this sliders value
         //currentSequenceNumberSlider->setRange(1, numberOfSequencesSlider->getValue(), 1);
     }
-
-    //=======================================================
     
     
-    
-    /*
-    if (slider == sequenceLengthSlider)
+    //CC Controller Number
+    else if (slider == ccControllerSlider)
     {
-        //set the range of the noteLengthSlider so that the max value matches this sliders value
-        //midiMode->setNoteLengthSliderRange(sequenceLengthSlider->getValue());
-        
-        sequencerGrid->repaint(); //repaint with bounds!
-        
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSequencerLength(sequenceLengthSlider->getValue());
+            PAD_SETTINGS->setSequencerMidiCcController(ccControllerSlider->getValue());
         }
-        
     }
-     */
     
-    
-    /*
-    if (slider == currentSequenceNumberSlider)
+    //min pressure range slider
+    else if (slider == midiPressureMinRangeSlider)
     {
-        //if individual pad number is selected
-        if(SINGLE_PAD)
+        for (int i = 0; i < selectedPads.size(); i++)
         {
-            //this function will update the display of the grid
-            sequencerGrid->setCurrentSequenceNumber(currentSequenceNumberSlider->getValue());
-        }
-        else if(MULTI_PADS)
-        {
-            //what do i do here? clear grid but don't cleat data. 
-            sequencerGrid->resetGridGui();
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerMidiMinPressureRange(midiPressureMinRangeSlider->getValue());
         }
         
     }
-     */
-
     
+    
+    //max pressure range slider
+    else if (slider == midiPressureMaxRangeSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerMidiMaxPressureRange(midiPressureMaxRangeSlider->getValue());
+        }
+    }
+
+       
 }
 
 void GuiSequencerMode::buttonClicked (Button* button)
@@ -905,13 +827,17 @@ void GuiSequencerMode::buttonClicked (Button* button)
             else if (sequenceLength < 1)
                 sequenceLength = 1;
             
+            setParameterLabelText(String(sequenceLength));
+            
             for (int i = 0; i < selectedPads.size(); i++)
             {
                 int padNum = selectedPads[i];
                 PAD_SETTINGS->setSequencerLength(sequenceLength);
             }
             
-            setParameterLabelText(String(sequenceLength));
+            //and set noteLength to the new sequence length
+            setNoteLengthSliderRange(sequenceLength);
+        
             
         }
         
@@ -999,7 +925,6 @@ void GuiSequencerMode::buttonClicked (Button* button)
     
     
     
-    
     //this function sets the selected mode (based on the button pressed)
     //to the currently selected pad (or set of pads)
     int buttonIndex;
@@ -1008,7 +933,6 @@ void GuiSequencerMode::buttonClicked (Button* button)
     //get the selected button and set the right mode to screen
     if (button == modeMidiButton)
     {
-        setToMidiMode();
         buttonIndex = 1;
         
         for (int i = 0; i < selectedPads.size(); i++)
@@ -1017,8 +941,11 @@ void GuiSequencerMode::buttonClicked (Button* button)
             PAD_SETTINGS->setSequencerMode(buttonIndex);
         }
         
+        mainComponentRef.getGuiPiano()->setActive(true);
+        mainComponentRef.getGuiPiano()->updateDisplay();
+        
         for (int i = 0; i <= 15; i++)
-            channelButtons[i]->setVisible(true);
+            midiChannelButtons[i]->setVisible(true);
         
         for (int i = 0; i <= 11; i++)
             audioRowButtons[i]->setVisible(false);
@@ -1038,6 +965,9 @@ void GuiSequencerMode::buttonClicked (Button* button)
             else
                 ccControllerSlider->setVisible(false);
             
+            midiPressureMinRangeSlider->setVisible(true);
+            midiPressureMaxRangeSlider->setVisible(true);
+            
              pressureStatusButton->setVisible(true);
             
             if(pressureStatusButton->getToggleStateValue()==true)
@@ -1051,12 +981,11 @@ void GuiSequencerMode::buttonClicked (Button* button)
         
         setRotaryControlDisplay();
         
-        repaint(); // <- set bounds here!
+        repaint(600, 200, 424, 469); // <- set bounds here!
 
     }
     else if (button == modeSamplesButton)
     {
-        setToSamplesMode();
         buttonIndex = 2;
         
         for (int i = 0; i < selectedPads.size(); i++)
@@ -1065,8 +994,10 @@ void GuiSequencerMode::buttonClicked (Button* button)
             PAD_SETTINGS->setSequencerMode(buttonIndex);
         }
         
+        mainComponentRef.getGuiPiano()->setActive(false);
+        
         for (int i = 0; i <= 15; i++)
-            channelButtons[i]->setVisible(false);
+            midiChannelButtons[i]->setVisible(false);
         
         for (int i = 0; i <= 11; i++)
             audioRowButtons[i]->setVisible(true);
@@ -1082,6 +1013,8 @@ void GuiSequencerMode::buttonClicked (Button* button)
             linkButton->setVisible(true);
             
             ccControllerSlider->setVisible(false);
+            midiPressureMinRangeSlider->setVisible(false);
+            midiPressureMaxRangeSlider->setVisible(false);
             
             pressureStatusButton->setVisible(true);
             
@@ -1097,13 +1030,36 @@ void GuiSequencerMode::buttonClicked (Button* button)
         
         setRotaryControlDisplay();
 
-        repaint(); // <- set bounds here!
+        repaint(600, 200, 424, 469); // <- set bounds here!
     }
      
     
+    //Am I doing the below correctly?
+    //or should I set both midi and samples mode pressure status each time?
+    //the only problem with this is if you turn on the pressure status in midi
+    //mode it could in tern create an effect object which we don't need.
+    //With the current method i need to think about what happens to effects
+    //objects when switching between samples and midi mode on a single pad.
     else if (button == pressureStatusButton)
 	{
-		
+        if (modeMidiButton->getToggleState() == true)
+        {
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setSequencerMidiPressureStatus(pressureStatusButton->getToggleState());
+            }
+        }
+        
+        else if (modeSamplesButton->getToggleState() == true)
+        {
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                //int padNum = selectedPads[i];
+                //set sequence samples effect to 0 / off in PadSettings. see how sampler mode handles this
+            }
+        }
+        
 		if(pressureStatusButton->getToggleStateValue()==true)
 			notSelected->setVisible(false);
 		else
@@ -1128,53 +1084,6 @@ void GuiSequencerMode::buttonClicked (Button* button)
 	}
 
     
-    /*
-    else if (button == clearButton)
-    {
-        bool userSelection;
-        userSelection = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Are you sure?", "You cannot undo this command", "Ok", "Cancel");
-        if (userSelection == true)
-        {
-            sequencerGrid->clear();
-        }
-    }
-    
-    else if (button == clearAllButton)
-    {
-        bool userSelection;
-        userSelection = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Are you sure?", "You cannot undo this command", "Ok", "Cancel");
-        if (userSelection == true)
-        {
-            sequencerGrid->clearAll();
-        }
-    }
-    
-    
-    //the below if(SINGLE_PAD) checks are just for safety... if multi pads are selected the save buttons should be invisible.
-    else if (button == saveSeqButton)
-    {
-        if (SINGLE_PAD)
-            appDocumentStateRef.saveSequence(currentSequenceNumberSlider->getValue()-1, selectedPads[0]);
-    }
-    
-    else if (button == loadSeqButton)
-    {
-        
-        appDocumentStateRef.loadSequence(currentSequenceNumberSlider->getValue()-1, selectedPads);
-    }
-    
-    else if (button == saveSeqSetButton)
-    {
-        if (SINGLE_PAD)
-            appDocumentStateRef.saveSequenceSet(selectedPads[0]);
-    }
-    
-   else if (button == loadSeqSetButton)
-    {
-        appDocumentStateRef.loadSequenceSet(selectedPads);
-    }
-    
-    */
     
     else if (button == loopButton)
     {
@@ -1222,12 +1131,77 @@ void GuiSequencerMode::buttonClicked (Button* button)
     }
      
     
+    //midi channel buttons
+    for (int chan = 0; chan < 16; chan++)
+    {
+        if (button == midiChannelButtons[chan])
+        {
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setSequencerMidiChannel(chan + 1);
+            }
+            
+            break;
+        }
+        
+    }
     
-    for (int i = 0; i <= 11; i++)
+    //triggerMode buttons
+    for (int trig = 0; trig < 6; trig++)
+    {
+        if (button == triggerModeButtons[trig])
+        {
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setSequencerTriggerMode(trig);
+            }
+            
+            break;
+        }
+    }
+    
+    //pressureMode buttons
+    for (int pres = 0; pres < 6; pres++)
+    {
+        if (button == midiPressureModeButtons[pres])
+        {
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setSequencerMidiPressureMode(pres);
+            }
+            
+            if (pres == 3)
+                ccControllerSlider->setVisible(true);
+            else
+                ccControllerSlider->setVisible(false);
+            
+            break;
+        }
+    }
+    
+    
+    for (int row = 0; row <= 11; row++)
 	{
-		if (button == audioRowButtons[i]) 
+		if (button == audioRowButtons[row]) 
         {
         
+            FileChooser myChooser (translate("Please select an audio file to load..."),
+                                   File::getSpecialLocation (File::userMusicDirectory),
+                                   "*.wav;*.aif;*.aiff");
+            
+            if (myChooser.browseForFileToOpen() == true)
+            {
+                File selectedAudioFile (myChooser.getResult());
+                
+                for (int i = 0; i < selectedPads.size(); i++)
+                {
+                    int padNum = selectedPads[i];
+                    PAD_SETTINGS->setSequencerSamplesAudioFilePath(selectedAudioFile, row);
+                }
+            }
 			
 		}
 	}
@@ -1268,6 +1242,8 @@ void GuiSequencerMode::hideComponents()
     stickyButton->setVisible(false);
     linkButton->setVisible(false);
     ccControllerSlider->setVisible(false);
+    midiPressureMinRangeSlider->setVisible(false);
+    midiPressureMaxRangeSlider->setVisible(false);
     notSelected->setVisible(false);
     fxDial->setVisible(false);
     
@@ -1330,6 +1306,9 @@ void GuiSequencerMode::setDisplay (int settingsType)
                 ccControllerSlider->setVisible(true);
             else
                 ccControllerSlider->setVisible(false);
+            
+            midiPressureMinRangeSlider->setVisible(true);
+            midiPressureMaxRangeSlider->setVisible(true);
         }
         
         else if(modeSamplesButton->getToggleStateValue()==true)
@@ -1353,7 +1332,7 @@ void GuiSequencerMode::setDisplay (int settingsType)
     
     setRotaryControlDisplay();
     
-    repaint(); // <- set bounds here!
+    repaint(600, 200, 424, 469); // <- set bounds here!
 }
 
 
@@ -1443,100 +1422,107 @@ void GuiSequencerMode::updateDisplay()
     {
         int padNum = selectedPads[0];
         
-    
         if (PAD_SETTINGS->getSequencerMode() == 1) //midi mode
-            modeMidiButton->setToggleState(true, false); 
+        {
+            modeMidiButton->setToggleState(true, false);
+            pressureStatusButton->setToggleState(PAD_SETTINGS->getSequencerMidiPressureStatus(), false);
+            
+            mainComponentRef.getGuiPiano()->setActive(true);
+            mainComponentRef.getGuiPiano()->updateDisplay();
+        }
         else if (PAD_SETTINGS->getSequencerMode() == 2) //samples mode
+        {
             modeSamplesButton->setToggleState(true, false);
+            mainComponentRef.getGuiPiano()->setActive(false);
+            
+            //uncomment the below when effects and the corresonding 
+            //PadSettings stuff for sequencer mode has been implemented
+            /*
+            if (PAD_SETTINGS->getSequencerSamplesEffect() == 0)
+                pressureStatusButton->setToggleState(false, false);
+            else
+                pressureStatusButton->setToggleState(true, false);
+             */
+        }
+        
         
         //calling setDisplay() at the bottom will in turn display the correct mode components
         
-        
-        sequencerGrid->setPlayHeadPos(0); //??
-
-        numberOfSequencesSlider->setValue(PAD_SETTINGS->getSequencerNumberOfSequences(), false); 
         sequenceLength = PAD_SETTINGS->getSequencerLength();
+        numberOfSequencesSlider->setValue(PAD_SETTINGS->getSequencerNumberOfSequences(), false);
+        relativeTempoSlider->setValue(PAD_SETTINGS->getSequencerRelativeTempoMode(), false);
+        noteLengthSlider->setValue(PAD_SETTINGS->getSequencerMidiNoteLength(), false);
+        setNoteLengthSliderRange(sequenceLength);
+        audioGainSlider->setValue(PAD_SETTINGS->getSequencerGain(), false);
+        audioPanSlider->setValue(PAD_SETTINGS->getSequencerPan(), false);
         triggerModeButtons[PAD_SETTINGS->getSequencerTriggerMode()]->setToggleState(true, false);
+        midiPressureModeButtons[PAD_SETTINGS->getSequencerMidiPressureMode()]->setToggleState(true, false);
+        midiChannelButtons[PAD_SETTINGS->getSequencerMidiChannel()-1]->setToggleState(true, false);
+        ccControllerSlider->setComponentValue(PAD_SETTINGS->getSequencerMidiCcController());
         loopButton->setToggleState(PAD_SETTINGS->getSequencerShouldLoop(), false);
         indestructibleButton->setToggleState(PAD_SETTINGS->getSequencerIndestructible(), false);
         finishLoopButton->setToggleState(PAD_SETTINGS->getSequencerShouldFinishLoop(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getSequencerSticky(), false);
-        //currentSequenceNumberSlider->setValue(1);
-        relativeTempoSlider->setValue(PAD_SETTINGS->getSequencerRelativeTempoMode(), false);
-        //currentSequenceNumberSlider->setRange(1, numberOfSequencesSlider->getValue(), 1);
         linkButton->setToggleState(PAD_SETTINGS->getSequencerDynamicMode(), false);
+        midiPressureMinRangeSlider->setComponentValue(PAD_SETTINGS->getSequencerMidiMinPressureRange());
+        midiPressureMaxRangeSlider->setComponentValue(PAD_SETTINGS->getSequencerMidiMaxPressureRange());
         
         
     }
     
-    /*
+    
     else if(MULTI_PADS)
     {
-        
-        //set to a default setting
-        setToMidiMode();
+      
         modeMidiButton->setToggleState(true, false);
+        mainComponentRef.getGuiPiano()->setActive(true);
+        mainComponentRef.getGuiPiano()->updateDisplay();
+        pressureStatusButton->setToggleState(true, false);
         
-    
-        sequencerGrid->setPlayHeadPos(0); // ??
-        
-        
-        //set default values
-        numberOfSequencesSlider->setValue(8, false); 
-        sequenceLengthSlider->setValue(250, false);
-        triggerModeMenu->setSelectedId(2, true);
-        loopButton->setToggleState(1, false);
-        indestructibleButton->setToggleState(0, false);
-        finishLoopButton->setToggleState(0, false);
-        stickyButton->setToggleState(0, false);
-        //currentSequenceNumberSlider->setValue(1);
-        relativeTempoMenu->setSelectedId(3, true);
-        linkButton->setToggleState(0, false);
-        
-        //set the range of the noteLengthSlider so that the max value matches this sliders value
-        midiMode->setNoteLengthSliderRange(sequenceLengthSlider->getValue());
-        //set the the range of the currentSequenceNumberSlider so that the max matches this sliders value
-        currentSequenceNumberSlider->setRange(1, numberOfSequencesSlider->getValue(), 1);
+        sequenceLength = 32;
+        numberOfSequencesSlider->setValue(1, false);
+        relativeTempoSlider->setValue(3, false);
+        noteLengthSlider->setValue(4, false);
+        setNoteLengthSliderRange(32);
+        audioGainSlider->setValue(2.0, false);
+        audioPanSlider->setValue(0.5, false);
+        triggerModeButtons[2]->setToggleState(true, false);
+        midiPressureModeButtons[1]->setToggleState(true, false);
+        midiChannelButtons[1]->setToggleState(true, false);
+        ccControllerSlider->setComponentValue(13);
+        loopButton->setToggleState(true, false);
+        indestructibleButton->setToggleState(false, false);
+        finishLoopButton->setToggleState(false, false);
+        stickyButton->setToggleState(false, false);
+        linkButton->setToggleState(false, false);
+        midiPressureMinRangeSlider->setComponentValue(0);
+        midiPressureMaxRangeSlider->setComponentValue(127);
 
         
-        saveSeqButton->setVisible(false);
-        saveSeqSetButton->setVisible(false);
-        
     }
-    */
+    
     
     //update sequencerGrid GUI based on currently selected pad and currently selected sequence number
     sequencerGrid->setCurrentlySelectedPad(selectedPads); //why is this called here and not above?
-    //currentSequenceNumberSlider->setValue(1);
-    //sequencerGrid->setCurrentSequenceNumber(currentSequenceNumberSlider->getValue());
+                        //is it because setCurrentlySelectedPad is used as an updateDisplay() too?
+    currentSequenceNumber = 1;
+    sequencerGrid->setCurrentSequenceNumber(currentSequenceNumber);
     
     
-}
+    //uncomment the below line when effects have been properly added to sequencer mode
+    //fxDial->updateDisplay();
+    
+    //sequencerGrid->setPlayHeadPos(0); //??
+    
+    if (sequenceSettingsButton->getToggleState() == true)
+        setDisplay(3);
+    else if (triggerSettingsButton->getToggleState() == true)
+        setDisplay(1);
+    else if (pressureSettingsButton->getToggleState() == true)
+        setDisplay(2);
+    
+}   
 
-
-
-void GuiSequencerMode::setToMidiMode()
-{
-    //midiMode->setVisible(true);
-    //samplesMode->setVisible(false);
-    
-    //update the display of the midi mode so it shows the
-    //currently selected pad's settings, and makes any uneeded
-    //components invisble or dissabled
-    //midiMode->updateDisplay();
-    
-}
-
-void GuiSequencerMode::setToSamplesMode()
-{
-    //midiMode->setVisible(false);
-    //samplesMode->setVisible(true);
-    
-    //update the display of the midi mode so it shows the
-    //currently selected pad's settings, and makes any uneeded
-    //components invisble or dissabled
-    //samplesMode->updateDisplay();
-}
 
 void GuiSequencerMode::setParameterLabelText (String value)
 {
@@ -1606,6 +1592,25 @@ void GuiSequencerMode::setCurrentSequenceNumber()
         sequencerGrid->setCurrentSequenceNumber(currentSequenceNumber);
         //do i need to do an alternative to the above line if multiple pads are selected?
     }
+}
+
+void GuiSequencerMode::setNoteLengthSliderRange (int maxValue)
+{
+    //set the range
+    noteLengthSlider->setRange(1, maxValue, 1);
+    
+    for (int i = 0; i < selectedPads.size(); i++)
+    {
+        int padNum = selectedPads[i];
+        
+        if (PAD_SETTINGS->getSequencerMidiNoteLength() > maxValue) //if now out of range
+        {
+            PAD_SETTINGS->setSequencerMidiNoteLength(maxValue); //set the PAD_SETTINGS value to the new maxValue
+            noteLengthSlider->setValue(maxValue, false); //update the slider display, but don;t send an update
+        }
+    }
+    
+    
 }
 
 

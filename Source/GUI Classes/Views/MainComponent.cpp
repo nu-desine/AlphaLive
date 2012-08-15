@@ -722,7 +722,6 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
 		modeControllerButton->setVisible(true);
 		globalSettingsButton->setVisible(true);
         toolbox->setVisible(true); //or maybe it links to projects directory?
-        //midiPiano->setActive(true);
 		repaint();
     }
     
@@ -1044,8 +1043,9 @@ void MainComponent::setToSequencerMode()
     
     globalSettingsButton->setEnabled(true);
     globalSettingsButton->setAlpha(1.0f);
-    midiPiano->setActive(true);
-    midiPiano->updateDisplay();
+    //setting the midi piano state is done within
+    //updateDisplay() of guiSequencerMode,
+    //as it depends on states within that object
 	noModeSelected = 0;
 	repaint();
 }
@@ -1070,6 +1070,11 @@ void MainComponent::setToControllerMode()
 AlphaLiveEngine& MainComponent::getAlphaLiveEngineRef()
 {
     return alphaLiveEngineRef;
+}
+
+GuiPiano* MainComponent::getGuiPiano()
+{
+    return midiPiano;
 }
 
 

@@ -34,6 +34,8 @@
 GuiPiano::GuiPiano() : Component ("GuiPiano")
 
 {
+    recentlyUpdated = true;
+    
     //note display label
     addAndMakeVisible(midiNoteLabel = new Label("Note Label", "60"));
     midiNoteLabel->setJustificationType(Justification::horizontallyCentred);
@@ -163,7 +165,7 @@ void GuiPiano::buttonClicked(Button *button)
         if (button == keys[i])
         {
             //=========================================================================
-            //regular click to set the selected pad/s a single note
+            //regular click to set the selected midi pads note or sequencers root note
             if (modifier.isCommandDown() == false)
             {
                 //first clear all keys
@@ -171,17 +173,60 @@ void GuiPiano::buttonClicked(Button *button)
                     setKeyDisplay(i, false);
                 selectedKeys.clear();
                 
-            
-                setKeyDisplay (i, true);
-                selectedKeys.addIfNotAlreadyThere(i);
                 
-                for (int j = 0; j < selectedPads.size(); j++)
+                for (int padIndex = 0; padIndex < selectedPads.size(); padIndex++)
                 {
-                    int padNum = selectedPads[j];
+                    int padNum = selectedPads[padIndex];
+                    
+                    
                     
                     if (PAD_SETTINGS->getMode() == 1) //Midi Mode
                     {
                         PAD_SETTINGS->setMidiNote(i);
+                        
+                        if (padIndex == 0)
+                        {
+                            setKeyDisplay (i, true);
+                            selectedKeys.addIfNotAlreadyThere(i);
+                        }
+                    }
+                    
+                    else if (PAD_SETTINGS->getMode() == 3) //Sequencer Mode
+                    {
+                        recentlyUpdated = true;
+                        
+                        //get currently set 'root' note
+                        int rootNote = PAD_SETTINGS->getSequencerMidiNote(0);
+                        //get difference between root note and clicked note
+                        int transposeValue = rootNote - i;
+                        
+                        //add the transpose value to each note in the scale/set
+                        for (int row = 0; row < 12; row++)
+                        {
+                            int currentVal = PAD_SETTINGS->getSequencerMidiNote(row);
+                            int newVal = currentVal-transposeValue;
+                            if (newVal > 119)
+                                newVal = 119;
+                            else if (newVal < 0)
+                                newVal = 0;
+                            
+                            //the above check is needed, as keys above 119 don't exist
+                            //and will cause a crash. 
+                            //if a user selected 119 all notes will be set to 119,
+                            //however if the user then selects 60, all the notes will
+                            //be set to 60 as currentVal-transposeValue will be the same
+                            //for each note. Is there a way to get back the original scale/set?
+                            
+                            PAD_SETTINGS->setSequencerMidiNote(newVal, row);
+                            
+                            //update the GUI (only need to do this a single time)
+                            if (padIndex == 0)
+                            {
+                                setKeyDisplay (newVal, true);
+                                selectedKeys.addIfNotAlreadyThere(newVal);
+                            }
+                                
+                        }
                     }
                 }
             
@@ -191,33 +236,103 @@ void GuiPiano::buttonClicked(Button *button)
             }
             
             //=========================================================================
-            //cmd-click to select mutiple pads
+            //cmd-click to select mutiple notes for midi pads or custom scale for sequencer pads
             else if (modifier.isCommandDown() == true)
             {
-                //don't clear the keys
+                //don't intially clear the keys
                 
                 //if the number of selected keys is less than the number of selected pads
                 if (selectedKeys.size() < selectedPads.size())
                 {
-                    //add the key
-                    setKeyDisplay (i, true);
-                    selectedKeys.addIfNotAlreadyThere(i);
-                    
-                    //cycle through the selected keys in the order they were selected,
+                    //cycle through the SELECTED KEYS in the order they were selected,
                     //applying them to the selected pads in chronilogical order
-                    for (int j = 0; j < selectedKeys.size(); j++)
+                    for (int padIndex = 0; padIndex < selectedKeys.size(); padIndex++)
                     {
-                        int padNum = selectedPads[j];
+                        int padNum = selectedPads[padIndex];
                         
                         if (PAD_SETTINGS->getMode() == 1) //Midi Mode
                         {
-                            PAD_SETTINGS->setMidiNote(selectedKeys[j]);
+                            
+                            PAD_SETTINGS->setMidiNote(selectedKeys[padIndex]);
+                            
+                            //update the GUI
+                            if (padIndex == 0)
+                            {
+                                //add the key
+                                setKeyDisplay (i, true);
+                                selectedKeys.addIfNotAlreadyThere(i); 
+                            }
+                            
                         }
+                        
                     }
+                     
                 }
                 
-                break;
+                for (int padIndex = 0; padIndex < selectedPads.size(); padIndex++)
+                {
+                    int padNum = selectedPads[padIndex];
+                    
+                    if (PAD_SETTINGS->getMode() == 3) //Sequencer Mode
+                    {
+                        //currently, if the user cmd-clicks a key for the first time
+                        //(when recentlyUpdated == true) it will clear the piano
+                        //and allow the user to select 12 individual different keys,
+                        //each time applying the selected set of keys to the sequencer
+                        //rows. if the user doesn't selected all 12, and the does a normal
+                        //click will will change the root note, what should the unselected
+                        //note be? The previously set note of that row? 0? another default value?
+                        // if it it the prev note... should cmd-click delete/replace each note
+                        //of the row 1 at a time rather than clearing everything? OR will
+                        //that get confusing?
+                        
+                        
+                        if (recentlyUpdated == true)
+                        {
+                            //first clear all keys
+                            for (int i = 0; i < 120; i++)
+                                setKeyDisplay(i, false);
+                            selectedKeys.clear();
+                            
+                            recentlyUpdated = false;
+                        }
+                         
+                        
+                        
+                        //if the number of selected keys is less than the number of sequencer rows
+                        if (selectedKeys.size() < 12)
+                        {
+                            //update the GUI (only need to do this a single time)
+                            if (padIndex == 0)
+                            {
+                                setKeyDisplay (i, true);
+                                selectedKeys.addIfNotAlreadyThere(i);
+                            }
+                            
+                            for (int row = 0; row < 12; row++)
+                            {
+                                
+                                int note = selectedKeys[row];
+                                
+                                if (row > selectedKeys.size()-1)
+                                    note = 0; //default note
+                                
+                                PAD_SETTINGS->setSequencerMidiNote(note, row);
+                                std::cout << "row " << row << " set to note : " << note << std::endl;
+                            }
+                            
+                            
+                            
+                        }
+                    }
+                    
+                }
+               
+                
             }
+                
+                break;
+
             //=========================================================================
         }
 	}
@@ -234,6 +349,8 @@ void GuiPiano::setCurrentlySelectedPad (Array <int> selectedPads_)
 
 void GuiPiano::updateDisplay()
 {
+    recentlyUpdated = true;
+    
     //first clear all keys
     for (int i = 0; i < 120; i++)
         setKeyDisplay(i, false);
@@ -251,6 +368,14 @@ void GuiPiano::updateDisplay()
             selectedKeys.addIfNotAlreadyThere(PAD_SETTINGS->getMidiNote());
         }
         
+        else if (PAD_SETTINGS->getMode() == 3 && PAD_SETTINGS->getSequencerMode() == 1) //Midi Sequencer Mode
+        {
+            for (int i = 0; i < 12; i++)
+            {
+                setKeyDisplay (PAD_SETTINGS->getSequencerMidiNote(i), true);
+                selectedKeys.addIfNotAlreadyThere(PAD_SETTINGS->getMidiNote());
+            }
+        }
     }
     
     //=========================================================================
@@ -269,8 +394,14 @@ void GuiPiano::updateDisplay()
                 selectedKeys.addIfNotAlreadyThere(PAD_SETTINGS->getMidiNote());
             }
         }
+        
+        else if (PAD_SETTINGS->getMode() == 3 && PAD_SETTINGS->getSequencerMode() == 1) //Midi Sequencer Mode
+        {
+            //what should I display here?
+        }
     }
     //=========================================================================
+    
 }
 
 void GuiPiano::mouseDown (const MouseEvent &e)
@@ -400,5 +531,11 @@ void GuiPiano::setActive (bool value)
         for (int i = 0; i < 120; i++)
             setKeyDisplay(i, false);
     }
+    /*
+    else if (value == true)
+    {
+        updateDisplay();
+    }
+     */
     
 }

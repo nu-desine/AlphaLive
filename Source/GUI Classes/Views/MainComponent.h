@@ -97,6 +97,8 @@ public:
     void mouseExit (const MouseEvent &e);
     
     AlphaLiveEngine& getAlphaLiveEngineRef();
+    
+    GuiPiano* getGuiPiano();
 	
     //==============================================================================
     //application command target stuff

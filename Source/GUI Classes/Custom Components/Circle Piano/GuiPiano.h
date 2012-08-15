@@ -75,6 +75,7 @@ private:
     
 	float keyWidth, keySegWhite, keyGapWhite, keySegBlack, keyGapBlack, segStartWhite, segStartBlack, segEndWhite, segEndBlack;
     
+    bool recentlyUpdated;
 };
 
 

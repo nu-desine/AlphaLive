@@ -52,6 +52,8 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     samplesMode->setInterceptsMouseClicks(false, true);
     */
     
+    controlDisplayId = 0;
+    
     //grid
     addAndMakeVisible(sequencerGrid = new SequencerGrid(modeSequencerRef, *this));
     sequencerGrid->addMouseListener(this, true);
@@ -96,7 +98,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	
 	addChildComponent(noteLengthSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	noteLengthSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
-	noteLengthSlider->setRange(1, 32, 1);
+	noteLengthSlider->setRange(1, NO_OF_COLUMNS, 1);
     noteLengthSlider->addListener(this);
     noteLengthSlider->setValue(4, false);
     noteLengthSlider->addMouseListener(this, true);
@@ -105,18 +107,18 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	
 	addChildComponent(audioGainSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	audioGainSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
-	audioGainSlider->setRange(0, 127, 1);
+	audioGainSlider->setRange(0.0, 2.0);
     audioGainSlider->addListener(this);
-    audioGainSlider->setValue(100, false);
+    audioGainSlider->setValue(0.01, false);
     audioGainSlider->addMouseListener(this, true);
 	
 	//--------------- audio pan slider-------------------
 	
 	addChildComponent(audioPanSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	audioPanSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
-	audioPanSlider->setRange(0, 127, 1);
+	audioPanSlider->setRange(0.0, 1.0, 0.01);
     audioPanSlider->addListener(this);
-    audioPanSlider->setValue(63, false);
+    audioPanSlider->setValue(0.5, false);
     audioPanSlider->addMouseListener(this, true);
 
     
@@ -777,28 +779,60 @@ void GuiSequencerMode::comboBoxChanged (ComboBox* comboBox)
 
 void GuiSequencerMode::sliderDragStarted (Slider* slider)
 {
-    if (slider == relativeTempoSlider)
-		setParameterLabelText(String(relativeTempoSlider->getValue()));
-	
-	else if (slider == noteLengthSlider)
-		setParameterLabelText(String(noteLengthSlider->getValue()));
-		
-	else if (slider == audioGainSlider)
-		setParameterLabelText(String(audioGainSlider->getValue()));
-		
-	else if (slider == audioPanSlider)
-		setParameterLabelText(String(audioPanSlider->getValue()));
 		
 }
 
 void GuiSequencerMode::sliderValueChanged (Slider* slider)
 {
     
+    if (slider == relativeTempoSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerRelativeTempoMode(slider->getValue());
+        }
+            
+		setParameterLabelText(String(relativeTempoSlider->getValue()));
+    }
+	
+	else if (slider == noteLengthSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerMidiNoteLength(slider->getValue());
+        }
+        
+		setParameterLabelText(String(noteLengthSlider->getValue()));
+    }
+    
+	else if (slider == audioGainSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerGain(slider->getValue());
+        }
+        
+		setParameterLabelText(String(audioGainSlider->getValue()));
+    }
+    
+	else if (slider == audioPanSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerPan(slider->getValue());
+        }
+        
+		setParameterLabelText(String(audioPanSlider->getValue()));
+    }
+    
+    
     
     if (slider == numberOfSequencesSlider)
     {
-        //set the the range of the currentSequenceNumberSlider so that the max matches this sliders value
-        currentSequenceNumberSlider->setRange(1, numberOfSequencesSlider->getValue(), 1);
         
         for (int i = 0; i < selectedPads.size(); i++)
         {
@@ -806,6 +840,8 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
             PAD_SETTINGS->setSequencerNumberOfSequences(numberOfSequencesSlider->getValue());
         }
         
+        //set the the range of the currentSequenceNumberSlider so that the max matches this sliders value
+        currentSequenceNumberSlider->setRange(1, numberOfSequencesSlider->getValue(), 1);
     }
 
     
@@ -847,117 +883,33 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
 void GuiSequencerMode::buttonClicked (Button* button)
 {
     
-    if (button == addStep)
+    if (button == addStep || button == removeStep)
 	{
-		if(triggerSettingsButton->getToggleStateValue()==true)
-		{
-			if(modeMidiButton->getToggleStateValue()==true)
-			{
-				if (relativeTempoSlider->isVisible())
-				{
-					relativeTempoSlider->setVisible(false);
-					noteLengthSlider->setVisible(true);
-					setParameterLabelText(String::empty);
-				}
-				
-				else if (noteLengthSlider->isVisible())
-				{
-					noteLengthSlider->setVisible(false);
-					relativeTempoSlider->setVisible(true);
-					setParameterLabelText(String::empty);
-				}
-			}
-			
-			if(modeSamplesButton->getToggleStateValue()==true)
-			{
-				if (relativeTempoSlider->isVisible())
-				{
-					relativeTempoSlider->setVisible(false);
-					audioGainSlider->setVisible(true);
-					setParameterLabelText(String::empty);
-				}
-				
-				else if (audioGainSlider->isVisible())
-				{
-					audioGainSlider->setVisible(false);
-					audioPanSlider->setVisible(true);
-					setParameterLabelText(String::empty);
-				}
-				
-				else if (audioPanSlider->isVisible())
-				{
-					audioPanSlider->setVisible(false);
-					relativeTempoSlider->setVisible(true);
-					setParameterLabelText(String::empty);
-				}
-			}
-		}
+        if (button == addStep)
+            controlDisplayId++;
+        else if (button == removeStep)
+            controlDisplayId--;
+        
+        setRotaryControlDisplay();
 	}
 	
-	if (button == removeStep)
-	{
-		if(triggerSettingsButton->getToggleStateValue()==true)
-		{
-			if(modeMidiButton->getToggleStateValue()==true)
-			{
-				if (relativeTempoSlider->isVisible())
-				{
-					relativeTempoSlider->setVisible(false);
-					noteLengthSlider->setVisible(true);
-					setParameterLabelText(String::empty);
-				}
-				
-				else if (noteLengthSlider->isVisible())
-				{
-					noteLengthSlider->setVisible(false);
-					relativeTempoSlider->setVisible(true);
-					setParameterLabelText(String::empty);
-				}
-			}
-			
-			if(modeSamplesButton->getToggleStateValue()==true)
-			{
-				
-				if (relativeTempoSlider->isVisible())
-				{
-					relativeTempoSlider->setVisible(false);
-					audioPanSlider->setVisible(true);
-					setParameterLabelText(String::empty);
-				}
-				
-				else if (audioGainSlider->isVisible())
-				{
-					audioGainSlider->setVisible(false);
-					relativeTempoSlider->setVisible(true);
-					setParameterLabelText(String::empty);
-				}
-				
-				else if (audioPanSlider->isVisible())
-				{
-					audioPanSlider->setVisible(false);
-					audioGainSlider->setVisible(true);
-					setParameterLabelText(String::empty);
-				}
-			}
-		}
-	}
 	
-	if (button == previewButton) 
+	else if (button == previewButton) 
     {
 		
 	}
 	
-	if (button == nextSequenceButton)
+	else if (button == nextSequenceButton)
 	{
 		currentSequenceNumberSlider->setValue(currentSequenceNumberSlider->getValue() + 1, true, true);
 	}
 	
-	if (button == previousSequenceButton)
+	else if (button == previousSequenceButton)
 	{
 		currentSequenceNumberSlider->setValue(currentSequenceNumberSlider->getValue() - 1, true, true);
 	}
 	
-	if(button == popUpButton)
+	else if(button == popUpButton)
 	{
 		PopupMenu menu;
         
@@ -1014,9 +966,6 @@ void GuiSequencerMode::buttonClicked (Button* button)
     
     
     
-    
-    
-    
     //this function sets the selected mode (based on the button pressed)
     //to the currently selected pad (or set of pads)
     int buttonIndex;
@@ -1034,23 +983,15 @@ void GuiSequencerMode::buttonClicked (Button* button)
             PAD_SETTINGS->setSequencerMode(buttonIndex);
         }
         
-        
         for (int i = 0; i <= 15; i++)
             channelButtons[i]->setVisible(true);
         
         for (int i = 0; i <= 11; i++)
             audioRowButtons[i]->setVisible(false);
         
-        if(triggerSettingsButton->getToggleStateValue() == true)
-        {
-            
-           //nothing new 
-            
-        }
         
         if(pressureSettingsButton->getToggleStateValue() == true)
         {
-            pressureStatusButton->setVisible(true);
             
             for (int i = 0; i < 6; i++)
                 midiPressureModeButtons[i]->setVisible(true);
@@ -1063,27 +1004,20 @@ void GuiSequencerMode::buttonClicked (Button* button)
             else
                 ccControllerSlider->setVisible(false);
             
+             pressureStatusButton->setVisible(true);
             
             if(pressureStatusButton->getToggleStateValue()==true)
                 notSelected->setVisible(false);
             else
                 notSelected->setVisible(true);
             
-            
             fxDial->setVisible(false);
         }
             
         
-			
-			relativeTempoSlider->setVisible(true);
-			noteLengthSlider->setVisible(true);
-			audioGainSlider->setVisible(false);
-			audioPanSlider->setVisible(false);
-			
-			setParameterLabelText(String::empty);
-		
-
+        setRotaryControlDisplay();
         
+        repaint(); // <- set bounds here!
 
     }
     else if (button == modeSamplesButton)
@@ -1103,27 +1037,19 @@ void GuiSequencerMode::buttonClicked (Button* button)
         for (int i = 0; i <= 11; i++)
             audioRowButtons[i]->setVisible(true);
         
-        if(triggerSettingsButton->getToggleStateValue()==true)
-        {
-            
-            
-            
-        }
         
         if(pressureSettingsButton->getToggleStateValue()==true)
         {
-            pressureStatusButton->setVisible(true);
             
             for (int i = 0; i < 6; i++)
                 midiPressureModeButtons[i]->setVisible(false);
             
             stickyButton->setVisible(true);
-            
             linkButton->setVisible(true);
-        
             
             ccControllerSlider->setVisible(false);
             
+            pressureStatusButton->setVisible(true);
             
             if(pressureStatusButton->getToggleStateValue()==true)
                 notSelected->setVisible(false);
@@ -1135,17 +1061,13 @@ void GuiSequencerMode::buttonClicked (Button* button)
             
         }
         
-        relativeTempoSlider->setVisible(false);
-        noteLengthSlider->setVisible(false);
-        audioGainSlider->setVisible(false);
-        audioPanSlider->setVisible(false);
-        
-        setParameterLabelText(String::empty);
+        setRotaryControlDisplay();
 
+        repaint(); // <- set bounds here!
     }
      
     
-    if (button == pressureStatusButton)
+    else if (button == pressureStatusButton)
 	{
 		
 		if(pressureStatusButton->getToggleStateValue()==true)
@@ -1155,18 +1077,18 @@ void GuiSequencerMode::buttonClicked (Button* button)
 		
 	}
     
-    if (button == sequenceSettingsButton)
+    else if (button == sequenceSettingsButton)
     {
         setDisplay(3);
         
 	}
     
-    if (button == triggerSettingsButton)
+    else if (button == triggerSettingsButton)
     {
         setDisplay(1);	
 	}
     
-    if (button == pressureSettingsButton)
+    else if (button == pressureSettingsButton)
     {
         setDisplay(2);		
 	}
@@ -1276,7 +1198,6 @@ void GuiSequencerMode::buttonClicked (Button* button)
 		}
 	}
     
-	repaint(); // <- set bounds here!
 }
 
 void GuiSequencerMode::labelTextChanged (Label* labelThatHasChanged)
@@ -1287,18 +1208,17 @@ void GuiSequencerMode::labelTextChanged (Label* labelThatHasChanged)
 
 void GuiSequencerMode::hideComponents()
 {
-    //hides most of the components
+    //This function is used to hide most of the components
+    //and put the GUI in a state where it is ready to have a
+    //new display set
     
     //sequencer settings stuff
     sequencerGrid->setVisible(false);
-    addStep->setVisible(false);
-    removeStep->setVisible(false);
-    parameterLabel->setVisible(false);
     popUpButton->setVisible(false);
     previewButton->setVisible(false);
     nextSequenceButton->setVisible(false);
     previousSequenceButton->setVisible(false);
-    numberOfSequencesSlider->setVisible(false);
+    numberOfSequencesSlider->setVisible(false); //is this actually visible or needed?
     
     //trigger settings stuff
     for (int i = 0; i < 6; i++)
@@ -1322,15 +1242,21 @@ void GuiSequencerMode::hideComponents()
     noteLengthSlider->setVisible(false);
     audioGainSlider->setVisible(false);
     audioPanSlider->setVisible(false);
+    addStep->setVisible(false);
+    removeStep->setVisible(false);
+    parameterLabel->setVisible(false);
     currentParameterLabel->setVisible(false);
-    
-    setParameterLabelText(String::empty);
+    //setParameterLabelText(String::empty);
 }
 
 
 
 void GuiSequencerMode::setDisplay (int settingsType)
 {
+    //This function sets the GUI depending on what
+    //setting view (settingsType) has been selected
+    //taking the mode into consideration
+    
     hideComponents();
     
     if (settingsType == 1) //trigger settings
@@ -1343,24 +1269,11 @@ void GuiSequencerMode::setDisplay (int settingsType)
         indestructibleButton->setVisible(true);
         finishLoopButton->setVisible(true);
         
-        
-        if(modeMidiButton->getToggleStateValue()==true)
-        {
-            relativeTempoSlider->setVisible(true);
-            noteLengthSlider->setVisible(true);
-        }
-        
-        if(modeSamplesButton->getToggleStateValue()==true)
-        {
-            relativeTempoSlider->setVisible(true);
-            noteLengthSlider->setVisible(true);
-            audioGainSlider->setVisible(true);
-            audioPanSlider->setVisible(true);
-        }
-        
+        parameterLabel->setVisible(true);
         currentParameterLabel->setVisible(true);
         addStep->setVisible(true);
         removeStep->setVisible(true);
+        
     }
     
     else if (settingsType == 2) //pressure settings
@@ -1402,9 +1315,88 @@ void GuiSequencerMode::setDisplay (int settingsType)
         previewButton->setVisible(true);
         nextSequenceButton->setVisible(true);
         previousSequenceButton->setVisible(true);
+    }
+    
+    setRotaryControlDisplay();
+    
+    repaint(); // <- set bounds here!
+}
+
+
+
+
+void GuiSequencerMode::setRotaryControlDisplay()
+{
+    //This function sets which rotary slider is displayed in the centre
+    //based on the following parameters:
+    // - controlDisplayId which is controlled by the + and - buttons
+    // - which settings view is currently displayed (trigger, pressure, or sequence)
+    // - which mode is currently selected (midi or audio)
+    
+    relativeTempoSlider->setVisible(false);
+    noteLengthSlider->setVisible(false);
+    audioGainSlider->setVisible(false);
+    audioPanSlider->setVisible(false);
+    numberOfSequencesSlider->setVisible(false);
+    
+    if(triggerSettingsButton->getToggleStateValue() == true)
+    {
+        if(modeMidiButton->getToggleStateValue() == true)
+        {
+            if (controlDisplayId > 1)
+                controlDisplayId = 0;
+            else if (controlDisplayId < 0)
+                controlDisplayId = 1;
+            
+            
+            if (controlDisplayId == 0)
+            {
+                relativeTempoSlider->setVisible(true);
+            }
+            
+            else if (controlDisplayId == 1)
+            {
+                noteLengthSlider->setVisible(true);
+            }
+        }
+        
+        else if(modeSamplesButton->getToggleStateValue()==true)
+        {
+            if (controlDisplayId > 2)
+                controlDisplayId = 0;
+            else if (controlDisplayId < 0)
+                controlDisplayId = 2;
+            
+            if (controlDisplayId == 0)
+            {
+                relativeTempoSlider->setVisible(true);
+            }
+            
+            else if (controlDisplayId == 1)
+            {
+                audioGainSlider->setVisible(true);
+            }
+            
+            else if (controlDisplayId == 2)
+            {
+                audioPanSlider->setVisible(true);
+            }
+        }
+    }
+    
+    
+    else if(sequenceSettingsButton->getToggleStateValue() == true)
+    {
         numberOfSequencesSlider->setVisible(true);
     }
+    
+    
+    setParameterLabelText (String::empty);
+    
 }
+
+
+
 
 void GuiSequencerMode::updateDisplay()
 {
@@ -1512,14 +1504,26 @@ void GuiSequencerMode::setToSamplesMode()
     //samplesMode->updateDisplay();
 }
 
-void GuiSequencerMode::setParameterLabelText (String param)
+void GuiSequencerMode::setParameterLabelText (String value)
 {
-	
-	parameterLabel->setColour(Label::textColourId, AlphaColours::lightblue);
-	parameterLabel->setText(param, false);
+	//This function is used to update the display of currentParameterLabel
+    //which displays the name of the currently visible rotary control,
+    //and parameterLabel which displays the current value of the visible control
     
+    //The function is called everytime the value of one of the controls is changed
+    //and passes in the controls value as a string and sets it to parameterLabel.
+    
+    //If you want to update the currentParameterLabel text call this function with
+    //String::empty and the currently visible control is found and the name is
+    //put into the label, as well as putting the value of it into the other label.
+    
+    if (value != String::empty)
+    {
+	parameterLabel->setColour(Label::textColourId, AlphaColours::lightblue);
+	parameterLabel->setText(value, false);
+    }
 	
-	if (param == String::empty)
+	else if (value == String::empty)
 	{
 		parameterLabel->setColour(Label::textColourId, Colours::white);
 		
@@ -1530,7 +1534,7 @@ void GuiSequencerMode::setParameterLabelText (String param)
 			
 		}
 		
-		if (relativeTempoSlider->isVisible())
+		else if (relativeTempoSlider->isVisible())
 		{
 			
 			currentParameterLabel->setText("TEMPO", false);
@@ -1538,7 +1542,7 @@ void GuiSequencerMode::setParameterLabelText (String param)
 			
 		}
 		
-		if (noteLengthSlider->isVisible())
+		else if (noteLengthSlider->isVisible())
 		{
 			
 			currentParameterLabel->setText("N LENGTH", false);
@@ -1546,7 +1550,7 @@ void GuiSequencerMode::setParameterLabelText (String param)
 			
 		}
 		
-		if (audioGainSlider->isVisible())
+		else if (audioGainSlider->isVisible())
 		{
 			
 			currentParameterLabel->setText("GAIN", false);
@@ -1554,7 +1558,7 @@ void GuiSequencerMode::setParameterLabelText (String param)
 			
 		}
 		
-		if (audioPanSlider->isVisible())
+		else if (audioPanSlider->isVisible())
 		{
 			
 			currentParameterLabel->setText("PAN", false);

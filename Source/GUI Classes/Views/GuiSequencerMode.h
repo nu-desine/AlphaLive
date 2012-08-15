@@ -81,11 +81,12 @@ public:
     
     void hideComponents();
     void setDisplay (int settingsType); // 1 = trigger settings, 2 = pressure settings, 3 = sequence settings
+    void setRotaryControlDisplay();
     
     void setToMidiMode();
     void setToSamplesMode();
     
-    void setParameterLabelText (String param);
+    void setParameterLabelText (String value);
     
     
 private:
@@ -94,6 +95,8 @@ private:
     ModeSequencer &modeSequencerRef;
     MainComponent &mainComponentRef;
     AppDocumentState &appDocumentStateRef;
+    
+    int controlDisplayId; //used to set which rotary dial is display in the centre
     
     //GuiSeqMidiMode *midiMode;
     //GuiSeqSamplesMode *samplesMode;

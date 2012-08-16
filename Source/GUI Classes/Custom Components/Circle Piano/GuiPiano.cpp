@@ -331,8 +331,9 @@ void GuiPiano::buttonClicked(Button *button)
                                     setKeyDisplay(i, false);
                                 selectedKeys.clear();
                                 
-                                recentlyUpdated = false;
                             }
+                            
+                            recentlyUpdated = false;
                             
                             //if the number of selected keys is less than the number of sequencer rows
                             if (selectedKeys.size() < 12)
@@ -425,7 +426,7 @@ void GuiPiano::setCurrentlySelectedPad (Array <int> selectedPads_)
 
 void GuiPiano::updateDisplay()
 {
-    recentlyUpdated = true;
+    //recentlyUpdated = true;
     
     //first clear all keys
     for (int i = 0; i < 120; i++)

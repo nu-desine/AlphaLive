@@ -409,6 +409,14 @@ void GuiMidiMode::buttonClicked (Button* button)
 	else if(button == pressureSettingsButton)
         setDisplay(2);
     
+    else if(button == quantiseButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setQuantizeMode(button->getToggleState());
+        }
+    }
    
     else if(button == pressureStatusButton)
     {
@@ -528,6 +536,7 @@ void GuiMidiMode::updateDisplay()
         //Don't broadcast any changes to the component Listeners. Only want to update the GUI here
         
         //velocitySlider->sliderComponent()->setValue(PAD_SETTINGS->getMidiVelocity(), true);
+        quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         channelButtons[PAD_SETTINGS->getMidiChannel()-1]->setToggleState(true, false);
         pressureMinRangeSlider->setComponentValue(PAD_SETTINGS->getMidiMinPressureRange());
         pressureMaxRangeSlider->setComponentValue(PAD_SETTINGS->getMidiMaxPressureRange());
@@ -546,6 +555,7 @@ void GuiMidiMode::updateDisplay()
     {
         //set default values
         //velocitySlider->sliderComponent()->setValue(110, true);
+        quantiseButton->setToggleState(false, false);
         channelButtons[0]->setToggleState(true, false);
         pressureMinRangeSlider->setComponentValue(0);
         pressureMaxRangeSlider->setComponentValue(127);

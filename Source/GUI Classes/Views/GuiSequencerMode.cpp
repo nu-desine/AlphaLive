@@ -865,6 +865,15 @@ void GuiSequencerMode::buttonClicked (Button* button)
     {
 		
 	}
+    
+    else if(button == quantiseButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setQuantizeMode(button->getToggleState());
+        }
+    }
 	
 	else if(button == popUpButton)
 	{
@@ -1448,6 +1457,7 @@ void GuiSequencerMode::updateDisplay()
         
         //calling setDisplay() at the bottom will in turn display the correct mode components
         
+        quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         sequenceLength = PAD_SETTINGS->getSequencerLength();
         numberOfSequencesSlider->setValue(PAD_SETTINGS->getSequencerNumberOfSequences(), false);
         relativeTempoSlider->setValue(PAD_SETTINGS->getSequencerRelativeTempoMode(), false);
@@ -1479,6 +1489,7 @@ void GuiSequencerMode::updateDisplay()
         mainComponentRef.getGuiPiano()->updateDisplay();
         pressureStatusButton->setToggleState(true, false);
         
+        quantiseButton->setToggleState(false, false);
         sequenceLength = 32;
         numberOfSequencesSlider->setValue(1, false);
         relativeTempoSlider->setValue(3, false);

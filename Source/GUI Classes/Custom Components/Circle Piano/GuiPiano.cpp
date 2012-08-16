@@ -196,7 +196,6 @@ void GuiPiano::buttonClicked(Button *button)
                     //=========================================================================
                     else if (PAD_SETTINGS->getMode() == 3) //Sequencer Mode
                     {
-                        recentlyUpdated = true;
                         
                         //get currently set 'root' note
                         int rootNote = PAD_SETTINGS->getSequencerMidiNote(0);
@@ -234,6 +233,10 @@ void GuiPiano::buttonClicked(Button *button)
                             }
                                 
                         }
+                        
+                        
+                        recentlyUpdated = true;
+                         
                     }
                 }
             
@@ -311,42 +314,77 @@ void GuiPiano::buttonClicked(Button *button)
                          second reason in the point above.
                          */
                         
+                        //std::cout << keys[i]->getToggleState() << std::endl;
                         
-                        if (recentlyUpdated == true)
+                        if (keys[i]->getToggleState() == true) //if was previous off and clicked
                         {
-                            //first clear all keys
-                            for (int i = 0; i < 120; i++)
-                                setKeyDisplay(i, false);
-                            selectedKeys.clear();
                             
+                            if (recentlyUpdated == true && selectedKeys.size() == 12) // so th cmd-click doesn't delete if incomplete set
+                            {
+                                //first clear all keys
+                                for (int i = 0; i < 120; i++)
+                                    setKeyDisplay(i, false);
+                                selectedKeys.clear();
+                                
+                                recentlyUpdated = false;
+                            }
+                            
+                            
+                            
+                            //if the number of selected keys is less than the number of sequencer rows
+                            if (selectedKeys.size() < 12)
+                            {
+                                //update the GUI (only need to do this a single time)
+                                if (padIndex == 0)
+                                {
+                                    setKeyDisplay (i, true);
+                                    selectedKeys.addIfNotAlreadyThere(i);
+                                }
+                                
+                                
+                                for (int row = 0; row < 12; row++)
+                                {
+                                    
+                                    int note = selectedKeys[row];
+                                    
+                                    if (row > selectedKeys.size()-1)
+                                        note = -500; //'off' note
+                                    
+                                    PAD_SETTINGS->setSequencerMidiNote(note, row);
+                                    //std::cout << "row " << row << " set to note : " << note << std::endl;
+                                }
+                            }
+                        }
+                        
+                        else if (keys[i]->getToggleState() == false) //if was previous on and clicked 
+                        {
                             recentlyUpdated = false;
-                        }
-                         
-                        
-                        
-                        //if the number of selected keys is less than the number of sequencer rows
-                        if (selectedKeys.size() < 12)
-                        {
-                            //update the GUI (only need to do this a single time)
-                            if (padIndex == 0)
-                            {
-                                setKeyDisplay (i, true);
-                                selectedKeys.addIfNotAlreadyThere(i);
-                            }
                             
+                            //if the number of selected keys is less than the number of sequencer rows
+                            //if (selectedKeys.size() < 12)
+                            //{
+                                //update the GUI (only need to do this a single time)
+                                if (padIndex == 0)
+                                {
+                                    setKeyDisplay (i, false);
+                                    selectedKeys.removeFirstMatchingValue(i);
+                                }
+                                
+                                
+                                for (int row = 0; row < 12; row++)
+                                {
+                                    int note = selectedKeys[row];
+                                    
+                                    if (row > selectedKeys.size()-1)
+                                        note = -500; //'off' note
+                                    
+                                    PAD_SETTINGS->setSequencerMidiNote(note, row);
+                                    //std::cout << "row " << row << " set to note : " << note << std::endl;
+                                }
+                            //}
                             
-                            for (int row = 0; row < 12; row++)
-                            {
-                                
-                                int note = selectedKeys[row];
-                                
-                                if (row > selectedKeys.size()-1)
-                                    note = -500; //'off' note
-                                
-                                PAD_SETTINGS->setSequencerMidiNote(note, row);
-                                //std::cout << "row " << row << " set to note : " << note << std::endl;
-                            }
                         }
+                        
                     }
                 }
             }
@@ -392,8 +430,11 @@ void GuiPiano::updateDisplay()
         {
             for (int i = 0; i < 12; i++)
             {
-                setKeyDisplay (PAD_SETTINGS->getSequencerMidiNote(i), true);
-                selectedKeys.addIfNotAlreadyThere(PAD_SETTINGS->getMidiNote());
+                if (PAD_SETTINGS->getSequencerMidiNote(i) >= 0)
+                {
+                    setKeyDisplay (PAD_SETTINGS->getSequencerMidiNote(i), true);
+                    selectedKeys.addIfNotAlreadyThere(PAD_SETTINGS->getMidiNote());
+                }
             }
         }
     }

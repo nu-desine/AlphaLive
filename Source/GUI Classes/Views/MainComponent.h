@@ -97,6 +97,8 @@ public:
     void mouseExit (const MouseEvent &e);
     
     AlphaLiveEngine& getAlphaLiveEngineRef();
+    
+    GuiPiano* getGuiPiano();
 	
     //==============================================================================
     //application command target stuff
@@ -142,7 +144,7 @@ private:
     
     TextEditor *infoTextBox;
     
-    ComboBox *padDisplayTextMenu, *pressureSensitivityMenu;
+    //ComboBox *padDisplayTextMenu, *pressureSensitivityMenu;
     
     bool isInfoBoxEnabled;
     
@@ -194,10 +196,10 @@ private:
     PreferencesComponent *preferencesComponent;
     ProjectSettingsComponent *projectSettingsComponent;
     
-    TextButton *exclusiveModeButton;
-    AlphaSlider *exclusiveGroupSlider;
+    //TextButton *exclusiveModeButton;
+    //AlphaSlider *exclusiveGroupSlider;
     
-    TextButton *quantizeModeButton;
+    //TextButton *quantizeModeButton;
     
     //==============================================================================
 };

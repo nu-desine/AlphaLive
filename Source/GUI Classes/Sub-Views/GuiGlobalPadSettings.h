@@ -25,11 +25,15 @@
 #define H_GUIGLOBALPADSETTINGS
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
+#include "../Custom Components/General/AlphaSlider.h"
 
 class MainComponent;
 
 
-class GuiGlobalPadSettings :    public Component
+class GuiGlobalPadSettings :    public Component,
+                                public Button::Listener,
+                                public Slider::Listener,
+                                public ComboBox::Listener
 {
 	public:
 	
@@ -38,14 +42,26 @@ class GuiGlobalPadSettings :    public Component
     
     void resized();
 	void paint (Graphics& g);
+    
+    void buttonClicked (Button* button);
+    void sliderValueChanged (Slider* slider);
+    void comboBoxChanged (ComboBox* comboBox);
 	
 	void setCurrentlySelectedPad (Array<int> selectedPads_);
+    
+    void updateDisplay();
 	
-	
+	void mouseEnter (const MouseEvent &e);
+    void mouseExit (const MouseEvent &e);
 	
 	private:
-	
-	 MainComponent &mainComponentRef;
+    
+    Array <int> selectedPads;
+    MainComponent &mainComponentRef;
+    
+    TextButton *exclusiveModeButton;
+    AlphaSlider *exclusiveGroupSlider;
+    ComboBox *pressureSensitivityMenu;
 	
 };
 

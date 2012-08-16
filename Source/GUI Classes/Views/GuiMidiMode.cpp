@@ -409,6 +409,14 @@ void GuiMidiMode::buttonClicked (Button* button)
 	else if(button == pressureSettingsButton)
         setDisplay(2);
     
+    else if(button == quantiseButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setQuantizeMode(button->getToggleState());
+        }
+    }
    
     else if(button == pressureStatusButton)
     {
@@ -484,7 +492,7 @@ void GuiMidiMode::buttonClicked (Button* button)
             for (int i = 0; i < selectedPads.size(); i++)
             {
                 int padNum = selectedPads[i];
-                PAD_SETTINGS->setMidiTriggerMode(trig);
+                PAD_SETTINGS->setMidiTriggerMode(trig+1);
             }
             
             break;
@@ -499,7 +507,7 @@ void GuiMidiMode::buttonClicked (Button* button)
             for (int i = 0; i < selectedPads.size(); i++)
             {
                 int padNum = selectedPads[i];
-                PAD_SETTINGS->setMidiPressureMode(pres);
+                PAD_SETTINGS->setMidiPressureMode(pres+1);
             }
             
             if (pres == 3)
@@ -528,11 +536,12 @@ void GuiMidiMode::updateDisplay()
         //Don't broadcast any changes to the component Listeners. Only want to update the GUI here
         
         //velocitySlider->sliderComponent()->setValue(PAD_SETTINGS->getMidiVelocity(), true);
+        quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         channelButtons[PAD_SETTINGS->getMidiChannel()-1]->setToggleState(true, false);
         pressureMinRangeSlider->setComponentValue(PAD_SETTINGS->getMidiMinPressureRange());
         pressureMaxRangeSlider->setComponentValue(PAD_SETTINGS->getMidiMaxPressureRange());
-        pressureModeButtons[PAD_SETTINGS->getMidiPressureMode()]->setToggleState(true, false);
-        triggerModeButtons[PAD_SETTINGS->getMidiTriggerMode()]->setToggleState(true, false);
+        pressureModeButtons[PAD_SETTINGS->getMidiPressureMode()-1]->setToggleState(true, false);
+        triggerModeButtons[PAD_SETTINGS->getMidiTriggerMode()-1]->setToggleState(true, false);
         ccControllerSlider->setComponentValue(PAD_SETTINGS->getMidiCcController());
         indestructibleButton->setToggleState(PAD_SETTINGS->getMidiIndestructible(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getMidiSticky(), false);
@@ -546,6 +555,7 @@ void GuiMidiMode::updateDisplay()
     {
         //set default values
         //velocitySlider->sliderComponent()->setValue(110, true);
+        quantiseButton->setToggleState(false, false);
         channelButtons[0]->setToggleState(true, false);
         pressureMinRangeSlider->setComponentValue(0);
         pressureMaxRangeSlider->setComponentValue(127);

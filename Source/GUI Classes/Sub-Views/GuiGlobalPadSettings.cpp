@@ -22,25 +22,51 @@
  */
 
 #include "GuiGlobalPadSettings.h"
+#include "../../File and Settings/AppSettings.h"
+#include "../Views/MainComponent.h"
+
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
+#define SINGLE_PAD (selectedPads.size() == 1)
+#define MULTI_PADS (selectedPads.size() > 1)
 
 GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
 : mainComponentRef(ref)
 
 {
-	
+	addAndMakeVisible(exclusiveModeButton = new TextButton("Exc Mode"));
+    exclusiveModeButton->addListener(this);
+    exclusiveModeButton->addMouseListener(this, true);
+    exclusiveModeButton->setClickingTogglesState(true);
+    exclusiveModeButton->setToggleState(0, false);
+    
+    addChildComponent(exclusiveGroupSlider = new AlphaSlider());
+    exclusiveGroupSlider->setRange(1, 24, 1);
+    exclusiveGroupSlider->addListener(this);
+    exclusiveGroupSlider->setValue(1, false);
+    exclusiveGroupSlider->addMouseListener(this, true);
+    exclusiveGroupSlider->setVisible(false);
+    
+    addAndMakeVisible(pressureSensitivityMenu = new ComboBox());
+    pressureSensitivityMenu->addListener(this);
+    pressureSensitivityMenu->addMouseListener(this, true);
+    pressureSensitivityMenu->addItem("Non-Sensitive", 1);
+    pressureSensitivityMenu->addItem("Standard", 2);
+    pressureSensitivityMenu->addItem("Sensitive", 3);
+    pressureSensitivityMenu->setSelectedId(2);
 	
 }
 
 GuiGlobalPadSettings::~GuiGlobalPadSettings()
 {
 	
-	
+	deleteAllChildren();
 }
 
 void GuiGlobalPadSettings::resized()
 {
-	
-	
+	exclusiveModeButton->setBounds(802, 379, 42, 42);
+    exclusiveGroupSlider->setBounds(802, 430, 42, 42);
+	pressureSensitivityMenu->setBounds(802, 500, 87, 20);
 	
 }
 
@@ -53,5 +79,83 @@ void GuiGlobalPadSettings::paint (Graphics& g)
 void GuiGlobalPadSettings::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
 	
-	
+	selectedPads = selectedPads_;
 }
+
+void GuiGlobalPadSettings::buttonClicked (Button* button)
+{
+    if (button == exclusiveModeButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setExclusiveMode(button->getToggleState());
+        }
+        
+        if (button->getToggleState() == true)
+            exclusiveGroupSlider->setVisible(true);
+        else
+            exclusiveGroupSlider->setVisible(false); 
+    }
+}
+
+void GuiGlobalPadSettings::sliderValueChanged (Slider* slider)
+{
+    if (slider == exclusiveGroupSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setExclusiveGroup(slider->getValue());
+        }
+    }
+}
+
+void GuiGlobalPadSettings::comboBoxChanged (ComboBox* comboBox)
+{
+    if (comboBox == pressureSensitivityMenu)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setPressureSensitivityMode(pressureSensitivityMenu->getSelectedId());
+        }
+    }
+}
+
+void GuiGlobalPadSettings::updateDisplay()
+{
+    if(SINGLE_PAD)
+    {
+        int padNum = selectedPads[0];
+        
+        pressureSensitivityMenu->setSelectedId(PAD_SETTINGS->getPressureSensitivityMode(), true);
+        exclusiveModeButton->setToggleState(PAD_SETTINGS->getExclusiveMode(), false);
+        exclusiveGroupSlider->setComponentValue(PAD_SETTINGS->getExclusiveGroup());
+        
+    }
+    else if(MULTI_PADS)
+    {
+        pressureSensitivityMenu->setSelectedId(2, true);
+        exclusiveModeButton->setToggleState(false, false);
+        exclusiveGroupSlider->setComponentValue(1);
+    }
+    
+    if (exclusiveModeButton->getToggleState() == true)
+        exclusiveGroupSlider->setVisible(true);
+    else
+        exclusiveGroupSlider->setVisible(false);
+}
+
+
+void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
+{
+    
+}
+
+void GuiGlobalPadSettings::mouseExit (const MouseEvent &e)
+{
+    //remove any text
+    mainComponentRef.setInfoTextBoxText (String::empty);
+}
+

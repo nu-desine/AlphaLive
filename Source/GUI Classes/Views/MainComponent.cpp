@@ -187,6 +187,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     killswitchButton->addMouseListener(this, true);
     
     
+    /*
     addAndMakeVisible(pressureSensitivityMenu = new ComboBox());
     pressureSensitivityMenu->addListener(this);
     pressureSensitivityMenu->addMouseListener(this, true);
@@ -194,7 +195,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     pressureSensitivityMenu->addItem("Standard", 2);
     pressureSensitivityMenu->addItem("Sensitive", 3);
     pressureSensitivityMenu->setSelectedId(2);
-    
+    */
     /*
     addAndMakeVisible(autoShowSettingsSwitch = new GuiSwitch());
     autoShowSettingsSwitch->addListener(this);
@@ -203,7 +204,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     autoShowSettingsSwitch->addMouseListener(this, true);
      */
     
-    
+    /*
     addAndMakeVisible(exclusiveModeButton = new TextButton("Exc Mode"));
     exclusiveModeButton->addListener(this);
     exclusiveModeButton->addMouseListener(this, true);
@@ -222,6 +223,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     quantizeModeButton->addMouseListener(this, true);
     quantizeModeButton->setClickingTogglesState(true);
     quantizeModeButton->setToggleState(0, false);
+     */
      
     
     //create pop-up window
@@ -460,6 +462,7 @@ void MainComponent::sliderValueChanged (Slider *slider)
 		repaint();
 	}
     
+    /*
     else if (slider == exclusiveGroupSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
@@ -468,6 +471,7 @@ void MainComponent::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setExclusiveGroup(slider->getValue());
         }
     } 
+     */
 }
 
 
@@ -589,7 +593,6 @@ void MainComponent::buttonClicked(Button *button)
     else if (button == globalSettingsButton)
 	{
        
-		
 		guiMidiMode->setVisible(false);
 		guiSamplerMode->setVisible(false);
 		guiSequencerMode->setVisible(false);
@@ -597,6 +600,7 @@ void MainComponent::buttonClicked(Button *button)
 		
 		if (button->getToggleState()==true) 
         {
+            guiGlobalPadSettings->updateDisplay();
 			guiGlobalPadSettings->setVisible(true);
             
             modeOffButton->setEnabled(false);
@@ -646,6 +650,7 @@ void MainComponent::buttonClicked(Button *button)
     
     //==============================================================================
     
+    /*
     else if (button == exclusiveModeButton)
     {
         for (int i = 0; i < selectedPads.size(); i++)
@@ -670,6 +675,7 @@ void MainComponent::buttonClicked(Button *button)
         }
         
     }
+     */
     
     //==============================================================================
     //===SCENES, LOADING & SAVING - now handled by the command manager below!======
@@ -780,6 +786,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
         
         //set other things
         //padNumberDisplayLabel->setText("Pad " + String(currentlySelectedPad+1) + " Selected", false);
+        /*
         pressureSensitivityMenu->setSelectedId(PAD_SETTINGS->getPressureSensitivityMode(), true);
         exclusiveModeButton->setToggleState(PAD_SETTINGS->getExclusiveMode(), false);
         exclusiveGroupSlider->setValue(PAD_SETTINGS->getExclusiveGroup(), false);
@@ -789,7 +796,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
             exclusiveGroupSlider->setVisible(true);
         else
             exclusiveGroupSlider->setVisible(false);
-        
+        */
         
     }
     else if (MULTI_PADS)
@@ -857,6 +864,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
         }
         
         
+        /*
         int pressureSens_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getPressureSensitivityMode();
         
         //loop through all selected pads expect for the first one
@@ -933,8 +941,16 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
             if (i == selectedPads.size()-1)
                 quantizeModeButton->setToggleState(quantizeMode_, false);
         }
-      
+      */
         
+        
+        //how i should I handle this?
+        /*
+        if (globalSettingsButton->getToggleState() == true)
+        {
+            
+        }
+         */
         
         
     }
@@ -956,6 +972,7 @@ void MainComponent::comboBoxChanged (ComboBox *comboBox)
     }
      */
     
+    /*
     if (comboBox == pressureSensitivityMenu)
     {
         for (int i = 0; i < selectedPads.size(); i++)
@@ -964,7 +981,7 @@ void MainComponent::comboBoxChanged (ComboBox *comboBox)
             PAD_SETTINGS->setPressureSensitivityMode(pressureSensitivityMenu->getSelectedId());
         }
     }
-
+     */
 }
 
 
@@ -1198,10 +1215,12 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     {
         setInfoTextBoxText ("Help Text Box. Hover the mouse over a control to view here a description of what the control does."/* Right-click here to dissable it */);
     }
+    /*
     else if (pressureSensitivityMenu->isMouseOver(true)==true)
     {
         setInfoTextBoxText("Pad Pressure Sensitivity Mode. Sets and displays the sensitivity of the selected pad/pads in terms of mapping the pressure to paramaters within the application.");
     }
+     */
     else if(killswitchButton->isMouseOver(true))
     {
         setInfoTextBoxText("Kill Switch. Instantly stops the clock and any playing pads.");

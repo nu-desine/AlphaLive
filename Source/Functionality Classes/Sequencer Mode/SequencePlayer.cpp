@@ -540,7 +540,7 @@ void SequencePlayer::run()
             {
                 //look for note-off messages before note-on messages,
                 //as otherwise if you set the note length to be max length,
-                //the note will be turned off straight away duw to how note length
+                //the note will be turned off straight away due to how note length
                 //is implemented below
                 
                 //check for any midi notes that need to be turned off
@@ -745,14 +745,20 @@ void SequencePlayer::stopThreadAndReset()
 //called every time a midi message needs triggering
 void SequencePlayer::triggerMidiMessage(int rowNumber, int velocity)
 {
-    MidiMessage message = MidiMessage::noteOn(midiChannel, midiNote[rowNumber], (uint8)velocity);
-    sendMidiMessage(message);
+    if (midiNote[rowNumber] >= 0)
+    {
+        MidiMessage message = MidiMessage::noteOn(midiChannel, midiNote[rowNumber], (uint8)velocity);
+        sendMidiMessage(message);
+    }
 }
 
 void SequencePlayer::triggerMidiNoteOffMessage (int rowNumber)
 {
-    MidiMessage message = MidiMessage::noteOff(midiChannel, midiNote[rowNumber]);
-    sendMidiMessage(message);
+    if (midiNote[rowNumber] >= 0)
+    {
+        MidiMessage message = MidiMessage::noteOff(midiChannel, midiNote[rowNumber]);
+        sendMidiMessage(message);
+    }
 }
 
 void SequencePlayer::sendMidiPressureData()

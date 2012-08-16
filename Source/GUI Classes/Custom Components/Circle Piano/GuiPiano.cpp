@@ -165,7 +165,8 @@ void GuiPiano::buttonClicked(Button *button)
         if (button == keys[i])
         {
             //=========================================================================
-            //regular click to set the selected midi pads note or sequencers root note
+            //=========================================================================
+            //regular click to set the selected midi pads note or sequencers pad root note
             if (modifier.isCommandDown() == false)
             {
                 //first clear all keys
@@ -173,6 +174,7 @@ void GuiPiano::buttonClicked(Button *button)
                     setKeyDisplay(i, false);
                 selectedKeys.clear();
                 
+                //=========================================================================
                 
                 for (int padIndex = 0; padIndex < selectedPads.size(); padIndex++)
                 {
@@ -191,6 +193,7 @@ void GuiPiano::buttonClicked(Button *button)
                         }
                     }
                     
+                    //=========================================================================
                     else if (PAD_SETTINGS->getMode() == 3) //Sequencer Mode
                     {
                         recentlyUpdated = true;
@@ -204,26 +207,30 @@ void GuiPiano::buttonClicked(Button *button)
                         for (int row = 0; row < 12; row++)
                         {
                             int currentVal = PAD_SETTINGS->getSequencerMidiNote(row);
-                            int newVal = currentVal-transposeValue;
-                            if (newVal > 119)
-                                newVal = 119;
-                            else if (newVal < 0)
-                                newVal = 0;
                             
-                            //the above check is needed, as keys above 119 don't exist
-                            //and will cause a crash. 
-                            //if a user selected 119 all notes will be set to 119,
-                            //however if the user then selects 60, all the notes will
-                            //be set to 60 as currentVal-transposeValue will be the same
-                            //for each note. Is there a way to get back the original scale/set?
-                            
-                            PAD_SETTINGS->setSequencerMidiNote(newVal, row);
-                            
-                            //update the GUI (only need to do this a single time)
-                            if (padIndex == 0)
+                            if (currentVal >= 0)
                             {
-                                setKeyDisplay (newVal, true);
-                                selectedKeys.addIfNotAlreadyThere(newVal);
+                                int newVal = currentVal-transposeValue;
+                                if (newVal > 119)
+                                    newVal = 119;
+                                else if (newVal < 0)
+                                    newVal = 0;
+                                
+                                //the above check is needed, as keys above 119 don't exist
+                                //and will cause a crash. 
+                                //if a user selected 119 all notes will be set to 119,
+                                //however if the user then selects 60, all the notes will
+                                //be set to 60 as currentVal-transposeValue will be the same
+                                //for each note. Is there a way to get back the original scale/set?
+                                
+                                PAD_SETTINGS->setSequencerMidiNote(newVal, row);
+                                
+                                //update the GUI (only need to do this a single time)
+                                if (padIndex == 0)
+                                {
+                                    setKeyDisplay (newVal, true);
+                                    selectedKeys.addIfNotAlreadyThere(newVal);
+                                }
                             }
                                 
                         }
@@ -234,13 +241,14 @@ void GuiPiano::buttonClicked(Button *button)
                 
                 break;
             }
-            
+            //=========================================================================
             //=========================================================================
             //cmd-click to select mutiple notes for midi pads or custom scale for sequencer pads
             else if (modifier.isCommandDown() == true)
             {
                 //don't intially clear the keys
                 
+                //=========================================================================
                 //if the number of selected keys is less than the number of selected pads
                 if (selectedKeys.size() < selectedPads.size())
                 {
@@ -268,23 +276,40 @@ void GuiPiano::buttonClicked(Button *button)
                     }
                      
                 }
-                
+        
+                //=========================================================================
                 for (int padIndex = 0; padIndex < selectedPads.size(); padIndex++)
                 {
                     int padNum = selectedPads[padIndex];
                     
                     if (PAD_SETTINGS->getMode() == 3) //Sequencer Mode
                     {
-                        //currently, if the user cmd-clicks a key for the first time
-                        //(when recentlyUpdated == true) it will clear the piano
-                        //and allow the user to select 12 individual different keys,
-                        //each time applying the selected set of keys to the sequencer
-                        //rows. if the user doesn't selected all 12, and the does a normal
-                        //click will will change the root note, what should the unselected
-                        //note be? The previously set note of that row? 0? another default value?
-                        // if it it the prev note... should cmd-click delete/replace each note
-                        //of the row 1 at a time rather than clearing everything? OR will
-                        //that get confusing?
+                        /*
+                         
+                         Cmd-click is used to select a custom scale/set of notes for a the sequence grid of a sequencer pad.
+                         The selected keys/notes will be applied in order of their value to the sequencer rows.
+                         If less than 12 notes are selected, the top 'unselected' rows will note have any notes on them.
+                         
+                         This is the current way that the app handles command-clicks on the piano in seq mode:
+                         
+                         When the user cmd-clicks a key for the first time (when recentlyUpdated == true) it will clear the piano
+                         and allow the user to select 12 individual different keys for each row if the sequence.
+                         Each time a key is selected it applies all the selected keys to the sequence rows.
+                         If the number of selected keys is less than the number of rows (12), each row which
+                         doesn't currently have a key selected for it is set to an 'off' value of -500.
+                         I've chosen 500 as no degree of transposing a note set to -500 could be transposed to 
+                         be positive by regualar clicking the piano).
+                         The app will view any minus midi note number as 'off', whether its to display the note on the piano
+                         or play the note as a midi message.
+                         
+                         This method seems to make more sense over the other possible methods:
+                         1. any 'unchosen' note is set to a default note such as 0 or 60. This is flawed as when transposing
+                         the selection it will transpose the default note which might not make sense, plus when
+                         ordering the selected keys the default note could be layed out somewhere in the middle of the
+                         selected notes, which doesn't make sense as any unselected notes should be set to the top of the grid.
+                         2. any 'unchosen' note is kept the same as the previous note. This also flawed because of the 
+                         second reason in the point above.
+                         */
                         
                         
                         if (recentlyUpdated == true)
@@ -309,30 +334,25 @@ void GuiPiano::buttonClicked(Button *button)
                                 selectedKeys.addIfNotAlreadyThere(i);
                             }
                             
+                            
                             for (int row = 0; row < 12; row++)
                             {
                                 
                                 int note = selectedKeys[row];
                                 
                                 if (row > selectedKeys.size()-1)
-                                    note = 0; //default note
+                                    note = -500; //'off' note
                                 
                                 PAD_SETTINGS->setSequencerMidiNote(note, row);
-                                std::cout << "row " << row << " set to note : " << note << std::endl;
+                                //std::cout << "row " << row << " set to note : " << note << std::endl;
                             }
-                            
-                            
-                            
                         }
                     }
-                    
                 }
-               
-                
             }
                 
-                break;
-
+            break;
+            //=========================================================================
             //=========================================================================
         }
 	}

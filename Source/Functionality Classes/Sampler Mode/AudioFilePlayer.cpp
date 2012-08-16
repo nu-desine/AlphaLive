@@ -128,16 +128,16 @@ void AudioFilePlayer::processAudioFile(int padValue)
             case 2:
                 triggerModeData = triggerModes.toggle(padValue);
                 break;
+            //case 3:
+                //triggerModeData = triggerModes.toggleRelease(padValue);
+                //break;
             case 3:
-                triggerModeData = triggerModes.toggleRelease(padValue);
-                break;
-            case 4:
                 triggerModeData = triggerModes.latch(padValue);
                 break;
-            case 5:
-                triggerModeData = triggerModes.latchMax(padValue);
-                break;
-            case 6:
+            //case 5:
+             //   triggerModeData = triggerModes.latchMax(padValue);
+             //   break;
+            case 4:
                 triggerModeData = triggerModes.trigger(padValue);
                 break;
             default:

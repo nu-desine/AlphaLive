@@ -54,8 +54,8 @@ PadSettings::PadSettings(int arrayIndex)
     midiChannel = 1;
     midiMinPressureRange = 0;
     midiMaxPressureRange = 127;
-    midiPressureMode = 0;
-    midiTriggerMode = 0;
+    midiPressureMode = 1;
+    midiTriggerMode = 1;
     midiIndestructible = 0;
     midiSticky = 0;
     midiPressureStatus = true;
@@ -65,7 +65,7 @@ PadSettings::PadSettings(int arrayIndex)
     
     //sampler mode
     samplerAudioFilePath = String::empty;
-    samplerTriggerMode = 1; 
+    samplerTriggerMode = 2; 
     samplerShouldLoop = 1;
     samplerIndestructible = 0;
     samplerShouldFinishLoop = 0;
@@ -269,7 +269,7 @@ void PadSettings::resetData (int whatToReset)
         setMidiMinPressureRange(0);
         setMidiMaxPressureRange(127);
         setMidiPressureMode(0);
-        setMidiTriggerMode(0);
+        setMidiTriggerMode(1);
         setMidiIndestructible(0);
         setMidiSticky(0);
         setMidiPressureStatus (true);
@@ -280,7 +280,7 @@ void PadSettings::resetData (int whatToReset)
     if (whatToReset != 2)
     {
         setSamplerAudioFilePath (File::nonexistent);
-        setSamplerTriggerMode (1);
+        setSamplerTriggerMode (2);
         setSamplerShouldLoop(1);
         setSamplerIndestructible(0);
         setSamplerShouldFinishLoop(0);

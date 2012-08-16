@@ -91,16 +91,16 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
         case 2:
             triggerModeData[padNumber] = triggerModes[padNumber].toggle(padValue);
             break;
+        //case 3:
+            //triggerModeData[padNumber] = triggerModes[padNumber].toggleRelease(padValue);
+            //break;
         case 3:
-            triggerModeData[padNumber] = triggerModes[padNumber].toggleRelease(padValue);
-            break;
-        case 4:
             triggerModeData[padNumber] = triggerModes[padNumber].latch(padValue);
             break;
-        case 5:
-            triggerModeData[padNumber] = triggerModes[padNumber].latchMax(padValue);
-            break;
-        case 6:
+        //case 5:
+           // triggerModeData[padNumber] = triggerModes[padNumber].latchMax(padValue);
+           // break;
+        case 4:
             triggerModeData[padNumber] = triggerModes[padNumber].trigger(padValue);
             break;
         default:
@@ -329,27 +329,27 @@ void ModeMidi::sendPressureData (int padNumber)
                 message = MidiMessage::aftertouchChange(channel[padNumber], note[padNumber], pressureValueScaled);
                 break;
                 
-            case 2: //CC messages
+            case 4: //CC messages
                 message = MidiMessage::controllerEvent(channel[padNumber], controllerNumber[padNumber], pressureValueScaled);
                 break;
                 
-            case 3: //channel aftertouch
+            case 2: //channel aftertouch
                 message = MidiMessage::channelPressureChange(channel[padNumber], pressureValueScaled);
                 break;
                 
-            case 4: //pitch bend up
+            case 5: //pitch bend up
                 //convert 0-127 to 8191-16383
                 pressureValueScaled = 8192 + (pressureValueScaled * (8191.0/127.0));
                 message = MidiMessage::pitchWheel(channel[padNumber], pressureValueScaled);
                 break;
                 
-            case 5: //pitch bend down
+            case 6: //pitch bend down
                 //convert 0-127 to 8191-0
                 pressureValueScaled = 8192 - (pressureValueScaled * (8191.0/127.0));
                 message = MidiMessage::pitchWheel(channel[padNumber], pressureValueScaled);
                 break;
                 
-            case 6: // mod wheel
+            case 3: // mod wheel
                 message = MidiMessage::controllerEvent(channel[padNumber], 1, pressureValueScaled);
                 break;
                 

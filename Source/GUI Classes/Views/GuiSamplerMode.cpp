@@ -441,7 +441,7 @@ void GuiSamplerMode::buttonClicked (Button* button)
             for (int i = 0; i < selectedPads.size(); i++)
             {
                 int padNum = selectedPads[i];
-                PAD_SETTINGS->setSamplerTriggerMode(trig);
+                PAD_SETTINGS->setSamplerTriggerMode(trig+1);
             }
             
             break;
@@ -530,7 +530,7 @@ void GuiSamplerMode::updateDisplay()
         //gainSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerGain(), false);
         //panSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerPan(), false);
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
-        triggerModeButtons[PAD_SETTINGS->getSamplerTriggerMode()]->setToggleState(true, false);
+        triggerModeButtons[PAD_SETTINGS->getSamplerTriggerMode()-1]->setToggleState(true, false);
         loopButton->setToggleState(PAD_SETTINGS->getSamplerShouldLoop(), false);
         indestructibleButton->setToggleState(PAD_SETTINGS->getSamplerIndestructible(), false);
         finishLoopButton->setToggleState(PAD_SETTINGS->getSamplerShouldFinishLoop(), false);

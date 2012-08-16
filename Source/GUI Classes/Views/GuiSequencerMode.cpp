@@ -268,22 +268,22 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	for (int i = 0; i < 6; i++)
     {
         if (i == 0)
-            midiPressureModeButtons.insert(i, new SettingsButton("PAT", (270 * (M_PI / 180)), 
+            midiPressureModeButtons.insert(i, new SettingsButton("CAT", (270 * (M_PI / 180)), 
                                                              (315 * (M_PI / 180)), 0.4f, -90, 0.45, 0.7));
         if (i == 1)
-            midiPressureModeButtons.insert(i, new SettingsButton("CAT", (315 * (M_PI / 180)),
+            midiPressureModeButtons.insert(i, new SettingsButton("M.Wh", (315 * (M_PI / 180)),
                                                              (2 * M_PI) , 0.4f, -90, 0.45, 0.7));
         if (i == 2)
-            midiPressureModeButtons.insert(i, new SettingsButton("M.Wh", 0.0f, (45 * (M_PI / 180)), 
+            midiPressureModeButtons.insert(i, new SettingsButton("CC", 0.0f, (45 * (M_PI / 180)), 
                                                              0.4f, 90, 0.55, 0.5));
         if (i == 3)
-            midiPressureModeButtons.insert(i, new SettingsButton("CC", (45 * (M_PI / 180)), (90 * (M_PI / 180)), 
+            midiPressureModeButtons.insert(i, new SettingsButton("PB UP", (45 * (M_PI / 180)), (90 * (M_PI / 180)), 
                                                              0.4f, 90, 0.55, 0.5));
         if (i == 4)
-            midiPressureModeButtons.insert(i, new SettingsButton("PB UP", (225 * (M_PI / 180)), 
+            midiPressureModeButtons.insert(i, new SettingsButton("PB DOWN", (225 * (M_PI / 180)), 
                                                              (270 * (M_PI / 180)),0.4f, -90, 0.45, 0.7));
         if (i == 5)
-            midiPressureModeButtons.insert(i, new SettingsButton("PB DOWN", (180 * (M_PI / 180)),
+            midiPressureModeButtons.insert(i, new SettingsButton("REMOVE ME!", (180 * (M_PI / 180)),
                                                              (225 * (M_PI/ 180)) , 0.4f, -90, 0.45, 0.7));
         
         midiPressureModeButtons[i]->addListener(this);
@@ -969,7 +969,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
             stickyButton->setVisible(true);
             linkButton->setVisible(true);
             
-            if(midiPressureModeButtons[3]->getToggleStateValue()==true)
+            if(midiPressureModeButtons[2]->getToggleStateValue()==true)
                 ccControllerSlider->setVisible(true);
             else
                 ccControllerSlider->setVisible(false);
@@ -1164,7 +1164,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
             for (int i = 0; i < selectedPads.size(); i++)
             {
                 int padNum = selectedPads[i];
-                PAD_SETTINGS->setSequencerTriggerMode(trig);
+                PAD_SETTINGS->setSequencerTriggerMode(trig+1);
             }
             
             break;
@@ -1179,10 +1179,10 @@ void GuiSequencerMode::buttonClicked (Button* button)
             for (int i = 0; i < selectedPads.size(); i++)
             {
                 int padNum = selectedPads[i];
-                PAD_SETTINGS->setSequencerMidiPressureMode(pres);
+                PAD_SETTINGS->setSequencerMidiPressureMode(pres+1);
             }
             
-            if (pres == 3)
+            if (pres == 2)
                 ccControllerSlider->setVisible(true);
             else
                 ccControllerSlider->setVisible(false);
@@ -1311,7 +1311,7 @@ void GuiSequencerMode::setDisplay (int settingsType)
             for (int i = 0; i < 6; i++)
                 midiPressureModeButtons[i]->setVisible(true);
             
-            if(midiPressureModeButtons[3]->getToggleStateValue()==true)
+            if(midiPressureModeButtons[2]->getToggleStateValue()==true)
                 ccControllerSlider->setVisible(true);
             else
                 ccControllerSlider->setVisible(false);
@@ -1465,8 +1465,8 @@ void GuiSequencerMode::updateDisplay()
         setNoteLengthSliderRange(sequenceLength);
         audioGainSlider->setValue(PAD_SETTINGS->getSequencerGain(), false);
         audioPanSlider->setValue(PAD_SETTINGS->getSequencerPan(), false);
-        triggerModeButtons[PAD_SETTINGS->getSequencerTriggerMode()]->setToggleState(true, false);
-        midiPressureModeButtons[PAD_SETTINGS->getSequencerMidiPressureMode()]->setToggleState(true, false);
+        triggerModeButtons[PAD_SETTINGS->getSequencerTriggerMode()-1]->setToggleState(true, false);
+        midiPressureModeButtons[PAD_SETTINGS->getSequencerMidiPressureMode()-1]->setToggleState(true, false);
         midiChannelButtons[PAD_SETTINGS->getSequencerMidiChannel()-1]->setToggleState(true, false);
         ccControllerSlider->setComponentValue(PAD_SETTINGS->getSequencerMidiCcController());
         loopButton->setToggleState(PAD_SETTINGS->getSequencerShouldLoop(), false);
@@ -1497,9 +1497,9 @@ void GuiSequencerMode::updateDisplay()
         setNoteLengthSliderRange(32);
         audioGainSlider->setValue(2.0, false);
         audioPanSlider->setValue(0.5, false);
-        triggerModeButtons[2]->setToggleState(true, false);
-        midiPressureModeButtons[1]->setToggleState(true, false);
-        midiChannelButtons[1]->setToggleState(true, false);
+        triggerModeButtons[1]->setToggleState(true, false);
+        midiPressureModeButtons[0]->setToggleState(true, false);
+        midiChannelButtons[0]->setToggleState(true, false);
         ccControllerSlider->setComponentValue(13);
         loopButton->setToggleState(true, false);
         indestructibleButton->setToggleState(false, false);

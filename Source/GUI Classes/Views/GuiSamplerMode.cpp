@@ -373,6 +373,14 @@ void GuiSamplerMode::buttonClicked (Button* button)
 	else if(button == pressureSettingsButton)
         setDisplay(2);
     
+    else if(button == quantiseButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setQuantizeMode(button->getToggleState());
+        }
+    }
     
     else if (button == loopButton)
     {
@@ -446,7 +454,7 @@ void GuiSamplerMode::buttonClicked (Button* button)
             for (int i = 0; i < selectedPads.size(); i++)
             {
                 int padNum = selectedPads[i];
-                PAD_SETTINGS->setSamplerTriggerMode(trig);
+                PAD_SETTINGS->setSamplerTriggerMode(trig+1);
             }
             
             break;
@@ -534,7 +542,8 @@ void GuiSamplerMode::updateDisplay()
 		
         //gainSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerGain(), false);
         //panSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerPan(), false);
-        triggerModeButtons[PAD_SETTINGS->getSamplerTriggerMode()]->setToggleState(true, false);
+        quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
+        triggerModeButtons[PAD_SETTINGS->getSamplerTriggerMode()-1]->setToggleState(true, false);
         loopButton->setToggleState(PAD_SETTINGS->getSamplerShouldLoop(), false);
         indestructibleButton->setToggleState(PAD_SETTINGS->getSamplerIndestructible(), false);
         finishLoopButton->setToggleState(PAD_SETTINGS->getSamplerShouldFinishLoop(), false);
@@ -554,6 +563,7 @@ void GuiSamplerMode::updateDisplay()
         waveform->setFile (File::nonexistent);
         //gainSlider->sliderComponent()->setValue(0.7, false);
         //panSlider->sliderComponent()->setValue(0.5, false);
+        quantiseButton->setToggleState(false, false);
         triggerModeButtons[0]->setToggleState(true, false); //ideally nothing should be selected here
         loopButton->setToggleState(1, false);
         indestructibleButton->setToggleState(0, false);

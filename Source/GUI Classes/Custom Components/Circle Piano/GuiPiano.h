@@ -20,6 +20,9 @@
  //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+
+
 #ifndef GUIPIANO_H
 #define GUIPIANO_H
 
@@ -75,6 +78,7 @@ private:
     
 	float keyWidth, keySegWhite, keyGapWhite, keySegBlack, keyGapBlack, segStartWhite, segStartBlack, segEndWhite, segEndBlack;
     
+    bool recentlyUpdated;
 };
 
 

@@ -76,19 +76,17 @@ public:
     void mouseExit (const MouseEvent &e);
     
     //==============================================================================
-    void setCurrentSequenceNumber();
-    
     void setCurrentlySelectedPad (Array<int> selectedPads_);
-    void updateDisplay();
     
+    void setNoteLengthSliderRange (int maxValue);
+    
+    void updateDisplay();
     void hideComponents();
     void setDisplay (int settingsType); // 1 = trigger settings, 2 = pressure settings, 3 = sequence settings
     void setRotaryControlDisplay();
     
-    void setToMidiMode();
-    void setToSamplesMode();
-    
     void setParameterLabelText (String value);
+    void setCurrentSequenceNumber();
     
     
 private:
@@ -99,21 +97,13 @@ private:
     AppDocumentState &appDocumentStateRef;
     
     int controlDisplayId; //used to set which rotary dial is display in the centre
-    
-    //GuiSeqMidiMode *midiMode;
-    //GuiSeqSamplesMode *samplesMode;
-    SequencerGrid *sequencerGrid;
-    
-    //TextButton *clearButton, *clearAllButton, *saveSeqButton, *saveSeqSetButton, *loadSeqButton, *loadSeqSetButton;
-    
-    //AlphaSlider *currentSequenceNumberSlider, *sequenceLengthSlider; //*numberOfSequencesSlider;
-    //ComboBox *triggerModeMenu, *relativeTempoMenu;
-    //Label *velocityLabel;
-    Label *parameterLabel, *currentParameterLabel;
-    
     int sequenceLength; //this is controlled by the plus/minus buttons when in viewing sequencer settings
-    int currentSequenceNumber;
+    int currentSequenceNumber; //this is controlled by the plus/minus buttons on the side
     
+    SequencerGrid *sequencerGrid;
+    GuiFxDial *fxDial;
+    GuiCircleBackground *notSelected;
+   
     ModeButton *triggerSettingsButton, *pressureSettingsButton, *sequenceSettingsButton, *quantiseButton;
     AlphaTextButton *nextSequenceButton, *previousSequenceButton;
     ModeButton *loopButton, *indestructibleButton, *finishLoopButton, *stickyButton, *linkButton;
@@ -127,26 +117,23 @@ private:
     
     GuiFxDial *fxDial;
     
-    /*
-    ModeButton *modeMidiButton, *modeSamplesButton;
-    ModeButton *sequencerGridToggleButton;
-    GuiPopUpWindow *popUpWindow;
-     */
+ 
     
+	OwnedArray<AlphaTextButton> midiChannelButtons;
+	OwnedArray<AlphaTextButton> audioRowButtons;
+	
     OwnedArray<SettingsButtonImage> triggerModeButtons;
     OwnedArray<SettingsButton> midiPressureModeButtons;
-    OwnedArray<AlphaTextButton> channelButtons;
-	OwnedArray<AlphaTextButton> audioRowButtons;
-    
-    GuiSwitch *pressureStatusButton;
-    
     SettingsButton *plusButton, *minusButton;
-	DrawableButton *previewButton;
-	
-	AlphaSlider *ccControllerSlider;
-	//Label *sequenceLength;
-	AlphaPopUpButton *popUpButton;
+    GuiSwitch *pressureStatusButton;
+    AlphaPopUpButton *popUpButton;
+    DrawableButton *previewButton;
+
+    AlphaRotarySlider *numberOfSequencesSlider, *relativeTempoSlider, *noteLengthSlider, *audioGainSlider, *audioPanSlider;
+    AlphaSlider *ccControllerSlider, *midiPressureMinRangeSlider, *midiPressureMaxRangeSlider;
     
+    Label *parameterLabel, *currentParameterLabel;
+     
 };
 
 #endif

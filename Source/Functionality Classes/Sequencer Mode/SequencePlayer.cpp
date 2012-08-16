@@ -162,22 +162,22 @@ void SequencePlayer::processSequence(int padValue)
         case 2:
             triggerModeData = triggerModes.toggle(padValue);
             break;
+        //case 3:
+            //triggerModeData = triggerModes.toggleRelease(padValue);
+            //break;
         case 3:
-            triggerModeData = triggerModes.toggleRelease(padValue);
-            break;
-        case 4:
             triggerModeData = triggerModes.latch(padValue);
             break;
-        case 5:
-            triggerModeData = triggerModes.latchMax(padValue);
-            break;
-        case 6:
+        //case 5:
+           // triggerModeData = triggerModes.latchMax(padValue);
+           // break;
+        case 4:
             triggerModeData = triggerModes.trigger(padValue);
             break;
-        case 7:
+        case 5:
             triggerModeData = triggerModes.cycle(padValue);
             break;
-        case 8:
+        case 6:
             triggerModeData = triggerModes.autoCycle(padValue);
             break;
         default:
@@ -195,7 +195,7 @@ void SequencePlayer::processSequence(int padValue)
             //...and triggerModeData signifies to stop audio, DON'T LET IT...MWAHAHAHA! 
             triggerModeData.playingStatus = 2; //ignore
         }
-        else if (triggerModeData.playingStatus == 1 && currentPlayingState == 1 && triggerMode != 6)
+        else if (triggerModeData.playingStatus == 1 && currentPlayingState == 1 && triggerMode != /*6*/4)
         {
             //...and triggerModeData signifies to start playing, 
             //but file is already playing and triggerMode does not equal 'trigger'
@@ -540,7 +540,7 @@ void SequencePlayer::run()
             {
                 //look for note-off messages before note-on messages,
                 //as otherwise if you set the note length to be max length,
-                //the note will be turned off straight away duw to how note length
+                //the note will be turned off straight away due to how note length
                 //is implemented below
                 
                 //check for any midi notes that need to be turned off
@@ -604,7 +604,7 @@ void SequencePlayer::run()
         
         
         //for autocycle trigger Mode
-        if (triggerMode == 8)
+        if (triggerMode == /*8*/ 6)
         {
             
             if (columnNumber == sequenceLength && playingLastLoop == true)
@@ -639,7 +639,7 @@ void SequencePlayer::run()
         //restart the counter so that the sequence loops
         //otherwise the while loop will exit and the thread will stop on it's own
         if ((columnNumber == sequenceLength && shouldLoop == true) || 
-            (columnNumber == sequenceLength && triggerMode == 7 && playingLastLoop == false))
+            (columnNumber == sequenceLength && triggerMode == /*7*/ 5 && playingLastLoop == false))
             columnNumber = 0;
         
         
@@ -745,14 +745,20 @@ void SequencePlayer::stopThreadAndReset()
 //called every time a midi message needs triggering
 void SequencePlayer::triggerMidiMessage(int rowNumber, int velocity)
 {
-    MidiMessage message = MidiMessage::noteOn(midiChannel, midiNote[rowNumber], (uint8)velocity);
-    sendMidiMessage(message);
+    if (midiNote[rowNumber] >= 0)
+    {
+        MidiMessage message = MidiMessage::noteOn(midiChannel, midiNote[rowNumber], (uint8)velocity);
+        sendMidiMessage(message);
+    }
 }
 
 void SequencePlayer::triggerMidiNoteOffMessage (int rowNumber)
 {
-    MidiMessage message = MidiMessage::noteOff(midiChannel, midiNote[rowNumber]);
-    sendMidiMessage(message);
+    if (midiNote[rowNumber] >= 0)
+    {
+        MidiMessage message = MidiMessage::noteOff(midiChannel, midiNote[rowNumber]);
+        sendMidiMessage(message);
+    }
 }
 
 void SequencePlayer::sendMidiPressureData()
@@ -775,10 +781,10 @@ void SequencePlayer::sendMidiPressureData()
             case 1: //channel aftertouch
                 message = MidiMessage::channelPressureChange(midiChannel, pressureValueScaled);
                 break;
-            case 2: //CC messages
+            case 3: //CC messages
                 message = MidiMessage::controllerEvent(midiChannel, midiControllerNumber, pressureValueScaled);
                 break;
-            case 3: // mod wheel
+            case 2: // mod wheel
                 message = MidiMessage::controllerEvent(midiChannel, 1, pressureValueScaled);
                 break;
             case 4: //pitch bend up

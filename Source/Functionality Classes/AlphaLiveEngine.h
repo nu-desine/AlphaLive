@@ -79,7 +79,7 @@
 #include "Sequencer Mode/ModeSequencer.h"
 #include "Controller Mode/ModeController.h"
 #include "../Application/AbstractSubjectAndObserver.h"
-#include "OscOutput.h"
+#include "../My IO Classes/OscOutput.h"
 #include "GlobalClock.h"
 #include "../Audio Processing/PanControl.h"
 

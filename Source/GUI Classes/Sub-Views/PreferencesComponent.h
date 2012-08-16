@@ -24,7 +24,7 @@
 #define H_PREFERENCESCOMPONENT
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
-#include "AlphaAudioSettingsComponent.h"
+#include "../Custom Components/General/AlphaAudioSettingsComponent.h"
 #include "../../Functionality Classes/AlphaLiveEngine.h"
 #include "../../File and Settings/StoredSettings.h"
 

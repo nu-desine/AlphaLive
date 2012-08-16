@@ -22,7 +22,7 @@
 
 #include "GuiSamplerMode.h"
 #include "../../File and Settings/AppSettings.h"
-#include "../Binary Data/ImageSliderBinaryData.h"
+#include "../Binary Data/BinaryDataNew.h"
 #include "GlobalValues.h"
 #include "MainComponent.h"
 
@@ -41,7 +41,8 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     
     //----------------quantise button-------------------
 	
-	addAndMakeVisible(quantiseButton = new AlphaTextButton("Q"));
+	Image *quantiseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::quantiseicon_png, BinaryDataNew::quantiseicon_pngSize));
+	addAndMakeVisible(quantiseButton = new ModeButton(quantiseIcon));
 	quantiseButton->setClickingTogglesState(true);
 	quantiseButton->setToggleState(false, false);	
 	quantiseButton->addListener(this);
@@ -51,7 +52,8 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	
 	//----------------trigger settings button-------------------
 	
-	addAndMakeVisible(triggerSettingsButton = new AlphaTextButton("TRIGGER"));
+	Image *triggerSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::triggersettingsicon_png, BinaryDataNew::triggersettingsicon_pngSize));
+	addAndMakeVisible(triggerSettingsButton = new ModeButton(triggerSettingsImage));
 	triggerSettingsButton->setRadioGroupId (1234);
 	triggerSettingsButton->setClickingTogglesState(true);
 	triggerSettingsButton->setToggleState(false, false);	
@@ -62,7 +64,8 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	
 	//----------------pressure settings button-------------------
 	
-	addAndMakeVisible(pressureSettingsButton = new AlphaTextButton("PRESSURE"));
+	Image *pressureSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::pressuresettingsicon_png, BinaryDataNew::pressuresettingsicon_pngSize));
+	addAndMakeVisible(pressureSettingsButton = new ModeButton(pressureSettingsImage));
 	pressureSettingsButton->setRadioGroupId (1234);
 	pressureSettingsButton->setClickingTogglesState(true);
 	pressureSettingsButton->setToggleState(false, false);	
@@ -117,21 +120,27 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
      */
     
     //----------------------Trigger mode buttons------------------
+    Image *standardIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::standardicon_png, BinaryDataNew::standardicon_pngSize));
+	Image *toggleIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::toggleicon_png, BinaryDataNew::toggleicon_pngSize));
+	Image *latchIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::latchicon_png, BinaryDataNew::latchicon_pngSize));
+	Image *triggerIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::triggericon_png, BinaryDataNew::triggericon_pngSize));
+	
     for (int i = 0; i < 4; i++)
     {
         if (i == 0)
-            triggerModeButtons.insert(i, new SettingsButton("STANDARD", (270 * (M_PI / 180)), 
-                                                            (315 * (M_PI / 180)),
-                                                            0.4f, -90, 0.45, 0.75));
+			triggerModeButtons.insert(i, new SettingsButtonImage(standardIcon, (270 * (M_PI / 180)), 
+																 (315 * (M_PI / 180)),
+																 0.4f, 0.7f));
         else if (i == 1)
-            triggerModeButtons.insert(i, new SettingsButton("TOGGLE", (315 * (M_PI / 180)),
-                                                            (2 * M_PI) , 0.4f, -90, 0.45, 0.68));
+            triggerModeButtons.insert(i, new SettingsButtonImage(toggleIcon, (315 * (M_PI / 180)),
+																 (2 * M_PI) , 0.4f, 0.7f));
         else if (i == 2)
-            triggerModeButtons.insert(i, new SettingsButton("LATCH", 0.0f, (45 * (M_PI / 180)), 
-                                                            0.4f, 90, 0.55, 0.3));
+            triggerModeButtons.insert(i, new SettingsButtonImage(latchIcon, 0.0f, (45 * (M_PI / 180)), 
+																 0.4f, 0.7f));
         else if (i == 3)
-            triggerModeButtons.insert(i, new SettingsButton("TRIGGER", (45 * (M_PI / 180)), 
-                                                            (90 * (M_PI / 180)), 0.4f, 90, 0.55, 0.25));
+            triggerModeButtons.insert(i, new SettingsButtonImage(triggerIcon, (45 * (M_PI / 180)), 
+																 (90 * (M_PI / 180)), 0.4f, 0.7f));
+		
         
         triggerModeButtons[i]->addListener(this);
         triggerModeButtons[i]->setOpaque(false);
@@ -142,19 +151,22 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     
     triggerModeButtons[1]->setToggleState(true, false);
     
-    addAndMakeVisible(loopButton = new AlphaTextButton("Loop"));
+	Image *loopIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::loopicon_png, BinaryDataNew::loopicon_pngSize));
+    addAndMakeVisible(loopButton =new ModeButton(loopIcon));
     loopButton->addListener(this);
     loopButton->addMouseListener(this, true);
     loopButton->setClickingTogglesState(true);
     loopButton->setToggleState(1, false);
     
-    addAndMakeVisible(indestructibleButton = new AlphaTextButton("indestruct"));
+    Image *destructIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::indestructableicon_png, BinaryDataNew::indestructableicon_pngSize));
+	addChildComponent(indestructibleButton = new ModeButton(destructIcon));
     indestructibleButton->addListener(this);
     indestructibleButton->addMouseListener(this, true);
     indestructibleButton->setClickingTogglesState(true);
     indestructibleButton->setToggleState(0, false);
     
-    addAndMakeVisible(finishLoopButton = new AlphaTextButton("Finish"));
+	Image *finishIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::finishicon_png, BinaryDataNew::finishicon_pngSize));
+    addAndMakeVisible(finishLoopButton =new ModeButton(finishIcon));
     finishLoopButton->addListener(this);
     finishLoopButton->addMouseListener(this, true);
     finishLoopButton->setClickingTogglesState(true);
@@ -164,7 +176,8 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	fxDial->setInterceptsMouseClicks(false, true);
     fxDial->addMouseListener(this, false);
     
-    addChildComponent(stickyButton = new AlphaTextButton("Sticky"));
+	Image *stickyIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::stickyicon_png, BinaryDataNew::stickyicon_pngSize));
+    addChildComponent(stickyButton = new ModeButton(stickyIcon));
     stickyButton->addListener(this);
     stickyButton->addMouseListener(this, true);
     stickyButton->setClickingTogglesState(true);

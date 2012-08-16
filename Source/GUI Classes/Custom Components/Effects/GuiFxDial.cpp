@@ -1,14 +1,27 @@
 /*
  *  GuiFxDial.cpp
- *  sdaJuce
- *
- *  Created by Sam Davies on 19/10/2011.
- *  Copyright 2011 __MyCompanyName__.
- *
+ //  AlphaLive
+ //
+ //  Created by Liam Meredith-Lacey on 22/12/2011.
+ //  Copyright 2011 nu desine.
+ //
+ //  This file is part of AlphaLive.
+ //
+ //  AlphaLive is free software: you can redistribute it and/or modify
+ //  it under the terms of the GNU General Public License, version 2, 
+ //  as published by the Free Software Foundation.
+ //  
+ //  AlphaLive is distributed in the hope that it will be useful,
+ //  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ //  GNU General Public License for more details.
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "GuiFxDial.h"
-#include "../../Binary Data/PressureBinaryData.h"
+#include "../../Binary Data/BinaryDataNew.h"
 #include "../../../File and Settings/AppSettings.h"
 #include "../../Views/MainComponent.h"
 
@@ -34,28 +47,39 @@ GuiFxDial::GuiFxDial(MainComponent &ref) :  Component ("GuiFxDial"),
     
     
     //----------------------FX buttons------------------
+	Image *gainIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::gainicon_png, BinaryDataNew::gainicon_pngSize));
+	Image *lpfIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::lpficon_png, BinaryDataNew::lpficon_pngSize));
+	Image *hpfIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::hpficon_png, BinaryDataNew::hpficon_pngSize));
+	Image *bpfIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::bpficon_png, BinaryDataNew::bpficon_pngSize));
+	Image *driveIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::offsymbol_png, BinaryDataNew::offsymbol_pngSize));
+	Image *crushIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::offsymbol_png, BinaryDataNew::offsymbol_pngSize));
+	Image *delayIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::delayicon_png, BinaryDataNew::delayicon_pngSize));
+	Image *reverbIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::reverbicon_png, BinaryDataNew::reverbicon_pngSize));
+	Image *flangerIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::flangericon_png, BinaryDataNew::flangericon_pngSize));
+	Image *tremoloIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::tremoloicon_png, BinaryDataNew::tremoloicon_pngSize));
+		
     for (int i = 0; i < 10; i++)
     {
         if (i == 0)
-            fxButtons.insert(i, new SettingsButton(translate("GAIN"), (27 * (M_PI / 180)), (54 * (M_PI / 180)), 0.75f, -5, 0.3, 0.3));
+            fxButtons.insert(i, new SettingsButtonImage(gainIcon, (27 * (M_PI / 180)), (54 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 1)
-            fxButtons.insert(i, new SettingsButton(translate("LPF"), (54 * (M_PI / 180)), (81 * (M_PI / 180)), 0.75f, -5, 0.38, 0.3));
+            fxButtons.insert(i, new SettingsButtonImage(lpfIcon, (54 * (M_PI / 180)), (81 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 2)
-            fxButtons.insert(i, new SettingsButton(translate("HPF"), (81 * (M_PI / 180)), (108 * (M_PI / 180)), 0.75f, -5, 0.35, 0.3));
+            fxButtons.insert(i, new SettingsButtonImage(hpfIcon, (81 * (M_PI / 180)), (108 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 3)
-            fxButtons.insert(i, new SettingsButton(translate("BPF"), (108 * (M_PI / 180)), (135 * (M_PI / 180)), 0.75f, 185, 0.6, 0.37));
+            fxButtons.insert(i, new SettingsButtonImage(bpfIcon, (108 * (M_PI / 180)), (135 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 4)
-            fxButtons.insert(i, new SettingsButton(translate("DRIVE"), (135 * (M_PI / 180)), (162 * (M_PI / 180)), 0.75f, 185, 0.7, 0.37));
+            fxButtons.insert(i, new SettingsButtonImage(driveIcon, (135 * (M_PI / 180)), (162 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 5)
-            fxButtons.insert(i, new SettingsButton(translate("CRUSH"), (162 * (M_PI / 180)), (189 * (M_PI / 180)), 0.75f,  185, 0.73, 0.37));
+            fxButtons.insert(i, new SettingsButtonImage(crushIcon, (162 * (M_PI / 180)), (189 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 6)
-            fxButtons.insert(i, new SettingsButton(translate("DELAY"), (189 * (M_PI / 180)), (216 * (M_PI / 180)), 0.75f, 185, 0.7, 0.37));
+            fxButtons.insert(i, new SettingsButtonImage(delayIcon, (189 * (M_PI / 180)), (216 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 7)
-            fxButtons.insert(i, new SettingsButton(translate("REVERB"), (216 * (M_PI / 180)), (243 * (M_PI / 180)), 0.75f, 188, 0.75, 0.37));
+            fxButtons.insert(i, new SettingsButtonImage(reverbIcon, (216 * (M_PI / 180)), (243 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 8)
-            fxButtons.insert(i, new SettingsButton(translate("FLANGER"), (243 * (M_PI / 180)), (270 * (M_PI / 180)), 0.75f, 188, 0.75, 0.37));
+            fxButtons.insert(i, new SettingsButtonImage(flangerIcon, (243 * (M_PI / 180)), (270 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 9)
-            fxButtons.insert(i, new SettingsButton(translate("TREMOLO"), (270 * (M_PI / 180)), (297 * (M_PI / 180)), 0.75f, 190, 0.85, 0.37));
+            fxButtons.insert(i, new SettingsButtonImage(tremoloIcon, (270 * (M_PI / 180)), (297 * (M_PI / 180)), 0.75f, 1.0f));
         
         fxButtons[i]->addListener(this);
         fxButtons[i]->setOpaque(false);

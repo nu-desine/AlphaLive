@@ -26,6 +26,7 @@
 #include "FxGuiTremolo.h"
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
+#include "../../../Binary Data/BinaryDataNew.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
@@ -97,7 +98,8 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     alphaTouchMenu->addItem("Wave Shape", 4);
     alphaTouchMenu->setSelectedId(1, true);
     
-    addAndMakeVisible(reverseButton = new AlphaTextButton("INVERT"));
+    Image *reverseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::inverticon_png, BinaryDataNew::inverticon_pngSize));
+    addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);
     reverseButton->addMouseListener(this, true);

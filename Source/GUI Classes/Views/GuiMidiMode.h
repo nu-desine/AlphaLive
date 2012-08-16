@@ -35,6 +35,8 @@
 #include "../Custom Components/General/AlphaImageKnob.h"
 #include "../Custom Components/General/AlphaTextButton.h"
 #include "../Custom Components/General/SettingsButton.h"
+#include "../Custom Components/General/ModeButton.h"
+#include "../Custom Components/General/SettingsButtonImage.h"
 
 class MainComponent;
 
@@ -74,15 +76,15 @@ private:
     MainComponent &mainComponentRef;
     
 	//GUI Components
-    AlphaTextButton *triggerSettingsButton, *pressureSettingsButton, *quantiseButton; //should the quantize button be global now? think so :)
+    ModeButton *triggerSettingsButton, *pressureSettingsButton, *quantiseButton; //should the quantize button be global now? think so :)
     AlphaSlider *pressureMinRangeSlider, *pressureMaxRangeSlider, *ccControllerSlider;
-    AlphaTextButton *indestructibleButton, *stickyButton;
+    ModeButton *indestructibleButton, *stickyButton;
     GuiSwitch *pressureStatusButton, *noteStatusButton;
     
     GuiCircleBackground *notSelected;
     
     OwnedArray<AlphaTextButton> channelButtons;
-    OwnedArray<SettingsButton> triggerModeButtons;
+    OwnedArray<SettingsButtonImage> triggerModeButtons;
     OwnedArray<SettingsButton> pressureModeButtons;
     
 };

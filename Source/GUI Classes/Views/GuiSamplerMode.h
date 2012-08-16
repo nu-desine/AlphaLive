@@ -32,6 +32,8 @@
 #include "../Custom Components/General/AlphaTextButton.h"
 #include "../Custom Components/General/SettingsButton.h"
 #include "../Custom Components/General/GuiSwitch.h"
+#include "../Custom Components/General/ModeButton.h"
+#include "../Custom Components/General/SettingsButtonImage.h"
 
 
 class MainComponent;
@@ -70,11 +72,11 @@ private:
     MainComponent &mainComponentRef;
     
     ScopedPointer <FilenameComponent> fileChooser;
-    ScopedPointer <AlphaTextButton> loopButton, indestructibleButton, finishLoopButton, stickyButton;
-    ScopedPointer <AlphaTextButton> triggerSettingsButton, pressureSettingsButton, quantiseButton; //quantise button should probably now be global.
+    ScopedPointer <ModeButton> loopButton, indestructibleButton, finishLoopButton, stickyButton;
+    ScopedPointer <ModeButton> triggerSettingsButton, pressureSettingsButton, quantiseButton; //quantise button should probably now be global.
 
     ScopedPointer <GuiSwitch> pressureStatusButton;
-    OwnedArray<SettingsButton> triggerModeButtons;
+    OwnedArray<SettingsButtonImage> triggerModeButtons;
     ScopedPointer <GuiFxDial> fxDial;
     //AlphaImageKnob *gainSlider;
 	//AlphaImageKnob *panSlider;

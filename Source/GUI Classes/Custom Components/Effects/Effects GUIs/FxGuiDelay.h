@@ -30,6 +30,7 @@
 #include "../../General/AlphaImageKnob.h"
 #include "../../General/AlphaRotarySlider.h"
 #include "../../General/AlphaTextButton.h"
+#include "../../General/ModeButton.h"
 
 class MainComponent;
 
@@ -61,7 +62,8 @@ private:
     AlphaRotarySlider *wetMixSlider, *feedbackSlider, *delayTimeSlider, *lpfFrequencySlider, *hpfFrequencySlider;
     
     ComboBox *alphaTouchMenu, *delayTimeMenu;
-    AlphaTextButton *reverseButton, *syncButton;
+    ModeButton *reverseButton;
+	AlphaTextButton *syncButton;
     AlphaRotarySlider *intensitySlider;
     
     Array<int> selectedPads;

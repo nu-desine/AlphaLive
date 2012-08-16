@@ -56,15 +56,10 @@ private:
     //==============================================================================
     
     
-	
-	//Image OffImage, OverImage, OnImage, ClickImage;
-	float normalOpacity, overOpacity, downOpacity, onOpacity;
-    Colour normalOverlay, overOverlay, downOverlay, onOverlay;
 	Image *symbol;
 	
 	Path hitPath;
-    
-	//Image getCurrentImage() const;
+ 
 	
 	
     

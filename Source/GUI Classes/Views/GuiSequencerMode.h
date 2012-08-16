@@ -41,6 +41,7 @@
 #include "../Custom Components/Effects/GuiFxDial.h"
 #include "../Custom Components/General/AlphaPopUpButton.h"
 #include "../Custom Components/General/AlphaRotarySlider.h"
+#include "../Custom Components/General/SettingsButtonImage.h"
 
 class MainComponent;
 
@@ -113,9 +114,11 @@ private:
     int sequenceLength; //this is controlled by the plus/minus buttons when in viewing sequencer settings
     int currentSequenceNumber;
     
-    AlphaTextButton *triggerSettingsButton, *pressureSettingsButton, *sequenceSettingsButton, *quantiseButton;
-    AlphaTextButton *modeMidiButton, *modeSamplesButton, *nextSequenceButton, *previousSequenceButton;
-    AlphaTextButton *loopButton, *indestructibleButton, *finishLoopButton, *stickyButton, *linkButton;
+    ModeButton *triggerSettingsButton, *pressureSettingsButton, *sequenceSettingsButton, *quantiseButton;
+    AlphaTextButton *nextSequenceButton, *previousSequenceButton;
+    ModeButton *loopButton, *indestructibleButton, *finishLoopButton, *stickyButton, *linkButton;
+	
+	ModeButton *modeMidiButton, *modeSamplesButton;
     
     AlphaRotarySlider *numberOfSequencesSlider, *relativeTempoSlider, *noteLengthSlider, *audioGainSlider, *audioPanSlider;
     
@@ -130,7 +133,7 @@ private:
     GuiPopUpWindow *popUpWindow;
      */
     
-    OwnedArray<SettingsButton> triggerModeButtons;
+    OwnedArray<SettingsButtonImage> triggerModeButtons;
     OwnedArray<SettingsButton> midiPressureModeButtons;
     OwnedArray<AlphaTextButton> channelButtons;
 	OwnedArray<AlphaTextButton> audioRowButtons;

@@ -60,18 +60,12 @@ public:
     //==================================================================
     //Global
     void setMode (int value);
-    void setCurrentState (int value);
-    void setCurrentPlayingState (int value);
-    void setCurrentValue (int value); 
     void setPressureSensitivityMode (int value);
     void setExclusiveMode (int value);
     void setExclusiveGroup (int value);
     void setQuantizeMode (int value);
 
     int getMode();
-    int getCurrentState();
-    int getCurrentValue();
-    int getCurrentPlayingState();
     int getPressureSensitivityMode();
     int getExclusiveMode();
     int getExclusiveGroup();
@@ -344,17 +338,12 @@ public:
     
 private:
     
-    int padNumber; //this should be private surely?! Test it out
+    int padNumber;
     AlphaLiveEngine *alphaLiveEngineRef;
     
     //==================================================================
     //Global
     int mode; // 0 = off, 1 = midi, 2 = sampler, 3 = sequencer, 4 = controller
-    int prevMode;
-    int currentState; //Hods the current physical state. 1 = pressed, 0 = not pressed
-    int currentPlayingState; //Holds the current PLAYING state. 0 = off, 1 = on
-    int currentValue; //Holds the current modified pressire value
-    
     int pressureSensitivityMode;
     int exclusiveMode;
     int exclusiveGroup;

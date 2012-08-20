@@ -233,7 +233,7 @@
 		0C52F2AC15D69E2C00E76547 /* Toolbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Toolbox.cpp; sourceTree = "<group>"; };
 		0C52F2AD15D69E2C00E76547 /* Toolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Toolbox.h; sourceTree = "<group>"; };
 		0C52F2B215D6BF4D00E76547 /* GuiGlobalPadSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiGlobalPadSettings.cpp; sourceTree = "<group>"; };
-		0C52F2B315D6BF4E00E76547 /* GuiGlobalPadSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; path = GuiGlobalPadSettings.h; sourceTree = "<group>"; };
+		0C52F2B315D6BF4E00E76547 /* GuiGlobalPadSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiGlobalPadSettings.h; sourceTree = "<group>"; };
 		0C68958415D123AA00848D62 /* ger_trans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ger_trans; sourceTree = "<group>"; };
 		0C78A2AC15B467900049C0C8 /* AbstractSubjectAndObserver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractSubjectAndObserver.cpp; sourceTree = "<group>"; };
 		0C78A2AD15B467900049C0C8 /* AbstractSubjectAndObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractSubjectAndObserver.h; sourceTree = "<group>"; };
@@ -475,6 +475,7 @@
 		0CA0A4F815B97E8C001362B3 /* TriggerModes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TriggerModes.cpp; sourceTree = "<group>"; };
 		0CA0A4F915B97E8C001362B3 /* TriggerModes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriggerModes.h; sourceTree = "<group>"; };
 		0CA92FACC9C857515F5DC895 /* juce_Colours.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Colours.h; path = ../../JuceLibraryCode/modules/juce_graphics/colour/juce_Colours.h; sourceTree = SOURCE_ROOT; };
+		0CABB5C615E267EF00F27184 /* FirmwareStruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirmwareStruct.h; sourceTree = "<group>"; };
 		0CE4BE3A15D056EE00B444EE /* jap_trans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = jap_trans; sourceTree = "<group>"; };
 		0D5838014A4AB76B63EC13C4 /* juce_FileTreeComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_FileTreeComponent.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/filebrowser/juce_FileTreeComponent.cpp; sourceTree = SOURCE_ROOT; };
 		0D683EFC0C730B43D4BA49E6 /* juce_OggVorbisAudioFormat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_OggVorbisAudioFormat.cpp; path = ../../JuceLibraryCode/modules/juce_audio_formats/codecs/juce_OggVorbisAudioFormat.cpp; sourceTree = SOURCE_ROOT; };
@@ -1470,6 +1471,7 @@
 				0C78A2D115B467900049C0C8 /* PadSettings.cpp */,
 				0C78A2D415B467900049C0C8 /* StoredSettings.h */,
 				0C78A2D315B467900049C0C8 /* StoredSettings.cpp */,
+				0CABB5C615E267EF00F27184 /* FirmwareStruct.h */,
 			);
 			name = "File and Settings";
 			path = "../../Source/File and Settings";

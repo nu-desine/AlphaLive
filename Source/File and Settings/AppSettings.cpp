@@ -32,7 +32,6 @@ AppSettings* AppSettings::Instance()
         pInstance = new AppSettings();
     }
     
-    
     //address of sole instance
     return pInstance;
 }
@@ -40,11 +39,9 @@ AppSettings* AppSettings::Instance()
 
 AppSettings::AppSettings()
 {
-    
     //default values
     //currentlySelectedPad = 99; //what should this default be?
     padDisplayTextMode = 1;
-    
     
     globalPan = 0.5;
     globalGain = 1.0;
@@ -54,15 +51,8 @@ AppSettings::AppSettings()
     beatsPerBar = 4;
     autoStartClock = 0; //off
     
-    for (int i = 0; i <=5; i++)
-    {
-        samplerChannelMode[i] = 1;
-        sequencerChannelMode[i] = 1;
-    }
-    
     copyExternalFiles = true;
 
-    
     //=================================Pad Settings stuff==================================
     //'for' loop to create 48 objects of the PadSettings class, which are put into an array.
     //each object of the array holds the settings for a different pad
@@ -94,11 +84,6 @@ void AppSettings::resetData()
     setGlobalPan(0.5);
     setGlobalGain(1.0);
     setGlobalTempo(120.0);
-    for (int i = 0; i <=5; i++)
-    {
-        setSamplerChannelMode(i, 1);
-        setSequencerChannelMode(i, 1);
-    }
     
     setQuantizationValue(3);
     setBeatsPerBar(4);
@@ -180,15 +165,6 @@ void AppSettings::setAutoStartClock (int value)
 }
 
 
-void AppSettings::setSamplerChannelMode (int channelNumber, int value)
-{
-    samplerChannelMode[channelNumber] = value;
-}
-void AppSettings::setSequencerChannelMode(int channelNumber, int value)
-{
-    sequencerChannelMode[channelNumber] = value;
-}
-
 void AppSettings::setCopyExternalFiles (bool value)
 {
     copyExternalFiles = value;
@@ -235,15 +211,6 @@ int AppSettings::getAutoStartClock()
     return autoStartClock;
 }
 
-int AppSettings::getSamplerChannelMode (int channelNumber)
-{
-    return samplerChannelMode[channelNumber];
-}
-
-int AppSettings::getSequencerChannelMode(int channelNumber)
-{
-    return sequencerChannelMode[channelNumber];
-}
 
 bool AppSettings::getCopyExternalFiles()
 {

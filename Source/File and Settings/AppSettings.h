@@ -62,9 +62,6 @@ public:
     void setBeatsPerBar (int value);
     void setAutoStartClock (int value);
     
-    void setSamplerChannelMode (int channelNumber, int value);
-    void setSequencerChannelMode (int channelNumber, int value);
-    
     void setCopyExternalFiles (bool value);
     
     Array<int> getCurrentlySelectedPad();
@@ -77,9 +74,6 @@ public:
     int getQuantizationValue();
     int getBeatsPerBar();
     int getAutoStartClock();
-    
-    int getSamplerChannelMode (int channelNumber);
-    int getSequencerChannelMode (int channelNumber);
     
     bool getCopyExternalFiles();
     
@@ -121,20 +115,13 @@ private:
     float globalTempo;
     int quantizationValue; //value represents an item in the GUI quantization menu
     int beatsPerBar; //similar to time signature
-    int autoStartClock; //when 1, clock will start when the first loop/seq pad is pressed. First pad atall?
-    
-    
-    //THIS STUFF is no longer needed.
-    //global sampler mode
-    int samplerChannelMode[6];
-    //global sequencer mode
-    int sequencerChannelMode[6];
+    int autoStartClock; //when 1, clock will start when the first midi/loop/seq pad is pressed.
     
     //variable used to store copied pad settings
     ScopedPointer<PadSettings> copiedPadSettings;
     
     //========================================================================================================
-    //variables which are global to the whole project and aren't changeable between individual scenes.
+    //variables which are global to the whole project (project settings) and aren't changeable between individual scenes.
     //Would it make more sense to not have them in AppSettings?
     //========================================================================================================
     

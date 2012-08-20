@@ -145,22 +145,8 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
                                                                 :   mainComponentRef(ref),
                                                                     alphaLiveEngineRef(ref2)
 {
-    
-    addAndMakeVisible(languageLabel = new Label ("language label", translate("Language: ")));
-    languageLabel->setColour(Label::textColourId, Colours::lightgrey);
-    
-    addAndMakeVisible(languageMenu = new ComboBox());
-    languageMenu->addItem("English", 1);
-    languageMenu->addItem(CharPointer_UTF8("Français"), 2);
-    languageMenu->addItem("Deutsch", 3);
-    //languageMenu->addItem(CharPointer_UTF8 ("日本の"), 4);
-    //languageMenu->addItem(CharPointer_UTF8 ("普通話"), 5);
-    languageMenu->addItem("Japanese", 4);
-    languageMenu->addItem("Mandarin", 5);
-    languageMenu->addListener(this);
-    languageMenu->addMouseListener(this, true);
-    languageMenu->setSelectedId(StoredSettings::getInstance()->language, true);
-    
+    //To add a non-standard character to a label, combobox, etc..
+    // you must wrap the string like this - CharPointer_UTF8 ("日本の").
     
     appProjectDirChooser = new FilenameComponent ("app project directory",
                                                   StoredSettings::getInstance()->appProjectDir.getParentDirectory(),
@@ -226,8 +212,6 @@ GeneralSettingsComponent::~GeneralSettingsComponent()
 
 void GeneralSettingsComponent::resized()
 {
-    //languageLabel->setBounds(60, 10, 120, 20);
-    //languageMenu->setBounds(200, 10, 150, 20);
     
     appProjectDirChooser->setBounds(200, 50, 210, 20);
     directoryLabel->setBounds(60, 50, 120, 20);
@@ -284,15 +268,6 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
         StoredSettings::getInstance()->flush();
     }
     
-    else if (comboBox == languageMenu)
-    {
-        StoredSettings::getInstance()->language = comboBox->getSelectedId();
-        StoredSettings::getInstance()->flush();
-        
-        mainComponentRef.setLocalisation();
-        
-        AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, translate("Restart Application"), translate("Please restart AlphaLive for the language change to be fully implemented."));  
-    }
 }
 
 void GeneralSettingsComponent::filenameComponentChanged (FilenameComponent* filenameComponent)

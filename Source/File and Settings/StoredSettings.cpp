@@ -57,7 +57,6 @@ void StoredSettings::flush()
         props->setValue ("midiNoteDisplayType", midiNoteDisplayType);
         props->setValue ("launchTask", launchTask);
         props->setValue ("killOnClockStop", killOnClockStop);
-        props->setValue ("language", language);
     }
 
     props = nullptr;
@@ -83,7 +82,6 @@ void StoredSettings::flush()
     midiNoteDisplayType = props->getIntValue("midiNoteDisplayType");
     launchTask = props->getIntValue("launchTask");
     killOnClockStop = props->getIntValue("killOnClockStop");
-    language = props->getIntValue("language");
     
 
 }
@@ -127,9 +125,6 @@ void StoredSettings::setDefaultValues()
     
     if (launchTask == 0)
         launchTask = 1;
-    
-    if (language == 0)
-        language = 1;
     
     flush();
 }

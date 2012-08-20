@@ -125,8 +125,6 @@ private:
     AlphaTextButton *openButton, *saveButton;
     //TextButton *clearScenesButton;
     //TextButton *cleanUpProjectButton;
-    
-    //AlphaSlider *tempoSlider;
 
     GuiMidiMode *guiMidiMode;
     GuiSamplerMode *guiSamplerMode;
@@ -143,8 +141,6 @@ private:
     SceneComponent *sceneComponent;
     
     TextEditor *infoTextBox;
-    
-    //ComboBox *padDisplayTextMenu, *pressureSensitivityMenu;
     
     bool isInfoBoxEnabled;
     
@@ -177,14 +173,6 @@ private:
 	ModeButton *modeControllerButton;
     ModeButton *globalSettingsButton;
     
-    /*
-    //should this stuff be in it's own component?
-    GuiSpeaker *speakerLeft, *speakerRight;
-    GuiCircleBackground *circleBackground;
-    
-    GuiPopUpWindow *popUpWindow;
-     */
-    
     GuiGlobalClock *globalClock;
     GuiPiano *midiPiano;
     Toolbox *toolbox;
@@ -195,11 +183,6 @@ private:
     AboutComponent *aboutComponent;
     PreferencesComponent *preferencesComponent;
     ProjectSettingsComponent *projectSettingsComponent;
-    
-    //TextButton *exclusiveModeButton;
-    //AlphaSlider *exclusiveGroupSlider;
-    
-    //TextButton *quantizeModeButton;
     
     //==============================================================================
 };

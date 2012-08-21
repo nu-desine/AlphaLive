@@ -253,22 +253,22 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
         if (i == 0)
 			triggerModeButtons.insert(i, new SettingsButtonImage(standardIcon, (270 * (M_PI / 180)), 
 																 (315 * (M_PI / 180)),
-																 0.4f, 0.7f));
+																 0.4f, 0.6f));
         else if (i == 1)
             triggerModeButtons.insert(i, new SettingsButtonImage(toggleIcon, (315 * (M_PI / 180)),
-																 (2 * M_PI) , 0.4f, 0.7f));
+																 (2 * M_PI) , 0.4f, 0.6f));
         else if (i == 2)
             triggerModeButtons.insert(i, new SettingsButtonImage(latchIcon, 0.0f, (45 * (M_PI / 180)), 
-																 0.4f, 0.7f));
+																 0.4f, 0.6f));
         else if (i == 3)
             triggerModeButtons.insert(i, new SettingsButtonImage(triggerIcon, (45 * (M_PI / 180)), 
-																 (90 * (M_PI / 180)), 0.4f, 0.7f));
+																 (90 * (M_PI / 180)), 0.4f, 0.6f));
         else if (i == 4)
             triggerModeButtons.insert(i, new SettingsButtonImage(cycleIcon, (225 * (M_PI / 180)), 
-															(270 * (M_PI / 180)), 0.4f, 0.7f));
+															(270 * (M_PI / 180)), 0.4f, 0.6f));
         else if (i == 5)
             triggerModeButtons.insert(i, new SettingsButtonImage(autoIcon, (180 * (M_PI / 180)), 
-															(225 * (M_PI / 180)), 0.4f, 0.7f));
+															(225 * (M_PI / 180)), 0.4f, 0.6f));
         
         triggerModeButtons[i]->addListener(this);
         triggerModeButtons[i]->setRadioGroupId (43);
@@ -279,27 +279,32 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     triggerModeButtons[1]->setToggleState(true, false);
     
     //--------------pressure mode buttons--------------------------
-	for (int i = 0; i < 6; i++)
+	
+	//Image *patIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::polyphonicaftertouchicon_png, BinaryDataNew::polyphonicaftertouchicon_pngSize));
+	Image *catIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::channelaftertouchicon_png, BinaryDataNew::channelaftertouchicon_pngSize));
+	Image *mwheelIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::modwheelicon_png, BinaryDataNew::modwheelicon_pngSize));
+	Image *ccIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::ccmessageicon_png, BinaryDataNew::ccmessageicon_pngSize));
+	Image *pbUpIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::pitchbendupicon_png, BinaryDataNew::pitchbendupicon_pngSize));
+	Image *pbDownIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::pitchbenddownicon_png, BinaryDataNew::pitchbenddownicon_pngSize));
+	
+	for (int i = 0; i < 5; i++)
     {
         if (i == 0)
-            midiPressureModeButtons.insert(i, new SettingsButton("CAT", (270 * (M_PI / 180)), 
-                                                             (315 * (M_PI / 180)), 0.4f, -90, 0.45, 0.7));
+           midiPressureModeButtons.insert(i, new SettingsButtonImage(pbUpIcon, (270 * (M_PI / 180)), 
+																  (315 * (M_PI / 180)), 0.4f, 0.6f));
         if (i == 1)
-            midiPressureModeButtons.insert(i, new SettingsButton("M.Wh", (315 * (M_PI / 180)),
-                                                             (2 * M_PI) , 0.4f, -90, 0.45, 0.7));
+            midiPressureModeButtons.insert(i, new SettingsButtonImage(catIcon, (315 * (M_PI / 180)),
+																  (2 * M_PI) , 0.4f, 0.6f));
         if (i == 2)
-            midiPressureModeButtons.insert(i, new SettingsButton("CC", 0.0f, (45 * (M_PI / 180)), 
-                                                             0.4f, 90, 0.55, 0.5));
+            midiPressureModeButtons.insert(i, new SettingsButtonImage(mwheelIcon, 0.0f, (45 * (M_PI / 180)), 
+																  0.4f,0.6f));
         if (i == 3)
-            midiPressureModeButtons.insert(i, new SettingsButton("PB UP", (45 * (M_PI / 180)), (90 * (M_PI / 180)), 
-                                                             0.4f, 90, 0.55, 0.5));
+            midiPressureModeButtons.insert(i, new SettingsButtonImage(ccIcon, (45 * (M_PI / 180)), (90 * (M_PI / 180)), 
+																  0.4f, 0.6f));
         if (i == 4)
-            midiPressureModeButtons.insert(i, new SettingsButton("PB DOWN", (225 * (M_PI / 180)), 
-                                                             (270 * (M_PI / 180)),0.4f, -90, 0.45, 0.7));
-        if (i == 5)
-            midiPressureModeButtons.insert(i, new SettingsButton("REMOVE ME!", (180 * (M_PI / 180)),
-                                                             (225 * (M_PI/ 180)) , 0.4f, -90, 0.45, 0.7));
-        
+            midiPressureModeButtons.insert(i, new SettingsButtonImage(pbDownIcon, (225 * (M_PI / 180)), 
+																  (270 * (M_PI / 180)),0.4f,0.6f));
+           
         midiPressureModeButtons[i]->addListener(this);
         midiPressureModeButtons[i]->setRadioGroupId (53);
         midiPressureModeButtons[i]->addMouseListener(this, false);
@@ -518,7 +523,7 @@ void GuiSequencerMode::resized()
 	midiPressureModeButtons[2]->setBounds(728, 305, 234, 234);
 	midiPressureModeButtons[3]->setBounds(728, 305, 234, 234);
 	midiPressureModeButtons[4]->setBounds(728, 305, 234, 234);
-	midiPressureModeButtons[5]->setBounds(728, 305, 234, 234);
+	//midiPressureModeButtons[5]->setBounds(728, 305, 234, 234);
 	
 	ccControllerSlider->setBounds(890, 431, 58, 58);
     midiPressureMinRangeSlider->setBounds(800, 540, 42, 42);
@@ -988,7 +993,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
         if(pressureSettingsButton->getToggleStateValue() == true)
         {
             
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 5; i++)
                 midiPressureModeButtons[i]->setVisible(true);
             
             stickyButton->setVisible(true);
@@ -1040,7 +1045,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
         if(pressureSettingsButton->getToggleStateValue()==true)
         {
             
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 5; i++)
                 midiPressureModeButtons[i]->setVisible(false);
             
             stickyButton->setVisible(true);
@@ -1197,7 +1202,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
     }
     
     //pressureMode buttons
-    for (int pres = 0; pres < 6; pres++)
+    for (int pres = 0; pres < 5; pres++)
     {
         if (button == midiPressureModeButtons[pres])
         {
@@ -1271,7 +1276,7 @@ void GuiSequencerMode::hideComponents()
 
     //pressure settings stuff
     pressureStatusButton->setVisible(false);
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 5; i++)
         midiPressureModeButtons[i]->setVisible(false);
     stickyButton->setVisible(false);
     linkButton->setVisible(false);
@@ -1333,7 +1338,7 @@ void GuiSequencerMode::setDisplay (int settingsType)
         
         if(modeMidiButton->getToggleStateValue()==true)
         {
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 5; i++)
                 midiPressureModeButtons[i]->setVisible(true);
             
             if(midiPressureModeButtons[2]->getToggleStateValue()==true)

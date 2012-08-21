@@ -11,6 +11,12 @@ namespace BinaryDataNew
     extern const char*  bpficon_png;
     const int           bpficon_pngSize = 5080;
 
+    extern const char*  ccmessageicon_png;
+    const int           ccmessageicon_pngSize = 10762;
+
+    extern const char*  channelaftertouchicon_png;
+    const int           channelaftertouchicon_pngSize = 6155;
+
     extern const char*  controlsymbol_png;
     const int           controlsymbol_pngSize = 3671;
 
@@ -48,7 +54,7 @@ namespace BinaryDataNew
     const int           linkicon_pngSize = 5043;
 
     extern const char*  loading_png;
-    const int           loading_pngSize = 143883;
+    const int           loading_pngSize = 37784;
 
     extern const char*  loopicon_png;
     const int           loopicon_pngSize = 5739;
@@ -65,11 +71,14 @@ namespace BinaryDataNew
     extern const char*  modeoff_png;
     const int           modeoff_pngSize = 60204;
 
+    extern const char*  modwheelicon_png;
+    const int           modwheelicon_pngSize = 7764;
+
     extern const char*  offsymbol_png;
     const int           offsymbol_pngSize = 3400;
 
     extern const char*  padsbg_png;
-    const int           padsbg_pngSize = 543891;
+    const int           padsbg_pngSize = 293812;
 
     extern const char*  padsettingssymbol_png;
     const int           padsettingssymbol_pngSize = 4066;
@@ -79,6 +88,15 @@ namespace BinaryDataNew
 
     extern const char*  padson_png;
     const int           padson_pngSize = 84132;
+
+    extern const char*  pitchbenddownicon_png;
+    const int           pitchbenddownicon_pngSize = 8498;
+
+    extern const char*  pitchbendupicon_png;
+    const int           pitchbendupicon_pngSize = 8056;
+
+    extern const char*  polyphonicaftertouchicon_png;
+    const int           polyphonicaftertouchicon_pngSize = 5271;
 
     extern const char*  pressuresettingsicon_png;
     const int           pressuresettingsicon_pngSize = 8588;
@@ -96,7 +114,7 @@ namespace BinaryDataNew
     const int           sequencersymbol_pngSize = 4458;
 
     extern const char*  standardicon_png;
-    const int           standardicon_pngSize = 6019;
+    const int           standardicon_pngSize = 5287;
 
     extern const char*  statusoff_png;
     const int           statusoff_pngSize = 57530;
@@ -105,13 +123,13 @@ namespace BinaryDataNew
     const int           stickyicon_pngSize = 4399;
 
     extern const char*  toggleicon_png;
-    const int           toggleicon_pngSize = 8120;
+    const int           toggleicon_pngSize = 5633;
 
     extern const char*  tremoloicon_png;
     const int           tremoloicon_pngSize = 5559;
 
     extern const char*  triggericon_png;
-    const int           triggericon_pngSize = 4822;
+    const int           triggericon_pngSize = 7101;
 
     extern const char*  triggersettingsicon_png;
     const int           triggersettingsicon_pngSize = 9580;

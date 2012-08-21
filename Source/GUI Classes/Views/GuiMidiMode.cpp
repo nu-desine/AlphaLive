@@ -80,16 +80,16 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
         if (i == 0)
         triggerModeButtons.insert(i, new SettingsButtonImage(standardIcon, (270 * (M_PI / 180)), 
                                                             (315 * (M_PI / 180)),
-                                                            0.4f, 0.7f));
+                                                            0.4f, 0.6f));
         else if (i == 1)
             triggerModeButtons.insert(i, new SettingsButtonImage(toggleIcon, (315 * (M_PI / 180)),
-                                                            (2 * M_PI) , 0.4f, 0.7f));
+                                                            (2 * M_PI) , 0.4f, 0.6f));
         else if (i == 2)
             triggerModeButtons.insert(i, new SettingsButtonImage(latchIcon, 0.0f, (45 * (M_PI / 180)), 
-                                                            0.4f, 0.7f));
+                                                            0.4f, 0.6f));
         else if (i == 3)
             triggerModeButtons.insert(i, new SettingsButtonImage(triggerIcon, (45 * (M_PI / 180)), 
-                                                            (90 * (M_PI / 180)), 0.4f, 0.7f));
+                                                            (90 * (M_PI / 180)), 0.4f, 0.6f));
         
         triggerModeButtons[i]->addListener(this);
         triggerModeButtons[i]->setOpaque(false);
@@ -102,26 +102,34 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     
     
     //--------------pressure mode buttons--------------------------
+	
+	Image *patIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::polyphonicaftertouchicon_png, BinaryDataNew::polyphonicaftertouchicon_pngSize));
+	Image *catIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::channelaftertouchicon_png, BinaryDataNew::channelaftertouchicon_pngSize));
+	Image *mwheelIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::modwheelicon_png, BinaryDataNew::modwheelicon_pngSize));
+	Image *ccIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::ccmessageicon_png, BinaryDataNew::ccmessageicon_pngSize));
+	Image *pbUpIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::pitchbendupicon_png, BinaryDataNew::pitchbendupicon_pngSize));
+	Image *pbDownIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::pitchbenddownicon_png, BinaryDataNew::pitchbenddownicon_pngSize));
+
 	for (int i = 0; i < 6; i++)
     {
         if (i == 0)
-            pressureModeButtons.insert(i, new SettingsButton("PAT", (270 * (M_PI / 180)), 
-                                                             (315 * (M_PI / 180)), 0.4f, -90, 0.45, 0.7));
+            pressureModeButtons.insert(i, new SettingsButtonImage(patIcon, (270 * (M_PI / 180)), 
+                                                             (315 * (M_PI / 180)), 0.4f, 0.6f));
         if (i == 1)
-            pressureModeButtons.insert(i, new SettingsButton("CAT", (315 * (M_PI / 180)),
-                                                             (2 * M_PI) , 0.4f, -90, 0.45, 0.7));
+            pressureModeButtons.insert(i, new SettingsButtonImage(catIcon, (315 * (M_PI / 180)),
+                                                             (2 * M_PI) , 0.4f, 0.6f));
         if (i == 2)
-            pressureModeButtons.insert(i, new SettingsButton("M.Wh", 0.0f, (45 * (M_PI / 180)), 
-                                                             0.4f, 90, 0.55, 0.5));
+            pressureModeButtons.insert(i, new SettingsButtonImage(mwheelIcon, 0.0f, (45 * (M_PI / 180)), 
+                                                             0.4f,0.6f));
         if (i == 3)
-            pressureModeButtons.insert(i, new SettingsButton("CC", (45 * (M_PI / 180)), (90 * (M_PI / 180)), 
-                                                             0.4f, 90, 0.55, 0.5));
+            pressureModeButtons.insert(i, new SettingsButtonImage(ccIcon, (45 * (M_PI / 180)), (90 * (M_PI / 180)), 
+                                                             0.4f, 0.6f));
         if (i == 4)
-            pressureModeButtons.insert(i, new SettingsButton("PB UP", (225 * (M_PI / 180)), 
-                                                             (270 * (M_PI / 180)),0.4f, -90, 0.45, 0.7));
+            pressureModeButtons.insert(i, new SettingsButtonImage(pbUpIcon, (225 * (M_PI / 180)), 
+                                                             (270 * (M_PI / 180)),0.4f,0.6f));
         if (i == 5)
-            pressureModeButtons.insert(i, new SettingsButton("PB DOWN", (180 * (M_PI / 180)),
-                                                             (225 * (M_PI/ 180)) , 0.4f, -90, 0.45, 0.7));
+            pressureModeButtons.insert(i, new SettingsButtonImage(pbDownIcon, (180 * (M_PI / 180)),
+                                                             (225 * (M_PI/ 180)) , 0.4f, 0.6f));
         
         pressureModeButtons[i]->addListener(this);
         pressureModeButtons[i]->setOpaque(false);

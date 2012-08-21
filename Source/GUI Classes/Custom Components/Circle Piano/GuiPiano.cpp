@@ -584,10 +584,24 @@ void GuiPiano::setKeyDisplay (int keyNumber, bool keyOn)
     
     else if (keyOn == true)
     {
+		
+		int noteIndex = ((keyNumber + 1) % 12);		
+        
         //set the key/button colour
-      keys[keyNumber]->setColours(AlphaColours::blue, AlphaColours::blue, AlphaColours::lightblue);  
-    }
-    
+        if(noteIndex == 2 || noteIndex == 4 || noteIndex == 7 || noteIndex == 9 || noteIndex == 11)
+        {
+			
+			keys[keyNumber]->setColours(AlphaColours::lightblue, AlphaColours::lightblue, AlphaColours::lightblue);  
+
+			
+		}
+		else {
+			
+			keys[keyNumber]->setColours(AlphaColours::blue, AlphaColours::blue, AlphaColours::lightblue);  
+			
+		}
+
+	}    
     //set the button toggle/state
     keys[keyNumber]->setToggleState(keyOn, false);
 }

@@ -109,21 +109,13 @@ private:
     ModeButton *loopButton, *indestructibleButton, *finishLoopButton, *stickyButton, *linkButton;
 	
 	ModeButton *modeMidiButton, *modeSamplesButton;
-    
-    AlphaRotarySlider *numberOfSequencesSlider, *relativeTempoSlider, *noteLengthSlider, *audioGainSlider, *audioPanSlider;
-    
-    //GuiCircleBackground *circleBackgroundLeft, *circleBackgroundRight;
-    GuiCircleBackground *notSelected;
-    
-    GuiFxDial *fxDial;
-    
- 
+  
     
 	OwnedArray<AlphaTextButton> midiChannelButtons;
 	OwnedArray<AlphaTextButton> audioRowButtons;
 	
     OwnedArray<SettingsButtonImage> triggerModeButtons;
-    OwnedArray<SettingsButton> midiPressureModeButtons;
+    OwnedArray<SettingsButtonImage> midiPressureModeButtons;
     SettingsButton *plusButton, *minusButton;
     GuiSwitch *pressureStatusButton;
     AlphaPopUpButton *popUpButton;

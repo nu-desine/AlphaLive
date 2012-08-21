@@ -85,7 +85,7 @@ private:
     
     OwnedArray<AlphaTextButton> channelButtons;
     OwnedArray<SettingsButtonImage> triggerModeButtons;
-    OwnedArray<SettingsButton> pressureModeButtons;
+    OwnedArray<SettingsButtonImage> pressureModeButtons;
     
 };
 

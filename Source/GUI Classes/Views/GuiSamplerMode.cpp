@@ -130,16 +130,16 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
         if (i == 0)
 			triggerModeButtons.insert(i, new SettingsButtonImage(standardIcon, (270 * (M_PI / 180)), 
 																 (315 * (M_PI / 180)),
-																 0.4f, 0.7f));
+																 0.4f, 0.6f));
         else if (i == 1)
             triggerModeButtons.insert(i, new SettingsButtonImage(toggleIcon, (315 * (M_PI / 180)),
-																 (2 * M_PI) , 0.4f, 0.7f));
+																 (2 * M_PI) , 0.4f, 0.6f));
         else if (i == 2)
             triggerModeButtons.insert(i, new SettingsButtonImage(latchIcon, 0.0f, (45 * (M_PI / 180)), 
-																 0.4f, 0.7f));
+																 0.4f, 0.6f));
         else if (i == 3)
             triggerModeButtons.insert(i, new SettingsButtonImage(triggerIcon, (45 * (M_PI / 180)), 
-																 (90 * (M_PI / 180)), 0.4f, 0.7f));
+																 (90 * (M_PI / 180)), 0.4f, 0.6f));
 		
         
         triggerModeButtons[i]->addListener(this);

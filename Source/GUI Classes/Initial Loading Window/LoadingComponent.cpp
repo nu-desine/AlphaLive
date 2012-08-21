@@ -21,12 +21,12 @@
 //
 
 #include "LoadingComponent.h"
-#include "../Binary Data/BinaryData.h"
+#include "../Binary Data/BinaryDataNew.h"
 
 
 LoadingComponent::LoadingComponent()
 {
-    backgroundImage = ImageFileFormat::loadFrom(BinaryData::loading_png, BinaryData::loading_pngSize);
+    backgroundImage = ImageFileFormat::loadFrom(BinaryDataNew::loading_png, BinaryDataNew::loading_pngSize);
     
     Font newFont (50, Font::bold);
     addAndMakeVisible(loadingLabel = new Label("Loading Label", "AlphaLive\nLoading...")); 

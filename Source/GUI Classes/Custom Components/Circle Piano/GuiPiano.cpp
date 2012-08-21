@@ -202,38 +202,48 @@ void GuiPiano::buttonClicked(Button *button)
                         //get difference between root note and clicked note
                         int transposeValue = rootNote - i;
                         
-                        //add the transpose value to each note in the scale/set
-                        for (int row = 0; row < 12; row++)
+                        //check to see if the top row of grid will be transposed
+                        //to above 119. If so, don't transpose the notes, and just
+                        //redraw/re-set what was last there in the below else statement
+                        if (PAD_SETTINGS->getSequencerMidiNote(11)-transposeValue <= 119)
                         {
-                            int currentVal = PAD_SETTINGS->getSequencerMidiNote(row);
-                            
-                            if (currentVal >= 0)
+                            //add the transpose value to each note in the scale/set
+                            for (int row = 0; row < 12; row++)
                             {
-                                int newVal = currentVal-transposeValue;
-                                if (newVal > 119)
-                                    newVal = 119;
-                                else if (newVal < 0) // is this check really needed?
-                                    newVal = 0;
+                                int currentVal = PAD_SETTINGS->getSequencerMidiNote(row);
                                 
-                                //the above check is needed, as keys above 119 don't exist
-                                //and will cause a crash. 
-                                //if a user selected 119 all notes will be set to 119,
-                                //however if the user then selects 60, all the notes will
-                                //be set to 60 as currentVal-transposeValue will be the same
-                                //for each note. Is there a way to get back the original scale/set?
+                                if (currentVal >= 0)
+                                {
+                                    int newVal = currentVal-transposeValue;
+                                    
+                                    PAD_SETTINGS->setSequencerMidiNote(newVal, row);
+                                    
+                                    //update the GUI
+                                    if (padIndex == 0)
+                                    {
+                                        setKeyDisplay (newVal, true);
+                                        selectedKeys.addIfNotAlreadyThere(newVal);
+                                    }
+                                }
                                 
-                                PAD_SETTINGS->setSequencerMidiNote(newVal, row);
-                                
-                                //update the GUI
+                            }
+                        }
+                        else
+                        {
+                            //redraw and re-set what was previously there
+                            //bit convoluted to clear everything above
+                            //just to redraw it in a certain situation.
+                            //Is there a better way to code it?
+                            for (int row = 0; row < 12; row++)
+                            {
                                 if (padIndex == 0)
                                 {
-                                    setKeyDisplay (newVal, true);
-                                    selectedKeys.addIfNotAlreadyThere(newVal);
+                                    setKeyDisplay (PAD_SETTINGS->getSequencerMidiNote(row), true);
+                                    selectedKeys.addIfNotAlreadyThere(PAD_SETTINGS->getSequencerMidiNote(row));
                                 }
                             }
-                                
+                            
                         }
-                        
                         
                         recentlyUpdated = true;
                          

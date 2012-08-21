@@ -1497,8 +1497,8 @@
 		0C78A2D615B467900049C0C8 /* Controller Mode */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A2D715B467900049C0C8 /* ModeController.cpp */,
 				0C78A2D815B467900049C0C8 /* ModeController.h */,
+				0C78A2D715B467900049C0C8 /* ModeController.cpp */,
 			);
 			path = "Controller Mode";
 			sourceTree = "<group>";

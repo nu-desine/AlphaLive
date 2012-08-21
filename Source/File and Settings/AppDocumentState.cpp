@@ -1112,7 +1112,7 @@ void AppDocumentState::saveToScene (int sceneNumber)
         else if (PAD_SETTINGS->getMode() == 4) //controller mode
         {
             padData->setAttribute("controllerControl", PAD_SETTINGS->getControllerControl());
-            padData->setAttribute("controllerSceneNumber", PAD_SETTINGS->getControllerPresentNumber());
+            padData->setAttribute("controllerSceneNumber", PAD_SETTINGS->getControllerSceneNumber());
             padData->setAttribute("controllerOscIpAddress", PAD_SETTINGS->getControllerOscIpAddress());
             padData->setAttribute("controllerOscPortNumber", PAD_SETTINGS->getControllerOscPort());
             padData->setAttribute("controllerMidiProgramChangeNumber", PAD_SETTINGS->getControllerMidiProgramChangeNumber());

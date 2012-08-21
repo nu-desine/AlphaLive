@@ -447,14 +447,14 @@ void GuiControllerMode::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        controlButtons[PAD_SETTINGS->getControllerControl()]->setToggleState(true, false);
-        sceneNumberSlider->setComponentValue(PAD_SETTINGS->getControllerPresentNumber());
+        controlButtons[PAD_SETTINGS->getControllerControl()-1]->setToggleState(true, false);
+        sceneNumberSlider->setComponentValue(PAD_SETTINGS->getControllerSceneNumber());
         oscIpAddressEditor->setText(PAD_SETTINGS->getControllerOscIpAddress(), false);
         oscPortNumberSlider->setComponentValue(PAD_SETTINGS->getControllerOscPort());
         midiProgramChangeNumberSlider->setComponentValue(PAD_SETTINGS->getControllerMidiProgramChangeNumber());
         midiChannelButtons[PAD_SETTINGS->getControllerMidiProgramChangeChannel()-1]->setToggleState(true, false);
         
-        setDisplay(PAD_SETTINGS->getControllerControl());
+        setDisplay(PAD_SETTINGS->getControllerControl()-1);
     }
     
     else if(MULTI_PADS)

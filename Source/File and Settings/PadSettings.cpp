@@ -1888,7 +1888,7 @@ int PadSettings::getControllerControl()
 {
     return controllerControl;
 }
-int PadSettings::getControllerPresentNumber()
+int PadSettings::getControllerSceneNumber()
 {
     return controllerSceneNumber;
 }

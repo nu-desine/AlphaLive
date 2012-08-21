@@ -103,22 +103,14 @@ void SceneSlot::mouseDown (const MouseEvent &e)
     
     
     //---handle the GUI and 'status' value-----
-    if (e.mods.isShiftDown()==true) //if shift is currently down
+    if (status != 2 && e.mods.isShiftDown()==true) //if clicked on unselected slot shift is currently down
     {
-        /*
-        status = 1; //set as 'filled'
-        sceneComponentRef.slotClicked(this);//call callback function, where it will 'save' the data
-        
-        status = 2; //set as 'selected'
-        repaint(); //update display
-         */
+        //sceneComponentRef.slotClicked(this);
+
     }
-    else if ((status == 0 || status == 1) 
-             && e.mods.isPopupMenu() == false) //if clicked on an unselected slot but it isn't a 'right click'
+    else if (status != 2 && e.mods.isPopupMenu() == false) //if clicked on an unselected slot but it isn't a 'right click'
     {
-        status = 2; //set as selected
         sceneComponentRef.slotClicked(this); //call callback function, where it will 'load' the data
-        repaint();
     }
     
     
@@ -207,7 +199,6 @@ void SceneSlot::loadScene()
         }
         else
         {
-            status = 2;
             sceneComponentRef.slotClicked(this);
             
             //the above method automatically sets the loaded scene as the selected scene.

@@ -106,71 +106,40 @@ void SceneComponent::slotClicked(SceneSlot *sceneSlot)
     {
         if (sceneSlot == slot[i])
         {
-            //get status of slot clicked
-            int status = sceneSlot->getStatus();
+            slot[i]->setStatus(2); //set as selected
             
-            //--- SAVE DATA T0 SCENE----
-            if (status == 1)
+            //save previously selected scene data
+            appDocumentStateRef.saveToScene(selectedSceneNumber);
+            
+            //search through all the pads of prev scene checking their modes.
+            //if all pads are set to off, the slots status will need
+            //to be set to 0 below
+            int modeCheck = 0;
+            int prevStatus = 0;
+            for (int i = 0; i <= 47; i++)
             {
-                /*
-                //save current app data
-                appDocumentStateRef.saveToScene(i);
-                
-                std::cout << "Current settings have been saved into scene " + String(i) << std::endl;
-                
-                //de-select any other slecected slots
-                for (int j = 0; j <= NO_OF_SCENES-1; j++)
+                modeCheck = AppSettings::Instance()->padSettings[i]->getMode();
+                if (modeCheck > 0)
                 {
-                    if (slot[j] != sceneSlot && slot[j]->getStatus() == 2) //if slot doesn't equal clicked slot, and slot's status = 2 (selected)
-                    {
-                        slot[j]->setStatus(1); //set status to filled but not sleceted
-                    }
-                } 
-                
-                if (shouldShowSaveWindow == true)
-                {
-                AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Saved!", "The current settings have been saved to scene " + String(i+1));
+                    prevStatus = 1;
+                    break;
                 }
-                
-                shouldShowSaveWindow = true; 
-                 */
             }
             
-            //--- LOAD UP SCENE DATA ----
-            else if (status == 2) 
-            {
-                //save previously selected scene data
-                appDocumentStateRef.saveToScene(selectedSceneNumber);
-                
-                //search through all the pads of prev scene checking their modes.
-                //if all pads are set to off, the slots status will need
-                //to be set to 0 below
-                int modeCheck = 0;
-                int prevStatus = 0;
-                for (int i = 0; i <= 47; i++)
-                {
-                    modeCheck = AppSettings::Instance()->padSettings[i]->getMode();
-                    if (modeCheck > 0)
-                    {
-                        prevStatus = 1;
-                        break;
-                    }
-                }
-                
-                //load data from clicked scene
-                appDocumentStateRef.loadFromScene(i);
-                
-                //de-select previously selected slot and set to the right status
-                for (int i = 0; i <= NO_OF_SCENES-1; i++)
-                {
-                    //if slot doesn't equal clicked slot, and slots status = 2 (selected)
-                    if (slot[i] != sceneSlot && slot[i]->getStatus() == 2) 
-                    {
-                        slot[i]->setStatus(prevStatus);
-                    }
-                } 
-            }
+            //load data from clicked scene
+            appDocumentStateRef.loadFromScene(i);
+            //appDocumentStateRef.saveToScene(i);
             
+            //de-select previously selected slot and set to the right status
+            for (int i = 0; i <= NO_OF_SCENES-1; i++)
+            {
+                //if slot doesn't equal clicked slot, and slots status = 2 (selected)
+                if (slot[i] != sceneSlot && slot[i]->getStatus() == 2) 
+                {
+                    slot[i]->setStatus(prevStatus);
+                }
+            } 
+           
             //set the selected scene number
             selectedSceneNumber = i;
             appDocumentStateRef.setCurrentlySelectedScene(i);
@@ -189,6 +158,7 @@ void SceneComponent::setSlotStatus (int slotNumber, int statusValue)
 {
     slot[slotNumber]->setStatus(statusValue);
     
+    //does the below need to be done? this function is only called from loadProject (i think)
     if (statusValue == 2)
     {
         selectedSceneNumber = slotNumber;
@@ -198,8 +168,7 @@ void SceneComponent::setSlotStatus (int slotNumber, int statusValue)
 
 void SceneComponent::selectDefaultScene()
 {
-    slot[0]->setStatus(2);
-    slotClicked(slot[0]); //'clicked' with a status of '2' will load the data
+    slotClicked(slot[0]); 
     
 }
 
@@ -209,16 +178,11 @@ bool SceneComponent::update(const Subject& theChangedSubject)
 {
     if (&theChangedSubject == &mSubject)
     {
+        int sceneNumber = AppSettings::Instance()->padSettings[mSubject.getPadNumber()]->getControllerSceneNumber()-1;
         
-        int sceneNumber = AppSettings::Instance()->padSettings[mSubject.getPadNumber()]->getControllerPresentNumber()-1;
+        //load up slot data 
+        slotClicked(slot[sceneNumber]);
         
-        //change currently selected scene
-        if (slot[sceneNumber]->getStatus() != 0) //if the scene slot isn't empty
-        {
-            //load up slot data 
-            slot[sceneNumber]->setStatus(2);
-            slotClicked(slot[sceneNumber]);
-        }
     }
     
     return true;

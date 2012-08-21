@@ -49,11 +49,11 @@ void ModeController::getOscData(int pad, int value)
     padNumber = pad;
     padValue = value;
     
-    if (PAD_SETTINGS->getControllerControl() == 2) //scene switcher
+    if (PAD_SETTINGS->getControllerControl() == 1) //scene switcher
     {
         changeScene(); 
     }
-    else if (PAD_SETTINGS->getControllerControl() == 3) //osc controller
+    else if (PAD_SETTINGS->getControllerControl() == 4) //osc controller
     {
         //would be nice if this option wasn't in the controller mode and was in the OSC routing class, as there is a very slight delay. would it make a noticeable difference?
         //or is the delay down to the code in the OscOutput class?
@@ -67,7 +67,7 @@ void ModeController::getOscData(int pad, int value)
         oscOutput.transmitThruMessage(padNumber+1, padValue, PAD_SETTINGS->getControllerOscIpAddress(), PAD_SETTINGS->getControllerOscPort());
     }
     
-    else if (PAD_SETTINGS->getControllerControl() == 4) //MIDI program change
+    else if (PAD_SETTINGS->getControllerControl() == 2) //MIDI program change
     {
         if (prevPadValue[padNumber] == 0 && padValue > 0)
         {
@@ -77,7 +77,7 @@ void ModeController::getOscData(int pad, int value)
     
     }
     
-    else if (PAD_SETTINGS->getControllerControl() == 5) //MIDI program change & scene switcher
+    else if (PAD_SETTINGS->getControllerControl() == 3) //MIDI program change & scene switcher
     {
         if (prevPadValue[padNumber] == 0 && padValue > 0)
         {

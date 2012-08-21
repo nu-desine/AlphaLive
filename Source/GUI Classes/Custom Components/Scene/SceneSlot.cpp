@@ -103,14 +103,14 @@ void SceneSlot::mouseDown (const MouseEvent &e)
     
     
     //---handle the GUI and 'status' value-----
-    if (status != 2 && e.mods.isShiftDown()==true) //if clicked on unselected slot shift is currently down
+    if (status != 2 && e.mods.isShiftDown() == true) //if clicked on an unselected slot while shift is down
     {
-        //sceneComponentRef.slotClicked(this);
+        selectSlot(true);
 
     }
     else if (status != 2 && e.mods.isPopupMenu() == false) //if clicked on an unselected slot but it isn't a 'right click'
     {
-        sceneComponentRef.slotClicked(this); //call callback function, where it will 'load' the data
+        selectSlot();
     }
     
     
@@ -150,7 +150,6 @@ void SceneSlot::mouseDown (const MouseEvent &e)
 }
 
 
-
 void SceneSlot::mouseEnter	(const MouseEvent & e)
 {
     mouseIsOver = true;
@@ -164,6 +163,42 @@ void SceneSlot::mouseExit	(const MouseEvent & e)
 }
 
 
+void SceneSlot::selectSlot (bool isShiftDown)
+{
+    setStatus(2); //set as selected
+    
+    //save previously selected scene data
+    sceneComponentRef.getAppDocumentState().saveToScene(sceneComponentRef.getSelectedSceneNumber());
+    
+    //search through all the pads of prev scene checking their modes.
+    //if all pads are set to off, the slots status will need
+    //to be set to 0 in SceneComponent::configureSelectedSlot()
+    //which called below
+    int modeCheck = 0;
+    int prevStatus = 0;
+    for (int i = 0; i <= 47; i++)
+    {
+        modeCheck = AppSettings::Instance()->padSettings[i]->getMode();
+        if (modeCheck > 0)
+        {
+            prevStatus = 1;
+            break;
+        }
+    }
+    
+    if (isShiftDown == true)
+    {
+        //save/copy data to clicked scene
+        sceneComponentRef.getAppDocumentState().saveToScene(slotNumber);
+    }
+    else
+    {
+        //load data from clicked scene
+        sceneComponentRef.getAppDocumentState().loadFromScene(slotNumber);
+    }
+    
+    sceneComponentRef.configureSelectedSlot (slotNumber, prevStatus);
+}
 
 
 void SceneSlot::setStatus (int value)
@@ -199,7 +234,8 @@ void SceneSlot::loadScene()
         }
         else
         {
-            sceneComponentRef.slotClicked(this);
+            //sceneComponentRef.slotClicked(this);
+            selectSlot();
             
             //the above method automatically sets the loaded scene as the selected scene.
             //if we would prefer to just load the scene but not select it, we could just call

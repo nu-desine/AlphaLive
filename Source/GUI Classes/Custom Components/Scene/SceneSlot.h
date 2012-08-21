@@ -39,6 +39,8 @@ public:
     void mouseEnter	(const MouseEvent & e);
     void mouseExit	(const MouseEvent & e);
     
+    void selectSlot (bool isShiftDown = false);
+    
     void resized();
     void paint (Graphics &g);
     

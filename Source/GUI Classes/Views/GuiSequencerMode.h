@@ -27,7 +27,7 @@
 #include "GuiSeqMidiMode.h"
 #include "GuiSeqSamplesMode.h"
 #include "../Custom Components/Sequencer/SequencerGrid.h"
-#include "ModeSequencer.h"
+#include "../../Functionality Classes/Sequencer Mode/ModeSequencer.h"
 #include "../../Application/AbstractSubjectAndObserver.h"
 #include "../Custom Components/General/ImageSlider.h"
 #include "../Custom Components/Graphics/GuiCircleBackground.h"

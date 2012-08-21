@@ -40,10 +40,6 @@ PadSettings::PadSettings(int arrayIndex)
     //------------default values--------------
     mode = 0; //or should default mode be midi (1) ?
     pressureSensitivityMode = 2; //standard
-    prevMode = 0;
-    currentState = 0;
-    currentPlayingState = 0;
-    currentValue = 0;
     exclusiveMode = 0;
     exclusiveGroup = 1;
     quantizeMode = 0; //unquantized
@@ -403,21 +399,6 @@ void PadSettings::setMode(int value)
 }
 
 
-void PadSettings::setCurrentState(int value)
-{
-    currentState = value;
-}
-
-void PadSettings::setCurrentPlayingState (int value)
-{
-    currentPlayingState = value;
-}
-
-void PadSettings::setCurrentValue (int value)
-{
-    currentValue = value;
-}
-
 void PadSettings::setPressureSensitivityMode (int value)
 {
     pressureSensitivityMode = value;
@@ -457,20 +438,6 @@ int PadSettings::getMode()
     return mode;
 }
 
-int PadSettings::getCurrentState()
-{
-    return currentState;
-}
-
-int PadSettings::getCurrentValue()
-{
-    return currentValue;
-}
-
-int PadSettings::getCurrentPlayingState()
-{
-    return currentPlayingState;
-}
 int PadSettings::getPressureSensitivityMode()
 {
     return pressureSensitivityMode;

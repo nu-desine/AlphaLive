@@ -24,7 +24,7 @@
 #define H_PREFERENCESCOMPONENT
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
-#include "AlphaAudioSettingsComponent.h"
+#include "../Custom Components/General/AlphaAudioSettingsComponent.h"
 #include "../../Functionality Classes/AlphaLiveEngine.h"
 #include "../../File and Settings/StoredSettings.h"
 
@@ -104,9 +104,9 @@ private:
     AlphaLiveEngine &alphaLiveEngineRef;
 
     
-    Label *directoryLabel, *midiNoteDisplayTypeLabel, *launchTaskLabel, *languageLabel;
+    Label *directoryLabel, *midiNoteDisplayTypeLabel, *launchTaskLabel;
     Label *killOnClockStopLabel;
-    ComboBox *midiNoteDisplayTypeMenu, *launchTaskMenu, *languageMenu;
+    ComboBox *midiNoteDisplayTypeMenu, *launchTaskMenu;
     TextButton *killOnClockStopButton;
     FilenameComponent *appProjectDirChooser;
     

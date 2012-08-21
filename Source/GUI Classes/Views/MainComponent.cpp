@@ -189,15 +189,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     killswitchButton->addMouseListener(this, true);
     
     
-    /*
-    addAndMakeVisible(pressureSensitivityMenu = new ComboBox());
-    pressureSensitivityMenu->addListener(this);
-    pressureSensitivityMenu->addMouseListener(this, true);
-    pressureSensitivityMenu->addItem("Non-Sensitive", 1);
-    pressureSensitivityMenu->addItem("Standard", 2);
-    pressureSensitivityMenu->addItem("Sensitive", 3);
-    pressureSensitivityMenu->setSelectedId(2);
-    */
+   
     /*
     addAndMakeVisible(autoShowSettingsSwitch = new GuiSwitch());
     autoShowSettingsSwitch->addListener(this);
@@ -206,33 +198,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     autoShowSettingsSwitch->addMouseListener(this, true);
      */
     
-    /*
-    addAndMakeVisible(exclusiveModeButton = new TextButton("Exc Mode"));
-    exclusiveModeButton->addListener(this);
-    exclusiveModeButton->addMouseListener(this, true);
-    exclusiveModeButton->setClickingTogglesState(true);
-    exclusiveModeButton->setToggleState(0, false);
-    
-    addAndMakeVisible(exclusiveGroupSlider = new AlphaSlider());
-    exclusiveGroupSlider->setRange(1, 24, 1);
-    exclusiveGroupSlider->addListener(this);
-    exclusiveGroupSlider->setValue(1, false);
-    exclusiveGroupSlider->addMouseListener(this, true);
-    exclusiveGroupSlider->setVisible(false);
-    
-    addAndMakeVisible(quantizeModeButton = new TextButton("Quantize"));
-    quantizeModeButton->addListener(this);
-    quantizeModeButton->addMouseListener(this, true);
-    quantizeModeButton->setClickingTogglesState(true);
-    quantizeModeButton->setToggleState(0, false);
-     */
-     
-    
-    //create pop-up window
-    //addAndMakeVisible(popUpWindow = new GuiPopUpWindow());
-    //popUpWindow->setVisible(false);
-    
-    //addAndMakeVisible(tooltip = new TooltipWindow());
     
     /*
     //'rotate pad display' stuff
@@ -337,11 +302,6 @@ void MainComponent::resized()
     
     infoTextBox->setBounds(0, getHeight()-30, getWidth(), 30);
     
-    //pressureSensitivityMenu->setBounds(800, 130, 100, 20);
-    //exclusiveModeButton->setBounds(820, 180, 70, 20);
-    //exclusiveGroupSlider->setBounds(820, 210, 70, 20);
-    //quantizeModeButton->setBounds(800, 100, 100, 20);
-    
     pivotX = guiPadLayout->getX() + (guiPadLayout->getWidth() * 0.5);
 	pivotY = guiPadLayout->getY() + (guiPadLayout->getHeight() * 0.5);
 	offskew = guiPadLayout->getY();
@@ -418,7 +378,6 @@ bool MainComponent::update(const Subject& theChangedSubject)
             //there is still some inefficiency in that these things will be updated everytime a sequence is loaded... sort this out?!!
             gainSlider->sliderComponent()->setValue(AppSettings::Instance()->getGlobalGain(), false); 
             panSlider->sliderComponent()->setValue(AppSettings::Instance()->getGlobalPan(), false);
-            //tempoSlider->setValue(AppSettings::Instance()->getGlobalTempo(), false);
             
             //set the mode colour ring of each pad
             for (int i = 0; i <= 47; i++)
@@ -464,16 +423,6 @@ void MainComponent::sliderValueChanged (Slider *slider)
 		repaint();
 	}
     
-    /*
-    else if (slider == exclusiveGroupSlider)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setExclusiveGroup(slider->getValue());
-        }
-    } 
-     */
 }
 
 
@@ -652,32 +601,6 @@ void MainComponent::buttonClicked(Button *button)
     
     //==============================================================================
     
-    /*
-    else if (button == exclusiveModeButton)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setExclusiveMode(button->getToggleState());
-        }
-        
-        if (button->getToggleState() == true)
-            exclusiveGroupSlider->setVisible(true);
-        else
-           exclusiveGroupSlider->setVisible(false); 
-    }
-    
-    
-    else if (button == quantizeModeButton)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setQuantizeMode(button->getToggleState());
-        }
-        
-    }
-     */
     
     //==============================================================================
     //===SCENES, LOADING & SAVING - now handled by the command manager below!======
@@ -944,6 +867,8 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
                 quantizeModeButton->setToggleState(quantizeMode_, false);
         }
       */
+        
+        
         
         
         //how i should I handle this?
@@ -1248,8 +1173,6 @@ void MainComponent::mouseExit (const MouseEvent &e)
 
 void MainComponent::setLocalisation()
 {
-    
-    //trans = nullptr;
     
     static String countryCode = SystemStats::getDisplayLanguage();
     

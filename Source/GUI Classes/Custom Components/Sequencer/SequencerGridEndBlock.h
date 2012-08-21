@@ -23,8 +23,8 @@
 #ifndef H_SEQUENCERGRIDENDBLOCK
 #define H_SEQUENCERGRIDENDBLOCK
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "SequencerValues.h"
+#include "../../../../JuceLibraryCode/JuceHeader.h"
+#include "../../../Functionality Classes/Sequencer Mode/SequencerValues.h"
 
 class SequencerGridEndBlock :   public Component
 {

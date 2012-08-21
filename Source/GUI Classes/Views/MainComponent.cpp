@@ -1416,20 +1416,6 @@ bool MainComponent::perform (const InvocationInfo& info)
         
         if (userSelection == true)
         {
-            /*
-            //reset pad settings data
-            for (int i = 0; i <= 47; i++)
-                AppSettings::Instance()->padSettings[i]->resetData(0);
-            AppSettings::Instance()->resetData();
-            
-            //save reset data to all scene's
-            for (int i = 0; i < 20; i++)
-            {
-                appDocumentStateRef.saveToScene(i);
-            }
-             */
-            
-            //reset/clear gui
             sceneComponent->clearAll();
         }
 	}

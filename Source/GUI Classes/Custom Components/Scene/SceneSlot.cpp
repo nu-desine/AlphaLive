@@ -96,7 +96,7 @@ void SceneSlot::mouseDown (const MouseEvent &e)
 { 
     
     /* NEW SCENE IMPLEMENTATION.
-     All scenes always contain some data. 
+     All scenes always contain some data and are all selectable. 
      Changing scene saves the previous scene first.
      Shift-click on a scene copies the current scene to the clicked scene.
      */
@@ -221,20 +221,24 @@ void SceneSlot::loadScene()
 
 void SceneSlot::clearScene()
 {
+    //save the current settings into the selected secen
+    sceneComponentRef.getAppDocumentState().saveToScene(sceneComponentRef.getSelectedSceneNumber());
+    
     //reset pad settings data
     for (int i = 0; i <= 47; i++)
         AppSettings::Instance()->padSettings[i]->resetData(0);
     AppSettings::Instance()->resetData();
     
+    //save the reset data into the clicked slot
     sceneComponentRef.getAppDocumentState().saveToScene(slotNumber);
     
-    if (sceneComponentRef.getSelectedSceneNumber() == slotNumber)
-    {
-        sceneComponentRef.getAppDocumentState().loadFromScene(slotNumber);
-    }
-    else 
+    if (slotNumber != sceneComponentRef.getSelectedSceneNumber())
     {
         setStatus(0);
     }
+    //else, status should be 2 and needs to stay as 2
+    
+    //load the saved data back into the currently selected scene
+    sceneComponentRef.getAppDocumentState().loadFromScene(sceneComponentRef.getSelectedSceneNumber());
     
 }

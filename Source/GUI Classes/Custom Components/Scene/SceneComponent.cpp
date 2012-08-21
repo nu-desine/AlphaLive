@@ -158,7 +158,7 @@ void SceneComponent::slotClicked(SceneSlot *sceneSlot)
                 }
                 
                 //load data from clicked scene
-                appDocumentStateRef.loadFromScene(i); //or should the 'loading' be done from somewhere else?
+                appDocumentStateRef.loadFromScene(i);
                 
                 //de-select previously selected slot and set to the right status
                 for (int i = 0; i <= NO_OF_SCENES-1; i++)
@@ -188,6 +188,11 @@ int SceneComponent::getSelectedSceneNumber()
 void SceneComponent::setSlotStatus (int slotNumber, int statusValue)
 {
     slot[slotNumber]->setStatus(statusValue);
+    
+    if (statusValue == 2)
+    {
+        selectedSceneNumber = slotNumber;
+    }
 }
 
 
@@ -204,16 +209,15 @@ bool SceneComponent::update(const Subject& theChangedSubject)
 {
     if (&theChangedSubject == &mSubject)
     {
-        std::cout << "Attempting to change scene!\n";
         
-        int presNumber = AppSettings::Instance()->padSettings[mSubject.getPadNumber()]->getControllerPresentNumber()-1;
+        int sceneNumber = AppSettings::Instance()->padSettings[mSubject.getPadNumber()]->getControllerPresentNumber()-1;
         
         //change currently selected scene
-        if (slot[presNumber]->getStatus() != 0) //if the scene slot isn't empty
+        if (slot[sceneNumber]->getStatus() != 0) //if the scene slot isn't empty
         {
             //load up slot data 
-            slot[presNumber]->setStatus(2);
-            slotClicked(slot[presNumber]);
+            slot[sceneNumber]->setStatus(2);
+            slotClicked(slot[sceneNumber]);
         }
     }
     

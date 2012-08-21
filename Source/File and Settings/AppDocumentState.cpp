@@ -427,18 +427,13 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
                     {
                         sceneStatus = 0;
                         
-                        //if (sceneData[scene]->getChildByName("PAD_DATA_"+String(i)) != 0) //TEMPORARY CHECK
-                        //{
-                            if (sceneData[scene]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") != 0)
-                            {
-                                sceneStatus = 1;
-                                break;
-                            }
-                        //}
-                        
+                        if (sceneData[scene]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") != 0)
+                        {
+                            sceneStatus = 1;
+                            break;
+                        }
                     }
                      
-                    
                     //set the first scene to be display as 'selected'
                     if (scene == 0)
                     {

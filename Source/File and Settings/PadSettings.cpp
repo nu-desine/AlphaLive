@@ -264,7 +264,7 @@ void PadSettings::resetData (int whatToReset)
         setMidiChannel(1);
         setMidiMinPressureRange(0);
         setMidiMaxPressureRange(127);
-        setMidiPressureMode(0);
+        setMidiPressureMode(1);
         setMidiTriggerMode(1);
         setMidiIndestructible(0);
         setMidiSticky(0);

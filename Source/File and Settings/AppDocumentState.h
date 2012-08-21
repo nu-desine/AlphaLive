@@ -126,7 +126,8 @@ private:
     
     MainAppWindow *mainAppWindowRef;
     
-    bool shouldDisplayAlertWindow;
+    bool shouldDisplayAlertWindow;  //Don't think this is needed anymore as it was a 
+                                    //bad idea to display an alert window when saving
     
     int currentlySelectedScene;
     

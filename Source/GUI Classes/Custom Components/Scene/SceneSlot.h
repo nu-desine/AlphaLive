@@ -54,8 +54,8 @@ private:
     
     /*
     Status holds a slots status:
-     - 0 = empty
-     - 1 = Filled but not selected
+     - 0 = No settings (all pads set to off) 
+     - 1 = Settings applied to at least one pad
      - 2 = Selected
     */
     int status;

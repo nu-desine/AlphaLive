@@ -1416,12 +1416,18 @@ bool MainComponent::perform (const InvocationInfo& info)
         
         if (userSelection == true)
         {
-            //reset/clear xml objects
-            //DONT CLEAR SCENE 0 AS THIS ALWAYS NEED TO BE FILLED
-            for (int i = 1; i <= 9; i++)
+            /*
+            //reset pad settings data
+            for (int i = 0; i <= 47; i++)
+                AppSettings::Instance()->padSettings[i]->resetData(0);
+            AppSettings::Instance()->resetData();
+            
+            //save reset data to all scene's
+            for (int i = 0; i < 20; i++)
             {
-                appDocumentStateRef.clearScene(i);
+                appDocumentStateRef.saveToScene(i);
             }
+             */
             
             //reset/clear gui
             sceneComponent->clearAll();

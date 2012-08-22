@@ -176,8 +176,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	//---------------audio row buttons---------------------
 	for (int i = 0; i <= 11; i++)
 	{
-		audioRowButtons.insert(i, new AlphaTextButton());
-		audioRowButtons[i]->setButtonText(String(i + 1)) ;
+		audioRowButtons.insert(i, new FileDropButton(String(i + 1), i));
 		audioRowButtons[i]->setClickingTogglesState(false);
 		audioRowButtons[i]->addListener(this);
         audioRowButtons[i]->addMouseListener(this, true);
@@ -711,6 +710,9 @@ void GuiSequencerMode::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
     selectedPads = selectedPads_;
     fxDial->setCurrentlySelectedPad(selectedPads);
+    
+    for (int i = 0; i <= 11; i++)
+		audioRowButtons[i]->setCurrentlySelectedPad(selectedPads);
     
     //updateDisplay();    
 }

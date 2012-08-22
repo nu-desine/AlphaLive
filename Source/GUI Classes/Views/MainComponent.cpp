@@ -1418,14 +1418,6 @@ bool MainComponent::perform (const InvocationInfo& info)
         
         if (userSelection == true)
         {
-            //reset/clear xml objects
-            //DONT CLEAR SCENE 0 AS THIS ALWAYS NEED TO BE FILLED
-            for (int i = 1; i <= 9; i++)
-            {
-                appDocumentStateRef.clearScene(i);
-            }
-            
-            //reset/clear gui
             sceneComponent->clearAll();
         }
 	}

@@ -85,7 +85,7 @@ public:
     void saveProjectAs();
     void loadProject(bool openBrowser, File fileToOpen = File::nonexistent);
     void saveSceneToDisk (int sceneNumber);
-    bool loadSceneFromDisk(int sceneNumber);
+    bool loadSceneFromDisk(int sceneNumber, bool openBrowser = true, File fileToOpen = File::nonexistent);
     
     void saveProjectSettings();
     void loadProjectSettings();
@@ -126,7 +126,8 @@ private:
     
     MainAppWindow *mainAppWindowRef;
     
-    bool shouldDisplayAlertWindow;
+    bool shouldDisplayAlertWindow;  //Don't think this is needed anymore as it was a 
+                                    //bad idea to display an alert window when saving
     
     int currentlySelectedScene;
     

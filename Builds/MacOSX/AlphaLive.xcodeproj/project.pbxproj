@@ -146,6 +146,7 @@
 		AD1B7AB2CF30FED145FDAF6E /* juce_events.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9D83A9D048D3C4B324C2183B /* juce_events.mm */; };
 		B833A4900694C5248CE155C4 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B0711F13B4343AC13C8E66E /* OpenGL.framework */; };
 		B9C61B8C15DD2D7C00FE7B43 /* SettingsButtonImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9C61B8B15DD2D7C00FE7B43 /* SettingsButtonImage.cpp */; };
+		B9D43F4915E51D24007C1B40 /* FileDropButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9D43F4715E51D24007C1B40 /* FileDropButton.cpp */; };
 		C639BA23C8C1C7582FACAB75 /* juce_audio_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB5E813C74CCE66CAEB7E5B1 /* juce_audio_basics.mm */; };
 		CBC91F7970BEE3004596A9D7 /* juce_cryptography.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65CFEDEE871328C5B048CB79 /* juce_cryptography.mm */; };
 		CF2035DB786742F7DCCA085B /* juce_data_structures.mm in Sources */ = {isa = PBXBuildFile; fileRef = 917E421414537A1FFB513BAC /* juce_data_structures.mm */; };
@@ -1027,6 +1028,8 @@
 		B9A0575587AE7E089DC99D7B /* juce_android_WebBrowserComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_android_WebBrowserComponent.cpp; path = ../../JuceLibraryCode/modules/juce_gui_extra/native/juce_android_WebBrowserComponent.cpp; sourceTree = SOURCE_ROOT; };
 		B9C61B8A15DD2D7C00FE7B43 /* SettingsButtonImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsButtonImage.h; sourceTree = "<group>"; };
 		B9C61B8B15DD2D7C00FE7B43 /* SettingsButtonImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SettingsButtonImage.cpp; sourceTree = "<group>"; };
+		B9D43F4715E51D24007C1B40 /* FileDropButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileDropButton.cpp; sourceTree = "<group>"; };
+		B9D43F4815E51D24007C1B40 /* FileDropButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileDropButton.h; sourceTree = "<group>"; };
 		B9E3BD00F2B15EBCBC805A1F /* juce_TableListBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_TableListBox.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/widgets/juce_TableListBox.h; sourceTree = SOURCE_ROOT; };
 		BA0AE1072B330AA7098C9098 /* juce_Expression.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_Expression.cpp; path = ../../JuceLibraryCode/modules/juce_core/maths/juce_Expression.cpp; sourceTree = SOURCE_ROOT; };
 		BA9A6B2E943B6DF9C957E982 /* juce_MidiOutput.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_MidiOutput.cpp; path = ../../JuceLibraryCode/modules/juce_audio_devices/midi_io/juce_MidiOutput.cpp; sourceTree = SOURCE_ROOT; };
@@ -1697,6 +1700,8 @@
 				0C52F2A915D69D5C00E76547 /* SettingsButton.cpp */,
 				B9C61B8A15DD2D7C00FE7B43 /* SettingsButtonImage.h */,
 				B9C61B8B15DD2D7C00FE7B43 /* SettingsButtonImage.cpp */,
+				B9D43F4715E51D24007C1B40 /* FileDropButton.cpp */,
+				B9D43F4815E51D24007C1B40 /* FileDropButton.h */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -3693,6 +3698,7 @@
 				0C52F2AE15D69E2C00E76547 /* Toolbox.cpp in Sources */,
 				0C52F2B415D6BF4E00E76547 /* GuiGlobalPadSettings.cpp in Sources */,
 				B9C61B8C15DD2D7C00FE7B43 /* SettingsButtonImage.cpp in Sources */,
+				B9D43F4915E51D24007C1B40 /* FileDropButton.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

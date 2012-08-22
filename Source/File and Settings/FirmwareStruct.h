@@ -23,11 +23,11 @@ struct mode_midi
     int note; //0-127
     int minPressureRange; //0-127
     int maxPressureRange; //0-127
-    int pressureMode; //1-6 (midi pressure data type)
-    int triggerMode; //1-4 or 1-5 ("playstates" or whatever we call it)
+    enum triggerModes {standard = 1, toggle, latch, trigger};
+    enum pressureModes {polyAT = 1, channelAT, modWheel, ccMessage, pitchBendUp, pitchBendDown};
+    int ccNumber; //0-127
     bool indestructible;
     bool sticky;
-    int ccNumber; //0-127
     bool pressureStatus;
     bool noteStatus;
     
@@ -37,23 +37,22 @@ struct mode_midi
 
 struct mode_sequencer
 {
-    int mode;   //1-2 (midi or audio sequence). 
-                //Should the firmware 'drive' the audio sequences? Or should it
-                //just view mode '2' as off?
+    enum modes {midi = 1, audio};    //Should the firmware 'drive' the audio sequences? Or should it
+                                    //just view mode '2' as off?
     int sequenceData[8][12][32];    //0-127. [sequence][row][column]. 
                                     //0 = no note, 1-127 = note with given velocity
     int numberOfSequences; //1-8
     int sequenceLength //1-32
-    int triggerMode; //1-6 or 1-7
+    enum triggerModes {standard = 1, toggle, latch, trigger, cycle, autoCycle};
     bool shouldLoop;
     bool shouldFinishLoop;
     bool indestructible;
     bool sticky;
-    int relativeTempo;  //Allows the tempo to be set to half time, double time etc...
-                        //Could either send numbers in the range of -2 to +2 that the
-                        //firmware uses to set the tempo based on the global tempo,
-                        //or the variable is a float and the software sends the actual
-                        //tempo to set the individual sequence at.
+    
+    enum relativeTempo {quarterTime = -2, halfTime, regular, doubleTime, quadrupalTime};  
+    // OR....
+    double relativeTempo;
+    
     bool dynamicMode;   //If true, the pressure is used to alter which sequence is playing
                         //as well as the default pressure functionality.
     
@@ -62,7 +61,7 @@ struct mode_sequencer
     int noteLength; //1-32
     int minPressureRange; //0-127
     int maxPressureRange; //0-127
-    int pressureMode; //0-5 (same as midi mode but without poly-aftertouch)
+    enum pressureModes {channelAT = 1, modWheel, ccMessage, pitchBendUp, pitchBendDown};
     int ccNumber; //0-127
     bool pressureStatus;
     
@@ -72,8 +71,10 @@ struct mode_sequencer
 
 struct mode_controller
 {
-    int mode;   //1-4. Firmware will only be needed for modes 
+    enum modes {sceneChange = 1, midiProgramChange, sceneAndProgramChange, oscOut}; 
+                //Firmware will only be needed for modes 
                 //2 and 3 to send MIDI program change messages.
+   
     int programChangeNumber; //0-127
     int channel; //1-16
 };
@@ -86,8 +87,9 @@ struct pad_settings
     struct mode_sequencer modeSequencer;
     struct mode_controller modeController;
     
-    int mode;   //0-4. Firmware only interested in modes 1 (midi),
-                //3 (sequencer), and 4 (controller).
+    enum modes {off = 0, midi, sampler, sequencer, controller}; 
+    //Firmware will be needed for modes  1, 3 and 4
+    
     bool exclusiveMode; //If true, the pad is given a group number (defined below)
                         //Exclusive mode means that only a single pad of said group
                         //can be playing at any time.

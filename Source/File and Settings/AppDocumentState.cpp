@@ -113,7 +113,6 @@ void AppDocumentState::createNewProject()
         for (int i = 0; i <= 47; i++)
             PAD_SETTINGS->resetData(0);
         
-        
         currentProjectFile = File::nonexistent;
         
         File::getSpecialLocation(File::tempDirectory).deleteRecursively();
@@ -131,8 +130,8 @@ void AppDocumentState::createNewProject()
             //accessed by observer in order to update the relevent scene slot's GUI
             sceneToUpdate = i;
             
-            //clear the xmlelement for the current scene number
-            clearScene(i);
+            //reset the scene data by saving the default settings to the scene
+            saveToScene(i);
             
             //display GUI scene slot as empty
             sceneStatus = 0;
@@ -200,11 +199,13 @@ void AppDocumentState::saveProject()
             performanceSettings.removeChildElement(sceneData[i], false);
         }
         
+        /*
         if (shouldDisplayAlertWindow == true)
         {
             AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Project Saved", "The project settings have been successfully saved to file");
         }
         shouldDisplayAlertWindow = true;
+         */
         
         
         //add the file to the 'recent files' list
@@ -292,10 +293,11 @@ void AppDocumentState::saveProjectAs()
             //change the window title bar text
             mainAppWindowRef->setTitleBarText(currentProjectFile.getFileNameWithoutExtension());
             
+            /*
             if (shouldDisplayAlertWindow == true)
                 AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Project Saved", "The project settings have been successfully saved to file");
-            
             shouldDisplayAlertWindow = true;
+             */
             
             //add the file to the 'recent files' list
             registerRecentFile (currentProjectFile);
@@ -406,33 +408,34 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
                 //in anyway.
                 
                 //=========load the child elements of loadedXml and put them in the sceneData objects===========
-                for (int i = 0; i <= NO_OF_SCENES-1; i++)
+                for (int scene = 0; scene <= NO_OF_SCENES-1; scene++)
                 {
                     //accessed by observer in order to update the relevent scene slot's GUI
-                    sceneToUpdate = i;
+                    sceneToUpdate = scene;
                     
                     //clear the xmlelement for the current scene number
-                    clearScene(i);
+                    clearScene(scene);
                     
                     //put the loaded xml data into the xmlelement for the current scene
-                    XmlElement* childToInsert = loadedXml->getChildByName("SCENE_" + String(i));
-                    sceneData.insert (i, childToInsert);
+                    XmlElement* childToInsert = loadedXml->getChildByName("SCENE_" + String(scene));
+                    sceneData.insert (scene, childToInsert);
                     //remove sceneData childelement from loadedXml so it isn't deleted when loadedXml goes out of scope!
                     loadedXml->removeChildElement (childToInsert, false);
                     
-                    if (sceneData[i]->getNumChildElements() > 0) //if this scene contains something
+                    //determine the status of the scene
+                    for (int i = 0; i < 48; i++)
                     {
-                        //display GUI scene slot as filled 
-                        sceneStatus = 1;
-                    }
-                    else if (sceneData[i]->getNumChildElements() == 0) //if this scene contains nothing
-                    {
-                        //display GUI scene slot as empty
                         sceneStatus = 0;
+                        
+                        if (sceneData[scene]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") != 0)
+                        {
+                            sceneStatus = 1;
+                            break;
+                        }
                     }
-                    
+                     
                     //set the first scene to be display as 'selected'
-                    if (i == 0)
+                    if (scene == 0)
                     {
                         sceneStatus = 2;
                         setCurrentlySelectedScene(0);
@@ -651,18 +654,28 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
 
 
 
-bool AppDocumentState::loadSceneFromDisk(int sceneNumber)
+bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File fileToOpen)
 {
-
     //navigate to app directory
     FileChooser loadFileChooser("Select a .alphascene file to load...", 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphascene");
     
-    if (loadFileChooser.browseForFileToOpen())
+    bool shouldLoad;
+    
+    if (openBrowser == true)
+        shouldLoad = loadFileChooser.browseForFileToOpen(); //open file browser
+    
+    if (shouldLoad || openBrowser == false)
     {
         //get file
-        File loadedFile (loadFileChooser.getResult());
+        //File loadedFile (loadFileChooser.getResult());
+        File loadedFile;
+        
+        if (openBrowser == true)
+            loadedFile = loadFileChooser.getResult();
+        else
+            loadedFile = fileToOpen;
         
         //parse file into xml file
         ScopedPointer<XmlElement> loadedXml (XmlDocument::parse(loadedFile));
@@ -673,7 +686,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber)
             clearScene(sceneNumber);
             
             //put the loaded xml data into the xmlelement for the current scene
-            //howcome i need to load each child individually here but not anywhere else (where i just load/save first child and it weird does the same for the others)???
+            //howcome i need to load each child individually here but not anywhere else (where i just load/save first child and it weird does the same for the others)??? (21/8/12 - does this comment still apply now?)
             for ( int i = 0; i <= 47; i++)
             {
                 XmlElement* childToInsert = loadedXml->getChildByName("PAD_DATA_"+String(i));
@@ -685,6 +698,8 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber)
             
             //remove sceneData childelement from loadedXml so it isn't deleted when loadedXml goes out of scope!
             loadedXml->removeChildElement (childToInsert, false);
+            
+            
             
             //------------
             if (AppSettings::Instance()->getCopyExternalFiles() == true)
@@ -1107,7 +1122,7 @@ void AppDocumentState::saveToScene (int sceneNumber)
         else if (PAD_SETTINGS->getMode() == 4) //controller mode
         {
             padData->setAttribute("controllerControl", PAD_SETTINGS->getControllerControl());
-            padData->setAttribute("controllerSceneNumber", PAD_SETTINGS->getControllerPresentNumber());
+            padData->setAttribute("controllerSceneNumber", PAD_SETTINGS->getControllerSceneNumber());
             padData->setAttribute("controllerOscIpAddress", PAD_SETTINGS->getControllerOscIpAddress());
             padData->setAttribute("controllerOscPortNumber", PAD_SETTINGS->getControllerOscPort());
             padData->setAttribute("controllerMidiProgramChangeNumber", PAD_SETTINGS->getControllerMidiProgramChangeNumber());
@@ -1137,7 +1152,6 @@ void AppDocumentState::loadFromScene (int sceneNumber)
     
     if (sceneData[sceneNumber] != nullptr && sceneData[sceneNumber]->hasTagName("SCENE_"+String(sceneNumber)))
     {
-        
         //===global settings===
         XmlElement *globalData = new XmlElement(*sceneData[sceneNumber]->getChildByName("GLOBAL_DATA"));
         
@@ -1422,7 +1436,6 @@ void AppDocumentState::clearScene (int sceneNumber)
         sceneData[sceneNumber]->deleteAllChildElements();
     }
 }
-
 
 
 

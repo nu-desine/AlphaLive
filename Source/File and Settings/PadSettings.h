@@ -325,7 +325,7 @@ public:
     void setControllerMidiProgramChangeChannel (int value);
     
     int getControllerControl();
-    int getControllerPresentNumber();
+    int getControllerSceneNumber();
     String getControllerOscIpAddress();
     int getControllerOscPort();
     int getControllerMidiProgramChangeNumber();

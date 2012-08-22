@@ -42,6 +42,8 @@
 #include "../Custom Components/General/AlphaPopUpButton.h"
 #include "../Custom Components/General/AlphaRotarySlider.h"
 #include "../Custom Components/General/SettingsButtonImage.h"
+#include "../Custom Components/General/FileDropButton.h"
+
 
 class MainComponent;
 
@@ -112,10 +114,11 @@ private:
   
     
 	OwnedArray<AlphaTextButton> midiChannelButtons;
-	OwnedArray<AlphaTextButton> audioRowButtons;
+	OwnedArray<FileDropButton> audioRowButtons;
 	
     OwnedArray<SettingsButtonImage> triggerModeButtons;
     OwnedArray<SettingsButtonImage> midiPressureModeButtons;
+
     SettingsButton *plusButton, *minusButton;
     GuiSwitch *pressureStatusButton;
     AlphaPopUpButton *popUpButton;

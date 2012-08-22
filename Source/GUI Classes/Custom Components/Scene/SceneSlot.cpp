@@ -36,6 +36,7 @@ SceneSlot::SceneSlot (int slotNumber_, SceneComponent &ref)
     mouseIsOver = false;
     slotNumberString = String(slotNumber+1);
     
+    somethingIsBeingDraggedOver = false;
 }
 
 SceneSlot::~SceneSlot()
@@ -59,9 +60,9 @@ void SceneSlot::paint (Graphics &g)
         ColourGradient seqGradient(Colours::black, (getWidth()*0.5), 0, Colours::darkgrey.withAlpha(0.5f), (getWidth()),(getHeight()), true);
         g.setGradientFill(seqGradient);
     }
-    else if (status == 1) //Filled but not selected
+    else if (status == 1) //settings applied but not selected
     {
-        ColourGradient seqGradient(Colours::white, (getWidth()*0.5), 0, Colours::grey, (getWidth()*0.5),(getHeight()), true);
+        ColourGradient seqGradient(Colours::white.withAlpha(0.5f), (getWidth()*0.5), 0, Colours::grey.withAlpha(0.5f), (getWidth()*0.5),(getHeight()), true);
         g.setGradientFill(seqGradient);
     }
     else if (status == 2) //selected
@@ -87,6 +88,13 @@ void SceneSlot::paint (Graphics &g)
     }
     
     
+    if (somethingIsBeingDraggedOver == true)
+    {
+        //draw a 'highlight' eclipse. Another option would be to draw an image of a downwards arrow signifying 'drop here'?
+        g.setColour(Colours::white.withAlpha(0.3f));
+        //g.fillEllipse((getWidth()*0.08), (getHeight()*0.08), (getWidth()*0.84), (getHeight()*0.84));
+        g.fillEllipse(0, 0, getWidth(), getHeight());
+    }
     
 
 }
@@ -94,30 +102,23 @@ void SceneSlot::paint (Graphics &g)
 
 void SceneSlot::mouseDown (const MouseEvent &e)
 { 
-    /*how scenes should work:
-     - shift-click on any slot to saved the current settings into that scene. The slot should then be display as 'selected'.
-     - click on any 'filled' slot to load settings from the clicked scene. The slot should then be displayed as selected,
-        with the previously selected pad now just displayed as 'filled'.
-     - You can also reclick on a selected slot to load it back up? Or would this cause errors in terms of losing data by forgetting to hold shift when attempting to save?
-     
-     AM I HAPPY WITH THE CURRENT WAY THIS IS IMPLEMENTED? goo through the data code and make sure its effecient/not repeaeted
+    
+    /* NEW SCENE IMPLEMENTATION.
+     All scenes always contain some data and are all selectable. 
+     Changing scene saves the previous scene first.
+     Shift-click on a scene copies the current scene to the clicked scene.
      */
     
     
     //---handle the GUI and 'status' value-----
-    if (e.mods.isShiftDown()==true) //if shift is currently down
+    if (status != 2 && e.mods.isShiftDown() == true) //if clicked on an unselected slot while shift is down
     {
-        status = 1; //set as 'filled'
-        sceneComponentRef.slotClicked(this);//call callback function, where it will 'save' the data
-        
-        status = 2; //set as 'selected'
-        repaint(); //update display
+        selectSlot(true);
+
     }
-    else if (status == 1 && e.mods.isPopupMenu() == false) //if clicked on a 'filled' slot but it isn't a 'right click'
+    else if (status != 2 && e.mods.isPopupMenu() == false) //if clicked on an unselected slot but it isn't a 'right click'
     {
-        status = 2; //set as selected
-        sceneComponentRef.slotClicked(this); //call callback function, where it will 'load' the data
-        repaint();
+        selectSlot();
     }
     
     
@@ -131,9 +132,8 @@ void SceneSlot::mouseDown (const MouseEvent &e)
         if (status != 0) //if there is something store in the scene slot
         {
             menu.addItem(2, "Export scene...");
-            menu.addItem(3, "Clear and remove scene...");
+            menu.addItem(3, "Clear scene...");
         }
-        
         
         const int result = menu.show();
         
@@ -158,7 +158,6 @@ void SceneSlot::mouseDown (const MouseEvent &e)
 }
 
 
-
 void SceneSlot::mouseEnter	(const MouseEvent & e)
 {
     mouseIsOver = true;
@@ -172,6 +171,42 @@ void SceneSlot::mouseExit	(const MouseEvent & e)
 }
 
 
+void SceneSlot::selectSlot (bool isShiftDown)
+{
+    setStatus(2); //set as selected
+    
+    //save previously selected scene data
+    sceneComponentRef.getAppDocumentState().saveToScene(sceneComponentRef.getSelectedSceneNumber());
+    
+    //search through all the pads of prev scene checking their modes.
+    //if all pads are set to off, the slots status will need
+    //to be set to 0 in SceneComponent::configureSelectedSlot()
+    //which called below
+    int modeCheck = 0;
+    int prevStatus = 0;
+    for (int i = 0; i <= 47; i++)
+    {
+        modeCheck = AppSettings::Instance()->padSettings[i]->getMode();
+        if (modeCheck > 0)
+        {
+            prevStatus = 1;
+            break;
+        }
+    }
+    
+    if (isShiftDown == true)
+    {
+        //save/copy data to clicked scene
+        sceneComponentRef.getAppDocumentState().saveToScene(slotNumber);
+    }
+    else
+    {
+        //load data from clicked scene
+        sceneComponentRef.getAppDocumentState().loadFromScene(slotNumber);
+    }
+    
+    sceneComponentRef.configureSelectedSlot (slotNumber, prevStatus);
+}
 
 
 void SceneSlot::setStatus (int value)
@@ -200,43 +235,99 @@ void SceneSlot::loadScene()
     
     if (shouldLoad == true) //when the filebrowser 'cancel' button isn't pressed
     {
-        status = 2;
-        sceneComponentRef.slotClicked(this); //call callback function, where it will 'load' the data
-        repaint();
+        
+        if (slotNumber == sceneComponentRef.getSelectedSceneNumber())
+        {
+            sceneComponentRef.getAppDocumentState().loadFromScene(slotNumber);
+        }
+        else
+        {
+            //sceneComponentRef.slotClicked(this);
+            selectSlot();
+            
+            //the above method automatically sets the loaded scene as the selected scene.
+            //if we would prefer to just load the scene but not select it, we could just call
+            //setStatus(1) I think.
+        }
+        
     }
 }
 
 
 void SceneSlot::clearScene()
 {
-    if (slotNumber != 0)
+    //save the current settings into the selected secen
+    sceneComponentRef.getAppDocumentState().saveToScene(sceneComponentRef.getSelectedSceneNumber());
+    
+    //reset pad settings data
+    for (int i = 0; i <= 47; i++)
+        AppSettings::Instance()->padSettings[i]->resetData(0);
+    AppSettings::Instance()->resetData();
+    
+    //save the reset data into the clicked slot
+    sceneComponentRef.getAppDocumentState().saveToScene(slotNumber);
+    
+    if (slotNumber != sceneComponentRef.getSelectedSceneNumber())
     {
-        sceneComponentRef.getAppDocumentState().clearScene(slotNumber);
-        
-        if (status == 2) //if currently 'selected'
-        {
-            //set default scene 0 as 'selected' and load its settings
-            sceneComponentRef.selectDefaultScene();
-        }
         setStatus(0);
     }
-    else //if this is scene 0 
+    //else, status should be 2 and needs to stay as 2
+    
+    //load the saved data back into the currently selected scene
+    sceneComponentRef.getAppDocumentState().loadFromScene(sceneComponentRef.getSelectedSceneNumber());
+    
+}
+
+
+
+bool SceneSlot::isInterestedInFileDrag (const StringArray& files)
+{
+    File selectedFile(files[0]);
+	String extension = selectedFile.getFileExtension();
+    
+	if (extension == ".alphascene")
+		return true;
+	else
+		return false;
+    
+}
+void SceneSlot::fileDragEnter (const StringArray& /*files*/, int /*x*/, int /*y*/)
+{
+    somethingIsBeingDraggedOver = true;
+	repaint();
+    
+}
+void SceneSlot::fileDragMove (const StringArray& /*files*/, int /*x*/, int /*y*/)
+{
+    
+}
+void SceneSlot::fileDragExit (const StringArray& /*files*/)
+{
+    somethingIsBeingDraggedOver = false;
+	repaint();
+}
+void SceneSlot::filesDropped (const StringArray& files, int /*x*/, int /*y*/)
+{
+    //string of filepath
+	String message = files.joinIntoString ("\n");
+	
+    //file of filepath
+    File droppedFile (message);
+    
+    //'put' scene data into the slot
+    sceneComponentRef.getAppDocumentState().loadSceneFromDisk(slotNumber, false, droppedFile);
+    
+    if (slotNumber == sceneComponentRef.getSelectedSceneNumber())
+        sceneComponentRef.getAppDocumentState().loadFromScene(slotNumber);
+    else
     {
-        //set slot to 'selected' but reset global data and mode 0 for each pad
-        //reset all current padSettings 
-        for (int i = 0; i <= 47; i++)
-        {
-            AppSettings::Instance()->padSettings[i]->resetData(0);
-        }
-        //reset global data
-        AppSettings::Instance()->resetData();
-        
-        status = 1; //set as 'filled'
-        sceneComponentRef.disableSaveAlertWindow();
-        sceneComponentRef.slotClicked(this);//call callback function, where it will 'save' the data
-        status = 2; //set as 'selected'
-        repaint(); //update display
-        sceneComponentRef.slotClicked(this);
-        
+        selectSlot();
+        //the above method automatically sets the loaded scene as the selected scene.
+        //if we would prefer to just load the scene but not select it, we could just call
+        //setStatus(1) I think.
     }
+    
+	somethingIsBeingDraggedOver = false;
+	repaint();
+    
 }

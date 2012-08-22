@@ -41,6 +41,7 @@
 #include "../Custom Components/Effects/GuiFxDial.h"
 #include "../Custom Components/General/AlphaPopUpButton.h"
 #include "../Custom Components/General/AlphaRotarySlider.h"
+#include "../Custom Components/General/FileDropButton.h"
 
 class MainComponent;
 
@@ -108,7 +109,7 @@ private:
     AlphaTextButton *modeMidiButton, *modeSamplesButton, *nextSequenceButton, *previousSequenceButton;
     AlphaTextButton *loopButton, *indestructibleButton, *finishLoopButton, *stickyButton, *linkButton;
     OwnedArray<AlphaTextButton> midiChannelButtons;
-	OwnedArray<AlphaTextButton> audioRowButtons;
+	OwnedArray<FileDropButton> audioRowButtons;
     
     OwnedArray<SettingsButton> triggerModeButtons;
     OwnedArray<SettingsButton> midiPressureModeButtons;

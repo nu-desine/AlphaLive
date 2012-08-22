@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C1A3C4F15E50D65004306A3 /* FileDropButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C1A3C4D15E50D65004306A3 /* FileDropButton.cpp */; };
 		0C41D38815B456E90002DCD1 /* document_icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0C41D38615B456E90002DCD1 /* document_icon.icns */; };
 		0C41D38915B456E90002DCD1 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0C41D38715B456E90002DCD1 /* icon.icns */; };
 		0C52F28B15D6914600E76547 /* AlphaPopUpButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C52F28715D6914600E76547 /* AlphaPopUpButton.cpp */; };
@@ -211,6 +212,8 @@
 		0BA10572CEE7B9491160A103 /* juce_GraphicsContext.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_GraphicsContext.cpp; path = ../../JuceLibraryCode/modules/juce_graphics/contexts/juce_GraphicsContext.cpp; sourceTree = SOURCE_ROOT; };
 		0BB5F1152C93577E4AB4958E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		0C0EBD8EA4693EEDBFEDFAB9 /* juce_ArrowButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_ArrowButton.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/buttons/juce_ArrowButton.cpp; sourceTree = SOURCE_ROOT; };
+		0C1A3C4D15E50D65004306A3 /* FileDropButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileDropButton.cpp; sourceTree = "<group>"; };
+		0C1A3C4E15E50D65004306A3 /* FileDropButton.h */ = {isa = PBXFileReference; fileEncoding = 4; path = FileDropButton.h; sourceTree = "<group>"; };
 		0C287D087BCB039AABDDD356 /* juce_DynamicLibrary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_DynamicLibrary.h; path = ../../JuceLibraryCode/modules/juce_core/threads/juce_DynamicLibrary.h; sourceTree = SOURCE_ROOT; };
 		0C41D38615B456E90002DCD1 /* document_icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = document_icon.icns; sourceTree = "<group>"; };
 		0C41D38715B456E90002DCD1 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
@@ -1692,6 +1695,8 @@
 				0C52F29115D6939B00E76547 /* AlphaTextButton.cpp */,
 				0C52F2AA15D69D5E00E76547 /* SettingsButton.h */,
 				0C52F2A915D69D5C00E76547 /* SettingsButton.cpp */,
+				0C1A3C4E15E50D65004306A3 /* FileDropButton.h */,
+				0C1A3C4D15E50D65004306A3 /* FileDropButton.cpp */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -3687,6 +3692,7 @@
 				0C52F2AB15D69D6000E76547 /* SettingsButton.cpp in Sources */,
 				0C52F2AE15D69E2C00E76547 /* Toolbox.cpp in Sources */,
 				0C52F2B415D6BF4E00E76547 /* GuiGlobalPadSettings.cpp in Sources */,
+				0C1A3C4F15E50D65004306A3 /* FileDropButton.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

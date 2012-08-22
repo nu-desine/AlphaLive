@@ -85,7 +85,7 @@ public:
     void saveProjectAs();
     void loadProject(bool openBrowser, File fileToOpen = File::nonexistent);
     void saveSceneToDisk (int sceneNumber);
-    bool loadSceneFromDisk(int sceneNumber);
+    bool loadSceneFromDisk(int sceneNumber, bool openBrowser = true, File fileToOpen = File::nonexistent);
     
     void saveProjectSettings();
     void loadProjectSettings();

@@ -654,18 +654,28 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
 
 
 
-bool AppDocumentState::loadSceneFromDisk(int sceneNumber)
+bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File fileToOpen)
 {
-
     //navigate to app directory
     FileChooser loadFileChooser("Select a .alphascene file to load...", 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphascene");
     
-    if (loadFileChooser.browseForFileToOpen())
+    bool shouldLoad;
+    
+    if (openBrowser == true)
+        shouldLoad = loadFileChooser.browseForFileToOpen(); //open file browser
+    
+    if (shouldLoad || openBrowser == false)
     {
         //get file
-        File loadedFile (loadFileChooser.getResult());
+        //File loadedFile (loadFileChooser.getResult());
+        File loadedFile;
+        
+        if (openBrowser == true)
+            loadedFile = loadFileChooser.getResult();
+        else
+            loadedFile = fileToOpen;
         
         //parse file into xml file
         ScopedPointer<XmlElement> loadedXml (XmlDocument::parse(loadedFile));

@@ -36,6 +36,7 @@ SceneSlot::SceneSlot (int slotNumber_, SceneComponent &ref)
     mouseIsOver = false;
     slotNumberString = String(slotNumber+1);
     
+    somethingIsBeingDraggedOver = false;
 }
 
 SceneSlot::~SceneSlot()
@@ -87,6 +88,13 @@ void SceneSlot::paint (Graphics &g)
     }
     
     
+    if (somethingIsBeingDraggedOver == true)
+    {
+        //draw a 'highlight' eclipse. Another option would be to draw an image of a downwards arrow signifying 'drop here'?
+        g.setColour(Colours::white.withAlpha(0.3f));
+        //g.fillEllipse((getWidth()*0.08), (getHeight()*0.08), (getWidth()*0.84), (getHeight()*0.84));
+        g.fillEllipse(0, 0, getWidth(), getHeight());
+    }
     
 
 }
@@ -267,5 +275,59 @@ void SceneSlot::clearScene()
     
     //load the saved data back into the currently selected scene
     sceneComponentRef.getAppDocumentState().loadFromScene(sceneComponentRef.getSelectedSceneNumber());
+    
+}
+
+
+
+bool SceneSlot::isInterestedInFileDrag (const StringArray& files)
+{
+    File selectedFile(files[0]);
+	String extension = selectedFile.getFileExtension();
+    
+	if (extension == ".alphascene")
+		return true;
+	else
+		return false;
+    
+}
+void SceneSlot::fileDragEnter (const StringArray& /*files*/, int /*x*/, int /*y*/)
+{
+    somethingIsBeingDraggedOver = true;
+	repaint();
+    
+}
+void SceneSlot::fileDragMove (const StringArray& /*files*/, int /*x*/, int /*y*/)
+{
+    
+}
+void SceneSlot::fileDragExit (const StringArray& /*files*/)
+{
+    somethingIsBeingDraggedOver = false;
+	repaint();
+}
+void SceneSlot::filesDropped (const StringArray& files, int /*x*/, int /*y*/)
+{
+    //string of filepath
+	String message = files.joinIntoString ("\n");
+	
+    //file of filepath
+    File droppedFile (message);
+    
+    //'put' scene data into the slot
+    sceneComponentRef.getAppDocumentState().loadSceneFromDisk(slotNumber, false, droppedFile);
+    
+    if (slotNumber == sceneComponentRef.getSelectedSceneNumber())
+        sceneComponentRef.getAppDocumentState().loadFromScene(slotNumber);
+    else
+    {
+        selectSlot();
+        //the above method automatically sets the loaded scene as the selected scene.
+        //if we would prefer to just load the scene but not select it, we could just call
+        //setStatus(1) I think.
+    }
+    
+	somethingIsBeingDraggedOver = false;
+	repaint();
     
 }

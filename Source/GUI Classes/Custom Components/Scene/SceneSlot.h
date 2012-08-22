@@ -28,7 +28,8 @@
 
 class SceneComponent;
 
-class SceneSlot :  public Component
+class SceneSlot :   public Component,
+                    public FileDragAndDropTarget
                     
 {
 public:
@@ -51,6 +52,14 @@ public:
     void loadScene();
     void clearScene();
     
+    // These methods implement the FileDragAndDropTarget interface, and allow the component
+    // to accept drag-and-drop of files..
+    bool isInterestedInFileDrag (const StringArray& files);
+    void fileDragEnter (const StringArray& /*files*/, int /*x*/, int /*y*/);
+    void fileDragMove (const StringArray& /*files*/, int /*x*/, int /*y*/);
+    void fileDragExit (const StringArray& /*files*/);
+    void filesDropped (const StringArray& files, int /*x*/, int /*y*/);
+    
 private:
     
     
@@ -67,6 +76,8 @@ private:
     String slotNumberString;
     
     SceneComponent &sceneComponentRef;
+    
+    bool somethingIsBeingDraggedOver;
     
 };
 

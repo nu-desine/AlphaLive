@@ -88,7 +88,7 @@ void SequencerGrid::resized()
     
 	for (int row = 0; row <= NO_OF_ROWS-1; row++)
     {
-		int gaps = row * 9;
+		int gaps = ((NO_OF_ROWS-1) - row) * 9;
 		
         for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
         {

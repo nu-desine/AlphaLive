@@ -12,10 +12,10 @@ namespace BinaryDataNew
     const int           bpficon_pngSize = 5080;
 
     extern const char*  ccmessageicon_png;
-    const int           ccmessageicon_pngSize = 10762;
+    const int           ccmessageicon_pngSize = 11739;
 
     extern const char*  channelaftertouchicon_png;
-    const int           channelaftertouchicon_pngSize = 6155;
+    const int           channelaftertouchicon_pngSize = 8691;
 
     extern const char*  controlsymbol_png;
     const int           controlsymbol_pngSize = 3671;
@@ -72,7 +72,7 @@ namespace BinaryDataNew
     const int           modeoff_pngSize = 60204;
 
     extern const char*  modwheelicon_png;
-    const int           modwheelicon_pngSize = 7764;
+    const int           modwheelicon_pngSize = 5955;
 
     extern const char*  offsymbol_png;
     const int           offsymbol_pngSize = 3400;
@@ -96,7 +96,7 @@ namespace BinaryDataNew
     const int           pitchbendupicon_pngSize = 8056;
 
     extern const char*  polyphonicaftertouchicon_png;
-    const int           polyphonicaftertouchicon_pngSize = 5271;
+    const int           polyphonicaftertouchicon_pngSize = 9151;
 
     extern const char*  pressuresettingsicon_png;
     const int           pressuresettingsicon_pngSize = 8588;

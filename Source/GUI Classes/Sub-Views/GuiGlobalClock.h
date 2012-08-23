@@ -73,9 +73,10 @@ private:
 	
 	Path barCount, quantiseBg, barsBg;
 	
-	AlphaTextButton *transportButton, *twoFour, *threeFour, *fourFour, *fiveFour, *sixFour, *sevenFour;
-	
-	SettingsButton *fourBar, *twoBar, *oneBar, *oneBeat, *halfBeat, *quarterBeat;
+    AlphaTextButton *transportButton;
+    
+	OwnedArray <AlphaTextButton> beatsPerBarButtons;
+    OwnedArray <SettingsButton> quantizationValueButtons;
 
     
 };

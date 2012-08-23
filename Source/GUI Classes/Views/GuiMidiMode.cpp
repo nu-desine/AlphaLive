@@ -25,6 +25,7 @@
 #include "../../Functionality Classes/Other/LayoutsAndScales.cpp"
 #include "../Binary Data/BinaryDataNew.h"
 #include "GlobalValues.h"
+#include "../../Application/CommonInfoBoxText.h"
 #include "MainComponent.h"
 
 
@@ -664,56 +665,100 @@ void GuiMidiMode::setDisplay(int settingsType)
 
 void GuiMidiMode::mouseEnter (const MouseEvent &e)
 {
-    /*
-    if (e.eventComponent == channelSlider)
+    
+    for (int i = 0; i < 16; i++)
     {
-        mainComponentRef.setInfoTextBoxText("MIDI Channel Dial. Sets and displays the selected pads MIDI channel.");
+        if (channelButtons[i]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::midiChannelButtons) + " " + String(i+1) + ".");
+            break;
+        }
     }
-    else if (velocitySlider->isMouseOver(true))
+    
+    if (quantiseButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("MIDI Velocity Knob. Sets and displays the MIDI velocity for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::quantizeButton));
     }
-    else if (circlePianoOneOctave->isMouseOver(true))
+    else if (triggerSettingsButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Layout Selector. Sets the MIDI note layout that covers the entire set of pads. Use the middle drop-down menu to set the layout, the piano at the bottom to set the key, and the top set of buttons to set the octave.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::triggerSettingsButton));
     }
-    else if (circlePianoForScales->isMouseOver(true))
+    else if (pressureSettingsButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Scale Selector. Sets the MIDI scale for the selected row of pads. Use the middle drop-down menu to set the scale and the piano at the bottom to set the root note. The top set of buttons can be used to transpose the piano range.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressureSettingsButton));
     }
-    else if (circlePiano->isMouseOver(true))
+    
+    else if (triggerModeButtons[0]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("MIDI note Keyboard. Sets and displays the MIDI note for the selected pad. Use the top set of buttons to switch between octaves.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::triggerModeStandard) + " " + translate(CommonInfoBoxText::triggerModeButtons));
     }
-    else if (noteStatusButton->isMouseOver(true))
+    else if (triggerModeButtons[1]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Note-Status Switch. If this switch is 'off' the selected pad/pads will not trigger any MIDI note-on or note-off messages.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::triggerModeToggle) + " " + translate(CommonInfoBoxText::triggerModeButtons));
+    }
+    else if (triggerModeButtons[2]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::triggerModeLatch) + " " + translate(CommonInfoBoxText::triggerModeButtons));
+    }
+    else if (triggerModeButtons[3]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::triggerModeTrigger) + " " + translate(CommonInfoBoxText::triggerModeButtons));
+    }
+    
+    
+    else if (pressureModeButtons[0]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Polyphonic Aftertouch.") + " " + translate(CommonInfoBoxText::midiPressureModes));
+    }
+    else if (pressureModeButtons[1]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressureChannelAT) + " " + translate(CommonInfoBoxText::midiPressureModes));
+    }
+    else if (pressureModeButtons[2]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressureModWheel) + " " + translate(CommonInfoBoxText::midiPressureModes));
+    }
+    else if (pressureModeButtons[3]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressureCC) + " " + translate(CommonInfoBoxText::midiPressureModes));
+    }
+    else if (pressureModeButtons[4]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressurePitchUp) + " " + translate(CommonInfoBoxText::midiPressureModes));
+    }
+    else if (pressureModeButtons[5]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressurePitchDown) + " " + translate(CommonInfoBoxText::midiPressureModes));
+    }
+    if (noteStatusButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Note Status Switch. If this switch is set to 'off' the selected pads will not trigger any MIDI note-on or note-off messages."));
     }
     else if (pressureStatusButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Pressure-Status Switch. If this switch is 'off' the selected pad/pads will not trigger any MIDI pressure-related data.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressureStatusButton));
     }
     else if (pressureMinRangeSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Pressure Minimum Range Selector. Along with the Maximum Range Selector below, it sets and displays the MIDI pressure-related data range for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::midiMinPressureRangeSlider));
     }
     else if (pressureMaxRangeSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Pressure Maximum Range Selector. Along with the Minimum Range Selector above, it sets and displays the MIDI pressure-related data range for the selected pad/pads.");
-    }
-    else if (pressureModeMenu->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Pressure Mode Drop-down Menu. Sets and displays what type of MIDI data will be created from the selected pad/pads pressure value.");
-    }
-    else if (triggerModeMenu->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Pressure TriggerMode Drop-down Menu. Sets and displays the pressure TriggerMode for the selected pad/pads. Pressure TriggerModes determine how interation with a pad controls the creation of MIDI data.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::midiMaxPressureRangeSlider));
     }
     else if (ccControllerSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("MIDI CC Controller Selector. Sets and displays the MIDI CC controller number for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::midiCcSlider));
     }
-    */
+    else if (indestructibleButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::indestructibleButton));
+    }
+    else if (stickyButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::stickyButton));
+    }
+    
     
 }
 

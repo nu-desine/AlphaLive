@@ -582,37 +582,41 @@ void GuiPadLayout::mouseEnter (const MouseEvent &e)
     {
         if (pads[i]->isMouseOver(true))
         {
-            mainComponentRef.setInfoTextBoxText("Pad " + String(i+1) + ". Click here to view and edit the settings of this pad. Right-click to view copy & paste options. Alt-Click and drag to emulate a pad press. Drag audio files here for the Sampler Mode. The outer-ring colour signifies the pad's mode.");
+            mainComponentRef.setInfoTextBoxText(translate("Pad ") + String(i+1) + translate(". Click on a pad to view and edit its settings. Cmd-click (Mac) or ctrl-click (Windows) to select custom groups of pads, or shift-click to select a sequential set of pads. Alt-Click and drag to emulate a pad press. Right-click to display further options. Drag-and-drop audio files for pads set to Sampler Mode. The pads display will signify its current mode and playing state."));
         }
     }
     
     if (globalSb->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Select All Pads. Click here to apply settings to all of the pads on the AlphaSphere.");
+        mainComponentRef.setInfoTextBoxText(translate("Select All Pads. Click here to apply settings to all of the pads on the AlphaSphere."));
     }
     else if (row1Sb->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Select Row 1. Click here to apply settings to the pads on row 1 (bottom row) of the AlphaSphere.");
+        mainComponentRef.setInfoTextBoxText(translate("Select Row 1. Click here to apply settings to the pads on row 1 (bottom row) of the AlphaSphere."));
     }
     else if (row2Sb->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Select Row 2. Click here to apply settings to the pads on row 2 (second from bottom row) of the AlphaSphere.");
+        mainComponentRef.setInfoTextBoxText(translate("Select Row 2. Click here to apply settings to the pads on row 2 (second from bottom row) of the AlphaSphere."));
     }
     else if (row3Sb->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Select Row 3. Click here to apply settings to the pads on row 3 (bottom-middle row) of the AlphaSphere.");
+        mainComponentRef.setInfoTextBoxText(translate("Select Row 3. Click here to apply settings to the pads on row 3 (bottom-middle row) of the AlphaSphere."));
     }
     else if (row4Sb->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Select Row 4. Click here to apply settings to the pads on row 4 (top-middle row) of the AlphaSphere.");
+        mainComponentRef.setInfoTextBoxText(translate("Select Row 4. Click here to apply settings to the pads on row 4 (top-middle row) of the AlphaSphere."));
     }
     else if (row5Sb->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Select Row 5. Click here to apply settings to the pads on row 5 (second from top row) of the AlphaSphere.");
+        mainComponentRef.setInfoTextBoxText(translate("Select Row 5. Click here to apply settings to the pads on row 5 (second from top row) of the AlphaSphere."));
     }
     else if (row6Sb->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Select Row 6. Click here to apply settings to the pads on row 6 (top row) of the AlphaSphere.");
+        mainComponentRef.setInfoTextBoxText(translate("Select Row 6. Click here to apply settings to the pads on row 6 (top row) of the AlphaSphere."));
+    }
+    else if (row7Sb->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Click here to deselect all pads."));
     }
        
     

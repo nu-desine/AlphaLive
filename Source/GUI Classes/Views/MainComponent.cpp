@@ -48,8 +48,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     
     //language/localisation stuff
     setLocalisation();
-	
-	//test comment
     
     //========command manager stuff==================
 	commandManager->registerAllCommandsForTarget (this);
@@ -74,10 +72,9 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //Mode Gui's
     addChildComponent(guiMidiMode = new GuiMidiMode(*this));
     addChildComponent(guiSamplerMode = new GuiSamplerMode(*this));
-    addChildComponent(guiSequencerMode = new GuiSequencerMode(*alphaLiveEngineRef.getModeSequencer(), *this, appDocumentStateRef)); //pass in a ref to modeSequencer instance
-    guiSequencerMode->setInterceptsMouseClicks(false, true);
+    addChildComponent(guiSequencerMode = new GuiSequencerMode(*alphaLiveEngineRef.getModeSequencer(), *this, appDocumentStateRef)); 
+    //guiSequencerMode->setInterceptsMouseClicks(false, true);
     addChildComponent(guiControllerMode = new GuiControllerMode(*this));
-    
     addChildComponent(guiGlobalPadSettings = new GuiGlobalPadSettings(*this));
     
     
@@ -89,7 +86,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     
     //--------------------------------------------------------------------------
     //Mode Buttons
-    
     //create off mode button
 	Image *offModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::offsymbol_png, BinaryDataNew::offsymbol_pngSize)); 
 	addAndMakeVisible(modeOffButton = new ModeButton(offModeImage));
@@ -98,7 +94,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	modeOffButton->setRadioGroupId (1234);
     modeOffButton->addMouseListener(this, false);
 	
-	//create curve mode button
+	//create global settings button
 	Image *globalSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::padsettingssymbol_png, BinaryDataNew::padsettingssymbol_pngSize)); 
 	addAndMakeVisible(globalSettingsButton = new ModeButton(globalSettingsImage));
 	globalSettingsButton->addListener(this);
@@ -143,6 +139,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     addAndMakeVisible(globalClock = new GuiGlobalClock(*this, alphaLiveEngineRef));
     globalClock->setInterceptsMouseClicks(false, true);
 	
+    //open/save buttons
     addAndMakeVisible(openButton = new AlphaTextButton());
     openButton->setButtonText("OPEN");
     openButton->setCommandToTrigger(commandManager, CommandIDs::Open, false);
@@ -153,20 +150,9 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     saveButton->setCommandToTrigger(commandManager, CommandIDs::Save, false);
     saveButton->addMouseListener(this, false);
     
-    
+    //scene component
     addAndMakeVisible(sceneComponent = new SceneComponent(appDocumentStateRef, *alphaLiveEngineRef.getModeController())); //pass in appDocumentStateRef so that appDocumentStateRef function calls can be made within sceneComponent
     sceneComponent->addMouseListener(this, true);
-    
-    /*
-    addAndMakeVisible(clearScenesButton = new TextButton("Clear All"));
-    clearScenesButton->setCommandToTrigger(commandManager, CommandIDs::ClearAllScenes, false);
-    clearScenesButton->addMouseListener(this, false);
-    
-    addAndMakeVisible(cleanUpProjectButton = new TextButton("Clean Up Project"));
-    cleanUpProjectButton->setCommandToTrigger(commandManager, CommandIDs::CleanUpProject, false);
-    cleanUpProjectButton->addMouseListener(this, true);
-     */
-    
     
     //create gain slider
     addAndMakeVisible(gainSlider = new AlphaImageKnob(2));
@@ -182,11 +168,13 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     panSlider->sliderComponent()->setValue(0.5, true);
     panSlider->sliderComponent()->addMouseListener(this, false);
     
+    /*
+     
     //killswitch button
     addAndMakeVisible(killswitchButton = new TextButton());
     killswitchButton->setColour(TextButton::buttonColourId, Colours::blue);
     killswitchButton->setCommandToTrigger(commandManager, CommandIDs::KillSwitch, false);
-    killswitchButton->addMouseListener(this, true);
+    killswitchButton->addMouseListener(this, true);*/
     
     
    
@@ -215,15 +203,20 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	offskew = 0;
      */
     
+    //piano
     addAndMakeVisible(midiPiano = new GuiPiano());
     midiPiano->addMouseListener(this, true);
     
+    //toolbox
     addAndMakeVisible(toolbox = new Toolbox());
+    toolbox->addMouseListener(this, true);
     
+    //pop up views
     addChildComponent(aboutComponent = new AboutComponent(*this));
     addChildComponent(preferencesComponent = new PreferencesComponent(*this, alphaLiveEngineRef));
     addChildComponent(projectSettingsComponent = new ProjectSettingsComponent(*this, alphaLiveEngineRef, appDocumentStateRef));
     
+    //info box
     addAndMakeVisible(infoTextBox = new TextEditor());
     infoTextBox->setMultiLine(true);
     infoTextBox->setReadOnly(true);
@@ -1094,53 +1087,58 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     
     if (e.eventComponent == modeOffButton)
     {
-        setInfoTextBoxText (translate("Off-Mode Button. Click this button to disable/mute the selected pad/pads."));
+        setInfoTextBoxText (translate("Off Mode Button. Click this button to turn off the selected pads."));
         
     }
     else if (e.eventComponent == modeMidiButton)
     {
-        setInfoTextBoxText ("MIDI-Mode Button. Click this button to put MIDI functionality onto the selected pad/pads.This enables the AlphaSphere to act as a virtual MIDI device.");
+        setInfoTextBoxText (translate("MIDI Mode Button. Click this button to set the selected pads to MIDI Mode, which enables the pads to send MIDI data. The resultantly displayed controls can then be used to program the MIDI functionality of the AlphaSphere device."));
     }
     else if (e.eventComponent == modeSamplerButton)
     {
-        setInfoTextBoxText ("Sampler-Mode Button. Click this button to put Sampler functionality onto the selected pad/pads. This enables audio files to be triggered, looped, and manipulated.");
+        setInfoTextBoxText (translate("Sampler Mode Button.  Click this button to set the selected pads to Sampler Mode. This enables audio files to be triggered, looped, and manipulated."));
     }
     else if (e.eventComponent == modeSequencerButton)
     {
-        setInfoTextBoxText ("Sequencer-Mode Button. Click this button to put Sequencer functionality onto the selected pad/pads. This enables dynamic sequences of midi data or audio samples to be created.");
+        setInfoTextBoxText (translate("Sequencer Mode Button. Click this button to set the selected pads to Sequencer Mode. This enables sequences of midi data or audio samples to be created, looped and manipulated."));
     }
     else if (e.eventComponent == modeControllerButton)
     {
-        setInfoTextBoxText ("Controller-Mode Button. Click this button to put Controller functionality onto the selected pad/pads. This enables certain components within the application to be controlled by pads.");
+        setInfoTextBoxText (translate("Controller Mode Button. Click this button to set the selected pads to Controller Mode. This allows a set of other functionalities to be a applied to the pads."));
+    }
+    else if (globalSettingsButton->isMouseOver(true))
+    {
+        setInfoTextBoxText (translate("Global Pad Settings Button. Displays a set of pad settings which are not specific to any of the pad modes."));
     }
     else if (e.eventComponent == openButton)
     {
-        setInfoTextBoxText ("Load Performance. Allows a set of scenes to be loaded into the application.");
+        setInfoTextBoxText (translate("Load Project. Allows a set of scenes to be loaded into the application."));
     }
     else if (e.eventComponent == saveButton)
     {
-        setInfoTextBoxText ("Save Performance. Allows a set of scenes to be saved to the computer.");
+        setInfoTextBoxText (translate("Save Project. Allows a set of scenes to be saved to disk."));
     }
         else if (sceneComponent->isMouseOver(true))
     {
-        setInfoTextBoxText ("Scenes. Allows application settings to be saved into indvidual scenes that can then be saved to disk as a group. Shift-Click a slot to save a scene to the object, or click to load a scene from the object. Right-click to save and load single scenes.");
+        setInfoTextBoxText (translate("Scenes. AlphaLive contains 20 'scene' slots which can each hold a full set of pad settings. Click on a scene to load up its set of settings; right-click to import, export or clear a scenes; or shift-click to copy the currently select scene to the clicked one. AlphaLive scene files (.alphascene) can be imported via drag-and-drop too."));
     }
     else if (gainSlider->isMouseOver(true)==true)
     {
-        setInfoTextBoxText ("Global Gain Knob. Sets an displays the gain/volume of the overall output audio signal.");
+        setInfoTextBoxText (translate("Global Gain Control. Sets an displays the gain of the overall output audio signal."));
     }
     else if (panSlider->isMouseOver(true)==true)
     {
-        setInfoTextBoxText ("Global Pan Knob. Sets and displays the panning/stereo positioning of the overall output audio signal.");
+        setInfoTextBoxText (translate("Global Pan Control. Sets and displays the stereo positioning of the overall output audio signal."));
     }
+    /*
     else if (e.eventComponent == padRotate)
     {
         setInfoTextBoxText ("Pad Display Rotation Knob. Allows the central pad display to be rotated.");
     }
-    
+    */
     else if (e.eventComponent == infoTextBox)
     {
-        setInfoTextBoxText ("Help Text Box. Hover the mouse over a control to view here a description of what the control does."/* Right-click here to dissable it */);
+        setInfoTextBoxText (translate("Info Text Box. Hover the mouse over a control to view a description of what the control does here. It can be disabled using the option in the 'Controls' menu bar menu."));
     }
     /*
     else if (pressureSensitivityMenu->isMouseOver(true)==true)
@@ -1148,16 +1146,36 @@ void MainComponent::mouseEnter (const MouseEvent &e)
         setInfoTextBoxText("Pad Pressure Sensitivity Mode. Sets and displays the sensitivity of the selected pad/pads in terms of mapping the pressure to paramaters within the application.");
     }
      */
+    /*
     else if(killswitchButton->isMouseOver(true))
     {
         setInfoTextBoxText("Kill Switch. Instantly stops the clock and any playing pads.");
     }
+     */
     /*
     else if (autoShowSettingsSwitch->isMouseOver(true))
     {
         setInfoTextBoxText("'Show Pad Settings When Pressed' Option. If this switch is set to 'on' the pad settings will  beautomatically displayed when a pad is pressed. It is recommended that you only use this feature for editing projects and not playing/performing.");
     }
     */
+    else if (toolbox->isMouseOver(true))
+    {
+        setInfoTextBoxText (translate("Toolbox. This component will display a set of items that can be applied to the selected pads based on their mode. This includes items such as presets, audio samples, scales/notational arrangements, and sequence arrangements."));
+    }
+    
+    else if (midiPiano->isMouseOver(true))
+    {
+        int padNum = selectedPads[0];
+        
+        if (PAD_SETTINGS->getMode() == 1) //midi mode
+        {
+            setInfoTextBoxText (translate("MIDI Note Selector. Use this piano to select the MIDI notes of the selected pads. Use a regular click to select a single note for all selected pads, or cmd-click (Mac) or ctrl-click (Windows) to select multiple notes to apply to a set of pads. When selecting multiple notes, the order of selected notes will be applied to the pads in numerical order."));
+        }
+        else if (PAD_SETTINGS->getMode() == 3) //sequencer mode
+        {
+            setInfoTextBoxText (translate("MIDI Note Selector. Use this piano to select the MIDI notes of the sequencer grid for the selected pads. Cmd-click (Mac) or ctrl-click (Windows) to select the set of notes, which will be applied in numerical order, and use a regular click to set the root note. If less than 12 notes are selected no notes will be applied to the remaining rows of the grid."));
+        }
+    }
     
     
 }

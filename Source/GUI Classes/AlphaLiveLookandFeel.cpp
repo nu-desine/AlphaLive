@@ -156,7 +156,7 @@ AlphaLiveLookandFeel::AlphaLiveLookandFeel()
         Slider::thumbColourId,                      textButtonColour,
         Slider::trackColourId,                      AlphaColours::blue_,
         Slider::rotarySliderFillColourId,           AlphaColours::blue_,
-        Slider::rotarySliderOutlineColourId,        0xff1c1c1c, //0xff3c3c3c
+        Slider::rotarySliderOutlineColourId,        0xff2c2c2c, //0xff3c3c3c
         Slider::textBoxTextColourId,                0xffffffff,
         Slider::textBoxBackgroundColourId,          0x00000000,
         Slider::textBoxHighlightColourId,           textHighlightColour,
@@ -559,7 +559,7 @@ void AlphaLiveLookandFeel::drawRotarySlider (Graphics& g,
         else
             g.setColour (Colour (0x80808080));
 		
-        const float thickness = (1 - 0.2) + (0.2 * (radius * 0.007));
+        const float thickness = (1 - 0.2) + (0.2 * (radius * 0.0055));
 		
         {
             Path filledArc;
@@ -571,7 +571,7 @@ void AlphaLiveLookandFeel::drawRotarySlider (Graphics& g,
             g.fillPath (filledArc);
         }
 		
-        g.setColour(slider.findColour (Slider::rotarySliderOutlineColourId));
+        g.setColour(slider.findColour (Slider::rotarySliderOutlineColourId).withAlpha (isMouseOver ? 1.0f : 0.5f));
         Path outlineArc;
         outlineArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness);
         outlineArc.closeSubPath();

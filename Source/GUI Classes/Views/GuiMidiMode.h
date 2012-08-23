@@ -32,6 +32,7 @@
 #include "../Custom Components/Graphics/GuiCircleBackground.h"
 #include "../Custom Components/Graphics/GuiSpeaker.h"
 #include "../Custom Components/General/AlphaSlider.h"
+#include "../Custom Components/General/AlphaRotarySlider.h"
 #include "../Custom Components/General/AlphaImageKnob.h"
 #include "../Custom Components/General/AlphaTextButton.h"
 #include "../Custom Components/General/SettingsButton.h"
@@ -77,7 +78,8 @@ private:
     
 	//GUI Components
     ModeButton *triggerSettingsButton, *pressureSettingsButton, *quantiseButton; //should the quantize button be global now? think so :)
-    AlphaSlider *pressureMinRangeSlider, *pressureMaxRangeSlider, *ccControllerSlider;
+    AlphaRotarySlider *pressureMinRangeSlider, *pressureMaxRangeSlider;
+	AlphaSlider *ccControllerSlider;
     ModeButton *indestructibleButton, *stickyButton;
     GuiSwitch *pressureStatusButton, *noteStatusButton;
     

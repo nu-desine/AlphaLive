@@ -44,6 +44,7 @@
 #include "../Custom Components/General/GuiSwitch.h"
 #include "../Custom Components/Graphics/GuiPopUpWindow.h"
 #include "../Custom Components/General/AlphaSlider.h"
+#include "../Custom Components/General/AlphaRotarySlider.h"
 #include "../Custom Components/General/AlphaTextButton.h"
 #include "../Custom Components/Scene/SceneComponent.h"
 #include "../../File and Settings/AppDocumentState.h"
@@ -122,7 +123,7 @@ private:
     Image backgroundImage, padsOff, padsOn, modeOff, padsBg;
     
     
-    AlphaTextButton *openButton, *saveButton;
+    ModeButton *openButton, *saveButton;
     //TextButton *clearScenesButton;
     //TextButton *cleanUpProjectButton;
 
@@ -155,7 +156,7 @@ private:
     int noPadsSelected, noModeSelected;
     
     GuiPadLayout *guiPadLayout;
-    AlphaImageKnob *gainSlider, *panSlider;
+    AlphaRotarySlider *gainSlider, *panSlider;
 
     //'rotate pad display' stuff
     Slider *padRotate;

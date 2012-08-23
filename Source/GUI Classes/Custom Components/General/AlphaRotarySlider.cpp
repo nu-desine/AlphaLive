@@ -32,7 +32,7 @@ AlphaRotarySlider::AlphaRotarySlider(const float startAngleRadians,
 	rotaryEnd = endAngleRadians;
 	theWidth = _theWidth;
 	
-	hitPath.addPieSegment (0, 0, theWidth, theWidth, rotaryStart, rotaryEnd, ((1 - 0.2) + (0.2 * (theWidth * 0.5) * 0.006)));
+	hitPath.addPieSegment (0, 0, theWidth, theWidth, rotaryStart, rotaryEnd, ((1 - 0.2) + (0.2 * (theWidth * 0.5) * 0.003)));
 	
 }
 

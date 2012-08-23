@@ -169,18 +169,20 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
 	quantiseButton->setOpaque(false);
     
     //------------------Pressure minimum range slider------------------------------
-    addChildComponent(pressureMinRangeSlider = new AlphaSlider());
+    addChildComponent(pressureMinRangeSlider = new AlphaRotarySlider((90 * (M_PI / 180)), (315 * (M_PI / 180)), 290));
+	pressureMinRangeSlider->setRotaryParameters((90 * (M_PI / 180)), (315 * (M_PI / 180)),true);
     pressureMinRangeSlider->setRange(0, 127, 1);
     pressureMinRangeSlider->addListener(this);
-    pressureMinRangeSlider->setComponentValue(0);
+    pressureMinRangeSlider->setValue(0);
     pressureMinRangeSlider->addMouseListener(this, true);
     
     
     //------------------Pressure maximum range slider------------------------------
-    addChildComponent(pressureMaxRangeSlider = new AlphaSlider());
+    addChildComponent(pressureMaxRangeSlider = new AlphaRotarySlider((90 * (M_PI / 180)), (315 * (M_PI / 180)), 270));
+	pressureMaxRangeSlider->setRotaryParameters((90 * (M_PI / 180)), (315 * (M_PI / 180)),true);
     pressureMaxRangeSlider->setRange(0, 127, 1);
     pressureMaxRangeSlider->addListener(this);
-    pressureMaxRangeSlider->setComponentValue(127);
+    pressureMaxRangeSlider->setValue(127);
     pressureMaxRangeSlider->addMouseListener(this, true);
     
 	Image *destructIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::indestructableicon_png, BinaryDataNew::indestructableicon_pngSize));
@@ -276,8 +278,8 @@ void GuiMidiMode::resized()
 	
 	stickyButton->setBounds(853, 496,32, 32);
     
-    pressureMinRangeSlider->setBounds(800, 540, 42, 42);
-    pressureMaxRangeSlider->setBounds(848, 540, 42, 42);
+    pressureMinRangeSlider->setBounds(700, 277, 290, 290);
+    pressureMaxRangeSlider->setBounds(710, 287, 270, 270);
 	
     //can we give the below more specific bounds?
     //if not the below can be put into a for loop
@@ -555,8 +557,8 @@ void GuiMidiMode::updateDisplay()
         //velocitySlider->sliderComponent()->setValue(PAD_SETTINGS->getMidiVelocity(), true);
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         channelButtons[PAD_SETTINGS->getMidiChannel()-1]->setToggleState(true, false);
-        pressureMinRangeSlider->setComponentValue(PAD_SETTINGS->getMidiMinPressureRange());
-        pressureMaxRangeSlider->setComponentValue(PAD_SETTINGS->getMidiMaxPressureRange());
+        pressureMinRangeSlider->setValue(PAD_SETTINGS->getMidiMinPressureRange());
+        pressureMaxRangeSlider->setValue(PAD_SETTINGS->getMidiMaxPressureRange());
         pressureModeButtons[PAD_SETTINGS->getMidiPressureMode()-1]->setToggleState(true, false);
         triggerModeButtons[PAD_SETTINGS->getMidiTriggerMode()-1]->setToggleState(true, false);
         ccControllerSlider->setComponentValue(PAD_SETTINGS->getMidiCcController());
@@ -574,8 +576,8 @@ void GuiMidiMode::updateDisplay()
         //velocitySlider->sliderComponent()->setValue(110, true);
         quantiseButton->setToggleState(false, false);
         channelButtons[0]->setToggleState(true, false);
-        pressureMinRangeSlider->setComponentValue(0);
-        pressureMaxRangeSlider->setComponentValue(127);
+        pressureMinRangeSlider->setValue(0);
+        pressureMaxRangeSlider->setValue(127);
         pressureModeButtons[0]->setToggleState(true, false); //ideally nothing should be selected here
         triggerModeButtons[0]->setToggleState(true, false); // '' ''
         indestructibleButton->setToggleState(0, false);

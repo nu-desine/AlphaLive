@@ -26,6 +26,7 @@
 #include "../Binary Data/BinaryDataNew.h"
 #include "../Binary Data/BinaryData.h"
 #include "GlobalValues.h"
+#include "../../Application/CommonInfoBoxText.h"
 #include "MainComponent.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
@@ -1660,47 +1661,43 @@ void GuiSequencerMode::setNoteLengthSliderRange (int maxValue)
 
 void GuiSequencerMode::mouseEnter (const MouseEvent &e)
 {
-    /*
+    if (quantiseButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::quantizeButton));
+    }
+    else if (sequenceSettingsButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Sequence Settings. Click here to display the circular step-sequencer grid to draw and edit the sequence arrangement for the selected pads, as well as access other sequence settings controls."));
+    }
+    else if (triggerSettingsButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::triggerSettingsButton));
+    }
+    else if (pressureSettingsButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressureSettingsButton));
+    }
+    
     if (modeMidiButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Sequencer MIDI-Mode Button. Click this button to set the selected pad/pads to the MIDI-sequencer mode.\nThis mode allows dynamic sequences of MIDI note-on and note-off messages to be sent out of the application.");
+        mainComponentRef.setInfoTextBoxText("Sequencer MIDI Mode Button. Click here to set the selected pads to the MIDI sequencer mode and display the its MIDI settings controls. This mode allows sequences of MIDI note-on and note-off messages programmed into the AlphaSphere device.");
     }
     else if (modeSamplesButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Sequencer Samples-Mode Button. Click this button to set the selected pad/pads to the samples-sequencer mode.\nThis mode allows dynamic sequences of audio samples to be created and played.");
+        mainComponentRef.setInfoTextBoxText("Sequencer Audio Mode Button. Click here to set the selected pads to the audio sequencer mode and display the its audio settings controls. This mode allows sequences of audio samples to be created and played.");
     }
-    else if (sequencerGridToggleButton->isMouseOver(true))
+    
+    else if (sequencerGrid->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("View Sequencer Grid Button. Toggles a pop-up window that displays the sequencer grid which is used to view and edit the sequences.");
+        mainComponentRef.setInfoTextBoxText("Circular Step-Sequencer Grid. This is where the sequence arrangement for the selected pads is drawn, editted and displayed. Like a traditional step-sequencer interface click on a grid block to create a 'note', or click on a note to delete it. Perform alt-click-drag on a note to change the notes velocity/gain.");
     }
-    else if (clearButton->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Clear Sequence Button. Click this button to clear and delete the currently displayed sequence.");
-    }
-    else if (clearAllButton->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Clear-All Sequence Button. Click this button to clear and delete all the sequences on the selected pad/pads.");
-    }
+    
+    /*
     else if (currentSequenceNumberSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText("Current Sequence Number Selector. Sets and displays the sequence displayed on the grid for the selected pad/pads.");
     }
-    else if (saveSeqButton->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Save Sequence Button. Saves the currently displayed sequence to an external file.");
-    }
-    else if (loadSeqButton->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Load Sequence Button. Loads a sequence from an external file into the selected sequence number which is then displayed on the grid.");
-    }
-    else if (saveSeqSetButton->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Save Sequence Set Button. Saves the selected pad/pads set of sequences to an external file.");
-    }
-    else if (loadSeqSetButton->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Load Sequence Set Button. Loads a set of sequences from an external file into the the selected pad/pads.");
-    }
+    
     else if (sequenceLengthSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText("Sequence Length Selector. Sets and displays the length of the sequence (in sequence steps) for the selected pad/pads. This can be used to crudely set the sequence time signature.");
@@ -1709,14 +1706,7 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText("Number of Sequences Selector. Sets and displays the number of sequences in the sequencer set for the selected pad/pads.");
     }
-    else if (triggerModeMenu->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("TriggerMode Drop-down Menu. Sets and displays the sequencer TriggerMode for the selected pad/pads. Sequencer TriggerModes determine how interation with a pad controls the playback and modification of a sequence.");
-    }
-    else if (sequencerGrid->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Step-Sequencer Grid. This is where the actual sequence is editted and displayed. Like a traditional step-sequencer interface, click on a grid point (where the grid lines intersect) to create a 'note', or click on a note to delete it. Use alt-click-drag on a note to change the note's velocity/gain.");
-    }
+    
     else if (relativeTempoMenu->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText("Relative Tempo Menu. Sets the relative tempo of the individual sequencer.");

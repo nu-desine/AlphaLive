@@ -24,6 +24,7 @@
 #include "../../File and Settings/AppSettings.h"
 #include "../Binary Data/BinaryDataNew.h"
 #include "GlobalValues.h"
+#include "../../Application/CommonInfoBoxText.h"
 #include "MainComponent.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
@@ -590,11 +591,63 @@ void GuiSamplerMode::updateDisplay()
 
 void GuiSamplerMode::mouseEnter (const MouseEvent &e)
 {
-    /*
+    
+    if (quantiseButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::quantizeButton));
+    }
+    else if (triggerSettingsButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::triggerSettingsButton));
+    }
+    else if (pressureSettingsButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressureSettingsButton));
+    }
+    
+    else if (triggerModeButtons[0]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::triggerModeStandard) + " " + translate(CommonInfoBoxText::triggerModeButtons));
+    }
+    else if (triggerModeButtons[1]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::triggerModeToggle) + " " + translate(CommonInfoBoxText::triggerModeButtons));
+    }
+    else if (triggerModeButtons[2]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::triggerModeLatch) + " " + translate(CommonInfoBoxText::triggerModeButtons));
+    }
+    else if (triggerModeButtons[3]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::triggerModeTrigger) + " " + translate(CommonInfoBoxText::triggerModeButtons));
+    }
+    else if (pressureStatusButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressureStatusButton));
+    }
+    else if (indestructibleButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::indestructibleButton));
+    }
+    else if (stickyButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::stickyButton));
+    }
+    else if (loopButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::loopButton));
+    }
+    else if (finishLoopButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::finishLoopButton));
+    }
+    
     if (fileChooser->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Audio File Selector. Sets and displays the filepath name of the audio file for the selected pad/pads. Use the '+' button to open a File Browser Window, or use the drop-down menu to select from recently selected files, as well as view the currently selected file.");
+        mainComponentRef.setInfoTextBoxText("Audio File Selector. Sets and displays the filepath name of the audio file for the selected pads. Use the '+' button to open a File Browser Window, or use the drop-down menu to select from recently selected files, as well as view the currently selected file.");
     }
+    
+    /*
     else if (panSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText("Pan Knob. Sets and displays the panning/stereo positioning of the selected pad/pads audio signal.");
@@ -602,10 +655,6 @@ void GuiSamplerMode::mouseEnter (const MouseEvent &e)
     else if (gainSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText("Gain Knob. Sets and displays the gain/volume of the selected pad/pads audio signal.");
-    }
-    else if (triggerModeMenu->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("TriggerMode Drop-down Menu. \nSets and displays the sampler TriggerMode for the selected pad/pads. Sampler TriggerModes determine how interation with a pad controls the playback and modification of an audio file.");
     }
     else if (fxDial->isMouseOver(true))
     {

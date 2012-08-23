@@ -1141,12 +1141,6 @@ void MainComponent::mouseEnter (const MouseEvent &e)
         setInfoTextBoxText (translate("Info Text Box. Hover the mouse over a control to view a description of what the control does here. It can be disabled using the option in the 'Controls' menu bar menu."));
     }
     /*
-    else if (pressureSensitivityMenu->isMouseOver(true)==true)
-    {
-        setInfoTextBoxText("Pad Pressure Sensitivity Mode. Sets and displays the sensitivity of the selected pad/pads in terms of mapping the pressure to paramaters within the application.");
-    }
-     */
-    /*
     else if(killswitchButton->isMouseOver(true))
     {
         setInfoTextBoxText("Kill Switch. Instantly stops the clock and any playing pads.");

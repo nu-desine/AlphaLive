@@ -24,6 +24,7 @@
 #include "../../Binary Data/BinaryDataNew.h"
 #include "../../../File and Settings/AppSettings.h"
 #include "../../Views/MainComponent.h"
+#include "../../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
@@ -339,60 +340,49 @@ void GuiFxDial::updateDisplay()
 
 void GuiFxDial::mouseEnter (const MouseEvent &e)
 {
-    /*
-    if (buttons[0]->isMouseOver(true))
+    
+    if (fxButtons[0]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("No Effect. The pressure of the selected pad/pads will not control any effect.");
+        mainComponentRef.setInfoTextBoxText(translate("Gain and Pan Effect. Allows the pressure of the selected pads to manipulate the gain and pan of the audio."));
     }
-    else if (buttons[1]->isMouseOver(true))
+    else if (fxButtons[1]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Gain and Pan. Allows the pressure of the selected pad/pads to manipulate the gain and pan of the audio.");
+        mainComponentRef.setInfoTextBoxText(translate("Low-pass Filter Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[2]->isMouseOver(true))
+    else if (fxButtons[2]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Low-Pass Filter. Allows the pressure of the selected pad/pads to manipulate audio with a Low-Pass Filter.");
+        mainComponentRef.setInfoTextBoxText(translate("High-pass Filter Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[3]->isMouseOver(true))
+    else if (fxButtons[3]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("High-Pass Filter. Allows the pressure of the selected pad/pads to manipulate audio with a High-Pass Filter.");
+       mainComponentRef.setInfoTextBoxText(translate("Band-pass Filter Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[4]->isMouseOver(true))
+    else if (fxButtons[4]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Band-Pass Filter. Allows the pressure of the selected pad/pads to manipulate audio with a Band-Pass Filter.");
+        mainComponentRef.setInfoTextBoxText(translate("Overdrive Distortion Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[5]->isMouseOver(true))
+    else if (fxButtons[5]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Overdrive Distortion. Allows the pressure of the selected pad/pads to manipulate audio with a overdrive distortion effect. Coming Soon!");
+        mainComponentRef.setInfoTextBoxText(translate("Bitcrusher Distortion Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[6]->isMouseOver(true))
+    else if (fxButtons[6]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Delay. Allows the pressure of the selected pad/pads to manipulate audio with a simple delay effect.");
+        mainComponentRef.setInfoTextBoxText(translate("Delay/Echo Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[7]->isMouseOver(true))
+    else if (fxButtons[7]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Reverb. Allows the pressure of the selected pad/pads to manipulate audio with a simple reverb effect.");
+       mainComponentRef.setInfoTextBoxText(translate("Reverb Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[8]->isMouseOver(true))
+    else if (fxButtons[8]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Chorus. Allows the pressure of the selected pad/pads to manipulate audio with a chorus effect. Coming Soon!");
+        mainComponentRef.setInfoTextBoxText(translate("Flanger/Phaser Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[9]->isMouseOver(true))
+    else if (fxButtons[9]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Flanger. Allows the pressure of the selected pad/pads to manipulate audio with a flanger effect.");
+        mainComponentRef.setInfoTextBoxText(translate("Tremolo Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[10]->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Tremolo. Allows the pressure of the selected pad/pads to manipulate audio with a tremolo effect.");
-    }
-    else if (buttons[11]->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Vibrato. Allows the pressure of the selected pad/pads to manipulate audio with a vibrato effect. Coming Soon!");
-    }
-    else if (buttons[12]->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Pitchshifter. Allows the pressure of the selected pad/pads to manipulate audio with a pitchshifter. Coming Soon!");
-    }
-     */
+    
+     
 }
 
 void GuiFxDial::mouseExit (const MouseEvent &e)

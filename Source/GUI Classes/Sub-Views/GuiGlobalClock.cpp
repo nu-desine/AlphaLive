@@ -24,6 +24,7 @@
 #include "../Views/MainComponent.h"
 #include "../../File and Settings/AppSettings.h"
 #include "AlphaLiveLookandFeel.h"
+#include "../../Application/CommonInfoBoxText.h"
 
 #define OFFSET_X 479
 #define OFFSET_Y 6
@@ -325,34 +326,35 @@ void GuiGlobalClock::mouseEnter (const MouseEvent &e)
     
     else if (quantizationValueButtons[0]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Quantization Value Buttons. When a pad is set to 'quantized' it will be triggered at the next point in time relevant to the global quantization value. This button sets the value to a quarter beat."));
+        mainComponentRef.setInfoTextBoxText (translate("Quarter Beat Quantization Value.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
     }
+    
     else if (quantizationValueButtons[1]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Quantization Value Buttons. When a pad is set to 'quantized' it will be triggered at the next point in time relevant to the global quantization value. This button sets the value to half a beat."));
+        mainComponentRef.setInfoTextBoxText (translate("Half Beat Quantization Value.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
     }
     else if (quantizationValueButtons[2]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Quantization Value Buttons. When a pad is set to 'quantized' it will be triggered at the next point in time relevant to the global quantization value. This button sets the value to one beat."));
+       mainComponentRef.setInfoTextBoxText (translate("One Beat Quantization Value.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
     }
     else if (quantizationValueButtons[3]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Quantization Value Buttons. When a pad is set to 'quantized' it will be triggered at the next point in time relevant to the global quantization value. This button sets the value to one bar."));
+        mainComponentRef.setInfoTextBoxText (translate("One Bar Quantization Value.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
     }
     else if (quantizationValueButtons[4]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Quantization Value Buttons. When a pad is set to 'quantized' it will be triggered at the next point in time relevant to the global quantization value. This button sets the value to two bars."));
+        mainComponentRef.setInfoTextBoxText (translate("Two Bars Quantization Value.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
     }
     else if (quantizationValueButtons[5]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Quantization Value Buttons. When a pad is set to 'quantized' it will be triggered at the next point in time relevant to the global quantization value. This button sets the value to four bars."));
+        mainComponentRef.setInfoTextBoxText (translate("Four Bars Quantization Value.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
     }
     
     for (int i = 0; i < 6; i++)
     {
         if (beatsPerBarButtons[i]->isMouseOver(true))
         {
-            mainComponentRef.setInfoTextBoxText (translate("Beats-Per-Bar Buttons. This set of buttons allows a basic time signature to be set. This button sets the clocks beats-per-bar value to ") + String (i+2) + ".");
+            mainComponentRef.setInfoTextBoxText (String (i+2) + " " + translate("Beats-Per-Bar. This set of buttons allows a basic time signature for the global clock to be set."));
         }
     }
     

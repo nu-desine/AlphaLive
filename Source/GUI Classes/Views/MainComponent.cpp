@@ -40,10 +40,13 @@
 
 //==============================================================================
 MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, DocumentWindow* owner_)
-                        :   alphaLiveEngineRef(ref),
+                        :   Thread("Info Box Updater"),
+alphaLiveEngineRef(ref),
                             appDocumentStateRef(ref2),
                             owner(owner_)
+                            
 {
+    infoBoxText = String::empty;
     infoTextBox = nullptr;
     
     //language/localisation stuff
@@ -261,6 +264,9 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 
 MainComponent::~MainComponent()
 {
+    if (isThreadRunning())
+        stopThread(500);
+    
     deleteAllChildren();
     //delete blackChrome;
     
@@ -1055,15 +1061,58 @@ GuiPiano* MainComponent::getGuiPiano()
 }
 
 
+
 void MainComponent::setInfoTextBoxText (String text)
 {
+    /* 
+     Setting the Info Box is now done using a thread so that the info box will
+     only be set/updated if the mouse has been hovering over the control for a certain
+     amount of time. This reduces CPU usage when moving the mouse over the interface quickily
+     as it won't unneccesarily updated udpdating the text all the time, which also looks smoother.
+     
+     This is achieved using the following algorithm:
+     - Everytime the mouse events or exists a control it calls this function with the controls
+     description as an argument. The description is put into the infoBoxText String variable.
+     - If the thread is not currently running, start the thread.
+     - In the run() function below it will enter the while statement and pause for either 200 ms
+     or until a notification wakes up the thread. If the timeout period expires it will exit the
+     loop (as gotNewTextMessage will equal false) and set the infoTextBox Text, and the thread
+     will exit.
+     - If setInfoTextBoxText() is called whilst the thread is running (meaning the thread is 
+     currently 'waiting', notify() will be called which will wake up the thread. However this will
+     cause gotNewTextMessage to equal true, so it will re-enter the loop and wait for 200 ms again.
+     Therefore the info box text will only by updated when the thread is woken by notifications
+     sent by new controls being enter exitted by the mouse.
+     */
+    
+    infoBoxText = text;
+    
+    if (isThreadRunning() == false)
+        startThread();
+    else
+        notify();
+}
+
+
+void MainComponent::run()
+{
+    bool gotNewTextMessage = true;
+    
+    while (gotNewTextMessage == true)
+    {
+        gotNewTextMessage = wait(100);
+    }
+    
     if (isInfoBoxEnabled == true)
     {
+        const MessageManagerLock mmLock;
+        
         infoTextBox->clear();
-        infoTextBox->setText(text);
+        infoTextBox->setText(infoBoxText);
     }
     
 }
+
 
 void MainComponent::setIsClockRunning (bool value)
 {

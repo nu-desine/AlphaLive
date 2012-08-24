@@ -64,7 +64,8 @@ class MainComponent :   public Component,
                         public Slider::Listener,
                         public ComboBox::Listener,
                         public Observer, //so this class can 'observe' appDocumentState
-                        public ApplicationCommandTarget
+                        public ApplicationCommandTarget,
+                        public Thread
 {
 public:
     //==============================================================================
@@ -91,6 +92,7 @@ public:
     void setToSequencerMode();
     void setToControllerMode();
     
+    void run();
     void setInfoTextBoxText (String text);
     
     void mouseDown (const MouseEvent &e);
@@ -185,6 +187,8 @@ private:
     AboutComponent *aboutComponent;
     PreferencesComponent *preferencesComponent;
     ProjectSettingsComponent *projectSettingsComponent;
+    
+    String infoBoxText;
     
     //==============================================================================
 };

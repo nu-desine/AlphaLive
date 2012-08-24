@@ -74,11 +74,18 @@ namespace CommonInfoBoxText
     
     static String midiMaxPressureRangeSlider(translate("Pressure Maximum Range Selector. Along with the Minimum Range Selector it sets and displays the MIDI pressure data range for the selected pads."));
     
+    static String oscIpAddressEditor(translate("IP Address Editor. Sets and displays the IP address of the device that you want the selected pads to send OSC messages to. Set to 127.0.0.1 to send OSC messages somewhere on the same computer."));
+    
+    static String oscportNumberSlider(translate("Port Number Selector. Sets and displays the UDP/TCP port number that you want the selected pads to send OSC messages over."));
+    
     
     // ==== global clock controls ====
     static String quantizationValueButtons(translate("When a pad is set to 'quantized' its start/stop command will be triggered at the next point in time relevant to the global quantization value which is set with this set of buttons."));
     
     // ==== FX dial and views ====
     static String effectsButtons(translate("Applies the effect to the audio of the selected pads whose paramaters can then be controlled via the pads pressure."));
+    
+    // ==== Other ====
+    static String closeButton (translate("Click to go back to the applications main interface. Pressing ESC also triggers this command."));
     
 }

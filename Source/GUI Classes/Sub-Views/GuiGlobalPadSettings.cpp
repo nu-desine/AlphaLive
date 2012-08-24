@@ -150,7 +150,19 @@ void GuiGlobalPadSettings::updateDisplay()
 
 void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
 {
-    
+    if (exclusiveModeButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Exclusive Mode Button. If this button is set to 'on' the selected pads will be set to 'Exclusive Mode' - only a single pad can be playing at any time for each exclusive group."));
+    }
+    else if (exclusiveGroupSlider->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Exclusive Group Selector. Sets and displays the exclusive group number for the selected pads."));
+        
+    }
+    else if (pressureSensitivityMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Pressure Curve Menu. Use this menu to select the curve for the pressure."));
+    }
 }
 
 void GuiGlobalPadSettings::mouseExit (const MouseEvent &e)

@@ -24,6 +24,7 @@
 #include "GlobalValues.h"
 #include "../Custom Components/Scene/SceneValues.h"
 #include "../../File and Settings/AppSettings.h"
+#include "../../Application/CommonInfoBoxText.h"
 #include "MainComponent.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
@@ -34,21 +35,6 @@
 GuiControllerMode::GuiControllerMode(MainComponent &ref)
                                             :   mainComponentRef(ref)
 {
-    /*
-    addAndMakeVisible(speakerLeft = new GuiSpeaker());
-    addAndMakeVisible(circleBackgroundSmall = new GuiCircleBackground());
-    addAndMakeVisible(circleBackgroundRight = new GuiCircleBackground());
-    
-    addAndMakeVisible(controlMenu = new ComboBox());
-    controlMenu->addListener(this);
-    controlMenu->addMouseListener(this, true);
-    controlMenu->addItem("None Selected...", 1);
-    controlMenu->addItem("Scene Switcher", 2);
-    controlMenu->addItem("MIDI Program Change", 4);
-    controlMenu->addItem("Scene & MIDI Program Switcher", 5);
-    controlMenu->addItem("OSC Ouput", 3);
-    controlMenu->setSelectedId(1, true);
-     */
     
     for (int i = 0; i < 4; i++)
     {
@@ -124,18 +110,7 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
         
         addChildComponent(midiChannelButtons[i]);
 	}
-    
-    /*
-    addAndMakeVisible(midiProgramChangeChannelSlider = new AlphaSlider());
-    midiProgramChangeChannelSlider->setRange(1, 16, 1);
-    midiProgramChangeChannelSlider->setValue(1, false);
-    midiProgramChangeChannelSlider->addListener(this);
-    midiProgramChangeChannelSlider->addMouseListener(this, true);
-    midiProgramChangeChannelSlider->setVisible(false);
-     */
-
-
-    
+   
 }
 
 
@@ -532,33 +507,53 @@ void GuiControllerMode::setDisplay (int controlSelected)
 
 void GuiControllerMode::mouseEnter (const MouseEvent &e)
 {
-    /*
-    if (controlMenu->isMouseOver(true))
+    for (int i = 0; i < 4; i++)
     {
-        mainComponentRef.setInfoTextBoxText("Control Drop-Down Menu. Sets and displays the control for the selected pad/pads.");
+        if (controlButtons[0]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate("Scene Switch Mode. Select this button to enable the selected pads to be used to switch to a defined scene number."));
+        }
+        else if (controlButtons[1]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate("MIDI Program Change Mode. Select this button to enable the selected pads to be used to send out a MIDI program change message."));
+        }
+        else if (controlButtons[2]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate("Dual Scene Switch/MIDI Program Change Mode. Select this button to enable the selected pads to be used to send out a MIDI program change message as well as a scene switch command."));
+        }
+        else if (controlButtons[3]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate("OSC Output Mode. Select this button to enable the selected pads to be used to send out Open Sound Control messages."));
+        }
     }
-    else if (sceneNumberSlider->isMouseOver(true))
+    
+    if (sceneNumberSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Scene Number Selector. Sets and displays the scene number for the selected pad/pads. When the pad is pressed it will cause settings to be loaded from the selected scene.");
+        mainComponentRef.setInfoTextBoxText(translate("Scene Number Selector. Sets and displays the scene number for the selected pads. When the pad is pressed it will cause settings to be loaded from the selected scene."));
     }
     else if (oscIpAddressEditor->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("IP Address Editor. Sets and displays the IP address of the device that you want to send OSC messages to from the selected pad/pads. Set to 127.0.0.1 to send OSC messages somewhere on the same computer.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::oscIpAddressEditor));
     }
     else if (oscPortNumberSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Port Number Selector. Sets and displays the UDP/TCP port number that you want to send OSC messages over from the selected pad/pads. Warning: Do not select port 5003 as this is AlphaLive's listening port!");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::oscportNumberSlider));
     }
     else if (midiProgramChangeNumberSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("MIDI Program Change Number Selector. Sets and displays the MIDI Program Change Number for the selected pad/pads.");
-    }
-    else if (midiProgramChangeChannelSlider->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("MIDI Program Change Channel Selector. Sets and displays the MIDI Program Change Channel for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate("MIDI Program Change Number Selector. Sets and displays the MIDI Program Change Number for the selected pads."));
     }
     
-    */
+    for (int i = 0; i < 16; i++)
+    {
+        if (midiChannelButtons[i]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::midiChannelButtons) + " " + String(i+1) + ".");
+            break;
+        }
+    }
+    
+    
 }
 
 void GuiControllerMode::mouseExit (const MouseEvent &e)

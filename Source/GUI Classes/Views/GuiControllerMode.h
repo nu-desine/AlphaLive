@@ -71,15 +71,10 @@ private:
     Array<int> selectedPads;
     MainComponent &mainComponentRef;
     
-    //GuiSpeaker *speakerLeft;
-    //GuiCircleBackground *circleBackgroundSmall, *circleBackgroundRight;
-    
-    //ComboBox *controlMenu;
-    
     OwnedArray <SettingsButton> controlButtons;
     
     AlphaSlider *sceneNumberSlider, *oscPortNumberSlider;
-    AlphaSlider *midiProgramChangeNumberSlider;// *midiProgramChangeChannelSlider;
+    AlphaSlider *midiProgramChangeNumberSlider;
     OwnedArray<AlphaTextButton> midiChannelButtons;
     Label *oscIpAddressEditor;
     

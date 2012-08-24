@@ -22,6 +22,7 @@
 
 #include "PreferencesComponent.h"
 #include "../Views/MainComponent.h"
+#include "../../Application/CommonInfoBoxText.h"
 
 
 PreferencesComponent::PreferencesComponent(MainComponent &ref, AlphaLiveEngine &ref2)
@@ -102,11 +103,11 @@ void PreferencesComponent::mouseEnter (const MouseEvent &e)
 {
     if (closeButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Click to go back to the application's main interface. Pressing ESC also triggers this command.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::closeButton));
     }
     else if (audioAndMidiSettingsComponent->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText ("Audio Output Settings. Sets and displays the global audio output settings of AlphaLive. Output device, sample rate, and audio buffer size can be set along with a button that allows a test signal to be played.");
+        mainComponentRef.setInfoTextBoxText (translate("Audio Output Settings. Sets and displays the global audio output settings of AlphaLive. Output device, sample rate, and audio buffer size can be set along with a button that allows a test signal to be played."));
     }
 }
 
@@ -292,19 +293,19 @@ void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
     
     if (appProjectDirChooser->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("AlphaLive Projects Directory Chooser. This control allows you to change the location of the applications projects folder. The previous folder and its contents will be moved to the new location.");
+        mainComponentRef.setInfoTextBoxText(translate("AlphaLive Projects Directory Chooser. This control allows you to change the location of the applications projects folder. The previous folder and its contents will be moved to the new location."));
     }
     else if (midiNoteDisplayTypeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("MIDI note display type selector. Use this menu to configure how MIDI notes are displayed on the circular pianos.");
+        mainComponentRef.setInfoTextBoxText(translate("MIDI note display type selector. Use this menu to configure how MIDI notes are displayed within the application."));
     }
     else if (launchTaskMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Application Launch Task selector. Use this menu to configure what happens when the application is lauched.");
+        mainComponentRef.setInfoTextBoxText(translate("Application Launch Task selector. Use this menu to configure what happens when the application is lauched."));
     }
     else if (killOnClockStopButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("If this option is set to 'On' any playing pads will be stopped when the clock is stopped.");
+        mainComponentRef.setInfoTextBoxText(translate("If this option is set to 'on' any playing pads will be stopped when the clock is stopped."));
     }
 }
 

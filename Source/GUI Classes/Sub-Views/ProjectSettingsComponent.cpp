@@ -24,6 +24,8 @@
 #include "../Views/MainComponent.h"
 #include "../../File and Settings/AppSettings.h"
 #include "../../Functionality Classes/Sequencer Mode/SequencerValues.h"
+#include "../../Application/CommonInfoBoxText.h"
+
 
 
 ProjectSettingsComponent::ProjectSettingsComponent(MainComponent &ref, AlphaLiveEngine &ref2, AppDocumentState &ref3)
@@ -85,7 +87,7 @@ void ProjectSettingsComponent::mouseEnter (const MouseEvent &e)
 {
     if (closeButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Click to go back to the application's main interface. Pressing ESC also triggers this command.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::closeButton));
     }
 }
 
@@ -232,15 +234,15 @@ void GlobalOscComponent::mouseEnter (const MouseEvent &e)
 {
     if (globalOscSwitch->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Global OSC Mode. Use this switch to turn on Global OSC Mode which allows you to send out OSC messages from each pad whilst still maintaining the functionality of adding audio/MIDI modes.");
+        mainComponentRef.setInfoTextBoxText(translate("Global OSC Mode. Use this switch to turn on Global OSC Mode which allows you to send out Open Sound Control messages from each pad whilst still maintaining the functionality of their audio/MIDI modes."));
     }
     else if (oscIpAddressEditor->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("IP Address Editor. Sets and displays the IP address of the device that you want to send the OSC messages to. Set to 127.0.0.1 to send OSC messages somewhere on the same computer.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::oscIpAddressEditor));
     }
     else if (oscPortNumberSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Port Number Selector. Sets and displays the UDP/TCP port number that you want to send OSC messages over. Warning: Do not select port 5003 as this is AlphaLive's listening port!");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::oscportNumberSlider));
     }
 }
 
@@ -311,7 +313,7 @@ void GeneralProjSettingsComponent::buttonClicked (Button* button)
     {
         if(copyExternalFilesSwitch->getToggleStateValue() == true)
         {
-            bool shouldImport = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Copy External Files", "This command will allow all imported audio files to be copied into the projects directory. It will also instantly import any files currently included in the project that are stored externally. This may take a couple of seconds depending on the number and size of audio files.");
+            bool shouldImport = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("Copy External Files"), translate("This command will allow all imported audio files to be copied into the projects directory. It will also instantly import any files currently included in the project that are stored externally. This may take a couple of seconds depending on the number and size of audio files."));
             
             if (shouldImport == true)
             {
@@ -356,7 +358,7 @@ void GeneralProjSettingsComponent::mouseEnter (const MouseEvent &e)
 {
     if (copyExternalFilesSwitch->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Copy External Audio Files Options. By default when an external audio file is added to an AlphaLive project it is copied into the projects directory. Use this button to turn this option off. Be aware that with this set to off the project will not beable to link to any external audio files if moved onto another computer.");
+        mainComponentRef.setInfoTextBoxText(translate("Copy External Audio Files Options. By default when an external audio file is added to an AlphaLive project it is copied into the projects directory. Use this button to turn this option off. Be aware that with this set to off the project will not beable to link to any external audio files if moved onto another computer."));
     }
 
 }

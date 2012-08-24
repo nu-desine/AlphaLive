@@ -22,6 +22,8 @@
 
 #include "AboutComponent.h"
 #include "../Views/MainComponent.h"
+#include "../../Application/CommonInfoBoxText.h"
+
 
 
 AboutComponent::AboutComponent(MainComponent &ref)
@@ -105,7 +107,7 @@ void AboutComponent::mouseEnter (const MouseEvent &e)
 {
     if (closeButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Click to go back to the application's main interface. Pressing ESC also triggers this command.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::closeButton));
     }
 }
 

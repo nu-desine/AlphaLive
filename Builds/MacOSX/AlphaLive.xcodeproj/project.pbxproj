@@ -1803,12 +1803,12 @@
 				0C78A36615B467910049C0C8 /* GuiSamplerMode.cpp */,
 				0C78A36F15B467910049C0C8 /* GuiSequencerMode.h */,
 				0C78A36E15B467910049C0C8 /* GuiSequencerMode.cpp */,
+				0C78A36515B467910049C0C8 /* GuiControllerMode.h */,
+				0C78A36415B467910049C0C8 /* GuiControllerMode.cpp */,
 				0C78A36B15B467910049C0C8 /* GuiSeqMidiMode.h */,
 				0C78A36A15B467910049C0C8 /* GuiSeqMidiMode.cpp */,
 				0C78A36D15B467910049C0C8 /* GuiSeqSamplesMode.h */,
 				0C78A36C15B467910049C0C8 /* GuiSeqSamplesMode.cpp */,
-				0C78A36515B467910049C0C8 /* GuiControllerMode.h */,
-				0C78A36415B467910049C0C8 /* GuiControllerMode.cpp */,
 			);
 			path = Views;
 			sourceTree = "<group>";

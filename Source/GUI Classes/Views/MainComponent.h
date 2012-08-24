@@ -157,6 +157,7 @@ private:
     
     GuiPadLayout *guiPadLayout;
     AlphaRotarySlider *gainSlider, *panSlider;
+    Label *gainPanValueLabel;
 
     //'rotate pad display' stuff
     Slider *padRotate;

@@ -37,12 +37,13 @@ GuiPiano::GuiPiano() : Component ("GuiPiano")
     recentlyUpdated = true;
     
     //note display label
-    addAndMakeVisible(midiNoteLabel = new Label("Note Label", "60"));
+    addAndMakeVisible(midiNoteLabel = new Label("Note Label", String::empty));
     midiNoteLabel->setJustificationType(Justification::horizontallyCentred);
-    midiNoteLabel->setColour(Label::textColourId, Colours::lightgrey);
+    midiNoteLabel->setFont(Font(12));
     midiNoteLabel->addMouseListener(this, true);
     
     noteDisplayType = StoredSettings::getInstance()->midiNoteDisplayType;
+    noteNumber = 60;
 	
 	keyWidth = ( 2.57142857 * (M_PI / 180));
 	keySegWhite = (keyWidth * 0.9);
@@ -142,17 +143,25 @@ void GuiPiano::resized()
         }
 	}
 	
+    midiNoteLabel->setBounds(560, 578, 30, 30);
 }
 
 
 void GuiPiano::paint (Graphics& g)
 {
-	
+	/*
 	g.setColour(Colours::black);
 	g.fillEllipse(520, 542, 90, 90);
 		
 	g.setColour(Colours::grey.withAlpha(0.3f));
 	g.drawEllipse(520, 542, 90, 90, 1.0f);
+     */
+    
+    g.setColour(Colours::black);
+	g.fillEllipse(540, 560, 55, 55);
+    
+	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.drawEllipse(540, 560, 55, 55, 1.0f);
 	
 	
 }
@@ -194,6 +203,7 @@ void GuiPiano::buttonClicked(Button *button)
                         {
                             setKeyDisplay (i, true);
                             selectedKeys.addIfNotAlreadyThere(i);
+                            noteNumber = i;
                         }
                     }
                     
@@ -229,6 +239,9 @@ void GuiPiano::buttonClicked(Button *button)
                                         setKeyDisplay (newVal, true);
                                         selectedKeys.addIfNotAlreadyThere(newVal);
                                     }
+                                    
+                                    if (row == 0)
+                                        noteNumber = i;
                                 }
                                 
                             }
@@ -255,7 +268,7 @@ void GuiPiano::buttonClicked(Button *button)
                     }
                 }
             
-                break;
+                //break;
             }
             
             //=========================================================================
@@ -427,6 +440,8 @@ void GuiPiano::buttonClicked(Button *button)
             //=========================================================================
             //=========================================================================
         }
+        
+        
 	}
 }
 
@@ -458,6 +473,8 @@ void GuiPiano::updateDisplay()
         {
             setKeyDisplay (PAD_SETTINGS->getMidiNote(), true);
             selectedKeys.addIfNotAlreadyThere(PAD_SETTINGS->getMidiNote());
+            
+            noteNumber = PAD_SETTINGS->getMidiNote();
         }
         
         else if (PAD_SETTINGS->getMode() == 3 && PAD_SETTINGS->getSequencerMode() == 1) //Midi Sequencer Mode
@@ -468,9 +485,14 @@ void GuiPiano::updateDisplay()
                 {
                     setKeyDisplay (PAD_SETTINGS->getSequencerMidiNote(i), true);
                     selectedKeys.addIfNotAlreadyThere(PAD_SETTINGS->getSequencerMidiNote(i));
+                    
                 }
             }
+            
+            noteNumber = PAD_SETTINGS->getSequencerMidiNote(0);
         }
+        
+        setNoteLabelText(noteNumber);
     }
     
     //=========================================================================
@@ -487,13 +509,18 @@ void GuiPiano::updateDisplay()
                 padNum = selectedPads[i];
                 setKeyDisplay (PAD_SETTINGS->getMidiNote(), true);
                 selectedKeys.addIfNotAlreadyThere(PAD_SETTINGS->getMidiNote());
+                
+                noteNumber = -1;
             }
         }
         
         else if (PAD_SETTINGS->getMode() == 3 && PAD_SETTINGS->getSequencerMode() == 1) //Midi Sequencer Mode
         {
             //what should I display here?
+            noteNumber = -1;
         }
+        
+        setNoteLabelText(noteNumber);
     }
     //=========================================================================
     
@@ -510,7 +537,7 @@ void GuiPiano::mouseDown (const MouseEvent &e)
             
             PopupMenu menu;
             
-            if (noteDisplayType == 1)
+            if (noteDisplayType == 2)
                 menu.addItem(1, translate("Display MIDI note numbers"));
             else
                 menu.addItem(2, translate("Display MIDI note names"));
@@ -535,6 +562,7 @@ void GuiPiano::mouseDown (const MouseEvent &e)
             }
         }
     }
+     
 }
 
 void GuiPiano::mouseEnter (const MouseEvent &e)
@@ -544,7 +572,9 @@ void GuiPiano::mouseEnter (const MouseEvent &e)
         //===display note number when hovering mouse over a piano key===
         if (keys[i]->isMouseOver(true))
         {
-            midiNoteLabel->setColour(Label::textColourId, Colours::orange);
+            midiNoteLabel->setColour(Label::textColourId, AlphaColours::blue);
+            setNoteLabelText(i);
+            break;
         }
     }
 }
@@ -554,17 +584,27 @@ void GuiPiano::mouseExit (const MouseEvent &e)
 {
     //=====set key label text to currently selected note=====
     setNoteLabelText(noteNumber);
-    midiNoteLabel->setColour(Label::textColourId, Colours::lightgrey);
+    midiNoteLabel->setColour(Label::textColourId, LookAndFeel::getDefaultLookAndFeel().findColour(Label::textColourId));
 }
 
 
-void GuiPiano::setNoteLabelText (int noteNumber)
+void GuiPiano::setNoteLabelText (int note)
 {
-    if (noteDisplayType == 0)
-        midiNoteLabel->setText(String(noteNumber), false);
-    
-    else if (noteDisplayType == 1)
-        midiNoteLabel->setText(MidiMessage::getMidiNoteName(noteNumber, true, true, 3), false);
+    if (note >= 0)
+    {
+        if (noteDisplayType == 1)
+        {
+            midiNoteLabel->setText(String(note), false);
+        }
+        else if (noteDisplayType == 2)
+        {
+            midiNoteLabel->setText(MidiMessage::getMidiNoteName(note, true, true, 3), false);
+        }
+    }
+    else
+    {
+        midiNoteLabel->setText(String::empty, false); 
+    }
 }
 
 

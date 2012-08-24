@@ -157,8 +157,10 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     sceneComponent->addMouseListener(this, true);
     
     //create gain slider
-    addAndMakeVisible(gainSlider = new AlphaRotarySlider((225 * (M_PI / 180)), (530 * (M_PI / 180)), 81));
-	gainSlider->setRotaryParameters((225 * (M_PI / 180)), (530 * (M_PI / 180)),true);
+    //addAndMakeVisible(gainSlider = new AlphaRotarySlider((225 * (M_PI / 180)), (530 * (M_PI / 180)), 81));
+	//gainSlider->setRotaryParameters((225 * (M_PI / 180)), (530 * (M_PI / 180)),true);
+    addAndMakeVisible(gainSlider = new AlphaRotarySlider((225 * (M_PI / 180)), (495 * (M_PI / 180)), 81));
+	gainSlider->setRotaryParameters((225 * (M_PI / 180)), (495 * (M_PI / 180)),true);
     gainSlider->setRange(0.0, 2.0);
     gainSlider->addListener(this);
 	gainSlider->setValue(1.0, true);
@@ -171,6 +173,12 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     panSlider->addListener(this);
     panSlider->setValue(0.5, true);
     panSlider->addMouseListener(this, false);
+    
+    //gain and pan label
+    addAndMakeVisible(gainPanValueLabel = new Label("gain and pan label", "0.5555"));
+    gainPanValueLabel->setJustificationType(Justification::horizontallyCentred);
+    gainPanValueLabel->setFont(Font(12));
+    gainPanValueLabel->addMouseListener(this, true);
     
     /*
      
@@ -310,6 +318,7 @@ void MainComponent::resized()
 	
 	gainSlider->setBounds(38, 8, 81, 81);
 	panSlider->setBounds(46, 16, 65, 65);
+    gainPanValueLabel->setBounds(54, 24, 49, 49);
 }
 
 
@@ -367,16 +376,17 @@ void MainComponent::paint(juce::Graphics &g)
 	g.setColour(Colours::grey.withAlpha(0.3f));
 	g.drawEllipse(35, 5, 87, 87, 1.0f);
 	
-	g.setColour(Colours::black);
-	g.fillEllipse(32, 73, 58, 58);
+    //The below code is for the blue circle for the gain/pan control. what was it meant for?
+	//g.setColour(Colours::black);
+	//g.fillEllipse(32, 73, 58, 58);
 	
-	ColourGradient fillGradient(AlphaColours::blue, 32+(58*0.5), 73+(58*0.6), AlphaColours::lightblue, 32+(58*0.5), 73, false);
-	g.setGradientFill(fillGradient);
+	//ColourGradient fillGradient(AlphaColours::blue, 32+(58*0.5), 73+(58*0.6), AlphaColours::lightblue, 32+(58*0.5), 73, false);
+	//g.setGradientFill(fillGradient);
 	
-	g.fillEllipse((32+(58*0.15)), (73+(58*0.15)), (58*0.7), (58*0.7));
+	//g.fillEllipse((32+(58*0.15)), (73+(58*0.15)), (58*0.7), (58*0.7));
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
-	g.drawEllipse((32+(58*0.1)), (73+(58*0.1)), (58*0.8), (58*0.8), 1.0f);
+	//g.setColour(Colours::grey.withAlpha(0.3f));
+	//g.drawEllipse((32+(58*0.1)), (73+(58*0.1)), (58*0.8), (58*0.8), 1.0f);
 
     
 }

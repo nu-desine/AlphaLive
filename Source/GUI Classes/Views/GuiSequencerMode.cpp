@@ -226,8 +226,8 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     addAndMakeVisible(parameterLabel = new Label());
 	parameterLabel->setFont(Font(9));
 	parameterLabel->setText("32", false);
-    parameterLabel->setColour(Label::textColourId, Colours::white);
-    parameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
+    //parameterLabel->setColour(Label::textColourId, Colours::white);
+    //parameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     parameterLabel->setJustificationType(Justification::centred);
     parameterLabel->setEditable(false, true, true);
     parameterLabel->addListener(this);
@@ -1604,7 +1604,7 @@ void GuiSequencerMode::setParameterLabelText (String value)
 	
 	else if (value == String::empty)
 	{
-		parameterLabel->setColour(Label::textColourId, Colours::white);
+		parameterLabel->setColour(Label::textColourId, LookAndFeel::getDefaultLookAndFeel().findColour(Label::textColourId));
 		
 		if (numberOfSequencesSlider->isVisible())
 		{
@@ -1676,6 +1676,26 @@ void GuiSequencerMode::setNoteLengthSliderRange (int maxValue)
 
 void GuiSequencerMode::mouseEnter (const MouseEvent &e)
 {
+    
+    // ======= param label text command =========
+    // =======================================
+    
+    if (numberOfSequencesSlider->isMouseOver(true))
+		setParameterLabelText(String(numberOfSequencesSlider->getValue()));
+	else if (relativeTempoSlider->isMouseOver(true))
+		setParameterLabelText(String(relativeTempoSlider->getValue()));
+	else if (noteLengthSlider->isMouseOver(true))
+		setParameterLabelText(String(noteLengthSlider->getValue()));
+	else if (audioGainSlider->isMouseOver(true))
+		setParameterLabelText(String(audioGainSlider->getValue()));
+	else if (audioPanSlider->isMouseOver(true))
+		setParameterLabelText(String(audioPanSlider->getValue()));
+     
+    
+    
+    // ======= info box text command =========
+    // =======================================
+    
     if (quantiseButton->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::quantizeButton));
@@ -1863,6 +1883,20 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
 
 void GuiSequencerMode::mouseExit (const MouseEvent &e)
 {
+    
+    if (e.eventComponent == numberOfSequencesSlider)
+		setParameterLabelText(String::empty);
+	else if (e.eventComponent == relativeTempoSlider)
+		setParameterLabelText(String::empty);
+	else if (e.eventComponent == noteLengthSlider)
+		setParameterLabelText(String::empty);
+	else if (e.eventComponent == audioGainSlider)
+		setParameterLabelText(String::empty);
+	else if (e.eventComponent == audioPanSlider)
+		setParameterLabelText(String::empty);
+     
+    
+    
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
     

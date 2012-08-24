@@ -34,12 +34,14 @@ public:
     
     void resized();
     void paint (Graphics &g);
+	void drawButtonBackground();
     bool hitTest (int x, int y);
     
 private:
     
     Image image;
     Path hitPath;
+	int i;
     
     
 };

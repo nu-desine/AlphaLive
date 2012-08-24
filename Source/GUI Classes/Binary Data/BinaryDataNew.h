@@ -42,7 +42,7 @@ namespace BinaryDataNew
     const int           indestructableicon_pngSize = 6704;
 
     extern const char*  interfacemain_png;
-    const int           interfacemain_pngSize = 148720;
+    const int           interfacemain_pngSize = 149050;
 
     extern const char*  inverticon_png;
     const int           inverticon_pngSize = 5593;
@@ -55,6 +55,9 @@ namespace BinaryDataNew
 
     extern const char*  loading_png;
     const int           loading_pngSize = 37784;
+
+    extern const char*  loadsymbol_png;
+    const int           loadsymbol_pngSize = 4895;
 
     extern const char*  loopicon_png;
     const int           loopicon_pngSize = 5739;
@@ -76,6 +79,9 @@ namespace BinaryDataNew
 
     extern const char*  offsymbol_png;
     const int           offsymbol_pngSize = 3400;
+
+    extern const char*  onoff_png;
+    const int           onoff_pngSize = 6183;
 
     extern const char*  padsbg_png;
     const int           padsbg_pngSize = 293812;
@@ -106,6 +112,9 @@ namespace BinaryDataNew
 
     extern const char*  reverbicon_png;
     const int           reverbicon_pngSize = 4850;
+
+    extern const char*  savesymbol_png;
+    const int           savesymbol_pngSize = 4577;
 
     extern const char*  sequenceicon_png;
     const int           sequenceicon_pngSize = 7192;

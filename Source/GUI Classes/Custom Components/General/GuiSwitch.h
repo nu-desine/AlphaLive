@@ -29,6 +29,7 @@ public:
 private:
 	
 	Path hitPath;
+	Image theImage;
 	
 };
 

@@ -192,18 +192,20 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     ccControllerSlider->addMouseListener(this, true);
     
     //------------------Pressure minimum range slider------------------------------
-    addChildComponent(midiPressureMinRangeSlider = new AlphaSlider());
+    addChildComponent(midiPressureMinRangeSlider = new AlphaRotarySlider((90 * (M_PI / 180)), (315 * (M_PI / 180)), 290));
+	midiPressureMinRangeSlider->setRotaryParameters((90 * (M_PI / 180)), (315 * (M_PI / 180)),true);
     midiPressureMinRangeSlider->setRange(0, 127, 1);
     midiPressureMinRangeSlider->addListener(this);
-    midiPressureMinRangeSlider->setComponentValue(0);
+    midiPressureMinRangeSlider->setValue(0);
     midiPressureMinRangeSlider->addMouseListener(this, true);
     
     
     //------------------Pressure maximum range slider------------------------------
-    addChildComponent(midiPressureMaxRangeSlider = new AlphaSlider());
+    addChildComponent(midiPressureMaxRangeSlider = new AlphaRotarySlider((90 * (M_PI / 180)), (315 * (M_PI / 180)), 270));
+	midiPressureMaxRangeSlider->setRotaryParameters((90 * (M_PI / 180)), (315 * (M_PI / 180)),true);
     midiPressureMaxRangeSlider->setRange(0, 127, 1);
     midiPressureMaxRangeSlider->addListener(this);
-    midiPressureMaxRangeSlider->setComponentValue(127);
+    midiPressureMaxRangeSlider->setValue(127);
     midiPressureMaxRangeSlider->addMouseListener(this, true);
     
     
@@ -349,6 +351,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     //---------------status off bg-------------------------------------
     addChildComponent(notSelected = new GuiCircleBackground());
 	notSelected->setVisible(false);
+	notSelected->drawButtonBackground();
 	
 	//---------------pressure status button-------------------------------------
     
@@ -527,8 +530,8 @@ void GuiSequencerMode::resized()
 	//midiPressureModeButtons[5]->setBounds(728, 305, 234, 234);
 	
 	ccControllerSlider->setBounds(890, 431, 58, 58);
-    midiPressureMinRangeSlider->setBounds(800, 540, 42, 42);
-    midiPressureMaxRangeSlider->setBounds(848, 540, 42, 42);
+	midiPressureMinRangeSlider->setBounds(700, 277, 290, 290);
+    midiPressureMaxRangeSlider->setBounds(710, 287, 270, 270);
 	
 	fxDial->setBounds(683, 261, 324, 324);
 
@@ -561,6 +564,17 @@ void GuiSequencerMode::paint (Graphics& g)
 	if(pressureSettingsButton->getToggleStateValue()==true)
 	{
 		g.fillEllipse(850,493, 38, 38);
+		
+		Path linkButtonBg;
+		
+		linkButtonBg.addCentredArc(805, 223, 72, 72, 0, (123 * (M_PI / 180)), (214 * (M_PI / 180)), true);
+		linkButtonBg.addCentredArc(845, 423, 162, 162, 0, (330 * (M_PI / 180)), (367 * (M_PI / 180)), false);
+		
+		
+		g.setColour(AlphaColours::nearlyblack);
+		g.fillPath(linkButtonBg, getTransform());
+		
+		g.setColour(Colours::black);
 		g.fillEllipse(800,265, 38, 38);
 	}
 	
@@ -1508,8 +1522,8 @@ void GuiSequencerMode::updateDisplay()
         finishLoopButton->setToggleState(PAD_SETTINGS->getSequencerShouldFinishLoop(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getSequencerSticky(), false);
         linkButton->setToggleState(PAD_SETTINGS->getSequencerDynamicMode(), false);
-        midiPressureMinRangeSlider->setComponentValue(PAD_SETTINGS->getSequencerMidiMinPressureRange());
-        midiPressureMaxRangeSlider->setComponentValue(PAD_SETTINGS->getSequencerMidiMaxPressureRange());
+        midiPressureMinRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMinPressureRange());
+        midiPressureMaxRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMaxPressureRange());
         
         
     }
@@ -1540,8 +1554,8 @@ void GuiSequencerMode::updateDisplay()
         finishLoopButton->setToggleState(false, false);
         stickyButton->setToggleState(false, false);
         linkButton->setToggleState(false, false);
-        midiPressureMinRangeSlider->setComponentValue(0);
-        midiPressureMaxRangeSlider->setComponentValue(127);
+        midiPressureMinRangeSlider->setValue(0);
+        midiPressureMaxRangeSlider->setValue(127);
 
         
     }

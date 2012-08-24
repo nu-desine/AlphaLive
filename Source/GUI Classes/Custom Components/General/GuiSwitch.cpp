@@ -8,7 +8,7 @@
  */
 
 #include "GuiSwitch.h"
-#include "../../Binary Data/BinaryData.h"
+#include "../../Binary Data/BinaryDataNew.h"
 #include "../../AlphaLiveLookandFeel.h"
 
 GuiSwitch::GuiSwitch()
@@ -16,8 +16,8 @@ GuiSwitch::GuiSwitch()
 {
 	
 	setClickingTogglesState(true);
-	
-	setButtonText(translate("OFF"));
+	theImage = ImageCache::getFromMemory(BinaryDataNew::onoff_png, BinaryDataNew::onoff_pngSize);
+
  	
 }
 
@@ -51,8 +51,7 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
             
 			ColourGradient fillGradient(Colours::black, (getWidth()*0.5), (getHeight()*0.6), AlphaColours::nearlyblack, (getWidth()*0.5), 0, false);
 			g.setGradientFill(fillGradient);
-			setButtonText(translate("OFF"));
-			
+
             break;
         }
 			
@@ -61,8 +60,7 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
             
 			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.9), Colours::black, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
-			setButtonText(translate("OFF"));
-			
+
             break;
         }
 			
@@ -71,8 +69,7 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
             
 			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.7), Colours::black, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
-			setButtonText(translate("OFF"));
-			
+
             break;
         }
 			
@@ -81,7 +78,6 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
             
 			ColourGradient fillGradient(AlphaColours::blue, (getWidth()*0.5), (getHeight()*0.5), AlphaColours::lightblue, (getWidth()*0.5), 0, false);
 			g.setGradientFill(fillGradient);
-			setButtonText(translate("ON"));
 			
             break;
         }
@@ -91,7 +87,6 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
             
 			ColourGradient fillGradient(AlphaColours::lightblue, (getWidth()*0.5), (getHeight()*0.9), AlphaColours::blue, (getWidth()*0.5), (getHeight()*0.5), false);
 			g.setGradientFill(fillGradient);
-			setButtonText(translate("ON"));
 			
             break;
         }
@@ -101,7 +96,6 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
             
 			ColourGradient fillGradient(AlphaColours::lightblue, (getWidth()*0.5), (getHeight()*0.7), AlphaColours::blue, (getWidth()*0.5), (getHeight()*0.5), false);
 			g.setGradientFill(fillGradient);
-			setButtonText(translate("ON"));
 			
             break;
         }
@@ -118,7 +112,7 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
 	g.setColour(Colours::grey.withAlpha(0.3f));
 	g.drawEllipse((getWidth()*0.1), (getHeight()*0.1), (getWidth()*0.8), (getHeight()*0.8), 1.0f);
 	
-	
+	/*
 	g.setFont (10);
     g.setColour (Colours::white);
 	
@@ -126,7 +120,12 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
     g.drawFittedText (getButtonText(),
                       (getWidth()*0.15), (getHeight()*0.35), (getWidth()*0.7), (getHeight()*0.3),
                       Justification::centred, 2);
+	*/
 	
+	g.setColour(Colours::white);
+	g.drawImage (theImage,
+				 (getWidth()*0.22), (getHeight()*0.22), (getWidth()*0.6), (getHeight()*0.6),
+				 0, 0, theImage.getWidth(), theImage.getHeight(), true);
 }
 
 

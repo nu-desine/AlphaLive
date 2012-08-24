@@ -148,6 +148,11 @@ void GuiPiano::resized()
 void GuiPiano::paint (Graphics& g)
 {
 	
+	g.setColour(Colours::black);
+	g.fillEllipse(520, 542, 90, 90);
+		
+	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.drawEllipse(520, 542, 90, 90, 1.0f);
 	
 	
 }

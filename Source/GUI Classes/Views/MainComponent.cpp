@@ -140,13 +140,15 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     globalClock->setInterceptsMouseClicks(false, true);
 	
     //open/save buttons
-    addAndMakeVisible(openButton = new AlphaTextButton());
-    openButton->setButtonText("OPEN");
+	Image *openImage = new Image(ImageCache::getFromMemory(BinaryDataNew::loadsymbol_png, BinaryDataNew::loadsymbol_pngSize)); 
+    addAndMakeVisible(openButton = new ModeButton(openImage));
+	openButton->setClickingTogglesState(false);
     openButton->setCommandToTrigger(commandManager, CommandIDs::Open, false);
     openButton->addMouseListener(this, false);
     
-    addAndMakeVisible(saveButton = new AlphaTextButton());
-    saveButton->setButtonText("SAVE");
+	Image *saveImage = new Image(ImageCache::getFromMemory(BinaryDataNew::savesymbol_png, BinaryDataNew::savesymbol_pngSize)); 
+    addAndMakeVisible(saveButton = new ModeButton(saveImage));
+	saveButton->setClickingTogglesState(false);
     saveButton->setCommandToTrigger(commandManager, CommandIDs::Save, false);
     saveButton->addMouseListener(this, false);
     
@@ -155,18 +157,20 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     sceneComponent->addMouseListener(this, true);
     
     //create gain slider
-    addAndMakeVisible(gainSlider = new AlphaImageKnob(2));
-    gainSlider->sliderComponent()->setRange(0.0, 2.0);
-    gainSlider->sliderComponent()->addListener(this);
-	gainSlider->sliderComponent()->setValue(1.0, true);
-    gainSlider->sliderComponent()->addMouseListener(this, true);
+    addAndMakeVisible(gainSlider = new AlphaRotarySlider((225 * (M_PI / 180)), (530 * (M_PI / 180)), 81));
+	gainSlider->setRotaryParameters((225 * (M_PI / 180)), (530 * (M_PI / 180)),true);
+    gainSlider->setRange(0.0, 2.0);
+    gainSlider->addListener(this);
+	gainSlider->setValue(1.0, true);
+    gainSlider->addMouseListener(this, true);
 	
 	//create pan slider
-    addAndMakeVisible(panSlider = new AlphaImageKnob(2, true));
-    panSlider->sliderComponent()->setRange(0.0, 1.0);
-    panSlider->sliderComponent()->addListener(this);
-    panSlider->sliderComponent()->setValue(0.5, true);
-    panSlider->sliderComponent()->addMouseListener(this, false);
+    addAndMakeVisible(panSlider = new AlphaRotarySlider((225 * (M_PI / 180)), (495 * (M_PI / 180)), 65));
+	panSlider->setRotaryParameters((225 * (M_PI / 180)), (495 * (M_PI / 180)),true);
+    panSlider->setRange(0.0, 1.0);
+    panSlider->addListener(this);
+    panSlider->setValue(0.5, true);
+    panSlider->addMouseListener(this, false);
     
     /*
      
@@ -285,8 +289,8 @@ void MainComponent::resized()
 	modeControllerButton->setBounds(960, 191, 50, 50);
 	
 	
-    openButton->setBounds(38, 6, 42, 42);
-    saveButton->setBounds(90, 6, 42, 42);
+    openButton->setBounds(153, 7, 30, 30);
+    saveButton->setBounds(180, 38, 30, 30);
     
     sceneComponent->setBounds(5, 10, 20, getHeight());
     //clearPresetsButton->setBounds(7, 646, 16, 16);
@@ -303,6 +307,9 @@ void MainComponent::resized()
     aboutComponent->setBounds(0, 0, getWidth(), getHeight());
     preferencesComponent->setBounds(0, 0, getWidth(), getHeight());
     projectSettingsComponent->setBounds(0, 0, getWidth(), getHeight());
+	
+	gainSlider->setBounds(38, 8, 81, 81);
+	panSlider->setBounds(46, 16, 65, 65);
 }
 
 
@@ -351,6 +358,26 @@ void MainComponent::paint(juce::Graphics &g)
 	}
 	
 	g.drawImage(padsBg, 0, 0, getWidth(), getHeight(), 0, 0, padsBg.getWidth(), padsBg.getHeight());
+	
+	//gain and pan container
+	
+	g.setColour(Colours::black);
+	g.fillEllipse(35, 5, 87, 87);
+	
+	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.drawEllipse(35, 5, 87, 87, 1.0f);
+	
+	g.setColour(Colours::black);
+	g.fillEllipse(32, 73, 58, 58);
+	
+	ColourGradient fillGradient(AlphaColours::blue, 32+(58*0.5), 73+(58*0.6), AlphaColours::lightblue, 32+(58*0.5), 73, false);
+	g.setGradientFill(fillGradient);
+	
+	g.fillEllipse((32+(58*0.15)), (73+(58*0.15)), (58*0.7), (58*0.7));
+	
+	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.drawEllipse((32+(58*0.1)), (73+(58*0.1)), (58*0.8), (58*0.8), 1.0f);
+
     
 }
 
@@ -369,8 +396,8 @@ bool MainComponent::update(const Subject& theChangedSubject)
             //update GUI things (GUI of global settings) which aren't updated by setCurrentlySelectedPad
             //these things could be put in setCurrentlySelectedPad but they'll be updated everytime a pad is selected which would be inefficent
             //there is still some inefficiency in that these things will be updated everytime a sequence is loaded... sort this out?!!
-            gainSlider->sliderComponent()->setValue(AppSettings::Instance()->getGlobalGain(), false); 
-            panSlider->sliderComponent()->setValue(AppSettings::Instance()->getGlobalPan(), false);
+            gainSlider->setValue(AppSettings::Instance()->getGlobalGain(), false); 
+            panSlider->setValue(AppSettings::Instance()->getGlobalPan(), false);
             
             //set the mode colour ring of each pad
             for (int i = 0; i <= 47; i++)
@@ -397,14 +424,14 @@ bool MainComponent::update(const Subject& theChangedSubject)
 
 void MainComponent::sliderValueChanged (Slider *slider)
 {
-    if (slider == gainSlider->sliderComponent())
+    if (slider == gainSlider)
     {
-        AppSettings::Instance()->setGlobalGain(gainSlider->sliderComponent()->getValue());
+        AppSettings::Instance()->setGlobalGain(gainSlider->getValue());
     }
     
-    else if (slider == panSlider->sliderComponent())
+    else if (slider == panSlider)
     {
-        AppSettings::Instance()->setGlobalPan(panSlider->sliderComponent()->getValue());
+        AppSettings::Instance()->setGlobalPan(panSlider->getValue());
         
     }
     

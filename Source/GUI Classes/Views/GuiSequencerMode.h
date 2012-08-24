@@ -124,8 +124,8 @@ private:
     AlphaPopUpButton *popUpButton;
     DrawableButton *previewButton;
 
-    AlphaRotarySlider *numberOfSequencesSlider, *relativeTempoSlider, *noteLengthSlider, *audioGainSlider, *audioPanSlider;
-    AlphaSlider *ccControllerSlider, *midiPressureMinRangeSlider, *midiPressureMaxRangeSlider;
+    AlphaRotarySlider *numberOfSequencesSlider, *midiPressureMinRangeSlider, *midiPressureMaxRangeSlider, *relativeTempoSlider, *noteLengthSlider, *audioGainSlider, *audioPanSlider;
+    AlphaSlider *ccControllerSlider;
     
     Label *parameterLabel, *currentParameterLabel;
      

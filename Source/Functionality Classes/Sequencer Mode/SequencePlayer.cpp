@@ -1021,23 +1021,23 @@ void SequencePlayer::setTempo(float value)
     
     switch (relativeTempoMode)
     {
-    case 1: //quarter time
+    case -2: //quarter time
         tempo = value/4.0;
         break;
         
-    case 2: //half time
+    case -1: //half time
         tempo = value/2.0;
         break;
     
-        case 3: //regular time
+    case 0: //regular time
         tempo = value;
         break;
         
-    case 4: //double time
+    case 1: //double time
         tempo = value*2.0;
         break;
         
-    case 5: //quadrupal time
+    case 2: //quadrupal time
         tempo = value*4.0;
         break;
         

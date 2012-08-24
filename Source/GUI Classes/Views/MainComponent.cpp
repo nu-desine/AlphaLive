@@ -163,7 +163,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	gainSlider->setRotaryParameters((225 * (M_PI / 180)), (495 * (M_PI / 180)),true);
     gainSlider->setRange(0.0, 2.0);
     gainSlider->addListener(this);
-	gainSlider->setValue(1.0, true);
+	gainSlider->setValue(1.0, false);
     gainSlider->addMouseListener(this, true);
 	
 	//create pan slider
@@ -171,12 +171,13 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	panSlider->setRotaryParameters((225 * (M_PI / 180)), (495 * (M_PI / 180)),true);
     panSlider->setRange(0.0, 1.0);
     panSlider->addListener(this);
-    panSlider->setValue(0.5, true);
+    panSlider->setValue(0.5, false);
     panSlider->addMouseListener(this, false);
     
     //gain and pan label
-    addAndMakeVisible(gainPanValueLabel = new Label("gain and pan label", "0.5555"));
+    addAndMakeVisible(gainPanValueLabel = new Label("value label", String::empty));
     gainPanValueLabel->setJustificationType(Justification::horizontallyCentred);
+    gainPanValueLabel->setColour(Label::textColourId, AlphaColours::blue);
     gainPanValueLabel->setFont(Font(12));
     gainPanValueLabel->addMouseListener(this, true);
     
@@ -437,11 +438,13 @@ void MainComponent::sliderValueChanged (Slider *slider)
     if (slider == gainSlider)
     {
         AppSettings::Instance()->setGlobalGain(gainSlider->getValue());
+        gainPanValueLabel->setText(String(slider->getValue(), 3), false);
     }
     
     else if (slider == panSlider)
     {
         AppSettings::Instance()->setGlobalPan(panSlider->getValue());
+        gainPanValueLabel->setText(String(slider->getValue(), 3), false);
         
     }
     
@@ -1209,6 +1212,12 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     }
     
     
+    //update gainPanValueLabel
+    if (gainSlider->isMouseOver(true))
+        gainPanValueLabel->setText(String(gainSlider->getValue(), 3), false);
+    else if (panSlider->isMouseOver(true))
+        gainPanValueLabel->setText(String(panSlider->getValue(), 3), false);
+    
 }
 
 //called whenever a the mouse exits a component which has a MouseListener attached to it
@@ -1216,6 +1225,12 @@ void MainComponent::mouseExit (const MouseEvent &e)
 {
     //remove any text
     setInfoTextBoxText (String::empty);
+    
+    
+    if(e.eventComponent == gainSlider || e.eventComponent == panSlider)
+        gainPanValueLabel->setText(String::empty, false);
+        
+        
 }
 
 

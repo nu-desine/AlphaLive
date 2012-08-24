@@ -62,9 +62,9 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	//--------------- relative tempo slider-------------------
 	addChildComponent(relativeTempoSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	relativeTempoSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
-	relativeTempoSlider->setRange(1, 5, 1);
+	relativeTempoSlider->setRange(-2, 2, 1);
     relativeTempoSlider->addListener(this);
-    relativeTempoSlider->setValue(3, false);
+    relativeTempoSlider->setValue(0, false);
     relativeTempoSlider->addMouseListener(this, true);
 	
 	//--------------- midi note length slider-------------------

@@ -165,7 +165,7 @@ PadSettings::PadSettings(int arrayIndex)
     sequencerShouldFinishLoop = 0;
     sequencerSticky = 0;
     sequencerLength = 32;
-    sequencerRelativeTempoMode = 3; //regular time
+    sequencerRelativeTempoMode = 0; //regular time
     sequencerDynamicMode = 0;
     
     //set a default sequencer note midi layout of 60-72
@@ -309,7 +309,7 @@ void PadSettings::resetData (int whatToReset)
         setSequencerShouldFinishLoop(0);
         setSequencerSticky(0);
         setSequencerLength (32);
-        setSequencerRelativeTempoMode(3);
+        setSequencerRelativeTempoMode(0);
         setSequencerDynamicMode(0);
         
         for (int i = 0, num = 60; i <= NO_OF_ROWS-1; i++)

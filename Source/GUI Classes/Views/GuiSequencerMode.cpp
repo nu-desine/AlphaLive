@@ -290,20 +290,20 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	for (int i = 0; i < 5; i++)
     {
         if (i == 0)
-           midiPressureModeButtons.insert(i, new SettingsButtonImage(pbUpIcon, (270 * (M_PI / 180)), 
-																  (315 * (M_PI / 180)), 0.4f, 0.6f));
-        if (i == 1)
             midiPressureModeButtons.insert(i, new SettingsButtonImage(catIcon, (315 * (M_PI / 180)),
-																  (2 * M_PI) , 0.4f, 0.6f));
-        if (i == 2)
+                                                                      (2 * M_PI) , 0.4f, 0.6f));
+        if (i == 1)
             midiPressureModeButtons.insert(i, new SettingsButtonImage(mwheelIcon, 0.0f, (45 * (M_PI / 180)), 
-																  0.4f,0.6f));
-        if (i == 3)
+                                                                      0.4f, 0.6f));
+        if (i == 2)
             midiPressureModeButtons.insert(i, new SettingsButtonImage(ccIcon, (45 * (M_PI / 180)), (90 * (M_PI / 180)), 
-																  0.4f, 0.6f));
+                                                                      0.4f, 0.6f));
+        if (i == 3)
+            midiPressureModeButtons.insert(i, new SettingsButtonImage(pbUpIcon, (270 * (M_PI / 180)), 
+                                                                      (315 * (M_PI / 180)), 0.4f, 0.6f));
         if (i == 4)
             midiPressureModeButtons.insert(i, new SettingsButtonImage(pbDownIcon, (225 * (M_PI / 180)), 
-																  (270 * (M_PI / 180)),0.4f,0.6f));
+                                                                      (270 * (M_PI / 180)),0.4f,0.6f));
            
         midiPressureModeButtons[i]->addListener(this);
         midiPressureModeButtons[i]->setRadioGroupId (53);
@@ -390,6 +390,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	previewButton->setImages (&normal, &normal, &normal, 0, &down, &down, &down, 0);
 	previewButton->setClickingTogglesState (true);
 	previewButton->addListener (this);
+    previewButton->addMouseListener(this, true);
 	previewButton->setBackgroundColours (Colours::black, AlphaColours::blue);
 	addAndMakeVisible (previewButton);
 	
@@ -1680,40 +1681,170 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     
     if (modeMidiButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Sequencer MIDI Mode Button. Click here to set the selected pads to the MIDI sequencer mode and display the its MIDI settings controls. This mode allows sequences of MIDI note-on and note-off messages programmed into the AlphaSphere device.");
-    }
-    else if (modeSamplesButton->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Sequencer Audio Mode Button. Click here to set the selected pads to the audio sequencer mode and display the its audio settings controls. This mode allows sequences of audio samples to be created and played.");
+        mainComponentRef.setInfoTextBoxText(translate("Sequencer MIDI Mode Button. Click here to set the selected pads to the MIDI sequencer mode and display the its MIDI settings controls. This mode allows sequences of MIDI note-on and note-off messages programmed into the AlphaSphere device."));
     }
     
     else if (sequencerGrid->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Circular Step-Sequencer Grid. This is where the sequence arrangement for the selected pads is drawn, editted and displayed. Like a traditional step-sequencer interface click on a grid block to create a 'note', or click on a note to delete it. Perform alt-click-drag on a note to change the notes velocity/gain.");
-    }
-    
-    /*
-    else if (currentSequenceNumberSlider->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Current Sequence Number Selector. Sets and displays the sequence displayed on the grid for the selected pad/pads.");
-    }
-    
-    else if (sequenceLengthSlider->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Sequence Length Selector. Sets and displays the length of the sequence (in sequence steps) for the selected pad/pads. This can be used to crudely set the sequence time signature.");
+        mainComponentRef.setInfoTextBoxText(translate("Circular Step-Sequencer Grid. This is where the sequence arrangement for the selected pads is drawn, editted and displayed. Like a traditional step-sequencer interface click on a grid block to create a 'note', or click on a note to delete it. Perform alt-click-drag on a note to change the velocity/gain of the note."));
     }
     else if (numberOfSequencesSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Number of Sequences Selector. Sets and displays the number of sequences in the sequencer set for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate("Number of Sequences Selector. Each Sequencer pad can hold up to 8 individual sequences which can then be switched between on-the-fly using the pads pressure or using certain Trigger Modes. This control sets and displays the number of sequences for the selected pads."));
     }
-    
-    else if (relativeTempoMenu->isMouseOver(true))
+    else if (relativeTempoSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Relative Tempo Menu. Sets the relative tempo of the individual sequencer.");
+        mainComponentRef.setInfoTextBoxText(translate("Relative Tempo Selector. Sets and displays the relative tempo of the sequences of the selected pads. The tempo can be set to Quarter Time (-2), Half Time (-1), Standard Time (0), Double Time (1), or Quadrupal Time (2)."));
+    }
+    else if (noteLengthSlider->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("MIDI Note Length Selector. Sets and displays the MIDI note length (in sequence steps/beats) for the MIDI sequences of the selected pads. The note length can be no longer than the sequence length."));
+    }
+    else if (midiPressureMinRangeSlider->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::midiMinPressureRangeSlider));
+    }
+    else if (midiPressureMaxRangeSlider->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::midiMaxPressureRangeSlider));
+    }
+    
+    if (audioPanSlider->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Audio Pan Control. Sets and displays the stereo positioning of the audio signal of the sequences for the selected pads."));
+    }
+    else if (audioGainSlider->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Audio Gain Control. Sets and displays the gain of the audio signal of the sequences for the selected pads."));
+    }
+    
+    else if (triggerModeButtons[0]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::triggerModeStandard) + " " + translate(CommonInfoBoxText::triggerModeButtons));
+    }
+    else if (triggerModeButtons[1]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::triggerModeToggle) + " " + translate(CommonInfoBoxText::triggerModeButtons));
+    }
+    else if (triggerModeButtons[2]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::triggerModeLatch) + " " + translate(CommonInfoBoxText::triggerModeButtons));
+    }
+    else if (triggerModeButtons[3]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::triggerModeTrigger) + " " + translate(CommonInfoBoxText::triggerModeButtons));
+    }
+    else if (triggerModeButtons[4]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("'Cycle' Trigger Mode - press the pad to play the first sequence, press again to change to the next sequence, and press to the pads full depth and release to stop.") + " " + translate(CommonInfoBoxText::triggerModeButtons));
+    }
+    else if (triggerModeButtons[5]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("'Auto-Cycle' Trigger Mode - press the pad to play the sequence, and press again to stop. When it reaches the end of sequences it will automatically move onto the next sequence.") + " " + translate(CommonInfoBoxText::triggerModeButtons));
+    }
+    
+    else if (midiPressureModeButtons[0]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressureChannelAT) + " " + translate(CommonInfoBoxText::midiPressureModes));
+    }
+    else if (midiPressureModeButtons[1]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressureModWheel) + " " + translate(CommonInfoBoxText::midiPressureModes));
+    }
+    else if (midiPressureModeButtons[2]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressureCC) + " " + translate(CommonInfoBoxText::midiPressureModes));
+    }
+    else if (midiPressureModeButtons[3]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressurePitchUp) + " " + translate(CommonInfoBoxText::midiPressureModes));
+    }
+    else if (midiPressureModeButtons[4]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressurePitchDown) + " " + translate(CommonInfoBoxText::midiPressureModes));
+    }
+    else if (pressureStatusButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::pressureStatusButton));
+    }
+    else if (indestructibleButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::indestructibleButton));
+    }
+    else if (stickyButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::stickyButton));
+    }
+    else if (loopButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::loopButton));
+    }
+    else if (finishLoopButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::finishLoopButton));
+    }
+    else if (linkButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Pressure Link Button. If this button is set to 'on' the pressure of the selected pads will be used to switch between the different sequences."));
+    }
+    else if (popUpButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Sequence Options Button. Click this button to display a list of other sequence options. This button will also display the currently displayed/playing sequence number."));
+    }
+    else if (previewButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Preview Sequence Button. Use this button to preview the currently displayed sequence."));
+    }
+    else if (nextSequenceButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Next Sequence Button. Click this button to display the next sequence in the set."));
+    }
+    else if (previousSequenceButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Previous Sequence Button. Click this button to display the previous sequence in the set."));
     }
     
     
-    */
+    if (sequenceSettingsButton->getToggleState() == true)
+    {
+        if (plusButton->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate("Increase Sequence Length Button. Use this button to make the sequences longer for the selected pads."));
+        }
+        
+        else if (minusButton->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate("Decrease Sequence Length Button. Use this button to make the sequences shorter for the selected pads."));
+        }
+    }
+    else if (triggerSettingsButton->getToggleState() == true)
+    {
+        if (plusButton->isMouseOver(true) || minusButton->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate("Use this pair of buttons to switch between a set of controls."));
+        }
+    }
+    
+    
+    for (int i = 0; i < 16; i++)
+    {
+        if (midiChannelButtons[i]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::midiChannelButtons) + " " + String(i+1) + ".");
+            break;
+        }
+    }
+    
+    for (int i = 0; i < 12; i++)
+    {
+        if (audioRowButtons[i]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate("Sequencer Audio Sample Selector Buttons. Use these buttons to select the audio samples for the rows of the sequencer grid for the selected pads. Audio files can also be dragged-and-dropped onto the buttons. Use this button to select the audio sample for row") + " " + String(i+1) + ".");
+            break;
+        }
+    }
+    
+    
 }
 
 void GuiSequencerMode::mouseExit (const MouseEvent &e)

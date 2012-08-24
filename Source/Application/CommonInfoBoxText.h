@@ -44,7 +44,7 @@ namespace CommonInfoBoxText
     
     static String triggerModeTrigger(translate("'Trigger' Trigger Mode - press the pad to play the note/sample/sequence, press again to re-trigger, and press to the pads full depth and release to stop."));
     
-    static String midiChannelButtons(translate("MIDI Channel Buttons. Sets and displays the MIDI channel for the selected pads. Click this button to set the selected pads to channel "));
+    static String midiChannelButtons(translate("MIDI Channel Buttons. Sets and displays the MIDI channel for the selected pads. Click this button to set the selected pads to channel"));
     
     static String triggerSettingsButton(translate("Trigger Settings. Click here to display the trigger settings controls. Trigger settings determine the parameters and playback of a MIDI note, audio sample, or sequence."));
     

@@ -781,11 +781,11 @@ void SequencePlayer::sendMidiPressureData()
             case 1: //channel aftertouch
                 message = MidiMessage::channelPressureChange(midiChannel, pressureValueScaled);
                 break;
-            case 3: //CC messages
-                message = MidiMessage::controllerEvent(midiChannel, midiControllerNumber, pressureValueScaled);
-                break;
             case 2: // mod wheel
                 message = MidiMessage::controllerEvent(midiChannel, 1, pressureValueScaled);
+                break;
+            case 3: //CC messages
+                message = MidiMessage::controllerEvent(midiChannel, midiControllerNumber, pressureValueScaled);
                 break;
             case 4: //pitch bend up
                 //convert 0-127 to 8191-16383

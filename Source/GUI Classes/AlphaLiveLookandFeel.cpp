@@ -604,20 +604,38 @@ void AlphaLiveLookandFeel::drawRotarySlider (Graphics& g,
 
 
 
-const Font AlphaLiveLookandFeel::getPopupMenuFont() // << why isn't this overriding??
+const Font AlphaLiveLookandFeel::getPopupMenuFont() 
 {
-    std::cout << "getting font" << std::endl;
     return Font (13.0f);
 }
 
+void AlphaLiveLookandFeel::drawPopupMenuBackground (Graphics& g, int width, int height)
+{
+    const Colour background (findColour (PopupMenu::backgroundColourId));
+    
+    g.fillAll (background);
+    
+    //The below code draws the horrible lines
+    //g.setColour (background.overlaidWith (Colour (0x2badd8e6)));
+    //for (int i = 0; i < height; i += 3)
+        //g.fillRect (0, i, width, 1);
+    
+    g.setColour (background.overlaidWith (Colour (AlphaColours::verydarkgrey_).withAlpha(0.8f)));
+    g.fillRect (0, 0, width, height);
+    
+    #if ! JUCE_MAC
+    g.setColour (findColour (PopupMenu::textColourId).withAlpha (0.6f));
+    g.drawRect (0, 0, width, height);
+    #endif
+}
+
+/*
 void AlphaLiveLookandFeel::getIdealPopupMenuItemSize (const String& text,
                                                       const bool isSeparator,
                                                       int standardMenuItemHeight,
                                                       int& idealWidth,
                                                       int& idealHeight)
 {
-    std::cout << "getting font" << std::endl;
-    
     if (isSeparator)
     {
         idealWidth = 50;
@@ -648,7 +666,6 @@ void AlphaLiveLookandFeel::drawPopupMenuItem (Graphics& g,
                                      Image* image,
                                      const Colour* const textColourToUse)
 {
-    std::cout << "getting font" << std::endl;
     
     const float halfH = height * 0.5f;
     
@@ -746,7 +763,7 @@ void AlphaLiveLookandFeel::drawPopupMenuItem (Graphics& g,
     }
 }
 
-
+*/
 
 int AlphaLiveLookandFeel::getDefaultScrollbarWidth()
 {

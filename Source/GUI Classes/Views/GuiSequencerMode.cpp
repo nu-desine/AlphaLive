@@ -1313,6 +1313,11 @@ void GuiSequencerMode::hideComponents()
     minusButton->setVisible(false);
     parameterLabel->setVisible(false);
     currentParameterLabel->setVisible(false);
+    
+    for (int i = 0; i < 16; i++)
+        midiChannelButtons[i]->setVisible(false);
+    for (int i = 0; i < 12; i++)
+        audioRowButtons[i]->setVisible(false);
     //setParameterLabelText(String::empty);
 }
 
@@ -1386,6 +1391,18 @@ void GuiSequencerMode::setDisplay (int settingsType)
         nextSequenceButton->setVisible(true);
         previousSequenceButton->setVisible(true);
     }
+    
+    if (modeMidiButton->getToggleState())
+    {
+        for (int i = 0; i < 16; i++)
+            midiChannelButtons[i]->setVisible(true);
+    }
+    else if (modeSamplesButton->getToggleState())
+    {
+        for (int i = 0; i < 12; i++)
+            audioRowButtons[i]->setVisible(true);
+    }
+    
     
     setRotaryControlDisplay();
     
@@ -1871,9 +1888,21 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     
     for (int i = 0; i < 12; i++)
     {
+        
+        
         if (audioRowButtons[i]->isMouseOver(true))
         {
-            mainComponentRef.setInfoTextBoxText(translate("Sequencer Audio Sample Selector Buttons. Use these buttons to select the audio samples for the rows of the sequencer grid for the selected pads. Audio files can also be dragged-and-dropped onto the buttons. Use this button to select the audio sample for row") + " " + String(i+1) + ".");
+            if (SINGLE_PAD)
+            {
+                int padNum = selectedPads[0];
+                
+                mainComponentRef.setInfoTextBoxText(translate("Sequencer Audio Sample Selector Buttons. Use these buttons to select the audio samples for the rows of the sequencer grid for the selected pads. Audio files can also be dragged-and-dropped onto the buttons. Use this button to select the audio sample for row") + " " + String(i+1) + ". " + translate("The current audio file set here is:") + " " + PAD_SETTINGS->getSequencerSamplesAudioFilePath(i).getFullPathName());
+            }
+            else if (MULTI_PADS)
+            {
+                 mainComponentRef.setInfoTextBoxText(translate("Sequencer Audio Sample Selector Buttons. Use these buttons to select the audio samples for the rows of the sequencer grid for the selected pads. Audio files can also be dragged-and-dropped onto the buttons. Use this button to select the audio sample for row") + " " + String(i+1) + ".");
+            }
+            
             break;
         }
     }

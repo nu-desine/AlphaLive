@@ -46,6 +46,8 @@ Toolbox::Toolbox() :
     fileTreeComp->setIndentSize(10);
     //to change the row height, need to hack FileTreeListItem::getItemHeight() in juce_FileTreeComponent.cpp
     //could this be done using LookAndFeel instead?
+    //Update - I think i need to use the TreeViewItem to create my own items and then I can overide getItemHeight()
+    //to set the size. However for now I'm lazy and I'm just going to hack the Juce Library code.
     
     fileListComp = new FileListComponent (scalesDirectoryList);
     fileListComp->addListener(this);

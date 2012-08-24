@@ -77,8 +77,8 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         PopupMenu recentFiles;
         StoredSettings::getInstance()->recentFiles.createPopupMenuItems (recentFiles, 100, true, true);
         recentFiles.addSeparator();
-        recentFiles.addItem(99, "Clear Menu");
-        menu.addSubMenu (translate("Open Recent"), recentFiles, StoredSettings::getInstance()->recentFiles.getNumFiles() > 0);
+        recentFiles.addItem(99, translate("Clear Menu"));
+        menu.addSubMenu (translate(translate("Open Recent")), recentFiles, StoredSettings::getInstance()->recentFiles.getNumFiles() > 0);
         
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::Save);

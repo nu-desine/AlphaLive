@@ -92,7 +92,7 @@ void AppDocumentState::createNewProject()
     //if found a pad with a mode set to it, ask if user wants to save first
     if (modeCheck != 0)
     {
-        shouldSave = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon, "Create New Project", "Would you like to save the current project first?", "Yes", "No", "Cancel");
+        shouldSave = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon, translate("Create New Project"), translate("Would you like to save the current project first?"));
     }
     
     //if the user didn't press cancel on the alertwindow ('cancel load command')
@@ -218,7 +218,7 @@ void AppDocumentState::saveProject()
 void AppDocumentState::saveProjectAs()
 {
     //navigate to app directory
-    FileChooser saveFileChooser("Create a AlphaLive project to save...", 
+    FileChooser saveFileChooser(translate("Create a AlphaLive project to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphalive");
     
@@ -253,7 +253,7 @@ void AppDocumentState::saveProjectAs()
         //delete the file if it exists & write the new data
         if (savedFile.exists())
         {
-            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "This File Already Exists!", "Are you sure you want to overwrite this file?");
+            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("This File Already Exists!"), translate("Are you sure you want to overwrite this file?"));
         }
         
         if (overwrite == true)
@@ -331,7 +331,7 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
     //if found a pad with a mode set to it, ask if user wants to save first
     if (modeCheck != 0)
     {
-        shouldSave = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon, "Load New Project", "Would you like to save the current project first?", "Yes", "No", "Cancel");
+        shouldSave = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon, translate("Load New Project"), translate("Would you like to save the current project first?"));
     }
     
     //if the user didn't press cancel on the alertwindow ('cancel load command')
@@ -347,7 +347,7 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
         // ========================== 'LOAD PROJECT' CODE ==================================
         
         //navigate to app directory
-        FileChooser loadFileChooser("Select a .alphalive file to load...", 
+        FileChooser loadFileChooser(translate("Select a .alphalive file to open..."), 
                                     StoredSettings::getInstance()->appProjectDir, 
                                     "*.alphalive");
         
@@ -477,7 +477,7 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
             }
             else
             {
-                AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Cannot Open File", "The selected AlphaLive Project file seems to be corrupt.");
+                AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, translate("Cannot Open File"), translate("The selected AlphaLive Project file seems to be corrupt."));
             }
             
         }
@@ -494,7 +494,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
     saveToScene(sceneNumber);
     
     //navigate to app directory
-    FileChooser saveFileChooser("Create an AlphaLive Scene file to save...", 
+    FileChooser saveFileChooser(translate("Create an AlphaLive Scene file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphascene");
     if (saveFileChooser.browseForFileToSave(false))
@@ -515,7 +515,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
         //delete the file if it exists &write the new data
         if (savedFile.existsAsFile())
         {
-            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "This File Already Exists!", "Are you sure you want to overwrite this file?");
+            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("This File Already Exists!"), translate("Are you sure you want to overwrite this file?"));
         }
         
         if (overwrite == true)
@@ -566,7 +566,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
                                 }
                                 else
                                 {
-                                    AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + newFileName + "\"" + " for Pad " + String(i+1) + " could not be found.");
+                                    AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), newFileName + " " + translate("could not be found."));
                                     //do something here so the loaded data is string::empty and NOT the missing audio file name
                                     //can i do this here or does it need to be done in the loadforscene method?
                                 }
@@ -604,7 +604,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
                                     }
                                     else
                                     {
-                                        AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + newFileName + "\"" + " for Pad " + String(i+1) + " could not be found.");
+                                        AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), newFileName + " " + translate("could not be found."));
                                         //do something here so the loaded data is string::empty and NOT the missing audio file name
                                         //can i do this here or does it need to be done in the loadforscene method?
                                     }
@@ -645,7 +645,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
             
             //----
             
-            AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Single Scene Saved", "The Scene has been successfully saved to file.");
+            //AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Single Scene Saved", "The Scene has been successfully saved to file.");
         }
     }
     
@@ -657,7 +657,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
 bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File fileToOpen)
 {
     //navigate to app directory
-    FileChooser loadFileChooser("Select a .alphascene file to load...", 
+    FileChooser loadFileChooser(translate("Select a .alphascene file to load..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphascene");
     
@@ -753,7 +753,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
                             }
                             else
                             {
-                                AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + newFileName + "\"" + " for Pad " + String(i+1) + " could not be found.");
+                                AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), newFileName + " " + translate("could not be found."));
                                 //do something here so the loaded data is string::empty and NOT the missing audio file name
                             }
                         }
@@ -805,7 +805,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
                                 }
                                 else
                                 {
-                                    AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + newFileName + "\"" + " for Pad " + String(i+1) + " could not be found.");
+                                    AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), newFileName + " " + translate("could not be found."));
                                     //do something here so the loaded data is string::empty and NOT the missing audio file name
                                 }
                                 
@@ -876,7 +876,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
         }
         else
         {
-            AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Cannot Open File", "The selected AlphaLive Scene file seems to be corrupt.");
+            AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, translate("Cannot Open File"), translate("The selected AlphaLive Scene file seems to be corrupt."));
             
             return false;
         } 
@@ -1442,7 +1442,7 @@ void AppDocumentState::clearScene (int sceneNumber)
 void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int currentlySelectedPad)
 {
     //navigate to app directory
-    FileChooser saveFileChooser("Create a single sequence file to save...", 
+    FileChooser saveFileChooser(translate("Create a single sequence file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphaseq");
     
@@ -1459,7 +1459,7 @@ void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int current
         //delete the file if it exists &write the new data
         if (savedFile.existsAsFile())
         {
-            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "This File Already Exists!", "Are you sure you want to overwrite this file?");
+            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("This File Already Exists!"), translate("Are you sure you want to overwrite this file?"));
         }
         
         if (overwrite == true)
@@ -1477,7 +1477,7 @@ void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int current
             
             std::cout << savedFile.getFullPathName() << std::endl;
             
-            AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Single Sequence Saved", "The sequence has been successfully saved to file");
+            //AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Single Sequence Saved", "The sequence has been successfully saved to file");
         }
     }
     
@@ -1487,7 +1487,7 @@ void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int current
 void AppDocumentState::loadSequence (int currentlySeletedSeqNumber, Array<int> selectedPads_)
 {
     //navigate to app directory
-    FileChooser loadFileChooser("Select a .alphaseq file to load...", 
+    FileChooser loadFileChooser(translate("Select a .alphaseq file to load..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphaseq");
     
@@ -1521,7 +1521,7 @@ void AppDocumentState::loadSequence (int currentlySeletedSeqNumber, Array<int> s
 void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
 {
     //navigate to app directory
-    FileChooser saveFileChooser("Create a sequence set file to save...", 
+    FileChooser saveFileChooser(translate("Create a sequence set file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphaseqset");
     
@@ -1538,7 +1538,7 @@ void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
         //delete the file if it exists &write the new data
         if (savedFile.existsAsFile())
         {
-            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "This File Already Exists!", "Are you sure you want to overwrite this file?");
+            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("This File Already Exists!"), translate("Are you sure you want to overwrite this file?"));
         }
         
         if (overwrite == true)
@@ -1559,7 +1559,7 @@ void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
             
             std::cout << savedFile.getFullPathName() << std::endl;
             
-            AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Sequence Set Saved", "The sequence set has been successfully saved to file");
+            //AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Sequence Set Saved", "The sequence set has been successfully saved to file");
         }
     }
 }
@@ -1575,7 +1575,7 @@ void AppDocumentState::loadSequenceSet(Array<int> selectedPads_)
     //and load individual seq's and seq sets
     
     //navigate to app directory
-    FileChooser loadFileChooser("Select a .alphaseqset file to load...", 
+    FileChooser loadFileChooser(translate("Select a .alphaseqset file to load..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphaseqset");
     
@@ -1613,7 +1613,7 @@ void AppDocumentState::removeUneededAudioFiles()
     if (currentProjectFile != File::nonexistent) //if there is currently an open project
     {
         
-        bool shouldCleanUp = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Clean Up Project", "This command will go through the current project's Audio Files directory and delete any files which aren't currently being used. Over time this will prevent an excessive build-up of redundant data. It was also reset any unused mode settings to default values. Please note that you can not undo this command!");
+        bool shouldCleanUp = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("Clean Up Project"), translate("This command will go through the current projects Audio Files directory and delete any files which aren't currently being used. Over time this will prevent an excessive build-up of redundant data. It was also reset any unused mode settings to default values. Please note that you can not undo this command!"));
         if (shouldCleanUp == true)
         {
             //this function must check all the settings of all the sceneData elements,
@@ -1774,13 +1774,13 @@ void AppDocumentState::removeUneededAudioFiles()
             shouldDisplayAlertWindow = false;
             saveProject();
             
-            AlertWindow::showMessageBox(AlertWindow::InfoIcon, "Project Cleaned Up!", "All redundant files and settings have been deleted and reset.");
+            AlertWindow::showMessageBox(AlertWindow::InfoIcon, translate("Project Cleaned Up!"), translate("All redundant files and settings have been deleted and reset."));
         }
     }
     
     else
     {
-        AlertWindow::showMessageBox(AlertWindow::InfoIcon, "No project currently open!", "There is no project open to clean up.");
+        AlertWindow::showMessageBox(AlertWindow::InfoIcon, translate("No project currently open!"), translate("There is no project open to clean up."));
     }
 }
 

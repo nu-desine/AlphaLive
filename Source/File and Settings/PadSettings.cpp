@@ -746,7 +746,7 @@ File PadSettings::getSamplerAudioFilePath()
         
         if (audioFile.existsAsFile() == false) //if for some reason it doesn't exist
         {
-            AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + samplerAudioFilePath + "\"" + " for Pad " + String(padNumber+1) + " could not be found.");
+            AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), samplerAudioFilePath + " " + translate("could not be found."));
             //IN NEXT VERSION USE A YES/NO ALERTWINDOW THAT ASKS IF YOU WOULD LIKE TO MANUALLY LOCATE THE AUDIO FILE.
             //THIS WILL BRING UP A FILEBROWSERWINDOW AND THE CHOSEN FILE WILL THEN BE MOVED TO THE CURRENT WORKING DIRECTORY AND
             //SAVED INTO THE samplerAudioFilePath STRING IN THE CORRECT FORMAT.
@@ -1823,7 +1823,7 @@ File PadSettings::getSequencerSamplesAudioFilePath(int rowNumber)
         
         if (audioFile.existsAsFile() == false) //if for some reason it doesn't exist
         {
-            AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + sequencerSamplesAudioFilePath[rowNumber] + "\"" + " for Pad " + String(padNumber+1) + " could not be found.");
+            AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), sequencerSamplesAudioFilePath[rowNumber] + " " + translate("could not be found."));
             //IN NEXT VERSION USE A YES/NO ALERTWINDOW THAT ASKS IF YOU WOULD LIKE TO MANUALLY LOCATE THE AUDIO FILE.
             //THIS WILL BRING UP A FILEBROWSERWINDOW AND THE CHOSEN FILE WILL THEN BE MOVED TO THE CURRENT WORKING DIRECTORY AND
             //SAVED INTO THE samplerAudioFilePath STRING IN THE CORRECT FORMAT.

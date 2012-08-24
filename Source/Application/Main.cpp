@@ -149,7 +149,7 @@ public:
     //==============================================================================
     void systemRequestedQuit()
     {
-        bool shouldQuit = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Quit", "Are you sure you want to quit?", "Yes", "No");
+        bool shouldQuit = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("Quit"), translate("Are you sure you want to quit?"));
         
         if (shouldQuit == true)
         {

@@ -17,7 +17,7 @@ GuiSwitch::GuiSwitch()
 	
 	setClickingTogglesState(true);
 	
-	setButtonText("OFF");
+	setButtonText(translate("OFF"));
  	
 }
 
@@ -51,7 +51,7 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
             
 			ColourGradient fillGradient(Colours::black, (getWidth()*0.5), (getHeight()*0.6), AlphaColours::nearlyblack, (getWidth()*0.5), 0, false);
 			g.setGradientFill(fillGradient);
-			setButtonText("OFF");
+			setButtonText(translate("OFF"));
 			
             break;
         }
@@ -61,7 +61,7 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
             
 			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.9), Colours::black, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
-			setButtonText("OFF");
+			setButtonText(translate("OFF"));
 			
             break;
         }
@@ -71,7 +71,7 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
             
 			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.7), Colours::black, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
-			setButtonText("OFF");
+			setButtonText(translate("OFF"));
 			
             break;
         }
@@ -81,7 +81,7 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
             
 			ColourGradient fillGradient(AlphaColours::blue, (getWidth()*0.5), (getHeight()*0.5), AlphaColours::lightblue, (getWidth()*0.5), 0, false);
 			g.setGradientFill(fillGradient);
-			setButtonText("ON");
+			setButtonText(translate("ON"));
 			
             break;
         }
@@ -91,7 +91,7 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
             
 			ColourGradient fillGradient(AlphaColours::lightblue, (getWidth()*0.5), (getHeight()*0.9), AlphaColours::blue, (getWidth()*0.5), (getHeight()*0.5), false);
 			g.setGradientFill(fillGradient);
-			setButtonText("ON");
+			setButtonText(translate("ON"));
 			
             break;
         }
@@ -101,7 +101,7 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
             
 			ColourGradient fillGradient(AlphaColours::lightblue, (getWidth()*0.5), (getHeight()*0.7), AlphaColours::blue, (getWidth()*0.5), (getHeight()*0.5), false);
 			g.setGradientFill(fillGradient);
-			setButtonText("ON");
+			setButtonText(translate("ON"));
 			
             break;
         }

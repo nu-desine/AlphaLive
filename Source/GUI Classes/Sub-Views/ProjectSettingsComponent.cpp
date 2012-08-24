@@ -38,11 +38,11 @@ ProjectSettingsComponent::ProjectSettingsComponent(MainComponent &ref, AlphaLive
     
     //create tabbed component and add tabs/child components
     addAndMakeVisible(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
-    tabbedComponent->addTab("General Settings", Colours::darkgrey, generalSettingsComponent, true);
-    tabbedComponent->addTab("Global OSC Settings", Colours::darkgrey, globalOscComponent, true);
+    tabbedComponent->addTab(translate("General Settings"), Colours::darkgrey, generalSettingsComponent, true);
+    tabbedComponent->addTab(translate("Global OSC Settings"), Colours::darkgrey, globalOscComponent, true);
     
     addAndMakeVisible(closeButton = new TextButton());
-    closeButton->setButtonText("Close");
+    closeButton->setButtonText(translate("Close"));
     closeButton->addListener(this);
     closeButton->addMouseListener(this, true);
     
@@ -136,11 +136,11 @@ GlobalOscComponent::GlobalOscComponent(MainComponent &ref, AlphaLiveEngine &ref2
 {
     //GLOBAL OSC OUTPUT SETTINGS
     addAndMakeVisible(globalOscLabel = new Label());
-    globalOscLabel->setText("Global OSC Mode:", false);
+    globalOscLabel->setText(translate("Global OSC Mode:"), false);
     globalOscLabel->setColour(Label::textColourId, Colours::lightgrey);
     
     addAndMakeVisible(globalOscSwitch = new TextButton());
-    globalOscSwitch->setButtonText("Off");
+    globalOscSwitch->setButtonText(translate("Off"));
     globalOscSwitch->setClickingTogglesState(true);
     globalOscSwitch->setToggleState(false, false);
     globalOscSwitch->addListener(this);
@@ -206,7 +206,7 @@ void GlobalOscComponent::buttonClicked (Button* button)
             oscIpAddressEditor->setVisible(true);
             oscPortNumberSlider->setVisible(true);
             
-            globalOscSwitch->setButtonText("On");
+            globalOscSwitch->setButtonText(translate("On"));
         }
         else
         {
@@ -216,7 +216,7 @@ void GlobalOscComponent::buttonClicked (Button* button)
             oscIpAddressEditor->setVisible(false);
             oscPortNumberSlider->setVisible(false);
             
-            globalOscSwitch->setButtonText("Off");
+            globalOscSwitch->setButtonText(translate("Off"));
         }
     }
 }
@@ -267,9 +267,9 @@ GeneralProjSettingsComponent::GeneralProjSettingsComponent(MainComponent &ref, A
     copyExternalFilesSwitch->setClickingTogglesState(true);
     copyExternalFilesSwitch->setToggleState(AppSettings::Instance()->getCopyExternalFiles(), false);
     if(copyExternalFilesSwitch->getToggleStateValue() == true)
-        copyExternalFilesSwitch->setButtonText("On");
+        copyExternalFilesSwitch->setButtonText(translate("On"));
     else
-        copyExternalFilesSwitch->setButtonText("Off"); 
+        copyExternalFilesSwitch->setButtonText(translate("Off")); 
     
     copyExternalFilesSwitch->addListener(this);
     copyExternalFilesSwitch->addMouseListener(this, true);
@@ -328,7 +328,7 @@ void GeneralProjSettingsComponent::buttonClicked (Button* button)
                 appDocumentStateRef.importAudioFiles();
                 
                 AppSettings::Instance()->setCopyExternalFiles(true);
-                copyExternalFilesSwitch->setButtonText("On");
+                copyExternalFilesSwitch->setButtonText(translate("On"));
             }
             else
             {
@@ -339,7 +339,7 @@ void GeneralProjSettingsComponent::buttonClicked (Button* button)
         else
         {
             AppSettings::Instance()->setCopyExternalFiles(false);
-            copyExternalFilesSwitch->setButtonText("Off");
+            copyExternalFilesSwitch->setButtonText(translate("Off"));
         }
     }
     
@@ -349,16 +349,16 @@ void GeneralProjSettingsComponent::updateDisplay()
 {
     copyExternalFilesSwitch->setToggleState(AppSettings::Instance()->getCopyExternalFiles(), false);
     if(copyExternalFilesSwitch->getToggleStateValue() == true)
-        copyExternalFilesSwitch->setButtonText("On");
+        copyExternalFilesSwitch->setButtonText(translate("On"));
     else
-        copyExternalFilesSwitch->setButtonText("Off");
+        copyExternalFilesSwitch->setButtonText(translate("Off"));
 }
 
 void GeneralProjSettingsComponent::mouseEnter (const MouseEvent &e)
 {
     if (copyExternalFilesSwitch->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Copy External Audio Files Options. By default when an external audio file is added to an AlphaLive project it is copied into the projects directory. Use this button to turn this option off. Be aware that with this set to off the project will not beable to link to any external audio files if moved onto another computer."));
+        mainComponentRef.setInfoTextBoxText(translate("Copy External Audio Files Options. By default when an external audio file is added to an AlphaLive project it is copied into the projects directory. Use this button to turn this option off. Be aware that with this set to off the project will not be able to link to any external audio files if moved onto another computer."));
     }
 
 }

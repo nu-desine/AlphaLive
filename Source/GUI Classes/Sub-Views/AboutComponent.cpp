@@ -35,11 +35,11 @@ AboutComponent::AboutComponent(MainComponent &ref)
     titleLabel->setFont(newFont1);
     
     addAndMakeVisible(versionNumberLabel = new Label("Version Number"));
-    versionNumberLabel->setText("Version " + String(ProjectInfo::versionString), false);
+    versionNumberLabel->setText(translate("Version") + " " + String(ProjectInfo::versionString), false);
     titleLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(companyLabel = new Label("Company"));
-    companyLabel->setText("Developed by ", false);
+    companyLabel->setText(translate("Developed by") + " ", false);
     companyLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(nuDesineLink = new HyperlinkButton("nu desine", URL("http://www.nu-desine.com")));
@@ -47,18 +47,18 @@ AboutComponent::AboutComponent(MainComponent &ref)
     //nuDesineLink->setFont(hyperlinkFont, true);
     
     addAndMakeVisible(openSourceLabel = new Label("Open Source Label"));
-    openSourceLabel->setText("An Open Source application released under the ", false);
+    openSourceLabel->setText(translate("An Open Source application released under the") + " ", false);
     openSourceLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(gnuLicenseLink = new HyperlinkButton("GNU General Public License v2.0", 
                                                          URL("http://www.opensource.org/licenses/GPL-2.0")));
     
     addAndMakeVisible(copyrightLabel = new Label("Copyright Label"));
-    copyrightLabel->setText("Copyright 2011-2012 nu desine.", false);
+    copyrightLabel->setText(translate("Copyright 2011-2012 nu desine."), false);
     copyrightLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(closeButton = new TextButton());
-    closeButton->setButtonText("Close");
+    closeButton->setButtonText(translate("Close"));
     closeButton->addListener(this);
     closeButton->addMouseListener(this, true);
     

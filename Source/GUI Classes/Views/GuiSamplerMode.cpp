@@ -84,7 +84,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 										 false, false, false,
 										 "*.wav; *.aif; *.aiff",
 										 String::empty,
-										 "(choose a WAV or AIFF file)");
+										 translate("(choose a WAV or AIFF file)"));
 	fileChooser->addListener (this);					
 	fileChooser->setBrowseButtonText ("+");
 	fileChooser->setMaxNumberOfRecentFiles (20);
@@ -355,7 +355,7 @@ void GuiSamplerMode::filenameComponentChanged (FilenameComponent* filenameCompon
         {
             AlertWindow::showMessageBox (AlertWindow::WarningIcon,
                                          "AlphaLive",
-                                         "Couldn't open file!\n\n");
+                                         translate("Couldn't open file!"));
         }	
     }
     
@@ -644,7 +644,7 @@ void GuiSamplerMode::mouseEnter (const MouseEvent &e)
     
     if (fileChooser->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Audio File Selector. Sets and displays the filepath name of the audio file for the selected pads. Use the '+' button to open a File Browser Window, or use the drop-down menu to select from recently selected files, as well as view the currently selected file.");
+        mainComponentRef.setInfoTextBoxText(translate("Audio File Selector. Sets and displays the filepath name of the audio file for the selected pads. Use the '+' button to open a File Browser Window, or use the drop-down menu to select from recently selected files, as well as view the currently selected file."));
     }
     
     /*

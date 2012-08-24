@@ -232,7 +232,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	
 	addChildComponent(currentParameterLabel = new Label());
 	currentParameterLabel->setFont(Font(10));
-	currentParameterLabel->setText("TEMPO", false);
+	currentParameterLabel->setText(translate("TEMPO"), false);
     currentParameterLabel->setColour(Label::textColourId, Colours::white);
     currentParameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     currentParameterLabel->setJustificationType(Justification::centred);
@@ -913,15 +913,15 @@ void GuiSequencerMode::buttonClicked (Button* button)
 	{
 		PopupMenu menu;
         
-        menu.addItem(1, translate("Load sequence..."));
-		menu.addItem(2, translate("Load sequence set..."));
+        menu.addItem(1, translate(translate("Load sequence...")));
+		menu.addItem(2, translate(translate("Load sequence set...")));
         if (SINGLE_PAD)
         {
-            menu.addItem(3, translate("Save sequence..."));
-            menu.addItem(4, translate("Save sequence set..."));
+            menu.addItem(3, translate(translate("Save sequence...")));
+            menu.addItem(4, translate(translate("Save sequence set...")));
         }
-		menu.addItem(5, translate("Clear..."));
-		menu.addItem(6, translate("Clear all..."));
+		menu.addItem(5, translate(translate("Clear...")));
+		menu.addItem(6, translate(translate("Clear all...")));
         
         const int result = menu.show();
         
@@ -1602,25 +1602,25 @@ void GuiSequencerMode::setParameterLabelText (String value)
 		
 		else if (relativeTempoSlider->isVisible())
 		{
-			currentParameterLabel->setText("TEMPO", false);
+			currentParameterLabel->setText(translate("TEMPO"), false);
 			parameterLabel->setText(String(relativeTempoSlider->getValue()), false);
 		}
 		
 		else if (noteLengthSlider->isVisible())
 		{
-			currentParameterLabel->setText("N LENGTH", false);
+			currentParameterLabel->setText(translate("N LENGTH"), false);
 			parameterLabel->setText(String(noteLengthSlider->getValue()), false);
 		}
 		
 		else if (audioGainSlider->isVisible())
 		{
-			currentParameterLabel->setText("GAIN", false);
+			currentParameterLabel->setText(translate("GAIN"), false);
 			parameterLabel->setText(String(audioGainSlider->getValue()), false);
 		}
 		
 		else if (audioPanSlider->isVisible())
 		{
-			currentParameterLabel->setText("PAN", false);
+			currentParameterLabel->setText(translate("PAN"), false);
 			parameterLabel->setText(String(audioPanSlider->getValue()), false);
 			
 		}
@@ -1686,7 +1686,7 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     
     else if (sequencerGrid->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Circular Step-Sequencer Grid. This is where the sequence arrangement for the selected pads is drawn, editted and displayed. Like a traditional step-sequencer interface click on a grid block to create a 'note', or click on a note to delete it. Perform alt-click-drag on a note to change the velocity/gain of the note."));
+        mainComponentRef.setInfoTextBoxText(translate("Circular Step-Sequencer Grid. This is where the sequence arrangement for the selected pads is drawn, edited and displayed. Like a traditional step-sequencer interface click on a grid block to create a 'note', or click on a note to delete it. Perform alt-click-drag on a note to change the velocity/gain of the note."));
     }
     else if (numberOfSequencesSlider->isMouseOver(true))
     {
@@ -1694,7 +1694,7 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     }
     else if (relativeTempoSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Relative Tempo Selector. Sets and displays the relative tempo of the sequences of the selected pads. The tempo can be set to Quarter Time (-2), Half Time (-1), Standard Time (0), Double Time (1), or Quadrupal Time (2)."));
+        mainComponentRef.setInfoTextBoxText(translate("Relative Tempo Selector. Sets and displays the relative tempo of the sequences of the selected pads. The tempo can be set to Quarter Time (-2), Half Time (-1), Standard Time (0), Double Time (1), or Quadruple Time (2)."));
     }
     else if (noteLengthSlider->isMouseOver(true))
     {

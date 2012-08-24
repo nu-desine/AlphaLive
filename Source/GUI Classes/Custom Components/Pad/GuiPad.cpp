@@ -451,8 +451,8 @@ void GuiPad::mouseDown (const MouseEvent &e)
     if (e.mods.isPopupMenu() == true)
     {
         PopupMenu menu;
-        menu.addItem(1, "Copy pad settings...");
-        menu.addItem(2, "Paste pad settings...");
+        menu.addItem(1, translate("Copy pad settings..."));
+        menu.addItem(2, translate("Paste pad settings..."));
         
         const int result = menu.show();
         

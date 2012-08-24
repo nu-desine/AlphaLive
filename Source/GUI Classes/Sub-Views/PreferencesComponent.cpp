@@ -45,11 +45,11 @@ PreferencesComponent::PreferencesComponent(MainComponent &ref, AlphaLiveEngine &
     
     //create tabbed component and add tabs/child components
     addAndMakeVisible(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
-    tabbedComponent->addTab("Audio and MIDI Settings", Colours::darkgrey, audioAndMidiSettingsComponent, true);
-    tabbedComponent->addTab("General Settings", Colours::darkgrey, generalSettingsComponent, true);
+    tabbedComponent->addTab(translate("Audio Output Settings"), Colours::darkgrey, audioAndMidiSettingsComponent, true);
+    tabbedComponent->addTab(translate("General Settings"), Colours::darkgrey, generalSettingsComponent, true);
     
     addAndMakeVisible(closeButton = new TextButton());
-    closeButton->setButtonText("Close");
+    closeButton->setButtonText(translate("Close"));
     closeButton->addListener(this);
     closeButton->addMouseListener(this, true);
     
@@ -154,7 +154,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
                                                   false, true, false,
                                                   String::empty,
                                                   String::empty,
-                                                  "Choose the AlphaLive Project Directory");
+                                                  translate("Choose the AlphaLive Project Directory"));
     
     appProjectDirChooser->addListener (this);					
 	///appProjectDirChooser->setBrowseButtonText ("Browse...");
@@ -162,25 +162,25 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
 	addAndMakeVisible (appProjectDirChooser);
     appProjectDirChooser->addMouseListener(this, true);
     
-    addAndMakeVisible(directoryLabel = new Label("directory label", "Projects Directory:"));
+    addAndMakeVisible(directoryLabel = new Label("directory label", translate("Projects Directory:")));
     directoryLabel->setColour(Label::textColourId, Colours::lightgrey);
     
-    addAndMakeVisible(midiNoteDisplayTypeLabel = new Label ("midi display label", "Note Display Type:"));
+    addAndMakeVisible(midiNoteDisplayTypeLabel = new Label ("midi display label", translate("Note Display Type:")));
     midiNoteDisplayTypeLabel->setColour(Label::textColourId, Colours::lightgrey);
     
     addAndMakeVisible(midiNoteDisplayTypeMenu = new ComboBox());
-    midiNoteDisplayTypeMenu->addItem("MIDI Note Number", 1);
-    midiNoteDisplayTypeMenu->addItem("MIDI Note Name", 2);
+    midiNoteDisplayTypeMenu->addItem(translate("MIDI Note Number"), 1);
+    midiNoteDisplayTypeMenu->addItem(translate("MIDI Note Name"), 2);
     midiNoteDisplayTypeMenu->addListener(this);
     midiNoteDisplayTypeMenu->addMouseListener(this, true);
     midiNoteDisplayTypeMenu->setSelectedId(StoredSettings::getInstance()->midiNoteDisplayType, true);
     
-    addAndMakeVisible(launchTaskLabel = new Label ("Launch Task Label", "On Launch:"));
+    addAndMakeVisible(launchTaskLabel = new Label ("Launch Task Label", translate("On Launch:")));
     launchTaskLabel->setColour(Label::textColourId, Colours::lightgrey);
     
     addAndMakeVisible(launchTaskMenu = new ComboBox());
-    launchTaskMenu->addItem("Open new project", 1);
-    launchTaskMenu->addItem("Open last project", 2);
+    launchTaskMenu->addItem(translate("Open new project"), 1);
+    launchTaskMenu->addItem(translate("Open last project"), 2);
     launchTaskMenu->addListener(this);
     launchTaskMenu->addMouseListener(this, true);
     launchTaskMenu->setSelectedId(StoredSettings::getInstance()->launchTask, true);
@@ -190,15 +190,15 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     killOnClockStopButton->setClickingTogglesState(true);
     killOnClockStopButton->setToggleState(StoredSettings::getInstance()->killOnClockStop, false);
     if(killOnClockStopButton->getToggleStateValue() == true)
-        killOnClockStopButton->setButtonText("On");
+        killOnClockStopButton->setButtonText(translate("On"));
     else
-        killOnClockStopButton->setButtonText("Off"); 
+        killOnClockStopButton->setButtonText(translate("Off")); 
     
     killOnClockStopButton->addListener(this);
     killOnClockStopButton->addMouseListener(this, true);
     
     addAndMakeVisible(killOnClockStopLabel = new Label());
-    killOnClockStopLabel->setText("Kill Pads On Clock Stop:", false);
+    killOnClockStopLabel->setText(translate("Kill Pads On Clock Stop:"), false);
     killOnClockStopLabel->setColour(Label::textColourId, Colours::lightgrey);
     
     
@@ -241,13 +241,13 @@ void GeneralSettingsComponent::buttonClicked (Button* button)
         if(killOnClockStopButton->getToggleStateValue() == true)
         {
             StoredSettings::getInstance()->killOnClockStop = 1;
-            killOnClockStopButton->setButtonText("On");
+            killOnClockStopButton->setButtonText(translate("On"));
         }
         
         else
         {
             StoredSettings::getInstance()->killOnClockStop = 0;
-            killOnClockStopButton->setButtonText("Off");
+            killOnClockStopButton->setButtonText(translate("Off"));
         }
         
         StoredSettings::getInstance()->flush();
@@ -301,7 +301,7 @@ void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
     }
     else if (launchTaskMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Application Launch Task selector. Use this menu to configure what happens when the application is lauched."));
+        mainComponentRef.setInfoTextBoxText(translate("Application Launch Task selector. Use this menu to configure what happens when the application is launched."));
     }
     else if (killOnClockStopButton->isMouseOver(true))
     {

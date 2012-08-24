@@ -1426,7 +1426,7 @@ bool MainComponent::perform (const InvocationInfo& info)
     else if(info.commandID == CommandIDs::ClearAllScenes)
 	{
 		bool userSelection;
-        userSelection = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Are you sure?", "You cannot undo this command", "Ok", "Cancel");
+        userSelection = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("Are you sure?"), translate("You cannot undo this command."));
         
         if (userSelection == true)
         {

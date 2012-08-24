@@ -128,11 +128,11 @@ void SceneSlot::mouseDown (const MouseEvent &e)
         
         PopupMenu menu;
         
-        menu.addItem(1, "Import scene...");
+        menu.addItem(1, translate("Import scene..."));
         if (status != 0) //if there is something store in the scene slot
         {
-            menu.addItem(2, "Export scene...");
-            menu.addItem(3, "Clear scene...");
+            menu.addItem(2, translate("Export scene..."));
+            menu.addItem(3, translate("Clear scene..."));
         }
         
         const int result = menu.show();

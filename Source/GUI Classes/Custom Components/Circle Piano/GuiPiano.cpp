@@ -506,9 +506,9 @@ void GuiPiano::mouseDown (const MouseEvent &e)
             PopupMenu menu;
             
             if (noteDisplayType == 1)
-                menu.addItem(1, "Display MIDI note numbers");
+                menu.addItem(1, translate("Display MIDI note numbers"));
             else
-                menu.addItem(2, "Display MIDI note names");
+                menu.addItem(2, translate("Display MIDI note names"));
             
             const int result = menu.show();
             

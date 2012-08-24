@@ -54,8 +54,8 @@ Toolbox::Toolbox() :
     
     //create tabbed component and add tabs/child components
     addAndMakeVisible(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
-    tabbedComponent->addTab("Scales", Colours::darkgrey, fileListComp, true);
-    tabbedComponent->addTab("Sample Library", Colours::darkgrey, fileTreeComp, true);
+    tabbedComponent->addTab(translate("Scales"), Colours::darkgrey, fileListComp, true);
+    tabbedComponent->addTab(translate("Sample Library"), Colours::darkgrey, fileTreeComp, true);
     tabbedComponent->setTabBarDepth(22);
     
     //tabbedComponent->setCurrentTabIndex(1, false); // can do this to sort out the scroll bar resizing bug

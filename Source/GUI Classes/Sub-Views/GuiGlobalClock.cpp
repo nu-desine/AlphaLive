@@ -86,7 +86,7 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
     
     //transport button
 	addAndMakeVisible(transportButton = new AlphaTextButton());
-    transportButton->setButtonText("START");
+    transportButton->setButtonText(translate("START"));
     transportButton->setClickingTogglesState(true);
     transportButton->setToggleState(false, false);
     transportButton->addListener(this);
@@ -218,7 +218,7 @@ bool GuiGlobalClock::update(const Subject& theChangedSubject)
         else if (mainComponentRef.getAlphaLiveEngineRef().getGlobalClock()->getGuiUpdateFlag() == 2)
         {
             transportButton->setToggleState(true, false);
-            transportButton->setButtonText("STOP");
+            transportButton->setButtonText(translate("STOP"));
         }
     }
 	
@@ -251,13 +251,13 @@ void GuiGlobalClock::buttonClicked (Button* button)
         if (transportButton->getToggleState() == true)
         {
             alphaLiveEngineRef.getGlobalClock()->startClock();
-            transportButton->setButtonText("STOP");
+            transportButton->setButtonText(translate("STOP"));
             mainComponentRef.setIsClockRunning(true);
         }
         else
         {
             alphaLiveEngineRef.getGlobalClock()->stopClock();
-            transportButton->setButtonText("START");
+            transportButton->setButtonText(translate("START"));
             mainComponentRef.setIsClockRunning(false);
         }
     }
@@ -286,7 +286,7 @@ void GuiGlobalClock::toggleTransportButtonOff()
     if (transportButton->getToggleState() == true)
     {
         transportButton->setToggleState(false, false);
-        transportButton->setButtonText("START");
+        transportButton->setButtonText(translate("START"));
         mainComponentRef.setIsClockRunning(false);
     }
     

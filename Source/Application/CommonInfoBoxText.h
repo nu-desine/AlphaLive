@@ -83,7 +83,7 @@ namespace CommonInfoBoxText
     static String quantizationValueButtons(translate("When a pad is set to 'quantized' its start/stop command will be triggered at the next point in time relevant to the global quantization value which is set with this set of buttons."));
     
     // ==== FX dial and views ====
-    static String effectsButtons(translate("Applies the effect to the audio of the selected pads whose paramaters can then be controlled via the pads pressure."));
+    static String effectsButtons(translate("Applies the effect to the audio of the selected pads whose parameters can then be controlled via the pads pressure."));
     
     // ==== Other ====
     static String closeButton (translate("Click to go back to the applications main interface. Pressing ESC also triggers this command."));

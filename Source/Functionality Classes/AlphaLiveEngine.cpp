@@ -55,7 +55,7 @@ AlphaLiveEngine::AlphaLiveEngine()
 	{
 		AlertWindow::showMessageBox (AlertWindow::WarningIcon,
 									 "AlphaLive",
-									 "Couldn't open an output device!\n\n" + error);
+									 translate("Couldn't open an output device!") + "\n\n" + error);
 	}
     
     audioDeviceManager.addAudioCallback (this);

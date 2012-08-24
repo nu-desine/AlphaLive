@@ -386,7 +386,7 @@ public:
         if (error.isNotEmpty())
         {
             AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
-                                              "Error when trying to open audio device!",
+                                              translate("Error when trying to open audio device!"),
                                               error);
         }
     }

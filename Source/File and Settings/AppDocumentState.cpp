@@ -1472,7 +1472,7 @@ void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int current
             //get single sequence data string based on currently selected sequencer number slider value
             sequenceDataXml.setAttribute("sequenceData", PAD_SETTINGS_pad->getSequencerDataString(currentlySelectedSeqNumber));
             
-            String xmlDoc = sequenceDataXml.createDocument(String::empty, true);
+            String xmlDoc = sequenceDataXml.createDocument(String::empty);
             savedFile.appendText(xmlDoc);
             
             std::cout << savedFile.getFullPathName() << std::endl;
@@ -1554,7 +1554,7 @@ void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
                 sequenceDataXml.setAttribute("sequenceData"+String(i), PAD_SETTINGS_pad->getSequencerDataString(i));
             }
             
-            String xmlDoc = sequenceDataXml.createDocument(String::empty, true);
+            String xmlDoc = sequenceDataXml.createDocument(String::empty);
             savedFile.appendText(xmlDoc);
             
             std::cout << savedFile.getFullPathName() << std::endl;

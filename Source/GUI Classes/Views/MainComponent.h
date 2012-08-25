@@ -54,7 +54,7 @@
 #include "../Sub-Views/AboutComponent.h"
 #include "../Sub-Views/PreferencesComponent.h"
 #include "../Sub-Views/ProjectSettingsComponent.h"
-#include "../Sub-Views/Toolbox.h"
+#include "../Custom Components/Toolbox/Toolbox.h"
 #include "../Sub-Views/GuiGlobalPadSettings.h"
 #include "../Custom Components/Circle Piano/GuiPiano.h"
 #include "../AlphaLiveLookandFeel.h"

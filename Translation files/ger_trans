@@ -17,3 +17,4 @@ countries: de
 "Restart Application" = "Anwendung neu starten"
 "Please restart AlphaLive for the language change to be fully implemented." = "Bitte starten Sie Alphalive für die Änderung der Sprache vollständig umgesetzt zu werden."
 "MIDI Channel Buttons. Sets and displays the MIDI channel for the selected pads. Click this button to set the selected pads to channel " = "translation has worked. hurray!"
+"scale 1" = "Maßstab 1"

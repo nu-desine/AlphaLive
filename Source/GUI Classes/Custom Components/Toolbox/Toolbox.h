@@ -55,19 +55,26 @@ private:
     Array<int> selectedPads;
     MainComponent &parentRef;
     
-    ScopedPointer <TabbedComponent> tabbedComponent; //each mode will probably have its own dedicated TabbedComponent
+    //Main object of the component
+    ScopedPointer <TabbedComponent> tabbedComponent;
     
-    //There will be several of the following components, that each hold a list of files/scales/presets/etc...
-    ScopedPointer <FileTreeComponent> demoFileTreeComp;
-    ScopedPointer <FileListComponent> demoFileListComp;
-    
-    TimeSliceThread thread; //can i use just the single thread? Probably.
-    DirectoryContentsList demoTreeDirectoryList, demoListDirectoryList;
-    
+    //Each set of items (presets, scales, samples etc...) will have its own tree or list component
+    ScopedPointer <FileTreeComponent> audioSamplesTree;
+    ScopedPointer <FileListComponent> drumBanksList, sequencesList;
+    ScopedPointer <FileListComponent> modeMidiPresetsList, modeSamplerPresetsList, modeSequencerPresetsList;
+    ScopedPointer <FileListComponent> modeControllerPresetsList, effectPresetsList, scenePresetsList;
     ScopedPointer <XmlAttributesListBox> scalesListBox, layoutsListBox;
     
+    //all fileTree and fileList component need their own of the following object too...
+    DirectoryContentsList audioSamplesDirectory, drumBanksDirectory;
+    DirectoryContentsList sequencesDirectory;
+    DirectoryContentsList modeMidiPresetsDirectory, modeSamplerPresetsDirectory;
+    DirectoryContentsList modeSequencerPresetsDirectory, modeControllerPresetsDirectory;
+    DirectoryContentsList effectPresetsDirectory, scenePresetsDirectory;
     
-    File demoTreeDir, demoListDir;
+    TimeSliceThread thread; //can i use just the single thread? Probably.
+    
+    //File demoTreeDir, demoListDir;
     //==============================================================================
 };
 

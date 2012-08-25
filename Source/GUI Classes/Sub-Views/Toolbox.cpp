@@ -28,8 +28,8 @@ Toolbox::Toolbox() :
                     loopsDirectoryList (0, thread),
                     scalesDirectoryList(0, thread)
 {
-    //loopsDir = "/Users/Liam/Desktop/AlphaSphere Software Dev/Audio Samples/Library/Loops"; //what if it doesn't exist?
-    loopsDir = File::getSpecialLocation(File::userMusicDirectory);
+    loopsDir = "/Users/Liam/Desktop/AlphaSphere Software Dev/Audio Samples/Library/Loops"; //what if it doesn't exist?
+    //loopsDir = File::getSpecialLocation(File::userMusicDirectory);
     loopsDirectoryList.setDirectory (loopsDir, true, true);
     //scalesDir = "/Users/Liam/Desktop/AlphaSphere Software Dev/Audio Samples/Library/Scales"; //what if it doesn't exist?
     scalesDir = File::getSpecialLocation(File::userDocumentsDirectory);

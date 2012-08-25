@@ -21,15 +21,17 @@
 //
 
 #include "XmlAttributesListBox.h"
+#include "Toolbox.h"
 
 
-XmlAttributesListBox::XmlAttributesListBox (File fileToList)
+XmlAttributesListBox::XmlAttributesListBox (File fileToList, bool forScales, Toolbox &parent)
+:   forScales_(forScales),
+    parentRef(parent)
 {
      //will have to check tagname outside this class so it can be used for multiple files.
     //should be check its in an xml format here?
     
-    xmlFile = fileToList;
-    XmlElement *xmlData = XmlDocument::parse(xmlFile);
+    xmlData = XmlDocument::parse(fileToList);
 
     int numOfItems = xmlData->getNumChildElements();
     StringArray itemStrings;
@@ -37,17 +39,18 @@ XmlAttributesListBox::XmlAttributesListBox (File fileToList)
     for (int i = 0; i < numOfItems; i++)
         itemStrings.add(xmlData->getChildElement(i)->getStringAttribute("name"));
 
-    listBoxModel = new NoteLayoutListBoxModel(itemStrings);
+    listBoxModel = new AlphaListBoxModel(itemStrings, *this);
     addAndMakeVisible(listBox = new ListBox("list box", listBoxModel));
 
     listBox->setRowHeight(14);
     listBox->updateContent();
   
-    delete xmlData;
+    
 }
 
 XmlAttributesListBox::~XmlAttributesListBox()
 {
+    delete xmlData;
     delete listBoxModel;
     deleteAllChildren();
 }
@@ -60,4 +63,13 @@ void XmlAttributesListBox::resized()
 void XmlAttributesListBox::paint(Graphics& g)
 {
 
+}
+
+void XmlAttributesListBox::itemSelected (int itemRow)
+{
+    //called from listBoxModel when an item is double clicked
+    String noteLayout = xmlData->getChildElement(itemRow)->getStringAttribute("layout");
+    
+    parentRef.noteLayoutSelected(noteLayout, forScales_);
+  
 }

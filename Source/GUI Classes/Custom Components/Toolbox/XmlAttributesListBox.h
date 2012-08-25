@@ -24,26 +24,34 @@
 #define H_XMLATTRIBUTESLISTBOX
 
 #include "../../../../JuceLibraryCode/JuceHeader.h"
-#include "NoteLayoutListBoxModel.h"
+#include "AlphaListBoxModel.h"
 
+//SHOULD THIS CLASS BE A COMPONENT WITH A LISTBOX OBJECT
+//OR A LISTBOX OBJECT ITSELF?
+
+class Toolbox;
 
 class XmlAttributesListBox : public Component
 {
 public:
     //==============================================================================
-    XmlAttributesListBox(File fileToList);
+    XmlAttributesListBox(File fileToList, bool forScales, Toolbox &parent);
     ~XmlAttributesListBox();
     
     void resized();
     void paint(Graphics& g);
     
+    void itemSelected (int itemRow);
+    
   
 private:
     //==============================================================================
-    NoteLayoutListBoxModel *listBoxModel;
+    AlphaListBoxModel *listBoxModel;
     ListBox *listBox;
-    File xmlFile;
+    XmlElement *xmlData;
     
+    bool forScales_;
+    Toolbox &parentRef;
     
 };
 

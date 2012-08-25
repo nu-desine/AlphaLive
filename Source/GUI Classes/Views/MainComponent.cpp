@@ -224,7 +224,7 @@ alphaLiveEngineRef(ref),
     midiPiano->addMouseListener(this, true);
     
     //toolbox
-    addAndMakeVisible(toolbox = new Toolbox());
+    addAndMakeVisible(toolbox = new Toolbox(*this));
     toolbox->addMouseListener(this, true);
     
     //pop up views
@@ -710,6 +710,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
         guiControllerMode->setCurrentlySelectedPad(selectedPads);
         guiGlobalPadSettings->setCurrentlySelectedPad(selectedPads);
         midiPiano->setCurrentlySelectedPad(selectedPads);
+        toolbox->setCurrentlySelectedPad(selectedPads);
     }
     
     
@@ -990,6 +991,7 @@ void MainComponent::setToMidiMode()
     globalSettingsButton->setAlpha(1.0f);
     midiPiano->setActive(true);
     midiPiano->updateDisplay();
+    toolbox->updateDisplay();
 	noModeSelected = 0;
 	repaint();
 
@@ -1010,6 +1012,7 @@ void MainComponent::setToSamplerMode()
     globalSettingsButton->setEnabled(true);
     globalSettingsButton->setAlpha(1.0f);
     midiPiano->setActive(false);
+    toolbox->updateDisplay();
 	noModeSelected = 0;
 	repaint();
 
@@ -1029,6 +1032,7 @@ void MainComponent::setToSequencerMode()
     //setting the midi piano state is done within
     //updateDisplay() of guiSequencerMode,
     //as it depends on states within that object
+    toolbox->updateDisplay();
 	noModeSelected = 0;
 	repaint();
 }
@@ -1045,6 +1049,7 @@ void MainComponent::setToControllerMode()
     globalSettingsButton->setEnabled(true);
     globalSettingsButton->setAlpha(1.0f);
     midiPiano->setActive(false);
+    toolbox->updateDisplay();
 	noModeSelected = 0;
 	repaint();
 }

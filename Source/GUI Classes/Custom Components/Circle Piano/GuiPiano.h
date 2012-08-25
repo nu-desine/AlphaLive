@@ -59,6 +59,9 @@ public:
     
     void setActive (bool value);
     void setKeyDisplay (int keyNumber, bool isOn);
+    
+    void clearPiano();
+    void setNoteData(int note);
 	
 private:
     Array <int> selectedPads;

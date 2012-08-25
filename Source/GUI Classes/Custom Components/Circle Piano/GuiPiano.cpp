@@ -645,15 +645,11 @@ void GuiPiano::setKeyDisplay (int keyNumber, bool keyOn)
         //set the key/button colour
         if(noteIndex == 2 || noteIndex == 4 || noteIndex == 7 || noteIndex == 9 || noteIndex == 11)
         {
-			
 			keys[keyNumber]->setColours(AlphaColours::lightblue, AlphaColours::lightblue, AlphaColours::lightblue);  
-
-			
 		}
-		else {
-			
+		else 
+        {
 			keys[keyNumber]->setColours(AlphaColours::blue, AlphaColours::blue, AlphaColours::lightblue);  
-			
 		}
 
 	}    
@@ -662,7 +658,19 @@ void GuiPiano::setKeyDisplay (int keyNumber, bool keyOn)
 }
 
 
+void GuiPiano::clearPiano()
+{
+    for (int i = 0; i < 120; i++)
+        setKeyDisplay(i, false);
+    
+    selectedKeys.clear();
+}
 
+void GuiPiano::setNoteData(int note)
+{
+    setKeyDisplay (note, true);
+    selectedKeys.addIfNotAlreadyThere(note);
+}
 
 
 
@@ -688,3 +696,6 @@ void GuiPiano::setActive (bool value)
      */
     
 }
+
+
+

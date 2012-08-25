@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C1657D815E95709002E924A /* notational_arrangements.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0C1657D715E95709002E924A /* notational_arrangements.xml */; };
 		0C1A3C4F15E50D65004306A3 /* FileDropButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C1A3C4D15E50D65004306A3 /* FileDropButton.cpp */; };
 		0C41D38815B456E90002DCD1 /* document_icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0C41D38615B456E90002DCD1 /* document_icon.icns */; };
 		0C41D38915B456E90002DCD1 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0C41D38715B456E90002DCD1 /* icon.icns */; };
@@ -132,7 +133,7 @@
 		0C85C32515E526140043797E /* SettingsButtonImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C85C32315E526140043797E /* SettingsButtonImage.cpp */; };
 		0C9950CC15E902C30060688B /* scales.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0C9950CB15E902C30060688B /* scales.xml */; };
 		0C9950D115E9046C0060688B /* Toolbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C9950CF15E9046C0060688B /* Toolbox.cpp */; };
-		0C9950D415E909870060688B /* NoteLayoutListBoxModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C9950D215E909870060688B /* NoteLayoutListBoxModel.cpp */; };
+		0C9950D415E909870060688B /* AlphaListBoxModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C9950D215E909870060688B /* AlphaListBoxModel.cpp */; };
 		0C9950D715E9169E0060688B /* XmlAttributesListBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C9950D515E9169D0060688B /* XmlAttributesListBox.cpp */; };
 		0CA0A4FA15B97E8C001362B3 /* TriggerModes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CA0A4F815B97E8C001362B3 /* TriggerModes.cpp */; };
 		25CABBE894F6F3FE24224C5B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97FE2821188200B689631086 /* QuartzCore.framework */; };
@@ -216,6 +217,7 @@
 		0BA10572CEE7B9491160A103 /* juce_GraphicsContext.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_GraphicsContext.cpp; path = ../../JuceLibraryCode/modules/juce_graphics/contexts/juce_GraphicsContext.cpp; sourceTree = SOURCE_ROOT; };
 		0BB5F1152C93577E4AB4958E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		0C0EBD8EA4693EEDBFEDFAB9 /* juce_ArrowButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_ArrowButton.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/buttons/juce_ArrowButton.cpp; sourceTree = SOURCE_ROOT; };
+		0C1657D715E95709002E924A /* notational_arrangements.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = notational_arrangements.xml; sourceTree = "<group>"; };
 		0C1A3C4D15E50D65004306A3 /* FileDropButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileDropButton.cpp; sourceTree = "<group>"; };
 		0C1A3C4E15E50D65004306A3 /* FileDropButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileDropButton.h; sourceTree = "<group>"; };
 		0C287D087BCB039AABDDD356 /* juce_DynamicLibrary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_DynamicLibrary.h; path = ../../JuceLibraryCode/modules/juce_core/threads/juce_DynamicLibrary.h; sourceTree = SOURCE_ROOT; };
@@ -483,10 +485,10 @@
 		0C9950CB15E902C30060688B /* scales.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = scales.xml; sourceTree = "<group>"; };
 		0C9950CF15E9046C0060688B /* Toolbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Toolbox.cpp; sourceTree = "<group>"; };
 		0C9950D015E9046C0060688B /* Toolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Toolbox.h; sourceTree = "<group>"; };
-		0C9950D215E909870060688B /* NoteLayoutListBoxModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NoteLayoutListBoxModel.cpp; sourceTree = "<group>"; };
-		0C9950D315E909870060688B /* NoteLayoutListBoxModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteLayoutListBoxModel.h; sourceTree = "<group>"; };
+		0C9950D215E909870060688B /* AlphaListBoxModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlphaListBoxModel.cpp; sourceTree = "<group>"; };
+		0C9950D315E909870060688B /* AlphaListBoxModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlphaListBoxModel.h; sourceTree = "<group>"; };
 		0C9950D515E9169D0060688B /* XmlAttributesListBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XmlAttributesListBox.cpp; sourceTree = "<group>"; };
-		0C9950D615E9169E0060688B /* XmlAttributesListBox.h */ = {isa = PBXFileReference; fileEncoding = 4; path = XmlAttributesListBox.h; sourceTree = "<group>"; };
+		0C9950D615E9169E0060688B /* XmlAttributesListBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XmlAttributesListBox.h; sourceTree = "<group>"; };
 		0CA0A4F815B97E8C001362B3 /* TriggerModes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TriggerModes.cpp; sourceTree = "<group>"; };
 		0CA0A4F915B97E8C001362B3 /* TriggerModes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriggerModes.h; sourceTree = "<group>"; };
 		0CA92FACC9C857515F5DC895 /* juce_Colours.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Colours.h; path = ../../JuceLibraryCode/modules/juce_graphics/colour/juce_Colours.h; sourceTree = SOURCE_ROOT; };
@@ -1953,6 +1955,7 @@
 			isa = PBXGroup;
 			children = (
 				0C9950CB15E902C30060688B /* scales.xml */,
+				0C1657D715E95709002E924A /* notational_arrangements.xml */,
 			);
 			name = "Other Files";
 			path = "../../Other Files";
@@ -1965,8 +1968,8 @@
 				0C9950CF15E9046C0060688B /* Toolbox.cpp */,
 				0C9950D615E9169E0060688B /* XmlAttributesListBox.h */,
 				0C9950D515E9169D0060688B /* XmlAttributesListBox.cpp */,
-				0C9950D315E909870060688B /* NoteLayoutListBoxModel.h */,
-				0C9950D215E909870060688B /* NoteLayoutListBoxModel.cpp */,
+				0C9950D315E909870060688B /* AlphaListBoxModel.h */,
+				0C9950D215E909870060688B /* AlphaListBoxModel.cpp */,
 			);
 			path = Toolbox;
 			sourceTree = "<group>";
@@ -3585,6 +3588,7 @@
 				0C41D38815B456E90002DCD1 /* document_icon.icns in Resources */,
 				0C41D38915B456E90002DCD1 /* icon.icns in Resources */,
 				0C9950CC15E902C30060688B /* scales.xml in Resources */,
+				0C1657D815E95709002E924A /* notational_arrangements.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3732,7 +3736,7 @@
 				0C1A3C4F15E50D65004306A3 /* FileDropButton.cpp in Sources */,
 				0C85C32515E526140043797E /* SettingsButtonImage.cpp in Sources */,
 				0C9950D115E9046C0060688B /* Toolbox.cpp in Sources */,
-				0C9950D415E909870060688B /* NoteLayoutListBoxModel.cpp in Sources */,
+				0C9950D415E909870060688B /* AlphaListBoxModel.cpp in Sources */,
 				0C9950D715E9169E0060688B /* XmlAttributesListBox.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

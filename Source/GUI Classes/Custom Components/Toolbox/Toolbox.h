@@ -26,13 +26,14 @@
 #include "../../../../JuceLibraryCode/JuceHeader.h"
 #include "XmlAttributesListBox.h"
 
+class MainComponent;
 
 class Toolbox : public Component,
                 public FileBrowserListener
 {
 public:
     //==============================================================================
-    Toolbox();
+    Toolbox(MainComponent &parent);
     ~Toolbox();
     //==============================================================================
     void resized();
@@ -44,18 +45,26 @@ public:
     void fileDoubleClicked (const File& file);
     void browserRootChanged (const File&);
     
+    void setCurrentlySelectedPad (Array<int> selectedPads_);
+    void updateDisplay();
+    
+    void noteLayoutSelected (String layout, bool isScale);
+    
 private:
     //==============================================================================
-    TabbedComponent *tabbedComponent; //each mode will probably have its own dedicated TabbedComponent
+    Array<int> selectedPads;
+    MainComponent &parentRef;
+    
+    ScopedPointer <TabbedComponent> tabbedComponent; //each mode will probably have its own dedicated TabbedComponent
     
     //There will be several of the following components, that each hold a list of files/scales/presets/etc...
-    FileTreeComponent* demoFileTreeComp;
-    FileListComponent* demoFileListComp;
+    ScopedPointer <FileTreeComponent> demoFileTreeComp;
+    ScopedPointer <FileListComponent> demoFileListComp;
     
     TimeSliceThread thread; //can i use just the single thread? Probably.
     DirectoryContentsList demoTreeDirectoryList, demoListDirectoryList;
     
-    XmlAttributesListBox *scalesListBox;
+    ScopedPointer <XmlAttributesListBox> scalesListBox, layoutsListBox;
     
     
     File demoTreeDir, demoListDir;

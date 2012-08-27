@@ -60,21 +60,17 @@ private:
     
     //Each set of items (presets, scales, samples etc...) will have its own tree or list component
     ScopedPointer <FileTreeComponent> audioSamplesTree;
-    ScopedPointer <FileListComponent> drumBanksList, sequencesList;
-    ScopedPointer <FileListComponent> modeMidiPresetsList, modeSamplerPresetsList, modeSequencerPresetsList;
-    ScopedPointer <FileListComponent> modeControllerPresetsList, effectPresetsList, scenePresetsList;
-    ScopedPointer <XmlAttributesListBox> scalesListBox, layoutsListBox;
+    OwnedArray <FileListComponent> fileLists;
     
     //all fileTree and fileList component need their own of the following object too...
-    DirectoryContentsList audioSamplesDirectory, drumBanksDirectory;
-    DirectoryContentsList sequencesDirectory;
-    DirectoryContentsList modeMidiPresetsDirectory, modeSamplerPresetsDirectory;
-    DirectoryContentsList modeSequencerPresetsDirectory, modeControllerPresetsDirectory;
-    DirectoryContentsList effectPresetsDirectory, scenePresetsDirectory;
+    OwnedArray <DirectoryContentsList> contentLists;
+    
+    //Below are custom list box components
+    ScopedPointer <XmlAttributesListBox> scalesListBox, layoutsListBox;
     
     TimeSliceThread thread; //can i use just the single thread? Probably.
     
-    //File demoTreeDir, demoListDir;
+    int currentList;
     //==============================================================================
 };
 

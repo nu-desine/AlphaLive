@@ -1787,11 +1787,11 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     }
     else if (triggerModeButtons[4]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("'Cycle' Trigger Mode - press the pad to play the first sequence, press again to change to the next sequence, and press to the pads full depth and release to stop.") + " " + translate(CommonInfoBoxText::triggerModeButtons));
+        mainComponentRef.setInfoTextBoxText(translate("'Cycle' Mode - press the pad to play the first sequence, press again to change to the next sequence, and press to the pads full depth and release to stop.") + " " + translate(CommonInfoBoxText::triggerModeButtons));
     }
     else if (triggerModeButtons[5]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("'Auto-Cycle' Trigger Mode - press the pad to play the sequence, and press again to stop. When it reaches the end of sequences it will automatically move onto the next sequence.") + " " + translate(CommonInfoBoxText::triggerModeButtons));
+        mainComponentRef.setInfoTextBoxText(translate("'Auto-Cycle' Mode - press the pad to play the sequence, and press again to stop. When it reaches the end of sequences it will automatically move onto the next sequence.") + " " + translate(CommonInfoBoxText::triggerModeButtons));
     }
     
     else if (midiPressureModeButtons[0]->isMouseOver(true))

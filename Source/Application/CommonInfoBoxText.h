@@ -34,15 +34,15 @@ namespace CommonInfoBoxText
     //==== Mode specific controls ====
     static String quantizeButton(translate("Quantize Button. If this button is set to 'on' the selected pads will be quantized to global quantization value set at the top of the interface. Quantization allows pads to be synchronized by setting the points in time when a pad will start and stop."));
     
-    static String triggerModeButtons(translate("This set of 'Trigger Mode' buttons determine how interaction with a pad controls the playback of an audio sample, sequence, or MIDI note."));
+    static String triggerModeButtons(translate("This set of Trigger Mode buttons determine how interaction with a pad controls the playback of an audio sample, sequence, or MIDI note."));
     
-    static String triggerModeStandard(translate("'Standard' Trigger Mode - press the pad to play the note/sample/sequence and release to stop."));
+    static String triggerModeStandard(translate("'Standard' Mode - press the pad to play the note/sample/sequence and release to stop."));
     
-    static String triggerModeToggle(translate("'Toggle' Trigger Mode - press the pad to play the note/sample/sequence and press again to stop."));
+    static String triggerModeToggle(translate("'Toggle' Mode - press the pad to play the note/sample/sequence and press again to stop."));
     
-    static String triggerModeLatch(translate("'Latch' Trigger Mode - press the pad to play the note/sample/sequence and press to the pads full depth and release to stop."));
+    static String triggerModeLatch(translate("'Latch' Mode - press the pad to play the note/sample/sequence and press to the pads full depth and release to stop."));
     
-    static String triggerModeTrigger(translate("'Trigger' Trigger Mode - press the pad to play the note/sample/sequence, press again to re-trigger, and press to the pads full depth and release to stop."));
+    static String triggerModeTrigger(translate("'Trigger' Mode - press the pad to play the note/sample/sequence, press again to re-trigger, and press to the pads full depth and release to stop."));
     
     static String midiChannelButtons(translate("MIDI Channel Buttons. Sets and displays the MIDI channel for the selected pads. Click this button to set the selected pads to channel"));
     

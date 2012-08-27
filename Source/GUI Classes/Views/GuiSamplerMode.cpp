@@ -345,9 +345,9 @@ void GuiSamplerMode::filenameComponentChanged (FilenameComponent* filenameCompon
                 int padNum = selectedPads[i];
                 PAD_SETTINGS->setSamplerAudioFilePath(audioFile);
 				
-				waveform->setFile (audioFile);
-				
             }
+            
+            setAudioFileDisplay(audioFile);
             
         }
         
@@ -463,7 +463,10 @@ void GuiSamplerMode::buttonClicked (Button* button)
     }
 }
 
-
+void GuiSamplerMode::setAudioFileDisplay(File file)
+{
+    waveform->setFile (file);
+}
 
 void GuiSamplerMode::setDisplay(int settingsType)
 {

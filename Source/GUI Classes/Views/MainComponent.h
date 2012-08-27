@@ -100,6 +100,7 @@ public:
     void mouseExit (const MouseEvent &e);
     
     AlphaLiveEngine& getAlphaLiveEngineRef();
+    GuiSamplerMode* getGuiSamplerMode();
     
     GuiPiano* getGuiPiano();
 	

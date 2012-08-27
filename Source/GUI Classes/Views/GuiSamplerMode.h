@@ -57,6 +57,8 @@ public:
     void filenameComponentChanged (FilenameComponent* filenameComponent);
     void buttonClicked (Button* button);
     
+    void setAudioFileDisplay(File file);
+    
     void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
     

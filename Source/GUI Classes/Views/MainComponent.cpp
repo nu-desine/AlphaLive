@@ -1060,6 +1060,11 @@ AlphaLiveEngine& MainComponent::getAlphaLiveEngineRef()
     return alphaLiveEngineRef;
 }
 
+GuiSamplerMode* MainComponent::getGuiSamplerMode()
+{
+    return guiSamplerMode;
+}
+
 GuiPiano* MainComponent::getGuiPiano()
 {
     return midiPiano;

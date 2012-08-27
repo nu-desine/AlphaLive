@@ -43,6 +43,7 @@ public:
     
     void itemSelected (int itemRow);
     
+    void deselectAllRows();
   
 private:
     //==============================================================================

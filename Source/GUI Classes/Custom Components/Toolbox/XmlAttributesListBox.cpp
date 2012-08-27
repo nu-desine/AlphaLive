@@ -65,6 +65,11 @@ void XmlAttributesListBox::paint(Graphics& g)
 
 }
 
+void XmlAttributesListBox::deselectAllRows()
+{
+    listBox->deselectAllRows();
+}
+
 void XmlAttributesListBox::itemSelected (int itemRow)
 {
     //called from listBoxModel when an item is double clicked

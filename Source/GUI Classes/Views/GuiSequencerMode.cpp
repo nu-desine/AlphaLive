@@ -1000,6 +1000,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
         
         mainComponentRef.getGuiPiano()->setActive(true);
         mainComponentRef.getGuiPiano()->updateDisplay();
+        mainComponentRef.getToolbox()->updateDisplay();
         
         for (int i = 0; i <= 15; i++)
             midiChannelButtons[i]->setVisible(true);
@@ -1052,6 +1053,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
         }
         
         mainComponentRef.getGuiPiano()->setActive(false);
+        mainComponentRef.getToolbox()->updateDisplay();
         
         for (int i = 0; i <= 15; i++)
             midiChannelButtons[i]->setVisible(false);

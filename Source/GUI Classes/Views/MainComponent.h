@@ -100,9 +100,10 @@ public:
     void mouseExit (const MouseEvent &e);
     
     AlphaLiveEngine& getAlphaLiveEngineRef();
-    GuiSamplerMode* getGuiSamplerMode();
     
+    GuiSamplerMode* getGuiSamplerMode();
     GuiPiano* getGuiPiano();
+    Toolbox* getToolbox();
 	
     //==============================================================================
     //application command target stuff

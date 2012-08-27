@@ -971,6 +971,7 @@ void MainComponent::setToOffMode()
     midiPiano->setActive(false);
     globalSettingsButton->setEnabled(false);
     globalSettingsButton->setAlpha(0.3f);
+    toolbox->updateDisplay();
 	noModeSelected = 1;
 	repaint();
     
@@ -1068,6 +1069,11 @@ GuiSamplerMode* MainComponent::getGuiSamplerMode()
 GuiPiano* MainComponent::getGuiPiano()
 {
     return midiPiano;
+}
+
+Toolbox* MainComponent::getToolbox()
+{
+    return toolbox;
 }
 
 

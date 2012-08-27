@@ -181,7 +181,7 @@ void GuiPiano::buttonClicked(Button *button)
             //=========================================================================
             //=========================================================================
             //regular click to set the selected midi pads note or sequencers pad root note
-            if (modifier.isCommandDown() == false)
+            if (modifier.isAnyModifierKeyDown() == false)
             {
                 //first clear all keys
                 for (int i = 0; i < 120; i++)
@@ -268,7 +268,7 @@ void GuiPiano::buttonClicked(Button *button)
                     }
                 }
             
-                //break;
+                
             }
             
             //=========================================================================
@@ -285,7 +285,7 @@ void GuiPiano::buttonClicked(Button *button)
                 if (selectedKeys.size() < selectedPads.size())
                 {
                     //cycle through the SELECTED KEYS in the order they were selected,
-                    //applying them to the selected pads in chronilogical order
+                    //applying them to the selected pads in the order they were selected
                     for (int padIndex = 0; padIndex < selectedKeys.size(); padIndex++)
                     {
                         int padNum = selectedPads[padIndex];
@@ -354,10 +354,13 @@ void GuiPiano::buttonClicked(Button *button)
                             
                             if (recentlyUpdated == true && selectedKeys.size() == 12) // so th cmd-click doesn't delete if incomplete set
                             {
-                                //first clear all keys
-                                for (int i = 0; i < 120; i++)
-                                    setKeyDisplay(i, false);
-                                selectedKeys.clear();
+                                if (padIndex == 0)
+                                {
+                                    //clear all keys
+                                    for (int i = 0; i < 120; i++)
+                                        setKeyDisplay(i, false);
+                                    selectedKeys.clear();
+                                }
                                 
                             }
                             
@@ -394,10 +397,8 @@ void GuiPiano::buttonClicked(Button *button)
                                         note = -500; //'off' note
                                     
                                     PAD_SETTINGS->setSequencerMidiNote(note, row);
-                                    //std::cout << "row " << row << " set to note : " << note << std::endl;
                                 }
                                 
-                                //std::cout << std::endl;
                             }
                         }
                         
@@ -413,7 +414,7 @@ void GuiPiano::buttonClicked(Button *button)
                                 setKeyDisplay (i, false);
                                 selectedKeys.removeFirstMatchingValue(i);
                                 
-                                //Don't need to sort here do I? 
+                                //Don't need to sort keys here do I? 
                                 //Removing an element will resize the array,
                                 //which will cause the top row to be set to note 'off'
                             }
@@ -426,22 +427,67 @@ void GuiPiano::buttonClicked(Button *button)
                                     note = -500; //'off' note
                                 
                                 PAD_SETTINGS->setSequencerMidiNote(note, row);
-                                //std::cout << "row " << row << " set to note : " << note << std::endl;
                             }
-                            
-                            //std::cout << std::endl;
                          
                         }  
                     }
                 }
             }
-                
+            
+            //=========================================================================
+            //=========================================================================
+            //alt-click to transpose mutiple notes for midi pads
+            else if (modifier.isAltDown() == true)
+            {
+                if (AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 1) //Midi Mode
+                {
+                    //clear all keys
+                    for (int i = 0; i < 120; i++)
+                        setKeyDisplay(i, false);
+                    selectedKeys.clear();
+                    
+                    //get note of first selected pad
+                    //the 'root note' may not actually be the lowest note here. Is that a problem?
+                    //should I get the 'true' root note by searching for the lowest note first?
+                    int rootNote = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiNote();
+                    //get difference between root note and clicked note
+                    int transposeValue = rootNote - i;
+                    
+                    //whats the best way to check here if any of the selected pads could be transposed
+                    //out of range, and not transpose anything of they are?
+                    //as the notes are applied in order of their selection 
+                    //the last item of selectedPads won't always be the highest note.
+                    //could just manual go through
+                    //the array first to find the highest/lowest note and check that?
+                    
+                    
+                    for (int padIndex = 0; padIndex < selectedPads.size(); padIndex++)
+                    {
+                        int padNum = selectedPads[padIndex];
+                        
+                        int currentVal = PAD_SETTINGS->getMidiNote();
+                        int newVal = currentVal-transposeValue;
+                        
+                        if (newVal > 119)
+                            newVal = 119;
+                        else if (newVal < 0)
+                            newVal = 0;
+                        
+                        PAD_SETTINGS->setMidiNote(newVal);
+                        
+                        //update the GUI
+                        setKeyDisplay (newVal, true);
+                        selectedKeys.addIfNotAlreadyThere(newVal);
+                        
+                    }
+                    
+                }
+            }
+               
             break;
             //=========================================================================
             //=========================================================================
         }
-        
-        
 	}
 }
 

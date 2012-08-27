@@ -125,6 +125,13 @@ void Toolbox::setCurrentlySelectedPad (Array<int> selectedPads_)
 
 void Toolbox::updateDisplay()
 {
+    //should I only call deselect on last click component that can be found from currentList?
+    for (int i = 0; i < 8; i++)
+        fileLists[i]->deselectAllFiles();
+    audioSamplesTree->deselectAllFiles();
+    layoutsListBox->deselectAllRows();
+    scalesListBox->deselectAllRows();
+    
     tabbedComponent->clearTabs();
     tabbedComponent->setVisible(true);
     
@@ -252,7 +259,11 @@ void Toolbox::noteLayoutSelected (String layout, bool isScale)
             }
         }
     }
-    else //selectedPads must be sorted! Don;t need to check if midi mode like above as layouts only apply to midi mode
+    //selectedPads must be sorted below! UPDATE - pads are now sorted when clicked.
+    //if they are sorted to begin with does that mean that both the if and else statments here can be the same?
+    //if so we won;t need XMLAttributeLostBox to tell us if we're getting a scale or layout, right?
+    //which will make the class more modular and easier to use.
+    else 
     {
         int padNum = selectedPads[0]; //only need to check first pad as we should only be here if all pads equal to same mode
         

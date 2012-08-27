@@ -259,14 +259,15 @@ void Toolbox::noteLayoutSelected (String layout, bool isScale)
             }
         }
     }
-    //selectedPads must be sorted below! UPDATE - pads are now sorted when clicked.
-    //if they are sorted to begin with does that mean that both the if and else statments here can be the same?
-    //if so we won;t need XMLAttributeLostBox to tell us if we're getting a scale or layout, right?
-    //which will make the class more modular and easier to use.
+    
+     
     else 
     {
-        int padNum = selectedPads[0]; //only need to check first pad as we should only be here if all pads equal to same mode
+        //selectedPads must be sorted for notational arrangements!
+        DefaultElementComparator<int> sorter;
+        selectedPads.sort (sorter);
         
+        int padNum = selectedPads[0]; //only need to check first pad as we should only be here if all pads equal to same mode
         int rootNote = PAD_SETTINGS->getMidiNote(); //will this be appropriate?
         
         parentRef.getGuiPiano()->clearPiano();

@@ -285,7 +285,8 @@ void GuiPiano::buttonClicked(Button *button)
                 if (selectedKeys.size() < selectedPads.size())
                 {
                     //cycle through the SELECTED KEYS in the order they were selected,
-                    //applying them to the selected pads in the order they were selected
+                    //applying them to the selected pads in the order they were selected if not sorted,
+                    //or in numerical order if sorted.
                     for (int padIndex = 0; padIndex < selectedKeys.size(); padIndex++)
                     {
                         int padNum = selectedPads[padIndex];
@@ -446,38 +447,60 @@ void GuiPiano::buttonClicked(Button *button)
                         setKeyDisplay(i, false);
                     selectedKeys.clear();
                     
-                    //get note of first selected pad
-                    //the 'root note' may not actually be the lowest note here. Is that a problem?
-                    //should I get the 'true' root note by searching for the lowest note first?
-                    int rootNote = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiNote();
+                    //Get the 'root note'.
+                    //Should the root note be the note of the first select pad (selectedPads[0]).
+                    //Or should it be the lowest note?
+                    //Below is the code to find the lowest note.
+                    Array <int> selectedPadsNotes;
+                    for (int padIndex = 0; padIndex < selectedPads.size(); padIndex++)
+                        selectedPadsNotes.insert(padIndex, 
+                                                 AppSettings::Instance()->padSettings[selectedPads[padIndex]]->getMidiNote());
+                    DefaultElementComparator<int> sorter;
+                    selectedPadsNotes.sort (sorter);
+                    int rootNote = selectedPadsNotes[0];
+                    
                     //get difference between root note and clicked note
                     int transposeValue = rootNote - i;
                     
-                    //whats the best way to check here if any of the selected pads could be transposed
-                    //out of range, and not transpose anything of they are?
-                    //as the notes are applied in order of their selection 
-                    //the last item of selectedPads won't always be the highest note.
-                    //could just manual go through
-                    //the array first to find the highest/lowest note and check that?
                     
-                    
-                    for (int padIndex = 0; padIndex < selectedPads.size(); padIndex++)
+                    //check to see if the highest note will be transposed
+                    //to above 119. If so, don't transpose the notes, and just
+                    //redraw/re-set what was last there in the below else statement
+                    if (selectedPadsNotes.getLast()-transposeValue <= 119)
                     {
-                        int padNum = selectedPads[padIndex];
-                        
-                        int currentVal = PAD_SETTINGS->getMidiNote();
-                        int newVal = currentVal-transposeValue;
-                        
-                        if (newVal > 119)
-                            newVal = 119;
-                        else if (newVal < 0)
-                            newVal = 0;
-                        
-                        PAD_SETTINGS->setMidiNote(newVal);
-                        
-                        //update the GUI
-                        setKeyDisplay (newVal, true);
-                        selectedKeys.addIfNotAlreadyThere(newVal);
+                        for (int padIndex = 0; padIndex < selectedPads.size(); padIndex++)
+                        {
+                            int padNum = selectedPads[padIndex];
+                            
+                            int currentVal = PAD_SETTINGS->getMidiNote();
+                            int newVal = currentVal-transposeValue;
+                            
+                             //if (newVal > 119)
+                             //newVal = 119;
+                             //else if (newVal < 0)
+                             //newVal = 0;
+                            
+                            PAD_SETTINGS->setMidiNote(newVal);
+                            
+                            //update the GUI
+                            setKeyDisplay (newVal, true);
+                            selectedKeys.addIfNotAlreadyThere(newVal);
+                            
+                        }
+                    }
+                    else
+                    {
+                        //redraw and re-set what was previously there
+                        //bit convoluted to clear everything above
+                        //just to redraw it in a certain situation.
+                        //Is there a better way to code it?
+                        for (int padIndex = 0; padIndex < selectedPads.size(); padIndex++)
+                        {
+                            int padNum = selectedPads[padIndex];
+                            setKeyDisplay (PAD_SETTINGS->getMidiNote(), true);
+                            selectedKeys.addIfNotAlreadyThere(PAD_SETTINGS->getMidiNote());
+                            
+                        }
                         
                     }
                     

@@ -510,7 +510,7 @@ void GuiPadLayout::buttonClicked(Button *button)
     }
     
     
-    
+    //UPDATE IF THE CODE IS COMMENTED-OUT CLEARLY I DECIDED AGAINST IT AND SORTED OUT ANY PROBLEMS ELSEWHERE!
     //The below code sorts the pads into numerical order.
     //Is this how we want to do it?
     //It improves settings scales and layouts and then transposing them correctly,
@@ -522,12 +522,13 @@ void GuiPadLayout::buttonClicked(Button *button)
     // - Cmd-clicking on the piano for mutiple pads in midi mode
     // - alt-clicking piano for midi pads? Or here is it more to do with finding the true 'root' note?
     // - Applying scales and layouts from the toolbox. For layouts pads have to be sorted though!
+    /*
     for (int x = selectedPads.size() - 1; x >= 0; x--)
     {
         if (selectedPads[x] < selectedPads[x-1])
             selectedPads.swap(x, x-1);
     }
-    
+     */
     
     //pass on the selected pads to mainComponent, which then passes it further into the application..
     mainComponentRef.setCurrentlySelectedPad(selectedPads);

@@ -1268,7 +1268,7 @@ void MainComponent::mouseEnter (const MouseEvent &e)
         
         if (PAD_SETTINGS->getMode() == 1) //midi mode
         {
-            setInfoTextBoxText (translate("MIDI Note Selector. Use this piano to select the MIDI notes of the selected pads. Use a regular click to select a single note for all selected pads, or cmd-click (Mac) or ctrl-click (Windows) to select multiple notes to apply to a set of pads. When selecting multiple notes, the order of selected notes will be applied to the pads in numerical order."));
+            setInfoTextBoxText (translate("MIDI Note Selector. Use this piano to select the MIDI notes of the selected pads. Use a regular click to select a single note for all selected pads, or cmd-click (Mac) or ctrl-click (Windows) to select multiple notes to apply to a set of pads. When selecting multiple notes, the order of selected notes will be applied to the pads in the order they were selected. Alt-click to transpose a set of notes."));
         }
         else if (PAD_SETTINGS->getMode() == 3) //sequencer mode
         {

@@ -285,8 +285,7 @@ void GuiPiano::buttonClicked(Button *button)
                 if (selectedKeys.size() < selectedPads.size())
                 {
                     //cycle through the SELECTED KEYS in the order they were selected,
-                    //applying them to the selected pads in the order they were selected if not sorted,
-                    //or in numerical order if sorted.
+                    //applying them to the selected pads in the order they were selected.
                     for (int padIndex = 0; padIndex < selectedKeys.size(); padIndex++)
                     {
                         int padNum = selectedPads[padIndex];
@@ -446,6 +445,15 @@ void GuiPiano::buttonClicked(Button *button)
                     for (int i = 0; i < 120; i++)
                         setKeyDisplay(i, false);
                     selectedKeys.clear();
+                    
+                    //At the moment the currentl alg. belows won't allow you to transpose a scale
+                    //if ANY note will be transposed to above 119. Also, when transposing the note
+                    //you select will be the lowest note. However in the old software it was possible
+                    //to transpose notational arrangements so that the bottom set of notes would all
+                    //equal 0 or the top sets would all equal 119, meaning you could have more choice 
+                    //over where the arrangment starts and ends. Do we want that here? If so, the below
+                    //code will need to be changed to how it was before (most of it has just been
+                    //commented out.
                     
                     //Get the 'root note'.
                     //Should the root note be the note of the first select pad (selectedPads[0]).

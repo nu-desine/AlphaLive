@@ -45,6 +45,9 @@ public:
     void fileDoubleClicked (const File& file);
     void browserRootChanged (const File&);
     
+    void mouseEnter (const MouseEvent &e);
+    void mouseExit (const MouseEvent &e);
+    
     void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
     
@@ -53,13 +56,13 @@ public:
 private:
     //==============================================================================
     Array<int> selectedPads;
-    MainComponent &parentRef;
+    MainComponent &mainComponentRef;
     
     //Main object of the component
     ScopedPointer <TabbedComponent> tabbedComponent;
     
     //Each set of items (presets, scales, samples etc...) will have its own tree or list component
-    ScopedPointer <FileTreeComponent> audioSamplesTree;
+    OwnedArray <FileTreeComponent> treeLists;
     OwnedArray <FileListComponent> fileLists;
     
     //all fileTree and fileList component need their own of the following object too...

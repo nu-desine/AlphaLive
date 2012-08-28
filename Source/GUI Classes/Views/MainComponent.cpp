@@ -1266,10 +1266,6 @@ void MainComponent::mouseEnter (const MouseEvent &e)
         setInfoTextBoxText("'Show Pad Settings When Pressed' Option. If this switch is set to 'on' the pad settings will  beautomatically displayed when a pad is pressed. It is recommended that you only use this feature for editing projects and not playing/performing.");
     }
     */
-    else if (toolbox->isMouseOver(true))
-    {
-        setInfoTextBoxText (translate("Toolbox. This component will display a set of items that can be applied to the selected pads based on their mode. This includes items such as presets, audio samples, scales/notational arrangements, and sequence arrangements."));
-    }
     
     else if (midiPiano->isMouseOver(true))
     {

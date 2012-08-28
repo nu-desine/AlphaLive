@@ -50,19 +50,36 @@ Toolbox::Toolbox(MainComponent &parent) :
 {
     currentList = 0;
     
-    for (int i = 0; i < 9; i++)
-        contentLists.insert(i, new DirectoryContentsList(0, thread));
+    xmlFilter = new WildcardFileFilter("*xml", String::empty, "XML files");
+    seqFileFilter = new WildcardFileFilter("*alphaseq;*alphaseqset", String::empty, "AlphaLive sequencer files");
+    audioFileFilter = new WildcardFileFilter("*wav;*aiff;*aif", "*", "Audio files");
+        
+    contentLists.insert(DRUM_BANKS, new DirectoryContentsList(xmlFilter, thread));
+    contentLists[DRUM_BANKS]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Audio Library/nu Banks"), false, true);
     
-    contentLists[DRUM_BANKS]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Drum Banks"), false, true);
+    contentLists.insert(SEQUENCES, new DirectoryContentsList(seqFileFilter, thread));
     contentLists[SEQUENCES]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Sequences"), false, true);
+    
+    contentLists.insert(MIDI_PRESETS, new DirectoryContentsList(xmlFilter, thread));
     contentLists[MIDI_PRESETS]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Pad Presets/MIDI Mode"), false, true);
+    
+    contentLists.insert(SAMPLER_PRESETS, new DirectoryContentsList(xmlFilter, thread));
     contentLists[SAMPLER_PRESETS]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Pad Presets/Sampler Mode"), false, true);
+    
+    contentLists.insert(SEQUENCER_PRESETS, new DirectoryContentsList(xmlFilter, thread));
     contentLists[SEQUENCER_PRESETS]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Pad Presets/Sequencer Mode"), false, true);
+    
+    contentLists.insert(CONTROLLER_PRESETS, new DirectoryContentsList(xmlFilter, thread));
     contentLists[CONTROLLER_PRESETS]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Pad Presets/Controller Mode"), false, true);
+    
+    contentLists.insert(EFFECT_PRESETS, new DirectoryContentsList(xmlFilter, thread));
     contentLists[EFFECT_PRESETS]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Pad Presets/Effects"), false, true);
+    
+    contentLists.insert(SCENE_PRESETS, new DirectoryContentsList(xmlFilter, thread));
     contentLists[SCENE_PRESETS]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Scene Presets"), false, true);
     
-    contentLists[AUDIO_SAMPLES]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Audio Samples"), true, true);
+    contentLists.insert(AUDIO_SAMPLES, new DirectoryContentsList(audioFileFilter, thread));
+    contentLists[AUDIO_SAMPLES]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Audio Library"), true, true);
     
     thread.startThread();
     
@@ -213,6 +230,11 @@ void Toolbox::fileClicked (const File& file, const MouseEvent& e)
 
 void Toolbox::fileDoubleClicked (const File& file)
 {
+     int padNum = selectedPads[0];
+    
+    //====================================================================================
+    //====================================================================================
+    
     if (currentList == AUDIO_SAMPLES)
     {
         for (int i = 0; i < selectedPads.size(); i++)
@@ -223,12 +245,48 @@ void Toolbox::fileDoubleClicked (const File& file)
         
         parentRef.getGuiSamplerMode()->setAudioFileDisplay(file);
     }
+    
+    
+    //====================================================================================
+    //====================================================================================
+    
+    else if (currentList == DRUM_BANKS)
+    {
+        XmlElement *xmlData = new XmlElement("xml");
+        xmlData = XmlDocument::parse(file);
+        
+        int numOfSamples = xmlData->getChildElement(0)->getIntAttribute("numSamples");
+        String fileDirPath (file.getParentDirectory().getFullPathName());
+        StringArray sampleFilePaths;
+        
+        for (int i = 0; i < numOfSamples; i++)
+        {
+            sampleFilePaths.add(fileDirPath + xmlData->getChildElement(0)->getStringAttribute("sample" + String(i+1)));
+        }
+
+        if (PAD_SETTINGS->getMode() == 2) //Sampler Mode
+        {
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setSamplerAudioFilePath(File(sampleFilePaths[i]));
+            }
+            
+            parentRef.getGuiSamplerMode()->setAudioFileDisplay(File(sampleFilePaths[0]));
+        }
+          
+        delete xmlData;
+    }
 }
+
+
 
 void Toolbox::browserRootChanged (const File&)
 {
   
 }
+
+
 
 
 //callback function for the custom list boxes
@@ -238,6 +296,9 @@ void Toolbox::noteLayoutSelected (String layout, bool isScale)
     
     StringArray tokens;
     tokens.addTokens(layout, " ", String::empty);
+    
+    //====================================================================================
+    //====================================================================================
     
     if (isScale) //the layout is a scale as opposed to a notational arrangement
     {
@@ -260,7 +321,9 @@ void Toolbox::noteLayoutSelected (String layout, bool isScale)
         }
     }
     
-     
+    //====================================================================================
+    //====================================================================================
+    
     else 
     {
         //selectedPads must be sorted for notational arrangements!

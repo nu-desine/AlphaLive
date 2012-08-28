@@ -47,7 +47,6 @@ alphaLiveEngineRef(ref),
                             
 {
     infoBoxText = String::empty;
-    infoTextBox = nullptr;
     
     //language/localisation stuff
     setLocalisation();
@@ -1318,9 +1317,11 @@ void MainComponent::setLocalisation()
     //countryCode will equal ISO 639-1 or ISO 639-2 codes as listed here:
     //http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
     
+    String appDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString);
+    
     if (countryCode == "de" || countryCode == "deu") //german
     {
-        File transFile("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Translation files/ger_trans");
+        File transFile(appDir + "Application Data/ger_trans");
         trans = new LocalisedStrings (transFile);
         LocalisedStrings::setCurrentMappings(trans);
         
@@ -1328,7 +1329,7 @@ void MainComponent::setLocalisation()
     }
     else if (countryCode == "ja" || countryCode == "jpn") //japanese
     {
-        File transFile ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Translation files/jap_trans");
+        File transFile (appDir + "Application Data/jap_trans");
         trans = new LocalisedStrings (transFile);
         LocalisedStrings::setCurrentMappings(trans);
         alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));

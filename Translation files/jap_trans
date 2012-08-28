@@ -2,6 +2,8 @@ language: Japanese
 countries: jp
 "FontToRenderThisLanguageIn" = "Arial Unicode MS"
 
+//Make sure that you are editing the version of this file that is linked to the Application at runtime!
+
 "Preferences..." = "設定..."
 "Off-Mode Button. Click this button to disable/mute the selected pad/pads." = "オフモードボタン。有効/無効選択したパッド/パッドをミュートするには、このボタンをクリックします。"
 "The selected AlphaLive Project file cannot be opened with this version of AlphaLive." = "選択したAlphaLiveプロジェクトファイルは、AlphaLiveのこのバージョンで開くことができません。"

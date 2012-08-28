@@ -34,7 +34,7 @@ namespace CommonInfoBoxText
     //==== Mode specific controls ====
     static String quantizeButton(translate("Quantize Button. If this button is set to 'on' the selected pads will be quantized to global quantization value set at the top of the interface. Quantization allows pads to be synchronized by setting the points in time when a pad will start and stop."));
     
-    static String triggerModeButtons(translate("This set of Trigger Mode buttons determine how interaction with a pad controls the playback of an audio sample, sequence, or MIDI note."));
+    static String triggerModeButtons(translate("This set of Pad Behaviour buttons determine how interaction with a pad controls the playback of an audio sample, sequence, or MIDI note."));
     
     static String triggerModeStandard(translate("'Standard' Mode - press the pad to play the note/sample/sequence and release to stop."));
     

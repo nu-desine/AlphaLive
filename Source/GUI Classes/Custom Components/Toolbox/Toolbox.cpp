@@ -54,33 +54,37 @@ Toolbox::Toolbox(MainComponent &parent) :
     xmlFilter = new WildcardFileFilter("*xml", String::empty, "XML files");
     seqFileFilter = new WildcardFileFilter("*alphaseq;*alphaseqset", String::empty, "AlphaLive sequencer files");
     audioFileFilter = new WildcardFileFilter("*wav;*aiff;*aif", "*", "Audio files");
-        
+     
+    String appDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString);
+    
+    std::cout << appDir << std::endl;
+    
     contentLists.insert(DRUM_BANKS, new DirectoryContentsList(xmlFilter, thread));
-    contentLists[DRUM_BANKS]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Audio Library/nu Banks"), false, true);
+    contentLists[DRUM_BANKS]->setDirectory (File(appDir + "Library/Audio Library/nu Banks"), false, true);
     
     contentLists.insert(SEQUENCES, new DirectoryContentsList(seqFileFilter, thread));
-    contentLists[SEQUENCES]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Sequences"), false, true);
+    contentLists[SEQUENCES]->setDirectory (File(appDir + "Library/Sequences"), false, true);
     
     contentLists.insert(MIDI_PRESETS, new DirectoryContentsList(xmlFilter, thread));
-    contentLists[MIDI_PRESETS]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Pad Presets/MIDI Mode"), false, true);
+    contentLists[MIDI_PRESETS]->setDirectory (File(appDir + "Library/Pad Presets/MIDI Mode"), false, true);
     
     contentLists.insert(SAMPLER_PRESETS, new DirectoryContentsList(xmlFilter, thread));
-    contentLists[SAMPLER_PRESETS]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Pad Presets/Sampler Mode"), false, true);
+    contentLists[SAMPLER_PRESETS]->setDirectory (File(appDir + "Library/Pad Presets/Sampler Mode"), false, true);
     
     contentLists.insert(SEQUENCER_PRESETS, new DirectoryContentsList(xmlFilter, thread));
-    contentLists[SEQUENCER_PRESETS]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Pad Presets/Sequencer Mode"), false, true);
+    contentLists[SEQUENCER_PRESETS]->setDirectory (File(appDir + "Library/Pad Presets/Sequencer Mode"), false, true);
     
     contentLists.insert(CONTROLLER_PRESETS, new DirectoryContentsList(xmlFilter, thread));
-    contentLists[CONTROLLER_PRESETS]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Pad Presets/Controller Mode"), false, true);
+    contentLists[CONTROLLER_PRESETS]->setDirectory (File(appDir + "Library/Pad Presets/Controller Mode"), false, true);
     
     contentLists.insert(EFFECT_PRESETS, new DirectoryContentsList(xmlFilter, thread));
-    contentLists[EFFECT_PRESETS]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Pad Presets/Effects"), false, true);
+    contentLists[EFFECT_PRESETS]->setDirectory (File(appDir + "Library/Pad Presets/Effects"), false, true);
     
     contentLists.insert(SCENE_PRESETS, new DirectoryContentsList(xmlFilter, thread));
-    contentLists[SCENE_PRESETS]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Scene Presets"), false, true);
+    contentLists[SCENE_PRESETS]->setDirectory (File(appDir + "Library/Scene Presets"), false, true);
     
     contentLists.insert(AUDIO_SAMPLES, new DirectoryContentsList(audioFileFilter, thread));
-    contentLists[AUDIO_SAMPLES]->setDirectory (File("/Users/Liam/Desktop/AlphaSphere Software Dev/Application Directory Example/Library/Audio Library"), true, true);
+    contentLists[AUDIO_SAMPLES]->setDirectory (File(appDir + "Library/Audio Library"), true, true);
     
     thread.startThread();
     
@@ -104,8 +108,8 @@ Toolbox::Toolbox(MainComponent &parent) :
         fileLists[i]->setRowHeight(16);
     }
     
-    scalesListBox = new XmlAttributesListBox (File("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Other Files/scales.xml"), true, *this);
-    layoutsListBox = new XmlAttributesListBox (File("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Other Files/notational_arrangements.xml"), false, *this);
+    scalesListBox = new XmlAttributesListBox (File(appDir + "Application Data/scales.xml"), true, *this);
+    layoutsListBox = new XmlAttributesListBox (File(appDir + "Application Data/notational_arrangements.xml"), false, *this);
 
     //create tabbed component 
     addChildComponent(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));

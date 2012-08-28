@@ -1103,14 +1103,31 @@ void SequencePlayer::setDynamicMode (int value)
 
 void SequencePlayer::setMidiNote (int row, int value)
 {
-    //should i do a check here like in ModeMidi?
+
+    if (midiNote[row] != value && isThreadRunning() == true)
+    {
+        triggerMidiNoteOffMessage(row);
+    }
+    
     midiNote[row] = value;
 }
+
 void SequencePlayer::setMidiChannel (int value)
 {
-    //should i do a check here like in ModeMidi?
+    //if new channel is different from current channel, 
+    //stop MIDI notes if seq is currently playing to prevent hanging notes
+    
+    if (midiChannel != value && isThreadRunning() == true)
+    {
+        for (int i = 0; i < NO_OF_ROWS; i++)
+        {
+            triggerMidiNoteOffMessage(i);
+        }
+    }
+    
     midiChannel = value;
 }
+
 void SequencePlayer::setMidiVelocity (int value)
 {
     midiVelocity = value;

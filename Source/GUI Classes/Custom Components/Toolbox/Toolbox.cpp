@@ -48,6 +48,7 @@ Toolbox::Toolbox(MainComponent &parent) :
                     thread ("tree and list thread")
 
 {
+
     currentList = 0;
     
     xmlFilter = new WildcardFileFilter("*xml", String::empty, "XML files");
@@ -252,8 +253,7 @@ void Toolbox::fileDoubleClicked (const File& file)
     
     else if (currentList == DRUM_BANKS)
     {
-        XmlElement *xmlData = new XmlElement("xml");
-        xmlData = XmlDocument::parse(file);
+        ScopedPointer<XmlElement> xmlData (XmlDocument::parse(file));
         
         int numOfSamples = xmlData->getChildElement(0)->getIntAttribute("numSamples");
         String fileDirPath (file.getParentDirectory().getFullPathName());
@@ -263,6 +263,7 @@ void Toolbox::fileDoubleClicked (const File& file)
         {
             sampleFilePaths.add(fileDirPath + xmlData->getChildElement(0)->getStringAttribute("sample" + String(i+1)));
         }
+        
 
         if (PAD_SETTINGS->getMode() == 2) //Sampler Mode
         {
@@ -274,8 +275,22 @@ void Toolbox::fileDoubleClicked (const File& file)
             
             parentRef.getGuiSamplerMode()->setAudioFileDisplay(File(sampleFilePaths[0]));
         }
+        
+        else if (PAD_SETTINGS->getMode() == 3) //Sequencer Mode
+        {
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                
+                for (int row = 0; row < 12; row++)
+                {
+                    PAD_SETTINGS->setSequencerSamplesAudioFilePath(File(sampleFilePaths[row]), row);
+                }
+            }
+            
+        }
           
-        delete xmlData;
+        
     }
 }
 
@@ -305,7 +320,7 @@ void Toolbox::noteLayoutSelected (String layout, bool isScale)
         int padNum = selectedPads[0]; //only need to check first pad as we should only be here if all pads equal to same mode
         if (PAD_SETTINGS->getMode() == 1) //midi mode
         {
-            int rootNote = PAD_SETTINGS->getMidiNote(); //will this be appropriate?
+            int rootNote = PAD_SETTINGS->getMidiNote(); //will this be appropriate (root note = selectedPads[0] note)?
             
             parentRef.getGuiPiano()->clearPiano();
             for (int i = 0; i < selectedPads.size(); i++)
@@ -317,6 +332,33 @@ void Toolbox::noteLayoutSelected (String layout, bool isScale)
                 
                 PAD_SETTINGS->setMidiNote(noteToApply);
                 parentRef.getGuiPiano()->setNoteData(noteToApply);
+            }
+        }
+        
+        else if (PAD_SETTINGS->getMode() == 3) //sequencer mode
+        {
+            int rootNote = PAD_SETTINGS->getSequencerMidiNote(0); //will this be appropriate (root note = selectedPads[0] note)?
+            
+            parentRef.getGuiPiano()->clearPiano();
+            
+            for (int padIndex = 0; padIndex < selectedPads.size(); padIndex++)
+            {
+                for (int row = 0; row < 12; row++)
+                {
+                    padNum = selectedPads[padIndex];
+                    
+                    int noteToApply = tokens[row].getIntValue() + rootNote;
+                    if (noteToApply > 119)
+                        noteToApply = -500;
+                    
+                    PAD_SETTINGS->setSequencerMidiNote(noteToApply, row);
+                    
+                    if (padIndex == 0)
+                    {
+                        if (noteToApply >= 0)
+                            parentRef.getGuiPiano()->setNoteData(noteToApply);
+                    }
+                }
             }
         }
     }

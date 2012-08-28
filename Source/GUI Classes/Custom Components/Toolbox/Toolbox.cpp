@@ -289,9 +289,28 @@ void Toolbox::fileDoubleClicked (const File& file)
             }
             
         }
-          
         
     }
+    
+    //====================================================================================
+    //====================================================================================
+    
+    else if (currentList == SEQUENCES)
+    {
+        
+        if (file.getFileExtension() == ".alphaseq")
+        {
+            int currentSeqNumber = parentRef.getGuiSequencerMode()->getCurrentSequenceNumber()-1;
+            parentRef.getAppDocumentStateRef().loadSequence(currentSeqNumber, selectedPads, false, file);
+        }
+        
+        else if (file.getFileExtension() == ".alphaseqset")
+        {
+            parentRef.getAppDocumentStateRef().loadSequenceSet(selectedPads, false, file);
+        }
+        
+    }
+    
 }
 
 
@@ -309,6 +328,7 @@ void Toolbox::noteLayoutSelected (String layout, bool isScale)
 {
     //called when either a scale or notational arrangement is selected
     
+    //get the individual MIDI notes from the string and put them into an array
     StringArray tokens;
     tokens.addTokens(layout, " ", String::empty);
     

@@ -90,6 +90,7 @@ public:
     void setParameterLabelText (String value);
     void setCurrentSequenceNumber();
     
+    int getCurrentSequenceNumber();
     
 private:
     

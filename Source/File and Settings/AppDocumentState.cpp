@@ -1484,16 +1484,30 @@ void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int current
 }
 
 
-void AppDocumentState::loadSequence (int currentlySeletedSeqNumber, Array<int> selectedPads_)
+void AppDocumentState::loadSequence (int currentlySeletedSeqNumber, 
+                                     Array<int> selectedPads_,
+                                     bool openBrowser, 
+                                     File fileToOpen)
 {
     //navigate to app directory
     FileChooser loadFileChooser(translate("Select a .alphaseq file to load..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphaseq");
     
-    if (loadFileChooser.browseForFileToOpen())
+    bool shouldLoad;
+    
+    if (openBrowser == true)
+        shouldLoad = loadFileChooser.browseForFileToOpen(); //open file browser
+    
+    if (shouldLoad || openBrowser == false)
     {
-        File loadedFile (loadFileChooser.getResult());
+        //File loadedFile (loadFileChooser.getResult());
+        File loadedFile;
+        
+        if (openBrowser == true)
+            loadedFile = loadFileChooser.getResult();
+        else
+            loadedFile = fileToOpen;
         
         XmlElement* xml = XmlDocument::parse(loadedFile);
         if (xml != nullptr && xml->hasTagName("SEQUENCE_DATA"))
@@ -1568,20 +1582,29 @@ void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
 
 
 
-void AppDocumentState::loadSequenceSet(Array<int> selectedPads_)
+void AppDocumentState::loadSequenceSet(Array<int> selectedPads_,
+                                       bool openBrowser,
+                                       File fileToOpen)
 {
-    //i haven't updated this function yet to allow for old format seq strings to be correctly converted to the new format.
-    //it's not hard but will it be really needed? -  since i bet of the few ppl who currently use the software don't save
-    //and load individual seq's and seq sets
-    
     //navigate to app directory
     FileChooser loadFileChooser(translate("Select a .alphaseqset file to load..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphaseqset");
     
-    if (loadFileChooser.browseForFileToOpen())
+    bool shouldLoad;
+    
+    if (openBrowser == true)
+        shouldLoad = loadFileChooser.browseForFileToOpen(); //open file browser
+    
+    if (shouldLoad || openBrowser == false)
     {
-        File loadedFile (loadFileChooser.getResult());
+        //File loadedFile (loadFileChooser.getResult());
+        File loadedFile;
+        
+        if (openBrowser == true)
+            loadedFile = loadFileChooser.getResult();
+        else
+            loadedFile = fileToOpen;
         
         XmlElement* xml = XmlDocument::parse(loadedFile);
         if (xml != nullptr && xml->hasTagName("SEQUENCE_DATA"))

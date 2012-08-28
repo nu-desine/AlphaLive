@@ -1672,6 +1672,11 @@ void GuiSequencerMode::setCurrentSequenceNumber()
     }
 }
 
+int GuiSequencerMode::getCurrentSequenceNumber()
+{
+    return currentSequenceNumber;
+}
+
 void GuiSequencerMode::setNoteLengthSliderRange (int maxValue)
 {
     //set the range

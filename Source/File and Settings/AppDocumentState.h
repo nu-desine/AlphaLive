@@ -94,9 +94,15 @@ public:
     void clearScene (int sceneNumber);
     
     void saveSequence (int currentlySelectedSeqNumber, int currentlySelectedPad);
-    void loadSequence (int currentlySeletedSeqNumber, Array<int> selectedPads_);
+    void loadSequence (int currentlySeletedSeqNumber, 
+                       Array<int> selectedPads_, 
+                       bool openBrowser = true, File 
+                       fileToOpen = File::nonexistent);
+    
     void saveSequenceSet (int currentlySelectedPad);
-    void loadSequenceSet (Array<int> selectedPads_);
+    void loadSequenceSet (Array<int> selectedPads_, 
+                          bool openBrowser = true, 
+                          File fileToOpen = File::nonexistent);
     
     int getGuiUpdateFlag();
     int getSceneToUpdate();

@@ -100,8 +100,10 @@ public:
     void mouseExit (const MouseEvent &e);
     
     AlphaLiveEngine& getAlphaLiveEngineRef();
+    AppDocumentState& getAppDocumentStateRef();
     
     GuiSamplerMode* getGuiSamplerMode();
+    GuiSequencerMode* getGuiSequencerMode();
     GuiPiano* getGuiPiano();
     Toolbox* getToolbox();
 	

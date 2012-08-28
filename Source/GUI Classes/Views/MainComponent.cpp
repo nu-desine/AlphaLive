@@ -1061,9 +1061,19 @@ AlphaLiveEngine& MainComponent::getAlphaLiveEngineRef()
     return alphaLiveEngineRef;
 }
 
+AppDocumentState& MainComponent::getAppDocumentStateRef()
+{
+     return appDocumentStateRef;
+}
+
 GuiSamplerMode* MainComponent::getGuiSamplerMode()
 {
     return guiSamplerMode;
+}
+
+GuiSequencerMode* MainComponent::getGuiSequencerMode()
+{
+    return guiSequencerMode;
 }
 
 GuiPiano* MainComponent::getGuiPiano()

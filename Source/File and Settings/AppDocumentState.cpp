@@ -288,7 +288,7 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
     //can not load settings into seq and sampler modes where the pads player objects don't exist (yet)
     
     //midi mode
-    if (padData->getIntAttribute("mode") == 1)
+    if (PAD_SETTINGS->getMode() == 1)
     {
         if (padData->hasAttribute("midiNote"))
             PAD_SETTINGS->setMidiNote(padData->getIntAttribute("midiNote"));
@@ -318,7 +318,7 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
     }
     
     //sampler mode
-    else if (padData->getIntAttribute("mode") == 2)
+    else if (PAD_SETTINGS->getMode() == 2)
     {
         File newFile;
         String newFileString(String::empty);
@@ -454,7 +454,7 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
     }
     
     //sequencer mode
-    else if (padData->getIntAttribute("mode") == 3)
+    else if (PAD_SETTINGS->getMode() == 3)
     {
         if (padData->hasAttribute("sequencerMode")) //WHICH IT SHOULD ALWAYS HAVE
             PAD_SETTINGS->setSequencerMode(padData->getIntAttribute("sequencerMode"));
@@ -567,7 +567,7 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
     }
     
     //controller mode
-    else if (padData->getIntAttribute("mode") == 4)
+    else if (PAD_SETTINGS->getMode() == 4)
     {
         if (padData->hasAttribute("controllerControl"))
             PAD_SETTINGS->setControllerControl(padData->getIntAttribute("controllerControl"));

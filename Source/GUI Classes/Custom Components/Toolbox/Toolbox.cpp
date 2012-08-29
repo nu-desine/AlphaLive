@@ -378,6 +378,15 @@ void Toolbox::fileDoubleClicked (const File& file)
         mainComponentRef.getAppDocumentStateRef().loadPadFromDisk(selectedPads, false, file);
     }
     
+    //====================================================================================
+    //====================================================================================
+    
+    //SHOULD EFFECT PRESETS BE .ALPHAPAD FILES TOO? THEY'RE NO DIFFERENT ARE THEY?
+    
+    else if (file.getFileExtension() == ".alphaeffect")
+    {
+        mainComponentRef.getAppDocumentStateRef().loadPadFromDisk(selectedPads, false, file);
+    }
 }
 
 

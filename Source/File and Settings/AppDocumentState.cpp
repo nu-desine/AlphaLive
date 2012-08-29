@@ -490,7 +490,6 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
 
 void AppDocumentState::saveSceneToDisk (int sceneNumber)
 {
-    //first save the current settings to the current scene (saves the user having to first save into the scene and then save to disk!)
     saveToScene(sceneNumber);
     
     //navigate to app directory
@@ -645,7 +644,6 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
             
             //----
             
-            //AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Single Scene Saved", "The Scene has been successfully saved to file.");
         }
     }
     
@@ -668,8 +666,6 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
     
     if (shouldLoad || openBrowser == false)
     {
-        //get file
-        //File loadedFile (loadFileChooser.getResult());
         File loadedFile;
         
         if (openBrowser == true)
@@ -888,6 +884,46 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
     }
     
 }
+
+
+
+
+void AppDocumentState::savePadToDisk (int padNumber)
+{
+    
+}
+
+void AppDocumentState::loadPadFromDisk (Array<int> selectedPads_, bool openBrowser, File fileToOpen)
+{
+    //navigate to app directory
+    FileChooser loadFileChooser(translate("Select a .alphapad file to load..."), 
+                                StoredSettings::getInstance()->appProjectDir, 
+                                "*.alphapad");
+    
+    bool shouldLoad;
+    
+    if (openBrowser == true)
+        shouldLoad = loadFileChooser.browseForFileToOpen(); //open file browser
+    
+    if (shouldLoad || openBrowser == false)
+    {
+        File loadedFile;
+        
+        if (openBrowser == true)
+            loadedFile = loadFileChooser.getResult();
+        else
+            loadedFile = fileToOpen;
+        
+        //parse file into xml file
+        ScopedPointer<XmlElement> loadedXml (XmlDocument::parse(loadedFile));
+        
+        if (loadedXml != nullptr && loadedXml->hasTagName("ALPHALIVE_PAD_SETTINGS_VERSION_1"))
+        {
+            
+        }
+    }
+}
+
 
 
 
@@ -1435,6 +1471,17 @@ void AppDocumentState::clearScene (int sceneNumber)
     {
         sceneData[sceneNumber]->deleteAllChildElements();
     }
+}
+
+
+void AppDocumentState::savePadSettings (int padNumber)
+{
+    
+}
+
+void AppDocumentState::loadPadSettings (int padNumber)
+{
+    
 }
 
 

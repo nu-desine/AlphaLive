@@ -85,13 +85,17 @@ public:
     void saveProjectAs();
     void loadProject(bool openBrowser, File fileToOpen = File::nonexistent);
     void saveSceneToDisk (int sceneNumber);
-    bool loadSceneFromDisk(int sceneNumber, bool openBrowser = true, File fileToOpen = File::nonexistent);
+    bool loadSceneFromDisk (int sceneNumber, bool openBrowser = true, File fileToOpen = File::nonexistent);
+    void savePadToDisk (int padNumber);
+    void loadPadFromDisk (Array<int> selectedPads_, bool openBrowser = true, File fileToOpen = File::nonexistent);
     
     void saveProjectSettings();
     void loadProjectSettings();
     void saveToScene (int sceneNumber);
     void loadFromScene (int sceneNumber);
     void clearScene (int sceneNumber);
+    void savePadSettings (int padNumber);
+    void loadPadSettings (int padNumber);
     
     void saveSequence (int currentlySelectedSeqNumber, int currentlySelectedPad);
     void loadSequence (int currentlySeletedSeqNumber, 

@@ -31,17 +31,22 @@ XmlAttributesListBox::XmlAttributesListBox (File fileToList, bool forScales, Too
      //will have to check tagname outside this class so it can be used for multiple files.
     //should be check its in an xml format here?
     
-    xmlData = XmlDocument::parse(fileToList);
-
-    int numOfItems = xmlData->getNumChildElements();
     StringArray itemStrings;
+    xmlData = nullptr;
     
-    for (int i = 0; i < numOfItems; i++)
-        itemStrings.add(xmlData->getChildElement(i)->getStringAttribute("name"));
-
+    if (fileToList.exists())
+    {
+        xmlData = XmlDocument::parse(fileToList);
+        int numOfItems = xmlData->getNumChildElements();
+        
+        for (int i = 0; i < numOfItems; i++)
+            itemStrings.add(xmlData->getChildElement(i)->getStringAttribute("name"));
+        
+    }
+    
     listBoxModel = new AlphaListBoxModel(itemStrings, *this);
     addAndMakeVisible(listBox = new ListBox("list box", listBoxModel));
-
+        
     listBox->setRowHeight(14);
     listBox->updateContent();
   

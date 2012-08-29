@@ -60,34 +60,62 @@ Toolbox::Toolbox(MainComponent &parent) :
      
     String appDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString);
     
+    File banksFile(appDir + "Library/Audio Library/nu Banks");
+    if (banksFile.exists() == false)
+        banksFile = File::nonexistent;
+    File midiPresetsFile(appDir + "Library/Pad Presets/MIDI Mode");
+    if (midiPresetsFile.exists() == false)
+        midiPresetsFile = File::nonexistent;
+    File samplerPresetsFile(appDir + "Library/Pad Presets/Sampler Mode");
+    if (samplerPresetsFile.exists() == false)
+        samplerPresetsFile = File::nonexistent;
+    File sequencerPresetsFile(appDir + "Library/Pad Presets/Sequencer Mode");
+    if (sequencerPresetsFile.exists() == false)
+        sequencerPresetsFile = File::nonexistent;
+    File controllerPresetsFile(appDir + "Library/Pad Presets/Controller Mode");
+    if (controllerPresetsFile.exists() == false)
+        controllerPresetsFile = File::nonexistent;
+    File effectPresetsFile(appDir + "Library/Pad Presets/Effects");
+    if (effectPresetsFile.exists() == false)
+        effectPresetsFile = File::nonexistent;
+    File scenePresetsFile(appDir + "Library/Scene Presets");
+    if (scenePresetsFile.exists() == false)
+        scenePresetsFile = File::nonexistent;
+    File audioSamplesFile(appDir + "Library/Audio Library");
+    if (audioSamplesFile.exists() == false)
+        audioSamplesFile = File::nonexistent;
+    File sequencesFile(appDir + "Library/Sequences");
+    if (sequencesFile.exists() == false)
+        sequencesFile = File::nonexistent;
+    
     contentLists.insert(DRUM_BANKS, new DirectoryContentsList(bankFileFilter, thread));
-    contentLists[DRUM_BANKS]->setDirectory (File(appDir + "Library/Audio Library/nu Banks"), false, true);
+    contentLists[DRUM_BANKS]->setDirectory (banksFile, false, true);
     
     contentLists.insert(MIDI_PRESETS, new DirectoryContentsList(padFileFilter, thread));
-    contentLists[MIDI_PRESETS]->setDirectory (File(appDir + "Library/Pad Presets/MIDI Mode"), false, true);
+    contentLists[MIDI_PRESETS]->setDirectory (midiPresetsFile, false, true);
     
     contentLists.insert(SAMPLER_PRESETS, new DirectoryContentsList(padFileFilter, thread));
-    contentLists[SAMPLER_PRESETS]->setDirectory (File(appDir + "Library/Pad Presets/Sampler Mode"), false, true);
+    contentLists[SAMPLER_PRESETS]->setDirectory (samplerPresetsFile, false, true);
     
     contentLists.insert(SEQUENCER_PRESETS, new DirectoryContentsList(padFileFilter, thread));
-    contentLists[SEQUENCER_PRESETS]->setDirectory (File(appDir + "Library/Pad Presets/Sequencer Mode"), false, true);
+    contentLists[SEQUENCER_PRESETS]->setDirectory (sequencerPresetsFile, false, true);
     
     contentLists.insert(CONTROLLER_PRESETS, new DirectoryContentsList(padFileFilter, thread));
-    contentLists[CONTROLLER_PRESETS]->setDirectory (File(appDir + "Library/Pad Presets/Controller Mode"), false, true);
+    contentLists[CONTROLLER_PRESETS]->setDirectory (controllerPresetsFile, false, true);
     
     contentLists.insert(EFFECT_PRESETS, new DirectoryContentsList(effectFileFilter, thread));
-    contentLists[EFFECT_PRESETS]->setDirectory (File(appDir + "Library/Pad Presets/Effects"), false, true);
+    contentLists[EFFECT_PRESETS]->setDirectory (effectPresetsFile, false, true);
     
     contentLists.insert(SCENE_PRESETS, new DirectoryContentsList(sceneFileFilter, thread));
-    contentLists[SCENE_PRESETS]->setDirectory (File(appDir + "Library/Scene Presets"), false, true);
+    contentLists[SCENE_PRESETS]->setDirectory (scenePresetsFile, false, true);
     
     
     
     contentLists.insert(AUDIO_SAMPLES, new DirectoryContentsList(audioFileFilter, thread));
-    contentLists[AUDIO_SAMPLES]->setDirectory (File(appDir + "Library/Audio Library"), true, true);
+    contentLists[AUDIO_SAMPLES]->setDirectory (audioSamplesFile, true, true);
     
     contentLists.insert(SEQUENCES, new DirectoryContentsList(seqFileFilter, thread));
-    contentLists[SEQUENCES]->setDirectory (File(appDir + "Library/Sequences"), true, true);
+    contentLists[SEQUENCES]->setDirectory (sequencesFile, true, true);
     
     thread.startThread();
     
@@ -119,9 +147,17 @@ Toolbox::Toolbox(MainComponent &parent) :
         fileLists[i]->addMouseListener(this, true);
     }
     
-    scalesListBox = new XmlAttributesListBox (File(appDir + "Application Data/scales.xml"), true, *this);
+    File scalesFile(appDir + "Application Data/scales.xml");
+    if (scalesFile.exists() == false)
+        scalesFile = File::nonexistent;
+    
+    File layoutsFile(appDir + "Application Data/notational_arrangements.xml");
+    if (layoutsFile.exists() == false)
+        layoutsFile = File::nonexistent;
+    
+    scalesListBox = new XmlAttributesListBox (scalesFile, true, *this);
     scalesListBox->addMouseListener(this, true);
-    layoutsListBox = new XmlAttributesListBox (File(appDir + "Application Data/notational_arrangements.xml"), false, *this);
+    layoutsListBox = new XmlAttributesListBox (layoutsFile, false, *this);
     layoutsListBox->addMouseListener(this, true);
 
     //create tabbed component 
@@ -339,7 +375,7 @@ void Toolbox::fileDoubleClicked (const File& file)
     
     else if (file.getFileExtension() == ".alphapad")
     {
-        //mainComponentRef.getAppDocumentStateRef().loadPadFromDisk(selectedPads, false, file);
+        mainComponentRef.getAppDocumentStateRef().loadPadFromDisk(selectedPads, false, file);
     }
     
 }

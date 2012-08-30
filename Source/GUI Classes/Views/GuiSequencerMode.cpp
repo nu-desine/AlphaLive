@@ -996,11 +996,14 @@ void GuiSequencerMode::buttonClicked (Button* button)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerMode(buttonIndex);
+            
+            PAD_SETTINGS->setSequencerEffect(0); //set effect to off to remove the effect object
         }
         
         mainComponentRef.getGuiPiano()->setActive(true);
         mainComponentRef.getGuiPiano()->updateDisplay();
         mainComponentRef.getToolbox()->updateDisplay();
+        
         
         for (int i = 0; i <= 15; i++)
             midiChannelButtons[i]->setVisible(true);
@@ -1050,6 +1053,9 @@ void GuiSequencerMode::buttonClicked (Button* button)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerMode(buttonIndex);
+            
+            PAD_SETTINGS->setSequencerEffect(1); //set default effect
+            fxDial->updateDisplay();
         }
         
         mainComponentRef.getGuiPiano()->setActive(false);
@@ -1112,10 +1118,19 @@ void GuiSequencerMode::buttonClicked (Button* button)
         
         else if (modeSamplesButton->getToggleState() == true)
         {
+            
             for (int i = 0; i < selectedPads.size(); i++)
             {
-                //int padNum = selectedPads[i];
-                //set sequence samples effect to 0 / off in PadSettings. see how sampler mode handles this
+                int padNum = selectedPads[i];
+                if (button->getToggleState() == false)
+                {
+                    PAD_SETTINGS->setSequencerEffect(0);
+                }
+                else if (button->getToggleState() == true)
+                {
+                    PAD_SETTINGS->setSamplerEffect(1); //set default effect
+                    fxDial->updateDisplay();
+                }
             }
         }
         
@@ -1541,6 +1556,7 @@ void GuiSequencerMode::updateDisplay()
         linkButton->setToggleState(PAD_SETTINGS->getSequencerDynamicMode(), false);
         midiPressureMinRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMinPressureRange());
         midiPressureMaxRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMaxPressureRange());
+        //effect is found a set with fxDial
         
         
     }

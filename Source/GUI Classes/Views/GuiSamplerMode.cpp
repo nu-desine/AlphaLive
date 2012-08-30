@@ -552,6 +552,7 @@ void GuiSamplerMode::updateDisplay()
         indestructibleButton->setToggleState(PAD_SETTINGS->getSamplerIndestructible(), false);
         finishLoopButton->setToggleState(PAD_SETTINGS->getSamplerShouldFinishLoop(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getSamplerSticky(), false);
+        //effect is found a set with fxDial
         
         if (PAD_SETTINGS->getSamplerEffect() == 0)
             pressureStatusButton->setToggleState(false, false);

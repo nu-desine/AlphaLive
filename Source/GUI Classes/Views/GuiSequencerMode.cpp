@@ -1903,7 +1903,7 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
             {
                 int padNum = selectedPads[0];
                 
-                mainComponentRef.setInfoTextBoxText(translate("Sequencer Audio Sample Selector Buttons. Use these buttons to select the audio samples for the rows of the sequencer grid for the selected pads. Audio files can also be dragged-and-dropped onto the buttons. Use this button to select the audio sample for row") + " " + String(i+1) + ". " + translate("The current audio file set here is:") + " " + PAD_SETTINGS->getSequencerSamplesAudioFilePath(i).getFullPathName());
+                mainComponentRef.setInfoTextBoxText(translate("Sequencer Audio Sample Selector Buttons. Use these buttons to select the audio samples for the rows of the sequencer grid for the selected pads. Audio files can also be dragged-and-dropped onto the buttons. Use this button to select the audio sample for row") + " " + String(i+1) + ". " + translate("The current audio file set here is:") + " " + PAD_SETTINGS->getSequencerSamplesAudioFilePath(i).getFileName());
             }
             else if (MULTI_PADS)
             {

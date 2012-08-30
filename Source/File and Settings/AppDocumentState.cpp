@@ -1588,6 +1588,10 @@ void AppDocumentState::loadPadFromDisk (Array<int> selectedPads_, bool openBrows
             loadedXml->removeChildElement (padData, true);
             
             //update GUI - calls update() in mainComponent
+            
+            //SHOULD I CREATE A NEW GUIUPDATEFLAG VALUE THAT ONLY ALLOWS A MINIMUM AMOUNT OF
+            //THE GUI T0 BE UPDATED? HOWEVER THERE WILL PROBABLY BE A DIFFERENCE BETWEEN WHETHER
+            //IF THIS FUNCTION WAS CALLED FROM THE TOOLBOX OR BY MANUALLY LOADING A PADS SETTINGS.
             guiUpdateFlag = 0;
             notifyObs();
         }
@@ -1687,6 +1691,8 @@ void AppDocumentState::loadSequence (int currentlySeletedSeqNumber,
         delete xml;
         
         //update GUI
+        //SHOULD I CREATE A NEW GUIUPDATEFLAG VALUE THAT ONLY ALLOWS A MINIMUM AMOUNT OF
+        //THE GUI T0 BE UPDATED?
         notifyObs();
     }
 }
@@ -1783,6 +1789,8 @@ void AppDocumentState::loadSequenceSet(Array<int> selectedPads_,
         delete xml;
         
         //update GUI
+        //SHOULD I CREATE A NEW GUIUPDATEFLAG VALUE THAT ONLY ALLOWS A MINIMUM AMOUNT OF
+        //THE GUI T0 BE UPDATED? 
         notifyObs();
         
     }

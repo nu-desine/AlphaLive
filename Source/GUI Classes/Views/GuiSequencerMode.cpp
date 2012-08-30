@@ -994,10 +994,13 @@ void GuiSequencerMode::buttonClicked (Button* button)
         
         for (int i = 0; i < selectedPads.size(); i++)
         {
+            //  HOW WILL THIS LOOP REACT WHEN MULTIPLE PADS ARE SELECTED?
             int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerMode(buttonIndex);
             
             PAD_SETTINGS->setSequencerEffect(0); //set effect to off to remove the effect object
+            
+            pressureStatusButton->setToggleState(PAD_SETTINGS->getMidiPressureStatus(), false);
         }
         
         mainComponentRef.getGuiPiano()->setActive(true);
@@ -1051,11 +1054,20 @@ void GuiSequencerMode::buttonClicked (Button* button)
         
         for (int i = 0; i < selectedPads.size(); i++)
         {
+            //  HOW WILL THIS LOOP REACT WHEN MULTIPLE PADS ARE SELECTED?
             int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerMode(buttonIndex);
             
-            PAD_SETTINGS->setSequencerEffect(1); //set default effect
-            fxDial->updateDisplay();
+            if (PAD_SETTINGS->getSequencerEffect() == 0)
+            {
+                pressureStatusButton->setToggleState(false, false);
+            }
+            else
+            {
+                pressureStatusButton->setToggleState(true, false);
+                fxDial->updateDisplay(); //<< will update the effect too
+            }
+            
         }
         
         mainComponentRef.getGuiPiano()->setActive(false);
@@ -1128,7 +1140,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
                 }
                 else if (button->getToggleState() == true)
                 {
-                    PAD_SETTINGS->setSamplerEffect(1); //set default effect
+                    PAD_SETTINGS->setSequencerEffect(1); //set default effect
                     fxDial->updateDisplay();
                 }
             }

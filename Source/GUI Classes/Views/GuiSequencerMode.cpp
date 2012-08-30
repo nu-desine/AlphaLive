@@ -1531,6 +1531,7 @@ void GuiSequencerMode::updateDisplay()
                 pressureStatusButton->setToggleState(false, false);
             else
                 pressureStatusButton->setToggleState(true, false);
+            //effect is found a set with fxDial
              
         }
         
@@ -1556,7 +1557,7 @@ void GuiSequencerMode::updateDisplay()
         linkButton->setToggleState(PAD_SETTINGS->getSequencerDynamicMode(), false);
         midiPressureMinRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMinPressureRange());
         midiPressureMaxRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMaxPressureRange());
-        //effect is found a set with fxDial
+        
         
         
     }

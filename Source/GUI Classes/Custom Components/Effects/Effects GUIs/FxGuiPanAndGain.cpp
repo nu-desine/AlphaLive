@@ -101,7 +101,7 @@ void GuiGainAndPan::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxGainPanGain(gainSlider->getValue());
+            PAD_SETTINGS->setPadFxGainPanGain(gainSlider->getValue());
         }
         
     }
@@ -112,7 +112,7 @@ void GuiGainAndPan::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxGainPanPan(panSlider->getValue());
+            PAD_SETTINGS->setPadFxGainPanPan(panSlider->getValue());
         }
         
     }    
@@ -122,7 +122,7 @@ void GuiGainAndPan::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxGainPanAtIntensity(intensitySlider->getValue());
+            PAD_SETTINGS->setPadFxGainPanAtIntensity(intensitySlider->getValue());
         }
     }
     
@@ -136,7 +136,7 @@ void GuiGainAndPan::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxGainPanAlphaTouch(alphaTouchMenu->getSelectedId());
+            PAD_SETTINGS->setPadFxGainPanAlphaTouch(alphaTouchMenu->getSelectedId());
         }
     
     }
@@ -151,7 +151,7 @@ void GuiGainAndPan::buttonClicked (Button *button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxGainPanAtReverse(reverseButton->getToggleState());
+            PAD_SETTINGS->setPadFxGainPanAtReverse(reverseButton->getToggleState());
         }
         
     }
@@ -170,12 +170,12 @@ void GuiGainAndPan::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        gainSlider->setValue(PAD_SETTINGS->getSamplerFxGainPanGain(), false);
-        panSlider->setValue(PAD_SETTINGS->getSamplerFxGainPanPan(), false);
+        gainSlider->setValue(PAD_SETTINGS->getPadFxGainPanGain(), false);
+        panSlider->setValue(PAD_SETTINGS->getPadFxGainPanPan(), false);
         
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxGainPanAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxGainPanAtReverse(), false);
-        intensitySlider->setValue(PAD_SETTINGS->getSamplerFxGainPanAtIntensity(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxGainPanAlphaTouch(), true);
+        reverseButton->setToggleState(PAD_SETTINGS->getPadFxGainPanAtReverse(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getPadFxGainPanAtIntensity(), false);
     }
     
     else if(MULTI_PADS)

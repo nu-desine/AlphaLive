@@ -103,7 +103,7 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
 
     //audio stuff
     //init audio file player objects, 1 for each row
-    //LOOK INTO DOING THIS STUFF ONLY WHEN MODE IS SET TO SAMPLES MODE
+    //LOOK INTO DOING THIS STUFF ONLY WHEN MODE IS SET TO SAMPLES MODE?
     for (int row = 0; row <= NO_OF_ROWS-1; row++)
     {
         sequenceAudioFilePlayer[row] = new SequenceAudioFilePlayer(padNumber, row, audioTransportSourceThread);
@@ -111,6 +111,22 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     }
     
     broadcaster.addActionListener(this);
+    
+    //init all effects to be null
+    gainAndPan = nullptr;
+    lowPassFilter = nullptr;
+    highPassFilter = nullptr;
+    bandPassFilter = nullptr;
+    reverb = nullptr;
+    delay = nullptr;
+    flanger = nullptr;
+    tremolo = nullptr;
+    
+    //set effect to default 0, and then call set effect to create the effect object
+    //This alg. prevents any crashes caused within prepareToPlay when trying to
+    //set the sampleRate, where the effect object must exist
+    effect = 0;
+    setSamplesEffect(PAD_SETTINGS->getSequencerEffect());
     
     prevPadValue = pressureValue =  0;
     playingLastLoop = false;
@@ -123,6 +139,15 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
 
 SequencePlayer::~SequencePlayer()
 {
+    delete gainAndPan;
+    delete lowPassFilter;
+    delete highPassFilter;
+    delete bandPassFilter;
+    delete delay;
+    delete reverb;
+    delete flanger;
+    delete tremolo;
+    
     stopThread(timeInterval);
     //stopThreadAndReset();
     modeSequencerRef.updatePadPlayingStatus(padNumber, 0);
@@ -380,7 +405,37 @@ void SequencePlayer::processSequence(int padValue)
     }
     else if (mode == 2)
     {
-        //control DSP effects
+        //determine what effect and parameter the pressure is controlling
+        
+        switch (effect)
+        {
+            case 1: //Gain and Pan
+                gainAndPan->processAlphaTouch(pressureValue);
+                break;
+            case 2: //LPF
+                lowPassFilter->processAlphaTouch(pressureValue);
+                break;
+            case 3: //HPF
+                highPassFilter->processAlphaTouch(pressureValue);
+                break;
+            case 4: //BPF
+                bandPassFilter->processAlphaTouch(pressureValue);
+                break;
+            case 7: //Delay
+                delay->processAlphaTouch(pressureValue);
+                break;
+            case 8: //Reverb
+                reverb->processAlphaTouch(pressureValue);
+                break;
+            case 9: //Flanger
+                flanger->processAlphaTouch(pressureValue);
+                break;
+            case 10: //Tremolo
+                tremolo->processAlphaTouch(pressureValue);
+                break;
+            default:
+                break;
+        }
     }
     
     
@@ -502,6 +557,15 @@ void SequencePlayer::run()
     columnNumber = 0; //counter variable
     //will this be ok being here?
     sequenceNumber = 0;
+    
+    if (mode == 2)
+    {
+        //set the state of certain effects
+        if (effect == 9) //flanger
+            flanger->restart(); //so the lfo is re-started when the file is started
+        else if (effect == 10) //tremolo
+            tremolo->restart(); //so the lfo is re-started when the file is started
+    }
     
     //initally reset sequence display
     if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
@@ -733,6 +797,14 @@ void SequencePlayer::stopThreadAndReset()
         broadcaster.sendActionMessage("PLAYING OFF"); 
     }
     
+    if (mode == 2)
+    {
+        if (effect == 7) //delay
+            delay->resetBuffers();
+        else if (effect == 9) //flanger
+            flanger->resetBuffers();
+    }
+    
 }
 
 
@@ -846,6 +918,43 @@ void SequencePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFi
     
     audioMixer.getNextAudioBlock(bufferToFill);
     
+    sharedMemory.enter();
+    if (/*fileSource.isPlaying() == true &&*/ effect != 0)
+    {
+        
+        switch (effect) 
+        {
+            case 1: //Gain and Pan
+                gainAndPan->processAudio(bufferToFill);
+                break;
+            case 2: //LPF
+                lowPassFilter->processAudio(bufferToFill);
+                break;
+            case 3://HPF
+                highPassFilter->processAudio(bufferToFill);
+                break;
+            case 4: //BPF
+                bandPassFilter->processAudio(bufferToFill);
+                break;
+            case 7: //Delay
+                delay->processAudio(bufferToFill);
+                break;
+            case 8: //Reverb
+                reverb->processAudio(bufferToFill);
+                break;
+            case 9: //Flanger
+                flanger->processAudio(bufferToFill);
+                break;
+            case 10: //Tremolo
+                tremolo->processAudio(bufferToFill);
+                break;
+            default:
+                break;
+        }
+        
+    }
+    sharedMemory.exit();
+    
     /*
     //OLD GAIN AND PAN ALGORITHM
     //get sample data from audio buffer
@@ -897,6 +1006,38 @@ void SequencePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFi
 void SequencePlayer::prepareToPlay (int samplesPerBlockExpected,double sampleRate)
 {
     audioMixer.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    
+    sampleRate_ = sampleRate;
+    
+    switch (effect)
+    {
+        case 1:
+            gainAndPan->setSampleRate(sampleRate);
+            break;
+        case 2:
+            lowPassFilter->setSampleRate(sampleRate);
+            break;
+        case 3:
+            highPassFilter->setSampleRate(sampleRate);
+            break;
+        case 4:
+            bandPassFilter->setSampleRate(sampleRate);
+            break;
+        case 7:
+            delay->setSampleRate(sampleRate);
+            break;
+        case 8:
+            reverb->setSampleRate(sampleRate);
+            break;
+        case 9:
+            flanger->setSampleRate(sampleRate);
+            break;
+        case 10:
+            tremolo->setSampleRate(sampleRate);
+            break;
+        default:
+            break;
+    }
 }
 
 void SequencePlayer::releaseResources()
@@ -1184,7 +1325,88 @@ void SequencePlayer::setMidiPressureStatus (bool value)
 }
 
 
-
+void SequencePlayer::setSamplesEffect(int value)
+{
+    sharedMemory.enter();
+    
+    if (effect != value) //if the effect is being changed
+    {
+        //first, delete the current effect...
+        switch (effect)
+        {
+            case 1:
+                delete gainAndPan;
+                gainAndPan = nullptr;
+                break;
+            case 2:
+                delete lowPassFilter;
+                lowPassFilter = nullptr;
+                break;
+            case 3:
+                delete highPassFilter;
+                highPassFilter = nullptr;
+                break;
+            case 4:
+                delete bandPassFilter;
+                bandPassFilter = nullptr;
+                break;
+            case 7:
+                delete delay;
+                delay = nullptr;
+                break;
+            case 8:
+                delete reverb;
+                reverb = nullptr;
+                break;
+            case 9:
+                delete flanger;
+                flanger = nullptr;
+                break;
+            case 10:
+                delete tremolo;
+                tremolo = nullptr;
+                break;
+            default:
+                break;
+        }
+        
+        //Next, create the new effect...
+        switch (value)
+        {
+            case 1:
+                gainAndPan = new GainAndPan (padNumber, sampleRate_);
+                break;
+            case 2:
+                lowPassFilter = new LowpassFilter (padNumber, sampleRate_);
+                break;
+            case 3:
+                highPassFilter = new HighPassFilter (padNumber, sampleRate_);
+                break;
+            case 4:
+                bandPassFilter = new BandPassFilter (padNumber, sampleRate_);
+                break;
+            case 7:
+                delay = new Delay (padNumber, sampleRate_);
+                break;
+            case 8:
+                reverb = new ReverbClass (padNumber, sampleRate_);
+                break;
+            case 9:
+                flanger = new Flanger (padNumber, sampleRate_);
+                break;
+            case 10:
+                tremolo = new Tremolo (padNumber, sampleRate_);
+                break;
+            default:
+                break;
+        }
+        
+        //Finally, set the new effect to be the current effect
+        effect = value;
+    }
+    sharedMemory.exit();
+    
+}
 
 
 void SequencePlayer::setSamplesGain (float value)
@@ -1213,3 +1435,43 @@ double SequencePlayer::getTimeInterval()
     return timeInterval;
 }
 
+
+//========================================================================================
+GainAndPan& SequencePlayer::getGainAndPan()
+{
+    return *gainAndPan;
+}
+LowpassFilter& SequencePlayer::getLowpassFilter()
+{
+    return *lowPassFilter;
+}
+
+HighPassFilter& SequencePlayer::getHighPassFilter()
+{
+    return *highPassFilter;
+}
+
+BandPassFilter& SequencePlayer::getBandPassFilter()
+{
+    return *bandPassFilter;
+}
+
+Delay& SequencePlayer::getDelay()
+{
+    return *delay;
+}
+
+ReverbClass& SequencePlayer::getReverb()
+{
+    return *reverb;
+}
+
+Flanger& SequencePlayer::getFlanger()
+{
+    return *flanger;
+}
+
+Tremolo& SequencePlayer::getTremolo()
+{
+    return *tremolo;
+}

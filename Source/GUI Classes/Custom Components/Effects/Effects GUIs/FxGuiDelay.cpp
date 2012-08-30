@@ -151,7 +151,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelayMix(wetMixSlider->getValue());
+            PAD_SETTINGS->setPadFxDelayMix(wetMixSlider->getValue());
         }
     }
     
@@ -160,7 +160,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelayTime(delayTimeSlider->getValue());
+            PAD_SETTINGS->setPadFxDelayTime(delayTimeSlider->getValue());
         }
         
     }
@@ -170,7 +170,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelayFeedback(feedbackSlider->getValue());
+            PAD_SETTINGS->setPadFxDelayFeedback(feedbackSlider->getValue());
         }
         
     }
@@ -180,7 +180,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelayLpfFreq(lpfFrequencySlider->getValue());
+            PAD_SETTINGS->setPadFxDelayLpfFreq(lpfFrequencySlider->getValue());
         }
         
     }
@@ -190,7 +190,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelayHpfFreq(hpfFrequencySlider->getValue());
+            PAD_SETTINGS->setPadFxDelayHpfFreq(hpfFrequencySlider->getValue());
         }
         
     }
@@ -200,7 +200,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelayAtIntensity(intensitySlider->getValue());
+            PAD_SETTINGS->setPadFxDelayAtIntensity(intensitySlider->getValue());
         }
         
     }
@@ -216,7 +216,7 @@ void GuiDelay::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelayAlphaTouch(alphaTouchMenu->getSelectedId());
+            PAD_SETTINGS->setPadFxDelayAlphaTouch(alphaTouchMenu->getSelectedId());
         }
         
     }
@@ -254,8 +254,8 @@ void GuiDelay::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelayTime(delayTime);
-            PAD_SETTINGS->setSamplerFxDelayTimeMenu(delayTimeMenu->getSelectedId());
+            PAD_SETTINGS->setPadFxDelayTime(delayTime);
+            PAD_SETTINGS->setPadFxDelayTimeMenu(delayTimeMenu->getSelectedId());
         }
         
     }
@@ -270,7 +270,7 @@ void GuiDelay::buttonClicked (Button *button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelayAtReverse(reverseButton->getToggleState());
+            PAD_SETTINGS->setPadFxDelayAtReverse(reverseButton->getToggleState());
         }
     }
     
@@ -279,7 +279,7 @@ void GuiDelay::buttonClicked (Button *button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxDelaySync(syncButton->getToggleState());
+            PAD_SETTINGS->setPadFxDelaySync(syncButton->getToggleState());
         }
         
         delayTimeSlider->setVisible(false);
@@ -309,17 +309,17 @@ void GuiDelay::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        wetMixSlider->setValue(PAD_SETTINGS->getSamplerFxDelayMix(), false);
-        delayTimeSlider->setValue(PAD_SETTINGS->getSamplerFxDelayTime(), false);
-        delayTimeMenu->setSelectedId(PAD_SETTINGS->getSamplerFxDelayTimeMenu(), true);
-        feedbackSlider->setValue(PAD_SETTINGS->getSamplerFxDelayFeedback(), false);
-        lpfFrequencySlider->setValue(PAD_SETTINGS->getSamplerFxDelayLpfFreq(), false);
-        hpfFrequencySlider->setValue(PAD_SETTINGS->getSamplerFxDelayHpfFreq(), false);
-        syncButton->setToggleState(PAD_SETTINGS->getSamplerFxDelaySync(), false);
+        wetMixSlider->setValue(PAD_SETTINGS->getPadFxDelayMix(), false);
+        delayTimeSlider->setValue(PAD_SETTINGS->getPadFxDelayTime(), false);
+        delayTimeMenu->setSelectedId(PAD_SETTINGS->getPadFxDelayTimeMenu(), true);
+        feedbackSlider->setValue(PAD_SETTINGS->getPadFxDelayFeedback(), false);
+        lpfFrequencySlider->setValue(PAD_SETTINGS->getPadFxDelayLpfFreq(), false);
+        hpfFrequencySlider->setValue(PAD_SETTINGS->getPadFxDelayHpfFreq(), false);
+        syncButton->setToggleState(PAD_SETTINGS->getPadFxDelaySync(), false);
         
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxDelayAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxDelayAtReverse(), false);
-        intensitySlider->setValue(PAD_SETTINGS->getSamplerFxDelayAtIntensity(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxDelayAlphaTouch(), true);
+        reverseButton->setToggleState(PAD_SETTINGS->getPadFxDelayAtReverse(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getPadFxDelayAtIntensity(), false);
     }
     
     else if(MULTI_PADS)

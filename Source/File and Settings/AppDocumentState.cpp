@@ -113,89 +113,6 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
         padData->setAttribute("samplerPan", PAD_SETTINGS->getSamplerPan());
         padData->setAttribute("samplerGain", PAD_SETTINGS->getSamplerGain());
         
-        if (PAD_SETTINGS->getSamplerEffect() == 1) //Gain and Pan
-        {
-            padData->setAttribute("samplerFxGainPanGain", PAD_SETTINGS->getSamplerFxGainPanGain());
-            padData->setAttribute("samplerFxGainPanPan", PAD_SETTINGS->getSamplerFxGainPanPan());
-            padData->setAttribute("samplerFxGainPanAlphaTouch", PAD_SETTINGS->getSamplerFxGainPanAlphaTouch());
-            padData->setAttribute("samplerFxGainPanAtReverse", PAD_SETTINGS->getSamplerFxGainPanAtReverse());
-            padData->setAttribute("samplerFxGainPanAtIntensity", PAD_SETTINGS->getSamplerFxGainPanAtIntensity());
-        }
-        else if (PAD_SETTINGS->getSamplerEffect() == 2) //LPF
-        {
-            padData->setAttribute("samplerFxLpfMix", PAD_SETTINGS->getSamplerFxLpfMix());
-            padData->setAttribute("samplerFxLpfFreq", PAD_SETTINGS->getSamplerFxLpfFreq());
-            padData->setAttribute("samplerFxLpfBandwidth", PAD_SETTINGS->getSamplerFxLpfBandwidth());
-            padData->setAttribute("samplerFxLpfAlphaTouch", PAD_SETTINGS->getSamplerFxLpfAlphaTouch());
-            padData->setAttribute("samplerFxLpfAtReverse", PAD_SETTINGS->getSamplerFxLpfAtReverse());
-            padData->setAttribute("samplerFxLpfAtIntensity", PAD_SETTINGS->getSamplerFxLpfAtIntensity());
-        }
-        else if (PAD_SETTINGS->getSamplerEffect() == 3) //HPF
-        {
-            padData->setAttribute("samplerFxHpfMix", PAD_SETTINGS->getSamplerFxHpfMix());
-            padData->setAttribute("samplerFxHpfFreq", PAD_SETTINGS->getSamplerFxHpfFreq());
-            padData->setAttribute("samplerFxHpfBandwidth", PAD_SETTINGS->getSamplerFxHpfBandwidth());
-            padData->setAttribute("samplerFxHpfAlphaTouch", PAD_SETTINGS->getSamplerFxHpfAlphaTouch());
-            padData->setAttribute("samplerFxHpfAtReverse", PAD_SETTINGS->getSamplerFxHpfAtReverse());
-            padData->setAttribute("samplerFxHpfAtIntensity", PAD_SETTINGS->getSamplerFxHpfAtIntensity());
-        }
-        else if (PAD_SETTINGS->getSamplerEffect() == 4) //BPF
-        {
-            padData->setAttribute("samplerFxBpfMix", PAD_SETTINGS->getSamplerFxBpfMix());
-            padData->setAttribute("samplerFxBpfFreq", PAD_SETTINGS->getSamplerFxBpfFreq());
-            padData->setAttribute("samplerFxBpfBandwidth", PAD_SETTINGS->getSamplerFxBpfBandwidth());
-            padData->setAttribute("samplerFxBpfAlphaTouch", PAD_SETTINGS->getSamplerFxBpfAlphaTouch());
-            padData->setAttribute("samplerFxBpfAtReverse", PAD_SETTINGS->getSamplerFxBpfAtReverse());
-            padData->setAttribute("samplerFxBpfAtIntensity", PAD_SETTINGS->getSamplerFxBpfAtIntensity());
-        }
-        else if (PAD_SETTINGS->getSamplerEffect() == 7) //Delay
-        {
-            padData->setAttribute("samplerFxDelayMix", PAD_SETTINGS->getSamplerFxDelayMix());
-            padData->setAttribute("samplerFxDelayTime", PAD_SETTINGS->getSamplerFxDelayTime());
-            padData->setAttribute("samplerFxDelayFeedback", PAD_SETTINGS->getSamplerFxDelayFeedback());
-            padData->setAttribute("samplerFxDelayLpfFreq", PAD_SETTINGS->getSamplerFxDelayLpfFreq());
-            padData->setAttribute("samplerFxDelayHpfFreq", PAD_SETTINGS->getSamplerFxDelayHpfFreq());
-            padData->setAttribute("samplerFxDelaySync", PAD_SETTINGS->getSamplerFxDelaySync());
-            padData->setAttribute("samplerFxDelayTimeMenu", PAD_SETTINGS->getSamplerFxDelayTimeMenu());
-            padData->setAttribute("samplerFxDelayAlphaTouch", PAD_SETTINGS->getSamplerFxDelayAlphaTouch());
-            padData->setAttribute("samplerFxDelayAtReverse", PAD_SETTINGS->getSamplerFxDelayAtReverse());
-            padData->setAttribute("samplerFxDelayAtIntensity", PAD_SETTINGS->getSamplerFxDelayAtIntensity());
-        }
-        else if (PAD_SETTINGS->getSamplerEffect() == 8) //Reverb
-        {
-            padData->setAttribute("samplerFxReverbMix", PAD_SETTINGS->getSamplerFxReverbMix());
-            padData->setAttribute("samplerFxReverbRoomSize", PAD_SETTINGS->getSamplerFxReverbRoomSize());
-            padData->setAttribute("samplerFxReverbDamping", PAD_SETTINGS->getSamplerFxReverbDamping());
-            padData->setAttribute("samplerFxReverbWidth", PAD_SETTINGS->getSamplerFxReverbWidth());
-            padData->setAttribute("samplerFxReverbFreezeMode", PAD_SETTINGS->getSamplerFxReverbFreezeMode());
-            padData->setAttribute("samplerFxReverbAlphaTouch", PAD_SETTINGS->getSamplerFxReverbAlphaTouch());
-            padData->setAttribute("samplerFxReverbAtReverse", PAD_SETTINGS->getSamplerFxReverbAtReverse());
-            padData->setAttribute("samplerFxReverbAtIntensity", PAD_SETTINGS->getSamplerFxReverbAtIntensity());
-        }
-        else if (PAD_SETTINGS->getSamplerEffect() == 9) //Flanger
-        {
-            padData->setAttribute("samplerFxFlangerMix", PAD_SETTINGS->getSamplerFxFlangerMix());
-            padData->setAttribute("samplerFxFlangerRate", PAD_SETTINGS->getSamplerFxFlangerRate());
-            padData->setAttribute("samplerFxFlangerFeedback", PAD_SETTINGS->getSamplerFxFlangerFeedback());
-            padData->setAttribute("samplerFxFlangerIntensity", PAD_SETTINGS->getSamplerFxFlangerIntensity());
-            padData->setAttribute("samplerFxFlangerRateMenu", PAD_SETTINGS->getSamplerFxFlangerRateMenu());
-            padData->setAttribute("samplerFxFlangerSync", PAD_SETTINGS->getSamplerFxFlangerSync());
-            padData->setAttribute("samplerFxFlangerAlphaTouch", PAD_SETTINGS->getSamplerFxFlangerAlphaTouch());
-            padData->setAttribute("samplerFxFlangerAtReverse", PAD_SETTINGS->getSamplerFxFlangerAtReverse());
-            padData->setAttribute("samplerFxFlangerAtIntensity", PAD_SETTINGS->getSamplerFxFlangerAtIntensity());
-        }
-        else if (PAD_SETTINGS->getSamplerEffect() == 10) //Tremolo
-        {
-            padData->setAttribute("samplerFxTremoloDepth", PAD_SETTINGS->getSamplerFxTremoloDepth());
-            padData->setAttribute("samplerFxTremoloRate", PAD_SETTINGS->getSamplerFxTremoloRate());
-            padData->setAttribute("samplerFxTremoloShape", PAD_SETTINGS->getSamplerFxTremoloShape());
-            padData->setAttribute("samplerFxTremoloSync", PAD_SETTINGS->getSamplerFxTremoloSync());
-            padData->setAttribute("samplerFxTremoloRateMenu", PAD_SETTINGS->getSamplerFxTremoloRateMenu());
-            padData->setAttribute("samplerFxTremoloAlphaTouch", PAD_SETTINGS->getSamplerFxTremoloAlphaTouch());
-            padData->setAttribute("samplerFxTremoloAtReverse", PAD_SETTINGS->getSamplerFxTremoloAtReverse());
-            padData->setAttribute("samplerFxTremoloAtIntensity", PAD_SETTINGS->getSamplerFxTremoloAtIntensity());
-        }
-        
     }
     else if (PAD_SETTINGS->getMode() == 3) //sequencer mode
     {
@@ -246,6 +163,7 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
                     padData->setAttribute("sequencerSamplesAudioFilePath"+String(row), PAD_SETTINGS->getSequencerSamplesAudioFilePath(row).getFullPathName());
                 }
             }
+            padData->setAttribute("sequencerEffect", PAD_SETTINGS->getSequencerEffect());
             padData->setAttribute("sequencerPan", PAD_SETTINGS->getSequencerPan());
             padData->setAttribute("sequencerGain", PAD_SETTINGS->getSequencerGain());
         }
@@ -259,6 +177,99 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
         padData->setAttribute("controllerOscPortNumber", PAD_SETTINGS->getControllerOscPort());
         padData->setAttribute("controllerMidiProgramChangeNumber", PAD_SETTINGS->getControllerMidiProgramChangeNumber());
         padData->setAttribute("controllerMidiProgramChangeChannel", PAD_SETTINGS->getControllerMidiProgramChangeChannel());
+    }
+    
+    int modeCheck = PAD_SETTINGS->getMode();
+    int effect = 0;
+    if (modeCheck == 2)
+        effect = PAD_SETTINGS->getSamplerEffect();
+    else if (modeCheck == 3)
+    {
+        if (PAD_SETTINGS->getSequencerMode() == 2)
+            effect = PAD_SETTINGS->getSequencerEffect();
+    }
+    
+    if (effect == 1) //Gain and Pan
+    {
+        padData->setAttribute("padFxGainPanGain", PAD_SETTINGS->getPadFxGainPanGain());
+        padData->setAttribute("padFxGainPanPan", PAD_SETTINGS->getPadFxGainPanPan());
+        padData->setAttribute("padFxGainPanAlphaTouch", PAD_SETTINGS->getPadFxGainPanAlphaTouch());
+        padData->setAttribute("padFxGainPanAtReverse", PAD_SETTINGS->getPadFxGainPanAtReverse());
+        padData->setAttribute("padFxGainPanAtIntensity", PAD_SETTINGS->getPadFxGainPanAtIntensity());
+    }
+    else if (effect == 2) //LPF
+    {
+        padData->setAttribute("padFxLpfMix", PAD_SETTINGS->getPadFxLpfMix());
+        padData->setAttribute("padFxLpfFreq", PAD_SETTINGS->getPadFxLpfFreq());
+        padData->setAttribute("padFxLpfBandwidth", PAD_SETTINGS->getPadFxLpfBandwidth());
+        padData->setAttribute("padFxLpfAlphaTouch", PAD_SETTINGS->getPadFxLpfAlphaTouch());
+        padData->setAttribute("padFxLpfAtReverse", PAD_SETTINGS->getPadFxLpfAtReverse());
+        padData->setAttribute("padFxLpfAtIntensity", PAD_SETTINGS->getPadFxLpfAtIntensity());
+    }
+    else if (effect == 3) //HPF
+    {
+        padData->setAttribute("padFxHpfMix", PAD_SETTINGS->getPadFxHpfMix());
+        padData->setAttribute("padFxHpfFreq", PAD_SETTINGS->getPadFxHpfFreq());
+        padData->setAttribute("padFxHpfBandwidth", PAD_SETTINGS->getPadFxHpfBandwidth());
+        padData->setAttribute("padFxHpfAlphaTouch", PAD_SETTINGS->getPadFxHpfAlphaTouch());
+        padData->setAttribute("padFxHpfAtReverse", PAD_SETTINGS->getPadFxHpfAtReverse());
+        padData->setAttribute("padFxHpfAtIntensity", PAD_SETTINGS->getPadFxHpfAtIntensity());
+    }
+    else if (effect == 4) //BPF
+    {
+        padData->setAttribute("padFxBpfMix", PAD_SETTINGS->getPadFxBpfMix());
+        padData->setAttribute("padFxBpfFreq", PAD_SETTINGS->getPadFxBpfFreq());
+        padData->setAttribute("padFxBpfBandwidth", PAD_SETTINGS->getPadFxBpfBandwidth());
+        padData->setAttribute("padFxBpfAlphaTouch", PAD_SETTINGS->getPadFxBpfAlphaTouch());
+        padData->setAttribute("padFxBpfAtReverse", PAD_SETTINGS->getPadFxBpfAtReverse());
+        padData->setAttribute("padFxBpfAtIntensity", PAD_SETTINGS->getPadFxBpfAtIntensity());
+    }
+    else if (effect == 7) //Delay
+    {
+        padData->setAttribute("padFxDelayMix", PAD_SETTINGS->getPadFxDelayMix());
+        padData->setAttribute("padFxDelayTime", PAD_SETTINGS->getPadFxDelayTime());
+        padData->setAttribute("padFxDelayFeedback", PAD_SETTINGS->getPadFxDelayFeedback());
+        padData->setAttribute("padFxDelayLpfFreq", PAD_SETTINGS->getPadFxDelayLpfFreq());
+        padData->setAttribute("padFxDelayHpfFreq", PAD_SETTINGS->getPadFxDelayHpfFreq());
+        padData->setAttribute("padFxDelaySync", PAD_SETTINGS->getPadFxDelaySync());
+        padData->setAttribute("padFxDelayTimeMenu", PAD_SETTINGS->getPadFxDelayTimeMenu());
+        padData->setAttribute("padFxDelayAlphaTouch", PAD_SETTINGS->getPadFxDelayAlphaTouch());
+        padData->setAttribute("padFxDelayAtReverse", PAD_SETTINGS->getPadFxDelayAtReverse());
+        padData->setAttribute("padFxDelayAtIntensity", PAD_SETTINGS->getPadFxDelayAtIntensity());
+    }
+    else if (effect == 8) //Reverb
+    {
+        padData->setAttribute("padFxReverbMix", PAD_SETTINGS->getPadFxReverbMix());
+        padData->setAttribute("padFxReverbRoomSize", PAD_SETTINGS->getPadFxReverbRoomSize());
+        padData->setAttribute("padFxReverbDamping", PAD_SETTINGS->getPadFxReverbDamping());
+        padData->setAttribute("padFxReverbWidth", PAD_SETTINGS->getPadFxReverbWidth());
+        padData->setAttribute("padFxReverbFreezeMode", PAD_SETTINGS->getPadFxReverbFreezeMode());
+        padData->setAttribute("padFxReverbAlphaTouch", PAD_SETTINGS->getPadFxReverbAlphaTouch());
+        padData->setAttribute("padFxReverbAtReverse", PAD_SETTINGS->getPadFxReverbAtReverse());
+        padData->setAttribute("padFxReverbAtIntensity", PAD_SETTINGS->getPadFxReverbAtIntensity());
+    }
+    else if (effect == 9) //Flanger
+    {
+        padData->setAttribute("padFxFlangerMix", PAD_SETTINGS->getPadFxFlangerMix());
+        padData->setAttribute("padFxFlangerRate", PAD_SETTINGS->getPadFxFlangerRate());
+        padData->setAttribute("padFxFlangerFeedback", PAD_SETTINGS->getPadFxFlangerFeedback());
+        padData->setAttribute("padFxFlangerIntensity", PAD_SETTINGS->getPadFxFlangerIntensity());
+        padData->setAttribute("padFxFlangerRateMenu", PAD_SETTINGS->getPadFxFlangerRateMenu());
+        padData->setAttribute("padFxFlangerSync", PAD_SETTINGS->getPadFxFlangerSync());
+        padData->setAttribute("padFxFlangerAlphaTouch", PAD_SETTINGS->getPadFxFlangerAlphaTouch());
+        padData->setAttribute("padFxFlangerAtReverse", PAD_SETTINGS->getPadFxFlangerAtReverse());
+        padData->setAttribute("padFxFlangerAtIntensity", PAD_SETTINGS->getPadFxFlangerAtIntensity());
+    }
+    else if (effect == 10) //Tremolo
+    {
+        padData->setAttribute("padFxTremoloDepth", PAD_SETTINGS->getPadFxTremoloDepth());
+        padData->setAttribute("padFxTremoloRate", PAD_SETTINGS->getPadFxTremoloRate());
+        padData->setAttribute("padFxTremoloShape", PAD_SETTINGS->getPadFxTremoloShape());
+        padData->setAttribute("padFxTremoloSync", PAD_SETTINGS->getPadFxTremoloSync());
+        padData->setAttribute("padFxTremoloRateMenu", PAD_SETTINGS->getPadFxTremoloRateMenu());
+        padData->setAttribute("padFxTremoloAlphaTouch", PAD_SETTINGS->getPadFxTremoloAlphaTouch());
+        padData->setAttribute("padFxTremoloAtReverse", PAD_SETTINGS->getPadFxTremoloAtReverse());
+        padData->setAttribute("padFxTremoloAtIntensity", PAD_SETTINGS->getPadFxTremoloAtIntensity());
     }
 }
 
@@ -364,93 +375,6 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
         if (padData->hasAttribute("samplerGain"))
             PAD_SETTINGS->setSamplerGain(padData->getDoubleAttribute("samplerGain"));
         
-        if (padData->hasAttribute("samplerEffect"))
-        {
-            if (PAD_SETTINGS->getSamplerEffect() == 1) //Gain and Pan
-            {
-                PAD_SETTINGS->setSamplerFxGainPanGain(padData->getDoubleAttribute("samplerFxGainPanGain"));
-                PAD_SETTINGS->setSamplerFxGainPanPan(padData->getDoubleAttribute("samplerFxGainPanPan"));
-                PAD_SETTINGS->setSamplerFxGainPanAlphaTouch(padData->getIntAttribute("samplerFxGainPanAlphaTouch"));
-                PAD_SETTINGS->setSamplerFxGainPanAtReverse(padData->getIntAttribute("samplerFxGainPanAtReverse"));
-                PAD_SETTINGS->setSamplerFxGainPanAtIntensity(padData->getDoubleAttribute("samplerFxGainPanAtIntensity"));
-            }
-            else if (PAD_SETTINGS->getSamplerEffect() == 2) //LPF
-            {
-                PAD_SETTINGS->setSamplerFxLpfMix(padData->getDoubleAttribute("samplerFxLpfMix"));
-                PAD_SETTINGS->setSamplerFxLpfFreq(padData->getDoubleAttribute("samplerFxLpfFreq"));
-                PAD_SETTINGS->setSamplerFxLpfBandwidth(padData->getDoubleAttribute("samplerFxLpfBandwidth"));
-                PAD_SETTINGS->setSamplerFxLpfAlphaTouch(padData->getIntAttribute("samplerFxLpfAlphaTouch"));
-                PAD_SETTINGS->setSamplerFxLpfAtReverse(padData->getIntAttribute("samplerFxLpfAtReverse"));
-                PAD_SETTINGS->setSamplerFxLpfAtIntensity(padData->getDoubleAttribute("samplerFxLpfAtIntensity"));
-                
-            }
-            else if (PAD_SETTINGS->getSamplerEffect() == 3) //HPF
-            {
-                PAD_SETTINGS->setSamplerFxHpfMix(padData->getDoubleAttribute("samplerFxHpfMix"));
-                PAD_SETTINGS->setSamplerFxHpfFreq(padData->getDoubleAttribute("samplerFxHpfFreq"));
-                PAD_SETTINGS->setSamplerFxHpfBandwidth(padData->getDoubleAttribute("samplerFxHpfBandwidth"));
-                PAD_SETTINGS->setSamplerFxHpfAlphaTouch(padData->getIntAttribute("samplerFxHpfAlphaTouch"));
-                PAD_SETTINGS->setSamplerFxHpfAtReverse(padData->getIntAttribute("samplerFxHpfAtReverse"));
-                PAD_SETTINGS->setSamplerFxHpfAtIntensity(padData->getDoubleAttribute("samplerFxHpfAtIntensity"));
-            }
-            else if (PAD_SETTINGS->getSamplerEffect() == 4) //BPF
-            {
-                PAD_SETTINGS->setSamplerFxBpfMix(padData->getDoubleAttribute("samplerFxBpfMix"));
-                PAD_SETTINGS->setSamplerFxBpfFreq(padData->getDoubleAttribute("samplerFxBpfFreq"));
-                PAD_SETTINGS->setSamplerFxBpfBandwidth(padData->getDoubleAttribute("samplerFxBpfBandwidth"));
-                PAD_SETTINGS->setSamplerFxBpfAlphaTouch(padData->getIntAttribute("samplerFxBpfAlphaTouch"));
-                PAD_SETTINGS->setSamplerFxBpfAtReverse(padData->getIntAttribute("samplerFxBpfAtReverse"));
-                PAD_SETTINGS->setSamplerFxBpfAtIntensity(padData->getDoubleAttribute("samplerFxBpfAtIntensity"));
-            }
-            else if (PAD_SETTINGS->getSamplerEffect() == 7) //Delay
-            {
-                PAD_SETTINGS->setSamplerFxDelayMix(padData->getDoubleAttribute("samplerFxDelayMix"));
-                PAD_SETTINGS->setSamplerFxDelayTime(padData->getDoubleAttribute("samplerFxDelayTime"));
-                PAD_SETTINGS->setSamplerFxDelayFeedback(padData->getDoubleAttribute("samplerFxDelayFeedback"));
-                PAD_SETTINGS->setSamplerFxDelayLpfFreq(padData->getDoubleAttribute("samplerFxDelayLpfFreq"));
-                PAD_SETTINGS->setSamplerFxDelayHpfFreq(padData->getDoubleAttribute("samplerFxDelayHpfFreq"));
-                PAD_SETTINGS->setSamplerFxDelaySync(padData->getIntAttribute("samplerFxDelaySync"));
-                PAD_SETTINGS->setSamplerFxDelayTimeMenu(padData->getIntAttribute("samplerFxDelayTimeMenu"));
-                PAD_SETTINGS->setSamplerFxDelayAlphaTouch(padData->getIntAttribute("samplerFxDelayAlphaTouch"));
-                PAD_SETTINGS->setSamplerFxDelayAtReverse(padData->getIntAttribute("samplerFxDelayAtReverse"));
-                PAD_SETTINGS->setSamplerFxDelayAtIntensity(padData->getDoubleAttribute("samplerFxDelayAtIntensity"));
-            }
-            else if (PAD_SETTINGS->getSamplerEffect() == 8) //Reverb
-            {
-                PAD_SETTINGS->setSamplerFxReverbMix(padData->getDoubleAttribute("samplerFxReverbMix"));
-                PAD_SETTINGS->setSamplerFxReverbRoomSize(padData->getDoubleAttribute("samplerFxReverbRoomSize"));
-                PAD_SETTINGS->setSamplerFxReverbDamping(padData->getDoubleAttribute("samplerFxReverbDamping"));
-                PAD_SETTINGS->setSamplerFxReverbWidth(padData->getDoubleAttribute("samplerFxReverbWidth"));
-                PAD_SETTINGS->setSamplerFxReverbFreezeMode(padData->getDoubleAttribute("samplerFxReverbFreezeMode"));
-                PAD_SETTINGS->setSamplerFxReverbAlphaTouch(padData->getIntAttribute("samplerFxReverbAlphaTouch"));
-                PAD_SETTINGS->setSamplerFxReverbAtReverse(padData->getIntAttribute("samplerFxReverbAtReverse"));
-                PAD_SETTINGS->setSamplerFxReverbAtIntensity(padData->getDoubleAttribute("samplerFxReverbAtIntensity"));
-            }
-            else if (PAD_SETTINGS->getSamplerEffect() == 9) //Flanger
-            {
-                PAD_SETTINGS->setSamplerFxFlangerMix(padData->getDoubleAttribute("samplerFxFlangerMix"));
-                PAD_SETTINGS->setSamplerFxFlangerRate(padData->getDoubleAttribute("samplerFxFlangerRate"));
-                PAD_SETTINGS->setSamplerFxFlangerFeedback(padData->getDoubleAttribute("samplerFxFlangerFeedback"));
-                PAD_SETTINGS->setSamplerFxFlangerIntensity(padData->getDoubleAttribute("samplerFxFlangerIntensity"));
-                PAD_SETTINGS->setSamplerFxFlangerSync(padData->getIntAttribute("samplerFxFlangerSync"));
-                PAD_SETTINGS->setSamplerFxFlangerRateMenu(padData->getIntAttribute("samplerFxFlangerRateMenu"));
-                PAD_SETTINGS->setSamplerFxFlangerAlphaTouch(padData->getIntAttribute("samplerFxFlangerAlphaTouch"));
-                PAD_SETTINGS->setSamplerFxFlangerAtReverse(padData->getIntAttribute("samplerFxFlangerAtReverse"));
-                PAD_SETTINGS->setSamplerFxFlangerAtIntensity(padData->getDoubleAttribute("samplerFxFlangerAtIntensity"));
-            }
-            
-            else if (PAD_SETTINGS->getSamplerEffect() == 10) //Tremolo
-            {
-                PAD_SETTINGS->setSamplerFxTremoloDepth(padData->getDoubleAttribute("samplerFxTremoloDepth"));
-                PAD_SETTINGS->setSamplerFxTremoloRate(padData->getDoubleAttribute("samplerFxTremoloRate"));
-                PAD_SETTINGS->setSamplerFxTremoloShape(padData->getIntAttribute("samplerFxTremoloShape"));
-                PAD_SETTINGS->setSamplerFxTremoloSync(padData->getIntAttribute("samplerFxTremoloSync"));
-                PAD_SETTINGS->setSamplerFxTremoloRateMenu(padData->getIntAttribute("samplerFxTremoloRateMenu"));
-                PAD_SETTINGS->setSamplerFxTremoloAlphaTouch(padData->getIntAttribute("samplerFxTremoloAlphaTouch"));
-                PAD_SETTINGS->setSamplerFxTremoloAtReverse(padData->getIntAttribute("samplerFxTremoloAtReverse"));
-                PAD_SETTINGS->setSamplerFxTremoloAtIntensity(padData->getDoubleAttribute("samplerFxTremoloAtIntensity"));
-            }
-        }
     }
     
     //sequencer mode
@@ -559,6 +483,8 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
                 }
             }
             
+            if (padData->hasAttribute("sequencerEffect"))
+                PAD_SETTINGS->setSequencerEffect(padData->getIntAttribute("sequencerEffect"));
             if (padData->hasAttribute("sequencerPan"))
                 PAD_SETTINGS->setSequencerPan(padData->getDoubleAttribute("sequencerPan"));
             if (padData->hasAttribute("sequencerGain"))
@@ -582,7 +508,104 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
             PAD_SETTINGS->setControllerMidiProgramChangeNumber(padData->getIntAttribute("controllerMidiProgramChangeNumber"));
         if (padData->hasAttribute("controllerMidiProgramChangeChannel"))
             PAD_SETTINGS->setControllerMidiProgramChangeChannel(padData->getIntAttribute("controllerMidiProgramChangeChannel"));
+    }
+    
+    int modeCheck = PAD_SETTINGS->getMode();
+    int effect = 0;
+    if (modeCheck == 2)
+        effect = PAD_SETTINGS->getSamplerEffect();
+    else if (modeCheck == 3)
+    {
+        if (PAD_SETTINGS->getSequencerMode() == 2)
+            effect = PAD_SETTINGS->getSequencerEffect();
+    }
+    
+    if (padData->hasAttribute("samplerEffect") || padData->hasAttribute("sequencerEffect"))
+    {
+        if (effect == 1) //Gain and Pan
+        {
+            PAD_SETTINGS->setPadFxGainPanGain(padData->getDoubleAttribute("padFxGainPanGain"));
+            PAD_SETTINGS->setPadFxGainPanPan(padData->getDoubleAttribute("padFxGainPanPan"));
+            PAD_SETTINGS->setPadFxGainPanAlphaTouch(padData->getIntAttribute("padFxGainPanAlphaTouch"));
+            PAD_SETTINGS->setPadFxGainPanAtReverse(padData->getIntAttribute("padFxGainPanAtReverse"));
+            PAD_SETTINGS->setPadFxGainPanAtIntensity(padData->getDoubleAttribute("padFxGainPanAtIntensity"));
+        }
+        else if (effect == 2) //LPF
+        {
+            PAD_SETTINGS->setPadFxLpfMix(padData->getDoubleAttribute("padFxLpfMix"));
+            PAD_SETTINGS->setPadFxLpfFreq(padData->getDoubleAttribute("padFxLpfFreq"));
+            PAD_SETTINGS->setPadFxLpfBandwidth(padData->getDoubleAttribute("padFxLpfBandwidth"));
+            PAD_SETTINGS->setPadFxLpfAlphaTouch(padData->getIntAttribute("padFxLpfAlphaTouch"));
+            PAD_SETTINGS->setPadFxLpfAtReverse(padData->getIntAttribute("padFxLpfAtReverse"));
+            PAD_SETTINGS->setPadFxLpfAtIntensity(padData->getDoubleAttribute("padFxLpfAtIntensity"));
+            
+        }
+        else if (effect == 3) //HPF
+        {
+            PAD_SETTINGS->setPadFxHpfMix(padData->getDoubleAttribute("padFxHpfMix"));
+            PAD_SETTINGS->setPadFxHpfFreq(padData->getDoubleAttribute("padFxHpfFreq"));
+            PAD_SETTINGS->setPadFxHpfBandwidth(padData->getDoubleAttribute("padFxHpfBandwidth"));
+            PAD_SETTINGS->setPadFxHpfAlphaTouch(padData->getIntAttribute("padFxHpfAlphaTouch"));
+            PAD_SETTINGS->setPadFxHpfAtReverse(padData->getIntAttribute("padFxHpfAtReverse"));
+            PAD_SETTINGS->setPadFxHpfAtIntensity(padData->getDoubleAttribute("padFxHpfAtIntensity"));
+        }
+        else if (effect == 4) //BPF
+        {
+            PAD_SETTINGS->setPadFxBpfMix(padData->getDoubleAttribute("padFxBpfMix"));
+            PAD_SETTINGS->setPadFxBpfFreq(padData->getDoubleAttribute("padFxBpfFreq"));
+            PAD_SETTINGS->setPadFxBpfBandwidth(padData->getDoubleAttribute("padFxBpfBandwidth"));
+            PAD_SETTINGS->setPadFxBpfAlphaTouch(padData->getIntAttribute("padFxBpfAlphaTouch"));
+            PAD_SETTINGS->setPadFxBpfAtReverse(padData->getIntAttribute("padFxBpfAtReverse"));
+            PAD_SETTINGS->setPadFxBpfAtIntensity(padData->getDoubleAttribute("padFxBpfAtIntensity"));
+        }
+        else if (effect == 7) //Delay
+        {
+            PAD_SETTINGS->setPadFxDelayMix(padData->getDoubleAttribute("padFxDelayMix"));
+            PAD_SETTINGS->setPadFxDelayTime(padData->getDoubleAttribute("padFxDelayTime"));
+            PAD_SETTINGS->setPadFxDelayFeedback(padData->getDoubleAttribute("padFxDelayFeedback"));
+            PAD_SETTINGS->setPadFxDelayLpfFreq(padData->getDoubleAttribute("padFxDelayLpfFreq"));
+            PAD_SETTINGS->setPadFxDelayHpfFreq(padData->getDoubleAttribute("padFxDelayHpfFreq"));
+            PAD_SETTINGS->setPadFxDelaySync(padData->getIntAttribute("padFxDelaySync"));
+            PAD_SETTINGS->setPadFxDelayTimeMenu(padData->getIntAttribute("padFxDelayTimeMenu"));
+            PAD_SETTINGS->setPadFxDelayAlphaTouch(padData->getIntAttribute("padFxDelayAlphaTouch"));
+            PAD_SETTINGS->setPadFxDelayAtReverse(padData->getIntAttribute("padFxDelayAtReverse"));
+            PAD_SETTINGS->setPadFxDelayAtIntensity(padData->getDoubleAttribute("padFxDelayAtIntensity"));
+        }
+        else if (effect == 8) //Reverb
+        {
+            PAD_SETTINGS->setPadFxReverbMix(padData->getDoubleAttribute("padFxReverbMix"));
+            PAD_SETTINGS->setPadFxReverbRoomSize(padData->getDoubleAttribute("padFxReverbRoomSize"));
+            PAD_SETTINGS->setPadFxReverbDamping(padData->getDoubleAttribute("padFxReverbDamping"));
+            PAD_SETTINGS->setPadFxReverbWidth(padData->getDoubleAttribute("padFxReverbWidth"));
+            PAD_SETTINGS->setPadFxReverbFreezeMode(padData->getDoubleAttribute("padFxReverbFreezeMode"));
+            PAD_SETTINGS->setPadFxReverbAlphaTouch(padData->getIntAttribute("padFxReverbAlphaTouch"));
+            PAD_SETTINGS->setPadFxReverbAtReverse(padData->getIntAttribute("padFxReverbAtReverse"));
+            PAD_SETTINGS->setPadFxReverbAtIntensity(padData->getDoubleAttribute("padFxReverbAtIntensity"));
+        }
+        else if (effect == 9) //Flanger
+        {
+            PAD_SETTINGS->setPadFxFlangerMix(padData->getDoubleAttribute("padFxFlangerMix"));
+            PAD_SETTINGS->setPadFxFlangerRate(padData->getDoubleAttribute("padFxFlangerRate"));
+            PAD_SETTINGS->setPadFxFlangerFeedback(padData->getDoubleAttribute("padFxFlangerFeedback"));
+            PAD_SETTINGS->setPadFxFlangerIntensity(padData->getDoubleAttribute("padFxFlangerIntensity"));
+            PAD_SETTINGS->setPadFxFlangerSync(padData->getIntAttribute("padFxFlangerSync"));
+            PAD_SETTINGS->setPadFxFlangerRateMenu(padData->getIntAttribute("padFxFlangerRateMenu"));
+            PAD_SETTINGS->setPadFxFlangerAlphaTouch(padData->getIntAttribute("padFxFlangerAlphaTouch"));
+            PAD_SETTINGS->setPadFxFlangerAtReverse(padData->getIntAttribute("padFxFlangerAtReverse"));
+            PAD_SETTINGS->setPadFxFlangerAtIntensity(padData->getDoubleAttribute("padFxFlangerAtIntensity"));
+        }
         
+        else if (effect == 10) //Tremolo
+        {
+            PAD_SETTINGS->setPadFxTremoloDepth(padData->getDoubleAttribute("padFxTremoloDepth"));
+            PAD_SETTINGS->setPadFxTremoloRate(padData->getDoubleAttribute("padFxTremoloRate"));
+            PAD_SETTINGS->setPadFxTremoloShape(padData->getIntAttribute("padFxTremoloShape"));
+            PAD_SETTINGS->setPadFxTremoloSync(padData->getIntAttribute("padFxTremoloSync"));
+            PAD_SETTINGS->setPadFxTremoloRateMenu(padData->getIntAttribute("padFxTremoloRateMenu"));
+            PAD_SETTINGS->setPadFxTremoloAlphaTouch(padData->getIntAttribute("padFxTremoloAlphaTouch"));
+            PAD_SETTINGS->setPadFxTremoloAtReverse(padData->getIntAttribute("padFxTremoloAtReverse"));
+            PAD_SETTINGS->setPadFxTremoloAtIntensity(padData->getDoubleAttribute("padFxTremoloAtIntensity"));
+        }
     }
 }
 

@@ -120,7 +120,7 @@ void GuiReverb::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbMix(mixSlider->getValue());
+            PAD_SETTINGS->setPadFxReverbMix(mixSlider->getValue());
         }
         
     }
@@ -130,7 +130,7 @@ void GuiReverb::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbRoomSize(roomSizeSlider->getValue());
+            PAD_SETTINGS->setPadFxReverbRoomSize(roomSizeSlider->getValue());
         }
         
     }
@@ -140,7 +140,7 @@ void GuiReverb::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbDamping(dampingSlider->getValue());
+            PAD_SETTINGS->setPadFxReverbDamping(dampingSlider->getValue());
         }
         
     }
@@ -150,7 +150,7 @@ void GuiReverb::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbWidth(widthSlider->getValue());
+            PAD_SETTINGS->setPadFxReverbWidth(widthSlider->getValue());
         }
         
     }
@@ -162,7 +162,7 @@ void GuiReverb::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbAtIntensity(intensitySlider->getValue());
+            PAD_SETTINGS->setPadFxReverbAtIntensity(intensitySlider->getValue());
         }
     }
     
@@ -176,7 +176,7 @@ void GuiReverb::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbAlphaTouch(alphaTouchMenu->getSelectedId());
+            PAD_SETTINGS->setPadFxReverbAlphaTouch(alphaTouchMenu->getSelectedId());
         }
     }
     
@@ -190,7 +190,7 @@ void GuiReverb::buttonClicked (Button *button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbAtReverse(reverseButton->getToggleState());
+            PAD_SETTINGS->setPadFxReverbAtReverse(reverseButton->getToggleState());
         }
         
     }
@@ -209,14 +209,14 @@ void GuiReverb::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        mixSlider->setValue(PAD_SETTINGS->getSamplerFxReverbMix(), false);
-        roomSizeSlider->setValue(PAD_SETTINGS->getSamplerFxReverbRoomSize(), false);
-        dampingSlider->setValue(PAD_SETTINGS->getSamplerFxReverbDamping(), false);
-        widthSlider->setValue(PAD_SETTINGS->getSamplerFxReverbWidth(), false);
+        mixSlider->setValue(PAD_SETTINGS->getPadFxReverbMix(), false);
+        roomSizeSlider->setValue(PAD_SETTINGS->getPadFxReverbRoomSize(), false);
+        dampingSlider->setValue(PAD_SETTINGS->getPadFxReverbDamping(), false);
+        widthSlider->setValue(PAD_SETTINGS->getPadFxReverbWidth(), false);
         
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxReverbAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxReverbAtReverse(), false);
-        intensitySlider->setValue(PAD_SETTINGS->getSamplerFxReverbAtIntensity(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxReverbAlphaTouch(), true);
+        reverseButton->setToggleState(PAD_SETTINGS->getPadFxReverbAtReverse(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getPadFxReverbAtIntensity(), false);
     }
     
     else if(MULTI_PADS)

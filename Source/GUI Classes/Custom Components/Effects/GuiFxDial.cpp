@@ -172,7 +172,11 @@ void GuiFxDial::buttonClicked(Button *button)
                 for (int i = 0; i < selectedPads.size(); i++)
                 {
                     int padNum = selectedPads[i];
-                    PAD_SETTINGS->setSamplerEffect(fx+1);
+                    
+                    if (PAD_SETTINGS->getMode() == 2)
+                        PAD_SETTINGS->setSamplerEffect(fx+1);
+                    else if (PAD_SETTINGS->getMode() == 3)
+                        PAD_SETTINGS->setSequencerEffect(fx+1);
                 }
                 
                 //repaint(); // repaint with bounds!! what is ths repaint? do we need it anymore?
@@ -280,7 +284,11 @@ void GuiFxDial::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        currentEffect = PAD_SETTINGS->getSamplerEffect() - 1;
+        
+        if (PAD_SETTINGS->getMode() == 2)
+            currentEffect = PAD_SETTINGS->getSamplerEffect() - 1;
+        else if (PAD_SETTINGS->getMode() == 3)
+            currentEffect = PAD_SETTINGS->getSequencerEffect() - 1;
         
         if (currentEffect == 0) //Gain and Pan
         {

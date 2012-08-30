@@ -122,133 +122,6 @@ public:
     float getSamplerPan();
     float getSamplerGain();
     
-    //----Sampler FX----
-    //Gain&Pan
-    void setSamplerFxGainPanGain (float value);
-    void setSamplerFxGainPanPan (float value);
-    void setSamplerFxGainPanAlphaTouch (int value);
-    void setSamplerFxGainPanAtReverse (int value);
-    void setSamplerFxGainPanAtIntensity (float value);
-    float getSamplerFxGainPanGain();
-    float getSamplerFxGainPanPan();
-    int getSamplerFxGainPanAlphaTouch();
-    int getSamplerFxGainPanAtReverse();
-    float getSamplerFxGainPanAtIntensity();
-    //LPF
-    void setSamplerFxLpfMix (float value);
-    void setSamplerFxLpfFreq (float value);
-    void setSamplerFxLpfBandwidth (float value);
-    void setSamplerFxLpfAlphaTouch (int value);
-    void setSamplerFxLpfAtReverse (int value);
-    void setSamplerFxLpfAtIntensity (float value);
-    float getSamplerFxLpfMix();
-    float getSamplerFxLpfFreq();
-    float getSamplerFxLpfBandwidth();
-    int getSamplerFxLpfAlphaTouch();
-    int getSamplerFxLpfAtReverse();
-    float getSamplerFxLpfAtIntensity();
-    //HPF
-    void setSamplerFxHpfMix (float value);
-    void setSamplerFxHpfFreq (float value);
-    void setSamplerFxHpfBandwidth (float value);
-    void setSamplerFxHpfAlphaTouch (int value);
-    void setSamplerFxHpfAtReverse (int value);
-    void setSamplerFxHpfAtIntensity (float value);
-    float getSamplerFxHpfMix();
-    float getSamplerFxHpfFreq();
-    float getSamplerFxHpfBandwidth();
-    int getSamplerFxHpfAlphaTouch();
-    int getSamplerFxHpfAtReverse();
-    float getSamplerFxHpfAtIntensity();
-    //BPF
-    void setSamplerFxBpfMix (float value);
-    void setSamplerFxBpfFreq (float value);
-    void setSamplerFxBpfBandwidth (float value);
-    void setSamplerFxBpfAlphaTouch (int value);
-    void setSamplerFxBpfAtReverse (int value);
-    void setSamplerFxBpfAtIntensity (float value);
-    float getSamplerFxBpfMix();
-    float getSamplerFxBpfFreq();
-    float getSamplerFxBpfBandwidth();
-    int getSamplerFxBpfAlphaTouch();
-    int getSamplerFxBpfAtReverse();
-    float getSamplerFxBpfAtIntensity();
-    //delay
-    void setSamplerFxDelayMix (float value);
-    void setSamplerFxDelayTime (float value);
-    void setSamplerFxDelayFeedback (float value);
-    void setSamplerFxDelayLpfFreq (float value);
-    void setSamplerFxDelayHpfFreq (float value);
-    void setSamplerFxDelaySync (int value);
-    void setSamplerFxDelayTimeMenu (int value);
-    void setSamplerFxDelayAlphaTouch (int value);
-    void setSamplerFxDelayAtReverse (int value);
-    void setSamplerFxDelayAtIntensity (float value);
-    float getSamplerFxDelayMix();
-    float getSamplerFxDelayTime();
-    float getSamplerFxDelayFeedback();
-    float getSamplerFxDelayLpfFreq();
-    float getSamplerFxDelayHpfFreq();
-    int getSamplerFxDelaySync();
-    int getSamplerFxDelayTimeMenu();
-    int getSamplerFxDelayAlphaTouch();
-    int getSamplerFxDelayAtReverse();
-    float getSamplerFxDelayAtIntensity();
-    //reverb
-    void setSamplerFxReverbMix (float value);
-    void setSamplerFxReverbRoomSize (float value);
-    void setSamplerFxReverbDamping (float value);
-    void setSamplerFxReverbWidth (float value);
-    void setSamplerFxReverbFreezeMode (float value);
-    void setSamplerFxReverbAlphaTouch (int value);
-    void setSamplerFxReverbAtReverse (int value);
-    void setSamplerFxReverbAtIntensity (float value);
-    float getSamplerFxReverbMix();
-    float getSamplerFxReverbRoomSize();
-    float getSamplerFxReverbDamping();
-    float getSamplerFxReverbWidth();
-    float getSamplerFxReverbFreezeMode();
-    int getSamplerFxReverbAlphaTouch();
-    int getSamplerFxReverbAtReverse();
-    float getSamplerFxReverbAtIntensity();
-    //flanger
-    void setSamplerFxFlangerMix (double value);
-    void setSamplerFxFlangerRate(double value);
-    void setSamplerFxFlangerFeedback (double value);
-    void setSamplerFxFlangerIntensity (double value);
-    void setSamplerFxFlangerSync (int value);
-    void setSamplerFxFlangerRateMenu (int value);
-    void setSamplerFxFlangerAlphaTouch (int value);
-    void setSamplerFxFlangerAtReverse (int value);
-    void setSamplerFxFlangerAtIntensity (double value);
-    double getSamplerFxFlangerMix();
-    double getSamplerFxFlangerRate();
-    double getSamplerFxFlangerFeedback();
-    double getSamplerFxFlangerIntensity();
-    int getSamplerFxFlangerSync();
-    int getSamplerFxFlangerRateMenu();
-    int getSamplerFxFlangerAlphaTouch();
-    int getSamplerFxFlangerAtReverse();
-    double getSamplerFxFlangerAtIntensity();
-    //tremolo
-    void setSamplerFxTremoloDepth (double value);
-    void setSamplerFxTremoloRate (double value);
-    void setSamplerFxTremoloShape (int value);
-    void setSamplerFxTremoloSync (int value);
-    void setSamplerFxTremoloRateMenu (int value);
-    void setSamplerFxTremoloAlphaTouch (int value);
-    void setSamplerFxTremoloAtReverse (int value);
-    void setSamplerFxTremoloAtIntensity (double value);
-    double getSamplerFxTremoloDepth();
-    double getSamplerFxTremoloRate();
-    int getSamplerFxTremoloShape();
-    int getSamplerFxTremoloSync();
-    int getSamplerFxTremoloRateMenu();
-    int getSamplerFxTremoloAlphaTouch();
-    int getSamplerFxTremoloAtReverse();
-    double getSamplerFxTremoloAtIntensity();
-    
-    
     //==================================================================
     //Sequencer mode
     void setSequencerMode (int value);
@@ -274,6 +147,7 @@ public:
     void setSequencerMidiCcController (int value);
     
     void setSequencerSamplesAudioFilePath (File value, int sequencerRow);
+    void setSequencerEffect (int value);
     void setSequencerPan (float value);
     void setSequencerGain (float value);
     
@@ -300,7 +174,7 @@ public:
     int getSequencerMidiCcController();
     
     File getSequencerSamplesAudioFilePath (int sequencerRow);
-    bool getSequencerIsLibraryFile (int sequencerRow);
+    int getSequencerEffect();
     float getSequencerPan();
     float getSequencerGain();
     
@@ -331,6 +205,134 @@ public:
     int getControllerMidiProgramChangeNumber();
     int getControllerMidiProgramChangeChannel();
 
+    
+    //==================================================================
+    //Pad effects
+    
+    //Gain&Pan
+    void setPadFxGainPanGain (float value);
+    void setPadFxGainPanPan (float value);
+    void setPadFxGainPanAlphaTouch (int value);
+    void setPadFxGainPanAtReverse (int value);
+    void setPadFxGainPanAtIntensity (float value);
+    float getPadFxGainPanGain();
+    float getPadFxGainPanPan();
+    int getPadFxGainPanAlphaTouch();
+    int getPadFxGainPanAtReverse();
+    float getPadFxGainPanAtIntensity();
+    //LPF
+    void setPadFxLpfMix (float value);
+    void setPadFxLpfFreq (float value);
+    void setPadFxLpfBandwidth (float value);
+    void setPadFxLpfAlphaTouch (int value);
+    void setPadFxLpfAtReverse (int value);
+    void setPadFxLpfAtIntensity (float value);
+    float getPadFxLpfMix();
+    float getPadFxLpfFreq();
+    float getPadFxLpfBandwidth();
+    int getPadFxLpfAlphaTouch();
+    int getPadFxLpfAtReverse();
+    float getPadFxLpfAtIntensity();
+    //HPF
+    void setPadFxHpfMix (float value);
+    void setPadFxHpfFreq (float value);
+    void setPadFxHpfBandwidth (float value);
+    void setPadFxHpfAlphaTouch (int value);
+    void setPadFxHpfAtReverse (int value);
+    void setPadFxHpfAtIntensity (float value);
+    float getPadFxHpfMix();
+    float getPadFxHpfFreq();
+    float getPadFxHpfBandwidth();
+    int getPadFxHpfAlphaTouch();
+    int getPadFxHpfAtReverse();
+    float getPadFxHpfAtIntensity();
+    //BPF
+    void setPadFxBpfMix (float value);
+    void setPadFxBpfFreq (float value);
+    void setPadFxBpfBandwidth (float value);
+    void setPadFxBpfAlphaTouch (int value);
+    void setPadFxBpfAtReverse (int value);
+    void setPadFxBpfAtIntensity (float value);
+    float getPadFxBpfMix();
+    float getPadFxBpfFreq();
+    float getPadFxBpfBandwidth();
+    int getPadFxBpfAlphaTouch();
+    int getPadFxBpfAtReverse();
+    float getPadFxBpfAtIntensity();
+    //delay
+    void setPadFxDelayMix (float value);
+    void setPadFxDelayTime (float value);
+    void setPadFxDelayFeedback (float value);
+    void setPadFxDelayLpfFreq (float value);
+    void setPadFxDelayHpfFreq (float value);
+    void setPadFxDelaySync (int value);
+    void setPadFxDelayTimeMenu (int value);
+    void setPadFxDelayAlphaTouch (int value);
+    void setPadFxDelayAtReverse (int value);
+    void setPadFxDelayAtIntensity (float value);
+    float getPadFxDelayMix();
+    float getPadFxDelayTime();
+    float getPadFxDelayFeedback();
+    float getPadFxDelayLpfFreq();
+    float getPadFxDelayHpfFreq();
+    int getPadFxDelaySync();
+    int getPadFxDelayTimeMenu();
+    int getPadFxDelayAlphaTouch();
+    int getPadFxDelayAtReverse();
+    float getPadFxDelayAtIntensity();
+    //reverb
+    void setPadFxReverbMix (float value);
+    void setPadFxReverbRoomSize (float value);
+    void setPadFxReverbDamping (float value);
+    void setPadFxReverbWidth (float value);
+    void setPadFxReverbFreezeMode (float value);
+    void setPadFxReverbAlphaTouch (int value);
+    void setPadFxReverbAtReverse (int value);
+    void setPadFxReverbAtIntensity (float value);
+    float getPadFxReverbMix();
+    float getPadFxReverbRoomSize();
+    float getPadFxReverbDamping();
+    float getPadFxReverbWidth();
+    float getPadFxReverbFreezeMode();
+    int getPadFxReverbAlphaTouch();
+    int getPadFxReverbAtReverse();
+    float getPadFxReverbAtIntensity();
+    //flanger
+    void setPadFxFlangerMix (double value);
+    void setPadFxFlangerRate(double value);
+    void setPadFxFlangerFeedback (double value);
+    void setPadFxFlangerIntensity (double value);
+    void setPadFxFlangerSync (int value);
+    void setPadFxFlangerRateMenu (int value);
+    void setPadFxFlangerAlphaTouch (int value);
+    void setPadFxFlangerAtReverse (int value);
+    void setPadFxFlangerAtIntensity (double value);
+    double getPadFxFlangerMix();
+    double getPadFxFlangerRate();
+    double getPadFxFlangerFeedback();
+    double getPadFxFlangerIntensity();
+    int getPadFxFlangerSync();
+    int getPadFxFlangerRateMenu();
+    int getPadFxFlangerAlphaTouch();
+    int getPadFxFlangerAtReverse();
+    double getPadFxFlangerAtIntensity();
+    //tremolo
+    void setPadFxTremoloDepth (double value);
+    void setPadFxTremoloRate (double value);
+    void setPadFxTremoloShape (int value);
+    void setPadFxTremoloSync (int value);
+    void setPadFxTremoloRateMenu (int value);
+    void setPadFxTremoloAlphaTouch (int value);
+    void setPadFxTremoloAtReverse (int value);
+    void setPadFxTremoloAtIntensity (double value);
+    double getPadFxTremoloDepth();
+    double getPadFxTremoloRate();
+    int getPadFxTremoloShape();
+    int getPadFxTremoloSync();
+    int getPadFxTremoloRateMenu();
+    int getPadFxTremoloAlphaTouch();
+    int getPadFxTremoloAtReverse();
+    double getPadFxTremoloAtIntensity();
     
     //==================================================================
     //==================================================================
@@ -376,80 +378,6 @@ private:
     float samplerPan;
     float samplerGain;
     
-    //----fx variables------
-    //Gain&Pan
-    float samplerFxGainPanGain;
-    float samplerFxGainPanPan;
-    int samplerFxGainPanAlphaTouch;
-    int samplerFxGainPanAtReverse;
-    float samplerFxGainPanAtIntensity;
-    //LPF
-    float samplerFxLpfMix;
-    float samplerFxLpfFreq;
-    float samplerFxLpfBandwidth;
-    int samplerFxLpfAlphaTouch;
-    int samplerFxLpfAtReverse;
-    float samplerFxLpfAtIntensity;
-    //HPF
-    float samplerFxHpfMix;
-    float samplerFxHpfFreq;
-    float samplerFxHpfBandwidth;
-    int samplerFxHpfAlphaTouch;
-    int samplerFxHpfAtReverse;
-    float samplerFxHpfAtIntensity;
-    //BPF
-    float samplerFxBpfMix;
-    float samplerFxBpfFreq;
-    float samplerFxBpfBandwidth;
-    int samplerFxBpfAlphaTouch;
-    int samplerFxBpfAtReverse;
-    float samplerFxBpfAtIntensity;
-    //Delay
-    float samplerFxDelayMix;
-    float samplerFxDelayTime;
-    float samplerFxDelayFeedback;
-    float samplerFxDelayLpfFreq;
-    float samplerFxDelayHpfFreq;
-    int samplerFxDelaySync;
-    int samplerFxDelayTimeMenu;
-    int samplerFxDelayAlphaTouch;
-    int samplerFxDelayAtReverse;
-    float samplerFxDelayAtIntensity;
-    
-    //Reverb
-    float samplerFxReverbMix;
-    float samplerFxReverbRoomSize;
-    float samplerFxReverbDamping;
-    float samplerFxReverbWidth;
-    float samplerFxReverbFreezeMode;
-    int samplerFxReverbAlphaTouch;
-    int samplerFxReverbAtReverse;
-    float samplerFxReverbAtIntensity;
-    
-    //Flanger
-    double samplerFxFlangerMix;
-    double samplerFxFlangerRate;
-    double samplerFxFlangerFeedback;
-    double samplerFxFlangerIntensity;
-    int samplerFxFlangerSync;
-    int samplerFxFlangerRateMenu;
-    int samplerFxFlangerAlphaTouch;
-    int samplerFxFlangerAtReverse;
-    double samplerFxFlangerAtIntensity;
-    
-    //Tremolo
-    double samplerFxTremoloDepth;
-    double samplerFxTremoloRate;
-    int samplerFxTremoloShape;
-    int samplerFxTremoloSync;
-    int samplerFxTremoloRateMenu;
-    int samplerFxTremoloAlphaTouch;
-    int samplerFxTremoloAtReverse;
-    float samplerFxTremoloAtIntensity;
-    
-    
-    
-    
     //==================================================================
     //Sequencer mode
     int sequencerMode; //Midi or Samples
@@ -475,6 +403,7 @@ private:
     bool sequencerMidiPressureStatus;
     
     String sequencerSamplesAudioFilePath[NO_OF_ROWS];
+    int sequencerEffect;
     float sequencerPan;
     float sequencerGain;
     
@@ -492,6 +421,80 @@ private:
     int controllerOscPort;
     int controllerMidiProgramChangeNumber;
     int controllerMidiProgramChangeChannel;
+    
+    
+    //==================================================================
+    //Pad Effects (now applies to Sampler Mode and Sequencer Mode)
+    
+    //Gain&Pan
+    float padFxGainPanGain;
+    float padFxGainPanPan;
+    int padFxGainPanAlphaTouch;
+    int padFxGainPanAtReverse;
+    float padFxGainPanAtIntensity;
+    //LPF
+    float padFxLpfMix;
+    float padFxLpfFreq;
+    float padFxLpfBandwidth;
+    int padFxLpfAlphaTouch;
+    int padFxLpfAtReverse;
+    float padFxLpfAtIntensity;
+    //HPF
+    float padFxHpfMix;
+    float padFxHpfFreq;
+    float padFxHpfBandwidth;
+    int padFxHpfAlphaTouch;
+    int padFxHpfAtReverse;
+    float padFxHpfAtIntensity;
+    //BPF
+    float padFxBpfMix;
+    float padFxBpfFreq;
+    float padFxBpfBandwidth;
+    int padFxBpfAlphaTouch;
+    int padFxBpfAtReverse;
+    float padFxBpfAtIntensity;
+    //Delay
+    float padFxDelayMix;
+    float padFxDelayTime;
+    float padFxDelayFeedback;
+    float padFxDelayLpfFreq;
+    float padFxDelayHpfFreq;
+    int padFxDelaySync;
+    int padFxDelayTimeMenu;
+    int padFxDelayAlphaTouch;
+    int padFxDelayAtReverse;
+    float padFxDelayAtIntensity;
+    
+    //Reverb
+    float padFxReverbMix;
+    float padFxReverbRoomSize;
+    float padFxReverbDamping;
+    float padFxReverbWidth;
+    float padFxReverbFreezeMode;
+    int padFxReverbAlphaTouch;
+    int padFxReverbAtReverse;
+    float padFxReverbAtIntensity;
+    
+    //Flanger
+    double padFxFlangerMix;
+    double padFxFlangerRate;
+    double padFxFlangerFeedback;
+    double padFxFlangerIntensity;
+    int padFxFlangerSync;
+    int padFxFlangerRateMenu;
+    int padFxFlangerAlphaTouch;
+    int padFxFlangerAtReverse;
+    double padFxFlangerAtIntensity;
+    
+    //Tremolo
+    double padFxTremoloDepth;
+    double padFxTremoloRate;
+    int padFxTremoloShape;
+    int padFxTremoloSync;
+    int padFxTremoloRateMenu;
+    int padFxTremoloAlphaTouch;
+    int padFxTremoloAtReverse;
+    float padFxTremoloAtIntensity;
     
 };
 

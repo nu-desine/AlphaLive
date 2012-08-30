@@ -144,7 +144,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxFlangerMix(mixSlider->getValue());
+            PAD_SETTINGS->setPadFxFlangerMix(mixSlider->getValue());
         }
         
     }
@@ -154,7 +154,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxFlangerRate(rateSlider->getValue());
+            PAD_SETTINGS->setPadFxFlangerRate(rateSlider->getValue());
         }
         
     }
@@ -165,7 +165,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxFlangerFeedback(feedbackSlider->getValue());
+            PAD_SETTINGS->setPadFxFlangerFeedback(feedbackSlider->getValue());
         }
     }
     
@@ -175,7 +175,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxFlangerIntensity(flangerIntensitySlider->getValue());
+            PAD_SETTINGS->setPadFxFlangerIntensity(flangerIntensitySlider->getValue());
         }
         
     }
@@ -186,7 +186,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxFlangerAtIntensity(intensitySlider->getValue());
+            PAD_SETTINGS->setPadFxFlangerAtIntensity(intensitySlider->getValue());
         }
     }
     
@@ -201,7 +201,7 @@ void GuiFlanger::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxFlangerAlphaTouch(alphaTouchMenu->getSelectedId());
+            PAD_SETTINGS->setPadFxFlangerAlphaTouch(alphaTouchMenu->getSelectedId());
         }
         
     }
@@ -254,8 +254,8 @@ void GuiFlanger::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxFlangerRate(lfoRate);
-            PAD_SETTINGS->setSamplerFxFlangerRateMenu(rateMenu->getSelectedId());
+            PAD_SETTINGS->setPadFxFlangerRate(lfoRate);
+            PAD_SETTINGS->setPadFxFlangerRateMenu(rateMenu->getSelectedId());
         }
         
     }
@@ -270,7 +270,7 @@ void GuiFlanger::buttonClicked (Button *button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxFlangerAtReverse(reverseButton->getToggleState());
+            PAD_SETTINGS->setPadFxFlangerAtReverse(reverseButton->getToggleState());
         }
     }
     
@@ -279,7 +279,7 @@ void GuiFlanger::buttonClicked (Button *button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxFlangerSync(syncButton->getToggleState());
+            PAD_SETTINGS->setPadFxFlangerSync(syncButton->getToggleState());
         }
         
         
@@ -309,16 +309,16 @@ void GuiFlanger::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        mixSlider->setValue(PAD_SETTINGS->getSamplerFxFlangerMix(), false);
-        rateSlider->setValue(PAD_SETTINGS->getSamplerFxFlangerRate(), false);
-        feedbackSlider->setValue(PAD_SETTINGS->getSamplerFxFlangerFeedback(), false);
-        flangerIntensitySlider->setValue(PAD_SETTINGS->getSamplerFxFlangerIntensity(), false);
-        rateMenu->setSelectedId(PAD_SETTINGS->getSamplerFxFlangerRateMenu(), true);
-        syncButton->setToggleState(PAD_SETTINGS->getSamplerFxFlangerSync(), false);
+        mixSlider->setValue(PAD_SETTINGS->getPadFxFlangerMix(), false);
+        rateSlider->setValue(PAD_SETTINGS->getPadFxFlangerRate(), false);
+        feedbackSlider->setValue(PAD_SETTINGS->getPadFxFlangerFeedback(), false);
+        flangerIntensitySlider->setValue(PAD_SETTINGS->getPadFxFlangerIntensity(), false);
+        rateMenu->setSelectedId(PAD_SETTINGS->getPadFxFlangerRateMenu(), true);
+        syncButton->setToggleState(PAD_SETTINGS->getPadFxFlangerSync(), false);
         
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxFlangerAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxFlangerAtReverse(), false);
-        intensitySlider->setValue(PAD_SETTINGS->getSamplerFxFlangerAtIntensity(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxFlangerAlphaTouch(), true);
+        reverseButton->setToggleState(PAD_SETTINGS->getPadFxFlangerAtReverse(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getPadFxFlangerAtIntensity(), false);
     }
     
     else if(MULTI_PADS)

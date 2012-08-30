@@ -31,6 +31,15 @@
 #include "SequenceAudioFilePlayer.h"
 #include "../../Application/AbstractSubjectAndObserver.h"
 #include "../../Audio Processing/PanControl.h"
+#include "../../Audio Processing/DSP Effects/GainAndPan.h"
+#include "../../Audio Processing/DSP Effects/LowpassFilter.h"
+#include "../../Audio Processing/DSP Effects/HighPassFilter.h"
+#include "../../Audio Processing/DSP Effects/BandPassFilter.h"
+#include "../../Audio Processing/DSP Effects/Delay.h"
+#include "../../Audio Processing/DSP Effects/Reverb.h"
+#include "../../Audio Processing/DSP Effects/Flanger.h"
+#include "../../Audio Processing/DSP Effects/Tremolo.h"
+#include "../../Audio Processing/PanControl.h"
 
 class ModeSequencer;
 
@@ -92,6 +101,7 @@ public:
     void setMidiPressureMode (int value);
     void setMidiPressureStatus (bool value);
     
+    void setSamplesEffect (int value);
     void setSamplesAudioFile (int row, File sample);
     void setSamplesGain (float value);
     void setSamplesPan (float value);
@@ -101,6 +111,15 @@ public:
     
     //quantization stuff
     void triggerQuantizationPoint();
+    
+    GainAndPan& getGainAndPan();
+    LowpassFilter& getLowpassFilter();
+    HighPassFilter& getHighPassFilter();
+    BandPassFilter& getBandPassFilter();
+    Delay& getDelay();
+    ReverbClass& getReverb();
+    Flanger& getFlanger();
+    Tremolo& getTremolo();
 
     
 private:
@@ -125,6 +144,15 @@ private:
 	SequenceAudioFilePlayer *sequenceAudioFilePlayer[NO_OF_ROWS];
     CriticalSection sharedMemory;
     TimeSliceThread *audioTransportSourceThread;
+    GainAndPan *gainAndPan;
+    LowpassFilter *lowPassFilter;
+    HighPassFilter *highPassFilter;
+    BandPassFilter *bandPassFilter;
+    Delay *delay;
+    ReverbClass *reverb;
+    Flanger *flanger;
+    Tremolo *tremolo;
+    float sampleRate_;
     
     //audio stuff for mixing the SequenceAudioFilePlayer objects
 	MixerAudioSource audioMixer;
@@ -160,7 +188,8 @@ private:
     bool midiPressureStatus;
     
     float gain, gainPrev, panLeft, panLeftPrev, panRight, panRightPrev;
-
+    int effect;
+    
     bool playingLastLoop;
 };
 

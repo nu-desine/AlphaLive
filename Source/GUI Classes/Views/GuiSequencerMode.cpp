@@ -1511,14 +1511,12 @@ void GuiSequencerMode::updateDisplay()
             modeSamplesButton->setToggleState(true, false);
             mainComponentRef.getGuiPiano()->setActive(false);
             
-            //uncomment the below when effects and the corresonding 
-            //PadSettings stuff for sequencer mode has been implemented
-            /*
-            if (PAD_SETTINGS->getSequencerSamplesEffect() == 0)
+            
+            if (PAD_SETTINGS->getSequencerEffect() == 0)
                 pressureStatusButton->setToggleState(false, false);
             else
                 pressureStatusButton->setToggleState(true, false);
-             */
+             
         }
         
         
@@ -1586,9 +1584,7 @@ void GuiSequencerMode::updateDisplay()
     currentSequenceNumber = 1;
     sequencerGrid->setCurrentSequenceNumber(currentSequenceNumber);
     
-    
-    //uncomment the below line when effects have been properly added to sequencer mode
-    //fxDial->updateDisplay();
+    fxDial->updateDisplay();
     
     //sequencerGrid->setPlayHeadPos(0); //??
     

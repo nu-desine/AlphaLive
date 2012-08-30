@@ -28,17 +28,17 @@
 ReverbClass::ReverbClass(int padNumber_, float sampleRate_)
                         : padNumber(padNumber_)
 {
-    mix = mixPrev = mixControlValue = PAD_SETTINGS->getSamplerFxReverbMix();
-    params.roomSize = roomSizeControl = PAD_SETTINGS->getSamplerFxReverbRoomSize();
-    params.damping = dampingControl =  PAD_SETTINGS->getSamplerFxReverbDamping();
+    mix = mixPrev = mixControlValue = PAD_SETTINGS->getPadFxReverbMix();
+    params.roomSize = roomSizeControl = PAD_SETTINGS->getPadFxReverbRoomSize();
+    params.damping = dampingControl =  PAD_SETTINGS->getPadFxReverbDamping();
     params.wetLevel = 1.0; //static - mix is controlled by my own algorithm
     params.dryLevel = 0; //same as above...
-    params.width = widthControl =  PAD_SETTINGS->getSamplerFxReverbWidth();
-    params.freezeMode = freezeModeControl =  PAD_SETTINGS->getSamplerFxReverbFreezeMode();
+    params.width = widthControl =  PAD_SETTINGS->getPadFxReverbWidth();
+    params.freezeMode = freezeModeControl =  PAD_SETTINGS->getPadFxReverbFreezeMode();
     
-    alphaTouchParam = PAD_SETTINGS->getSamplerFxReverbAlphaTouch();
-    alphaTouchReverse = PAD_SETTINGS->getSamplerFxReverbAtReverse();
-    alphaTouchIntensity = PAD_SETTINGS->getSamplerFxReverbAtIntensity();
+    alphaTouchParam = PAD_SETTINGS->getPadFxReverbAlphaTouch();
+    alphaTouchReverse = PAD_SETTINGS->getPadFxReverbAtReverse();
+    alphaTouchIntensity = PAD_SETTINGS->getPadFxReverbAtIntensity();
     
     reverb.setSampleRate(sampleRate_);
 }

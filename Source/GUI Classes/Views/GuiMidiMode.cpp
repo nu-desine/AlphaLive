@@ -573,7 +573,7 @@ void GuiMidiMode::updateDisplay()
     
     else if(MULTI_PADS)
     {
-        //set default values
+        /*
         //velocitySlider->sliderComponent()->setValue(110, true);
         quantiseButton->setToggleState(false, false);
         channelButtons[0]->setToggleState(true, false);
@@ -586,6 +586,167 @@ void GuiMidiMode::updateDisplay()
         ccControllerSlider->setComponentValue(12);
         pressureStatusButton->setToggleState(true, false);
         noteStatusButton->setToggleState(true, false);
+         */
+        //==================================================================================================
+        int quantiseMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getQuantizeMode();
+        //loop through all selected pads expect for the first one
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            //if setting of this pad does NOT match setting of last pad, set default and break
+            if (PAD_SETTINGS->getQuantizeMode() != quantiseMode_)
+            {
+                quantiseButton->setToggleState(0, false);
+                break;
+            }
+            //if this is the last 'natural' iteraction, displayed the setting that matches all the pads
+            if (i == selectedPads.size()-1)
+                quantiseButton->setToggleState(quantiseMode_, false);
+        }
+        
+        //==================================================================================================
+        int channel_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiChannel();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getMidiChannel() != channel_)
+            {
+                for (int i = 0; i <16; i++)
+                    channelButtons[i]->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                channelButtons[channel_-1]->setToggleState(true, false);
+        }
+        
+        //==================================================================================================
+        int pressureMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiPressureMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getMidiPressureMode() != pressureMode_)
+            {
+                for (int i = 0; i < 6; i++)
+                    pressureModeButtons[i]->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                pressureModeButtons[pressureMode_-1]->setToggleState(true, false);
+        }
+        
+        //==================================================================================================
+        int triggerMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiTriggerMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getMidiTriggerMode() != triggerMode_)
+            {
+                for (int i = 0; i < 4; i++)
+                    triggerModeButtons[i]->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                triggerModeButtons[triggerMode_-1]->setToggleState(true, false);
+        }
+        
+        //==================================================================================================
+        int pressureMinRange_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiMinPressureRange();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getMidiMinPressureRange() != pressureMinRange_)
+            {
+                pressureMinRangeSlider->setValue(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+               pressureMinRangeSlider->setValue(pressureMinRange_, false);
+        }
+        
+        //==================================================================================================
+        int pressureMaxRange_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiMaxPressureRange();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getMidiMaxPressureRange() != pressureMaxRange_)
+            {
+                pressureMaxRangeSlider->setValue(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                pressureMaxRangeSlider->setValue(pressureMaxRange_, false);
+        }
+        
+        //==================================================================================================
+        int ccNumber_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiCcController();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getMidiCcController() != ccNumber_)
+            {
+                ccControllerSlider->setComponentValue(-999);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                ccControllerSlider->setComponentValue(ccNumber_);
+        }
+        
+        //==================================================================================================
+        int indestructible_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiIndestructible();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getMidiIndestructible() != indestructible_)
+            {
+                indestructibleButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                indestructibleButton->setToggleState(indestructible_, false);
+        }
+        
+        //==================================================================================================
+        int sticky_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiSticky();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getMidiSticky() != sticky_)
+            {
+                stickyButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                stickyButton->setToggleState(sticky_, false);
+        }
+        
+        //==================================================================================================
+        int noteStatus_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiNoteStatus();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getMidiNoteStatus() != noteStatus_)
+            {
+                noteStatusButton->setToggleState(1, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                noteStatusButton->setToggleState(noteStatus_, false);
+        }
+        
+        //==================================================================================================
+        int pressureStatus_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiPressureStatus();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getMidiPressureStatus() != pressureStatus_)
+            {
+                pressureStatusButton->setToggleState(1, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                pressureStatusButton->setToggleState(pressureStatus_, false);
+        }
+        
         
     }
 

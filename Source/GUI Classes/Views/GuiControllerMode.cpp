@@ -236,54 +236,7 @@ void GuiControllerMode::setCurrentlySelectedPad (Array <int> selectedPads_)
 
 void GuiControllerMode::comboBoxChanged (ComboBox* comboBox)
 {
-    /*
-    //==============================================================================
-    //pressure mode combobox
-    if (comboBox == controlMenu)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setControllerControl(controlMenu->getSelectedId());
-        }
-        
-         
-        //==============set what other components are visible===============
-        
-        //first set other componets invisble (saves having to set the visibility of each one in each next if statement)... 
-        sceneNumberSlider->setVisible(false);
-        oscIpAddressEditor->setVisible(false);
-        oscPortNumberSlider->setVisible(false);
-        midiProgramChangeNumberSlider->setVisible(false);
-        midiProgramChangeChannelSlider->setVisible(false);
-        
-        //...and then set the right one visible
-        if (controlMenu->getSelectedId() == 2) //scene switcher control selected
-        {
-            sceneNumberSlider->setVisible(true);
-        }
-        else if(controlMenu->getSelectedId() == 3) //OSC output control selected
-        {
-            oscIpAddressEditor->setVisible(true);
-            oscPortNumberSlider->setVisible(true);
-        }
-        else if(controlMenu->getSelectedId() == 4) //MIDI program change
-        {
-            midiProgramChangeNumberSlider->setVisible(true);
-            midiProgramChangeChannelSlider->setVisible(true);
-        }
-        else if(controlMenu->getSelectedId() == 5) //Dual Scene/MIDI program change
-        {
-            sceneNumberSlider->setVisible(true);
-            midiProgramChangeNumberSlider->setVisible(true);
-            midiProgramChangeChannelSlider->setVisible(true);
-        }
-        
-        
-    }
-    
-    //==============================================================================
-*/
+   
     
 }
 
@@ -326,19 +279,6 @@ void GuiControllerMode::sliderValueChanged (Slider* slider)
         
     }
     
-    
-    /*
-    //MIDI program change channel slider
-    else if (slider == midiProgramChangeChannelSlider)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setControllerMidiProgramChangeChannel(midiProgramChangeChannelSlider->getValue());
-        }
-        
-    }
-     */
 
     
 }
@@ -434,6 +374,7 @@ void GuiControllerMode::updateDisplay()
     
     else if(MULTI_PADS)
     {
+        /*
         controlButtons[0]->setToggleState(true, false);
         sceneNumberSlider->setComponentValue(1);
         oscIpAddressEditor->setText("127.0.0.1", false);
@@ -442,7 +383,100 @@ void GuiControllerMode::updateDisplay()
         midiChannelButtons[0]->setToggleState(true, false);
         
         setDisplay(0);
+         */
+        
+        int controlMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getControllerControl();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getControllerControl() != controlMode_)
+            {
+                for (int i = 0; i < 4; i++)
+                    controlButtons[i]->setToggleState(0, false);
+                
+                setDisplay(-1); //will effectively hide all components
+                break;
+            }
+            if (i == selectedPads.size()-1)
+            {
+                controlButtons[controlMode_-1]->setToggleState(true, false);
+                setDisplay(controlMode_-1);
+            }
+        }
+        
+        //==================================================================================================
+        int channel_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getControllerMidiProgramChangeChannel();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getControllerMidiProgramChangeChannel() != channel_)
+            {
+                for (int i = 0; i <16; i++)
+                    midiChannelButtons[i]->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                midiChannelButtons[channel_-1]->setToggleState(true, false);
+        }
+        
+        //==================================================================================================
+        int scene_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getControllerSceneNumber();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getControllerSceneNumber() != scene_)
+            {
+                sceneNumberSlider->setComponentValue(-999);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                sceneNumberSlider->setComponentValue(scene_);
+        }
+        
+        //==================================================================================================
+        int oscPort_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getControllerOscPort();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getControllerOscPort() != oscPort_)
+            {
+                oscPortNumberSlider->setComponentValue(-999);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                oscPortNumberSlider->setComponentValue(oscPort_);
+        }
+        
+        //==================================================================================================
+        int programChange_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getControllerMidiProgramChangeNumber();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getControllerMidiProgramChangeNumber() != programChange_)
+            {
+                midiProgramChangeNumberSlider->setComponentValue(-999);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                midiProgramChangeNumberSlider->setComponentValue(programChange_);
+        }
+        
+        //==================================================================================================
+        String oscIp_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getControllerOscIpAddress();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getControllerOscIpAddress() != oscIp_)
+            {
+                oscIpAddressEditor->setText("-", false);;
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                oscIpAddressEditor->setText(oscIp_, false);
+        }
+        
     }
+
     
 }
 

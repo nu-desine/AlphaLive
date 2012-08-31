@@ -53,7 +53,6 @@ Toolbox::Toolbox(MainComponent &parent) :
     
     bankFileFilter = new WildcardFileFilter("*alphabank", String::empty, "Audio bank files");
     padFileFilter = new WildcardFileFilter("*alphapad", String::empty, "Pad settings files");
-    effectFileFilter = new WildcardFileFilter("*alphaeffect", String::empty, "Effect settings files");
     seqFileFilter = new WildcardFileFilter("*alphaseq;*alphaseqset", "*", "AlphaLive sequencer files");
     audioFileFilter = new WildcardFileFilter("*wav;*aiff;*aif", "*", "Audio files");
     sceneFileFilter = new WildcardFileFilter("*alphascene", String::empty, "Scene files");
@@ -103,7 +102,7 @@ Toolbox::Toolbox(MainComponent &parent) :
     contentLists.insert(CONTROLLER_PRESETS, new DirectoryContentsList(padFileFilter, thread));
     contentLists[CONTROLLER_PRESETS]->setDirectory (controllerPresetsFile, false, true);
     
-    contentLists.insert(EFFECT_PRESETS, new DirectoryContentsList(effectFileFilter, thread));
+    contentLists.insert(EFFECT_PRESETS, new DirectoryContentsList(padFileFilter, thread));
     contentLists[EFFECT_PRESETS]->setDirectory (effectPresetsFile, false, true);
     
     contentLists.insert(SCENE_PRESETS, new DirectoryContentsList(sceneFileFilter, thread));
@@ -378,15 +377,6 @@ void Toolbox::fileDoubleClicked (const File& file)
         mainComponentRef.getAppDocumentStateRef().loadPadFromDisk(selectedPads, false, file);
     }
     
-    //====================================================================================
-    //====================================================================================
-    
-    //SHOULD EFFECT PRESETS BE .ALPHAPAD FILES TOO? THEY'RE NO DIFFERENT ARE THEY?
-    
-    else if (file.getFileExtension() == ".alphaeffect")
-    {
-        mainComponentRef.getAppDocumentStateRef().loadPadFromDisk(selectedPads, false, file);
-    }
 }
 
 

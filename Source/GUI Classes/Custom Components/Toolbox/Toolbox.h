@@ -73,7 +73,7 @@ private:
     
     TimeSliceThread thread; //can i use just the single thread? Probably.
     
-    ScopedPointer <WildcardFileFilter> padFileFilter, seqFileFilter, audioFileFilter, effectFileFilter, bankFileFilter, sceneFileFilter;
+    ScopedPointer <WildcardFileFilter> padFileFilter, seqFileFilter, audioFileFilter, bankFileFilter, sceneFileFilter;
     
     int currentList;
     //==============================================================================

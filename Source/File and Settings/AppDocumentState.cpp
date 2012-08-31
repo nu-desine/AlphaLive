@@ -513,14 +513,24 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
     int modeCheck = PAD_SETTINGS->getMode();
     int effect = 0;
     if (modeCheck == 2)
+    {
+        if (padData->hasAttribute("effect")) //if padData is from an effects preset file
+            PAD_SETTINGS->setSamplerEffect(padData->getIntAttribute("effect"));
+    
         effect = PAD_SETTINGS->getSamplerEffect();
+    }
     else if (modeCheck == 3)
     {
+        if (padData->hasAttribute("effect"))
+            PAD_SETTINGS->setSequencerEffect(padData->getIntAttribute("effect"));
+        
         if (PAD_SETTINGS->getSequencerMode() == 2)
             effect = PAD_SETTINGS->getSequencerEffect();
     }
     
-    if (padData->hasAttribute("samplerEffect") || padData->hasAttribute("sequencerEffect"))
+    if (padData->hasAttribute("samplerEffect") || 
+        padData->hasAttribute("sequencerEffect") || 
+        padData->hasAttribute("effect"))
     {
         if (effect == 1) //Gain and Pan
         {

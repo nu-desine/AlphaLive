@@ -28,7 +28,6 @@
 #include "../Custom Components/General/ImageSlider.h"
 #include "../Custom Components/Graphics/GuiCircleBackground.h"
 #include "../Custom Components/Circle Waveform/DemoThumbnailComp.h"
-#include "../Custom Components/General/AlphaImageKnob.h"
 #include "../Custom Components/General/AlphaTextButton.h"
 #include "../Custom Components/General/SettingsButton.h"
 #include "../Custom Components/General/GuiSwitch.h"

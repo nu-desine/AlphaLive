@@ -24,7 +24,6 @@
 #define H_FXGUILOWPASSFILTER
 
 #include "../../../../../JuceLibraryCode/JuceHeader.h"
-#include "../../General/AlphaImageKnob.h"
 #include "../../General/AlphaRotarySlider.h"
 #include "../../General/AlphaTextButton.h"
 #include "../../General/ModeButton.h"

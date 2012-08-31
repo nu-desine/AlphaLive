@@ -24,15 +24,12 @@
 #define H_TESTGUISEQUENCERMODE
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
-#include "GuiSeqMidiMode.h"
-#include "GuiSeqSamplesMode.h"
 #include "../Custom Components/Sequencer/SequencerGrid.h"
 #include "../../Functionality Classes/Sequencer Mode/ModeSequencer.h"
 #include "../../Application/AbstractSubjectAndObserver.h"
 #include "../Custom Components/General/ImageSlider.h"
 #include "../Custom Components/Graphics/GuiCircleBackground.h"
 #include "../Custom Components/General/ModeButton.h"
-#include "../Custom Components/Graphics/GuiPopUpWindow.h"
 #include "../Custom Components/General/AlphaSlider.h"
 #include "../../File and Settings/AppDocumentState.h"
 #include "../Custom Components/General/SettingsButton.h"

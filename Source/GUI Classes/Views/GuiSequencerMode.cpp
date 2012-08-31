@@ -24,7 +24,6 @@
 #include "../../Functionality Classes/Sequencer Mode/SequencerValues.h"
 #include "../../File and Settings/AppSettings.h"
 #include "../Binary Data/BinaryDataNew.h"
-#include "../Binary Data/BinaryData.h"
 #include "GlobalValues.h"
 #include "../../Application/CommonInfoBoxText.h"
 #include "MainComponent.h"

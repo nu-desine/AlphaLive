@@ -22,7 +22,6 @@
  */
 
 #include "ModeButton.h"
-#include "../../Binary Data/BinaryData.h"
 #include "../../AlphaLiveLookandFeel.h"
 
 

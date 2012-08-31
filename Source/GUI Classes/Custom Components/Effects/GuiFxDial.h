@@ -27,8 +27,6 @@
  */
 
 #include "../../../../JuceLibraryCode/JuceHeader.h"
-#include "GuiFxButtons.h"
-#include "../General/AlphaImageKnob.h"
 #include "../General/SettingsButtonImage.h"
 #include "Effects GUIs/FxGuiPanAndGain.h"
 #include "Effects GUIs/FxGuiLowPassFilter.h"

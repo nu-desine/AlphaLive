@@ -22,8 +22,7 @@
 
 #include "SequencerGrid.h"
 #include "../../../File and Settings/AppSettings.h"
-#include "../../Binary Data/SequencerBinaryData.h"
-#include "GuiSequencerMode.h"
+#include "../../Views/GuiSequencerMode.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)

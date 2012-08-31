@@ -21,7 +21,6 @@
  */
 
 #include "GuiPadLayout.h"
-#include "../../Binary Data/PadBinaryData.h"
 #include "../../Views/MainComponent.h"
 
 GuiPadLayout::GuiPadLayout(AlphaLiveEngine &subject, MainComponent &ref)

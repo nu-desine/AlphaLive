@@ -1,6 +1,6 @@
 //
 //  MainComponent.cpp
-//  AlphaMIDI
+//  AlphaLive
 //
 //  Created by Liam Meredith-Lacey on 14/09/2011.
 //  Copyright 2011 nu desine.
@@ -23,9 +23,6 @@
 #include "../../Application/Common.h"
 #include "MainComponent.h"
 #include "../../File and Settings/AppSettings.h"
-#include "../Binary Data/PadBinaryData.h"
-#include "../Binary Data/BinaryData.h"
-#include "../Binary Data/ImageSliderBinaryData.h"
 #include "GlobalValues.h"
 #include "../../Application/CommandIDs.h"
 #include "../../File and Settings/StoredSettings.h"

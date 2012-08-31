@@ -27,7 +27,6 @@
 #define H_FXGUIDELAY
 
 #include "../../../../../JuceLibraryCode/JuceHeader.h"
-#include "../../General/AlphaImageKnob.h"
 #include "../../General/AlphaRotarySlider.h"
 #include "../../General/AlphaTextButton.h"
 #include "../../General/ModeButton.h"

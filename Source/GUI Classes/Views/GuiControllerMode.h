@@ -24,7 +24,6 @@
 #define H_TESTGUICONTROLLERMODE
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
-#include "../Custom Components/Graphics/GuiSpeaker.h"
 #include "../Custom Components/Graphics/GuiCircleBackground.h"
 #include "../Custom Components/General/AlphaSlider.h"
 #include "../Custom Components/General/SettingsButton.h"

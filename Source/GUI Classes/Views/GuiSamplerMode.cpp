@@ -562,7 +562,7 @@ void GuiSamplerMode::updateDisplay()
 
     else if (MULTI_PADS)
     {
-        
+        /*
         //set default values
         fileChooser->setCurrentFile(File::nonexistent, false, false);
         waveform->setFile (File::nonexistent);
@@ -575,6 +575,134 @@ void GuiSamplerMode::updateDisplay()
         finishLoopButton->setToggleState(0, false);
         stickyButton->setToggleState(0, false);
         pressureStatusButton->setToggleState(false, false);
+         */
+        
+        //==================================================================================================
+        File file_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerAudioFilePath();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSamplerAudioFilePath() != file_)
+            {
+                fileChooser->setCurrentFile(File::nonexistent, false, false);
+                waveform->setFile(File::nonexistent);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+            {
+                fileChooser->setCurrentFile(file_, false, false);
+                waveform->setFile(file_);
+            }
+        }
+        
+        //==================================================================================================
+        int quantiseMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getQuantizeMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getQuantizeMode() != quantiseMode_)
+            {
+                quantiseButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                quantiseButton->setToggleState(quantiseMode_, false);
+        }
+        
+        //==================================================================================================
+        int triggerMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerTriggerMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSamplerTriggerMode() != triggerMode_)
+            {
+                for (int i = 0; i < 4; i++)
+                    triggerModeButtons[i]->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                triggerModeButtons[triggerMode_-1]->setToggleState(true, false);
+        }
+        
+        //==================================================================================================
+        int indestructible_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerIndestructible();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSamplerIndestructible() != indestructible_)
+            {
+                indestructibleButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                indestructibleButton->setToggleState(indestructible_, false);
+        }
+        
+        //==================================================================================================
+        int sticky_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerSticky();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSamplerSticky() != sticky_)
+            {
+                stickyButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                stickyButton->setToggleState(sticky_, false);
+        }
+        
+        //==================================================================================================
+        int loop_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerShouldLoop();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSamplerShouldLoop() != loop_)
+            {
+                loopButton->setToggleState(1, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                loopButton->setToggleState(loop_, false);
+        }
+        
+        //==================================================================================================
+        int finishLoop_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerShouldFinishLoop();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSamplerShouldFinishLoop() != finishLoop_)
+            {
+                finishLoopButton->setToggleState(1, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                finishLoopButton->setToggleState(finishLoop_, false);
+        }
+        
+        //==================================================================================================
+        //for pressure status button
+        int effect_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerEffect();
+        if (effect_ > 0)
+            effect_ = 1;
+        
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            int effect_2 = PAD_SETTINGS->getSamplerEffect();
+            if (effect_2 > 0)
+                effect_2 = 1;
+            
+            if (effect_2 != effect_)
+            {
+                pressureStatusButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                pressureStatusButton->setToggleState(effect_, false);
+        }
+
+        
     }
 
     

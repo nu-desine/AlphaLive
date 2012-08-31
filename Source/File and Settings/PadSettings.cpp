@@ -645,9 +645,9 @@ void PadSettings::setSamplerAudioFilePath(File value)
                     audioFileCopy = audioFileCopy.getNonexistentSibling();
                     value.copyFileTo(audioFileCopy); 
                 }
-                
-                value = audioFileCopy;
             }
+            
+            value = audioFileCopy;
         }
         
         //OLD - store just the FILE NAME of the audio file.
@@ -1137,10 +1137,9 @@ void PadSettings::setSequencerSamplesAudioFilePath(File value, int rowNumber)
                     audioFileCopy = audioFileCopy.getNonexistentSibling();
                     value.copyFileTo(audioFileCopy); 
                 }
-                
-                value = audioFileCopy;
             }
             
+            value = audioFileCopy;
         }
         
         //OLD - store just the FILE NAME of the audio file.

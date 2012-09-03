@@ -132,15 +132,23 @@ void SequencerGrid::setCurrentlySelectedPad (Array<int> selectedPads_)
                 {
                     for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
                     {
-                        sequencerData[seq][row][column] = 0;
+                        int value_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerData(seq, row, column);
+                        for (int i = 1; i < selectedPads.size(); i++)
+                        {
+                            int padNum = selectedPads[i];
+                            if (PAD_SETTINGS->getSequencerData(seq, row, column) != value_)
+                            {
+                                sequencerData[seq][row][column] = 0;
+                                break;
+                            }
+                            if (i == selectedPads.size()-1)
+                                sequencerData[seq][row][column] = value_;
+                        }
                     }
                 }
             }
-
-            
         }
     }
-    
     
     //setCurrentSequenceNumber(1);
 

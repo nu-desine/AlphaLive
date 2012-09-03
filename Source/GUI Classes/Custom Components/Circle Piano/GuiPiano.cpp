@@ -600,8 +600,35 @@ void GuiPiano::updateDisplay()
         
         else if (PAD_SETTINGS->getMode() == 3 && PAD_SETTINGS->getSequencerMode() == 1) //Midi Sequencer Mode
         {
-            //what should I display here?
-            noteNumber = -1;
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                padNum = selectedPads[i];
+                
+                for (int row = 0; row < 12; row++)
+                {
+                    int note_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerMidiNote(row);
+                    for (int i = 1; i < selectedPads.size(); i++)
+                    {
+                        int padNum = selectedPads[i];
+                        if (PAD_SETTINGS->getSequencerMidiNote(row) != note_)
+                        {
+                            noteNumber = -1;
+                            break;
+                        }
+                        if (i == selectedPads.size()-1)
+                        {
+                            if (note_ >= 0)
+                            {
+                                setKeyDisplay (note_, true);
+                                selectedKeys.addIfNotAlreadyThere(note_);
+                            }
+                            
+                            if (row == 0)
+                                noteNumber = note_;
+                        }
+                    }
+                }
+            }
         }
         
         setNoteLabelText(noteNumber);

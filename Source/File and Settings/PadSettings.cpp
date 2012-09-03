@@ -68,7 +68,7 @@ PadSettings::PadSettings(int arrayIndex)
     samplerSticky = 0;
     samplerEffect = 0;
     samplerPan = 0.5;
-    samplerGain = 1.0;
+    samplerGain = 0.9;
     
     //sequencer mode
     //init all indexes of the sequencerData 3D array to 0.
@@ -284,7 +284,7 @@ void PadSettings::resetData (int whatToReset)
         setSamplerSticky(0);
         setSamplerEffect (0);
         setSamplerPan (0.5);
-        setSamplerGain (1.0);
+        setSamplerGain (0.9);
     }
     
     if (whatToReset != 3)

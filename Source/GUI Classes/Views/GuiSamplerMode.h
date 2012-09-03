@@ -33,6 +33,7 @@
 #include "../Custom Components/General/GuiSwitch.h"
 #include "../Custom Components/General/ModeButton.h"
 #include "../Custom Components/General/SettingsButtonImage.h"
+#include "../Custom Components/General/AlphaRotarySlider.h"
 
 
 class MainComponent;
@@ -60,6 +61,8 @@ public:
     
     void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
+    void setParameterLabelText (String value);
+    void setRotaryControlDisplay();
     
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);
@@ -79,13 +82,14 @@ private:
     ScopedPointer <GuiSwitch> pressureStatusButton;
     OwnedArray<SettingsButtonImage> triggerModeButtons;
     ScopedPointer <GuiFxDial> fxDial;
-    //AlphaImageKnob *gainSlider;
-	//AlphaImageKnob *panSlider;
     ScopedPointer <GuiCircleBackground> notSelected;
 	
 	ScopedPointer <DemoThumbnailComp> waveform;
 	
-	
+    int controlDisplayId; //used to set which rotary dial is display in the centre
+	ScopedPointer <SettingsButton> plusButton, minusButton;
+    ScopedPointer <AlphaRotarySlider> gainSlider, panSlider;
+    ScopedPointer <Label> parameterLabel;
 	
 	
 	double startTime, endTime;

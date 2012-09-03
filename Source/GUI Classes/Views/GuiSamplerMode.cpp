@@ -39,6 +39,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 : mainComponentRef(ref)
 										
 {
+    controlDisplayId = 0;
     
     //----------------quantise button-------------------
 	
@@ -91,34 +92,45 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	addAndMakeVisible (fileChooser);
     fileChooser->addMouseListener(this, true);
     
-    /*
-    //create gain slider
-    addAndMakeVisible(gainSlider = new AlphaImageKnob(2));
-    gainSlider->sliderComponent()->setRange(0.0, 2.0);
-    gainSlider->sliderComponent()->addListener(this);
-	gainSlider->sliderComponent()->setValue(0.7, false);
-    gainSlider->sliderComponent()->addMouseListener(this, true);
+    //--------------- gain slider-------------------
+	addAndMakeVisible(gainSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
+	gainSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
+	gainSlider->setRange(0.0, 2.0, 0.01);
+    gainSlider->addListener(this);
+    gainSlider->setValue(1.0, false);
+    gainSlider->addMouseListener(this, true);
 	
-	//create pan slider
-    addAndMakeVisible(panSlider = new AlphaImageKnob(2, true));
-    panSlider->sliderComponent()->setRange(0.0, 1.0);
-    panSlider->sliderComponent()->addListener(this);
-    panSlider->sliderComponent()->setValue(0.5, false);
-    panSlider->sliderComponent()->addMouseListener(this, true);
-     */
+	//--------------- pan slider -------------------
+	addChildComponent(panSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
+	panSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
+	panSlider->setRange(0.0, 1.0, 0.01);
+    panSlider->addListener(this);
+    panSlider->setValue(0.5, false);
+    panSlider->addMouseListener(this, true);
+    
+    //---------------------- plus and minus buttons ------------------
+    addAndMakeVisible(plusButton = new SettingsButton("+", (135 * (M_PI / 180)), 
+                                                      (160 * (M_PI / 180)),
+                                                      0.7f, -5, 0.2, 0.27));
+	plusButton->setClickingTogglesState(false);
+	plusButton->addListener(this);
+	plusButton->addMouseListener(this, false);
+	
+	addAndMakeVisible(minusButton = new SettingsButton("-", (200 * (M_PI / 180)), 
+                                                       (225 * (M_PI / 180)),
+                                                       0.7f, -5, 0.3, 0.27));
+	minusButton->setClickingTogglesState(false);
+	minusButton->addListener(this);
+	minusButton->addMouseListener(this, false);
+    
+    //---------------------- parameter value label ------------------
+    addAndMakeVisible(parameterLabel = new Label());
+	parameterLabel->setFont(Font(9));
+	parameterLabel->setText("1", false);
+    parameterLabel->setJustificationType(Justification::centred);
+    //parameterLabel->setEditable(false, true, true);
+    //parameterLabel->addListener(this);
 
-    /*
-    addAndMakeVisible(triggerModeMenu = new ComboBox());
-    triggerModeMenu->addListener(this);
-    triggerModeMenu->addItem("Hold", 1);
-    triggerModeMenu->addItem("Toggle", 2);
-    triggerModeMenu->addItem("Toggle Release", 3);
-    triggerModeMenu->addItem("Latch", 4);
-    triggerModeMenu->addItem("Latch Max", 5);
-    triggerModeMenu->addItem("Trigger", 6);
-    triggerModeMenu->setSelectedId(2, true);
-    triggerModeMenu->addMouseListener(this, true);
-     */
     
     //----------------------Trigger mode buttons------------------
     Image *standardIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::standardicon_png, BinaryDataNew::standardicon_pngSize));
@@ -216,7 +228,14 @@ void GuiSamplerMode::resized()
 	
     waveform->setBounds(683, 261, 324, 324);
 	
-    fileChooser->setBounds(787, 393, 116, 80);
+    //fileChooser->setBounds(787, 393, 116, 80);
+    fileChooser->setBounds(787, 393, 116, 100);
+    
+    plusButton->setBounds(802, 379, 86, 86);
+    minusButton->setBounds(802, 379, 86, 86);
+	parameterLabel->setBounds(832,453,26,10);
+    gainSlider->setBounds(804, 381, 82, 82);
+    panSlider->setBounds(804, 381, 82, 82);
 	
 	quantiseButton->setBounds(681, 288,32, 32);
 	triggerSettingsButton->setBounds(789, 221,42, 42);
@@ -302,31 +321,27 @@ void GuiSamplerMode::comboBoxChanged (ComboBox* comboBox)
 
 void GuiSamplerMode::sliderValueChanged (Slider* slider)
 {
-    /*
-    //==============================================================================
-    //gain slider
-    if (slider == gainSlider->sliderComponent())
+    if (slider == gainSlider)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerGain(gainSlider->sliderComponent()->getValue());
-        }
-    }
-    
-    //==============================================================================
-    //pan slider
-    if (slider == panSlider->sliderComponent())
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerPan(panSlider->sliderComponent()->getValue());
+            PAD_SETTINGS->setSamplerGain(slider->getValue());
         }
         
+		setParameterLabelText(String(gainSlider->getValue()));
     }
-        //==============================================================================
-     */
+    
+	else if (slider == panSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSamplerPan(slider->getValue());
+        }
+        
+		setParameterLabelText(String(panSlider->getValue()));
+    }
 
 }
 
@@ -461,6 +476,16 @@ void GuiSamplerMode::buttonClicked (Button* button)
             break;
         }
     }
+    
+    if (button == plusButton || button == minusButton)
+	{
+        if (button == plusButton)
+            controlDisplayId++;
+        else if (button == minusButton)
+            controlDisplayId--;
+        
+        setRotaryControlDisplay();
+	}
 }
 
 void GuiSamplerMode::setAudioFileDisplay(File file)
@@ -483,6 +508,9 @@ void GuiSamplerMode::setDisplay(int settingsType)
         indestructibleButton->setVisible(true);
         finishLoopButton->setVisible(true);
         
+        plusButton->setVisible(true);
+        minusButton->setVisible(true);
+        parameterLabel->setVisible(true);
         
         fxDial->setVisible(false);
         pressureStatusButton->setVisible(false);
@@ -506,6 +534,10 @@ void GuiSamplerMode::setDisplay(int settingsType)
         indestructibleButton->setVisible(false);
         finishLoopButton->setVisible(false);
         
+        plusButton->setVisible(false);
+        minusButton->setVisible(false);
+        parameterLabel->setVisible(false);
+        
         fxDial->setVisible(true);
         pressureStatusButton->setVisible(true);
         stickyButton->setVisible(true);
@@ -519,6 +551,8 @@ void GuiSamplerMode::setDisplay(int settingsType)
         
         
     }
+    
+    setRotaryControlDisplay();
     
 }
 
@@ -544,8 +578,8 @@ void GuiSamplerMode::updateDisplay()
 		File audioFile(PAD_SETTINGS->getSamplerAudioFilePath());
 		waveform->setFile (audioFile);
 		
-        //gainSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerGain(), false);
-        //panSlider->sliderComponent()->setValue(PAD_SETTINGS->getSamplerPan(), false);
+        gainSlider->setValue(PAD_SETTINGS->getSamplerGain(), false);
+        panSlider->setValue(PAD_SETTINGS->getSequencerPan(), false);
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         triggerModeButtons[PAD_SETTINGS->getSamplerTriggerMode()-1]->setToggleState(true, false);
         loopButton->setToggleState(PAD_SETTINGS->getSamplerShouldLoop(), false);
@@ -681,6 +715,34 @@ void GuiSamplerMode::updateDisplay()
         }
         
         //==================================================================================================
+        double gain_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerGain();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSamplerGain() != gain_)
+            {
+                gainSlider->setValue(1.0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                gainSlider->setValue(gain_, false);
+        }
+        
+        //==================================================================================================
+        double pan_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerPan();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSamplerPan() != pan_)
+            {
+                panSlider->setValue(0.5, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                panSlider->setValue(pan_, false);
+        }
+        
+        //==================================================================================================
         //for pressure status button
         int effect_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerEffect();
         
@@ -714,14 +776,75 @@ void GuiSamplerMode::updateDisplay()
     else if (pressureSettingsButton->getToggleState() == true)
         setDisplay(2);
     
-    
     fxDial->updateDisplay();
 }
 
 
+void GuiSamplerMode::setParameterLabelText (String value)
+{
+	//This function is used to update the display of 
+    //parameterLabel which displays the current value of the visible control
+    
+    //The function is called everytime the value of one of the controls is changed
+    //and passes in the controls value as a string and sets it to parameterLabel.
+    
+    if (value != String::empty)
+    {
+        parameterLabel->setColour(Label::textColourId, AlphaColours::lightblue);
+        parameterLabel->setText(value, false);
+    }
+	
+	else if (value == String::empty)
+	{
+		parameterLabel->setColour(Label::textColourId, LookAndFeel::getDefaultLookAndFeel().findColour(Label::textColourId));
+		
+		
+		if (gainSlider->isVisible())
+		{
+			parameterLabel->setText(String(gainSlider->getValue()), false);
+		}
+		
+		else if (panSlider->isVisible())
+		{
+			parameterLabel->setText(String(panSlider->getValue()), false);
+			
+		}
+	}
+    
+}
+
+void GuiSamplerMode::setRotaryControlDisplay()
+{
+    gainSlider->setVisible(false);
+    panSlider->setVisible(false);
+    
+    if (controlDisplayId > 1)
+        controlDisplayId = 0;
+    else if (controlDisplayId < 0)
+        controlDisplayId = 1;
+    
+    if (controlDisplayId == 0)
+        gainSlider->setVisible(true);
+    else if (controlDisplayId == 1)
+        panSlider->setVisible(true);
+    
+    setParameterLabelText (String::empty);
+}
+
 
 void GuiSamplerMode::mouseEnter (const MouseEvent &e)
 {
+    // ======= param label text command =========
+    // =======================================
+    
+	if (gainSlider->isMouseOver(true))
+		setParameterLabelText(String(gainSlider->getValue()));
+	else if (panSlider->isMouseOver(true))
+		setParameterLabelText(String(panSlider->getValue()));
+    
+    // ======= info box text command =========
+    // =======================================
+    
     
     if (quantiseButton->isMouseOver(true))
     {
@@ -778,25 +901,37 @@ void GuiSamplerMode::mouseEnter (const MouseEvent &e)
         mainComponentRef.setInfoTextBoxText(translate("Audio File Selector. Sets and displays the filepath name of the audio file for the selected pads. Use the '+' button to open a File Browser Window, or use the drop-down menu to select from recently selected files, as well as view the currently selected file."));
     }
     
-    /*
     else if (panSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Pan Knob. Sets and displays the panning/stereo positioning of the selected pad/pads audio signal.");
+        mainComponentRef.setInfoTextBoxText(translate("Pan Control. Sets and displays the stereo positioning of the audio signal for the selected pads."));
     }
     else if (gainSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Gain Knob. Sets and displays the gain/volume of the selected pad/pads audio signal.");
+        mainComponentRef.setInfoTextBoxText(translate("Gain Control. Sets an displays the gain of the audio signal for the selected pads."));
     }
-    else if (fxDial->isMouseOver(true))
+    
+    if (plusButton->isMouseOver(true) || minusButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Sampler FX Dial. Sets and displays the audio processing effect that the selected pad/pads pressure controls.");
+        mainComponentRef.setInfoTextBoxText(translate("Use this pair of buttons to switch between a set of rotary controls above."));
     }
-     */
+    
+    //else if (fxDial->isMouseOver(true))
+    //{
+    //    mainComponentRef.setInfoTextBoxText("Sampler FX Dial. Sets and displays the audio processing effect that the selected pad/pads pressure controls.");
+    //}
+    
     
 }
 
 void GuiSamplerMode::mouseExit (const MouseEvent &e)
 {
+    
+	if (e.eventComponent == gainSlider)
+		setParameterLabelText(String::empty);
+	else if (e.eventComponent == panSlider)
+		setParameterLabelText(String::empty);
+    
+    
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
 }

@@ -77,9 +77,9 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	//--------------- audio gain slider-------------------
 	addChildComponent(audioGainSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	audioGainSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
-	audioGainSlider->setRange(0.0, 2.0);
+	audioGainSlider->setRange(0.0, 2.0, 0.01);
     audioGainSlider->addListener(this);
-    audioGainSlider->setValue(0.01, false);
+    audioGainSlider->setValue(1.0, false);
     audioGainSlider->addMouseListener(this, true);
 	
 	//--------------- audio pan slider-------------------
@@ -2261,7 +2261,7 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     }
     else if (previousSequenceButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Previous Sequence Button. Click this button to display the previous sequence in the set."));
+        mainComponentRef.setInfoTextBoxText(translate("Previous Sequence Button. Click this button to display the previous sequence in the set. PLEASE NOTE THAT THIS BUTTON CURRENTLY DOES NOT WORK!"));
     }
     
     
@@ -2281,7 +2281,7 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     {
         if (plusButton->isMouseOver(true) || minusButton->isMouseOver(true))
         {
-            mainComponentRef.setInfoTextBoxText(translate("Use this pair of buttons to switch between a set of controls."));
+            mainComponentRef.setInfoTextBoxText(translate("Use this pair of buttons to switch between a set of rotary controls above."));
         }
     }
     

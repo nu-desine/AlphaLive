@@ -458,7 +458,7 @@ void AlphaLiveLookandFeel::layoutFilenameComponent (FilenameComponent& filenameC
     browseButton->setBounds((xBrowseButton + (widthBrowseButton * 0.16)), (widthBrowseButton * 0.16),
 							(widthBrowseButton * 0.7),(widthBrowseButton * 0.7));
 	
-    filenameBox->setBounds (0, ((filenameComp.getWidth() * 0.5) + 2), (filenameComp.getWidth() * 0.75), filenameComp.getHeight() - ((filenameComp.getWidth() * 0.5) + 2));
+    filenameBox->setBounds (15, ((filenameComp.getWidth() * 0.5) + 20), (filenameComp.getWidth() * 0.75), filenameComp.getHeight() - ((filenameComp.getWidth() * 0.7) + 2));
 }
 
 //==============================================================================

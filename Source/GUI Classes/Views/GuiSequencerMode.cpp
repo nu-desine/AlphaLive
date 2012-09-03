@@ -852,6 +852,230 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
 
 void GuiSequencerMode::buttonClicked (Button* button)
 {
+    //Alot of the code in the following if/else statements that determines whats being set and displayed
+    //when a mode button is pressed is repeated elsewhere in the updateDisplay and setDisplay functions.
+    //should i just calling updatedisplay instead? Or does this do more than needed and can I just call
+    //set display instead?
+    int buttonIndex;
+    
+    //==============================================================================
+    //get the selected button and set the right mode to screen
+    if (button == modeMidiButton)
+    {
+        buttonIndex = 1;
+        
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerMode(buttonIndex);
+            PAD_SETTINGS->setSequencerEffect(0); //set effect to off to remove the effect object
+            
+        }
+        
+        updateDisplay(); //or setDisplay()?
+        
+        /*
+        int pressureStatus_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerMidiPressureStatus();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerMidiPressureStatus() != pressureStatus_)
+            {
+                pressureStatusButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                pressureStatusButton->setToggleState(pressureStatus_, false);
+        }
+        
+        mainComponentRef.getGuiPiano()->setActive(true);
+        mainComponentRef.getGuiPiano()->updateDisplay();
+        mainComponentRef.getToolbox()->updateDisplay();
+        
+        
+        for (int i = 0; i <= 15; i++)
+            midiChannelButtons[i]->setVisible(true);
+        
+        for (int i = 0; i <= 11; i++)
+            audioRowButtons[i]->setVisible(false);
+        
+        
+        if(pressureSettingsButton->getToggleStateValue() == true)
+        {
+            
+            for (int i = 0; i < 5; i++)
+                midiPressureModeButtons[i]->setVisible(true);
+            
+            stickyButton->setVisible(true);
+            linkButton->setVisible(true);
+            
+            if(midiPressureModeButtons[2]->getToggleStateValue()==true)
+                ccControllerSlider->setVisible(true);
+            else
+                ccControllerSlider->setVisible(false);
+            
+            midiPressureMinRangeSlider->setVisible(true);
+            midiPressureMaxRangeSlider->setVisible(true);
+            
+             pressureStatusButton->setVisible(true);
+            
+            if(pressureStatusButton->getToggleStateValue()==true)
+                notSelected->setVisible(false);
+            else
+                notSelected->setVisible(true);
+            
+            fxDial->setVisible(false);
+        }
+            
+        
+        setRotaryControlDisplay();
+         
+        
+        repaint(600, 200, 424, 469); // <- set bounds here!
+         */
+
+    }
+    else if (button == modeSamplesButton)
+    {
+        buttonIndex = 2;
+        
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerMode(buttonIndex);
+            
+        }
+        
+        updateDisplay(); //or setDisplay()?
+        
+        /*
+        //==================================================================================================
+        //for pressure status button
+        int effect_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerEffect();
+        if (effect_ > 0)
+            effect_ = 1;
+        
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            int effect_2 = PAD_SETTINGS->getSequencerEffect();
+            if (effect_2 > 0)
+                effect_2 = 1;
+            
+            if (effect_2 != effect_)
+            {
+                pressureStatusButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                pressureStatusButton->setToggleState(effect_, false);
+        }
+        
+        
+        
+        fxDial->updateDisplay();
+        mainComponentRef.getGuiPiano()->setActive(false);
+        mainComponentRef.getToolbox()->updateDisplay();
+        
+        for (int i = 0; i <= 15; i++)
+            midiChannelButtons[i]->setVisible(false);
+        
+        for (int i = 0; i <= 11; i++)
+            audioRowButtons[i]->setVisible(true);
+        
+        
+        if(pressureSettingsButton->getToggleStateValue()==true)
+        {
+            
+            for (int i = 0; i < 5; i++)
+                midiPressureModeButtons[i]->setVisible(false);
+            
+            stickyButton->setVisible(true);
+            linkButton->setVisible(true);
+            
+            ccControllerSlider->setVisible(false);
+            midiPressureMinRangeSlider->setVisible(false);
+            midiPressureMaxRangeSlider->setVisible(false);
+            
+            pressureStatusButton->setVisible(true);
+            
+            if(pressureStatusButton->getToggleStateValue()==true)
+                notSelected->setVisible(false);
+            else
+                notSelected->setVisible(true);
+            
+            
+            fxDial->setVisible(true);
+            
+        }
+        
+        setRotaryControlDisplay();
+         
+
+        repaint(600, 200, 424, 469); // <- set bounds here!
+         */
+    }
+     
+    
+    //Am I doing the below correctly?
+    //or should I set both midi and samples mode pressure status each time?
+    //the only problem with this is if you turn on the pressure status in midi
+    //mode it could in tern create an effect object which we don't need.
+    //With the current method i need to think about what happens to effects
+    //objects when switching between samples and midi mode on a single pad.
+    else if (button == pressureStatusButton)
+	{
+        if (modeMidiButton->getToggleState() == true)
+        {
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setSequencerMidiPressureStatus(pressureStatusButton->getToggleState());
+            }
+        }
+        
+        else if (modeSamplesButton->getToggleState() == true)
+        {
+            
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                if (button->getToggleState() == false)
+                {
+                    PAD_SETTINGS->setSequencerEffect(0);
+                }
+                else if (button->getToggleState() == true)
+                {
+                    PAD_SETTINGS->setSequencerEffect(1); //set default effect
+                    fxDial->updateDisplay();
+                }
+            }
+        }
+        
+		if(pressureStatusButton->getToggleStateValue()==true)
+			notSelected->setVisible(false);
+		else
+			notSelected->setVisible(true);
+		
+	}
+    
+    else if (button == sequenceSettingsButton)
+    {
+        setDisplay(3);
+        
+	}
+    
+    else if (button == triggerSettingsButton)
+    {
+        setDisplay(1);	
+	}
+    
+    else if (button == pressureSettingsButton)
+    {
+        setDisplay(2);		
+	}
+
     
     if (button == plusButton || button == minusButton)
 	{
@@ -885,7 +1109,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
             
             //and set noteLength to the new sequence length
             setNoteLengthSliderRange(sequenceLength);
-        
+            
             
         }
         
@@ -906,7 +1130,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
             currentSequenceNumber = 1;
         
         setCurrentSequenceNumber();
-	
+        
 	}
     
     else if (button == previewButton) 
@@ -981,194 +1205,6 @@ void GuiSequencerMode::buttonClicked (Button* button)
 	}
     
     
-    
-    //this function sets the selected mode (based on the button pressed)
-    //to the currently selected pad (or set of pads)
-    int buttonIndex;
-    
-    //==============================================================================
-    //get the selected button and set the right mode to screen
-    if (button == modeMidiButton)
-    {
-        buttonIndex = 1;
-        
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            //  HOW WILL THIS LOOP REACT WHEN MULTIPLE PADS ARE SELECTED?
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setSequencerMode(buttonIndex);
-            
-            PAD_SETTINGS->setSequencerEffect(0); //set effect to off to remove the effect object
-            
-            pressureStatusButton->setToggleState(PAD_SETTINGS->getMidiPressureStatus(), false);
-        }
-        
-        mainComponentRef.getGuiPiano()->setActive(true);
-        mainComponentRef.getGuiPiano()->updateDisplay();
-        mainComponentRef.getToolbox()->updateDisplay();
-        
-        
-        for (int i = 0; i <= 15; i++)
-            midiChannelButtons[i]->setVisible(true);
-        
-        for (int i = 0; i <= 11; i++)
-            audioRowButtons[i]->setVisible(false);
-        
-        
-        if(pressureSettingsButton->getToggleStateValue() == true)
-        {
-            
-            for (int i = 0; i < 5; i++)
-                midiPressureModeButtons[i]->setVisible(true);
-            
-            stickyButton->setVisible(true);
-            linkButton->setVisible(true);
-            
-            if(midiPressureModeButtons[2]->getToggleStateValue()==true)
-                ccControllerSlider->setVisible(true);
-            else
-                ccControllerSlider->setVisible(false);
-            
-            midiPressureMinRangeSlider->setVisible(true);
-            midiPressureMaxRangeSlider->setVisible(true);
-            
-             pressureStatusButton->setVisible(true);
-            
-            if(pressureStatusButton->getToggleStateValue()==true)
-                notSelected->setVisible(false);
-            else
-                notSelected->setVisible(true);
-            
-            fxDial->setVisible(false);
-        }
-            
-        
-        setRotaryControlDisplay();
-        
-        repaint(600, 200, 424, 469); // <- set bounds here!
-
-    }
-    else if (button == modeSamplesButton)
-    {
-        buttonIndex = 2;
-        
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            //  HOW WILL THIS LOOP REACT WHEN MULTIPLE PADS ARE SELECTED?
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setSequencerMode(buttonIndex);
-            
-            if (PAD_SETTINGS->getSequencerEffect() == 0)
-            {
-                pressureStatusButton->setToggleState(false, false);
-            }
-            else
-            {
-                pressureStatusButton->setToggleState(true, false);
-                fxDial->updateDisplay(); //<< will update the effect too
-            }
-            
-        }
-        
-        mainComponentRef.getGuiPiano()->setActive(false);
-        mainComponentRef.getToolbox()->updateDisplay();
-        
-        for (int i = 0; i <= 15; i++)
-            midiChannelButtons[i]->setVisible(false);
-        
-        for (int i = 0; i <= 11; i++)
-            audioRowButtons[i]->setVisible(true);
-        
-        
-        if(pressureSettingsButton->getToggleStateValue()==true)
-        {
-            
-            for (int i = 0; i < 5; i++)
-                midiPressureModeButtons[i]->setVisible(false);
-            
-            stickyButton->setVisible(true);
-            linkButton->setVisible(true);
-            
-            ccControllerSlider->setVisible(false);
-            midiPressureMinRangeSlider->setVisible(false);
-            midiPressureMaxRangeSlider->setVisible(false);
-            
-            pressureStatusButton->setVisible(true);
-            
-            if(pressureStatusButton->getToggleStateValue()==true)
-                notSelected->setVisible(false);
-            else
-                notSelected->setVisible(true);
-            
-            
-            fxDial->setVisible(true);
-            
-        }
-        
-        setRotaryControlDisplay();
-
-        repaint(600, 200, 424, 469); // <- set bounds here!
-    }
-     
-    
-    //Am I doing the below correctly?
-    //or should I set both midi and samples mode pressure status each time?
-    //the only problem with this is if you turn on the pressure status in midi
-    //mode it could in tern create an effect object which we don't need.
-    //With the current method i need to think about what happens to effects
-    //objects when switching between samples and midi mode on a single pad.
-    else if (button == pressureStatusButton)
-	{
-        if (modeMidiButton->getToggleState() == true)
-        {
-            for (int i = 0; i < selectedPads.size(); i++)
-            {
-                int padNum = selectedPads[i];
-                PAD_SETTINGS->setSequencerMidiPressureStatus(pressureStatusButton->getToggleState());
-            }
-        }
-        
-        else if (modeSamplesButton->getToggleState() == true)
-        {
-            
-            for (int i = 0; i < selectedPads.size(); i++)
-            {
-                int padNum = selectedPads[i];
-                if (button->getToggleState() == false)
-                {
-                    PAD_SETTINGS->setSequencerEffect(0);
-                }
-                else if (button->getToggleState() == true)
-                {
-                    PAD_SETTINGS->setSequencerEffect(1); //set default effect
-                    fxDial->updateDisplay();
-                }
-            }
-        }
-        
-		if(pressureStatusButton->getToggleStateValue()==true)
-			notSelected->setVisible(false);
-		else
-			notSelected->setVisible(true);
-		
-	}
-    
-    else if (button == sequenceSettingsButton)
-    {
-        setDisplay(3);
-        
-	}
-    
-    else if (button == triggerSettingsButton)
-    {
-        setDisplay(1);	
-	}
-    
-    else if (button == pressureSettingsButton)
-    {
-        setDisplay(2);		
-	}
-
     
     
     else if (button == loopButton)
@@ -1807,7 +1843,7 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerMidiPressureMode() != pressureMode_)
             {
-                for (int i = 0; i < 6; i++)
+                for (int i = 0; i < 5; i++)
                     midiPressureModeButtons[i]->setToggleState(0, false);
                 break;
             }
@@ -1953,6 +1989,7 @@ void GuiSequencerMode::updateDisplay()
     sequencerGrid->setCurrentSequenceNumber(currentSequenceNumber);
     
     fxDial->updateDisplay();
+    mainComponentRef.getToolbox()->updateDisplay();
     
     //sequencerGrid->setPlayHeadPos(0); //??
     

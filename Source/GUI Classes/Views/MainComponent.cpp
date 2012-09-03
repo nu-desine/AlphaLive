@@ -1028,8 +1028,8 @@ void MainComponent::setToSequencerMode()
     globalSettingsButton->setAlpha(1.0f);
     //setting the midi piano state is done within
     //updateDisplay() of guiSequencerMode,
-    //as it depends on states within that object
-    toolbox->updateDisplay();
+    //as it depends on states within that object.
+    //This is also true of the toolbox.
 	noModeSelected = 0;
 	repaint();
 }

@@ -2253,7 +2253,7 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     }
     else if (previewButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Preview Sequence Button. Use this button to preview the currently displayed sequence."));
+        mainComponentRef.setInfoTextBoxText(translate("Preview Sequence Button. Use this button to preview the currently displayed sequence. PLEASE NOTE THAT THIS BUTTON CURRENTLY DOES NOT WORK!"));
     }
     else if (nextSequenceButton->isMouseOver(true))
     {
@@ -2261,7 +2261,7 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     }
     else if (previousSequenceButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Previous Sequence Button. Click this button to display the previous sequence in the set. PLEASE NOTE THAT THIS BUTTON CURRENTLY DOES NOT WORK!"));
+        mainComponentRef.setInfoTextBoxText(translate("Previous Sequence Button. Click this button to display the previous sequence in the set."));
     }
     
     

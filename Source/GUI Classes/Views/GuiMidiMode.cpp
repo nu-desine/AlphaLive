@@ -206,6 +206,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     ccControllerSlider->setRange(0, 127, 1);
     ccControllerSlider->addListener(this);
     ccControllerSlider->addMouseListener(this, true);
+    ccControllerSlider->setComponentValue(-999);
     
 
     //---------------status off bg-------------------------------------
@@ -670,7 +671,7 @@ void GuiMidiMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getMidiMaxPressureRange() != pressureMaxRange_)
             {
-                pressureMaxRangeSlider->setValue(0, false);
+                pressureMaxRangeSlider->setValue(127, false);
                 break;
             }
             if (i == selectedPads.size()-1)

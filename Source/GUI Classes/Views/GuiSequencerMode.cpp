@@ -189,6 +189,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     ccControllerSlider->setRange(0, 127, 1);
     ccControllerSlider->addListener(this);
     ccControllerSlider->addMouseListener(this, true);
+    ccControllerSlider->setComponentValue(-999);
     
     //------------------Pressure minimum range slider------------------------------
     addChildComponent(midiPressureMinRangeSlider = new AlphaRotarySlider((90 * (M_PI / 180)), (315 * (M_PI / 180)), 290));
@@ -1362,48 +1363,62 @@ void GuiSequencerMode::setDisplay (int settingsType)
     if (settingsType == 1) //trigger settings
     {
         
-        for (int i = 0; i < 6; i++)
-            triggerModeButtons[i]->setVisible(true);
-        
-        loopButton->setVisible(true);
-        indestructibleButton->setVisible(true);
-        finishLoopButton->setVisible(true);
-        
-        parameterLabel->setVisible(true);
-        currentParameterLabel->setVisible(true);
-        plusButton->setVisible(true);
-        minusButton->setVisible(true);
+        if (modeMidiButton->getToggleStateValue() == true || modeSamplesButton->getToggleStateValue() == true)
+        {
+            for (int i = 0; i < 6; i++)
+                triggerModeButtons[i]->setVisible(true);
+            
+            loopButton->setVisible(true);
+            indestructibleButton->setVisible(true);
+            finishLoopButton->setVisible(true);
+            
+            parameterLabel->setVisible(true);
+            currentParameterLabel->setVisible(true);
+            plusButton->setVisible(true);
+            minusButton->setVisible(true);
+        }
+        else //when multiple pads are selected but with different modes
+        {
+            notSelected->setVisible(true);
+        }
         
     }
     
     else if (settingsType == 2) //pressure settings
     {
-        pressureStatusButton->setVisible(true);
-        stickyButton->setVisible(true);
-        linkButton->setVisible(true);
-        
-        if(pressureStatusButton->getToggleStateValue()==true)
-            notSelected->setVisible(false);
-        else
-            notSelected->setVisible(true);
-        
-        if(modeMidiButton->getToggleStateValue()==true)
+        if (modeMidiButton->getToggleStateValue() == true || modeSamplesButton->getToggleStateValue() == true)
         {
-            for (int i = 0; i < 5; i++)
-                midiPressureModeButtons[i]->setVisible(true);
+            pressureStatusButton->setVisible(true);
+            stickyButton->setVisible(true);
+            linkButton->setVisible(true);
             
-            if(midiPressureModeButtons[2]->getToggleStateValue()==true)
-                ccControllerSlider->setVisible(true);
+            if(pressureStatusButton->getToggleStateValue()==true)
+                notSelected->setVisible(false);
             else
-                ccControllerSlider->setVisible(false);
+                notSelected->setVisible(true);
             
-            midiPressureMinRangeSlider->setVisible(true);
-            midiPressureMaxRangeSlider->setVisible(true);
+            if(modeMidiButton->getToggleStateValue()==true)
+            {
+                for (int i = 0; i < 5; i++)
+                    midiPressureModeButtons[i]->setVisible(true);
+                
+                if(midiPressureModeButtons[2]->getToggleStateValue()==true)
+                    ccControllerSlider->setVisible(true);
+                else
+                    ccControllerSlider->setVisible(false);
+                
+                midiPressureMinRangeSlider->setVisible(true);
+                midiPressureMaxRangeSlider->setVisible(true);
+            }
+            
+            else if(modeSamplesButton->getToggleStateValue()==true)
+            {
+                fxDial->setVisible(true);
+            }
         }
-        
-        else if(modeSamplesButton->getToggleStateValue()==true)
+        else //when multiple pads are selected but with different modes
         {
-            fxDial->setVisible(true);
+            notSelected->setVisible(true);
         }
         
     }
@@ -1576,7 +1591,7 @@ void GuiSequencerMode::updateDisplay()
     
     else if(MULTI_PADS)
     {
-      
+      /*
         modeMidiButton->setToggleState(true, false);
         mainComponentRef.getGuiPiano()->setActive(true);
         mainComponentRef.getGuiPiano()->updateDisplay();
@@ -1601,7 +1616,331 @@ void GuiSequencerMode::updateDisplay()
         linkButton->setToggleState(false, false);
         midiPressureMinRangeSlider->setValue(0);
         midiPressureMaxRangeSlider->setValue(127);
-
+       */
+        
+        //==================================================================================================
+        int mode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerMode() != mode_)
+            {
+                modeMidiButton->setToggleState(0, false);
+                modeSamplesButton->setToggleState(0, false);
+                mainComponentRef.getGuiPiano()->setActive(false);
+                pressureStatusButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+            {
+                if (mode_ == 1)
+                {
+                    modeMidiButton->setToggleState(true, false);
+                    mainComponentRef.getGuiPiano()->setActive(true);
+                    mainComponentRef.getGuiPiano()->updateDisplay();
+                    
+                    //==================================================================================================
+                    int pressureStatus_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerMidiPressureStatus();
+                    for (int i = 1; i < selectedPads.size(); i++)
+                    {
+                        int padNum = selectedPads[i];
+                        if (PAD_SETTINGS->getSequencerMidiPressureStatus() != pressureStatus_)
+                        {
+                            pressureStatusButton->setToggleState(0, false);
+                            break;
+                        }
+                        if (i == selectedPads.size()-1)
+                            pressureStatusButton->setToggleState(pressureStatus_, false);
+                    }
+                }
+                else
+                {
+                    modeSamplesButton->setToggleState(true, false);
+                    mainComponentRef.getGuiPiano()->setActive(false);
+                    
+                    //==================================================================================================
+                    //for pressure status button
+                    int effect_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerEffect();
+                    if (effect_ > 0)
+                        effect_ = 1;
+                    
+                    for (int i = 1; i < selectedPads.size(); i++)
+                    {
+                        int padNum = selectedPads[i];
+                        int effect_2 = PAD_SETTINGS->getSequencerEffect();
+                        if (effect_2 > 0)
+                            effect_2 = 1;
+                        
+                        if (effect_2 != effect_)
+                        {
+                            pressureStatusButton->setToggleState(0, false);
+                            break;
+                        }
+                        if (i == selectedPads.size()-1)
+                            pressureStatusButton->setToggleState(effect_, false);
+                    }
+                }
+            }
+        }
+        
+        //==================================================================================================
+        int quantiseMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getQuantizeMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getQuantizeMode() != quantiseMode_)
+            {
+                quantiseButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                quantiseButton->setToggleState(quantiseMode_, false);
+        }
+        
+        //==================================================================================================
+        int seqLength_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerLength();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerLength() != seqLength_)
+            {
+                sequenceLength = 32;
+                setNoteLengthSliderRange(sequenceLength);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+            {
+                sequenceLength = seqLength_;
+                setNoteLengthSliderRange(sequenceLength);
+            }
+        }
+        
+        //==================================================================================================
+        int noOfSeqs_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerNumberOfSequences();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerNumberOfSequences() != noOfSeqs_)
+            {
+                numberOfSequencesSlider->setValue(1, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                numberOfSequencesSlider->setValue(noOfSeqs_, false);
+        }
+        
+        //==================================================================================================
+        int relativeTempo_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerRelativeTempoMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerRelativeTempoMode() != relativeTempo_)
+            {
+                relativeTempoSlider->setValue(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                relativeTempoSlider->setValue(relativeTempo_, false);
+        }
+        
+        //==================================================================================================
+        int noteLength_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerMidiNoteLength();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerMidiNoteLength() != noteLength_)
+            {
+                noteLengthSlider->setValue(1, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                noteLengthSlider->setValue(noteLength_, false);
+        }
+        
+        //==================================================================================================
+        double gain_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerGain();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerGain() != gain_)
+            {
+                audioGainSlider->setValue(1.0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                audioGainSlider->setValue(gain_, false);
+        }
+        
+        //==================================================================================================
+        double pan_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerPan();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerPan() != pan_)
+            {
+                audioPanSlider->setValue(0.5, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                audioPanSlider->setValue(pan_, false);
+        }
+        
+        //==================================================================================================
+        int triggerMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerTriggerMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerTriggerMode() != triggerMode_)
+            {
+                for (int i = 0; i < 6; i++)
+                    triggerModeButtons[i]->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                triggerModeButtons[triggerMode_-1]->setToggleState(true, false);
+        }
+        
+        //==================================================================================================
+        int pressureMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerMidiPressureMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerMidiPressureMode() != pressureMode_)
+            {
+                for (int i = 0; i < 6; i++)
+                    midiPressureModeButtons[i]->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                midiPressureModeButtons[pressureMode_-1]->setToggleState(true, false);
+        }
+        
+        //==================================================================================================
+        int channel_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerMidiChannel();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerMidiChannel() != channel_)
+            {
+                for (int i = 0; i <16; i++)
+                    midiChannelButtons[i]->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                midiChannelButtons[channel_-1]->setToggleState(true, false);
+        }
+        
+        //==================================================================================================
+        int ccNumber_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerMidiCcController();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerMidiCcController() != ccNumber_)
+            {
+                ccControllerSlider->setComponentValue(-999);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                ccControllerSlider->setComponentValue(ccNumber_);
+        }
+        
+        //==================================================================================================
+        int indestructible_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerIndestructible();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerIndestructible() != indestructible_)
+            {
+                indestructibleButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                indestructibleButton->setToggleState(indestructible_, false);
+        }
+        
+        //==================================================================================================
+        int sticky_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerSticky();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerSticky() != sticky_)
+            {
+                stickyButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                stickyButton->setToggleState(sticky_, false);
+        }
+        
+        //==================================================================================================
+        int loop_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerShouldLoop();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerShouldLoop() != loop_)
+            {
+                loopButton->setToggleState(1, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                loopButton->setToggleState(loop_, false);
+        }
+        
+        //==================================================================================================
+        int finishLoop_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerShouldFinishLoop();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerShouldFinishLoop() != finishLoop_)
+            {
+                finishLoopButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                finishLoopButton->setToggleState(finishLoop_, false);
+        }
+        
+        //==================================================================================================
+        int dynamicMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerDynamicMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerDynamicMode() != dynamicMode_)
+            {
+                linkButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                linkButton->setToggleState(dynamicMode_, false);
+        }
+        
+        //==================================================================================================
+        int pressureMinRange_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerMidiMinPressureRange();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerMidiMinPressureRange() != pressureMinRange_)
+            {
+                midiPressureMinRangeSlider->setValue(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                midiPressureMinRangeSlider->setValue(pressureMinRange_, false);
+        }
+        
+        //==================================================================================================
+        int pressureMaxRange_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerMidiMaxPressureRange();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerMidiMaxPressureRange() != pressureMaxRange_)
+            {
+                midiPressureMaxRangeSlider->setValue(127, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                midiPressureMaxRangeSlider->setValue(pressureMaxRange_, false);
+        }
         
     }
     
@@ -1609,6 +1948,7 @@ void GuiSequencerMode::updateDisplay()
     //update sequencerGrid GUI based on currently selected pad and currently selected sequence number
     sequencerGrid->setCurrentlySelectedPad(selectedPads); //why is this called here and not above?
                         //is it because setCurrentlySelectedPad is used as an updateDisplay() too?
+    
     currentSequenceNumber = 1;
     sequencerGrid->setCurrentSequenceNumber(currentSequenceNumber);
     

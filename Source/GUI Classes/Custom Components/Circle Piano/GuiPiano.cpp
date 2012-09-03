@@ -301,6 +301,7 @@ void GuiPiano::buttonClicked(Button *button)
                                 //add the key
                                 setKeyDisplay (i, true);
                                 selectedKeys.addIfNotAlreadyThere(i); 
+                                noteNumber = selectedKeys[0];
                             }
                             
                         }
@@ -429,7 +430,9 @@ void GuiPiano::buttonClicked(Button *button)
                                 PAD_SETTINGS->setSequencerMidiNote(note, row);
                             }
                          
-                        }  
+                        }
+                        
+                        noteNumber = selectedKeys[0];
                     }
                 }
             }
@@ -493,6 +496,9 @@ void GuiPiano::buttonClicked(Button *button)
                             //update the GUI
                             setKeyDisplay (newVal, true);
                             selectedKeys.addIfNotAlreadyThere(newVal);
+                            
+                            if (padIndex == 0)
+                                noteNumber = newVal;
                             
                         }
                     }
@@ -587,7 +593,8 @@ void GuiPiano::updateDisplay()
                 setKeyDisplay (PAD_SETTINGS->getMidiNote(), true);
                 selectedKeys.addIfNotAlreadyThere(PAD_SETTINGS->getMidiNote());
                 
-                noteNumber = -1;
+                if (i == 0)
+                    noteNumber = PAD_SETTINGS->getMidiNote();
             }
         }
         
@@ -756,15 +763,20 @@ void GuiPiano::setActive (bool value)
     setInterceptsMouseClicks(false, value);
     
     if (value == true)
-        setAlpha(1.0f);
-    else
-        setAlpha(0.3f);
-    
-    if (value == false)
     {
+        setAlpha(1.0f);
+        //don't think I need to set label text here as it will be set somewhere else.
+    }
+    else
+    {
+        setAlpha(0.3f);
+        
+        midiNoteLabel->setText(String::empty, false);
+        
         for (int i = 0; i < 120; i++)
             setKeyDisplay(i, false);
     }
+    
     /*
     else if (value == true)
     {

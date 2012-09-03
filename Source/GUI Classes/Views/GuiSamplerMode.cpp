@@ -673,7 +673,7 @@ void GuiSamplerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSamplerShouldFinishLoop() != finishLoop_)
             {
-                finishLoopButton->setToggleState(1, false);
+                finishLoopButton->setToggleState(0, false);
                 break;
             }
             if (i == selectedPads.size()-1)

@@ -273,12 +273,9 @@ void GuiFxDial::setCurrentlySelectedPad (Array<int> selectedPads_)
 
 void GuiFxDial::updateDisplay()
 {
-    //This method is used to set all the components to the currently selected pad's settings,
-    //as well as show and hide the relavent components
-    
     hideAllFx();
     
-    int currentEffect;
+    int currentEffect = 0;
     
     //if an individual pad number is currently selected
     if(SINGLE_PAD)
@@ -289,55 +286,93 @@ void GuiFxDial::updateDisplay()
             currentEffect = PAD_SETTINGS->getSamplerEffect() - 1;
         else if (PAD_SETTINGS->getMode() == 3)
             currentEffect = PAD_SETTINGS->getSequencerEffect() - 1;
-        
-        if (currentEffect == 0) //Gain and Pan
-        {
-            gainAndPan->updateDisplay();
-            gainAndPan->setVisible(true);
-        }
-        else if (currentEffect == 1) //LPF
-        {
-            lowpassFilter->updateDisplay();
-            lowpassFilter->setVisible(true);
-        }
-        else if (currentEffect == 2) //HPF
-        {
-            highPassFilter->updateDisplay();
-            highPassFilter->setVisible(true);
-        }
-        else if (currentEffect == 3) //BPF
-        {
-            bandPassFilter->updateDisplay();
-            bandPassFilter->setVisible(true);
-        }
-        else if (currentEffect == 6) //Delay
-        {
-            delay->updateDisplay();
-            delay->setVisible(true);
-        }
-        else if (currentEffect == 7) //Reverb
-        {
-            reverb->updateDisplay();
-            reverb->setVisible(true);
-        }
-        else if (currentEffect == 8) //Flanger
-        {
-            flanger->updateDisplay();
-            flanger->setVisible(true);
-        }
-        else if (currentEffect == 9) //Tremolo
-        {
-            tremolo->updateDisplay();
-            tremolo->setVisible(true);
-        }
-        
     }
 
     else if(MULTI_PADS)
     {
-        currentEffect = 0;
+        if (AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 2)
+        {
+            int effect_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerEffect();
+            for (int i = 1; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                if (PAD_SETTINGS->getSamplerEffect() != effect_)
+                {
+                    for (int i = 0; i < 10; i++)
+                        fxButtons[i]->setToggleState(0, false);
+                    
+                    currentEffect = 0;
+                    break;
+                }
+                if (i == selectedPads.size()-1)
+                {
+                    currentEffect = effect_-1;
+                }
+            }
+        }
+        else if (AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 3)
+        {
+            int effect_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerEffect();
+            for (int i = 1; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                if (PAD_SETTINGS->getSequencerEffect() != effect_)
+                {
+                    for (int i = 0; i < 10; i++)
+                        fxButtons[i]->setToggleState(0, false);
+                    
+                    currentEffect = 0;
+                    break;
+                }
+                if (i == selectedPads.size()-1)
+                {
+                    currentEffect = effect_-1;
+                }
+            }
+        }
     }
     
+    
+    if (currentEffect == 0) //Gain and Pan
+    {
+        gainAndPan->updateDisplay();
+        gainAndPan->setVisible(true);
+    }
+    else if (currentEffect == 1) //LPF
+    {
+        lowpassFilter->updateDisplay();
+        lowpassFilter->setVisible(true);
+    }
+    else if (currentEffect == 2) //HPF
+    {
+        highPassFilter->updateDisplay();
+        highPassFilter->setVisible(true);
+    }
+    else if (currentEffect == 3) //BPF
+    {
+        bandPassFilter->updateDisplay();
+        bandPassFilter->setVisible(true);
+    }
+    else if (currentEffect == 6) //Delay
+    {
+        delay->updateDisplay();
+        delay->setVisible(true);
+    }
+    else if (currentEffect == 7) //Reverb
+    {
+        reverb->updateDisplay();
+        reverb->setVisible(true);
+    }
+    else if (currentEffect == 8) //Flanger
+    {
+        flanger->updateDisplay();
+        flanger->setVisible(true);
+    }
+    else if (currentEffect == 9) //Tremolo
+    {
+        tremolo->updateDisplay();
+        tremolo->setVisible(true);
+    }
   
     if (currentEffect >= 0)
         fxButtons[currentEffect]->setToggleState(true, false);

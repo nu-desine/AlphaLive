@@ -683,15 +683,11 @@ void GuiSamplerMode::updateDisplay()
         //==================================================================================================
         //for pressure status button
         int effect_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerEffect();
-        if (effect_ > 0)
-            effect_ = 1;
         
         for (int i = 1; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
             int effect_2 = PAD_SETTINGS->getSamplerEffect();
-            if (effect_2 > 0)
-                effect_2 = 1;
             
             if (effect_2 != effect_)
             {
@@ -699,10 +695,13 @@ void GuiSamplerMode::updateDisplay()
                 break;
             }
             if (i == selectedPads.size()-1)
-                pressureStatusButton->setToggleState(effect_, false);
+            {
+                if (effect_ == 0)
+                    pressureStatusButton->setToggleState(0, false);
+                else
+                    pressureStatusButton->setToggleState(1, false);  
+            }
         }
-
-        
     }
 
     

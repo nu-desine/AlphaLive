@@ -136,9 +136,55 @@ void GuiGlobalPadSettings::updateDisplay()
     }
     else if(MULTI_PADS)
     {
+        /*
         pressureSensitivityMenu->setSelectedId(2, true);
         exclusiveModeButton->setToggleState(false, false);
         exclusiveGroupSlider->setComponentValue(1);
+         */
+        
+        //==================================================================================================
+        int exclusiveMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getExclusiveMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getExclusiveMode() != exclusiveMode_)
+            {
+                exclusiveModeButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                exclusiveModeButton->setToggleState(exclusiveMode_, false);
+        }
+        
+        //==================================================================================================
+        int exclusiveGroup_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getExclusiveGroup();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getExclusiveGroup() != exclusiveGroup_)
+            {
+                exclusiveGroupSlider->setComponentValue(-999);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                exclusiveGroupSlider->setComponentValue(exclusiveGroup_);
+        }
+        
+        //==================================================================================================
+        int pressureSensitivity_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getPressureSensitivityMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getPressureSensitivityMode() != pressureSensitivity_)
+            {
+                pressureSensitivityMenu->setSelectedId(2, true);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                pressureSensitivityMenu->setSelectedId(pressureSensitivity_, true);
+        }
+        
+        
     }
     
     if (exclusiveModeButton->getToggleState() == true)

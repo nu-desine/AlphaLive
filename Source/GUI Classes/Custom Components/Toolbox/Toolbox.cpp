@@ -202,16 +202,55 @@ void Toolbox::updateDisplay()
         fileLists[i]->deselectAllFiles();
     for (int i = 0; i < 2; i++)
         treeLists[i]->deselectAllFiles();
-    
     layoutsListBox->deselectAllRows();
     scalesListBox->deselectAllRows();
     
     tabbedComponent->clearTabs();
     tabbedComponent->setVisible(true);
     
-    int padNum = selectedPads[0];
+    int mode = 0;
+    int seqMode = 0;
     
-    if (PAD_SETTINGS->getMode() == 1)
+    if(SINGLE_PAD)
+    {
+        int padNum = selectedPads[0];
+        mode = PAD_SETTINGS->getMode();
+        seqMode = PAD_SETTINGS->getSequencerMode();
+    }
+    
+    else if(MULTI_PADS)
+    {
+        //==================================================================================================
+        int mode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getMode() != mode_)
+            {
+                mode = 0;
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                mode = mode_;
+        }
+        
+        //==================================================================================================
+        int seqMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerMode() != seqMode_)
+            {
+                seqMode = 0;
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                seqMode = seqMode_;
+        }
+    }
+    
+    
+    if (mode == 1)
     {
         if (selectedPads.size() == 48)
             tabbedComponent->addTab(translate("Layouts"), Colours::darkgrey, layoutsListBox, false);
@@ -221,7 +260,7 @@ void Toolbox::updateDisplay()
         
         tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[MIDI_PRESETS], false);
     }
-    else if (PAD_SETTINGS->getMode() == 2)
+    else if (mode == 2)
     {
         if (MULTI_PADS)
         {
@@ -233,12 +272,12 @@ void Toolbox::updateDisplay()
         tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[SAMPLER_PRESETS], false);
         
     }
-    else if (PAD_SETTINGS->getMode() == 3)
+    else if (mode == 3)
     {
-        if (PAD_SETTINGS->getSequencerMode() == 1)
+        if (seqMode == 1)
             tabbedComponent->addTab(translate("Scales"), Colours::darkgrey, scalesListBox, false);
         
-        else if (PAD_SETTINGS->getSequencerMode() == 2)
+        else if (seqMode == 2)
         {
             tabbedComponent->addTab(translate("Banks"), Colours::darkgrey, fileLists[DRUM_BANKS], false);
             //the below will only be useable if we get drag-and-drop working
@@ -250,7 +289,7 @@ void Toolbox::updateDisplay()
         tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[SEQUENCER_PRESETS], false);
     
     }
-    else if (PAD_SETTINGS->getMode() == 4)
+    else if (mode == 4)
     {
         tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[CONTROLLER_PRESETS], false);
     }

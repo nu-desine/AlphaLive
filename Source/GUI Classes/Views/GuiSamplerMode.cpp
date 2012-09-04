@@ -484,6 +484,11 @@ void GuiSamplerMode::buttonClicked (Button* button)
         else if (button == minusButton)
             controlDisplayId--;
         
+        if (controlDisplayId > 1)
+            controlDisplayId = 0;
+        else if (controlDisplayId < 0)
+            controlDisplayId = 1;
+        
         setRotaryControlDisplay();
 	}
 }
@@ -818,15 +823,13 @@ void GuiSamplerMode::setRotaryControlDisplay()
     gainSlider->setVisible(false);
     panSlider->setVisible(false);
     
-    if (controlDisplayId > 1)
-        controlDisplayId = 0;
-    else if (controlDisplayId < 0)
-        controlDisplayId = 1;
-    
-    if (controlDisplayId == 0)
-        gainSlider->setVisible(true);
-    else if (controlDisplayId == 1)
-        panSlider->setVisible(true);
+    if (triggerSettingsButton->getToggleState())
+    {
+        if (controlDisplayId == 0)
+            gainSlider->setVisible(true);
+        else if (controlDisplayId == 1)
+            panSlider->setVisible(true);
+    }
     
     setParameterLabelText (String::empty);
 }

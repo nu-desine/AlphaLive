@@ -196,7 +196,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	midiPressureMinRangeSlider->setRotaryParameters((90 * (M_PI / 180)), (315 * (M_PI / 180)),true);
     midiPressureMinRangeSlider->setRange(0, 127, 1);
     midiPressureMinRangeSlider->addListener(this);
-    midiPressureMinRangeSlider->setValue(0);
+    midiPressureMinRangeSlider->setValue(0, false);
     midiPressureMinRangeSlider->addMouseListener(this, true);
     
     
@@ -205,7 +205,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	midiPressureMaxRangeSlider->setRotaryParameters((90 * (M_PI / 180)), (315 * (M_PI / 180)),true);
     midiPressureMaxRangeSlider->setRange(0, 127, 1);
     midiPressureMaxRangeSlider->addListener(this);
-    midiPressureMaxRangeSlider->setValue(127);
+    midiPressureMaxRangeSlider->setValue(127, false);
     midiPressureMaxRangeSlider->addMouseListener(this, true);
     
     
@@ -226,10 +226,8 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     addAndMakeVisible(parameterLabel = new Label());
 	parameterLabel->setFont(Font(9));
 	parameterLabel->setText("32", false);
-    //parameterLabel->setColour(Label::textColourId, Colours::white);
-    //parameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     parameterLabel->setJustificationType(Justification::centred);
-    parameterLabel->setEditable(false, true, true);
+    //parameterLabel->setEditable(false, true, true);
     parameterLabel->addListener(this);
 	
 	addChildComponent(currentParameterLabel = new Label());
@@ -240,6 +238,13 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     currentParameterLabel->setJustificationType(Justification::centred);
     currentParameterLabel->setEditable(false, false, false);
     currentParameterLabel->addListener(this);
+    
+    //---------------hover parameter label -------------------------------------
+    addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
+    parameterHoverLabel->setJustificationType(Justification::centred);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
+    parameterHoverLabel->setFont(Font(9));
+    parameterHoverLabel->addMouseListener(this, true);
     
     //----------------------Trigger mode buttons------------------
 	Image *standardIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::standardicon_png, BinaryDataNew::standardicon_pngSize));
@@ -457,6 +462,7 @@ void GuiSequencerMode::resized()
 	
 	parameterLabel->setBounds(832,453,26,10);
 	currentParameterLabel->setBounds(821, 398, 48, 48);
+    parameterHoverLabel->setBounds(832,453,26,10);
 	
 	popUpButton->setBounds(816, 393, 58, 58);
     
@@ -834,6 +840,7 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
             PAD_SETTINGS->setSequencerMidiMinPressureRange(midiPressureMinRangeSlider->getValue());
         }
         
+        parameterHoverLabel->setText(String(slider->getValue()), false);
     }
     
     
@@ -845,6 +852,8 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerMidiMaxPressureRange(midiPressureMaxRangeSlider->getValue());
         }
+        
+        parameterHoverLabel->setText(String(slider->getValue()), false);
     }
 
        
@@ -1368,6 +1377,7 @@ void GuiSequencerMode::hideComponents()
     midiPressureMaxRangeSlider->setVisible(false);
     notSelected->setVisible(false);
     fxDial->setVisible(false);
+    parameterHoverLabel->setVisible(false);
     
     //hybrid stuff
     relativeTempoSlider->setVisible(false);
@@ -1445,6 +1455,7 @@ void GuiSequencerMode::setDisplay (int settingsType)
                 
                 midiPressureMinRangeSlider->setVisible(true);
                 midiPressureMaxRangeSlider->setVisible(true);
+                parameterHoverLabel->setVisible(true);
             }
             
             else if(modeSamplesButton->getToggleStateValue()==true)
@@ -1617,8 +1628,8 @@ void GuiSequencerMode::updateDisplay()
         finishLoopButton->setToggleState(PAD_SETTINGS->getSequencerShouldFinishLoop(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getSequencerSticky(), false);
         linkButton->setToggleState(PAD_SETTINGS->getSequencerDynamicMode(), false);
-        midiPressureMinRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMinPressureRange());
-        midiPressureMaxRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMaxPressureRange());
+        midiPressureMinRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMinPressureRange(), false);
+        midiPressureMaxRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMaxPressureRange(), false);
         
         
         
@@ -2116,8 +2127,14 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
 		setParameterLabelText(String(audioGainSlider->getValue()));
 	else if (audioPanSlider->isMouseOver(true))
 		setParameterLabelText(String(audioPanSlider->getValue()));
-     
     
+    
+    //update parameterHoverLabel
+    if (midiPressureMinRangeSlider->isMouseOver(true))
+        parameterHoverLabel->setText(String(midiPressureMinRangeSlider->getValue()), false);
+    else if (midiPressureMaxRangeSlider->isMouseOver(true))
+        parameterHoverLabel->setText(String(midiPressureMaxRangeSlider->getValue()), false);
+     
     
     // ======= info box text command =========
     // =======================================
@@ -2332,8 +2349,10 @@ void GuiSequencerMode::mouseExit (const MouseEvent &e)
 		setParameterLabelText(String::empty);
 	else if (e.eventComponent == audioPanSlider)
 		setParameterLabelText(String::empty);
-     
     
+    if(e.eventComponent == midiPressureMinRangeSlider || e.eventComponent == midiPressureMaxRangeSlider)
+        parameterHoverLabel->setText(String::empty, false);
+     
     
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);

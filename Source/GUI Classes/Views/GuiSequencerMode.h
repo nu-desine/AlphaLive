@@ -125,7 +125,7 @@ private:
     AlphaRotarySlider *numberOfSequencesSlider, *midiPressureMinRangeSlider, *midiPressureMaxRangeSlider, *relativeTempoSlider, *noteLengthSlider, *audioGainSlider, *audioPanSlider;
     AlphaSlider *ccControllerSlider;
     
-    Label *parameterLabel, *currentParameterLabel;
+    Label *parameterLabel, *currentParameterLabel, *parameterHoverLabel;
      
 };
 

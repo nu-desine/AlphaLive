@@ -77,6 +77,7 @@ private:
 	AlphaSlider *ccControllerSlider;
     ModeButton *indestructibleButton, *stickyButton;
     GuiSwitch *pressureStatusButton, *noteStatusButton;
+    Label *parameterHoverLabel;
     
     GuiCircleBackground *notSelected;
     

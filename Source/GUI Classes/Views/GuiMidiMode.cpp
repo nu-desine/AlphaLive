@@ -174,7 +174,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
 	pressureMinRangeSlider->setRotaryParameters((90 * (M_PI / 180)), (315 * (M_PI / 180)),true);
     pressureMinRangeSlider->setRange(0, 127, 1);
     pressureMinRangeSlider->addListener(this);
-    pressureMinRangeSlider->setValue(0);
+    pressureMinRangeSlider->setValue(0, false);
     pressureMinRangeSlider->addMouseListener(this, true);
     
     
@@ -183,7 +183,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
 	pressureMaxRangeSlider->setRotaryParameters((90 * (M_PI / 180)), (315 * (M_PI / 180)),true);
     pressureMaxRangeSlider->setRange(0, 127, 1);
     pressureMaxRangeSlider->addListener(this);
-    pressureMaxRangeSlider->setValue(127);
+    pressureMaxRangeSlider->setValue(127, false);
     pressureMaxRangeSlider->addMouseListener(this, true);
     
 	Image *destructIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::indestructableicon_png, BinaryDataNew::indestructableicon_pngSize));
@@ -220,6 +220,13 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     pressureStatusButton->setClickingTogglesState(true);
     pressureStatusButton->setToggleState(true, false);
     pressureStatusButton->addMouseListener(this, false);
+    
+    //---------------parameter label -------------------------------------
+    addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
+    parameterHoverLabel->setJustificationType(Justification::centred);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
+    parameterHoverLabel->setFont(Font(9));
+    parameterHoverLabel->addMouseListener(this, true);
     
     
     //---------------note status button-------------------------------------
@@ -282,6 +289,7 @@ void GuiMidiMode::resized()
     
     pressureMinRangeSlider->setBounds(700, 277, 290, 290);
     pressureMaxRangeSlider->setBounds(710, 287, 270, 270);
+    parameterHoverLabel->setBounds(832,453,26,10);
 	
     //can we give the below more specific bounds?
     //if not the below can be put into a for loop
@@ -394,9 +402,9 @@ void GuiMidiMode::sliderValueChanged (Slider* slider)
             PAD_SETTINGS->setMidiMinPressureRange(pressureMinRangeSlider->getValue());
         }
         
+         parameterHoverLabel->setText(String(slider->getValue()), false);
+        
     }
-    
-    
     //max pressure range slider
     if (slider == pressureMaxRangeSlider)
     {
@@ -405,6 +413,8 @@ void GuiMidiMode::sliderValueChanged (Slider* slider)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setMidiMaxPressureRange(pressureMaxRangeSlider->getValue());
         }
+        
+        parameterHoverLabel->setText(String(slider->getValue()), false);
     }
         
     //CC Controller Number
@@ -559,8 +569,8 @@ void GuiMidiMode::updateDisplay()
         //velocitySlider->sliderComponent()->setValue(PAD_SETTINGS->getMidiVelocity(), true);
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         channelButtons[PAD_SETTINGS->getMidiChannel()-1]->setToggleState(true, false);
-        pressureMinRangeSlider->setValue(PAD_SETTINGS->getMidiMinPressureRange());
-        pressureMaxRangeSlider->setValue(PAD_SETTINGS->getMidiMaxPressureRange());
+        pressureMinRangeSlider->setValue(PAD_SETTINGS->getMidiMinPressureRange(), false);
+        pressureMaxRangeSlider->setValue(PAD_SETTINGS->getMidiMaxPressureRange(), false);
         pressureModeButtons[PAD_SETTINGS->getMidiPressureMode()-1]->setToggleState(true, false);
         triggerModeButtons[PAD_SETTINGS->getMidiTriggerMode()-1]->setToggleState(true, false);
         ccControllerSlider->setComponentValue(PAD_SETTINGS->getMidiCcController());
@@ -782,6 +792,8 @@ void GuiMidiMode::setDisplay(int settingsType)
         pressureMinRangeSlider->setVisible(false);
         pressureMaxRangeSlider->setVisible(false);
         ccControllerSlider->setVisible(false);
+        parameterHoverLabel->setVisible(false);
+        
         
         if(noteStatusButton->getToggleStateValue()==true)
             notSelected->setVisible(false);
@@ -814,6 +826,8 @@ void GuiMidiMode::setDisplay(int settingsType)
         stickyButton->setVisible(true);
         pressureMinRangeSlider->setVisible(true);
         pressureMaxRangeSlider->setVisible(true);
+        parameterHoverLabel->setVisible(true);
+        //parameterHoverLabel->setText(String::empty, false);
         
         
         if(pressureStatusButton->getToggleStateValue()==true)
@@ -924,6 +938,11 @@ void GuiMidiMode::mouseEnter (const MouseEvent &e)
     }
     
     
+    //update parameterHoverLabel
+    if (pressureMinRangeSlider->isMouseOver(true))
+        parameterHoverLabel->setText(String(pressureMinRangeSlider->getValue()), false);
+    else if (pressureMaxRangeSlider->isMouseOver(true))
+        parameterHoverLabel->setText(String(pressureMaxRangeSlider->getValue()), false);
 }
 
 void GuiMidiMode::mouseExit (const MouseEvent &e)
@@ -931,6 +950,9 @@ void GuiMidiMode::mouseExit (const MouseEvent &e)
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
     
+    
+    if(e.eventComponent == pressureMinRangeSlider || e.eventComponent == pressureMaxRangeSlider)
+        parameterHoverLabel->setText(String::empty, false);
 }
 
 

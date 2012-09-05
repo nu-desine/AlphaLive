@@ -103,13 +103,10 @@ private:
 
     
     Label *directoryLabel, *midiNoteDisplayTypeLabel, *launchTaskLabel;
-    Label *killOnClockStopLabel;
-    ComboBox *midiNoteDisplayTypeMenu, *launchTaskMenu;
-    TextButton *killOnClockStopButton;
-    ComboBox* appProjectDirChooser;
-    
-    
-    
+    Label *killOnClockStopLabel, *cleanOnCloseLabel;
+    ComboBox *midiNoteDisplayTypeMenu, *launchTaskMenu, *appProjectDirChooser;
+    TextButton *killOnClockStopButton, *cleanOnCloseButton;
+
 };
 
 #endif //H_GENERALSETTINGSCOMPONENT

@@ -496,6 +496,11 @@ void GuiSamplerMode::buttonClicked (Button* button)
 void GuiSamplerMode::setAudioFileDisplay(File file)
 {
     waveform->setFile (file);
+    
+    //can't use 'file' below as this will be the original file, not the copied file in the projects directory
+    fileChooser->setCurrentFile (AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerAudioFilePath(), 
+                                 true, 
+                                 false);
 }
 
 void GuiSamplerMode::setDisplay(int settingsType)

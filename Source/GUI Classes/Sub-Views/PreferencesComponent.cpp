@@ -199,6 +199,25 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     killOnClockStopLabel->setColour(Label::textColourId, Colours::lightgrey);
     
     
+    
+    
+    addAndMakeVisible(cleanOnCloseButton = new TextButton());
+    cleanOnCloseButton->setClickingTogglesState(true);
+    cleanOnCloseButton->setToggleState(StoredSettings::getInstance()->cleanOnClose-1, false);
+    if(cleanOnCloseButton->getToggleStateValue() == true)
+        cleanOnCloseButton->setButtonText(translate("On"));
+    else
+        cleanOnCloseButton->setButtonText(translate("Off")); 
+    
+    cleanOnCloseButton->addListener(this);
+    cleanOnCloseButton->addMouseListener(this, true);
+    
+    addAndMakeVisible(cleanOnCloseLabel = new Label());
+    cleanOnCloseLabel->setText(translate("Clean Project On Close:"), false);
+    cleanOnCloseLabel->setColour(Label::textColourId, Colours::lightgrey);
+    
+
+    
 }
 
 GeneralSettingsComponent::~GeneralSettingsComponent()
@@ -222,6 +241,9 @@ void GeneralSettingsComponent::resized()
     
     killOnClockStopButton->setBounds(230, 168, 40, 25);
     killOnClockStopLabel->setBounds(60, 170, 150, 20);
+    
+    cleanOnCloseButton->setBounds(230, 208, 40, 25);
+    cleanOnCloseLabel->setBounds(60, 210, 150, 20);
 }
 
 void GeneralSettingsComponent::paint (Graphics& g)
@@ -231,8 +253,6 @@ void GeneralSettingsComponent::paint (Graphics& g)
 
 void GeneralSettingsComponent::buttonClicked (Button* button)
 {
-    
-    
     if (button == killOnClockStopButton)
     {
         if(killOnClockStopButton->getToggleStateValue() == true)
@@ -245,6 +265,24 @@ void GeneralSettingsComponent::buttonClicked (Button* button)
         {
             StoredSettings::getInstance()->killOnClockStop = 0;
             killOnClockStopButton->setButtonText(translate("Off"));
+        }
+        
+        StoredSettings::getInstance()->flush();
+    }
+    
+    
+    else if (button == cleanOnCloseButton)
+    {
+        if(button->getToggleStateValue() == true)
+        {
+            StoredSettings::getInstance()->cleanOnClose = 2;
+            button->setButtonText(translate("On"));
+        }
+        
+        else
+        {
+            StoredSettings::getInstance()->cleanOnClose = 1;
+            button->setButtonText(translate("Off"));
         }
         
         StoredSettings::getInstance()->flush();
@@ -317,6 +355,10 @@ void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
     else if (killOnClockStopButton->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("If this option is set to 'on' any playing pads will be stopped when the clock is stopped."));
+    }
+    else if (cleanOnCloseButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("'Cleaning' a project is the process of searching through the projects Audio Files directory and removing any unused audio files. If this option is set to 'on' the project will automatically be cleaned when the application is shut down. This will prevent a build-up of unused data."));
     }
 }
 

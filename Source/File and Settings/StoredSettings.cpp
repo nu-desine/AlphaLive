@@ -24,10 +24,6 @@
 //==============================================================================
 StoredSettings::StoredSettings()
 {
-    //only temp!
-    libraryDirectory = File::getSpecialLocation(File::currentApplicationFile).getParentDirectory();
-    libraryDirectory  = libraryDirectory.getFullPathName() + File::separatorString + "Library";
-    
     flush();
 }
 
@@ -57,6 +53,7 @@ void StoredSettings::flush()
         props->setValue ("midiNoteDisplayType", midiNoteDisplayType);
         props->setValue ("launchTask", launchTask);
         props->setValue ("killOnClockStop", killOnClockStop);
+        props->setValue ("cleanOnClose", cleanOnClose);
     }
 
     props = nullptr;
@@ -82,6 +79,7 @@ void StoredSettings::flush()
     midiNoteDisplayType = props->getIntValue("midiNoteDisplayType");
     launchTask = props->getIntValue("launchTask");
     killOnClockStop = props->getIntValue("killOnClockStop");
+    cleanOnClose = props->getIntValue("cleanOnClose");
     
 
 }
@@ -97,6 +95,7 @@ void StoredSettings::setDefaultValues()
         File oldProjectDir = (File::getSpecialLocation(File::userMusicDirectory).getFullPathName())+ "/AlphaLive Projects";
         File defaultProjectDirectory = (File::getSpecialLocation(File::userDocumentsDirectory).getFullPathName())+ "/AlphaLive Projects";
         
+        //UPDATE - CAN NOW PROBABLY REMOVE ALL CODE THAT CHECKS IF THE PROJECT DIR IS IN THE OLD LOCATION
         if (oldProjectDir.exists() == true)
         {
             //if directory is currently in the previous set location, move the folder to the new default location
@@ -125,6 +124,9 @@ void StoredSettings::setDefaultValues()
     
     if (launchTask == 0)
         launchTask = 1;
+    
+    if (cleanOnClose == 0)
+        cleanOnClose = 2;
     
     flush();
 }

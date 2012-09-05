@@ -1830,13 +1830,18 @@ void AppDocumentState::loadSequenceSet(Array<int> selectedPads_,
 }
 
 
-void AppDocumentState::removeUneededAudioFiles()
+void AppDocumentState::removeUneededAudioFiles (bool closingApp)
 {
     
     if (currentProjectFile != File::nonexistent) //if there is currently an open project
     {
+        bool shouldCleanUp = true;
         
-        bool shouldCleanUp = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("Clean Up Project"), translate("This command will go through the current projects Audio Files directory and delete any files which aren't currently being used. Over time this will prevent an excessive build-up of redundant data. It was also reset any unused mode settings to default values. Please note that you can not undo this command!"));
+        if (!closingApp)
+        {
+            shouldCleanUp = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("Clean Up Project"), translate("This command will go through the current projects Audio Files directory and delete any files which aren't currently being used. Over time this will prevent an excessive build-up of redundant data. It was also reset any unused mode settings to default values. Please note that you can not undo this command!"));
+        }
+        
         if (shouldCleanUp == true)
         {
             //this function must check all the settings of all the sceneData elements,
@@ -1849,7 +1854,8 @@ void AppDocumentState::removeUneededAudioFiles()
             //audio file as a reference to it wouldn't be found in any of the sceneData elements, so when the clean up is complete the audio file would 
             //now be missing.
             //instead of saving, you could load up the scene data for the current scene which would delete the current settings that havent been saved. What would be more natural?
-            saveToScene(currentlySelectedScene);
+            if (!closingApp)
+                saveToScene(currentlySelectedScene);
             
             File tempAudioDirectory = File::getCurrentWorkingDirectory().getParentDirectory().getFullPathName() + File::separatorString + "tempDir";
             tempAudioDirectory.createDirectory();
@@ -1978,32 +1984,34 @@ void AppDocumentState::removeUneededAudioFiles()
             //rename the temp dir (which should hold all the needed audio files) to 'Audio Files' so it can be used as the working dir when the project is next loaded up
             tempAudioDirectory.moveFileTo(audioFileDirectory);
             
-            //set the currentWorkingDirectory
-            audioFileDirectory.setAsCurrentWorkingDirectory();
-            
-            //=====================================================
-            //==============NEW - reset unused mode settings=======
-            //=====================================================
-            /*
-             Here, the settings of the modes that aren't being used for each pad are reset to their default values.
-             */
-            for (int i = 0; i <=47; i++)
+            if (!closingApp)
             {
-                PAD_SETTINGS->resetData(PAD_SETTINGS->getMode());
+                //set the currentWorkingDirectory
+                audioFileDirectory.setAsCurrentWorkingDirectory();
+                
+                // reset unused mode settings
+                
+                for (int i = 0; i <=47; i++)
+                {
+                    PAD_SETTINGS->resetData(PAD_SETTINGS->getMode());
+                }
+                
+                //automatically save the new settings
+                shouldDisplayAlertWindow = false; // << is this needed anymore?
+                saveProject();
+                
+                
+                AlertWindow::showMessageBox(AlertWindow::InfoIcon, translate("Project Cleaned Up!"), translate("All redundant files and settings have been deleted and reset."));
             }
-            //=====================================================
-            
-            //automatically save the new settings
-            shouldDisplayAlertWindow = false;
-            saveProject();
-            
-            AlertWindow::showMessageBox(AlertWindow::InfoIcon, translate("Project Cleaned Up!"), translate("All redundant files and settings have been deleted and reset."));
         }
     }
     
     else
     {
-        AlertWindow::showMessageBox(AlertWindow::InfoIcon, translate("No project currently open!"), translate("There is no project open to clean up."));
+        if (!closingApp)
+        {
+            AlertWindow::showMessageBox(AlertWindow::InfoIcon, translate("No project currently open!"), translate("There is no project open to clean up."));
+        }
     }
 }
 

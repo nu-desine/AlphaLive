@@ -120,7 +120,7 @@ public:
     int getSceneToUpdate();
     int getSceneStatus();
     
-    void removeUneededAudioFiles();
+    void removeUneededAudioFiles(bool closingApp);
     void importAudioFiles();   
     void setCurrentlySelectedScene(int value);
     

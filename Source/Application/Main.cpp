@@ -163,6 +163,12 @@ public:
             }
              */
             
+            //there needs to be a logical check below to work out if the project could need cleaning,
+            //for example, only when new audio files have been added? Take a count of the dir's contents
+            //at project lauch and then again at the end?
+            if (StoredSettings::getInstance()->cleanOnClose == 2)
+                appDocumentState->removeUneededAudioFiles(true);
+            
             quit();
             
         }
@@ -294,7 +300,7 @@ public:
         
         else if(info.commandID == CommandIDs::CleanUpProject)
         {
-            appDocumentState->removeUneededAudioFiles();
+            appDocumentState->removeUneededAudioFiles(false);
         }
         
         return true;

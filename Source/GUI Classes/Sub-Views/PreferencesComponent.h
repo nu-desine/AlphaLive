@@ -80,8 +80,7 @@ class MainComponent;
 
 class GeneralSettingsComponent :    public Component,
                                     public ComboBox::Listener,
-                                    public Button::Listener,
-                                    public FilenameComponentListener
+                                    public Button::Listener
 {
 public:
     GeneralSettingsComponent(MainComponent &ref, AlphaLiveEngine &ref2);
@@ -92,7 +91,6 @@ public:
     
     void buttonClicked (Button* button);
     void comboBoxChanged (ComboBox *comboBox);
-    void filenameComponentChanged (FilenameComponent* filenameComponent);
     
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);
@@ -108,7 +106,8 @@ private:
     Label *killOnClockStopLabel;
     ComboBox *midiNoteDisplayTypeMenu, *launchTaskMenu;
     TextButton *killOnClockStopButton;
-    FilenameComponent *appProjectDirChooser;
+    ComboBox* appProjectDirChooser;
+    
     
     
 };

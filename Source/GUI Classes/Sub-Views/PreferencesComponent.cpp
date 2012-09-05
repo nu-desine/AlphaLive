@@ -150,18 +150,14 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     //To add a non-standard character to a label, combobox, etc..
     // you must wrap the string like this - CharPointer_UTF8 ("日本の").
     
-    appProjectDirChooser = new FilenameComponent ("app project directory",
-                                                  StoredSettings::getInstance()->appProjectDir.getParentDirectory(),
-                                                  false, true, false,
-                                                  String::empty,
-                                                  String::empty,
-                                                  translate("Choose the AlphaLive Project Directory"));
     
-    appProjectDirChooser->addListener (this);					
-	///appProjectDirChooser->setBrowseButtonText ("Browse...");
-	appProjectDirChooser->setMaxNumberOfRecentFiles(0);
-	addAndMakeVisible (appProjectDirChooser);
+    addAndMakeVisible(appProjectDirChooser = new ComboBox());
+    appProjectDirChooser->addItem(StoredSettings::getInstance()->appProjectDir.getFullPathName(), 1);
+    appProjectDirChooser->addSeparator();
+    appProjectDirChooser->addItem(translate("Set Directory..."), 2);
+    appProjectDirChooser->addListener(this);
     appProjectDirChooser->addMouseListener(this, true);
+    appProjectDirChooser->setSelectedId(1, true);
     
     addAndMakeVisible(directoryLabel = new Label("directory label", translate("Projects Directory:")));
     directoryLabel->setColour(Label::textColourId, Colours::lightgrey);
@@ -270,24 +266,38 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
         StoredSettings::getInstance()->flush();
     }
     
-}
-
-void GeneralSettingsComponent::filenameComponentChanged (FilenameComponent* filenameComponent)
-{
-    if (filenameComponent == appProjectDirChooser)
+    else if (comboBox == appProjectDirChooser)
     {
-        if (StoredSettings::getInstance()->appProjectDir.getParentDirectory() != appProjectDirChooser->getCurrentFile())
+        if (comboBox->getSelectedId() == 2) //set directory
         {
-            //create new directory based on the users selection
-            File newProjectDirectory = (appProjectDirChooser->getCurrentFile().getFullPathName() + "/AlphaLive Projects");
-            //move old directory to the new one
-            StoredSettings::getInstance()->appProjectDir.moveFileTo(newProjectDirectory);
+            FileChooser myChooser (translate("Please select a directory to move the AlphaLive Projects directory to..."),
+                                   StoredSettings::getInstance()->appProjectDir.getParentDirectory());
             
-            StoredSettings::getInstance()->appProjectDir = newProjectDirectory;
-            StoredSettings::getInstance()->flush();
+            if (myChooser.browseForDirectory() == true)
+            {
+                File selectedDir (myChooser.getResult());
+                
+                if (StoredSettings::getInstance()->appProjectDir.getParentDirectory() != selectedDir &&
+                    StoredSettings::getInstance()->appProjectDir != selectedDir)
+                {
+                    //create new directory based on the users selection
+                    File newProjectDirectory = (selectedDir.getFullPathName() + File::separatorString + "AlphaLive Projects");
+                    //move old directory to the new one
+                    StoredSettings::getInstance()->appProjectDir.moveFileTo(newProjectDirectory);
+                    //Add to stored settings
+                    StoredSettings::getInstance()->appProjectDir = newProjectDirectory;
+                    StoredSettings::getInstance()->flush();
+                    //set menu item 1 to new directory
+                    appProjectDirChooser->changeItemText(1, StoredSettings::getInstance()->appProjectDir.getFullPathName());
+                }
+            }
+            
+            comboBox->setSelectedId(1, true);
         }
     }
+    
 }
+
 
 void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
 {

@@ -23,6 +23,7 @@
 #include "AboutComponent.h"
 #include "../Views/MainComponent.h"
 #include "../../Application/CommonInfoBoxText.h"
+#include "../AlphaLiveLookandFeel.h"
 
 
 
@@ -75,13 +76,13 @@ void AboutComponent::resized()
 {
     titleLabel->setBounds((getWidth()/2)-100, (getHeight()/4)+10, 200, 40);
     versionNumberLabel->setBounds((getWidth()/2)-50, (getHeight()/4)+50, 100, 40);
-    companyLabel->setBounds((getWidth()/2)-100, (getHeight()/4)+120, 150, 40);
-    nuDesineLink->setBounds(((getWidth()/2)-100)+112, (getHeight()/4)+129, 60, 22);
+    companyLabel->setBounds((getWidth()/2)-110, (getHeight()/4)+120, 150, 40);
+    nuDesineLink->setBounds(((getWidth()/2)-110)+112, (getHeight()/4)+129, 80, 22);
     openSourceLabel->setBounds((getWidth()/2)-150, (getHeight()/4)+160, 300, 40);
-    gnuLicenseLink->setBounds(((getWidth()/2)-150)+45, (getHeight()/4)+185, 200, 22);
-    copyrightLabel->setBounds((getWidth()/2)-100, (getHeight()/4)+220, 200, 40);
+    gnuLicenseLink->setBounds(((getWidth()/2)-155)+45, (getHeight()/4)+185, 220, 22);
+    copyrightLabel->setBounds(((getWidth()/2)-155)+45, (getHeight()/4)+220, 220, 40);
     
-    closeButton->setBounds((getWidth()/2)-35, ((getHeight()/4)*3)-60, 70, 20);
+    closeButton->setBounds((getWidth()/2)-20, ((getHeight()/4)*3)-70, 40, 35);
 }
 
 void AboutComponent::paint (Graphics& g)
@@ -89,7 +90,7 @@ void AboutComponent::paint (Graphics& g)
     g.setColour(Colours::black.withAlpha(0.8f));
     g.fillRect(0, 0, getWidth(), getHeight());
     
-    g.setColour(Colours::grey.withAlpha(0.9f));
+    g.setColour(Colours::grey.withAlpha(1.0f));
     g.fillRoundedRectangle(getWidth()/3, getHeight()/4, getWidth()/3, (getHeight()/2)-30, 10);
     
 }

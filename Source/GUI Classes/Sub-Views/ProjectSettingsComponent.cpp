@@ -25,6 +25,7 @@
 #include "../../File and Settings/AppSettings.h"
 #include "../../Functionality Classes/Sequencer Mode/SequencerValues.h"
 #include "../../Application/CommonInfoBoxText.h"
+#include "../AlphaLiveLookandFeel.h"
 
 
 
@@ -61,7 +62,7 @@ ProjectSettingsComponent::~ProjectSettingsComponent()
 void ProjectSettingsComponent::resized()
 {
     tabbedComponent->setBounds(getWidth()/4, getHeight()/6, getWidth()/2, ((getHeight()/6)*4)-70);
-    closeButton->setBounds((getWidth()/2)-35, ((getHeight()/6)*5)-60, 70, 20);
+    closeButton->setBounds((getWidth()/2)-20, ((getHeight()/6)*5)-68, 40, 35);
 }
 
 void ProjectSettingsComponent::paint (Graphics& g)
@@ -69,7 +70,7 @@ void ProjectSettingsComponent::paint (Graphics& g)
     g.setColour(Colours::black.withAlpha(0.8f));
     g.fillRect(0, 0, getWidth(), getHeight());
     
-    g.setColour(Colours::grey.withAlpha(0.9f));
+    g.setColour(AlphaColours::verydarkgrey.withAlpha(1.0f));
     g.fillRoundedRectangle(getWidth()/4, getHeight()/6, getWidth()/2, ((getHeight()/6)*4)-30, 10);
     
 }
@@ -157,12 +158,11 @@ GlobalOscComponent::GlobalOscComponent(MainComponent &ref, AlphaLiveEngine &ref2
     oscIpAddressEditor->setVisible(false);
     //AT SOME POINT USE LABEL::CREATEEDITORCOMPONENT() TO SET INPUT RESTRICTIONS TO THE EDITOR
     
-    addAndMakeVisible(oscPortNumberSlider = new AlphaSlider());
+    addChildComponent(oscPortNumberSlider = new AlphaSlider());
     oscPortNumberSlider->setRange(0, 65535, 1);
     oscPortNumberSlider->addListener(this);
     oscPortNumberSlider->setValue(5004, false);
     oscPortNumberSlider->addMouseListener(this, true);
-    oscPortNumberSlider->setVisible(false);
     
     
 }
@@ -175,9 +175,9 @@ GlobalOscComponent::~GlobalOscComponent()
 void GlobalOscComponent::resized()
 {
     globalOscLabel->setBounds(160, 10, 120, 20);
-    globalOscSwitch->setBounds(290, 10, 50, 20);
+    globalOscSwitch->setBounds(290, 8, 40, 25);
     oscIpAddressEditor->setBounds(200, 40, 100, 20);
-    oscPortNumberSlider->setBounds(200, 70, 100, 20);
+    oscPortNumberSlider->setBounds(224, 70, 48, 48);
 }
 
 void GlobalOscComponent::paint (Graphics& g)
@@ -288,7 +288,7 @@ GeneralProjSettingsComponent::~GeneralProjSettingsComponent()
 void GeneralProjSettingsComponent::resized()
 {
     copyExternalFilesLabel->setBounds(160, 10, 120, 20);
-    copyExternalFilesSwitch->setBounds(290, 10, 50, 20);
+    copyExternalFilesSwitch->setBounds(290, 8, 40, 25);
     
 }
 

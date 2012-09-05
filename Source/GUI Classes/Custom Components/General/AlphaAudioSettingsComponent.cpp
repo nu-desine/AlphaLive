@@ -264,7 +264,7 @@ public:
             if (testButton != nullptr)
                 testButton->setBounds (proportionOfWidth (0.77f),
                                        outputDeviceDropDown->getY(),
-                                       proportionOfWidth (0.18f),
+                                       proportionOfWidth (0.07f),
                                        h);
             y += dh;
         }

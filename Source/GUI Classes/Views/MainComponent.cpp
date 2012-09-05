@@ -225,8 +225,11 @@ alphaLiveEngineRef(ref),
     
     //pop up views
     addChildComponent(aboutComponent = new AboutComponent(*this));
+    aboutComponent->setAlpha(0.975f);
     addChildComponent(preferencesComponent = new PreferencesComponent(*this, alphaLiveEngineRef));
+    preferencesComponent->setAlpha(0.975f);
     addChildComponent(projectSettingsComponent = new ProjectSettingsComponent(*this, alphaLiveEngineRef, appDocumentStateRef));
+    projectSettingsComponent->setAlpha(0.975f);
     
     //info box
     addAndMakeVisible(infoTextBox = new TextEditor());

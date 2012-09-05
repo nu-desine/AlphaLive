@@ -23,6 +23,7 @@
 #include "PreferencesComponent.h"
 #include "../Views/MainComponent.h"
 #include "../../Application/CommonInfoBoxText.h"
+#include "../AlphaLiveLookandFeel.h"
 
 
 PreferencesComponent::PreferencesComponent(MainComponent &ref, AlphaLiveEngine &ref2)
@@ -67,7 +68,7 @@ void PreferencesComponent::resized()
 {
     tabbedComponent->setBounds(getWidth()/4, getHeight()/6, getWidth()/2, ((getHeight()/6)*4)-70);
     
-    closeButton->setBounds((getWidth()/2)-35, ((getHeight()/6)*5)-60, 70, 20);
+    closeButton->setBounds((getWidth()/2)-20, ((getHeight()/6)*5)-68, 40, 35);
 }
 
 void PreferencesComponent::paint (Graphics& g)
@@ -75,7 +76,7 @@ void PreferencesComponent::paint (Graphics& g)
     g.setColour(Colours::black.withAlpha(0.8f));
     g.fillRect(0, 0, getWidth(), getHeight());
     
-    g.setColour(Colours::grey.withAlpha(0.9f));
+    g.setColour(AlphaColours::verydarkgrey.withAlpha(1.0f));
     g.fillRoundedRectangle(getWidth()/4, getHeight()/6, getWidth()/2, ((getHeight()/6)*4)-30, 10);
     
 }
@@ -223,7 +224,7 @@ void GeneralSettingsComponent::resized()
     launchTaskMenu->setBounds(200, 130, 210, 20);
     launchTaskLabel->setBounds(60, 130, 120, 20);
     
-    killOnClockStopButton->setBounds(230, 170, 180, 20);
+    killOnClockStopButton->setBounds(230, 168, 40, 25);
     killOnClockStopLabel->setBounds(60, 170, 150, 20);
 }
 

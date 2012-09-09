@@ -59,7 +59,7 @@ Toolbox::Toolbox(MainComponent &parent) :
      
     String appDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString);
     
-    File banksFile(appDir + "Library/Audio Library/nu Banks");
+    File banksFile(appDir + "Library/Audio Library/AlphaBanks");
     if (banksFile.exists() == false)
         banksFile = File::nonexistent;
     File midiPresetsFile(appDir + "Library/Pad Presets/MIDI Mode");

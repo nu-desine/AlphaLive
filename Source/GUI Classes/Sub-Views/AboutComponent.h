@@ -48,8 +48,9 @@ public:
 private:
     MainComponent &mainComponentRef;
     TextButton *closeButton;
-    Label *titleLabel, *versionNumberLabel, *companyLabel, *openSourceLabel, *copyrightLabel;
+    Label *titleLabel, *versionNumberLabel, *companyLabel, *openSourceLabel, *copyrightLabel, *samplesLabel;
     HyperlinkButton *nuDesineLink, *gnuLicenseLink;
+    ImageButton *loopmastersButton, *zeroGButton, *fivePinMediaButton;
     
 };
 

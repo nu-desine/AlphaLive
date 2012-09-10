@@ -59,6 +59,15 @@ namespace BinaryDataNew
     extern const char*  loadsymbol_png;
     const int           loadsymbol_pngSize = 4895;
 
+    extern const char*  logo5pinmediasmall_jpg;
+    const int           logo5pinmediasmall_jpgSize = 19205;
+
+    extern const char*  logoloopmasterssmall_jpg;
+    const int           logoloopmasterssmall_jpgSize = 23795;
+
+    extern const char*  logozerogsmall_png;
+    const int           logozerogsmall_pngSize = 2447;
+
     extern const char*  loopicon_png;
     const int           loopicon_pngSize = 5739;
 
@@ -143,6 +152,6 @@ namespace BinaryDataNew
     extern const char*  triggersettingsicon_png;
     const int           triggersettingsicon_pngSize = 9580;
 
-};
+}
 
 #endif

@@ -21,7 +21,7 @@
  */
 
 #include "GuiPadLayout.h"
-#include "../../Views/MainComponent.h"
+//#include "../../Views/MainComponent.h"
 
 GuiPadLayout::GuiPadLayout(AlphaLiveEngine &subject, MainComponent &ref)
                             :   Component ("GuiPadLayout"),
@@ -564,13 +564,6 @@ Image GuiPadLayout::snapshot()
 	return snap;
 	
 }
-
-/*
-MainComponent& GuiPadLayout::getMainComponent()
-{
-    return mainComponentRef;
-}
- */
 
 AlphaLiveEngine& GuiPadLayout::getAlphaLiveEngine()
 {

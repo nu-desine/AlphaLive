@@ -1638,32 +1638,6 @@ void GuiSequencerMode::updateDisplay()
     
     else if(MULTI_PADS)
     {
-      /*
-        modeMidiButton->setToggleState(true, false);
-        mainComponentRef.getGuiPiano()->setActive(true);
-        mainComponentRef.getGuiPiano()->updateDisplay();
-        pressureStatusButton->setToggleState(true, false);
-        
-        quantiseButton->setToggleState(false, false);
-        sequenceLength = 32;
-        numberOfSequencesSlider->setValue(1, false);
-        relativeTempoSlider->setValue(3, false);
-        noteLengthSlider->setValue(4, false);
-        setNoteLengthSliderRange(32);
-        audioGainSlider->setValue(2.0, false);
-        audioPanSlider->setValue(0.5, false);
-        triggerModeButtons[1]->setToggleState(true, false);
-        midiPressureModeButtons[0]->setToggleState(true, false);
-        midiChannelButtons[0]->setToggleState(true, false);
-        ccControllerSlider->setComponentValue(13);
-        loopButton->setToggleState(true, false);
-        indestructibleButton->setToggleState(false, false);
-        finishLoopButton->setToggleState(false, false);
-        stickyButton->setToggleState(false, false);
-        linkButton->setToggleState(false, false);
-        midiPressureMinRangeSlider->setValue(0);
-        midiPressureMaxRangeSlider->setValue(127);
-       */
         
         //==================================================================================================
         int mode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerMode();
@@ -1997,8 +1971,10 @@ void GuiSequencerMode::updateDisplay()
     sequencerGrid->setCurrentlySelectedPad(selectedPads); //why is this called here and not above?
                         //is it because setCurrentlySelectedPad is used as an updateDisplay() too?
     
-    currentSequenceNumber = 1;
-    sequencerGrid->setCurrentSequenceNumber(currentSequenceNumber);
+    if (currentSequenceNumber > numberOfSequencesSlider->getValue())
+        currentSequenceNumber = numberOfSequencesSlider->getValue();
+    
+    setCurrentSequenceNumber();
     
     fxDial->updateDisplay();
     mainComponentRef.getToolbox()->updateDisplay();

@@ -88,6 +88,7 @@ public:
     void setToSamplerMode();
     void setToSequencerMode();
     void setToControllerMode();
+    void setGlobalPadSettingsDisplay();
     
     void run();
     void setInfoTextBoxText (String text);
@@ -125,10 +126,7 @@ private:
     
     Image backgroundImage, padsOff, padsOn, modeOff, padsBg;
     
-    
     ModeButton *openButton, *saveButton;
-    //TextButton *clearScenesButton;
-    //TextButton *cleanUpProjectButton;
 
     GuiMidiMode *guiMidiMode;
     GuiSamplerMode *guiSamplerMode;
@@ -139,7 +137,6 @@ private:
     AlphaLiveEngine &alphaLiveEngineRef;
     AppDocumentState &appDocumentStateRef;
     
-    //int currentlySelectedPad;
     Array <int> selectedPads;
     
     SceneComponent *sceneComponent;
@@ -184,7 +181,6 @@ private:
     
     //GuiSwitch *autoShowSettingsSwitch;
 
-    
     AboutComponent *aboutComponent;
     PreferencesComponent *preferencesComponent;
     ProjectSettingsComponent *projectSettingsComponent;

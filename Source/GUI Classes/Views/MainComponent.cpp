@@ -72,7 +72,6 @@ alphaLiveEngineRef(ref),
     addChildComponent(guiMidiMode = new GuiMidiMode(*this));
     addChildComponent(guiSamplerMode = new GuiSamplerMode(*this));
     addChildComponent(guiSequencerMode = new GuiSequencerMode(*alphaLiveEngineRef.getModeSequencer(), *this, appDocumentStateRef)); 
-    //guiSequencerMode->setInterceptsMouseClicks(false, true);
     addChildComponent(guiControllerMode = new GuiControllerMode(*this));
     addChildComponent(guiGlobalPadSettings = new GuiGlobalPadSettings(*this));
     
@@ -581,70 +580,9 @@ void MainComponent::buttonClicked(Button *button)
     
     else if (button == globalSettingsButton)
 	{
-       
-		guiMidiMode->setVisible(false);
-		guiSamplerMode->setVisible(false);
-		guiSequencerMode->setVisible(false);
-		guiControllerMode->setVisible(false);
-		
-		if (button->getToggleState()==true) 
-        {
-            guiGlobalPadSettings->updateDisplay();
-			guiGlobalPadSettings->setVisible(true);
-            
-            modeOffButton->setEnabled(false);
-            modeOffButton->setAlpha(0.3f);
-            modeMidiButton->setEnabled(false);
-            modeMidiButton->setAlpha(0.3f);
-            modeSamplerButton->setEnabled(false);
-            modeSamplerButton->setAlpha(0.3f);
-            modeSequencerButton->setEnabled(false);
-            modeSequencerButton->setAlpha(0.3f);
-            modeControllerButton->setEnabled(false);
-            modeControllerButton->setAlpha(0.3f);
-		}
-        
-		else 
-        {
-			
-			if (modeMidiButton->getToggleState()==true)
-				guiMidiMode->setVisible(true);
-				
-			else if (modeSamplerButton->getToggleState()==true)
-				guiSamplerMode->setVisible(true);
-				
-			else if (modeSequencerButton->getToggleState()==true)
-				guiSequencerMode->setVisible(true);
-				
-			else if (modeControllerButton->getToggleState()==true)
-				guiControllerMode->setVisible(true);
-            
-            guiGlobalPadSettings->setVisible(false);
-            
-            modeOffButton->setEnabled(true);
-            modeOffButton->setAlpha(1.0f);
-            modeMidiButton->setEnabled(true);
-            modeMidiButton->setAlpha(1.0f);
-            modeSamplerButton->setEnabled(true);
-            modeSamplerButton->setAlpha(1.0f);
-            modeSequencerButton->setEnabled(true);
-            modeSequencerButton->setAlpha(1.0f);
-            modeControllerButton->setEnabled(true);
-            modeControllerButton->setAlpha(1.0f);
-				
-		}
-		
+		setGlobalPadSettingsDisplay();
 	}
     
-    
-    //==============================================================================
-    
-    
-    //==============================================================================
-    //===SCENES, LOADING & SAVING - now handled by the command manager below!======
-    //==============================================================================
-    
-    //=================Now handled by the command manager======================
     
    
     /*
@@ -678,7 +616,9 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
         guiSequencerMode->setVisible(false);
         guiControllerMode->setVisible(false);
 		
-        repaint();
+        globalSettingsButton->setToggleState(false, false);
+        setGlobalPadSettingsDisplay();
+        //repaint(); //this is called in setGlobalPadSettingsDisplay() above
     }
     else if (selectedPads_.size() > 0 && selectedPads.size() == 0) //if previously there were no pads selected,
                                                             //but now is.
@@ -695,7 +635,6 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
     }
     
     selectedPads = selectedPads_;
-    
     
     
     if (selectedPads.size() > 0)
@@ -748,35 +687,10 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
             modeControllerButton->setToggleState(true, false);
         }
         
-        //set other things
-        //padNumberDisplayLabel->setText("Pad " + String(currentlySelectedPad+1) + " Selected", false);
-        /*
-        pressureSensitivityMenu->setSelectedId(PAD_SETTINGS->getPressureSensitivityMode(), true);
-        exclusiveModeButton->setToggleState(PAD_SETTINGS->getExclusiveMode(), false);
-        exclusiveGroupSlider->setValue(PAD_SETTINGS->getExclusiveGroup(), false);
-        quantizeModeButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
-        
-        if (exclusiveModeButton->getToggleState() == true)
-            exclusiveGroupSlider->setVisible(true);
-        else
-            exclusiveGroupSlider->setVisible(false);
-        */
-        
     }
     else if (MULTI_PADS)
     {
-        /*
-        //set to a default settings
-        setToOffMode();
-        modeOffButton->setToggleState(true, false);
-        pressureSensitivityMenu->setSelectedId(2, true);
-        exclusiveModeButton->setToggleState(0, false);
-        exclusiveGroupSlider->setValue(1, false);
-        exclusiveGroupSlider->setVisible(false);
-        quantizeModeButton->setToggleState(0, false);
-         
-         */
-        
+       
         //could we use a function here to compare settings instead?
         //use an enum to represent the PAD_SETTINGS->get....? which is passed in,
         //along with the value of the corresponding setting of the first pad
@@ -827,100 +741,12 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
             }
         }
         
-        
-        /*
-        int pressureSens_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getPressureSensitivityMode();
-        
-        //loop through all selected pads expect for the first one
-        for (int i = 1; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            //if setting of this pad does NOT match setting of last pad, set default and break
-            if (PAD_SETTINGS->getPressureSensitivityMode() != pressureSens_)
-            {
-                pressureSensitivityMenu->setSelectedId(0, true);
-                break;
-            }
-            //if this is the last 'natural' iteraction, displayed the setting that matches all the pads
-            if (i == selectedPads.size()-1)
-                pressureSensitivityMenu->setSelectedId(pressureSens_, true);
-        }
-        
-        
-        int exclusiveMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getExclusiveMode();
-        
-        //loop through all selected pads expect for the first one
-        for (int i = 1; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            //if setting of this pad does NOT match setting of last pad, set default and break
-            if (PAD_SETTINGS->getExclusiveMode() != exclusiveMode_)
-            {
-                exclusiveModeButton->setToggleState(0, false);
-                exclusiveGroupSlider->setVisible(false);
-                break;
-            }
-            //if this is the last 'natural' iteraction, displayed the setting that matches all the pads
-            if (i == selectedPads.size()-1)
-            {
-                exclusiveModeButton->setToggleState(exclusiveMode_, false);
-                if (exclusiveModeButton->getToggleState() == true)
-                    exclusiveGroupSlider->setVisible(true);
-                else
-                    exclusiveGroupSlider->setVisible(false);
-            }
-        }
-        
-        int exclusiveGroup_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getExclusiveGroup();
-        
-        //loop through all selected pads expect for the first one
-        for (int i = 1; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            //if setting of this pad does NOT match setting of last pad, set default and break
-            if (PAD_SETTINGS->getExclusiveGroup() != exclusiveGroup_)
-            {
-                exclusiveGroupSlider->setValue(1, false);
-                break;
-            }
-            //if this is the last 'natural' iteraction, displayed the setting that matches all the pads
-            if (i == selectedPads.size()-1)
-                exclusiveGroupSlider->setValue(exclusiveGroup_, false);
-        }
-        
-        
-        int quantizeMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getQuantizeMode();
-        
-        //loop through all selected pads expect for the first one
-        for (int i = 1; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            //if setting of this pad does NOT match setting of last pad, set default and break
-            if (PAD_SETTINGS->getQuantizeMode() != quantizeMode_)
-            {
-                quantizeModeButton->setToggleState(0, false);
-                break;
-            }
-            //if this is the last 'natural' iteraction, displayed the setting that matches all the pads
-            if (i == selectedPads.size()-1)
-                quantizeModeButton->setToggleState(quantizeMode_, false);
-        }
-      */
-        
-        
-        
-        
-        //how i should I handle this?
-        /*
-        if (globalSettingsButton->getToggleState() == true)
-        {
-            
-        }
-         */
-        
-        
     }
     
+    //is this the best way to do it? At this point the Mode GUI's would have beeen updated already,
+    //but if the following statement is true those calls would have been useless.
+    if (globalSettingsButton->getToggleState() == true)
+        setGlobalPadSettingsDisplay();
 
     commandManager->commandStatusChanged(); //so that if a single pad is selected, the copy and paste settings
                                             //command is enabled
@@ -930,24 +756,8 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
 
 void MainComponent::comboBoxChanged (ComboBox *comboBox)
 {
+   
     
-    /*
-    if (comboBox == padDisplayTextMenu)
-    {
-        AppSettings::Instance()->setPadDisplayTextMode(padDisplayTextMenu->getSelectedId());
-    }
-     */
-    
-    /*
-    if (comboBox == pressureSensitivityMenu)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setPressureSensitivityMode(pressureSensitivityMenu->getSelectedId());
-        }
-    }
-     */
 }
 
 
@@ -968,8 +778,6 @@ void MainComponent::setToOffMode()
     guiControllerMode->setVisible(false);
     
     midiPiano->setActive(false);
-    globalSettingsButton->setEnabled(false);
-    globalSettingsButton->setAlpha(0.3f);
     toolbox->updateDisplay();
 	noModeSelected = 1;
 	repaint();
@@ -987,8 +795,6 @@ void MainComponent::setToMidiMode()
     //components invisble or dissabled
     guiMidiMode->updateDisplay();
     
-    globalSettingsButton->setEnabled(true);
-    globalSettingsButton->setAlpha(1.0f);
     midiPiano->setActive(true);
     midiPiano->updateDisplay();
     toolbox->updateDisplay();
@@ -1009,8 +815,6 @@ void MainComponent::setToSamplerMode()
     //components invisble or dissabled
     guiSamplerMode->updateDisplay();
     
-    globalSettingsButton->setEnabled(true);
-    globalSettingsButton->setAlpha(1.0f);
     midiPiano->setActive(false);
     toolbox->updateDisplay();
 	noModeSelected = 0;
@@ -1027,8 +831,6 @@ void MainComponent::setToSequencerMode()
     
     guiSequencerMode->updateDisplay();
     
-    globalSettingsButton->setEnabled(true);
-    globalSettingsButton->setAlpha(1.0f);
     //setting the midi piano state is done within
     //updateDisplay() of guiSequencerMode,
     //as it depends on states within that object.
@@ -1046,12 +848,74 @@ void MainComponent::setToControllerMode()
     
     guiControllerMode->updateDisplay();
     
-    globalSettingsButton->setEnabled(true);
-    globalSettingsButton->setAlpha(1.0f);
     midiPiano->setActive(false);
     toolbox->updateDisplay();
 	noModeSelected = 0;
 	repaint();
+}
+
+void MainComponent::setGlobalPadSettingsDisplay()
+{
+    guiMidiMode->setVisible(false);
+    guiSamplerMode->setVisible(false);
+    guiSequencerMode->setVisible(false);
+    guiControllerMode->setVisible(false);
+    
+    if (globalSettingsButton->getToggleState()==true) 
+    {
+        //should the piano be dissabled here?
+        
+        guiGlobalPadSettings->updateDisplay();
+        guiGlobalPadSettings->setVisible(true);
+        
+        modeOffButton->setEnabled(false);
+        modeOffButton->setAlpha(0.3f);
+        modeMidiButton->setEnabled(false);
+        modeMidiButton->setAlpha(0.3f);
+        modeSamplerButton->setEnabled(false);
+        modeSamplerButton->setAlpha(0.3f);
+        modeSequencerButton->setEnabled(false);
+        modeSequencerButton->setAlpha(0.3f);
+        modeControllerButton->setEnabled(false);
+        modeControllerButton->setAlpha(0.3f);
+        
+        noModeSelected = 0;
+    }
+    else 
+    {
+        if (noPadsSelected == false)
+        {
+            if (modeOffButton->getToggleState()==true)
+                noModeSelected = 1;
+            
+            else if (modeMidiButton->getToggleState()==true)
+                guiMidiMode->setVisible(true);
+            
+            else if (modeSamplerButton->getToggleState()==true)
+                guiSamplerMode->setVisible(true);
+            
+            else if (modeSequencerButton->getToggleState()==true)
+                guiSequencerMode->setVisible(true);
+            
+            else if (modeControllerButton->getToggleState()==true)
+                guiControllerMode->setVisible(true);
+        }
+        
+        guiGlobalPadSettings->setVisible(false);
+        
+        modeOffButton->setEnabled(true);
+        modeOffButton->setAlpha(1.0f);
+        modeMidiButton->setEnabled(true);
+        modeMidiButton->setAlpha(1.0f);
+        modeSamplerButton->setEnabled(true);
+        modeSamplerButton->setAlpha(1.0f);
+        modeSequencerButton->setEnabled(true);
+        modeSequencerButton->setAlpha(1.0f);
+        modeControllerButton->setEnabled(true);
+        modeControllerButton->setAlpha(1.0f);
+    }
+    
+    repaint();
 }
 
 

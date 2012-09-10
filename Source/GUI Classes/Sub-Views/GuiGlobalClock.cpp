@@ -23,7 +23,7 @@
 #include "GuiGlobalClock.h"
 #include "../Views/MainComponent.h"
 #include "../../File and Settings/AppSettings.h"
-#include "AlphaLiveLookandFeel.h"
+#include "../AlphaLiveLookandFeel.h"
 #include "../../Application/CommonInfoBoxText.h"
 
 #define OFFSET_X 479

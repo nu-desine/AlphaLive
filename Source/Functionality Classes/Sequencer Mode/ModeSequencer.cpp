@@ -126,6 +126,13 @@ void ModeSequencer::killPad (int padNum)
     }
 }
 
+void ModeSequencer::previewSequence (int padNum)
+{
+    //what should I do here?
+    //should there be a dedicated class/object similar to sequencerplayer
+    //that just plays a sequence completetly seperate from the sequenceplayer
+    //objects for each pad.
+}
 
 void ModeSequencer::updatePadPlayingStatus(int padNumber, int playingStatus)
 {

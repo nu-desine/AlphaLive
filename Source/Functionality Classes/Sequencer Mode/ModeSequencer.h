@@ -62,6 +62,7 @@ public:
     void updatePadPlayingStatus(int padNumber, int playingStatus);
     
     void killPad (int padNum);
+    void previewSequence (int padNum);
     
     //AudioSource Functions
 	void prepareToPlay (int samplesPerBlockExpected,double sampleRate);
@@ -72,6 +73,7 @@ public:
     void triggerQuantizationPoint (int padNum);
     
     void setMidiOutputDevice (MidiOutput &midiOutput);
+    
     
     AlphaLiveEngine& getAlphaLiveEngineRef();
     

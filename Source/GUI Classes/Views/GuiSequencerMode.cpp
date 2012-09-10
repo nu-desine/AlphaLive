@@ -399,7 +399,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	previewButton->setClickingTogglesState (true);
 	previewButton->addListener (this);
     previewButton->addMouseListener(this, true);
-	previewButton->setBackgroundColours (Colours::black, AlphaColours::blue);
+	//previewButton->setBackgroundColours (Colours::black, AlphaColours::blue);
 	addAndMakeVisible (previewButton);
 	
 	addAndMakeVisible(nextSequenceButton = new AlphaTextButton());
@@ -1144,7 +1144,16 @@ void GuiSequencerMode::buttonClicked (Button* button)
     
     else if (button == previewButton) 
     {
-		
+        modeSequencerRef.previewSequence(selectedPads[0]);
+        
+		if (button->getToggleState() == true)
+        {
+            
+        }
+        else
+        {
+            
+        }
 	}
     
     else if(button == quantiseButton)
@@ -1477,9 +1486,11 @@ void GuiSequencerMode::setDisplay (int settingsType)
         minusButton->setVisible(true);
         parameterLabel->setVisible(true);
         popUpButton->setVisible(true);
-        previewButton->setVisible(true);
         nextSequenceButton->setVisible(true);
         previousSequenceButton->setVisible(true);
+        
+        if (SINGLE_PAD)
+            previewButton->setVisible(true);
     }
     
     if (modeMidiButton->getToggleState())

@@ -111,6 +111,10 @@ AlphaLiveLookandFeel::AlphaLiveLookandFeel()
         TextButton::buttonOnColourId,               0xff1a56ab,
         TextButton::textColourOnId,                 0xffffffff,
         TextButton::textColourOffId,                0xffffffff,
+        
+        DrawableButton::backgroundColourId,         0x00000000,
+        DrawableButton::backgroundOnColourId,       AlphaColours::blue_,
+
 		
         ComboBox::buttonColourId,                   0xffcccccc,
         ComboBox::outlineColourId,                  standardOutlineColour,

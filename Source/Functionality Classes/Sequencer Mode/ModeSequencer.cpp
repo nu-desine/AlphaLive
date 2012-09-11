@@ -45,6 +45,8 @@ ModeSequencer::ModeSequencer(MidiOutput &midiOutput, AlphaLiveEngine &ref)
     
     audioTransportSourceThread = new TimeSliceThread("Sequencer Audio Thread");
     audioTransportSourceThread->startThread();
+    
+    lastPreviewedSequencePadNum = 0;
 }
 
 
@@ -143,14 +145,23 @@ void ModeSequencer::previewSequence (int padNum, int status)
     else
         padSequencer[padNum]->stopThreadAndReset();
     
+    lastPreviewedSequencePadNum = padNum;
+    
+}
+
+void ModeSequencer::stopLastPreviewedSequence()
+{
+    if (padSequencer[lastPreviewedSequencePadNum] != nullptr &&
+        padSequencer[lastPreviewedSequencePadNum]->isThreadRunning() == true)
+    {
+        padSequencer[lastPreviewedSequencePadNum]->stopThreadAndReset();
+    }
 }
 
 void ModeSequencer::updatePadPlayingStatus(int padNumber, int playingStatus)
 {
     alphaLiveEngineRef.updatePadPlayingStatus(padNumber, playingStatus);
 }
-
-
 
 SequencePlayer* ModeSequencer::getSequencePlayerInstance (int padNumber)
 {

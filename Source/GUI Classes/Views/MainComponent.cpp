@@ -598,6 +598,10 @@ void MainComponent::buttonClicked(Button *button)
 //this function is called every time a user selects a pad on the GUI
 void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
 {
+    //is this the best place to call this?
+    //One problem is that this will be called when importing from the toolbox,
+    //where there are situtations where you might not want the sequence to stop
+    alphaLiveEngineRef.getModeSequencer()->stopLastPreviewedSequence();
     
     if (selectedPads_.size() == 0) //no pads selected
     {

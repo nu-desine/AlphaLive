@@ -1972,6 +1972,11 @@ void GuiSequencerMode::updateDisplay()
         
     }
     
+    if (previewButton->getToggleState() == true)
+    {
+        previewButton->setToggleState(false, false);
+    }
+    
     
     //update sequencerGrid GUI based on currently selected pad and currently selected sequence number
     sequencerGrid->setCurrentlySelectedPad(selectedPads); //why is this called here and not above?

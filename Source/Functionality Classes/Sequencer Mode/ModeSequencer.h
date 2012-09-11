@@ -66,6 +66,7 @@ public:
     //preview sequence stuff (called directly from guiSequencerMode)
     void previewSequence (int padNum, int status);
     void setPreviewSequenceNumber (int padNum, int sequenceNumber);
+    void stopLastPreviewedSequence();
     
     //AudioSource Functions
 	void prepareToPlay (int samplesPerBlockExpected,double sampleRate);
@@ -98,6 +99,8 @@ private:
     int whatShouldUpdateFlag;
     
     float tempo;
+    
+    int lastPreviewedSequencePadNum;
     
     AlphaLiveEngine &alphaLiveEngineRef;
 };

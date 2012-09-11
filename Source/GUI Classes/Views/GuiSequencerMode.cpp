@@ -883,6 +883,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
         }
         
         updateDisplay(); //or setDisplay()?
+        modeSequencerRef.stopLastPreviewedSequence();
         
         /*
         int pressureStatus_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerMidiPressureStatus();
@@ -957,6 +958,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
         }
         
         updateDisplay(); //or setDisplay()?
+         modeSequencerRef.stopLastPreviewedSequence();
         
         /*
         //==================================================================================================
@@ -1164,6 +1166,10 @@ void GuiSequencerMode::buttonClicked (Button* button)
 	{
 		PopupMenu menu;
         
+        if (SINGLE_PAD)
+            menu.addItem(7, translate(translate("Copy sequence...")));
+        menu.addItem(8, translate(translate("Paste sequence...")));
+        menu.addSeparator();
         menu.addItem(1, translate(translate("Load sequence...")));
 		menu.addItem(2, translate(translate("Load sequence set...")));
         if (SINGLE_PAD)
@@ -1171,6 +1177,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
             menu.addItem(3, translate(translate("Save sequence...")));
             menu.addItem(4, translate(translate("Save sequence set...")));
         }
+        menu.addSeparator();
 		menu.addItem(5, translate(translate("Clear...")));
 		menu.addItem(6, translate(translate("Clear all...")));
         
@@ -1214,10 +1221,51 @@ void GuiSequencerMode::buttonClicked (Button* button)
 				sequencerGrid->clearAll();
 			}			
 		}
-		
+        else if (result == 7)
+        {
+            int padNum = selectedPads[0];
+            
+            for (int row = 0; row <= NO_OF_ROWS-1; row++)
+            {
+                for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+                {
+                    AppSettings::Instance()->copySequenceData(PAD_SETTINGS->getSequencerData
+                                                              (currentSequenceNumber-1, row, column), 
+                                                              row, 
+                                                              column);
+                }
+            }
+            
+        }
+        else if (result == 8)
+        {
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                
+                for (int row = 0; row <= NO_OF_ROWS-1; row++)
+                {
+                    for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+                    {
+                        PAD_SETTINGS->setSequencerData(currentSequenceNumber-1, 
+                                                       row, 
+                                                       column, 
+                                                       AppSettings::Instance()->pasteSequenceData(row, column),
+                                                       false);
+                    }
+                }
+                
+                PAD_SETTINGS->seqDataToString();
+            }
+            
+            sequencerGrid->setCurrentlySelectedPad(selectedPads);
+            setCurrentSequenceNumber();
+            
+        }
+        
+        
+        
 	}
-    
-    
     
     
     else if (button == loopButton)

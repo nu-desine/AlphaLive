@@ -601,6 +601,8 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
     //is this the best place to call this?
     //One problem is that this will be called when importing from the toolbox,
     //where there are situtations where you might not want the sequence to stop
+    //this is also called when the sequencer mode buttons are pressed,
+    //as this updates the button state so the playing states needs to be updated too
     alphaLiveEngineRef.getModeSequencer()->stopLastPreviewedSequence();
     
     if (selectedPads_.size() == 0) //no pads selected

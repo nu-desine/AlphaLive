@@ -63,6 +63,12 @@ AppSettings::AppSettings()
     }
     
     copiedPadSettings = new PadSettings(NULL);
+    
+    for (int row = 0; row <= NO_OF_ROWS-1; row++)
+    {
+        for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+            copiedSequencerData[row][column] = 0;
+    }
 }
 
 
@@ -112,6 +118,16 @@ void AppSettings::pastePadSettings (int padNumber)
     padSettings[padNumber]->setMode(mode);
     
     
+}
+
+void AppSettings::copySequenceData (int value, int row, int column)
+{
+    copiedSequencerData[row][column] = value;
+}
+
+int AppSettings::pasteSequenceData (int row, int column)
+{
+    return copiedSequencerData[row][column];
 }
 
 //=====================================================================

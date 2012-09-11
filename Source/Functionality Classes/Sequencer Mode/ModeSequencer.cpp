@@ -46,7 +46,7 @@ ModeSequencer::ModeSequencer(MidiOutput &midiOutput, AlphaLiveEngine &ref)
     audioTransportSourceThread = new TimeSliceThread("Sequencer Audio Thread");
     audioTransportSourceThread->startThread();
     
-    lastPreviewedSequencePadNum = 0;
+    lastPreviewedSequencePadNum = 100; //no sequence default value
 }
 
 
@@ -155,6 +155,7 @@ void ModeSequencer::stopLastPreviewedSequence()
         padSequencer[lastPreviewedSequencePadNum]->isThreadRunning() == true)
     {
         padSequencer[lastPreviewedSequencePadNum]->stopThreadAndReset();
+        lastPreviewedSequencePadNum = 100; //no sequence default value
     }
 }
 

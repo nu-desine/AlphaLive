@@ -18,6 +18,9 @@
 // [BEGIN_USER_CODE_SECTION]
 
 // (You can add your own code in this section, and the Introjucer will not overwrite it)
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 // [END_USER_CODE_SECTION]
 

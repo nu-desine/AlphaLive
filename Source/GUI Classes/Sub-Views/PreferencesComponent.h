@@ -73,8 +73,8 @@ private:
 #ifndef H_GENERALSETTINGSCOMPONENT
 #define H_GENERALSETTINGSCOMPONENT
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "AlphaLiveEngine.h"
+#include "../../../JuceLibraryCode/JuceHeader.h"
+#include "../../Functionality Classes/AlphaLiveEngine.h"
 
 class MainComponent;
 

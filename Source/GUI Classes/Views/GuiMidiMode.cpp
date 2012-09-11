@@ -289,7 +289,7 @@ void GuiMidiMode::resized()
     
     pressureMinRangeSlider->setBounds(700, 277, 290, 290);
     pressureMaxRangeSlider->setBounds(710, 287, 270, 270);
-    parameterHoverLabel->setBounds(832,453,26,10);
+    parameterHoverLabel->setBounds(832, 453, 26, 10);
 	
     //can we give the below more specific bounds?
     //if not the below can be put into a for loop

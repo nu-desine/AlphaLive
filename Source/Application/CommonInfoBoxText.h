@@ -85,6 +85,12 @@ namespace CommonInfoBoxText
     // ==== FX dial and views ====
     static String effectsButtons(translate("Applies the effect to the audio of the selected pads whose parameters can then be controlled via the pads pressure."));
     
+    static String alphaTouchMenu(translate("AlphaTouch Menu. Sets and displays the effect parameter that the selected pads pressure will control."));
+    
+    static String inverseButton(translate("AlphaTouch Inverse Button. Activate this button to invert the direction of the modulation created by the pressure of the selected pads."));
+    
+    static String intensitySlider(translate("AlphaTouch Intensity Control. Sets and displays the intensity/range of modulation created by the pressure of the selected pads."));
+    
     // ==== Other ====
     static String closeButton (translate("Click to go back to the applications main interface. Pressing ESC also triggers this command."));
     

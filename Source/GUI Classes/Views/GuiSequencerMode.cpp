@@ -1170,12 +1170,12 @@ void GuiSequencerMode::buttonClicked (Button* button)
             menu.addItem(7, translate(translate("Copy sequence...")));
         menu.addItem(8, translate(translate("Paste sequence...")));
         menu.addSeparator();
-        menu.addItem(1, translate(translate("Load sequence...")));
-		menu.addItem(2, translate(translate("Load sequence set...")));
+        menu.addItem(1, translate(translate("Import sequence...")));
+		menu.addItem(2, translate(translate("Import sequence set...")));
         if (SINGLE_PAD)
         {
-            menu.addItem(3, translate(translate("Save sequence...")));
-            menu.addItem(4, translate(translate("Save sequence set...")));
+            menu.addItem(3, translate(translate("Export sequence...")));
+            menu.addItem(4, translate(translate("Export sequence set...")));
         }
         menu.addSeparator();
 		menu.addItem(5, translate(translate("Clear...")));
@@ -1187,19 +1187,19 @@ void GuiSequencerMode::buttonClicked (Button* button)
         {
             // user dismissed the menu without picking anything
         }
-        else if (result == 1) // load preset
+        else if (result == 1) // import sequence
         {
 			appDocumentStateRef.loadSequence(currentSequenceNumber-1, selectedPads);
         }
-        else if (result == 2) // load sequence set
+        else if (result == 2) // import sequence set
         {
 			appDocumentStateRef.loadSequenceSet(selectedPads);
         }
-        else if (result == 3) // save sequence
+        else if (result == 3) // export sequence
         {
 			appDocumentStateRef.saveSequence(currentSequenceNumber-1, selectedPads[0]);
         }
-		else if (result == 4) // save sequence set
+		else if (result == 4) // export sequence set
 		{
 			appDocumentStateRef.saveSequenceSet(selectedPads[0]);
 		}
@@ -2305,7 +2305,7 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     }
     else if (previewButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Preview Sequence Button. Use this button to preview the currently displayed sequence. PLEASE NOTE THAT THIS BUTTON CURRENTLY DOES NOT WORK!"));
+        mainComponentRef.setInfoTextBoxText(translate("Preview Sequence Button. Use this button to preview the currently displayed sequence."));
     }
     else if (nextSequenceButton->isMouseOver(true))
     {

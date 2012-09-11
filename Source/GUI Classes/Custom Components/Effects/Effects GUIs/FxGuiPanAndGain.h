@@ -56,6 +56,7 @@ private:
     ComboBox *alphaTouchMenu;
     ModeButton *reverseButton;
     AlphaRotarySlider *intensitySlider;
+    Label *parameterHoverLabel;
     
     Array<int> selectedPads;
     

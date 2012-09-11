@@ -1763,6 +1763,8 @@ void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
             
             XmlElement sequenceDataXml("SEQUENCE_DATA");
             
+            sequenceDataXml.setAttribute("sequencerNumberOfSequences", PAD_SETTINGS_pad->getSequencerNumberOfSequences());
+            
             //get all sequence data strings 
             for (int i = 0; i <= NO_OF_SEQS-1; i++)
             {
@@ -1815,6 +1817,9 @@ void AppDocumentState::loadSequenceSet(Array<int> selectedPads_,
                 {
                     PAD_SETTINGS_pads->stringToSeqData(xml->getStringAttribute("sequenceData"+String(seqNumber)), seqNumber);
                 }
+                
+                if (xml->hasAttribute("sequencerNumberOfSequences"))
+                    PAD_SETTINGS_pads->setSequencerNumberOfSequences(xml->getIntAttribute("sequencerNumberOfSequences"));
             }
             
         }

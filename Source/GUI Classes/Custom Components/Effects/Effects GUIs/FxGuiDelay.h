@@ -64,6 +64,7 @@ private:
     ModeButton *reverseButton;
 	AlphaTextButton *syncButton;
     AlphaRotarySlider *intensitySlider;
+    Label *parameterHoverLabel;
     
     Array<int> selectedPads;
     float tempo;

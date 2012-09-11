@@ -24,7 +24,7 @@
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
 #include "../../../Binary Data/BinaryDataNew.h"
-//#include "../../../AlphaLiveLookandFeel.h"
+#include "../../../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
@@ -58,10 +58,10 @@ GuiLowpassFilter::GuiLowpassFilter(MainComponent &ref)
     addAndMakeVisible(alphaTouchMenu = new ComboBox());
     alphaTouchMenu->addListener(this);
     alphaTouchMenu->addMouseListener(this, true);
-    alphaTouchMenu->addItem("Off", 1);
-    alphaTouchMenu->addItem("Mix", 2);
-    alphaTouchMenu->addItem("Cut-Off Frequency", 3);
-    alphaTouchMenu->addItem("Bandwidth/Resonance", 4);
+    alphaTouchMenu->addItem(translate("Off"), 1);
+    alphaTouchMenu->addItem(translate("Mix"), 2);
+    alphaTouchMenu->addItem(translate("Cut-Off Frequency"), 3);
+    alphaTouchMenu->addItem(translate("Bandwidth/Resonance"), 4);
     alphaTouchMenu->setSelectedId(1, true);
     
     Image *reverseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::inverticon_png, BinaryDataNew::inverticon_pngSize));
@@ -77,6 +77,13 @@ GuiLowpassFilter::GuiLowpassFilter(MainComponent &ref)
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
     intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
+    
+    //---------------parameter label -------------------------------------
+    addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
+    parameterHoverLabel->setJustificationType(Justification::centred);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
+    parameterHoverLabel->setFont(Font(9));
+    parameterHoverLabel->addMouseListener(this, true);
     
     setInterceptsMouseClicks(false, true);
 }
@@ -95,8 +102,9 @@ void GuiLowpassFilter::resized()
     bandwidthSlider->setBounds(77, 77, 170, 170);
 	intensitySlider->setBounds(67, 67, 190, 190);
     
-    alphaTouchMenu->setBounds(119, 192, 87, 20);
+    alphaTouchMenu->setBounds(119, 202, 87, 15);
     reverseButton->setBounds(211,211, 32, 32);
+    parameterHoverLabel->setBounds(144, 187, 36, 15);
 }
 
 
@@ -111,6 +119,7 @@ void GuiLowpassFilter::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxLpfMix(mixSlider->getValue());
         }
         
+        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
     }
     
     
@@ -122,6 +131,7 @@ void GuiLowpassFilter::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxLpfFreq(frequencySlider->getValue());
         }
         
+        parameterHoverLabel->setText(String(slider->getValue(), 0), false);
     }
     
     
@@ -133,6 +143,7 @@ void GuiLowpassFilter::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxLpfBandwidth(bandwidthSlider->getValue());
         }
     
+        parameterHoverLabel->setText(String(slider->getValue(), 2), false);
     }
     
     
@@ -144,6 +155,7 @@ void GuiLowpassFilter::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxLpfAtIntensity(intensitySlider->getValue());
         }
         
+        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
     }
 
 
@@ -216,28 +228,32 @@ void GuiLowpassFilter::mouseEnter (const MouseEvent &e)
 {
     if (mixSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Low-Pass Filter Mix Control. Sets the wet/dry ratio for Low-Pass filter for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate("Low-Pass Filter Mix Control. Sets the wet/dry ratio for Low-pass filter for the selected pads."));
+        parameterHoverLabel->setText(String(mixSlider->getValue(), 3), false);
     }
     else if (frequencySlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Low-Pass Filter Cut-Off Frequency Control. Sets the cut-off frequency for Low-Pass filter for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate("Low-Pass Filter Cut-Off Frequency Control. Sets the cut-off frequency for Low-Pass filter for the selected pads."));
+        parameterHoverLabel->setText(String(frequencySlider->getValue(), 0), false);
     }
     else if (bandwidthSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Low-Pass Filter Bandwidth Control. Sets the bandwidth for Low-Pass filter for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate("Low-Pass Filter Bandwidth Control. Sets the bandwidth for Low-Pass filter for the selected pads."));
+        parameterHoverLabel->setText(String(bandwidthSlider->getValue(), 2), false);
     }
     
     else if (alphaTouchMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("AlphaTouch Menu. Sets the effect parameter that the pads pressure will control for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::alphaTouchMenu));
     }
     else if (reverseButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("AlphaTouch Reverse Button. Activate this button to reverse/invert the direction of the modulated created by the pressure of the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::inverseButton));
     }
     else if (intensitySlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("AlphaTouch Intensity Control. Sets the intensity/range of modulation created by the pressure of the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
     }
     
 }
@@ -246,5 +262,6 @@ void GuiLowpassFilter::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
+    parameterHoverLabel->setText(String::empty, false);
     
 }

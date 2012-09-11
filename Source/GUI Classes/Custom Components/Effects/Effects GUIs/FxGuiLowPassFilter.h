@@ -58,8 +58,8 @@ private:
     ComboBox *alphaTouchMenu;
     ModeButton *reverseButton;
     AlphaRotarySlider *intensitySlider;
-    
-    //int currentlySelectedPad;
+    Label *parameterHoverLabel;
+
     Array<int> selectedPads;
     
 };

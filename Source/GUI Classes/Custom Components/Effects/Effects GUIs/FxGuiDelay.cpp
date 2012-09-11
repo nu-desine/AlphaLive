@@ -24,6 +24,7 @@
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
 #include "../../../Binary Data/BinaryDataNew.h"
+#include "../../../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
@@ -63,7 +64,7 @@ GuiDelay::GuiDelay(MainComponent &ref)
     
     addAndMakeVisible(hpfFrequencySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
 	hpfFrequencySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    hpfFrequencySlider->setRange(30, 20000);
+    hpfFrequencySlider->setRange(30, 20000, 1);
     hpfFrequencySlider->setValue(30, false);
     hpfFrequencySlider->addListener(this);
     hpfFrequencySlider->addMouseListener(this, true);
@@ -73,14 +74,14 @@ GuiDelay::GuiDelay(MainComponent &ref)
     addAndMakeVisible(delayTimeMenu = new ComboBox());
     delayTimeMenu->addListener(this);
     delayTimeMenu->addMouseListener(this, true);
-    delayTimeMenu->addItem("4 Beats", 1);
-    delayTimeMenu->addItem("2 Beats", 2);
-    delayTimeMenu->addItem("1 Beat", 3);
-    delayTimeMenu->addItem("Half Beat", 4);
-    delayTimeMenu->addItem("Quarter Beat", 5);
+    delayTimeMenu->addItem(translate("4 Beats"), 1);
+    delayTimeMenu->addItem(translate("2 Beats"), 2);
+    delayTimeMenu->addItem(translate("1 Beat"), 3);
+    delayTimeMenu->addItem(translate("Half Beat"), 4);
+    delayTimeMenu->addItem(translate("Quarter Beat"), 5);
     delayTimeMenu->setSelectedId(4, true);
     
-    addAndMakeVisible(syncButton = new AlphaTextButton("SYNC"));
+    addAndMakeVisible(syncButton = new AlphaTextButton(translate("SYNC")));
     syncButton->setClickingTogglesState(true);
     syncButton->setToggleState(1, false);
     syncButton->addListener(this);
@@ -90,12 +91,12 @@ GuiDelay::GuiDelay(MainComponent &ref)
     addAndMakeVisible(alphaTouchMenu = new ComboBox());
     alphaTouchMenu->addListener(this);
     alphaTouchMenu->addMouseListener(this, true);
-    alphaTouchMenu->addItem("Off", 1);
-    alphaTouchMenu->addItem("Wet Mix", 2);
-    alphaTouchMenu->addItem("Delay Time", 3);
-    alphaTouchMenu->addItem("Feedback", 4);
-    alphaTouchMenu->addItem("LPF Frequency", 5);
-    alphaTouchMenu->addItem("HPF Frequency", 6);
+    alphaTouchMenu->addItem(translate("Off"), 1);
+    alphaTouchMenu->addItem(translate("Wet Mix"), 2);
+    alphaTouchMenu->addItem(translate("Delay Time"), 3);
+    alphaTouchMenu->addItem(translate("Feedback"), 4);
+    alphaTouchMenu->addItem(translate("LPF Frequency"), 5);
+    alphaTouchMenu->addItem(translate("HPF Frequency"), 6);
     alphaTouchMenu->setSelectedId(1, true);
     
     Image *reverseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::inverticon_png, BinaryDataNew::inverticon_pngSize));
@@ -111,6 +112,13 @@ GuiDelay::GuiDelay(MainComponent &ref)
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
     intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
+    
+    //---------------parameter label -------------------------------------
+    addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
+    parameterHoverLabel->setJustificationType(Justification::centred);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
+    parameterHoverLabel->setFont(Font(9));
+    parameterHoverLabel->addMouseListener(this, true);
     
     tempo = AppSettings::Instance()->getGlobalTempo();
     
@@ -132,8 +140,9 @@ void GuiDelay::resized()
 	lpfFrequencySlider->setBounds(67, 67, 190, 190);
     hpfFrequencySlider->setBounds(57, 57, 210, 210);
     
-    alphaTouchMenu->setBounds(119, 192, 87, 20);
+    alphaTouchMenu->setBounds(119, 202, 87, 15);
     reverseButton->setBounds(211,211, 32, 32);
+    parameterHoverLabel->setBounds(144, 187, 36, 15);
     intensitySlider->setBounds(47, 47, 230, 230);
     
     delayTimeMenu->setBounds(119, 22, 87, 20);
@@ -153,6 +162,8 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setPadFxDelayMix(wetMixSlider->getValue());
         }
+        
+        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
     }
     
     else if (slider == delayTimeSlider)
@@ -163,6 +174,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayTime(delayTimeSlider->getValue());
         }
         
+        parameterHoverLabel->setText(String(slider->getValue(), 2), false);
     }
     
     else if (slider == feedbackSlider)
@@ -173,6 +185,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayFeedback(feedbackSlider->getValue());
         }
         
+        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
     }
     
     else if (slider == lpfFrequencySlider)
@@ -183,6 +196,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayLpfFreq(lpfFrequencySlider->getValue());
         }
         
+        parameterHoverLabel->setText(String(slider->getValue(), 0), false);
     }
     
     else if (slider == hpfFrequencySlider)
@@ -193,6 +207,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayHpfFreq(hpfFrequencySlider->getValue());
         }
         
+        parameterHoverLabel->setText(String(slider->getValue(), 0), false);
     }
     
     else if (slider == intensitySlider)
@@ -203,6 +218,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayAtIntensity(intensitySlider->getValue());
         }
         
+        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
     }
     
 
@@ -357,43 +373,49 @@ void GuiDelay::mouseEnter (const MouseEvent &e)
 {
     if (wetMixSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Wet Mix Control. Sets the delayed signal level for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate("Wet Mix Control. Sets and displays the delayed signal level for the selected pads."));
+        parameterHoverLabel->setText(String(wetMixSlider->getValue(), 3), false);
     }
     else if (delayTimeSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Delay Time Control. Sets the delay time in milliseconds for the selected pad/pads. If you would like to set the delay time based on note length, click on the 'Tempo Sync' button.");
+        mainComponentRef.setInfoTextBoxText(translate("Delay Time Control. Sets the delay time in milliseconds for the selected pads. If you would like to set the delay time based on note length, click on the 'Sync' button."));
+        parameterHoverLabel->setText(String(delayTimeSlider->getValue(), 2), false);
     }
     else if (delayTimeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Delay Time Menu. Sets the delay time in note length for the selected pad/pads. If you would like to set the delay time in milliseconds, click on the 'Tempo Sync' button.");
+        mainComponentRef.setInfoTextBoxText(translate("Delay Time Menu. Sets the delay time in note length for the selected pads. If you would like to set the delay time in milliseconds, click on the 'Sync' button."));
     }
     else if (syncButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Tempo Sync Button. Turn this button on to sync the delay to the tempo, else you can set the tempo is milliseconds.");
+        mainComponentRef.setInfoTextBoxText(translate("Tempo Sync Button. Turn this button on to sync the delay to the tempo, else you can set the tempo is milliseconds."));
     }
     else if (feedbackSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Delay Feedback Control. Sets the feedback level for the selected pad/pads. Please note that high values can create a delay that will get louder and never die out.");
+        mainComponentRef.setInfoTextBoxText(translate("Delay Feedback Control. Sets the feedback level for the selected pad/pads. Please note that high values can create a delay that will get louder and never die out."));
+        parameterHoverLabel->setText(String(feedbackSlider->getValue(), 3), false);
     }
     else if (lpfFrequencySlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Low Pass Filter Frequency Control. Sets the LPF cutoff frequency for the selected pad/pads. Please note that if this value is lower than the HPF cutoff frequency the delay signal will not be audible.");
+        mainComponentRef.setInfoTextBoxText(translate("Low Pass Filter Frequency Control. Sets the LPF cutoff frequency for the selected pads. Please note that if this value is lower than the HPF cutoff frequency the delay signal will not be audible."));
+        parameterHoverLabel->setText(String(lpfFrequencySlider->getValue(), 0), false);
     }
     else if (hpfFrequencySlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("High Pass Filter Frequency Control. Sets the HPF cutoff frequency for the selected pad/pads. Please note that if this value is higher than the LPF cutoff frequency the delay signal will not be audible.");
+        mainComponentRef.setInfoTextBoxText(translate("High Pass Filter Frequency Control. Sets the HPF cutoff frequency for the selected pads. Please note that if this value is higher than the LPF cutoff frequency the delay signal will not be audible."));
+        parameterHoverLabel->setText(String(hpfFrequencySlider->getValue(), 0), false);
     }
     else if (alphaTouchMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("AlphaTouch Menu. Sets the effect parameter that the pads pressure will control for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::alphaTouchMenu));
     }
     else if (reverseButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("AlphaTouch Reverse Button. Activate this button to reverse/invert the direction of the modulated created by the pressure of the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::inverseButton));
     }
     else if (intensitySlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("AlphaTouch Intensity Control. Sets the intensity/range of modulation created by the pressure of the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
     }
     
 }
@@ -402,5 +424,6 @@ void GuiDelay::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
+    parameterHoverLabel->setText(String::empty, false);
     
 }

@@ -298,6 +298,7 @@ void SequencePlayer::processSequence(int padValue)
                 broadcaster.sendActionMessage("PLAYING ON");
             }
             
+            sequenceNumber = 0;
             startThread();
             currentPlayingState = 1;
             
@@ -556,7 +557,7 @@ void SequencePlayer::run()
 
     columnNumber = 0; //counter variable
     //will this be ok being here?
-    sequenceNumber = 0;
+    //sequenceNumber = 0;
     
     if (mode == 2)
     {
@@ -1135,6 +1136,11 @@ void SequencePlayer::actionListenerCallback (const String& message)
 int SequencePlayer::getCurrentPlayingState()
 {
     return currentPlayingState;
+}
+
+void SequencePlayer::setSequenceNumber (int value)
+{
+    sequenceNumber = value;
 }
 
 //=====================================================================================

@@ -62,7 +62,10 @@ public:
     void updatePadPlayingStatus(int padNumber, int playingStatus);
     
     void killPad (int padNum);
-    void previewSequence (int padNum);
+    
+    //preview sequence stuff (called directly from guiSequencerMode)
+    void previewSequence (int padNum, int status);
+    void setPreviewSequenceNumber (int padNum, int sequenceNumber);
     
     //AudioSource Functions
 	void prepareToPlay (int samplesPerBlockExpected,double sampleRate);

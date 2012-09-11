@@ -126,12 +126,23 @@ void ModeSequencer::killPad (int padNum)
     }
 }
 
-void ModeSequencer::previewSequence (int padNum)
+void ModeSequencer::setPreviewSequenceNumber (int padNum, int sequenceNumber)
+{
+    padSequencer[padNum]->setSequenceNumber(sequenceNumber);
+}
+
+void ModeSequencer::previewSequence (int padNum, int status)
 {
     //what should I do here?
     //should there be a dedicated class/object similar to sequencerplayer
     //that just plays a sequence completetly seperate from the sequenceplayer
-    //objects for each pad.
+    //objects for each pad?
+    //or not...?
+    if (status == 1)
+        padSequencer[padNum]->processSequence(1);
+    else
+        padSequencer[padNum]->stopThreadAndReset();
+    
 }
 
 void ModeSequencer::updatePadPlayingStatus(int padNumber, int playingStatus)

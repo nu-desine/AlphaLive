@@ -109,6 +109,9 @@ public:
     void setRelativeTempoMode (int value);
     double getTimeInterval();
     
+    //called when previewing sequence
+    void setSequenceNumber (int value);
+    
     //quantization stuff
     void triggerQuantizationPoint();
     

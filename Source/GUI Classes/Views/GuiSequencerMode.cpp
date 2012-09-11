@@ -1138,22 +1138,17 @@ void GuiSequencerMode::buttonClicked (Button* button)
         else if (currentSequenceNumber < 1)
             currentSequenceNumber = 1;
         
+        if (previewButton->getToggleState() == true)
+            modeSequencerRef.setPreviewSequenceNumber(selectedPads[0], currentSequenceNumber-1);
+        
         setCurrentSequenceNumber();
         
 	}
     
     else if (button == previewButton) 
     {
-        modeSequencerRef.previewSequence(selectedPads[0]);
-        
-		if (button->getToggleState() == true)
-        {
-            
-        }
-        else
-        {
-            
-        }
+        modeSequencerRef.previewSequence(selectedPads[0], button->getToggleState());
+        modeSequencerRef.setPreviewSequenceNumber(selectedPads[0], currentSequenceNumber-1);
 	}
     
     else if(button == quantiseButton)

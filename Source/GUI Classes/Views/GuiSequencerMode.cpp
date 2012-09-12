@@ -1178,6 +1178,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
             menu.addItem(4, translate(translate("Export sequence set...")));
             menu.addSeparator();
             menu.addItem(9, translate(translate("Export sequence as MIDI file...")));
+            menu.addItem(10, translate(translate("Export sequence set as MIDI file...")));
         }
         menu.addSeparator();
 		menu.addItem(5, translate(translate("Clear...")));
@@ -1266,7 +1267,11 @@ void GuiSequencerMode::buttonClicked (Button* button)
         }
         else if (result == 9) // export sequence as midi file
         {
-			appDocumentStateRef.createMidiFile(currentSequenceNumber-1, selectedPads[0]);
+			appDocumentStateRef.createMidiFile(currentSequenceNumber-1, selectedPads[0], false);
+        }
+        else if (result == 10) // export sequence set as midi file
+        {
+			appDocumentStateRef.createMidiFile(currentSequenceNumber-1, selectedPads[0], true);
         }
         
         

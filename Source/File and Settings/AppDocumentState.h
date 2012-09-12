@@ -117,7 +117,8 @@ public:
                           File fileToOpen = File::nonexistent);
     
     void createMidiFile (int currentlySelectedSeqNumber, 
-                         int currentlySelectedPad);
+                         int currentlySelectedPad,
+                         int isSeqSet);
     
     int getGuiUpdateFlag();
     int getSceneToUpdate();

@@ -35,8 +35,6 @@ SequencerGrid::SequencerGrid(ModeSequencer &ref, GuiSequencerMode &ref2)
                                         :   mSubject(ref),
                                             guiSequencerMode(ref2)
 {
-    //backgroundImage = ImageFileFormat::loadFrom(SequencerBinaryData::seqgridbg_png, SequencerBinaryData::seqgridbg_pngSize);
-    
     //init playHead
     addAndMakeVisible(playHead = new SequencerGridPlayHead());
     
@@ -164,13 +162,6 @@ void SequencerGrid::setSequencerData (int seqNumber, int rowNumber, int columnNu
 //this function gets called everytime a gridPoint is 'created' or 'deleted'
 void SequencerGrid::gridClicked (int row, int column, int status)
 {
-    //std::cout << currentSequenceNumber-1 << " " << row << " " << column << " " << status << std::endl;
-    
-    //PAD_SETTINGS->setSequencerData(currentSequenceNumber-1, row, column, status);
-    //sequencerData[currentSequenceNumber-1][row][column] = status;
-    
-    //NEW STUFF
-    
     for (int i = 0; i < selectedPads.size(); i++)
     {
         int padNum = selectedPads[i];
@@ -188,15 +179,6 @@ void SequencerGrid::gridClicked (int row, int column, int status)
 
 void SequencerGrid::paint (Graphics &g)
 {
-    //draw background
-    //g.setColour(Colours::white);
-    //g.fillRect(0, 0, getWidth(), getHeight());
-    //g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), 0, 0, backgroundImage.getWidth(), backgroundImage.getHeight());
-    
-	//Rectangle<int> rect = g.getClipBounds();
-    //std::cout << "Painting sequencer: " << rect.getX() << " " << rect.getY() << " " << rect.getRight() << " " << rect.getBottom() << std::endl;
-	
-	
     //draw lines
     for (int i = 0, j = 1; i <=SEQ_HORIZONTAL_STEPS; i++)
     {
@@ -230,20 +212,6 @@ void SequencerGrid::paint (Graphics &g)
     }
     
     //draw circular lines
-    /*for (int i = 0, j = 0; i <=SEQ_VERTICAL_STEPS; i++)
-     {
-     if (j == 0) //as lines are drawn top to bottom, not bottom to top like they should be
-     g.setColour(Colours::orange);
-     else
-     g.setColour(Colours::darkgrey);
-     
-     g.drawLine(0, (GRID_POINT_H)*float(i), getWidth(), (GRID_POINT_H)*float(i));
-     
-     j++;
-     if (j == 4)
-     j = 0;
-     }
-	 */
 	g.setColour(Colours::grey.withAlpha(0.3f));
 	
 	for (int i = 0, j = 9; i <=SEQ_VERTICAL_STEPS-1; i++)
@@ -253,23 +221,7 @@ void SequencerGrid::paint (Graphics &g)
 		g.drawEllipse(gaps, gaps, (getWidth() - (gaps*2)), (getHeight()- (gaps*2)), 1);
 		
 	}
-	/*
-     blockPath.clear();
-     g.setColour(Colours::black.withAlpha(0.8f));
-     
-     theAngle = ((2 * M_PI) / (SEQ_HORIZONTAL_STEPS-1)) * (PAD_SETTINGS->getSequencerLength());
-     
-     blockPath.addPieSegment(0, 0, getWidth(), getHeight(), theAngle, (2 * M_PI), 0.3f);
-     
-     g.fillPath(blockPath, getTransform());
-	 */
-    
-    //resize end block
-    //endBlock->setBounds(float(PAD_SETTINGS->getSequencerLength()+1)*GRID_POINT_W, 0, getWidth()-(float(PAD_SETTINGS->getSequencerLength()+1)*GRID_POINT_W), getHeight());
-    
-    
-    
-    
+	
     /*
     if(SINGLE_PAD)
     {
@@ -409,7 +361,6 @@ bool SequencerGrid::update(const Subject& theChangedSubject)
     {
         if (mSubject.getWhatShouldUpdateFlag() == 1) //if notified by an 'update playhead' call
         {
-            //std::cout << "update playhead with columnNumber " << mSubject.getCurrentColumnNumber() << std::endl;
             int currentColumnNumber = mSubject.getCurrentColumnNumber();
             if (currentColumnNumber == 0)
             {
@@ -432,3 +383,4 @@ void SequencerGrid::setVelocityLabelText (String velocity)
 {
     guiSequencerMode.setParameterLabelText(velocity);
 }
+

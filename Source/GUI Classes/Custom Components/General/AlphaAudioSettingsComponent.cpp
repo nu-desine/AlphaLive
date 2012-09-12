@@ -1082,8 +1082,9 @@ void AlphaAudioSettingsComponent::comboBoxChanged (ComboBox* comboBoxThatHasChan
     }
     else if (comboBoxThatHasChanged == midiOutputSelector)
     {
+        //Why am i making my own call to set the midi device and not using the default method?
+        //If I don't need to, I could probably just use the default juce class
         //deviceManager.setDefaultMidiOutput (midiOutputSelector->getText()); 
-        
         alphaLiveEngineRef.setMidiOutputDevice(midiOutputSelector->getSelectedItemIndex()-1);
     }
 }

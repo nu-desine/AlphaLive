@@ -1176,6 +1176,8 @@ void GuiSequencerMode::buttonClicked (Button* button)
         {
             menu.addItem(3, translate(translate("Export sequence...")));
             menu.addItem(4, translate(translate("Export sequence set...")));
+            menu.addSeparator();
+            menu.addItem(9, translate(translate("Export sequence as MIDI file...")));
         }
         menu.addSeparator();
 		menu.addItem(5, translate(translate("Clear...")));
@@ -1261,6 +1263,10 @@ void GuiSequencerMode::buttonClicked (Button* button)
             sequencerGrid->setCurrentlySelectedPad(selectedPads);
             setCurrentSequenceNumber();
             
+        }
+        else if (result == 9) // export sequence as midi file
+        {
+			appDocumentStateRef.createMidiFile(currentSequenceNumber-1, selectedPads[0]);
         }
         
         

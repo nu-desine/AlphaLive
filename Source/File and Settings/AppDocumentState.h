@@ -116,6 +116,9 @@ public:
                           bool openBrowser = true, 
                           File fileToOpen = File::nonexistent);
     
+    void createMidiFile (int currentlySelectedSeqNumber, 
+                         int currentlySelectedPad);
+    
     int getGuiUpdateFlag();
     int getSceneToUpdate();
     int getSceneStatus();

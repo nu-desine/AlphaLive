@@ -1834,6 +1834,101 @@ void AppDocumentState::loadSequenceSet(Array<int> selectedPads_,
     }
 }
 
+void AppDocumentState::createMidiFile (int currentlySelectedSeqNumber, int currentlySelectedPad)
+{
+    //on the sequencer grid, a quarter note is 4 columns.
+    //therefore, the setTicksPerQuarterNote value would be equal to the length of two sequence 'beats',
+    //so one beat would equal noOfTicks/4.
+    
+    int noOfTicks = 24;
+    Array <MidiMessage> midiMessage;
+    int noteLength;
+    int rowNoteNumber[NO_OF_ROWS];
+    
+    //set note number data and note length depending on mode
+    if (PAD_SETTINGS_pad->getSequencerMode() == 1) //midi mode
+    {
+        noteLength = PAD_SETTINGS_pad->getSequencerMidiNoteLength();
+        for (int i = 0; i < NO_OF_ROWS; i++)
+           rowNoteNumber[i] = PAD_SETTINGS_pad->getSequencerMidiNote(i); 
+    }
+    else //samples mode
+    {
+        //default value
+        noteLength = 1;
+        //map GM drum mapping to rowNoteNumber array
+        rowNoteNumber[0] = 35;
+        rowNoteNumber[1] = 36;
+        rowNoteNumber[2] = 37;
+        rowNoteNumber[3] = 38;
+        rowNoteNumber[4] = 40;
+        rowNoteNumber[5] = 41;
+        rowNoteNumber[6] = 42;
+        rowNoteNumber[7] = 45;
+        rowNoteNumber[8] = 46;
+        rowNoteNumber[9] = 48;
+        rowNoteNumber[10] = 49;
+        rowNoteNumber[11] = 51;
+    }
+    
+    
+    //search through sequence data array of current sequence and create midi on/off messages
+    for (int row = 0; row <= NO_OF_ROWS-1; row++)
+    {
+        if (rowNoteNumber[row] >= 0)
+        {
+            for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+            {
+                int noteData = PAD_SETTINGS_pad->getSequencerData(currentlySelectedSeqNumber, row, column);
+                
+                if (noteData > 0)
+                {
+                    double noteStart = column * (noOfTicks/4);
+                    double noteEnd = noteStart + (noteLength * (noOfTicks/4));
+                    
+                    //create note on message
+                    MidiMessage noteOnMessage(MidiMessage::noteOn(1, rowNoteNumber[row], (uint8)noteData));
+                    noteOnMessage.setTimeStamp(noteStart);
+                    midiMessage.add(noteOnMessage);
+                    
+                    //create note off message
+                    MidiMessage noteOffMessage(MidiMessage::noteOff(1, rowNoteNumber[row]));
+                    noteOffMessage.setTimeStamp(noteEnd);
+                    midiMessage.add(noteOffMessage);
+                }
+            }
+        }
+        
+    }
+     
+    //create midi sequence
+    MidiMessageSequence midiSequence;
+    for (int i = 0; i < midiMessage.size(); i++)
+    {
+        midiSequence.addEvent(midiMessage[i]);
+    }
+    
+    //juce doc says you must call the below after adding note on events,
+    //however when I do this it will cut short any notes if a note of the
+    //same number is added before the previous note is finished, which
+    //ideally is not what we want.
+    //midiSequence.updateMatchedPairs();
+    
+    //create midi file
+    MidiFile midiFile;
+    midiFile.addTrack(midiSequence);
+    midiFile.setTicksPerQuarterNote(noOfTicks);
+
+    //create file and add midi file data
+    File fileToCreate("/Users/Liam/Desktop/test midi file.mid");
+    if (fileToCreate.exists() == true)
+        fileToCreate.deleteFile();
+    
+    FileOutputStream outputStream(fileToCreate);
+    midiFile.writeTo(outputStream);
+    
+}
+
 
 void AppDocumentState::removeUneededAudioFiles (bool closingApp)
 {

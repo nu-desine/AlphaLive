@@ -2014,7 +2014,7 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                      File fileToOpen)
 {
     
-    FileInputStream inputStream(File("/Users/Liam/Desktop/testImport.mid"));
+    FileInputStream inputStream(File("/Users/Liam/Desktop/testImport3.mid"));
     MidiFile midiFile;
     midiFile.readFrom(inputStream);
     int noOfTicks = midiFile.getTimeFormat(); //this must be positive. if negative it is in SMPTE format which we can't/don't want to use,
@@ -2045,6 +2045,7 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
         {
             eventHolder[i] = midiSequence->getEventPointer(i); 
             
+            
             if (eventHolder[i]->message.isNoteOn() == true)
             {
                 noteNumbers.addIfNotAlreadyThere(eventHolder[i]->message.getNoteNumber());
@@ -2061,6 +2062,7 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
         //delete all non-note-on messages from sequence
         for (int i = eventsToDelete.size()-1; i >= 0; i--)
             newSequence.deleteEvent(eventsToDelete[i], false);
+        
         
         noOfEvents = newSequence.getNumEvents();
         std::cout << "Midi file no of note on events: " << noOfEvents << std::endl;
@@ -2101,12 +2103,83 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
         noOfEvents = newSequence.getNumEvents();
         std::cout << "Midi file no of note on events within range: " << noOfEvents << std::endl;
     
+        //reset sequencer grid points
+        if (isSeqSet == false)
+        {
+            for (int i = 0; i < selectedPads_.size(); i++)
+            {
+                int padNum = selectedPads_[i];
+                
+                for (int row = 0; row <= NO_OF_ROWS-1; row++)
+                {
+                    for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+                    {
+                        PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, row, column, 0, false);
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < selectedPads_.size(); i++)
+            {
+                int padNum = selectedPads_[i];
+                
+                for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
+                {
+                    for (int row = 0; row <= NO_OF_ROWS-1; row++)
+                    {
+                        for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+                        {
+                            PAD_SETTINGS_pads->setSequencerData(seq, row, column, 0, false);
+                        }
+                    }
+                }
+            }
+        }
+        
+        //apply data from newSequence to sequencerData
+        //event message time stamp is used to work oout the column number
+        //event message note number index in the noteNumber array is used to set the row number
+        //event message velocity sets the value of the grid point
+        
+        MidiMessageSequence::MidiEventHolder *newEventHolder2[noOfEvents]; //pointers to newSequence content. Will they get 
         
         for (int i = 0; i < noOfEvents; i++)
         {
-            int noteColumn = (newEventHolder[i]->message.getTimeStamp())/(noOfTicks/4.0);
-            std::cout << "Note Time stamp: " << noteColumn << std::endl;
-
+            newEventHolder2[i] = newSequence.getEventPointer(i);
+            int noteColumn = roundToInt((newEventHolder2[i]->message.getTimeStamp())/(noOfTicks/4.0));
+            std::cout << "Note Column: " << noteColumn << std::endl;
+            int noteRow = noteNumbers.indexOf(newEventHolder2[i]->message.getNoteNumber());
+            std::cout << "Note Row: " << noteRow << std::endl;
+            int noteValue = newEventHolder2[i]->message.getVelocity();
+            std::cout << "Note Value: " << noteValue << std::endl;
+            
+            for (int i = 0; i < selectedPads_.size(); i++)
+            {
+                int padNum = selectedPads_[i];
+                PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, noteRow, noteColumn, noteValue, false);
+            }
+        }
+        
+        
+        for (int i = 0; i < selectedPads_.size(); i++)
+        {
+            int padNum = selectedPads_[i];
+            PAD_SETTINGS_pads->seqDataToString();
+        }
+        
+        if (shouldImportNoteData == true)
+        {
+            for (int i = 0; i < selectedPads_.size(); i++)
+            {
+                int padNum = selectedPads_[i];
+                for(int index = 0; index < noteNumbers.size(); index++)
+                {
+                    PAD_SETTINGS_pads->setSequencerMidiNote(noteNumbers[index], index);
+                }
+                
+            }
         }
         
     }

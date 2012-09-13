@@ -1298,18 +1298,32 @@ void GuiSequencerMode::buttonClicked (Button* button)
         else if (result == 11) // import sequence and note data from midi file
         {
 			appDocumentStateRef.importMidiFile (currentSequenceNumber-1, selectedPads, false, true);
+            
+            sequencerGrid->setCurrentlySelectedPad(selectedPads);
+            setCurrentSequenceNumber();
+            mainComponentRef.getGuiPiano()->updateDisplay();
         }
         else if (result == 12) // import sequence only from midi file
         {
 			appDocumentStateRef.importMidiFile (currentSequenceNumber-1, selectedPads, false, false);
+            
+            sequencerGrid->setCurrentlySelectedPad(selectedPads);
+            setCurrentSequenceNumber();
         }
         else if (result == 13) // import sequence set and note data from midi file
         {
 			appDocumentStateRef.importMidiFile (currentSequenceNumber-1, selectedPads, true, true);
+            
+            sequencerGrid->setCurrentlySelectedPad(selectedPads);
+            setCurrentSequenceNumber();
+            mainComponentRef.getGuiPiano()->updateDisplay();
         }
         else if (result == 14) // import sequence set only from midi file
         {
 			appDocumentStateRef.importMidiFile (currentSequenceNumber-1, selectedPads, true, false);
+            
+            sequencerGrid->setCurrentlySelectedPad(selectedPads);
+            setCurrentSequenceNumber();
         }
         
         

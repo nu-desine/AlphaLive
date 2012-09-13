@@ -108,8 +108,8 @@ public:
                        int currentlySelectedPad);
     void loadSequence (int currentlySeletedSeqNumber, 
                        Array<int> selectedPads_, 
-                       bool openBrowser = true, File 
-                       fileToOpen = File::nonexistent);
+                       bool openBrowser = true, 
+                       File fileToOpen = File::nonexistent);
     
     void saveSequenceSet (int currentlySelectedPad);
     void loadSequenceSet (Array<int> selectedPads_, 
@@ -119,6 +119,12 @@ public:
     void createMidiFile (int currentlySelectedSeqNumber, 
                          int currentlySelectedPad,
                          int isSeqSet);
+    void importMidiFile (int currentlySelectedSeqNumber, 
+                         Array<int> selectedPads_,
+                         int isSeqSet,
+                         bool shouldImportNoteData,
+                         bool openBrowser = true, 
+                         File fileToOpen = File::nonexistent);
     
     int getGuiUpdateFlag();
     int getSceneToUpdate();

@@ -1974,7 +1974,7 @@ void AppDocumentState::createMidiFile (int currentlySelectedSeqNumber, int curre
                 MidiMessageSequence midiSequence;
                 for (int i = 0; i < midiMessage.size(); i++)
                 {
-                    midiSequence.addEvent(midiMessage[i]);
+                    midiSequence.addEvent(midiMessage[i]); //i think this where the freed pointer problem is being caused! Something to do with midiMessage going out of scope?
                 }
                 
                 //juce doc says you must call the below after adding note on events,
@@ -2001,6 +2001,119 @@ void AppDocumentState::createMidiFile (int currentlySelectedSeqNumber, int curre
         }
     }    
 }
+
+
+
+
+
+void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber, 
+                     Array<int> selectedPads_,
+                     int isSeqSet,
+                     bool shouldImportNoteData,                  
+                     bool openBrowser, 
+                     File fileToOpen)
+{
+    
+    FileInputStream inputStream(File("/Users/Liam/Desktop/testImport.mid"));
+    MidiFile midiFile;
+    midiFile.readFrom(inputStream);
+    int noOfTicks = midiFile.getTimeFormat(); //this must be positive. if negative it is in SMPTE format which we can't/don't want to use,
+                                                //therefore cancel the midi import and display an alert window.
+    
+    
+    std::cout << "Midi file no of tracks: " << midiFile.getNumTracks() << std::endl;
+    std::cout << "Midi file no of ticks: " << noOfTicks << std::endl;
+    
+    const MidiMessageSequence *midiSequence (midiFile.getTrack(0)); //pointer to midiFile content. Will it get deleted when midiFile goes out of scope?
+    //as the MidiMessageSequence object above is a pointer to the midiFile content and needs to be const, we ,ust create a copy of this object to be used
+    //to delate all the non note-on events.
+    //the other way would be to do the following above: MidiMessageSequence *newSequence = new MidiMessageSequence(*midiFile.getTrack(0));
+    //to create a deep copy that could be editted (not const) and then you would only need the one sequence object. But then you would need
+    //to manually delete the object and possible the eventHolder objects too.
+    MidiMessageSequence newSequence = *midiSequence;
+    
+    if (midiSequence != 0) //if it got a track from midiFile
+    {
+        int noOfEvents = midiSequence->getNumEvents();
+        std::cout << "Midi file no of events: " << noOfEvents << std::endl;
+        
+        MidiMessageSequence::MidiEventHolder *eventHolder[noOfEvents]; //pointers to midiSequence content. Will they get deleted when midiFile goes out of scope?
+        Array <int> noteNumbers;
+        Array <int> eventsToDelete;
+        
+        for (int i = 0; i < noOfEvents; i++)
+        {
+            eventHolder[i] = midiSequence->getEventPointer(i); 
+            
+            if (eventHolder[i]->message.isNoteOn() == true)
+            {
+                noteNumbers.addIfNotAlreadyThere(eventHolder[i]->message.getNoteNumber());
+                std::cout << "event note number: " << eventHolder[i]->message.getNoteNumber() << std::endl;
+            }
+            else
+            {
+                //can't simply delete the event here as the indexes won't match between 
+                //the MidiMessageSequence objects once an event has been removed
+                eventsToDelete.add(i);
+            }
+        }
+        
+        //delete all non-note-on messages from sequence
+        for (int i = eventsToDelete.size()-1; i >= 0; i--)
+            newSequence.deleteEvent(eventsToDelete[i], false);
+        
+        noOfEvents = newSequence.getNumEvents();
+        std::cout << "Midi file no of note on events: " << noOfEvents << std::endl;
+        
+        //sort noteNumbers array then only keep the first twelve
+        DefaultElementComparator<int> sorter;
+        noteNumbers.sort (sorter);
+        for (int i = noteNumbers.size()-1; i > 11; i--)
+            noteNumbers.remove(i);
+        
+        
+        for(int i = 0; i < noteNumbers.size(); i++)
+        {
+            std::cout << "NoteNumbers: " << noteNumbers[i] << std::endl;
+        }
+        
+        MidiMessageSequence::MidiEventHolder *newEventHolder[noOfEvents]; //pointers to newSequence content. Will they get deleted when midiFile goes out of scope?
+        eventsToDelete.clear();
+        
+        for (int i = 0; i < noOfEvents; i++)
+        {
+            newEventHolder[i] = newSequence.getEventPointer(i);
+            int eventNoteNumber = newEventHolder[i]->message.getNoteNumber();
+            std::cout << "event note number: " << eventNoteNumber << std::endl;
+            
+            if (noteNumbers.contains(eventNoteNumber) == false)
+            {
+                //can't simply delete the event here as the indexes won't match between 
+                //the MidiMessageSequence objects once an event has been removed
+                eventsToDelete.add(i);
+            }
+        }
+        
+        //delete all note events that have note number which aren't in the noteNumbers array
+        for (int i = eventsToDelete.size()-1; i >= 0; i--)
+            newSequence.deleteEvent(eventsToDelete[i], false);
+        
+        noOfEvents = newSequence.getNumEvents();
+        std::cout << "Midi file no of note on events within range: " << noOfEvents << std::endl;
+    
+        
+        for (int i = 0; i < noOfEvents; i++)
+        {
+            int noteColumn = (newEventHolder[i]->message.getTimeStamp())/(noOfTicks/4.0);
+            std::cout << "Note Time stamp: " << noteColumn << std::endl;
+
+        }
+        
+    }
+}
+
+
+
 
 
 void AppDocumentState::removeUneededAudioFiles (bool closingApp)

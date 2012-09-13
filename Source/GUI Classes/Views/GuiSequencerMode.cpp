@@ -1176,7 +1176,29 @@ void GuiSequencerMode::buttonClicked (Button* button)
         {
             menu.addItem(3, translate(translate("Export sequence...")));
             menu.addItem(4, translate(translate("Export sequence set...")));
+        }
             menu.addSeparator();
+        
+        if (modeMidiButton->getToggleState() == true)
+        {
+            PopupMenu importMidiSingle;
+            importMidiSingle.addItem(11, translate("With note data..."));
+            importMidiSingle.addItem(12, translate("Without note data..."));
+            menu.addSubMenu(translate("Import sequence from MIDI file"), importMidiSingle);
+            
+            PopupMenu importMidiSet;
+            importMidiSet.addItem(13, translate("With note data..."));
+            importMidiSet.addItem(14, translate("Without note data..."));
+            menu.addSubMenu(translate("Import sequence set from MIDI file"), importMidiSet);
+        }
+        else //don't want to provide the option to import note data
+        {
+            menu.addItem(12, translate(translate("Import sequence from MIDI file")));
+            menu.addItem(14, translate(translate("Import sequence set from MIDI file")));
+        }
+        
+        if (SINGLE_PAD)
+        {
             menu.addItem(9, translate(translate("Export sequence as MIDI file...")));
             menu.addItem(10, translate(translate("Export sequence set as MIDI file...")));
         }
@@ -1273,7 +1295,22 @@ void GuiSequencerMode::buttonClicked (Button* button)
         {
 			appDocumentStateRef.createMidiFile(currentSequenceNumber-1, selectedPads[0], true);
         }
-        
+        else if (result == 11) // import sequence and note data from midi file
+        {
+			appDocumentStateRef.importMidiFile (currentSequenceNumber-1, selectedPads, false, true);
+        }
+        else if (result == 12) // import sequence only from midi file
+        {
+			appDocumentStateRef.importMidiFile (currentSequenceNumber-1, selectedPads, false, false);
+        }
+        else if (result == 13) // import sequence set and note data from midi file
+        {
+			appDocumentStateRef.importMidiFile (currentSequenceNumber-1, selectedPads, true, true);
+        }
+        else if (result == 14) // import sequence set only from midi file
+        {
+			appDocumentStateRef.importMidiFile (currentSequenceNumber-1, selectedPads, true, false);
+        }
         
         
 	}

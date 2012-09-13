@@ -829,7 +829,7 @@ void AppDocumentState::createNewProject()
         notifyObs();
         
         //change the window title bar text
-        mainAppWindowRef->setTitleBarText("untitled");
+        mainAppWindowRef->setTitleBarText(translate("untitled"));
         
     }
 }

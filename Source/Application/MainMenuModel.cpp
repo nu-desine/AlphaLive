@@ -24,6 +24,17 @@
 #include "Common.h"
 #include "../File and Settings/StoredSettings.h"
 
+/*
+ Below are some strings that need wrapping in the translate() function
+ so that the translationfilegenerator app will add them to the trans file,
+ as for some reason they're not picked up within the juce library code.
+ 
+ translate("Services")
+ translate("Hide AlphaLive")
+ translate("Hide Other")
+ translate("Show All")
+ translate("Quit AlphaLive")
+ */
 
 
 MainMenuModel::MainMenuModel(AppDocumentState &ref)

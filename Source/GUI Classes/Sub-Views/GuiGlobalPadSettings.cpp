@@ -49,9 +49,9 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
     addAndMakeVisible(pressureSensitivityMenu = new ComboBox());
     pressureSensitivityMenu->addListener(this);
     pressureSensitivityMenu->addMouseListener(this, true);
-    pressureSensitivityMenu->addItem("Non-Sensitive", 1);
-    pressureSensitivityMenu->addItem("Standard", 2);
-    pressureSensitivityMenu->addItem("Sensitive", 3);
+    pressureSensitivityMenu->addItem(translate("Non-Sensitive"), 1);
+    pressureSensitivityMenu->addItem(translate("Standard"), 2);
+    pressureSensitivityMenu->addItem(translate("Sensitive"), 3);
     pressureSensitivityMenu->setSelectedId(2);
 	
 }

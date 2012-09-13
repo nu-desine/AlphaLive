@@ -195,7 +195,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     killOnClockStopButton->addMouseListener(this, true);
     
     addAndMakeVisible(killOnClockStopLabel = new Label());
-    killOnClockStopLabel->setText(translate("Kill Pads On Clock Stop:"), false);
+    killOnClockStopLabel->setText(translate("Stop All Sound On Clock Stop:"), false);
     killOnClockStopLabel->setColour(Label::textColourId, Colours::lightgrey);
     
     

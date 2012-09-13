@@ -386,7 +386,7 @@ public:
         if (error.isNotEmpty())
         {
             AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
-                                              translate("Error when trying to open audio device!"),
+                                              TRANS("Error when trying to open audio device!"),
                                               error);
         }
     }
@@ -433,8 +433,8 @@ public:
                 {
                     addAndMakeVisible (outputChanList
                                        = new ChannelSelectorListBox (setup, ChannelSelectorListBox::audioOutputType,
-                                                                     TRANS ("(no audio output channels found)")));
-                    outputChanLabel = new Label (String::empty, TRANS ("Active Output Channels:"));
+                                                                     TRANS("No audio output channels found...")));
+                    outputChanLabel = new Label (String::empty, TRANS("Active Output Channels:"));
                     outputChanLabel->setColour(Label::textColourId, Colours::lightgrey);
                     outputChanLabel->attachToComponent (outputChanList, true);
                 }
@@ -454,8 +454,8 @@ public:
                 {
                     addAndMakeVisible (inputChanList
                                        = new ChannelSelectorListBox (setup, ChannelSelectorListBox::audioInputType,
-                                                                     TRANS ("(no audio input channels found)")));
-                    inputChanLabel = new Label (String::empty, TRANS ("active input channels:"));
+                                                                     TRANS("No audio input channels found...")));
+                    inputChanLabel = new Label (String::empty, TRANS("Active Input Channels:"));
                     inputChanLabel->setColour(Label::textColourId, Colours::lightgrey);
                     inputChanLabel->attachToComponent (inputChanList, true);
                 }
@@ -530,7 +530,7 @@ private:
         for (int i = 0; i < devs.size(); ++i)
             combo.addItem (devs[i], i + 1);
         
-        combo.addItem (TRANS("<< none >>"), -1);
+        combo.addItem (TRANS("None"), -1);
         combo.setSelectedId (-1, true);
     }
     
@@ -551,8 +551,8 @@ private:
         
         if (currentDevice != nullptr && currentDevice->hasControlPanel())
         {
-            addAndMakeVisible (showUIButton = new TextButton (TRANS ("show this device's control panel"),
-                                                              TRANS ("opens the device's own control panel")));
+            addAndMakeVisible (showUIButton = new TextButton (TRANS("Show this device's control panel"),
+                                                              TRANS("Opens the device's own control panel")));
             showUIButton->addListener (this);
         }
         
@@ -570,14 +570,14 @@ private:
                 addAndMakeVisible (outputDeviceDropDown);
                 
                 outputDeviceLabel = new Label (String::empty,
-                                               type->hasSeparateInputsAndOutputs() ? TRANS ("Audio Output:")
-                                               : TRANS ("Device:"));
+                                               type->hasSeparateInputsAndOutputs() ? TRANS("Audio Output:")
+                                               : TRANS("Device:"));
                 outputDeviceLabel->setColour(Label::textColourId, Colours::lightgrey);
                 outputDeviceLabel->attachToComponent (outputDeviceDropDown, true);
                 
                 if (setup.maxNumOutputChannels > 0)
                 {
-                    addAndMakeVisible (testButton = new TextButton (TRANS ("Test")));
+                    addAndMakeVisible (testButton = new TextButton (TRANS("Test")));
                     testButton->addListener (this);
                 }
             }
@@ -598,7 +598,7 @@ private:
                 inputDeviceDropDown->addListener (this);
                 addAndMakeVisible (inputDeviceDropDown);
                 
-                inputDeviceLabel = new Label (String::empty, TRANS ("Audio Input:"));
+                inputDeviceLabel = new Label (String::empty, TRANS("Audio Input:"));
                 inputDeviceLabel->setColour(Label::textColourId, Colours::lightgrey);
                 inputDeviceLabel->attachToComponent (inputDeviceDropDown, true);
                 
@@ -618,7 +618,7 @@ private:
         {
             addAndMakeVisible (sampleRateDropDown = new ComboBox (String::empty));
             
-            sampleRateLabel = new Label (String::empty, TRANS ("Sample Rate:"));
+            sampleRateLabel = new Label (String::empty, TRANS("Sample Rate:"));
             sampleRateLabel->setColour(Label::textColourId, Colours::lightgrey);
             sampleRateLabel->attachToComponent (sampleRateDropDown, true);
         }
@@ -633,7 +633,7 @@ private:
         for (int i = 0; i < numRates; ++i)
         {
             const int rate = roundToInt (currentDevice->getSampleRate (i));
-            sampleRateDropDown->addItem (String (rate) + " Hz", rate);
+            sampleRateDropDown->addItem (String (rate) + " " + TRANS("Hz"), rate);
         }
         
         sampleRateDropDown->setSelectedId (roundToInt (currentDevice->getCurrentSampleRate()), true);
@@ -646,7 +646,7 @@ private:
         {
             addAndMakeVisible (bufferSizeDropDown = new ComboBox (String::empty));
             
-            bufferSizeLabel = new Label (String::empty, TRANS ("Audio Buffer size:"));
+            bufferSizeLabel = new Label (String::empty, TRANS("Audio Buffer Size:"));
             bufferSizeLabel->setColour(Label::textColourId, Colours::lightgrey);
             bufferSizeLabel->attachToComponent (bufferSizeDropDown, true);
         }
@@ -665,9 +665,9 @@ private:
         {
             const int bs = currentDevice->getBufferSizeSamples (i);
             bufferSizeDropDown->addItem (String (bs)
-                                         + " samples ("
+                                         + " " + TRANS("samples") + " ("
                                          + String (bs * 1000.0 / currentRate, 1)
-                                         + " ms)",
+                                         + " " + TRANS("ms") + ")",
                                          bs);
         }
         
@@ -966,7 +966,7 @@ alphaLiveEngineRef(ref)
         addAndMakeVisible (deviceTypeDropDown);
         deviceTypeDropDown->addListener (this);
         
-        deviceTypeDropDownLabel = new Label (String::empty, TRANS ("Audio Device Type:"));
+        deviceTypeDropDownLabel = new Label (String::empty, TRANS("Audio Device Type:"));
         deviceTypeDropDownLabel->setColour(Label::textColourId, Colours::lightgrey);
         deviceTypeDropDownLabel->setJustificationType (Justification::centredRight);
         deviceTypeDropDownLabel->attachToComponent (deviceTypeDropDown, true);
@@ -976,10 +976,10 @@ alphaLiveEngineRef(ref)
     {
         addAndMakeVisible (midiInputsList
                            = new MidiInputSelectorComponentListBox (deviceManager,
-                                                                    TRANS("(No Midi Inputs Available)"),
+                                                                    TRANS("No Midi Inputs Available"),
                                                                     0, 0));
         
-        midiInputsLabel = new Label (String::empty, TRANS ("Active Midi Inputs:"));
+        midiInputsLabel = new Label (String::empty, TRANS("Active Midi Inputs:"));
         midiInputsLabel->setColour(Label::textColourId, Colours::lightgrey);
         midiInputsLabel->setJustificationType (Justification::topRight);
         midiInputsLabel->attachToComponent (midiInputsList, true);
@@ -1141,7 +1141,7 @@ void AlphaAudioSettingsComponent::updateAllControls()
         
         const StringArray midiOuts (MidiOutput::getDevices());
         
-        midiOutputSelector->addItem (TRANS("<< none >>"), -1);
+        midiOutputSelector->addItem (TRANS("None"), -1);
         midiOutputSelector->addSeparator();
         
         for (int i = 0; i < midiOuts.size(); ++i)

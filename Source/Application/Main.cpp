@@ -243,35 +243,35 @@ public:
         
         if(commandID == CommandIDs::New)
         {
-            result.setInfo ("New...",
+            result.setInfo (translate("New..."),
                             "Creates a new project.",
                             CommandCategories::FileCommands, 0);
             result.defaultKeypresses.add (KeyPress ('n', cmd, 0));
         }
         else if(commandID == CommandIDs::Open)
         {
-            result.setInfo ("Open...",
+            result.setInfo (translate("Open..."),
                             "Opens an AlphaLive Project file (.alphalive).",
                             CommandCategories::FileCommands, 0);
             result.defaultKeypresses.add (KeyPress ('o', cmd, 0));
         }
         else if(commandID == CommandIDs::Save)
         {
-            result.setInfo ("Save",
+            result.setInfo (translate("Save"),
                             "Saves the current settings to an AlphaLive Project file (.alphalive).",
                             CommandCategories::FileCommands, 0);
             result.defaultKeypresses.add (KeyPress ('s', cmd, 0));
         }
         else if(commandID == CommandIDs::SaveAs)
         {
-            result.setInfo ("Save As...",
+            result.setInfo (translate("Save As..."),
                             "Saves the current settings to an AlphaLive Project file (.alphalive).",
                             CommandCategories::FileCommands, 0);
             result.defaultKeypresses.add (KeyPress ('s', cmd|shift, 0));
         }
         else if (commandID == CommandIDs::CleanUpProject)
         {
-            result.setInfo ("Clean Up Project...",
+            result.setInfo (translate("Clean Up Project..."),
                             "Removes any unused audio files from the projects 'Audio Files' directory.",
                             CommandCategories::FileCommands, 0);
         }

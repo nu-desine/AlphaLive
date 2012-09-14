@@ -2020,8 +2020,6 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
     //no events actually be imported as all the events within the first 32 columns could
     //be deleted due to being out of the 'first 12 notes' range. Maybe the midi sequence should
     //be cut to the right length first?
-    // - It is not set up to import non 4/4 sequences efficiently. Instead of the 'cut-off' point
-    //of sequences being 32, would it make more sense to use sequence length?
     
     
     //navigate to app directory
@@ -2183,40 +2181,41 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                     //event message velocity sets the value of the grid point
                     const int noteValue = newEventHolder2[i]->message.getVelocity();
                     
-                    //single sequence - apply events to just the currently selected sequence
-                    if (isSeqSet == false)
+                    for (int i = 0; i < selectedPads_.size(); i++)
                     {
-                        if (noteColumn < NO_OF_COLUMNS)
+                        int padNum = selectedPads_[i];
+                        
+                        int sequenceLength = PAD_SETTINGS_pads->getSequencerLength();
+                        int seqNumber = noteColumn/sequenceLength;
+                        PAD_SETTINGS_pads->setSequencerNumberOfSequences(seqNumber+1);
+                        
+                        
+                        //single sequence - apply events to just the currently selected sequence
+                        if (isSeqSet == false)
                         {
-                            for (int i = 0; i < selectedPads_.size(); i++)
+                            if (noteColumn < sequenceLength)
                             {
-                                int padNum = selectedPads_[i];
-                                
                                 PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, noteRow, noteColumn, noteValue, false);
                             }
+                            //else
+                            //{
+                            //    break;
+                            //}
                         }
-                        else
+                        //sequence set - apply to all sequences, splitting the midi sequence after 32 columns each time
+                        else if (isSeqSet == true)
                         {
-                            break;
-                        }
-                    }
-                    //sequence set - apply to all sequences, splitting the midi sequence after 32 columns each time
-                    else if (isSeqSet == true)
-                    {
-                        if (noteColumn < (32 * 8)) //why can't I use NO_OF_COLUMNS * NO_OF_SEQS? Equals a random number
-                        {
-                            for (int i = 0; i < selectedPads_.size(); i++)
+                            if (noteColumn < (sequenceLength * 8)) //why can't I use NO_OF_SEQS? Equals a random number
                             {
-                                int padNum = selectedPads_[i];
                                 
-                                int seqNumber = noteColumn/32;
-                                int newNoteColumn = noteColumn - (32 * seqNumber);
+                                int newNoteColumn = noteColumn - (sequenceLength * seqNumber);
                                 PAD_SETTINGS_pads->setSequencerData(seqNumber, noteRow, newNoteColumn, noteValue, false);
+                                
                             }
-                        }
-                        else
-                        {
-                            break;
+                            //else
+                            //{
+                            //    break;
+                            //}
                         }
                     }
                 }

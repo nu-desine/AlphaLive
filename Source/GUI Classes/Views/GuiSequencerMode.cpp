@@ -1314,16 +1314,18 @@ void GuiSequencerMode::buttonClicked (Button* button)
         {
 			appDocumentStateRef.importMidiFile (currentSequenceNumber-1, selectedPads, true, true);
             
-            sequencerGrid->setCurrentlySelectedPad(selectedPads);
-            setCurrentSequenceNumber();
-            mainComponentRef.getGuiPiano()->updateDisplay();
+            //sequencerGrid->setCurrentlySelectedPad(selectedPads);
+            //setCurrentSequenceNumber();
+            //mainComponentRef.getGuiPiano()->updateDisplay();
+            updateDisplay();
         }
         else if (result == 14) // import sequence set only from midi file
         {
 			appDocumentStateRef.importMidiFile (currentSequenceNumber-1, selectedPads, true, false);
             
-            sequencerGrid->setCurrentlySelectedPad(selectedPads);
-            setCurrentSequenceNumber();
+            //sequencerGrid->setCurrentlySelectedPad(selectedPads);
+            //setCurrentSequenceNumber();
+            updateDisplay();
         }
         
         

@@ -2014,7 +2014,7 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                      File fileToOpen)
 {
     
-    FileInputStream inputStream(File("/Users/Liam/Desktop/testImport3.mid"));
+    FileInputStream inputStream(File("/Users/Liam/Desktop/testImportSet.mid"));
     MidiFile midiFile;
     midiFile.readFrom(inputStream);
     int noOfTicks = midiFile.getTimeFormat(); //this must be positive. if negative it is in SMPTE format which we can't/don't want to use,
@@ -2143,7 +2143,8 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
         //event message note number index in the noteNumber array is used to set the row number
         //event message velocity sets the value of the grid point
         
-        MidiMessageSequence::MidiEventHolder *newEventHolder2[noOfEvents]; //pointers to newSequence content. Will they get 
+        MidiMessageSequence::MidiEventHolder *newEventHolder2[noOfEvents]; //pointers to newSequence content. Will they get deleted when midiFile goes out of scope?
+        
         
         for (int i = 0; i < noOfEvents; i++)
         {
@@ -2151,16 +2152,51 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
             int noteColumn = roundToInt((newEventHolder2[i]->message.getTimeStamp())/(noOfTicks/4.0));
             std::cout << "Note Column: " << noteColumn << std::endl;
             int noteRow = noteNumbers.indexOf(newEventHolder2[i]->message.getNoteNumber());
-            std::cout << "Note Row: " << noteRow << std::endl;
+            //std::cout << "Note Row: " << noteRow << std::endl;
             int noteValue = newEventHolder2[i]->message.getVelocity();
-            std::cout << "Note Value: " << noteValue << std::endl;
-            
-            for (int i = 0; i < selectedPads_.size(); i++)
+            //std::cout << "Note Value: " << noteValue << std::endl;
+           
+            if (isSeqSet == false)
             {
-                int padNum = selectedPads_[i];
-                PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, noteRow, noteColumn, noteValue, false);
+                if (noteColumn < NO_OF_COLUMNS)
+                {
+                    for (int i = 0; i < selectedPads_.size(); i++)
+                    {
+                        int padNum = selectedPads_[i];
+                        PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, noteRow, noteColumn, noteValue, false);
+                    }
+                }
+                else
+                {
+                    std::cout << "breaking" << std::endl;
+                    break;
+                }
+            }
+            else if (isSeqSet == true)
+            {
+                
+                if (noteColumn < (32 * 8)) //why can't I use NO_OF_COLUMNS * NO_OF_SEQS? Equals a random number
+                {
+                    for (int i = 0; i < selectedPads_.size(); i++)
+                    {
+                        int padNum = selectedPads_[i];
+                        int seqNumber = noteColumn/32;
+                        std::cout << "Seq number: " << seqNumber << std::endl;
+                        noteColumn = noteColumn - (32 * seqNumber);
+                        std::cout << "New Note Column: " << noteColumn << std::endl;
+                        
+                        PAD_SETTINGS_pads->setSequencerData(seqNumber, noteRow, noteColumn, noteValue, false);
+                    }
+                }
+                else
+                {
+                    std::cout << "breaking" << std::endl;
+                    break;
+                }
             }
         }
+        
+        
         
         
         for (int i = 0; i < selectedPads_.size(); i++)

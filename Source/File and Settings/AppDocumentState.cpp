@@ -2013,211 +2013,236 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                      bool openBrowser, 
                      File fileToOpen)
 {
+    //navigate to app directory
+    FileChooser loadFileChooser(translate("Select a .mid file to import..."), 
+                                StoredSettings::getInstance()->appProjectDir, 
+                                "*.mid");
     
-    FileInputStream inputStream(File("/Users/Liam/Desktop/testImportSet.mid"));
-    MidiFile midiFile;
-    midiFile.readFrom(inputStream);
-    int noOfTicks = midiFile.getTimeFormat(); //this must be positive. if negative it is in SMPTE format which we can't/don't want to use,
-                                                //therefore cancel the midi import and display an alert window.
+    bool shouldLoad;
     
+    if (openBrowser == true)
+        shouldLoad = loadFileChooser.browseForFileToOpen(); //open file browser
     
-    std::cout << "Midi file no of tracks: " << midiFile.getNumTracks() << std::endl;
-    std::cout << "Midi file no of ticks: " << noOfTicks << std::endl;
-    
-    const MidiMessageSequence *midiSequence (midiFile.getTrack(0)); //pointer to midiFile content. Will it get deleted when midiFile goes out of scope?
-    //as the MidiMessageSequence object above is a pointer to the midiFile content and needs to be const, we ,ust create a copy of this object to be used
-    //to delate all the non note-on events.
-    //the other way would be to do the following above: MidiMessageSequence *newSequence = new MidiMessageSequence(*midiFile.getTrack(0));
-    //to create a deep copy that could be editted (not const) and then you would only need the one sequence object. But then you would need
-    //to manually delete the object and possible the eventHolder objects too.
-    MidiMessageSequence newSequence = *midiSequence;
-    
-    if (midiSequence != 0) //if it got a track from midiFile
+    if (shouldLoad || openBrowser == false)
     {
-        int noOfEvents = midiSequence->getNumEvents();
-        std::cout << "Midi file no of events: " << noOfEvents << std::endl;
+        File loadedFile;
         
-        MidiMessageSequence::MidiEventHolder *eventHolder[noOfEvents]; //pointers to midiSequence content. Will they get deleted when midiFile goes out of scope?
-        Array <int> noteNumbers;
-        Array <int> eventsToDelete;
+        if (openBrowser == true)
+            loadedFile = loadFileChooser.getResult();
+        else
+            loadedFile = fileToOpen;
         
-        for (int i = 0; i < noOfEvents; i++)
+        FileInputStream inputStream(loadedFile);
+        MidiFile midiFile;
+        midiFile.readFrom(inputStream);
+        int noOfTicks = midiFile.getTimeFormat();
+        
+        if (noOfTicks >= 0) //time format = ticks per quarter note
         {
-            eventHolder[i] = midiSequence->getEventPointer(i); 
             
+            std::cout << "Midi file no of tracks: " << midiFile.getNumTracks() << std::endl;
+            std::cout << "Midi file no of ticks: " << noOfTicks << std::endl;
             
-            if (eventHolder[i]->message.isNoteOn() == true)
-            {
-                noteNumbers.addIfNotAlreadyThere(eventHolder[i]->message.getNoteNumber());
-                std::cout << "event note number: " << eventHolder[i]->message.getNoteNumber() << std::endl;
-            }
-            else
-            {
-                //can't simply delete the event here as the indexes won't match between 
-                //the MidiMessageSequence objects once an event has been removed
-                eventsToDelete.add(i);
-            }
-        }
-        
-        //delete all non-note-on messages from sequence
-        for (int i = eventsToDelete.size()-1; i >= 0; i--)
-            newSequence.deleteEvent(eventsToDelete[i], false);
-        
-        
-        noOfEvents = newSequence.getNumEvents();
-        std::cout << "Midi file no of note on events: " << noOfEvents << std::endl;
-        
-        //sort noteNumbers array then only keep the first twelve
-        DefaultElementComparator<int> sorter;
-        noteNumbers.sort (sorter);
-        for (int i = noteNumbers.size()-1; i > 11; i--)
-            noteNumbers.remove(i);
-        
-        
-        for(int i = 0; i < noteNumbers.size(); i++)
-        {
-            std::cout << "NoteNumbers: " << noteNumbers[i] << std::endl;
-        }
-        
-        MidiMessageSequence::MidiEventHolder *newEventHolder[noOfEvents]; //pointers to newSequence content. Will they get deleted when midiFile goes out of scope?
-        eventsToDelete.clear();
-        
-        for (int i = 0; i < noOfEvents; i++)
-        {
-            newEventHolder[i] = newSequence.getEventPointer(i);
-            int eventNoteNumber = newEventHolder[i]->message.getNoteNumber();
-            std::cout << "event note number: " << eventNoteNumber << std::endl;
+            //pointer to midiFile content. Will get deleted when midiFile goes out of scope.
+            const MidiMessageSequence *midiSequence (midiFile.getTrack(0)); 
+            //as the MidiMessageSequence object above is a pointer to the midiFile content 
+            //and needs to be const, we must create a copy of this object to be used
+            //to delate all the non note-on events.
+            //the other way would be to do the following above: 
+            //MidiMessageSequence *newSequence = new MidiMessageSequence(*midiFile.getTrack(0));
+            //to create a deep copy that could be editted (not const) and then you would
+            //only need the one sequence object. But then you would need
+            //to manually delete the object and possible the eventHolder objects too.
+            MidiMessageSequence newSequence = *midiSequence;
             
-            if (noteNumbers.contains(eventNoteNumber) == false)
+            if (midiSequence != 0) //if it got a track from midiFile
             {
-                //can't simply delete the event here as the indexes won't match between 
-                //the MidiMessageSequence objects once an event has been removed
-                eventsToDelete.add(i);
-            }
-        }
-        
-        //delete all note events that have note number which aren't in the noteNumbers array
-        for (int i = eventsToDelete.size()-1; i >= 0; i--)
-            newSequence.deleteEvent(eventsToDelete[i], false);
-        
-        noOfEvents = newSequence.getNumEvents();
-        std::cout << "Midi file no of note on events within range: " << noOfEvents << std::endl;
-    
-        //reset sequencer grid points
-        if (isSeqSet == false)
-        {
-            for (int i = 0; i < selectedPads_.size(); i++)
-            {
-                int padNum = selectedPads_[i];
+                int noOfEvents = midiSequence->getNumEvents();
+                std::cout << "Midi file no of events: " << noOfEvents << std::endl;
                 
-                for (int row = 0; row <= NO_OF_ROWS-1; row++)
+                //pointers to midiSequence content. Will get deleted when midiFile goes out of scope.
+                MidiMessageSequence::MidiEventHolder *eventHolder[noOfEvents]; 
+                Array <int> noteNumbers;
+                Array <int> eventsToDelete;
+                
+                for (int i = 0; i < noOfEvents; i++)
                 {
-                    for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+                    eventHolder[i] = midiSequence->getEventPointer(i); 
+                    
+                    if (eventHolder[i]->message.isNoteOn() == true)
                     {
-                        PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, row, column, 0, false);
+                        noteNumbers.addIfNotAlreadyThere(eventHolder[i]->message.getNoteNumber());
+                    }
+                    else
+                    {
+                        //can't simply delete the event here as the indexes won't match between 
+                        //the MidiMessageSequence objects once an event has been removed
+                        eventsToDelete.add(i);
                     }
                 }
-            }
-        }
-        else
-        {
-            for (int i = 0; i < selectedPads_.size(); i++)
-            {
-                int padNum = selectedPads_[i];
                 
-                for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
+                //delete all non-note-on messages from sequence
+                for (int i = eventsToDelete.size()-1; i >= 0; i--)
+                    newSequence.deleteEvent(eventsToDelete[i], false);
+                
+                
+                noOfEvents = newSequence.getNumEvents();
+                std::cout << "Midi file no of note on events: " << noOfEvents << std::endl;
+                
+                //sort noteNumbers array then only keep the first twelve
+                DefaultElementComparator<int> sorter;
+                noteNumbers.sort (sorter);
+                for (int i = noteNumbers.size()-1; i > 11; i--)
+                    noteNumbers.remove(i);
+                
+                
+                for(int i = 0; i < noteNumbers.size(); i++)
                 {
-                    for (int row = 0; row <= NO_OF_ROWS-1; row++)
+                    std::cout << "NoteNumbers: " << noteNumbers[i] << std::endl;
+                }
+                
+                //Pointers to newSequence content. Will get deleted when midiFile goes out of scope.
+                MidiMessageSequence::MidiEventHolder *newEventHolder[noOfEvents]; 
+                eventsToDelete.clear();
+                
+                for (int i = 0; i < noOfEvents; i++)
+                {
+                    newEventHolder[i] = newSequence.getEventPointer(i);
+                    int eventNoteNumber = newEventHolder[i]->message.getNoteNumber();
+                    std::cout << "event note number: " << eventNoteNumber << std::endl;
+                    
+                    if (noteNumbers.contains(eventNoteNumber) == false)
                     {
-                        for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+                        //can't simply delete the event here as the indexes won't match between 
+                        //the MidiMessageSequence objects once an event has been removed
+                        eventsToDelete.add(i);
+                    }
+                }
+                
+                //delete all note events that have note number which aren't in the noteNumbers array
+                for (int i = eventsToDelete.size()-1; i >= 0; i--)
+                    newSequence.deleteEvent(eventsToDelete[i], false);
+                
+                noOfEvents = newSequence.getNumEvents();
+                std::cout << "Midi file no of note on events within range: " << noOfEvents << std::endl;
+                
+                //reset sequencer grid points
+                if (isSeqSet == false)
+                {
+                    for (int i = 0; i < selectedPads_.size(); i++)
+                    {
+                        int padNum = selectedPads_[i];
+                        
+                        for (int row = 0; row <= NO_OF_ROWS-1; row++)
                         {
-                            PAD_SETTINGS_pads->setSequencerData(seq, row, column, 0, false);
+                            for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+                            {
+                                PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, row, column, 0, false);
+                            }
                         }
                     }
                 }
-            }
-        }
-        
-        //apply data from newSequence to sequencerData
-        //event message time stamp is used to work oout the column number
-        //event message note number index in the noteNumber array is used to set the row number
-        //event message velocity sets the value of the grid point
-        
-        MidiMessageSequence::MidiEventHolder *newEventHolder2[noOfEvents]; //pointers to newSequence content. Will they get deleted when midiFile goes out of scope?
-        
-        
-        for (int i = 0; i < noOfEvents; i++)
-        {
-            newEventHolder2[i] = newSequence.getEventPointer(i);
-            int noteColumn = roundToInt((newEventHolder2[i]->message.getTimeStamp())/(noOfTicks/4.0));
-            std::cout << "Note Column: " << noteColumn << std::endl;
-            int noteRow = noteNumbers.indexOf(newEventHolder2[i]->message.getNoteNumber());
-            //std::cout << "Note Row: " << noteRow << std::endl;
-            int noteValue = newEventHolder2[i]->message.getVelocity();
-            //std::cout << "Note Value: " << noteValue << std::endl;
-           
-            if (isSeqSet == false)
-            {
-                if (noteColumn < NO_OF_COLUMNS)
-                {
-                    for (int i = 0; i < selectedPads_.size(); i++)
-                    {
-                        int padNum = selectedPads_[i];
-                        PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, noteRow, noteColumn, noteValue, false);
-                    }
-                }
                 else
                 {
-                    std::cout << "breaking" << std::endl;
-                    break;
-                }
-            }
-            else if (isSeqSet == true)
-            {
-                
-                if (noteColumn < (32 * 8)) //why can't I use NO_OF_COLUMNS * NO_OF_SEQS? Equals a random number
-                {
                     for (int i = 0; i < selectedPads_.size(); i++)
                     {
                         int padNum = selectedPads_[i];
-                        int seqNumber = noteColumn/32;
-                        std::cout << "Seq number: " << seqNumber << std::endl;
-                        noteColumn = noteColumn - (32 * seqNumber);
-                        std::cout << "New Note Column: " << noteColumn << std::endl;
                         
-                        PAD_SETTINGS_pads->setSequencerData(seqNumber, noteRow, noteColumn, noteValue, false);
+                        for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
+                        {
+                            for (int row = 0; row <= NO_OF_ROWS-1; row++)
+                            {
+                                for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+                                {
+                                    PAD_SETTINGS_pads->setSequencerData(seq, row, column, 0, false);
+                                }
+                            }
+                        }
                     }
                 }
-                else
+                
+                //apply data from newSequence to sequencerData
+                
+                //pointers to newSequence content. Will get deleted when midiFile goes out of scope.
+                MidiMessageSequence::MidiEventHolder *newEventHolder2[noOfEvents]; 
+                
+                
+                for (int i = 0; i < noOfEvents; i++)
                 {
-                    std::cout << "breaking" << std::endl;
-                    break;
+                    newEventHolder2[i] = newSequence.getEventPointer(i);
+                    //event message time stamp is used to work oout the column number
+                    const int noteColumn = roundToInt((newEventHolder2[i]->message.getTimeStamp())/(noOfTicks/4.0));
+                    //event message note number index in the noteNumber array is used to set the row number
+                    const int noteRow = noteNumbers.indexOf(newEventHolder2[i]->message.getNoteNumber());
+                    //event message velocity sets the value of the grid point
+                    const int noteValue = newEventHolder2[i]->message.getVelocity();
+                    
+                    if (isSeqSet == false)
+                    {
+                        if (noteColumn < NO_OF_COLUMNS)
+                        {
+                            for (int i = 0; i < selectedPads_.size(); i++)
+                            {
+                                int padNum = selectedPads_[i];
+                                PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, noteRow, noteColumn, noteValue, false);
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    else if (isSeqSet == true)
+                    {
+                        
+                        if (noteColumn < (32 * 8)) //why can't I use NO_OF_COLUMNS * NO_OF_SEQS? Equals a random number
+                        {
+                            for (int i = 0; i < selectedPads_.size(); i++)
+                            {
+                                int padNum = selectedPads_[i];
+                                int seqNumber = noteColumn/32;
+                                std::cout << "Seq number for pad " << selectedPads_[i] << ": " << seqNumber << std::endl;
+                                int newNoteColumn = noteColumn - (32 * seqNumber);
+                                std::cout << "New Note Column for pad " << selectedPads_[i] << ": " << newNoteColumn << std::endl;
+                                
+                                PAD_SETTINGS_pads->setSequencerData(seqNumber, noteRow, newNoteColumn, noteValue, false);
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
                 }
-            }
-        }
-        
-        
-        
-        
-        for (int i = 0; i < selectedPads_.size(); i++)
-        {
-            int padNum = selectedPads_[i];
-            PAD_SETTINGS_pads->seqDataToString();
-        }
-        
-        if (shouldImportNoteData == true)
-        {
-            for (int i = 0; i < selectedPads_.size(); i++)
-            {
-                int padNum = selectedPads_[i];
-                for(int index = 0; index < noteNumbers.size(); index++)
+                
+                
+                
+                
+                for (int i = 0; i < selectedPads_.size(); i++)
                 {
-                    PAD_SETTINGS_pads->setSequencerMidiNote(noteNumbers[index], index);
+                    int padNum = selectedPads_[i];
+                    PAD_SETTINGS_pads->seqDataToString();
+                }
+                
+                if (shouldImportNoteData == true)
+                {
+                    for (int i = 0; i < selectedPads_.size(); i++)
+                    {
+                        int padNum = selectedPads_[i];
+                        for(int index = 0; index < noteNumbers.size(); index++)
+                        {
+                            PAD_SETTINGS_pads->setSequencerMidiNote(noteNumbers[index], index);
+                        }
+                        
+                    }
                 }
                 
             }
         }
-        
+        else //time format = SMPTE
+        {
+            AlertWindow::showMessageBox(AlertWindow::InfoIcon, translate("Cannot Import MIDI File!"), translate("AlphaLive cannot import MIDI files that use the SMPTE time format."));
+        }
     }
 }
 

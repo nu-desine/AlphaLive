@@ -2013,6 +2013,17 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                      bool openBrowser, 
                      File fileToOpen)
 {
+    //current issues with importing midi files
+    // - If importing a big midi file as a single sequence it will determine which
+    //note numbers will be imported as well as those note numbers events using the entire
+    //midi sequence, even if most of it won't actually be imported. This could result in
+    //no events actually be imported as all the events within the first 32 columns could
+    //be deleted due to being out of the 'first 12 notes' range. Maybe the midi sequence should
+    //be cut to the right length first?
+    // - It is not set up to import non 4/4 sequences efficiently. Instead of the 'cut-off' point
+    //of sequences being 32, would it make more sense to use sequence length?
+    
+    
     //navigate to app directory
     FileChooser loadFileChooser(translate("Select a .mid file to import..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
@@ -2032,25 +2043,29 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
         else
             loadedFile = fileToOpen;
         
+        //read from file and put data into a MidiFile object
         FileInputStream inputStream(loadedFile);
         MidiFile midiFile;
         midiFile.readFrom(inputStream);
+        
         int noOfTicks = midiFile.getTimeFormat();
         
         if (noOfTicks >= 0) //time format = ticks per quarter note
         {
+            int trackToImport = 0;
+            if (midiFile.getNumTracks() > 1)
+                trackToImport = 1;
             
             std::cout << "Midi file no of tracks: " << midiFile.getNumTracks() << std::endl;
-            std::cout << "Midi file no of ticks: " << noOfTicks << std::endl;
             
             //pointer to midiFile content. Will get deleted when midiFile goes out of scope.
-            const MidiMessageSequence *midiSequence (midiFile.getTrack(0)); 
+            const MidiMessageSequence *midiSequence (midiFile.getTrack(trackToImport)); 
             //as the MidiMessageSequence object above is a pointer to the midiFile content 
             //and needs to be const, we must create a copy of this object to be used
-            //to delate all the non note-on events.
+            //to delete all the non note-on events.
             //the other way would be to do the following above: 
             //MidiMessageSequence *newSequence = new MidiMessageSequence(*midiFile.getTrack(0));
-            //to create a deep copy that could be editted (not const) and then you would
+            //to create a deep copy that could be editted (as it won't be const) and then you would
             //only need the one sequence object. But then you would need
             //to manually delete the object and possible the eventHolder objects too.
             MidiMessageSequence newSequence = *midiSequence;
@@ -2058,13 +2073,15 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
             if (midiSequence != 0) //if it got a track from midiFile
             {
                 int noOfEvents = midiSequence->getNumEvents();
-                std::cout << "Midi file no of events: " << noOfEvents << std::endl;
+                std::cout << noOfEvents << std::endl;
                 
                 //pointers to midiSequence content. Will get deleted when midiFile goes out of scope.
                 MidiMessageSequence::MidiEventHolder *eventHolder[noOfEvents]; 
                 Array <int> noteNumbers;
                 Array <int> eventsToDelete;
                 
+                //Search through all events, flag any non-note-on events to be deleted,
+                //and add the note numbers of any note-on events to the noteNumbers array.
                 for (int i = 0; i < noOfEvents; i++)
                 {
                     eventHolder[i] = midiSequence->getEventPointer(i); 
@@ -2081,13 +2098,12 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                     }
                 }
                 
-                //delete all non-note-on messages from sequence
+                //delete flagged events
                 for (int i = eventsToDelete.size()-1; i >= 0; i--)
                     newSequence.deleteEvent(eventsToDelete[i], false);
                 
-                
+                //update noOfEvents
                 noOfEvents = newSequence.getNumEvents();
-                std::cout << "Midi file no of note on events: " << noOfEvents << std::endl;
                 
                 //sort noteNumbers array then only keep the first twelve
                 DefaultElementComparator<int> sorter;
@@ -2095,21 +2111,17 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                 for (int i = noteNumbers.size()-1; i > 11; i--)
                     noteNumbers.remove(i);
                 
-                
-                for(int i = 0; i < noteNumbers.size(); i++)
-                {
-                    std::cout << "NoteNumbers: " << noteNumbers[i] << std::endl;
-                }
-                
                 //Pointers to newSequence content. Will get deleted when midiFile goes out of scope.
                 MidiMessageSequence::MidiEventHolder *newEventHolder[noOfEvents]; 
                 eventsToDelete.clear();
                 
+                //Search through all events and flag any events that don't contain a note
+                //number within the noteNumbers array to be deleted
                 for (int i = 0; i < noOfEvents; i++)
                 {
                     newEventHolder[i] = newSequence.getEventPointer(i);
+                    
                     int eventNoteNumber = newEventHolder[i]->message.getNoteNumber();
-                    std::cout << "event note number: " << eventNoteNumber << std::endl;
                     
                     if (noteNumbers.contains(eventNoteNumber) == false)
                     {
@@ -2119,12 +2131,12 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                     }
                 }
                 
-                //delete all note events that have note number which aren't in the noteNumbers array
+                //delete flagged events
                 for (int i = eventsToDelete.size()-1; i >= 0; i--)
                     newSequence.deleteEvent(eventsToDelete[i], false);
                 
+                //update noOfEvents
                 noOfEvents = newSequence.getNumEvents();
-                std::cout << "Midi file no of note on events within range: " << noOfEvents << std::endl;
                 
                 //reset sequencer grid points
                 if (isSeqSet == false)
@@ -2132,41 +2144,35 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                     for (int i = 0; i < selectedPads_.size(); i++)
                     {
                         int padNum = selectedPads_[i];
-                        
                         for (int row = 0; row <= NO_OF_ROWS-1; row++)
                         {
                             for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
-                            {
                                 PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, row, column, 0, false);
-                            }
                         }
                     }
                 }
-                else
+                else //seq set
                 {
                     for (int i = 0; i < selectedPads_.size(); i++)
                     {
                         int padNum = selectedPads_[i];
-                        
                         for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
                         {
                             for (int row = 0; row <= NO_OF_ROWS-1; row++)
                             {
                                 for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
-                                {
                                     PAD_SETTINGS_pads->setSequencerData(seq, row, column, 0, false);
-                                }
                             }
                         }
                     }
                 }
                 
-                //apply data from newSequence to sequencerData
-                
                 //pointers to newSequence content. Will get deleted when midiFile goes out of scope.
                 MidiMessageSequence::MidiEventHolder *newEventHolder2[noOfEvents]; 
                 
-                
+                //apply data from newSequence to sequencerData within PadSettings
+                //search through all the events, get the time stamp, noteNumber index, and velocity
+                //or each event, and apply it to the correct sequencerData index.
                 for (int i = 0; i < noOfEvents; i++)
                 {
                     newEventHolder2[i] = newSequence.getEventPointer(i);
@@ -2177,6 +2183,7 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                     //event message velocity sets the value of the grid point
                     const int noteValue = newEventHolder2[i]->message.getVelocity();
                     
+                    //single sequence - apply events to just the currently selected sequence
                     if (isSeqSet == false)
                     {
                         if (noteColumn < NO_OF_COLUMNS)
@@ -2184,6 +2191,7 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                             for (int i = 0; i < selectedPads_.size(); i++)
                             {
                                 int padNum = selectedPads_[i];
+                                
                                 PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, noteRow, noteColumn, noteValue, false);
                             }
                         }
@@ -2192,19 +2200,17 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                             break;
                         }
                     }
+                    //sequence set - apply to all sequences, splitting the midi sequence after 32 columns each time
                     else if (isSeqSet == true)
                     {
-                        
                         if (noteColumn < (32 * 8)) //why can't I use NO_OF_COLUMNS * NO_OF_SEQS? Equals a random number
                         {
                             for (int i = 0; i < selectedPads_.size(); i++)
                             {
                                 int padNum = selectedPads_[i];
-                                int seqNumber = noteColumn/32;
-                                std::cout << "Seq number for pad " << selectedPads_[i] << ": " << seqNumber << std::endl;
-                                int newNoteColumn = noteColumn - (32 * seqNumber);
-                                std::cout << "New Note Column for pad " << selectedPads_[i] << ": " << newNoteColumn << std::endl;
                                 
+                                int seqNumber = noteColumn/32;
+                                int newNoteColumn = noteColumn - (32 * seqNumber);
                                 PAD_SETTINGS_pads->setSequencerData(seqNumber, noteRow, newNoteColumn, noteValue, false);
                             }
                         }
@@ -2215,15 +2221,14 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                     }
                 }
                 
-                
-                
-                
+                //convert new sequence data to strings
                 for (int i = 0; i < selectedPads_.size(); i++)
                 {
                     int padNum = selectedPads_[i];
                     PAD_SETTINGS_pads->seqDataToString();
                 }
                 
+                //if needed, apply the noteNumbers array to the pads midi note array
                 if (shouldImportNoteData == true)
                 {
                     for (int i = 0; i < selectedPads_.size(); i++)
@@ -2233,9 +2238,9 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                         {
                             PAD_SETTINGS_pads->setSequencerMidiNote(noteNumbers[index], index);
                         }
-                        
                     }
                 }
+              
                 
             }
         }

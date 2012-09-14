@@ -194,7 +194,7 @@ void AudioFilePlayer::processAudioFile(int padValue)
                 //...and triggerModeData signifies to stop audio, DON'T LET IT...MWAHAHAHA! 
                 triggerModeData.playingStatus = 2; //ignore
             }
-            else if (triggerModeData.playingStatus == 1 && currentPlayingState == 1 && triggerMode != 6)
+            else if (triggerModeData.playingStatus == 1 && currentPlayingState == 1 && triggerMode != /*6*/4)
             {
                 //...and triggerModeData signifies to start playing, 
                 //but file is already playing and triggerMode does not equal 'trigger'

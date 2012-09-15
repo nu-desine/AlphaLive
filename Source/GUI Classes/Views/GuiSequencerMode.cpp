@@ -1195,6 +1195,8 @@ void GuiSequencerMode::buttonClicked (Button* button)
         {
             menu.addItem(12, translate(translate("Import sequence from MIDI file")));
             menu.addItem(14, translate(translate("Import sequence set from MIDI file")));
+            //translate("Whole pattern...");
+            //translate("Matching GM drum mapping only...");
         }
         
         if (SINGLE_PAD)

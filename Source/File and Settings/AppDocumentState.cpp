@@ -1993,12 +1993,16 @@ void AppDocumentState::createMidiFile (int currentlySelectedSeqNumber, int curre
                 
                 FileOutputStream outputStream(savedFile);
                 midiFile.writeTo(outputStream);
+                
             }
             else
             {
                 AlertWindow::showMessageBox(AlertWindow::InfoIcon, translate("MIDI file not created!"), translate("There is no sequence to create a MIDI file from."));
             }
+            
+            
         }
+        
     }    
 }
 

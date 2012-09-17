@@ -74,6 +74,7 @@ alphaLiveEngineRef(ref),
     addChildComponent(guiSequencerMode = new GuiSequencerMode(*alphaLiveEngineRef.getModeSequencer(), *this, appDocumentStateRef)); 
     addChildComponent(guiControllerMode = new GuiControllerMode(*this));
     addChildComponent(guiGlobalPadSettings = new GuiGlobalPadSettings(*this));
+    addChildComponent(eliteControlsSettings = new GuiEliteControlsSettings(*this));
     
     
     //Pad Layout
@@ -289,6 +290,9 @@ void MainComponent::resized()
     guiControllerMode->setBounds(0, 0, getWidth(), getHeight());
 	guiGlobalPadSettings->setBounds(0, 0, getWidth(), getHeight());
 	
+    eliteControls->setBounds(50, 530, 100, 100);
+    eliteControlsSettings->setBounds(0, 0, getWidth(), getHeight());
+    
 	midiPiano->setBounds(0, 0, 660, 685);
     
     toolbox->setBounds(760, 17, 247, 107);
@@ -316,8 +320,6 @@ void MainComponent::resized()
     globalClock->setBounds(479, 0, 266, 144);
     
     infoTextBox->setBounds(0, getHeight()-30, getWidth(), 30);
-    
-    eliteControls->setBounds(50, 530, 100, 100);
     
     pivotX = guiPadLayout->getX() + (guiPadLayout->getWidth() * 0.5);
 	pivotY = guiPadLayout->getY() + (guiPadLayout->getHeight() * 0.5);
@@ -931,6 +933,12 @@ void MainComponent::setGlobalPadSettingsDisplay()
     repaint();
 }
 
+void MainComponent::setEliteControlsSettingsDisplay (int controlNumber)
+{
+    //in here must deselect all pads, and show the eliteControlsSettingsView
+    //then if a pad is clicked this view must be hidden
+    std::cout << "Control clicked: " <<  controlNumber << std::endl;
+}
 
 AlphaLiveEngine& MainComponent::getAlphaLiveEngineRef()
 {

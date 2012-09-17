@@ -56,6 +56,7 @@
 #include "../Custom Components/Circle Piano/GuiPiano.h"
 #include "../AlphaLiveLookandFeel.h"
 #include "../Sub-Views/EliteControlsComponent.h"
+#include "../Sub-Views/GuiEliteControlsSettings.h"
 
 class MainComponent :   public Component,
                         public Button::Listener,
@@ -90,6 +91,7 @@ public:
     void setToSequencerMode();
     void setToControllerMode();
     void setGlobalPadSettingsDisplay();
+    void setEliteControlsSettingsDisplay (int controlNumber);
     
     void run();
     void setInfoTextBoxText (String text);
@@ -180,6 +182,7 @@ private:
     GuiPiano *midiPiano;
     Toolbox *toolbox;
     EliteControlsComponent *eliteControls;
+    GuiEliteControlsSettings *eliteControlsSettings;
     
     //GuiSwitch *autoShowSettingsSwitch;
 

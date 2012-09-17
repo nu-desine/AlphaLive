@@ -24,6 +24,14 @@
 #include "../Views/MainComponent.h"
 #include "../AlphaLiveLookandFeel.h"
 
+enum
+{
+    DIAL_1 = 1,
+    DIAL_2,
+    BUTTON_1,
+    BUTTON_2,
+    BUTTON_3,
+};
 
 EliteControlsComponent::EliteControlsComponent(MainComponent &ref)
         : mainComponentRef(ref)
@@ -34,15 +42,25 @@ EliteControlsComponent::EliteControlsComponent(MainComponent &ref)
     
     addAndMakeVisible (dial1Button = new ShapeButton("Dial 1", AlphaColours::blue, AlphaColours::lightblue, AlphaColours::blue));
     dial1Button->setShape(dialShape, true, true, false);
+    dial1Button->addListener(this);
+    dial1Button->addMouseListener(this, true);
     addAndMakeVisible (dial2Button = new ShapeButton("Dial 2", AlphaColours::blue, AlphaColours::lightblue, AlphaColours::blue));
     dial2Button->setShape(dialShape, true, true, false);
+    dial2Button->addListener(this);
+    dial2Button->addMouseListener(this, true);
     
     addAndMakeVisible (button1Button = new ShapeButton("Button 1", AlphaColours::blue, AlphaColours::lightblue, AlphaColours::blue));
     button1Button->setShape(buttonShape, true, true, false);
+    button1Button->addListener(this);
+    button1Button->addMouseListener(this, true);
     addAndMakeVisible (button2Button = new ShapeButton("Button 1", AlphaColours::blue, AlphaColours::lightblue, AlphaColours::blue));
     button2Button->setShape(buttonShape, true, true, false);
+    button2Button->addListener(this);
+    button2Button->addMouseListener(this, true);
     addAndMakeVisible (button3Button = new ShapeButton("Button 1", AlphaColours::blue, AlphaColours::lightblue, AlphaColours::blue));
     button3Button->setShape(buttonShape, true, true, false);
+    button3Button->addListener(this);
+    button3Button->addMouseListener(this, true);
     
 }
 
@@ -68,6 +86,21 @@ void EliteControlsComponent::paint (Graphics& g)
 
 void EliteControlsComponent::buttonClicked (Button* button)
 {
+    int clickedControl = 0;
+    
+    if (button == dial1Button)
+        clickedControl = DIAL_1;
+    else if (button == dial2Button)
+        clickedControl = DIAL_2;
+    else if (button == button1Button)
+        clickedControl = BUTTON_1;
+    else if (button == button2Button)
+        clickedControl = BUTTON_2;
+    else if (button == button3Button)
+        clickedControl = BUTTON_3;
+
+    
+    mainComponentRef.setEliteControlsSettingsDisplay(clickedControl);
     
 }
 

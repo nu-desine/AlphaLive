@@ -55,6 +55,7 @@
 #include "../Sub-Views/GuiGlobalPadSettings.h"
 #include "../Custom Components/Circle Piano/GuiPiano.h"
 #include "../AlphaLiveLookandFeel.h"
+#include "../Sub-Views/EliteControlsComponent.h"
 
 class MainComponent :   public Component,
                         public Button::Listener,
@@ -178,6 +179,7 @@ private:
     GuiGlobalClock *globalClock;
     GuiPiano *midiPiano;
     Toolbox *toolbox;
+    EliteControlsComponent *eliteControls;
     
     //GuiSwitch *autoShowSettingsSwitch;
 

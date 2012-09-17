@@ -222,6 +222,11 @@ alphaLiveEngineRef(ref),
     addAndMakeVisible(toolbox = new Toolbox(*this));
     toolbox->addMouseListener(this, true);
     
+    //elite controls display
+    addAndMakeVisible(eliteControls = new EliteControlsComponent(*this));
+    eliteControls->addMouseListener(this, true);
+    
+    
     //pop up views
     addChildComponent(aboutComponent = new AboutComponent(*this));
     aboutComponent->setAlpha(0.975f);
@@ -311,6 +316,8 @@ void MainComponent::resized()
     globalClock->setBounds(479, 0, 266, 144);
     
     infoTextBox->setBounds(0, getHeight()-30, getWidth(), 30);
+    
+    eliteControls->setBounds(50, 530, 100, 100);
     
     pivotX = guiPadLayout->getX() + (guiPadLayout->getWidth() * 0.5);
 	pivotY = guiPadLayout->getY() + (guiPadLayout->getHeight() * 0.5);

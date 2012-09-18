@@ -52,6 +52,13 @@ AppSettings::AppSettings()
     autoStartClock = 0; //off
     
     copyExternalFiles = true;
+    
+    //elite controls stuff
+    eliteDial[0].control = 1;
+    eliteDial[1].control = 2;
+    eliteButton[0].control = 2;
+    eliteButton[1].control = 2;
+    eliteButton[2].control = 1;
 
     //=================================Pad Settings stuff==================================
     //'for' loop to create 48 objects of the PadSettings class, which are put into an array.
@@ -231,6 +238,169 @@ int AppSettings::getAutoStartClock()
 bool AppSettings::getCopyExternalFiles()
 {
     return copyExternalFiles;
+}
+
+
+//Elite controls stuff
+void AppSettings::setEliteDialControl(int value, int dialNumber)
+{
+    eliteDial[dialNumber].control = value;
+}
+
+void AppSettings::setEliteDialMidiCcNumber(int value, int dialNumber)
+{
+    eliteDial[dialNumber].midiCcNumber = value;
+}
+void AppSettings::setEliteDialMidiChannel(int value, int dialNumber)
+{
+    eliteDial[dialNumber].midiChannel = value;
+}
+void AppSettings::setEliteDialMidiMinRange(int value, int dialNumber)
+{
+    eliteDial[dialNumber].midiMinRange = value;
+}
+void AppSettings::setEliteDialMidiMaxRange(int value, int dialNumber)
+{
+    eliteDial[dialNumber].midiMaxRange = value;
+}
+void AppSettings::setEliteDialOscPortNumber(int value, int dialNumber)
+{
+    eliteDial[dialNumber].oscPortNumber = value;
+}
+void AppSettings::setEliteDialOscIpAddress(String value, int dialNumber)
+{
+    eliteDial[dialNumber].oscIpAddress = value;
+}
+void AppSettings::setEliteDialOscMinRange(double value, int dialNumber)
+{
+    eliteDial[dialNumber].oscMaxRange = value;
+}
+void AppSettings::setEliteDialOscMaxRange(double value, int dialNumber)
+{
+    eliteDial[dialNumber].oscMaxRange = value;
+}
+
+
+int AppSettings::getEliteDialControl (int dialNumber)
+{
+    return eliteDial[dialNumber].control;
+}
+
+int AppSettings::getEliteDialMidiCcNumber(int dialNumber)
+{
+    return eliteDial[dialNumber].midiCcNumber;
+}
+int AppSettings::getEliteDialMidiChannel(int dialNumber)
+{
+    return eliteDial[dialNumber].midiChannel;
+}
+int AppSettings::getEliteDialMidiMinRange(int dialNumber)
+{
+    return eliteDial[dialNumber].midiMinRange;
+}
+int AppSettings::getEliteDialMidiMaxRange(int dialNumber)
+{
+    return eliteDial[dialNumber].midiMaxRange;
+}
+int AppSettings::getEliteDialOscPortNumber(int dialNumber)
+{
+    return eliteDial[dialNumber].oscPortNumber;
+}
+String AppSettings::getEliteDialOscIpAddress(int dialNumber)
+{
+    return eliteDial[dialNumber].oscIpAddress;
+}
+double AppSettings::getEliteDialOscMinRange(int dialNumber)
+{
+    return eliteDial[dialNumber].oscMinRange;
+}
+double AppSettings::getEliteDialOscMaxRange(int dialNumber)
+{
+    return eliteDial[dialNumber].oscMaxRange;
+}
+
+
+void AppSettings::setEliteButtonControl(int value, int buttonNumber)
+{
+    eliteButton[buttonNumber].control = value;
+}
+
+void AppSettings::setEliteButtonSceneNumber(int value, int buttonNumber)
+{
+    eliteButton[buttonNumber].sceneNumber = value;
+}
+void AppSettings::setEliteButtonMidiCcNumber(int value, int buttonNumber)
+{
+    eliteButton[buttonNumber].midiCcNumber = value;
+}
+void AppSettings::setEliteButtonMidiChannel(int value, int buttonNumber)
+{
+    eliteButton[buttonNumber].midiChannel = value;
+}
+void AppSettings::setEliteButtonMidiOffNumber(int value, int buttonNumber)
+{
+    eliteButton[buttonNumber].midiOffNumber = value;
+}
+void AppSettings::setEliteButtonMidiOnNumber(int value, int buttonNumber)
+{
+    eliteButton[buttonNumber].midiOnNumber = value;
+}
+void AppSettings::setEliteButtonOscPortNumber(int value, int buttonNumber)
+{
+    eliteButton[buttonNumber].oscPortNumber = value;
+}
+void AppSettings::setEliteButtonOscIpAddress(String value, int buttonNumber)
+{
+    eliteButton[buttonNumber].oscIpAddress = value;
+}
+void AppSettings::setEliteButtonOscOffNumber(double value, int buttonNumber)
+{
+    eliteButton[buttonNumber].oscOffNumber = value;
+}
+void AppSettings::setEliteButtonOscOnNumber(double value, int buttonNumber)
+{
+    eliteButton[buttonNumber].oscOnNumber = value;
+}
+
+int AppSettings::getEliteButtonControl (int buttonNumber)
+{
+    return eliteButton[buttonNumber].control;
+}
+int AppSettings::getEliteButtonSceneNumber(int buttonNumber)
+{
+    return eliteButton[buttonNumber].sceneNumber;
+}
+int AppSettings::getEliteButtonMidiCcNumber(int buttonNumber)
+{
+    return eliteButton[buttonNumber].midiCcNumber;
+}
+int AppSettings::getEliteButtonMidiChannel(int buttonNumber)
+{
+    return eliteButton[buttonNumber].midiChannel;
+}
+int AppSettings::getEliteButtonMidiOffNumber(int buttonNumber)
+{
+    return eliteButton[buttonNumber].midiOffNumber;
+}
+int AppSettings::getEliteButtonMidiOnNumber(int buttonNumber)
+{
+    return eliteButton[buttonNumber].midiOnNumber;
+}
+int AppSettings::getEliteButtonOscPortNumber(int buttonNumber)
+{
+    return eliteButton[buttonNumber].oscPortNumber;
+}
+String AppSettings::getEliteButtonOscIpAddress(int buttonNumber)
+{
+    return eliteButton[buttonNumber].oscIpAddress;
+}
+double AppSettings::getEliteButtonOscOffNumber(int buttonNumber)
+{
+    return eliteButton[buttonNumber].oscOffNumber;
+}
+double AppSettings::getEliteButtonOscOnNumber(int buttonNumber)
+{
+    return eliteButton[buttonNumber].oscOnNumber;
 }
 
 

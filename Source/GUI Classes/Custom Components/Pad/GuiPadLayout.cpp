@@ -586,6 +586,16 @@ void GuiPadLayout::setShouldDisplaySettings (bool value)
     shouldDisplaySettings = value;
 }
 
+void GuiPadLayout::deselectAllPads()
+{
+    selectedPads.clear(); //should I call clearQuick() instead?
+    
+    for (int i = 0; i <=47; i++)
+        turnOff(i);
+    
+    mainComponentRef.setCurrentlySelectedPad(selectedPads);
+}
+
 void GuiPadLayout::mouseEnter (const MouseEvent &e)
 {
     for (int i = 0; i <= 47; i++) 

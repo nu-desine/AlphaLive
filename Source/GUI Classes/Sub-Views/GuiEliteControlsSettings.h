@@ -32,7 +32,8 @@ class MainComponent;
 class GuiEliteControlsSettings :    public Component,
                                     public Button::Listener,
                                     public Slider::Listener,
-                                    public ComboBox::Listener
+                                    public ComboBox::Listener,
+                                    public Label::Listener
 {
 public:
 	
@@ -45,6 +46,7 @@ public:
     void buttonClicked (Button* button);
     void sliderValueChanged (Slider* slider);
     void comboBoxChanged (ComboBox* comboBox);
+    void labelTextChanged (Label* labelThatHasChanged);	
     
     void setDisplay (int controlNumber);
 	
@@ -53,9 +55,18 @@ public:
 	
 private:
     
+    int currentlySelectedControl;
     MainComponent &mainComponentRef;
     
     ScopedPointer <ComboBox> dialsMenu, buttonsMenu;
+    
+    ScopedPointer <AlphaSlider> dialMidiCcNumber, dialMidiChannel, dialMidiMinRange, dialMidiMaxRange;
+    ScopedPointer <AlphaSlider> dialOscPortNumber, dialOscMinRange, dialOscMaxRange;
+    ScopedPointer <Label> dialOscIpAddressEditor;
+    
+    ScopedPointer <AlphaSlider> buttonSceneNumber, buttonMidiCcNumber, buttonMidiChannel, buttonMidiOffNumber, buttonMidiOnNumber;
+    ScopedPointer <AlphaSlider> buttonOscPortNumber, buttonOscOffNumber, buttonOscOnNumber;
+    ScopedPointer <Label> buttonOscIpAddressEditor;
 	
 };
 

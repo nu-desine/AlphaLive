@@ -67,6 +67,7 @@ public:
     MainComponent& getMainComponent();
     
     void setShouldDisplaySettings (bool value);
+    void deselectAllPads();
     
     //access by the menu bar/command manager in MainComponent
     //which will only be available when a single pad is selected

@@ -253,6 +253,7 @@ alphaLiveEngineRef(ref),
 
     noPadsSelected = 1;
 	noModeSelected = 1;
+    eliteControlSelected = 0;
     
     modeOffButton->setVisible(false);
     modeMidiButton->setVisible(false);
@@ -357,8 +358,10 @@ void MainComponent::paint(juce::Graphics &g)
 	
 	if (noPadsSelected == 1) 
     {
-		g.drawImage(padsOff, 0, 0, getWidth(), getHeight(), 0, 0, padsOff.getWidth(), padsOff.getHeight());
-		g.drawImage(modeOff, 0, 0, getWidth(), getHeight(), 0, 0, modeOff.getWidth(), modeOff.getHeight());
+        g.drawImage(padsOff, 0, 0, getWidth(), getHeight(), 0, 0, padsOff.getWidth(), padsOff.getHeight());
+        
+        if (eliteControlSelected == 0)
+            g.drawImage(modeOff, 0, 0, getWidth(), getHeight(), 0, 0, modeOff.getWidth(), modeOff.getHeight());
 	}	
 	else if (noPadsSelected == 0) 
     {
@@ -377,7 +380,8 @@ void MainComponent::paint(juce::Graphics &g)
 	
 	if (noModeSelected == 1) 
     {
-		g.drawImage(modeOff, 0, 0, getWidth(), getHeight(), 0, 0, modeOff.getWidth(), modeOff.getHeight());
+        if (eliteControlSelected == 0)
+            g.drawImage(modeOff, 0, 0, getWidth(), getHeight(), 0, 0, modeOff.getWidth(), modeOff.getHeight());
 	}
 	
 	g.drawImage(padsBg, 0, 0, getWidth(), getHeight(), 0, 0, padsBg.getWidth(), padsBg.getHeight());
@@ -633,12 +637,14 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
 		
         globalSettingsButton->setToggleState(false, false);
         setGlobalPadSettingsDisplay();
+        
         //repaint(); //this is called in setGlobalPadSettingsDisplay() above
     }
     else if (selectedPads_.size() > 0 && selectedPads.size() == 0) //if previously there were no pads selected,
                                                             //but now is.
     {
         noPadsSelected = 0;
+        eliteControlSelected = 0;
 		modeOffButton->setVisible(true);
 		modeMidiButton->setVisible(true);
 		modeSamplerButton->setVisible(true);
@@ -646,6 +652,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
 		modeControllerButton->setVisible(true);
 		globalSettingsButton->setVisible(true);
         toolbox->setVisible(true); //or maybe it links to projects directory?
+        eliteControlsSettings->setVisible(false);
 		repaint();
     }
     
@@ -935,9 +942,12 @@ void MainComponent::setGlobalPadSettingsDisplay()
 
 void MainComponent::setEliteControlsSettingsDisplay (int controlNumber)
 {
-    //in here must deselect all pads, and show the eliteControlsSettingsView
-    //then if a pad is clicked this view must be hidden
-    std::cout << "Control clicked: " <<  controlNumber << std::endl;
+    std::cout << controlNumber << std::endl;
+    eliteControlSelected = 1;
+    guiPadLayout->deselectAllPads(); //this in turn calls setSelectedPads within this class
+    
+    eliteControlsSettings->setDisplay(controlNumber);
+    eliteControlsSettings->setVisible(true);
 }
 
 AlphaLiveEngine& MainComponent::getAlphaLiveEngineRef()

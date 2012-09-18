@@ -136,6 +136,7 @@ private:
     GuiSequencerMode *guiSequencerMode;
     GuiControllerMode *guiControllerMode;
     GuiGlobalPadSettings *guiGlobalPadSettings;
+    GuiEliteControlsSettings *eliteControlsSettings;
     
     AlphaLiveEngine &alphaLiveEngineRef;
     AppDocumentState &appDocumentStateRef;
@@ -156,7 +157,7 @@ private:
     
     DocumentWindow* owner;
     
-    int noPadsSelected, noModeSelected;
+    int noPadsSelected, noModeSelected, eliteControlSelected;
     
     GuiPadLayout *guiPadLayout;
     AlphaRotarySlider *gainSlider, *panSlider;
@@ -182,7 +183,6 @@ private:
     GuiPiano *midiPiano;
     Toolbox *toolbox;
     EliteControlsComponent *eliteControls;
-    GuiEliteControlsSettings *eliteControlsSettings;
     
     //GuiSwitch *autoShowSettingsSwitch;
 

@@ -56,9 +56,33 @@ AppSettings::AppSettings()
     //elite controls stuff
     eliteDial[0].control = 1;
     eliteDial[1].control = 2;
-    eliteButton[0].control = 2;
+    eliteButton[0].control = 1;
     eliteButton[1].control = 2;
-    eliteButton[2].control = 1;
+    eliteButton[2].control = 3;
+    
+    for (int i = 0; i < 2; i++)
+    {
+        eliteDial[i].midiCcNumber = 12;
+        eliteDial[i].midiChannel = 1;
+        eliteDial[i].midiMinRange = 0;
+        eliteDial[i].midiMaxRange = 127;
+        eliteDial[i].oscPortNumber = 5004;
+        eliteDial[i].oscMinRange = 0;
+        eliteDial[i].oscMaxRange = 511;
+        eliteDial[i].oscIpAddress = "127.0.0.1";
+    }
+    for (int i = 0; i < 3; i++)
+    {
+        eliteButton[i].sceneNumber = 2;
+        eliteButton[i].midiCcNumber = 13;
+        eliteButton[i].midiChannel = 1;
+        eliteButton[i].midiOffNumber = 0;
+        eliteButton[i].midiOnNumber = 127;
+        eliteButton[i].oscPortNumber = 5004;
+        eliteButton[i].oscOffNumber = 0;
+        eliteButton[i].oscOnNumber = 1;
+        eliteButton[i].oscIpAddress = "127.0.0.1";
+    }
 
     //=================================Pad Settings stuff==================================
     //'for' loop to create 48 objects of the PadSettings class, which are put into an array.
@@ -102,6 +126,36 @@ void AppSettings::resetData()
     setBeatsPerBar(4);
     setAutoStartClock(0);
     setCopyExternalFiles(true);
+    
+    //elite controls stuff
+    eliteDial[0].control = 1;
+    eliteDial[1].control = 2;
+    eliteButton[0].control = 1;
+    eliteButton[1].control = 2;
+    eliteButton[2].control = 3;
+    for (int i = 0; i < 2; i++)
+    {
+        eliteDial[i].midiCcNumber = 12;
+        eliteDial[i].midiChannel = 1;
+        eliteDial[i].midiMinRange = 0;
+        eliteDial[i].midiMaxRange = 127;
+        eliteDial[i].oscPortNumber = 5004;
+        eliteDial[i].oscMinRange = 0;
+        eliteDial[i].oscMaxRange = 511;
+        eliteDial[i].oscIpAddress = "127.0.0.1";
+    }
+    for (int i = 0; i < 3; i++)
+    {
+        eliteButton[i].sceneNumber = 2;
+        eliteButton[i].midiCcNumber = 13;
+        eliteButton[i].midiChannel = 1;
+        eliteButton[i].midiOffNumber = 0;
+        eliteButton[i].midiOnNumber = 127;
+        eliteButton[i].oscPortNumber = 5004;
+        eliteButton[i].oscOffNumber = 0;
+        eliteButton[i].oscOnNumber = 1;
+        eliteButton[i].oscIpAddress = "127.0.0.1";
+    }
 }
 
 void AppSettings::copyPadSettings (int padNumber)
@@ -273,7 +327,7 @@ void AppSettings::setEliteDialOscIpAddress(String value, int dialNumber)
 }
 void AppSettings::setEliteDialOscMinRange(double value, int dialNumber)
 {
-    eliteDial[dialNumber].oscMaxRange = value;
+    eliteDial[dialNumber].oscMinRange = value;
 }
 void AppSettings::setEliteDialOscMaxRange(double value, int dialNumber)
 {

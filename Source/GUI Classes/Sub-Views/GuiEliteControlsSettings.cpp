@@ -54,7 +54,7 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     
     //===============dial stuff===============
     addChildComponent(dialMidiCcNumber = new AlphaSlider());
-    dialMidiCcNumber->setRange(1, 127, 1);
+    dialMidiCcNumber->setRange(0, 127, 1);
     dialMidiCcNumber->addListener(this);
     dialMidiCcNumber->addMouseListener(this, true);
     
@@ -64,12 +64,12 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     dialMidiChannel->addMouseListener(this, true);
     
     addChildComponent(dialMidiMinRange = new AlphaSlider());
-    dialMidiMinRange->setRange(1, 127, 1);
+    dialMidiMinRange->setRange(0, 127, 1);
     dialMidiMinRange->addListener(this);
     dialMidiMinRange->addMouseListener(this, true);
     
     addChildComponent(dialMidiMaxRange = new AlphaSlider());
-    dialMidiMaxRange->setRange(1, 127, 1);
+    dialMidiMaxRange->setRange(0, 127, 1);
     dialMidiMaxRange->addListener(this);
     dialMidiMaxRange->addMouseListener(this, true);
     
@@ -105,7 +105,7 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     buttonSceneNumber->addMouseListener(this, true);
     
     addChildComponent(buttonMidiCcNumber = new AlphaSlider());
-    buttonMidiCcNumber->setRange(1, 127, 1);
+    buttonMidiCcNumber->setRange(0, 127, 1);
     buttonMidiCcNumber->addListener(this);
     buttonMidiCcNumber->addMouseListener(this, true);
     
@@ -115,12 +115,12 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     buttonMidiChannel->addMouseListener(this, true);
     
     addChildComponent(buttonMidiOffNumber = new AlphaSlider());
-    buttonMidiOffNumber->setRange(1, 127, 1);
+    buttonMidiOffNumber->setRange(0, 127, 1);
     buttonMidiOffNumber->addListener(this);
     buttonMidiOffNumber->addMouseListener(this, true);
     
     addChildComponent(buttonMidiOnNumber = new AlphaSlider());
-    buttonMidiOnNumber->setRange(1, 127, 1);
+    buttonMidiOnNumber->setRange(0, 127, 1);
     buttonMidiOnNumber->addListener(this);
     buttonMidiOnNumber->addMouseListener(this, true);
     
@@ -322,18 +322,88 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
     //Hide all components
     dialsMenu->setVisible(false);
     buttonsMenu->setVisible(false);
+    dialMidiCcNumber->setVisible(false);
+    dialMidiChannel->setVisible(false);
+    dialMidiMinRange->setVisible(false);
+    dialMidiMaxRange->setVisible(false);
+    dialOscPortNumber->setVisible(false);
+    dialOscMinRange->setVisible(false);
+    dialOscMaxRange->setVisible(false);
+    dialOscIpAddressEditor->setVisible(false);
+    buttonSceneNumber->setVisible(false);
+    buttonMidiCcNumber->setVisible(false);
+    buttonMidiChannel->setVisible(false);
+    buttonMidiOffNumber->setVisible(false);
+    buttonMidiOnNumber->setVisible(false);
+    buttonOscPortNumber->setVisible(false);
+    buttonOscOffNumber->setVisible(false);
+    buttonOscOnNumber->setVisible(false);
+    buttonOscIpAddressEditor->setVisible(false);
     
     //Set what component should be displayed and their values
     if (controlNumber == 1 || controlNumber == 2)
     {
-        dialsMenu->setSelectedId(AppSettings::Instance()->getEliteDialControl(controlNumber-1), true);
+        dialsMenu->setSelectedId(AppSettings::Instance()->getEliteDialControl(DIAL_NO), true);
+        dialMidiCcNumber->setComponentValue(AppSettings::Instance()->getEliteDialMidiCcNumber(DIAL_NO));
+        dialMidiChannel->setComponentValue(AppSettings::Instance()->getEliteDialMidiChannel(DIAL_NO));
+        dialMidiMinRange->setComponentValue(AppSettings::Instance()->getEliteDialMidiMinRange(DIAL_NO));
+        dialMidiMaxRange->setComponentValue(AppSettings::Instance()->getEliteDialMidiMaxRange(DIAL_NO));
+        dialOscPortNumber->setComponentValue(AppSettings::Instance()->getEliteDialOscPortNumber(DIAL_NO));
+        dialOscMinRange->setComponentValue(AppSettings::Instance()->getEliteDialOscMinRange(DIAL_NO));
+        dialOscMaxRange->setComponentValue(AppSettings::Instance()->getEliteDialOscMaxRange(DIAL_NO));
+        dialOscIpAddressEditor->setText(AppSettings::Instance()->getEliteDialOscIpAddress(DIAL_NO), false);
+        
         dialsMenu->setVisible(true);
+        
+        if (dialsMenu->getSelectedId() == 4)
+        {
+            dialMidiCcNumber->setVisible(true);
+            dialMidiChannel->setVisible(true);
+            dialMidiMinRange->setVisible(true);
+            dialMidiMaxRange->setVisible(true);
+        }
+        else if (dialsMenu->getSelectedId() == 5)
+        {
+            dialOscPortNumber->setVisible(true);
+            dialOscMinRange->setVisible(true);
+            dialOscMaxRange->setVisible(true);
+            dialOscIpAddressEditor->setVisible(true);
+        }
         
     }
     else if (controlNumber == 3 || controlNumber == 4 || controlNumber == 5)
     {
-        buttonsMenu->setSelectedId(AppSettings::Instance()->getEliteButtonControl(controlNumber-3), true);
+        buttonsMenu->setSelectedId(AppSettings::Instance()->getEliteButtonControl(BUTTON_NO), true);
+        buttonSceneNumber->setComponentValue(AppSettings::Instance()->getEliteButtonSceneNumber(BUTTON_NO));
+        buttonMidiCcNumber->setComponentValue(AppSettings::Instance()->getEliteButtonMidiCcNumber(BUTTON_NO));
+        buttonMidiChannel->setComponentValue(AppSettings::Instance()->getEliteButtonMidiChannel(BUTTON_NO));
+        buttonMidiOffNumber->setComponentValue(AppSettings::Instance()->getEliteButtonMidiOffNumber(BUTTON_NO));
+        buttonMidiOnNumber->setComponentValue(AppSettings::Instance()->getEliteButtonMidiOnNumber(BUTTON_NO));
+        buttonOscPortNumber->setComponentValue(AppSettings::Instance()->getEliteButtonOscPortNumber(BUTTON_NO));
+        buttonOscOffNumber->setComponentValue(AppSettings::Instance()->getEliteButtonOscOffNumber(BUTTON_NO));
+        buttonOscOnNumber->setComponentValue(AppSettings::Instance()->getEliteButtonOscOnNumber(BUTTON_NO));
+        buttonOscIpAddressEditor->setText(AppSettings::Instance()->getEliteButtonOscIpAddress(BUTTON_NO), false);
+
         buttonsMenu->setVisible(true);
+        
+        if (buttonsMenu->getSelectedId() == 2)
+        {
+            buttonSceneNumber->setVisible(true);
+        }
+        else if (buttonsMenu->getSelectedId() == 4)
+        {
+            buttonMidiCcNumber->setVisible(true);
+            buttonMidiChannel->setVisible(true);
+            buttonMidiOffNumber->setVisible(true);
+            buttonMidiOnNumber->setVisible(true);
+        }
+        else if (buttonsMenu->getSelectedId() == 5)
+        {
+            buttonOscPortNumber->setVisible(true);
+            buttonOscOffNumber->setVisible(true);
+            buttonOscOnNumber->setVisible(true);
+            buttonOscIpAddressEditor->setVisible(true);
+        }
     }
     
 }

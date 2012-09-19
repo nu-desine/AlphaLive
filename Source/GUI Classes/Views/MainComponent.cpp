@@ -942,7 +942,6 @@ void MainComponent::setGlobalPadSettingsDisplay()
 
 void MainComponent::setEliteControlsSettingsDisplay (int controlNumber)
 {
-    std::cout << controlNumber << std::endl;
     eliteControlSelected = 1;
     guiPadLayout->deselectAllPads(); //this in turn calls setSelectedPads within this class
     

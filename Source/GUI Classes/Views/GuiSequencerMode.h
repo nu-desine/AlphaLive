@@ -126,6 +126,8 @@ private:
     AlphaSlider *ccControllerSlider;
     
     Label *parameterLabel, *currentParameterLabel, *parameterHoverLabel;
+    
+    TextButton *recordButton;
      
 };
 

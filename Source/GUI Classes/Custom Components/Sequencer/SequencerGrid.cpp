@@ -324,6 +324,7 @@ void SequencerGrid::resetGridGui()
 void SequencerGrid::setCurrentSequenceNumber (int value)
 {
     currentSequenceNumber = value;
+    std::cout << "setting current sequence number: " << currentSequenceNumber << std::endl;
     
     //display the correct sequence on the grid
     
@@ -372,6 +373,11 @@ bool SequencerGrid::update(const Subject& theChangedSubject)
             }
             
             playHead->setLinePostion(float(currentColumnNumber));
+        }
+        else if (mSubject.getWhatShouldUpdateFlag() == 3)
+        {
+            std::cout << "here" << std::endl;
+            setCurrentlySelectedPad (selectedPads);
         }
     }
     

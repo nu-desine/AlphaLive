@@ -260,6 +260,56 @@ void ModeMidi::noteOn (int padNumber)
     sendMidiMessage(message);
     isCurrentlyPlaying[padNumber] = true;
     
+    //NEW - recording into sequencer pads
+    if (alphaLiveEngineRef.getRecordingPads().size() > 0)
+    {
+        for (int i = 0; i < alphaLiveEngineRef.getRecordingPads().size(); i++)
+        {
+            int recordingPad = alphaLiveEngineRef.getRecordingPads()[i];
+            
+            if (alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->isThreadRunning())
+            {
+                int seqChannel = AppSettings::Instance()->padSettings[recordingPad]->getSequencerMidiChannel();
+                
+                if (channel[padNumber] == seqChannel)
+                {
+                    int seqNote[NO_OF_ROWS];
+                    
+                    for (int j = 0; j < NO_OF_ROWS; j++)
+                    {
+                        seqNote[j] = AppSettings::Instance()->padSettings[recordingPad]->getSequencerMidiNote(j);
+                        
+                        if (note[padNumber] == seqNote[j])
+                        {
+                            std::cout << "recording note!" << std::endl;
+                            
+                            int sequenceNumber = alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->getSequenceNumber();
+                            
+                            //can i just get the currently column number? Or should I create a new function which gets
+                            //the current time in ms and works out the closet column number based on that?
+                            int columnNumber = alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->getColumnNumber();
+                            
+                            AppSettings::Instance()->padSettings[recordingPad]->setSequencerData(sequenceNumber, j, columnNumber, velocity[padNumber]);
+                            
+                            //if currently selected pad is the recording pad, update the grid gui.
+                            //how should it be handled if multiple pads are selected? Do nothing?
+                            MessageManagerLock mmLock;
+                            //optimise the below so we're only calling/updating what needs to be done!
+                            //first, update the display of the sequence grid which gets the stored
+                            //sequence data from PadSettings and puts it into the local sequenceData. This
+                            //could be optimised so that it is only getting the data from the current seq,
+                            //as thats all that will be changed here.
+                            alphaLiveEngineRef.getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 3);
+                            //next set the currently sequence display, which sets the status's of the grid points
+                            alphaLiveEngineRef.getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 2);
+                        }
+                    }
+                }
+                
+            }
+            
+        }
+    }
     
     
     //update pad GUI

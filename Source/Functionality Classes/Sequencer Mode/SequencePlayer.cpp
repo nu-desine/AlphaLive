@@ -79,6 +79,8 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     panLeft = panLeftPrev = PanControl::leftChanPan_(PAD_SETTINGS->getSequencerPan());
     panRight = panRightPrev = PanControl::rightChanPan_(PAD_SETTINGS->getSequencerPan());
     
+    recordEnabled = false;
+    
     triggerModeData.playingStatus = 0;
     triggerModeData.moveToNextSeq = false;
     
@@ -159,6 +161,13 @@ SequencePlayer::~SequencePlayer()
     
     audioMixer.removeAllInputs();
     audioPlayer.setSource(NULL);
+    
+    //new - recording stuff
+    if (recordEnabled == true && PAD_SETTINGS->getSequencerRecordEnabled() != nullptr)
+    {
+        int figureThisOUt;
+        PAD_SETTINGS->setSequencerRecordEnabled(false);
+    }
 }
 
 //=====================================================================================
@@ -1143,6 +1152,16 @@ void SequencePlayer::setSequenceNumber (int value)
     sequenceNumber = value;
 }
 
+int SequencePlayer::getSequenceNumber()
+{
+    return sequenceNumber;
+}
+
+int SequencePlayer::getColumnNumber()
+{
+    return columnNumber;
+}
+
 //=====================================================================================
 //=Settings Stuff======================================================================
 //=====================================================================================
@@ -1442,6 +1461,11 @@ void SequencePlayer::setSamplesPan (float value)
     panLeft = PanControl::leftChanPan_(value);
     panRight = PanControl::rightChanPan_(value);
     sharedMemory.exit();
+}
+
+void SequencePlayer::setRecordEnabled (bool value)
+{
+    recordEnabled = value;
 }
 
 

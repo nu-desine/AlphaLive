@@ -412,6 +412,14 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	previousSequenceButton->addListener(this);
 	previousSequenceButton->addMouseListener(this, true);
     
+    //record button
+    addAndMakeVisible(recordButton = new TextButton());
+    recordButton->setButtonText("R");
+    recordButton->setClickingTogglesState(true);	
+	recordButton->addListener(this);
+	recordButton->addMouseListener(this, true);
+    recordButton->setColour(TextButton::buttonOnColourId, Colours::red);
+    
     //attach this class to the subject class
     modeSequencerRef.attach(this);
     
@@ -506,9 +514,10 @@ void GuiSequencerMode::resized()
 	audioRowButtons[10]->setBounds(861,597,21, 21);
 	audioRowButtons[11]->setBounds(890,590,21, 21);
 	
-	quantiseButton->setBounds(681, 288,32, 32);
-	modeMidiButton->setBounds(952, 263,32, 32);
-	modeSamplesButton->setBounds(980, 293,32, 32);
+	quantiseButton->setBounds(681, 288, 32, 32);
+    recordButton->setBounds(715, 275, 20, 20);
+	modeMidiButton->setBounds(952, 263, 32, 32);
+	modeSamplesButton->setBounds(980, 293, 32, 32);
 	
 	sequenceSettingsButton->setBounds(735, 241,42, 42);
 	triggerSettingsButton->setBounds(789, 221,42, 42);
@@ -1378,6 +1387,15 @@ void GuiSequencerMode::buttonClicked (Button* button)
             PAD_SETTINGS->setSequencerDynamicMode(button->getToggleState());
         }
     }
+    
+    else if (button == recordButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerRecordEnabled(button->getToggleState());
+        }
+    }
      
     
     //midi channel buttons
@@ -1475,7 +1493,7 @@ void GuiSequencerMode::hideComponents()
     previewButton->setVisible(false);
     nextSequenceButton->setVisible(false);
     previousSequenceButton->setVisible(false);
-    numberOfSequencesSlider->setVisible(false); //is this actually visible or needed?
+    numberOfSequencesSlider->setVisible(false);
     
     //trigger settings stuff
     for (int i = 0; i < 6; i++)
@@ -1750,7 +1768,7 @@ void GuiSequencerMode::updateDisplay()
         linkButton->setToggleState(PAD_SETTINGS->getSequencerDynamicMode(), false);
         midiPressureMinRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMinPressureRange(), false);
         midiPressureMaxRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMaxPressureRange(), false);
-        
+        recordButton->setToggleState(PAD_SETTINGS->getSequencerRecordEnabled(), false);
         
         
     }
@@ -2082,6 +2100,19 @@ void GuiSequencerMode::updateDisplay()
             }
             if (i == selectedPads.size()-1)
                 midiPressureMaxRangeSlider->setValue(pressureMaxRange_, false);
+        }
+        
+        int recordEnabled_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerRecordEnabled();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerRecordEnabled() != recordEnabled_)
+            {
+                recordButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                recordButton->setToggleState(recordEnabled_, false);
         }
         
     }

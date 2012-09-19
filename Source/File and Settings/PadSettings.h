@@ -187,6 +187,9 @@ public:
     String getSequencerDataString (int seqNumber);
     void clearSequencerDataString (int seqNumber);
     
+    void setSequencerRecordEnabled (bool value);
+    bool getSequencerRecordEnabled();
+    
     //see private members section below for notes on other needed Sequencer methods
     
     //==================================================================
@@ -410,6 +413,7 @@ private:
     //this is the sequence data variable that is saved to xml, NOT the 3D int array above!
     String sequencerDataString[NO_OF_SEQS];
     
+    bool sequencerRecordEnabled;
     
     //possible extra settings - gain and pan for each individual samples
     

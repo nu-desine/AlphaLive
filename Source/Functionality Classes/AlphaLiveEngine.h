@@ -138,6 +138,9 @@ public:
     void handleExclusiveMode (int padNum);
     
     void killAll();
+    
+    void setRecordingSequencerPadsState (int padNum, int state);
+    Array<int> getRecordingPads();
         
 private:
     
@@ -180,6 +183,8 @@ private:
     //global clock/quantize stuff
     GlobalClock *globalClock;
     Array <int> queuedPads;
+    
+    Array <int> recordingPads;
     
     //if a pads exclusive mode is set to 1 (on), its padNumber needs to be added to an array
     //of an index relevant to the pads exclusive group number (index 0 = group 1, index 1 = group 2, 

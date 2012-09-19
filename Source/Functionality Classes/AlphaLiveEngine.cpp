@@ -457,6 +457,22 @@ void AlphaLiveEngine::killAll()
         globalClock->stopClock(); //currently all mode's are being killed again here
 }
 
+void AlphaLiveEngine::setRecordingSequencerPadsState (int padNum, int state)
+{
+    if (state == 1)
+    {
+        recordingPads.addIfNotAlreadyThere(padNum);
+    }
+    else if (state == 0)
+    {
+        recordingPads.removeFirstMatchingValue(padNum);
+    }
+}
+
+Array<int> AlphaLiveEngine::getRecordingPads()
+{
+    return recordingPads;
+}
 
 int AlphaLiveEngine::getPadNumberForPlayingStatus()
 {

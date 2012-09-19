@@ -1192,6 +1192,18 @@ void PadSettings::setSequencerGain(float value)
 }
 
 
+void PadSettings::setSequencerRecordEnabled (bool value)
+{
+    sequencerRecordEnabled = value;
+    alphaLiveEngineRef->setRecordingSequencerPadsState(padNumber, value);
+    
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setRecordEnabled(value);
+    }
+}
+
+
 #pragma mark Sequencer mode accessor functions
 
 int PadSettings::getSequencerMode()
@@ -1318,6 +1330,10 @@ float PadSettings::getSequencerPan()
 float PadSettings::getSequencerGain()
 {
     return sequencerGain;
+}
+bool PadSettings::getSequencerRecordEnabled()
+{
+    return sequencerRecordEnabled;
 }
 
 

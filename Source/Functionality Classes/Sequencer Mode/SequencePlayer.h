@@ -109,8 +109,14 @@ public:
     void setRelativeTempoMode (int value);
     double getTimeInterval();
     
+    void setRecordEnabled (bool value);
+    
     //called when previewing sequence
     void setSequenceNumber (int value);
+    
+    //called when recording from other pads
+    int getSequenceNumber();
+    int getColumnNumber();
     
     //quantization stuff
     void triggerQuantizationPoint();
@@ -192,6 +198,7 @@ private:
     
     float gain, gainPrev, panLeft, panLeftPrev, panRight, panRightPrev;
     int effect;
+    bool recordEnabled;
     
     bool playingLastLoop;
 };

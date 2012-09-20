@@ -110,6 +110,7 @@ private:
     Array<int> guiPadWaitingPlayUpdater;
     Array<int> guiPadWaitingStopUpdater;
     
+    bool recordingNote[48];
 };
 
 

@@ -324,7 +324,6 @@ void SequencerGrid::resetGridGui()
 void SequencerGrid::setCurrentSequenceNumber (int value)
 {
     currentSequenceNumber = value;
-    std::cout << "setting current sequence number: " << currentSequenceNumber << std::endl;
     
     //display the correct sequence on the grid
     
@@ -374,9 +373,9 @@ bool SequencerGrid::update(const Subject& theChangedSubject)
             
             playHead->setLinePostion(float(currentColumnNumber));
         }
-        else if (mSubject.getWhatShouldUpdateFlag() == 3)
+        
+        else if (mSubject.getWhatShouldUpdateFlag() == 3) //called from ModeMidi when recording notes from MIDI pads into sequencer pads
         {
-            std::cout << "here" << std::endl;
             setCurrentlySelectedPad (selectedPads);
         }
     }

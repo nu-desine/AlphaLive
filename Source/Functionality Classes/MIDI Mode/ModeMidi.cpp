@@ -299,14 +299,13 @@ void ModeMidi::noteOn (int padNumber)
                                 alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->setRecentlyAddedSequenceData(sequenceNumber, j, columnNumber, true);
                                 AppSettings::Instance()->padSettings[recordingPad]->setSequencerData(sequenceNumber, j, columnNumber, velocity[padNumber]);
                                 
+                                
+                                //if currently selected pad is the recording pad, update the grid gui.
+                                //how should it be handled if multiple pads are selected? Do nothing?
                                 if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
                                 {
                                     if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == recordingPad)
                                     {
-                                        //if currently selected pad is the recording pad, update the grid gui.
-                                        //how should it be handled if multiple pads are selected? Do nothing?
-                                        std::cout << "updating GUI... " << std::endl;
-                                        
                                         MessageManagerLock mmLock;
                                         //optimise the below so we're only calling/updating what needs to be done!
                                         //first, update the display of the sequence grid which gets the stored

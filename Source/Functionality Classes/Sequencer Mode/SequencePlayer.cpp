@@ -634,7 +634,7 @@ void SequencePlayer::run()
                 
                 //then check for any midi note-on messages
                 if (sequenceData[sequenceNumber][rowNumber][columnNumber] >= 1 && 
-                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == false) //if 'on'
+                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == false) //if 'on' and not a 'recently recorded' notes
                 {
                     int velocity = sequenceData[sequenceNumber][rowNumber][columnNumber];
                     //trigger note-on message
@@ -670,10 +670,15 @@ void SequencePlayer::run()
             //cycle through each row to look for any note on messages
             for (int rowNumber = 0; rowNumber <= NO_OF_ROWS-1; rowNumber++)
             {
-                if (sequenceData[sequenceNumber][rowNumber][columnNumber] >= 1) //if 'on'
+                if (sequenceData[sequenceNumber][rowNumber][columnNumber] >= 1 &&
+                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == false) //if 'on' and not a recently recorded note
                 {
                     int velocity = sequenceData[sequenceNumber][rowNumber][columnNumber];
                     triggerAudioMessage(rowNumber, velocity);
+                }
+                else if (recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == true)
+                {
+                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] = false;
                 }
             }
         }

@@ -384,10 +384,6 @@ void AudioFilePlayer::triggerQuantizationPoint()
 
 void AudioFilePlayer::playAudioFile()
 {
-    //This is now in processAudioFile() - too much too much CPU usage?
-    //if (currentFile != File::nonexistent && currentAudioFileSource != NULL)
-        //currentAudioFileSource->setLooping(shouldLoop);
-    
     //set the state of certain effects
     if (effect == 9) //flanger
         flanger->restart(); //so the lfo is re-started when the file is started
@@ -397,6 +393,71 @@ void AudioFilePlayer::playAudioFile()
     //start audio file
     fileSource.setPosition (0.0);
     fileSource.start();
+    
+    
+    //NEW - recording into sequencer pads
+    if (modeSamplerRef.getAlphaLiveEngineRef().getRecordingPads().size() > 0)
+    {
+        for (int i = 0; i < modeSamplerRef.getAlphaLiveEngineRef().getRecordingPads().size(); i++)
+        {
+            int recordingPad = modeSamplerRef.getAlphaLiveEngineRef().getRecordingPads()[i];
+            
+            if (modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->isThreadRunning()) //if currently playing
+            {
+                if (AppSettings::Instance()->padSettings[recordingPad]->getSequencerMode() == 2) //if samples mode
+                {
+                    File seqFile[NO_OF_ROWS];
+                    
+                    for (int j = 0; j < NO_OF_ROWS; j++)
+                    {
+                        seqFile[j] = AppSettings::Instance()->padSettings[recordingPad]->getSequencerSamplesAudioFilePath(j);
+                        
+                        if (currentFile == seqFile[j]) //if audio file path matches
+                        {
+                            int sequenceNumber = modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->getSequenceNumber();
+                            
+                            //can i just get the currently column number? Or should I create a new function which gets
+                            //the current time in ms and works out the closet column number based on that?
+                            int columnNumber = modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->getColumnNumber();
+                            
+                            //When recording a note to a sequencer pad the note will play twice at this point - 
+                            //from the played pad (this class) and from the recorded note in the sequence, which is note what we want.
+                            //We want the new note to be played from this class only, and not the seq notes which will all be played at the same
+                            //set length, amoung a few other unwanted behaviours.
+                            //This is done using a new variable within SequencerPlayer called recentlyAddedSequenceData.
+                            //Every time a note is recorded here it adds a 'true' to the array in the same location as the recorded note.
+                            //Then in SequencerPlayer it won't play this new note due to this 'true' flag.
+                            
+                            modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->setRecentlyAddedSequenceData(sequenceNumber, j, columnNumber, true);
+                            AppSettings::Instance()->padSettings[recordingPad]->setSequencerData(sequenceNumber, j, columnNumber, 110);
+                            
+                            
+                            //if currently selected pad is the recording pad, update the grid gui.
+                            //how should it be handled if multiple pads are selected? Do nothing?
+                            if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
+                            {
+                                if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == recordingPad)
+                                {
+                                    MessageManagerLock mmLock;
+                                    //optimise the below so we're only calling/updating what needs to be done!
+                                    //first, update the display of the sequence grid which gets the stored
+                                    //sequence data from PadSettings and puts it into the local sequenceData. This
+                                    //could be optimised so that it is only getting the data from the current seq,
+                                    //as thats all that will be changed here.
+                                    modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 3);
+                                    //next set the currently sequence display, which sets the status's of the grid points
+                                    modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 2);
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    
     
     /*
     AudioSampleBuffer buffer(2, 512);

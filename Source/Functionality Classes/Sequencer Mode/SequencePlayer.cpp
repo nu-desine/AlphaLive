@@ -46,6 +46,7 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
             for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
             {
                 sequenceData[seq][row][column] = PAD_SETTINGS->getSequencerData(seq, row, column);
+                recentlyAddedSequenceData[seq][row][column] = false;
             }
         }
     }
@@ -632,7 +633,8 @@ void SequencePlayer::run()
                 }
                 
                 //then check for any midi note-on messages
-                if (sequenceData[sequenceNumber][rowNumber][columnNumber] >= 1) //if 'on'
+                if (sequenceData[sequenceNumber][rowNumber][columnNumber] >= 1 && 
+                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == false) //if 'on'
                 {
                     int velocity = sequenceData[sequenceNumber][rowNumber][columnNumber];
                     //trigger note-on message
@@ -652,6 +654,10 @@ void SequencePlayer::run()
                     midiNoteOffTime[sequenceNumber][rowNumber][noteOffStep] = 1;
                     midiNoteOnCounter++;
                     
+                }
+                else if (recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == true)
+                {
+                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] = false;
                 }
             }
         }
@@ -1234,6 +1240,11 @@ void SequencePlayer::setMode(int value)
     }
     
     mode = value;
+}
+
+void SequencePlayer::setRecentlyAddedSequenceData (int sequenceNumber, int rowNumber, int columnNumber, bool value)
+{
+    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] = value;
 }
 
 void SequencePlayer::setNumberOfSequences (int value)

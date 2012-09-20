@@ -56,8 +56,6 @@ ModeMidi::ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref)
         isCurrentlyPlaying[i] = false;
         prevPadValue[i] = 0;
         pressureValue[i] = 0;
-        
-        recordingNote[i] = false;
     }
     
     broadcaster.addActionListener(this);
@@ -259,6 +257,10 @@ void ModeMidi::noteOn (int padNumber)
     }
     
     
+    MidiMessage message = MidiMessage::noteOn(channel[padNumber], note[padNumber], (uint8)velocity[padNumber]);
+    sendMidiMessage(message);
+    isCurrentlyPlaying[padNumber] = true;
+    
     //NEW - recording into sequencer pads
     if (alphaLiveEngineRef.getRecordingPads().size() > 0)
     {
@@ -280,14 +282,21 @@ void ModeMidi::noteOn (int padNumber)
                             
                             if (note[padNumber] == seqNote[j]) //if MIDI notes match
                             {
-                                recordingNote[padNumber] = true;
-                                
                                 int sequenceNumber = alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->getSequenceNumber();
                                 
                                 //can i just get the currently column number? Or should I create a new function which gets
                                 //the current time in ms and works out the closet column number based on that?
                                 int columnNumber = alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->getColumnNumber();
                                 
+                                //When recording a note to a sequencer pad the note will play twice at this point - 
+                                //from the played pad (this class) and from the recorded note in the sequence, which is note what we want.
+                                //We want the new note to be played from this class only, and not the seq notes which will all be played at the same
+                                //set length, amoung a few other unwanted behaviours.
+                                //This is done using a new variable within SequencerPlayer called recentlyAddedSequenceData.
+                                //Every time a note is recorded here it adds a 'true' to the array in the same location as the recorded note.
+                                //Then in SequencerPlayer it won't play this new note due to this 'true' flag.
+                                
+                                alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->setRecentlyAddedSequenceData(sequenceNumber, j, columnNumber, true);
                                 AppSettings::Instance()->padSettings[recordingPad]->setSequencerData(sequenceNumber, j, columnNumber, velocity[padNumber]);
                                 
                                 //if currently selected pad is the recording pad, update the grid gui.
@@ -302,7 +311,6 @@ void ModeMidi::noteOn (int padNumber)
                                 //next set the currently sequence display, which sets the status's of the grid points
                                 alphaLiveEngineRef.getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 2);
                                 
-                                triggerModes[padNumber].reset();
                             }
                         }
                     }
@@ -312,45 +320,24 @@ void ModeMidi::noteOn (int padNumber)
         }
     }
     
-    //When recording a note to a sequencer pad the note will play twice at this point - 
-    //from the played pad and from the recorded note in the sequence, which is note what we want.
-    //Ideally the new note in the sequence is the one that shouldn't be played, however I can't
-    //think of a way of telling the sequencer pad not to play the new note. So for now, it is the
-    //note created here which isn't played.
-    //If the note is being recorded, it sets the recordingNote[padNumber] bool to true so that
-    //the MIDI note isn't created below. This check is also needed in the noteOff() function
-    //as without it it could cause the new note played from the sequencer pad to be turned off prematurely.
-    //Note that there are several places in the class where "recordingNote[padNumber] = false" needs to be called.
-    //Ideally we want the new note to be played from this class, as the seq notes will all be played at the same
-    //set length.
-    
-
-    if (recordingNote[padNumber] == false)
+    //update pad GUI
+    if (currentPlayingStatus[padNumber] != 1) //GUI won't need updating if this is false
     {
-        MidiMessage message = MidiMessage::noteOn(channel[padNumber], note[padNumber], (uint8)velocity[padNumber]);
-        sendMidiMessage(message);
-        isCurrentlyPlaying[padNumber] = true;
-        
-        
-        //update pad GUI
-        if (currentPlayingStatus[padNumber] != 1) //GUI won't need updating if this is false
-        {
-            guiPadOnUpdater.add(padNumber);
-            broadcaster.sendActionMessage("ON");
-        }
-        
-        //set pad to 'on'
-        currentPlayingStatus[padNumber] = 1; 
-        
-        
-        
-        //Exclusive mode stuff
-        if (PAD_SETTINGS->getExclusiveMode() == 1)
-        {
-            alphaLiveEngineRef.handleExclusiveMode(padNumber);
-        }
-        
+        guiPadOnUpdater.add(padNumber);
+        broadcaster.sendActionMessage("ON");
     }
+    
+    //set pad to 'on'
+    currentPlayingStatus[padNumber] = 1; 
+    
+    
+    //Exclusive mode stuff
+    if (PAD_SETTINGS->getExclusiveMode() == 1)
+    {
+        alphaLiveEngineRef.handleExclusiveMode(padNumber);
+    }
+    
+   
 }
 
 
@@ -362,22 +349,16 @@ void ModeMidi::noteOff (int padNumber)
     //e.g. if you use one pad to pitch bend, and then turn the pad off via exclusive mode
     //the pitch will still be bent and won't change until you touch the previous pad again.
     
-    if (recordingNote[padNumber] == false)
-    {
-        MidiMessage message = MidiMessage::noteOff(channel[padNumber], note[padNumber]);
-        sendMidiMessage(message);
-        isCurrentlyPlaying[padNumber] = false;
-        
-        //update pad GUI
-        guiPadOffUpdater.add(padNumber);
-        broadcaster.sendActionMessage("OFF");
-        
-        currentPlayingStatus[padNumber] = 0; //set pad to 'off'
-    }
-    else
-    {
-        recordingNote[padNumber] = false;
-    }
+    MidiMessage message = MidiMessage::noteOff(channel[padNumber], note[padNumber]);
+    sendMidiMessage(message);
+    isCurrentlyPlaying[padNumber] = false;
+    
+    //update pad GUI
+    guiPadOffUpdater.add(padNumber);
+    broadcaster.sendActionMessage("OFF");
+    
+    currentPlayingStatus[padNumber] = 0; //set pad to 'off'
+    
     
 }
 
@@ -493,8 +474,6 @@ void ModeMidi::killPad (int padNum)
         currentPlayingStatus[padNum] = 0; //set pad to 'off'
         triggerModes[padNum].reset();
     }
-    
-    recordingNote[padNum] = false;
 }
 
 
@@ -542,7 +521,6 @@ void ModeMidi::setPadData (int padNumber)
     setNoteStatus (PAD_SETTINGS->getMidiNoteStatus(), padNumber);
     setQuantizeMode (PAD_SETTINGS->getQuantizeMode(), padNumber);
     
-    recordingNote[padNumber] = false;
 }
 
 

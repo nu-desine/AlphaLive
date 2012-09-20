@@ -117,6 +117,7 @@ public:
     //called when recording from other pads
     int getSequenceNumber();
     int getColumnNumber();
+    void setRecentlyAddedSequenceData (int sequenceNumber, int rowNumber, int columnNumber, bool value);
     
     //quantization stuff
     void triggerQuantizationPoint();
@@ -201,6 +202,8 @@ private:
     bool recordEnabled;
     
     bool playingLastLoop;
+    
+    bool recentlyAddedSequenceData[NO_OF_SEQS][NO_OF_ROWS][NO_OF_COLUMNS]; //[sequence][row][column]
 };
 
 

@@ -108,8 +108,12 @@ AlphaLiveEngine::AlphaLiveEngine()
     modeController = new ModeController();
     modeController->setMidiOutputDevice(*midiOutputDevice);
     
-    audioMixer.addInputSource(modeSampler,false); //add as inputsource to audioMixer
-    audioMixer.addInputSource(modeSequencer,false); //add as inputsource to audioMixer
+    //global clock stuff
+    globalClock = new GlobalClock(*this);
+    
+    audioMixer.addInputSource(modeSampler, false); //add as inputsource to audioMixer
+    audioMixer.addInputSource(modeSequencer, false); //add as inputsource to audioMixer
+    audioMixer.addInputSource(globalClock, false); //add as inputsource to audioMixer
     audioPlayer.setSource(&audioMixer);
     
     
@@ -117,8 +121,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     oscIpAddress = "127.0.0.1";
     oscPortNumber = 5004;
     
-    //global clock stuff
-    globalClock = new GlobalClock(*this);
+    
     
     for (int i = 0; i <= 23; i++)
         currentExclusivePad[i] = 100; //'100' here is used to signify an 'empty/NULL' value

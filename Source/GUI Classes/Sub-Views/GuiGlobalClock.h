@@ -77,6 +77,8 @@ private:
     
 	OwnedArray <AlphaTextButton> beatsPerBarButtons;
     OwnedArray <SettingsButton> quantizationValueButtons;
+    
+    TextButton *metronomeButton;
 
     
 };

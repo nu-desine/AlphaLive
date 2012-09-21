@@ -107,6 +107,7 @@ public:
     void setQuantizationValue (int value);
     void setBeatsPerBar (int value);
     void setAutoStartClock (int value);
+    void setMetronomeStatus (bool value);
     
     void setCopyExternalFiles (bool value);
     
@@ -120,6 +121,7 @@ public:
     int getQuantizationValue();
     int getBeatsPerBar();
     int getAutoStartClock();
+    bool getMetronomeStatus();
     
     bool getCopyExternalFiles();
     
@@ -208,6 +210,7 @@ private:
     int quantizationValue; //value represents an item in the GUI quantization menu
     int beatsPerBar; //similar to time signature
     int autoStartClock; //when 1, clock will start when the first midi/loop/seq pad is pressed.
+    bool metronomeStatus;
     
     //Elite Controls stuff
     EliteDialData eliteDial[2];

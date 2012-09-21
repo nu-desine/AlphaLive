@@ -37,7 +37,8 @@ class AlphaLiveEngine;
 
 class GlobalClock :     public Thread,
                         public Subject, //so this class can notify the observer class (GuiGlobalClock)
-                        public AsyncUpdater
+                        public AsyncUpdater,
+                        public AudioSource
 {
 public:
     GlobalClock(AlphaLiveEngine &ref);
@@ -46,11 +47,18 @@ public:
     //Thread callback function
     void run();
     
+    //AudioSource Functions
+	void prepareToPlay (int samplesPerBlockExpected,double sampleRate);
+	void releaseResources();
+	void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill);
+    
     void startClock();
     void stopClock();
     
     void setTempo (float value);
     void setBeatsPerBar (int value);
+    void setQuantizationValue (int value);
+    void setMetronomeStatus (bool value);
     
     int getBeatNumber();
     int getBarNumber();
@@ -69,6 +77,14 @@ private:
     int beatsPerBar;
     int microbeatNumber, beatNumber, barNumber;
     int guiUpdateFlag; //1 - beat indictor, 2 - Toggle start button on
+    int quantizationValue;
+    bool metronomeStatus;
+    
+    //audio related
+    MixerAudioSource audioMixer;
+	AudioTransportSource tickFileSource, tockFileSource;
+    ScopedPointer <AudioFormatReaderSource> tickAudioFormatReaderSource, tockAudioFormatReaderSource;
+    ScopedPointer <TimeSliceThread> audioTransportSourceThread;
     
     
 };

@@ -102,6 +102,13 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
      autoStartSwitch->addMouseListener(this, true);
      */
     
+    //metronome button
+    addAndMakeVisible(metronomeButton = new TextButton());
+    metronomeButton->setButtonText("M");
+    metronomeButton->setClickingTogglesState(true);	
+	metronomeButton->addListener(this);
+	metronomeButton->addMouseListener(this, true);
+    
 	currentBeatNumber = 0;
 	currentBeatStore = 0;
 	
@@ -130,6 +137,7 @@ void GuiGlobalClock::resized()
 {
     transportButton->setBounds(644-OFFSET_X, 42, 56, 56);
     tempoSlider->setBounds(550-OFFSET_X, 12, 50, 50);
+    metronomeButton->setBounds (510-OFFSET_X, 15, 25, 25);
 	
 	beatsPerBarButtons[0]->setBounds(631-OFFSET_X, 111, 17, 17);
 	beatsPerBarButtons[1]->setBounds(659-OFFSET_X, 121, 17, 17);
@@ -140,6 +148,8 @@ void GuiGlobalClock::resized()
 	
     for (int i = 0; i < 6; i++)
         quantizationValueButtons[i]->setBounds(606-OFFSET_X, 6, 131, 131);
+    
+    
 	
 }
 
@@ -260,6 +270,11 @@ void GuiGlobalClock::buttonClicked (Button* button)
             transportButton->setButtonText(translate("START"));
             mainComponentRef.setIsClockRunning(false);
         }
+    }
+    
+    else if (button == metronomeButton)
+    {
+        AppSettings::Instance()->setMetronomeStatus(metronomeButton->getToggleState());
     }
     
     /*

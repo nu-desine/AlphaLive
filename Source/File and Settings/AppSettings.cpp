@@ -50,6 +50,7 @@ AppSettings::AppSettings()
     quantizationValue = 3; //1 Bar
     beatsPerBar = 4;
     autoStartClock = 0; //off
+    metronomeStatus = false;
     
     copyExternalFiles = true;
     
@@ -229,6 +230,7 @@ void AppSettings::setGlobalTempo (float value)
 void AppSettings::setQuantizationValue(int value)
 {
     quantizationValue = value;
+    alphaLiveEngineRef->getGlobalClock()->setQuantizationValue(value);
 }
 
 void AppSettings::setBeatsPerBar (int value)
@@ -240,13 +242,16 @@ void AppSettings::setAutoStartClock (int value)
 {
     autoStartClock = value;
 }
-
+void AppSettings::setMetronomeStatus (bool value)
+{
+    metronomeStatus = value;
+    alphaLiveEngineRef->getGlobalClock()->setMetronomeStatus(value);
+}
 
 void AppSettings::setCopyExternalFiles (bool value)
 {
     copyExternalFiles = value;
 }
-
 
 
 Array<int> AppSettings::getCurrentlySelectedPad()
@@ -286,6 +291,10 @@ int AppSettings::getBeatsPerBar()
 int AppSettings::getAutoStartClock()
 {
     return autoStartClock;
+}
+bool AppSettings::getMetronomeStatus()
+{
+    return metronomeStatus;
 }
 
 

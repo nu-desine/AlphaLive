@@ -35,10 +35,76 @@ GlobalClock::GlobalClock(AlphaLiveEngine &ref)
     timeInterval = (double(15000.0)/tempo);
     beatsPerBar = AppSettings::Instance()->getBeatsPerBar();
     guiUpdateFlag = 1;
+    quantizationValue = AppSettings::Instance()->getQuantizationValue();
+    metronomeStatus = AppSettings::Instance()->getMetronomeStatus();
+    
+    //=================metronome stuff======================
+    
+    audioTransportSourceThread = new TimeSliceThread("Metronome Audio Thread");
+    audioTransportSourceThread->startThread();
+    tockAudioFormatReaderSource = NULL;
+    tickAudioFormatReaderSource = NULL;
+    tockFileSource.setPosition(0.0);
+    tockFileSource.setSource (0);
+    tickFileSource.setPosition(0.0);
+    tickFileSource.setSource (0);
+    
+    AudioFormatManager formatManager;
+    formatManager.registerBasicFormats();
+    
+    AudioFormatReader* reader = formatManager.createReaderFor(File("/Users/Liam/Desktop/Tock.wav"));
+    
+    if (reader != 0)
+    {
+        tockAudioFormatReaderSource = new AudioFormatReaderSource (reader, true);
+        
+        //set read ahead buffer size
+        int bufferSize = tockAudioFormatReaderSource->getTotalLength()/2;
+        //restrict buffer size value
+        if (bufferSize > 48000)
+            bufferSize = 48000;
+        else if (bufferSize < 8000)
+            bufferSize = 8000;
+        
+        // ..and plug it into our transport source
+        tockFileSource.setSource (tockAudioFormatReaderSource,
+                              bufferSize, // tells it to buffer this many samples ahead
+                              audioTransportSourceThread,
+                              reader->sampleRate);
+    }
+    
+    AudioFormatReader* reader2 = formatManager.createReaderFor(File("/Users/Liam/Desktop/Tick.wav"));
+    
+    if (reader2 != 0)
+    {
+        tickAudioFormatReaderSource = new AudioFormatReaderSource (reader2, true);
+        
+        //set read ahead buffer size
+        int bufferSize = tickAudioFormatReaderSource->getTotalLength()/2;
+        //restrict buffer size value
+        if (bufferSize > 48000)
+            bufferSize = 48000;
+        else if (bufferSize < 8000)
+            bufferSize = 8000;
+        
+        // ..and plug it into our transport source
+        tickFileSource.setSource (tickAudioFormatReaderSource,
+                                  bufferSize, // tells it to buffer this many samples ahead
+                                  audioTransportSourceThread,
+                                  reader2->sampleRate);
+    }
+    
+    //mix audio sources together
+    audioMixer.addInputSource(&tickFileSource, false); //add as inputsource to audioMixer
+    audioMixer.addInputSource(&tockFileSource, false); //add as inputsource to audioMixer
 }
 
 GlobalClock::~GlobalClock()
 {
+    tockFileSource.setSource(0);
+    tickFileSource.setSource(0);
+    audioMixer.removeAllInputs();
+    audioTransportSourceThread->stopThread(100);
     stopThread(timeInterval);
 }
 
@@ -69,6 +135,7 @@ void GlobalClock::run()
              //Bar number updates according to beat number within GuiGlobalClock
              guiUpdateFlag = 1;
              triggerAsyncUpdate();
+
          }
          if (beatNumber >= beatsPerBar+1) //1 bar
          {
@@ -76,12 +143,12 @@ void GlobalClock::run()
              barNumber++;
          }
          if (barNumber == 5) 
+         {
              barNumber = 1;
-         
-         
-         
+         }
+         	
          //=====send clock info to alphaLiveEngine and beyond based on quantization value=========
-         switch (AppSettings::Instance()->getQuantizationValue()) 
+         switch (quantizationValue) 
          {
              case 1: //4 bars
                  if (barNumber == 1 && beatNumber == 1 && microbeatNumber == 1)
@@ -123,6 +190,21 @@ void GlobalClock::run()
                      alphaLiveEngineRef.triggerQuantizationPoint();
                  }
                  break;
+         }
+         
+         //trigger metronome
+         if (metronomeStatus == true)
+         {
+             if (beatNumber == 1 && microbeatNumber == 1) //the start of a bar
+             {
+                 tickFileSource.setPosition (0.0);
+                 tickFileSource.start();
+             }
+             else if (microbeatNumber == 1) //the start of a beat
+             {
+                 tockFileSource.setPosition (0.0);
+                 tockFileSource.start();
+             }
          }
          
          //==================================================================
@@ -195,6 +277,20 @@ void GlobalClock::stopClock()
     
 }
 
+void GlobalClock::prepareToPlay (int samplesPerBlockExpected,double sampleRate)
+{
+    audioMixer.prepareToPlay(samplesPerBlockExpected, sampleRate);
+}
+
+void GlobalClock::releaseResources()
+{
+    audioMixer.releaseResources();
+}
+void GlobalClock::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
+{
+     audioMixer.getNextAudioBlock(bufferToFill);
+}
+
 void GlobalClock::setTempo (float value)
 {
     tempo = value;
@@ -203,6 +299,14 @@ void GlobalClock::setTempo (float value)
 void GlobalClock::setBeatsPerBar (int value)
 {
     beatsPerBar = value;
+}
+void GlobalClock::setQuantizationValue(int value)
+{
+    quantizationValue = value;
+}
+void GlobalClock::setMetronomeStatus(bool value)
+{
+    metronomeStatus = value;
 }
 
 int GlobalClock::getBeatNumber()

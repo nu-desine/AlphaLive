@@ -116,7 +116,7 @@ public:
     
     //called when recording from other pads
     int getSequenceNumber();
-    int getColumnNumber();
+    Array<int> getClosestColumnNumber();
     void setRecentlyAddedSequenceData (int sequenceNumber, int rowNumber, int columnNumber, bool value);
     
     //quantization stuff

@@ -1168,9 +1168,43 @@ int SequencePlayer::getSequenceNumber()
     return sequenceNumber;
 }
 
-int SequencePlayer::getColumnNumber()
+Array<int> SequencePlayer::getClosestColumnNumber()
 {
-    return columnNumber;
+    //get the exact system time and compare it to currentTime
+    //if the exact time is closer to current time, return the current column number
+    //if the exact time is closer to currentTime - timeInterval, return the last column
+    //is this the right algorithm?
+    
+    int exactTime = Time::getMillisecondCounter();
+    int timeFromLastColumn = exactTime - (currentTime - timeInterval); 
+    int timeTillNextColumn = currentTime - exactTime;
+    
+    //index 0 stores closest column number, 
+    //index 1 stores whether this is the last column or the current/next column
+    Array <int> closestColumnData; 
+    
+    if (timeFromLastColumn <= timeTillNextColumn) //closer to last column
+    {
+        int lastColumnNumber = columnNumber - 1;
+        if (lastColumnNumber < 0)
+            lastColumnNumber = sequenceLength - 1;
+        
+        closestColumnData.insert(0, lastColumnNumber);
+        closestColumnData.insert(1, 0);
+        
+        //std::cout << "returning last column number..." << std::endl;
+    }
+    else //timeTillNextColumn < timeFromLastColumn, closer to next column
+    {
+        //sstd::cout << "returning current column number..." << std::endl;
+        
+        closestColumnData.insert(0, columnNumber);
+        closestColumnData.insert(1, 1);
+    }
+    
+    //std::cout << std::endl;
+    
+    return closestColumnData;
 }
 
 //=====================================================================================

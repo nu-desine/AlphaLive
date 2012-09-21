@@ -416,9 +416,10 @@ void AudioFilePlayer::playAudioFile()
                         {
                             int sequenceNumber = modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->getSequenceNumber();
                             
-                            //can i just get the currently column number? Or should I create a new function which gets
-                            //the current time in ms and works out the closet column number based on that?
-                            int columnNumber = modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->getColumnNumber();
+                            //get the closest column number
+                            Array <int> columnNumberData = modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->getClosestColumnNumber();
+                            int columnNumber = columnNumberData[0];
+                            int columnNumberType = columnNumberData[1];
                             
                             //When recording a note to a sequencer pad the note will play twice at this point - 
                             //from the played pad (this class) and from the recorded note in the sequence, which is note what we want.
@@ -428,7 +429,9 @@ void AudioFilePlayer::playAudioFile()
                             //Every time a note is recorded here it adds a 'true' to the array in the same location as the recorded note.
                             //Then in SequencerPlayer it won't play this new note due to this 'true' flag.
                             
-                            modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->setRecentlyAddedSequenceData(sequenceNumber, j, columnNumber, true);
+                            if (columnNumberType == 1) //if the closest number is the current column number, add it to the recentAddedSequenceData Array so it isn't played
+                                modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->setRecentlyAddedSequenceData(sequenceNumber, j, columnNumber, true);
+                            
                             AppSettings::Instance()->padSettings[recordingPad]->setSequencerData(sequenceNumber, j, columnNumber, 110);
                             
                             

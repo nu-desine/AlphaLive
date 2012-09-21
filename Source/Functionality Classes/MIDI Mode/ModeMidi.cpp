@@ -284,9 +284,10 @@ void ModeMidi::noteOn (int padNumber)
                             {
                                 int sequenceNumber = alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->getSequenceNumber();
                                 
-                                //can i just get the currently column number? Or should I create a new function which gets
-                                //the current time in ms and works out the closet column number based on that?
-                                int columnNumber = alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->getColumnNumber();
+                                //get the closest column number
+                                Array <int> columnNumberData = alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->getClosestColumnNumber();
+                                int columnNumber = columnNumberData[0];
+                                int columnNumberType = columnNumberData[1];
                                 
                                 //When recording a note to a sequencer pad the note will play twice at this point - 
                                 //from the played pad (this class) and from the recorded note in the sequence, which is note what we want.
@@ -296,9 +297,10 @@ void ModeMidi::noteOn (int padNumber)
                                 //Every time a note is recorded here it adds a 'true' to the array in the same location as the recorded note.
                                 //Then in SequencerPlayer it won't play this new note due to this 'true' flag.
                                 
-                                alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->setRecentlyAddedSequenceData(sequenceNumber, j, columnNumber, true);
-                                AppSettings::Instance()->padSettings[recordingPad]->setSequencerData(sequenceNumber, j, columnNumber, velocity[padNumber]);
+                                if (columnNumberType == 1) //if the closest number is the current column number, add it to the recentAddedSequenceData Array so it isn't played
+                                    alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->setRecentlyAddedSequenceData(sequenceNumber, j, columnNumber, true);
                                 
+                                AppSettings::Instance()->padSettings[recordingPad]->setSequencerData(sequenceNumber, j, columnNumber, velocity[padNumber]);
                                 
                                 //if currently selected pad is the recording pad, update the grid gui.
                                 //how should it be handled if multiple pads are selected? Do nothing?

@@ -309,7 +309,7 @@ void SequencePlayer::processSequence(int padValue)
             }
             
             sequenceNumber = 0;
-            startThread();
+            startThread(8);
             currentPlayingState = 1;
             
             //EXCLUSIVE MODE STUFF 
@@ -516,7 +516,7 @@ void SequencePlayer::triggerQuantizationPoint()
             broadcaster.sendActionMessage("PLAYING ON");
         }
         
-        startThread();
+        startThread(8);
           
         currentPlayingState = 1;
         

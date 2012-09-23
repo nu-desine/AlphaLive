@@ -256,7 +256,7 @@ void GlobalClock::startClock()
     notifyObs();
     
     //start the thread
-    startThread();
+    startThread(8);
     
     
 }

@@ -1007,7 +1007,7 @@ void MainComponent::setInfoTextBoxText (String text)
     infoBoxText = text;
     
     if (isThreadRunning() == false)
-        startThread();
+        startThread(3);
     else
         notify();
 }

@@ -140,6 +140,12 @@ namespace BinaryDataNew
     extern const char*  stickyicon_png;
     const int           stickyicon_pngSize = 4399;
 
+    extern const char*  tick_wav;
+    const int           tick_wavSize = 177130;
+
+    extern const char*  tock_wav;
+    const int           tock_wavSize = 177130;
+
     extern const char*  toggleicon_png;
     const int           toggleicon_pngSize = 5633;
 
@@ -152,6 +158,6 @@ namespace BinaryDataNew
     extern const char*  triggersettingsicon_png;
     const int           triggersettingsicon_pngSize = 9580;
 
-}
+};
 
 #endif

@@ -93,14 +93,13 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
     transportButton->addMouseListener(this, true);
 	
 	
-     /*
-     //auto-start switch
-     addAndMakeVisible(autoStartSwitch = new GuiSwitch());
-     autoStartSwitch->addListener(this);
-     autoStartSwitch->setClickingTogglesState(true);
-     autoStartSwitch->setToggleState(false, false);
-     autoStartSwitch->addMouseListener(this, true);
-     */
+    //auto-start switch
+    addAndMakeVisible(autoStartSwitch = new TextButton());
+    autoStartSwitch->setButtonText("A");
+    autoStartSwitch->addListener(this);
+    autoStartSwitch->setClickingTogglesState(true);
+    autoStartSwitch->addMouseListener(this, true);
+     
     
     //metronome button
     addAndMakeVisible(metronomeButton = new TextButton());
@@ -137,7 +136,8 @@ void GuiGlobalClock::resized()
 {
     transportButton->setBounds(644-OFFSET_X, 42, 56, 56);
     tempoSlider->setBounds(550-OFFSET_X, 12, 50, 50);
-    metronomeButton->setBounds (510-OFFSET_X, 15, 25, 25);
+    metronomeButton->setBounds (490-OFFSET_X, 5, 25, 25);
+    autoStartSwitch->setBounds (520-OFFSET_X, 5, 25, 25);
 	
 	beatsPerBarButtons[0]->setBounds(631-OFFSET_X, 111, 17, 17);
 	beatsPerBarButtons[1]->setBounds(659-OFFSET_X, 121, 17, 17);
@@ -277,18 +277,11 @@ void GuiGlobalClock::buttonClicked (Button* button)
         AppSettings::Instance()->setMetronomeStatus(metronomeButton->getToggleState());
     }
     
-    /*
-     else if (button == autoStartSwitch)
-     {
-     if (autoStartSwitch->getToggleState() == true)
-     {
-     AppSettings::Instance()->setAutoStartClock(1);
-     }
-     else
-     AppSettings::Instance()->setAutoStartClock(0);
+    else if (button == autoStartSwitch)
+    {
+        AppSettings::Instance()->setAutoStartClock(autoStartSwitch->getToggleState());
+    }
      
-     }
-     */
 }
 
 void GuiGlobalClock::comboBoxChanged(ComboBox *comboBox)
@@ -332,12 +325,12 @@ void GuiGlobalClock::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText (translate("Clock Start/Stop Button. Use this button to manually start and stop the global clock."));
     }
-    /*
+    
      else if (autoStartSwitch->isMouseOver(true))
      {
-     mainComponentRef.setInfoTextBoxText ("Clock Auto-Start Switch. If set to true the clock will automatically start the first time a loop or sequence is played, else the clock will need to be manually started using the Start/Stop button.");
+     mainComponentRef.setInfoTextBoxText (translate("Clock Auto-Start Switch. If set to 'on' the clock will automatically start the first time a note, loop or sequence is played, else the clock will need to be manually started using the Start/Stop button."));
      }
-     */
+     
     
     else if (quantizationValueButtons[0]->isMouseOver(true))
     {

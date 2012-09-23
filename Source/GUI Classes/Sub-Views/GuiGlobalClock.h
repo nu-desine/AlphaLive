@@ -65,7 +65,6 @@ private:
     AlphaLiveEngine &alphaLiveEngineRef;
     
     AlphaSlider *tempoSlider;
-    //GuiSwitch *autoStartSwitch;
 	
 	int currentBeatNumber, currentBeatStore;
 	
@@ -78,7 +77,7 @@ private:
 	OwnedArray <AlphaTextButton> beatsPerBarButtons;
     OwnedArray <SettingsButton> quantizationValueButtons;
     
-    TextButton *metronomeButton;
+    TextButton *metronomeButton, *autoStartSwitch;
 
     
 };

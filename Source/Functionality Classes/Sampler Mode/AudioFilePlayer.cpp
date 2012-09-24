@@ -77,6 +77,8 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     //which means that it wouldn't have been called from setSamplerAudioFilePath().
     setAudioFile(PAD_SETTINGS->getSamplerAudioFilePath());
     
+    columnNumber = sequenceNumber = 0;
+    
     broadcaster.addActionListener(this);
 }
 
@@ -414,11 +416,11 @@ void AudioFilePlayer::playAudioFile()
                         
                         if (currentFile == seqFile[j]) //if audio file path matches
                         {
-                            int sequenceNumber = modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->getSequenceNumber();
+                            sequenceNumber = modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->getSequenceNumber();
                             
                             //get the closest column number
                             Array <int> columnNumberData = modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->getClosestColumnNumber();
-                            int columnNumber = columnNumberData[0];
+                            columnNumber = columnNumberData[0];
                             int columnNumberType = columnNumberData[1];
                             
                             //When recording a note to a sequencer pad the note will play twice at this point - 
@@ -441,15 +443,7 @@ void AudioFilePlayer::playAudioFile()
                             {
                                 if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == recordingPad)
                                 {
-                                    MessageManagerLock mmLock;
-                                    //optimise the below so we're only calling/updating what needs to be done!
-                                    //first, update the display of the sequence grid which gets the stored
-                                    //sequence data from PadSettings and puts it into the local sequenceData. This
-                                    //could be optimised so that it is only getting the data from the current seq,
-                                    //as thats all that will be changed here.
-                                    modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 3);
-                                    //next set the currently sequence display, which sets the status's of the grid points
-                                    modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 2);
+                                    broadcaster.sendActionMessage("RECORD NOTE");
                                 }
                             }
                             
@@ -526,6 +520,19 @@ void AudioFilePlayer::actionListenerCallback (const String& message)
     
     else if (message == "OFF")
         modeSamplerRef.updatePadPlayingStatus(padNumber, 0);
+    
+    else if (message == "RECORD NOTE")
+    {
+        //optimise the below so we're only calling/updating what needs to be done!
+        //first, update the display of the sequence grid which gets the stored
+        //sequence data from PadSettings and puts it into the local sequenceData. This
+        //could be optimised so that it is only getting the data from the current seq,
+        //as thats all that will be changed here.
+        modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 3);
+        //next set the currently sequence display, which sets the status's of the grid points
+        modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 2);
+
+    }
     
 }
 

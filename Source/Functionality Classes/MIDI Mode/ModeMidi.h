@@ -110,6 +110,9 @@ private:
     Array<int> guiPadWaitingPlayUpdater;
     Array<int> guiPadWaitingStopUpdater;
     
+    //for recording notes into sequencers
+    int columnNumber, sequenceNumber;
+    
 };
 
 

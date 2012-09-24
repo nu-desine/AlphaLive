@@ -58,6 +58,8 @@ ModeMidi::ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref)
         pressureValue[i] = 0;
     }
     
+    columnNumber = sequenceNumber = 0;
+    
     broadcaster.addActionListener(this);
             
 }
@@ -282,11 +284,11 @@ void ModeMidi::noteOn (int padNumber)
                             
                             if (note[padNumber] == seqNote[j]) //if MIDI notes match
                             {
-                                int sequenceNumber = alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->getSequenceNumber();
+                                sequenceNumber = alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->getSequenceNumber();
                                 
                                 //get the closest column number
                                 Array <int> columnNumberData = alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->getClosestColumnNumber();
-                                int columnNumber = columnNumberData[0];
+                                columnNumber = columnNumberData[0];
                                 int columnNumberType = columnNumberData[1];
                                 
                                 //When recording a note to a sequencer pad the note will play twice at this point - 
@@ -308,15 +310,7 @@ void ModeMidi::noteOn (int padNumber)
                                 {
                                     if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == recordingPad)
                                     {
-                                        MessageManagerLock mmLock;
-                                        //optimise the below so we're only calling/updating what needs to be done!
-                                        //first, update the display of the sequence grid which gets the stored
-                                        //sequence data from PadSettings and puts it into the local sequenceData. This
-                                        //could be optimised so that it is only getting the data from the current seq,
-                                        //as thats all that will be changed here.
-                                        alphaLiveEngineRef.getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 3);
-                                        //next set the currently sequence display, which sets the status's of the grid points
-                                        alphaLiveEngineRef.getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 2);
+                                        broadcaster.sendActionMessage("RECORD NOTE");
                                     }
                                 }
                                 
@@ -509,6 +503,18 @@ void ModeMidi::actionListenerCallback (const String& message)
     {
         alphaLiveEngineRef.updatePadPlayingStatus(guiPadWaitingStopUpdater.getLast(), 3);
         guiPadWaitingStopUpdater.removeLast();
+    }
+    
+    else if (message == "RECORD NOTE")
+    {
+        //optimise the below so we're only calling/updating what needs to be done!
+        //first, update the display of the sequence grid which gets the stored
+        //sequence data from PadSettings and puts it into the local sequenceData. This
+        //could be optimised so that it is only getting the data from the current seq,
+        //as thats all that will be changed here.
+        alphaLiveEngineRef.getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 3);
+        //next set the currently sequence display, which sets the status's of the grid points
+        alphaLiveEngineRef.getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 2);
     }
     
 }

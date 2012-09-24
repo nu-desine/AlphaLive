@@ -311,6 +311,7 @@ void GuiGlobalClock::updateDisplay()
 	
     beatsPerBarButtons[AppSettings::Instance()->getBeatsPerBar()-2]->setToggleState(true, false);
     quantizationValueButtons[6-AppSettings::Instance()->getQuantizationValue()]->setToggleState(true, false);
+    autoStartSwitch->setToggleState(AppSettings::Instance()->getAutoStartClock(), false);
 
 }
 

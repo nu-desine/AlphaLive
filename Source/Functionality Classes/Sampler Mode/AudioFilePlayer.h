@@ -133,6 +133,9 @@ private:
     
     bool playingLastLoop;
     
+    //for recording notes into sequencers
+    int columnNumber, sequenceNumber;
+    
     //playback manipulation stuff
     double fileStartPosition, fileEndPosition, currentPositionInRegion;
     int prevPressureRegion;

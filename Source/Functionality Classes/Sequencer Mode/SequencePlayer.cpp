@@ -162,13 +162,7 @@ SequencePlayer::~SequencePlayer()
     
     audioMixer.removeAllInputs();
     audioPlayer.setSource(NULL);
-    
-    //new - recording stuff
-    if (recordEnabled == true && PAD_SETTINGS->getSequencerRecordEnabled() != nullptr)
-    {
-        int figureThisOUt;
-        PAD_SETTINGS->setSequencerRecordEnabled(false);
-    }
+     
 }
 
 //=====================================================================================

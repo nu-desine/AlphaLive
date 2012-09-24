@@ -664,7 +664,50 @@ void AppDocumentState::saveToScene (int sceneNumber)
     globalData->setAttribute("beatsPerBar", AppSettings::Instance()->getBeatsPerBar());
     globalData->setAttribute("autoStartClock", AppSettings::Instance()->getAutoStartClock());
     
-    
+    //==========elite dials=============
+    for (int i = 0; i < 2; i++)
+    {
+        globalData->setAttribute("eliteDialControl" + String(i), AppSettings::Instance()->getEliteDialControl(i));
+        
+        if (AppSettings::Instance()->getEliteDialControl(i) == 4) //midi cc
+        {
+            globalData->setAttribute("eliteDialMidiCcNumber" + String(i), AppSettings::Instance()->getEliteDialMidiCcNumber(i));
+            globalData->setAttribute("eliteDialMidiChannel" + String(i), AppSettings::Instance()->getEliteDialMidiChannel(i));
+            globalData->setAttribute("eliteDialMidiMinRange" + String(i), AppSettings::Instance()->getEliteDialMidiMinRange(i));
+            globalData->setAttribute("eliteDialMidiMaxRange" + String(i), AppSettings::Instance()->getEliteDialMidiMaxRange(i));
+        }
+        else if (AppSettings::Instance()->getEliteDialControl(i) == 5) //osc
+        {
+            globalData->setAttribute("eliteDialOscPortNumber" + String(i), AppSettings::Instance()->getEliteDialOscPortNumber(i));
+            globalData->setAttribute("eliteDialOscMinRange" + String(i), AppSettings::Instance()->getEliteDialOscMinRange(i));
+            globalData->setAttribute("eliteDialOscMaxRange" + String(i), AppSettings::Instance()->getEliteDialOscMaxRange(i));
+            globalData->setAttribute("eliteDialOscIpAddress" + String(i), AppSettings::Instance()->getEliteDialOscIpAddress(i));
+        }
+    }
+    //==========elite buttons=============
+    for (int i = 0; i < 3; i++)
+    {
+        globalData->setAttribute("eliteButtonControl" + String(i), AppSettings::Instance()->getEliteButtonControl(i));
+        
+        if (AppSettings::Instance()->getEliteButtonControl(i) == 2) //scene switcher
+        {
+            globalData->setAttribute("eliteButtonSceneNumber" + String(i), AppSettings::Instance()->getEliteButtonSceneNumber(i));
+        }
+        else if (AppSettings::Instance()->getEliteButtonControl(i) == 4) //midi cc
+        {
+            globalData->setAttribute("eliteButtonMidiCcNumber" + String(i), AppSettings::Instance()->getEliteButtonMidiCcNumber(i));
+            globalData->setAttribute("eliteButtonMidiChannel" + String(i), AppSettings::Instance()->getEliteButtonMidiChannel(i));
+            globalData->setAttribute("eliteButtonMidiOffNumber" + String(i), AppSettings::Instance()->getEliteButtonMidiOffNumber(i));
+            globalData->setAttribute("eliteButtonMidiOnNumber" + String(i), AppSettings::Instance()->getEliteButtonMidiOnNumber(i));
+        }
+        else if (AppSettings::Instance()->getEliteButtonControl(i) == 5) //osc
+        {
+            globalData->setAttribute("eliteButtonOscPortNumber" + String(i), AppSettings::Instance()->getEliteButtonOscPortNumber(i));
+            globalData->setAttribute("eliteButtonOscOffNumber" + String(i), AppSettings::Instance()->getEliteButtonOscOffNumber(i));
+            globalData->setAttribute("eliteButtonOscOnNumber" + String(i), AppSettings::Instance()->getEliteButtonOscOnNumber(i));
+            globalData->setAttribute("eliteButtonOscIpAddress" + String(i), AppSettings::Instance()->getEliteButtonOscIpAddress(i));
+        }
+    }
     
     //===pad settings (pad number = i)
     for (int i = 0; i <= 47; i++)
@@ -708,6 +751,51 @@ void AppDocumentState::loadFromScene (int sceneNumber)
         AppSettings::Instance()->setQuantizationValue(globalData->getIntAttribute("quantizationValue"));
         AppSettings::Instance()->setBeatsPerBar(globalData->getIntAttribute("beatsPerBar"));
         AppSettings::Instance()->setAutoStartClock(globalData->getIntAttribute("autoStartClock"));
+        
+        //==========elite dials=============
+        for (int i = 0; i < 2; i++)
+        {
+            AppSettings::Instance()->setEliteDialControl(globalData->getIntAttribute("eliteDialControl" + String(i)), i);
+            
+            if (AppSettings::Instance()->getEliteDialControl(i) == 4) //midi cc
+            {
+                AppSettings::Instance()->setEliteDialMidiCcNumber(globalData->getIntAttribute("eliteDialMidiCcNumber" + String(i)), i);
+                AppSettings::Instance()->setEliteDialMidiChannel(globalData->getIntAttribute("eliteDialMidiChannel" + String(i)), i);
+                AppSettings::Instance()->setEliteDialMidiMinRange(globalData->getIntAttribute("eliteDialMidiMinRange" + String(i)), i);
+                AppSettings::Instance()->setEliteDialMidiMaxRange(globalData->getIntAttribute("eliteDialMidiMaxRange" + String(i)), i);
+            }
+            else if (AppSettings::Instance()->getEliteDialControl(i) == 5) //osc
+            {
+                AppSettings::Instance()->setEliteDialOscPortNumber(globalData->getIntAttribute("eliteDialOscPortNumber" + String(i)), i);
+                AppSettings::Instance()->setEliteDialOscMinRange(globalData->getDoubleAttribute("eliteDialOscMinRange" + String(i)), i);
+                AppSettings::Instance()->setEliteDialOscMaxRange(globalData->getDoubleAttribute("eliteDialOscMaxRange" + String(i)), i);
+                AppSettings::Instance()->setEliteDialOscIpAddress(globalData->getStringAttribute("eliteDialOscIpAddress" + String(i)), i);
+            }
+        }
+        //==========elite buttons=============
+        for (int i = 0; i < 3; i++)
+        {
+            AppSettings::Instance()->setEliteButtonControl(globalData->getIntAttribute("eliteButtonControl" + String(i)), i);
+            
+            if (AppSettings::Instance()->getEliteButtonControl(i) == 2) //scene switcher
+            {
+                AppSettings::Instance()->setEliteButtonSceneNumber(globalData->getIntAttribute("eliteButtonSceneNumber" + String(i)), i);
+            }
+            else if (AppSettings::Instance()->getEliteButtonControl(i) == 4) //midi cc
+            {
+                AppSettings::Instance()->setEliteButtonMidiCcNumber(globalData->getIntAttribute("eliteButtonMidiCcNumber" + String(i)), i);
+                AppSettings::Instance()->setEliteButtonMidiChannel(globalData->getIntAttribute("eliteButtonMidiChannel" + String(i)), i);
+                AppSettings::Instance()->setEliteButtonMidiOffNumber(globalData->getIntAttribute("eliteButtonMidiOffNumber" + String(i)), i);
+                AppSettings::Instance()->setEliteButtonMidiOnNumber(globalData->getIntAttribute("eliteButtonMidiOnNumber" + String(i)), i);
+            }
+            else if (AppSettings::Instance()->getEliteButtonControl(i) == 5) //osc
+            {
+                AppSettings::Instance()->setEliteButtonOscPortNumber(globalData->getIntAttribute("eliteButtonOscPortNumber" + String(i)), i);
+                AppSettings::Instance()->setEliteButtonOscOffNumber(globalData->getDoubleAttribute("eliteButtonOscOffNumber" + String(i)), i);
+                AppSettings::Instance()->setEliteButtonOscOnNumber(globalData->getDoubleAttribute("eliteButtonOscOnNumber" + String(i)), i);
+                AppSettings::Instance()->setEliteButtonOscIpAddress(globalData->getStringAttribute("eliteButtonOscIpAddress" + String(i)), i);
+            }
+        }
         
         delete globalData;
         

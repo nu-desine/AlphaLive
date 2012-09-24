@@ -291,7 +291,7 @@ void MainComponent::resized()
     guiControllerMode->setBounds(0, 0, getWidth(), getHeight());
 	guiGlobalPadSettings->setBounds(0, 0, getWidth(), getHeight());
 	
-    //eliteControls->setBounds(50, 530, 100, 100);
+    eliteControls->setBounds(50, 530, 100, 100);
     eliteControlsSettings->setBounds(0, 0, getWidth(), getHeight());
     
 	midiPiano->setBounds(0, 0, 660, 685);

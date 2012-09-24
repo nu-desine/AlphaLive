@@ -254,6 +254,7 @@ alphaLiveEngineRef(ref),
     noPadsSelected = 1;
 	noModeSelected = 1;
     eliteControlSelected = 0;
+    selectedEliteControl = 0;
     
     modeOffButton->setVisible(false);
     modeMidiButton->setVisible(false);
@@ -291,7 +292,7 @@ void MainComponent::resized()
     guiControllerMode->setBounds(0, 0, getWidth(), getHeight());
 	guiGlobalPadSettings->setBounds(0, 0, getWidth(), getHeight());
 	
-    eliteControls->setBounds(50, 530, 100, 100);
+    //eliteControls->setBounds(50, 530, 100, 100);
     eliteControlsSettings->setBounds(0, 0, getWidth(), getHeight());
     
 	midiPiano->setBounds(0, 0, 660, 685);
@@ -638,6 +639,15 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
         globalSettingsButton->setToggleState(false, false);
         setGlobalPadSettingsDisplay();
         
+        if (eliteControlSelected == 1)
+        {
+            //This is done here instead of within setEliteControlsSettingsDisplay()
+            //so that the display is updated correctly if the user switches scenes
+            //whilst an elite control display is currently in view
+            eliteControlsSettings->setDisplay(selectedEliteControl);
+            eliteControlsSettings->setVisible(true);
+        }
+        
         //repaint(); //this is called in setGlobalPadSettingsDisplay() above
     }
     else if (selectedPads_.size() > 0 && selectedPads.size() == 0) //if previously there were no pads selected,
@@ -943,10 +953,9 @@ void MainComponent::setGlobalPadSettingsDisplay()
 void MainComponent::setEliteControlsSettingsDisplay (int controlNumber)
 {
     eliteControlSelected = 1;
-    guiPadLayout->deselectAllPads(); //this in turn calls setSelectedPads within this class
-    
-    eliteControlsSettings->setDisplay(controlNumber);
-    eliteControlsSettings->setVisible(true);
+    selectedEliteControl = controlNumber;
+    guiPadLayout->deselectAllPads();    //this in turn calls setSelectedPads within this class,
+                                        //which sets and displays the elite controls display
 }
 
 AlphaLiveEngine& MainComponent::getAlphaLiveEngineRef()

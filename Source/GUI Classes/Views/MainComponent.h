@@ -157,7 +157,7 @@ private:
     
     DocumentWindow* owner;
     
-    int noPadsSelected, noModeSelected, eliteControlSelected;
+    int noPadsSelected, noModeSelected, eliteControlSelected, selectedEliteControl;
     
     GuiPadLayout *guiPadLayout;
     AlphaRotarySlider *gainSlider, *panSlider;

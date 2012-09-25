@@ -80,12 +80,12 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     columnNumber = sequenceNumber = 0;
     
     isInAttack = isInRelease = false;
-    attackTime = releaseTime = attackSamples = releaseSamples = attackPosition = releasePosition = 0;
+    attackPosition = releasePosition = 0;
     
-    attackTime = 0.5;
+    attackTime = 4.0;
     attackSamples = attackTime * sampleRate_;
     
-    releaseTime = 0.5;
+    releaseTime = 4.0;
     releaseSamples = releaseTime * sampleRate_;
     
     broadcaster.addActionListener(this);
@@ -409,6 +409,7 @@ void AudioFilePlayer::playAudioFile()
     }
     
     //start audio file
+    gain = gainPrev = PAD_SETTINGS->getSamplerGain();
     fileSource.setPosition (0.0);
     fileSource.start();
     
@@ -622,30 +623,39 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
                     isInAttack = false;
                     attackPosition = 0;
                 }
-                
-                //std::cout << "attack pos: " << attackPosition << " gain: " << (attackPosition * (gain/attackSamples)) << std::endl;
             }
             else if (isInRelease)
             {
-                double newGainL = (gain*panLeft) - (releasePosition * ((gain*panLeft)/attackSamples));
-                double newGainR = (gain*panRight) - (releasePosition * ((gain*panRight)/attackSamples));
+                double newGainL = (gain*panLeft) - (releasePosition * ((gain*panLeft)/releaseSamples));
+                double newGainR = (gain*panRight) - (releasePosition * ((gain*panRight)/releaseSamples));
                 
                 if (newGainL >= 0)
-                    *pOutL = *pOutL * newGainL;
+                {
+                    if (newGainL <= 1)
+                        *pOutL = *pOutL * (newGainL * newGainL * newGainL);
+                    else
+                        *pOutL = *pOutL * newGainL;
+                }
                 if (newGainR >= 0)
-                    *pOutR = *pOutR * newGainR;
+                {
+                    if (newGainR <= 1)
+                        *pOutR = *pOutR * (newGainR * newGainR * newGainR);
+                    else
+                        *pOutR = *pOutR * newGainR;
+                }
                 
                 releasePosition++;
                 
-                if (releasePosition >= releaseSamples)
+                if (releasePosition == releaseSamples-1)
                 {
+                    //set gain to 0 - without this it causes a slight artefact when the file is stopped for some reason
+                    gain = gainPrev = 0;
+                    
                     //stop file and stuff
                     broadcaster.sendActionMessage("STOP AFTER RELEASE");
-                    
-                    std::cout << "NOTICEMEMEMEMEMEMEMEMEMEMEMEMEMEME" << std::endl << std::endl << std::endl << std::endl;
+
                 }
                 
-                std::cout << "release pos: " << releasePosition << " gain: " << newGainL << " " << newGainR << std::endl;
             }
             
             //move to next pair of samples

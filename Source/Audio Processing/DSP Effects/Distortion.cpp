@@ -211,7 +211,7 @@ void Distortion::processAudio (const AudioSourceChannelInfo& bufferToFill)
 		}
 		
 		//DIGITAL
-		if (comboBoxID == 9) 
+		if (comboBoxID == 6) 
 		{
 			*leftChannel *= drive;
 			*rightChannel *= drive;
@@ -319,18 +319,18 @@ void Distortion::processAlphaTouch (int pressureValue)
 			
 		case 5: //Input gain
             if (alphaTouchReverse == false)
-                inputGain = inputGainControl + (pressureValue * (((16.0-inputGainControl)*alphaTouchIntensity)/511.0));
+                inputGain = inputGainControl + (pressureValue * (((1.0-inputGainControl)*alphaTouchIntensity)/511.0));
             else
-                inputGain = inputGainControl - (pressureValue * (((16.0-(16.0 - inputGainControl))*alphaTouchIntensity)/511.0));
+                inputGain = inputGainControl - (pressureValue * (((1.0-(1.0 - inputGainControl))*alphaTouchIntensity)/511.0));
             
             std::cout << inputGain << std::endl;
             break;
 			
 		case 6: //Output gain
             if (alphaTouchReverse == false)
-                outputGain = outputGainControl + (pressureValue * (((16.0-outputGainControl)*alphaTouchIntensity)/511.0));
+                outputGain = outputGainControl + (pressureValue * (((1.0-outputGainControl)*alphaTouchIntensity)/511.0));
             else
-                outputGain = outputGainControl - (pressureValue * (((16.0-(16.0 - outputGainControl))*alphaTouchIntensity)/511.0));
+                outputGain = outputGainControl - (pressureValue * (((1.0-(16.0 - outputGainControl))*alphaTouchIntensity)/511.0));
             
             std::cout << outputGain << std::endl;
             break;

@@ -139,6 +139,12 @@ private:
     //playback manipulation stuff
     double fileStartPosition, fileEndPosition, currentPositionInRegion;
     int prevPressureRegion;
+    
+    //attack/release stuff
+    bool isInAttack, isInRelease;
+    double attackTime, releaseTime;
+    int attackSamples, releaseSamples;
+    int attackPosition, releasePosition;
 };
 
 #endif

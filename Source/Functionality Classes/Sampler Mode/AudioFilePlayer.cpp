@@ -79,6 +79,15 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     
     columnNumber = sequenceNumber = 0;
     
+    isInAttack = isInRelease = false;
+    attackTime = releaseTime = attackSamples = releaseSamples = attackPosition = releasePosition = 0;
+    
+    attackTime = 0.5;
+    attackSamples = attackTime * sampleRate_;
+    
+    releaseTime = 0.5;
+    releaseSamples = releaseTime * sampleRate_;
+    
     broadcaster.addActionListener(this);
 }
 
@@ -392,6 +401,13 @@ void AudioFilePlayer::playAudioFile()
     else if (effect == 10) //tremolo
         tremolo->restart(); //so the lfo is re-started when the file is started
     
+    if (attackTime > 0)
+    {
+        isInAttack = true;
+        isInRelease = false;
+        attackPosition = 0;
+    }
+    
     //start audio file
     fileSource.setPosition (0.0);
     fileSource.start();
@@ -453,27 +469,7 @@ void AudioFilePlayer::playAudioFile()
             }
         }
     }
-    
-    
-    
-    /*
-    AudioSampleBuffer buffer(2, 512);
-    AudioSourceChannelInfo info;
-    info.buffer = &buffer;
-    info.startSample = 0;
-    info.numSamples = 512;
-    
-    fileSource.getNextAudioBlock(info);
-    
-    for (int i = 0; i < 2; ++i)
-    {
-        info.buffer->applyGainRamp (i,
-                                    info.startSample,
-                                    info.numSamples,
-                                    0,
-                                    gain);
-    }
-     */
+
      
     
     if (PAD_SETTINGS->getExclusiveMode() == 1)
@@ -495,15 +491,21 @@ void AudioFilePlayer::playAudioFile()
 
 void AudioFilePlayer::stopAudioFile()
 {
+    if (releaseTime > 0)
+    {
+        isInRelease = true;
+        isInAttack = false;
+        releasePosition = 0;
+    }
+    else
+    {
+        fileSource.stop();
     
-    fileSource.stop();
+        playingLastLoop = false;
+        broadcaster.sendActionMessage("OFF");
     
-    playingLastLoop = false;
-    broadcaster.sendActionMessage("OFF");
-    
-    currentPlayingState = 0;
-    //triggerModes.reset(); //can't do this hear as this will cause instant retriggering
-                            //of files if stopAudioFile() is called from a pad press.
+        currentPlayingState = 0;
+    }
     
 }
 
@@ -532,6 +534,17 @@ void AudioFilePlayer::actionListenerCallback (const String& message)
         //next set the currently sequence display, which sets the status's of the grid points
         modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 2);
 
+    }
+    
+    else if (message == "STOP AFTER RELEASE")
+    {
+        fileSource.stop();
+        playingLastLoop = false;
+        currentPlayingState = 0;
+        modeSamplerRef.updatePadPlayingStatus(padNumber, 0);
+        
+        isInRelease = false;
+        releasePosition = 0;
     }
     
 }
@@ -582,32 +595,94 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
          
     }
     sharedMemory.exit();
-     
-    //gain and pan
-    sharedMemory.enter();
     
-    for (int i = 0; i < bufferToFill.buffer->getNumChannels(); ++i)
+    
+    if (isInAttack == true || isInRelease == true)
     {
-        if (i == 0) //left chan
-            bufferToFill.buffer->applyGainRamp (i,
-                                                bufferToFill.startSample,
-                                                bufferToFill.numSamples,
-                                                panLeftPrev * gainPrev,
-                                                panLeft * gain);
-        else if (i == 1) // right chan
-            bufferToFill.buffer->applyGainRamp (i,
-                                                bufferToFill.startSample,
-                                                bufferToFill.numSamples,
-                                                panRightPrev * gainPrev,
-                                                panRight * gain);
+        //====== set attack and release =======
+        
+        sharedMemory.enter();
+        
+        //get first pair of sample data from audio buffer
+        float *pOutL = bufferToFill.buffer->getSampleData (0, bufferToFill.startSample);
+        float *pOutR = bufferToFill.buffer->getSampleData (1, bufferToFill.startSample);
+        
+        //increment through each pair of samples (left channel and right channel) in the current block of the audio buffer
+        for (int i = 0; i < bufferToFill.numSamples; ++i)
+        {
+            if (isInAttack)
+            {
+                *pOutL = *pOutL * (attackPosition * ((gain*panLeft)/attackSamples));
+                *pOutR = *pOutR * (attackPosition * ((gain*panRight)/attackSamples));
+                
+                attackPosition++;
+                
+                if (attackPosition >= attackSamples)
+                {
+                    isInAttack = false;
+                    attackPosition = 0;
+                }
+                
+                //std::cout << "attack pos: " << attackPosition << " gain: " << (attackPosition * (gain/attackSamples)) << std::endl;
+            }
+            else if (isInRelease)
+            {
+                double newGainL = (gain*panLeft) - (releasePosition * ((gain*panLeft)/attackSamples));
+                double newGainR = (gain*panRight) - (releasePosition * ((gain*panRight)/attackSamples));
+                
+                if (newGainL >= 0)
+                    *pOutL = *pOutL * newGainL;
+                if (newGainR >= 0)
+                    *pOutR = *pOutR * newGainR;
+                
+                releasePosition++;
+                
+                if (releasePosition >= releaseSamples)
+                {
+                    //stop file and stuff
+                    broadcaster.sendActionMessage("STOP AFTER RELEASE");
+                    
+                    std::cout << "NOTICEMEMEMEMEMEMEMEMEMEMEMEMEMEME" << std::endl << std::endl << std::endl << std::endl;
+                }
+                
+                std::cout << "release pos: " << releasePosition << " gain: " << newGainL << " " << newGainR << std::endl;
+            }
+            
+            //move to next pair of samples
+            pOutL++;
+            pOutR++;
+        }
+        
+        sharedMemory.exit();
+    }
+    else
+    {
+        //===== set gain and pan======
+        sharedMemory.enter();
+        
+        for (int i = 0; i < bufferToFill.buffer->getNumChannels(); ++i)
+        {
+            if (i == 0) //left chan
+                bufferToFill.buffer->applyGainRamp (i,
+                                                    bufferToFill.startSample,
+                                                    bufferToFill.numSamples,
+                                                    panLeftPrev * gainPrev,
+                                                    panLeft * gain);
+            else if (i == 1) // right chan
+                bufferToFill.buffer->applyGainRamp (i,
+                                                    bufferToFill.startSample,
+                                                    bufferToFill.numSamples,
+                                                    panRightPrev * gainPrev,
+                                                    panRight * gain);
+        }
+        
+        gainPrev = gain;
+        panLeftPrev = panLeft;
+        panRightPrev = panRight;
+        sharedMemory.exit();
     }
     
-    gainPrev = gain;
-    panLeftPrev = panLeft;
-    panRightPrev = panRight;
-    sharedMemory.exit();
-     
-     
+    
     if (fileSource.hasStreamFinished() == true) //if the audio file has ended on its own, automatically update the pad GUI
         //NOTE - hasStreamFinshed could be used above where I've been manually checking if the stream has ended on its own
     {
@@ -626,6 +701,8 @@ void AudioFilePlayer::prepareToPlay (int samplesPerBlockExpected,double sampleRa
     fileSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
     
     sampleRate_ = sampleRate;
+    attackSamples = attackTime * sampleRate_;
+    releaseSamples = releaseTime * sampleRate_;
     
     
     switch (effect)

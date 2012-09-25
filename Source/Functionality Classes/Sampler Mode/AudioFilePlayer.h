@@ -34,6 +34,7 @@
 #include "../../Audio Processing/DSP Effects/Flanger.h"
 #include "../../Audio Processing/DSP Effects/Tremolo.h"
 #include "../../Audio Processing/PanControl.h"
+#include "../../Audio Processing/DSP Effects/Distortion.h"
 
 
 class ModeSampler;
@@ -82,6 +83,7 @@ public:
     ReverbClass& getReverb();
     Flanger& getFlanger();
     Tremolo& getTremolo();
+	Distortion& getDistortion();
     
     //quantization stuff
     void triggerQuantizationPoint();
@@ -128,6 +130,7 @@ private:
     ReverbClass *reverb;
     Flanger *flanger;
     Tremolo *tremolo;
+	Distortion *distortion;
     
     ActionBroadcaster broadcaster;
     

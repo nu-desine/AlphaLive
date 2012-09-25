@@ -49,12 +49,13 @@
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
 #include "../../Third Party Libraries/DspFilters/Dsp.h"
+#include "../../Third Party Libraries/fastmath.h"
 
-class DistortionClass
+class Distortion
 {
 public:
-	DistortionClass(int padNumber_, float sampleRate_);
-	~DistortionClass();
+	Distortion(int padNumber_, float sampleRate_);
+	~Distortion();
     
     //Function that processes the audio
     void processAudio (const AudioSourceChannelInfo& bufferToFill);
@@ -62,10 +63,12 @@ public:
     void processAlphaTouch (int pressureValue);
     
     //Functions that set the effect parameters
-    void setMix (float value);
-    void setOverdrive (float value);
-    void setTone1 (float value);
-    void setTone2 (float value);
+    void setInputGain (double value);
+    void setDrive (double value);
+    void setOutputGain (double value);
+    void setMix (double value);
+	void setTone (double value);
+	void setDistortionTypeMenu(int value);
     
     //Functions that set the AlphaTouch settings
 	void setAlphaTouchParam (int value);
@@ -78,22 +81,36 @@ public:
 private:
     
     //The filters
-    Dsp::Filter *preFilter;
-    Dsp::Filter *postFilter;
-    Dsp::Params paramsPreFilter;
-    Dsp::Params paramsPostFilter;
-    
-    float mix, mixControl;
+    Dsp::Filter *preFilter1;
+	Dsp::Filter *preFilter2;
+    Dsp::Filter *postFilter1;
+	Dsp::Filter *postFilter2;
+    Dsp::Params paramsPreFilter1;
+	Dsp::Params paramsPreFilter2;
+    Dsp::Params paramsPostFilter1;
+    Dsp::Params paramsPostFilter2;
+	
+    float wetDryMixControl, wetDryMix, wetDryMixPrev;
+	float drive, driveControlValue;
     float frequencyControlPreFilter; //Tone 1
     float frequencyControlPostFilter; //Tone 2
-    float preGain, preGainControl; //Overdrive
-    float postGain;
+	float toneControl;
+    float inputGain, inputGainPrev, inputGainControl; //Overdrive
+    float outputGain, outputGainPrev, outputGainControl;
+	
+	float preFilter1Cutoff, preFilter2Cutoff; 
+	float postFilter1Cutoff, postFilter1Bandwidth, postFilter2Cutoff, postFilter2Bandwidth;
+	
+	float *pIn[2], *leftChannel, *rightChannel;
+	
+	float paramsPreFilter[3], paramsPostFilter[3];
     
     int alphaTouchParam;
     float alphaTouchIntensity;
     bool alphaTouchReverse;
-    
-    CriticalSection sharedMemory;
+	int comboBoxID;
+	
+	CriticalSection sharedMemory;
     
     int padNumber;
     

@@ -2098,3 +2098,89 @@ double PadSettings::getPadFxTremoloAtIntensity()
     return padFxTremoloAtIntensity;
 }
 
+
+#pragma mark Distortion
+void PadSettings::setPadFxDistortionInputGain (double value)
+{
+    padFxDistortionInputGain = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDistortion().setInputGain(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDistortion().setInputGain(value);
+}
+void PadSettings::setPadFxDistortionDrive (double value)
+{
+    padFxDistortionDrive = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDistortion().setDrive(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDistortion().setDrive(value);
+}
+void PadSettings::setPadFxDistortionOutputGain (double value)
+{
+    padFxDistortionOutputGain = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDistortion().setOutputGain(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDistortion().setOutputGain(value);
+}
+void PadSettings::setPadFxDistortionMix (double value)
+{
+    padFxDistortionMix = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDistortion().setMix(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDistortion().setMix(value);
+}
+void PadSettings::setPadFxDistortionTone (double value)
+{
+    padFxDistortionTone = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDistortion().setTone(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDistortion().setTone(value);
+}
+void PadSettings::setPadFxDistortionTypeMenu (int value)
+{
+    padFxDistortionType = value;
+}
+
+double PadSettings::getPadFxDistortionInputGain()
+{
+    return padFxDistortionInputGain;
+}
+double PadSettings::getPadFxDistortionDrive()
+{
+    return padFxDistortionDrive;
+}
+double PadSettings::getPadFxDistortionOutputGain()
+{
+    return padFxDistortionOutputGain;
+}
+double PadSettings::getPadFxDistortionMix()
+{
+    return padFxDistortionMix;
+}
+double PadSettings::getPadFxDistortionTone()
+{
+    return padFxDistortionTone;
+}
+int PadSettings::getPadFxDistortionTypeMenu()
+{
+    return padFxDistortionType;
+}
+int PadSettings::getPadFxDistortionAlphaTouch()
+{
+    return padFxDistortionAlphaTouch;
+}
+int PadSettings::getPadFxDistortionAtReverse()
+{
+    return padFxDistortionAtReverse;
+}
+float PadSettings::getPadFxDistortionAtIntensity()
+{
+    return padFxDistortionAtIntensity;
+}
+
+
+

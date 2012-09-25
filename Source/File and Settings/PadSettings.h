@@ -336,6 +336,22 @@ public:
     int getPadFxTremoloAlphaTouch();
     int getPadFxTremoloAtReverse();
     double getPadFxTremoloAtIntensity();
+	//distortion
+	void setPadFxDistortionInputGain (double value);
+	void setPadFxDistortionDrive (double value);
+	void setPadFxDistortionOutputGain (double value);
+	void setPadFxDistortionMix (double value);
+	void setPadFxDistortionTone (double value);
+	void setPadFxDistortionTypeMenu (int value);
+	double getPadFxDistortionInputGain();
+	double getPadFxDistortionDrive();
+	double getPadFxDistortionOutputGain();
+	double getPadFxDistortionMix();
+	double getPadFxDistortionTone();
+	int getPadFxDistortionTypeMenu();
+	int getPadFxDistortionAlphaTouch();
+	int getPadFxDistortionAtReverse();
+	float getPadFxDistortionAtIntensity();
     
     //==================================================================
     //==================================================================
@@ -499,6 +515,18 @@ private:
     int padFxTremoloAlphaTouch;
     int padFxTremoloAtReverse;
     float padFxTremoloAtIntensity;
+	
+	//Distortion
+	double padFxDistortionInputGain;
+	double padFxDistortionDrive;
+	double padFxDistortionOutputGain;
+	double padFxDistortionMix;
+	double padFxDistortionTone;
+	int padFxDistortionType;
+	int padFxDistortionAlphaTouch;
+	int padFxDistortionAtReverse;
+	int padFxDistortionAtIntensity;
+	
     
 };
 

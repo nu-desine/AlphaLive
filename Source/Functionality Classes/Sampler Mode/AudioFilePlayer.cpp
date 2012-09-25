@@ -46,6 +46,7 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     delay = nullptr;
     flanger = nullptr;
     tremolo = nullptr;
+	distortion =nullptr;
     
     //grab the setting values (so that if this object is deleted and recreated, it will hold the previous settings)
     //do i need to enter shared memory here?
@@ -90,6 +91,7 @@ AudioFilePlayer::~AudioFilePlayer()
     delete reverb;
     delete flanger;
     delete tremolo;
+	delete distortion;
     
     modeSamplerRef.updatePadPlayingStatus(padNumber, 0);
     fileSource.setSource(0);//unload the current file
@@ -306,6 +308,8 @@ void AudioFilePlayer::processAudioFile(int padValue)
             case 10: //Tremolo
                 tremolo->processAlphaTouch(pressureValue);
                 break;
+			case 11:
+				distortion->processAlphaTouch(pressureValue);
             default:
                 break;
         }
@@ -569,6 +573,8 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
             case 10: //Tremolo
                 tremolo->processAudio(bufferToFill);
                 break;
+			case 11: //Distortion
+				distortion->processAudio(bufferToFill);
             default:
                 break;
         }
@@ -647,6 +653,10 @@ void AudioFilePlayer::prepareToPlay (int samplesPerBlockExpected,double sampleRa
         case 10:
             tremolo->setSampleRate(sampleRate);
             break;
+		case 11:
+			distortion->setSampleRate(sampleRate);
+			break;
+
         default:
             break;
     }
@@ -726,6 +736,10 @@ void AudioFilePlayer::setEffect(int value)
                 delete tremolo;
                 tremolo = nullptr;
                 break;
+			case 11:
+				delete distortion;
+				tremolo = nullptr;
+				break;
             default:
                 break;
         }
@@ -756,6 +770,9 @@ void AudioFilePlayer::setEffect(int value)
                 break;
             case 10:
                 tremolo = new Tremolo (padNumber, sampleRate_);
+                break;
+			case 11:
+                distortion = new Distortion (padNumber, sampleRate_);
                 break;
             default:
                 break;
@@ -850,5 +867,10 @@ Flanger& AudioFilePlayer::getFlanger()
 Tremolo& AudioFilePlayer::getTremolo()
 {
     return *tremolo;
+}
+
+Distortion& AudioFilePlayer::getDistortion()
+{
+	return *distortion;
 }
 

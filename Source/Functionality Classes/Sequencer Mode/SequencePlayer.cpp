@@ -124,6 +124,7 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     delay = nullptr;
     flanger = nullptr;
     tremolo = nullptr;
+	distortion = nullptr;
     
     //set effect to default 0, and then call set effect to create the effect object
     //This alg. prevents any crashes caused within prepareToPlay when trying to
@@ -150,6 +151,7 @@ SequencePlayer::~SequencePlayer()
     delete reverb;
     delete flanger;
     delete tremolo;
+	delete distortion;
     
     stopThread(timeInterval);
     //stopThreadAndReset();
@@ -443,6 +445,9 @@ void SequencePlayer::processSequence(int padValue)
                 break;
             case 10: //Tremolo
                 tremolo->processAlphaTouch(pressureValue);
+                break;
+			case 11: //Distortion
+                distortion->processAlphaTouch(pressureValue);
                 break;
             default:
                 break;
@@ -969,6 +974,9 @@ void SequencePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFi
             case 10: //Tremolo
                 tremolo->processAudio(bufferToFill);
                 break;
+			case 11: //Distortion
+                distortion->processAudio(bufferToFill);
+                break;	
             default:
                 break;
         }
@@ -1056,6 +1064,9 @@ void SequencePlayer::prepareToPlay (int samplesPerBlockExpected,double sampleRat
         case 10:
             tremolo->setSampleRate(sampleRate);
             break;
+		case 11:
+            distortion->setSampleRate(sampleRate);
+            break;	
         default:
             break;
     }
@@ -1451,6 +1462,10 @@ void SequencePlayer::setSamplesEffect(int value)
                 delete tremolo;
                 tremolo = nullptr;
                 break;
+			case 11:
+                delete distortion;
+                distortion = nullptr;
+                break;	
             default:
                 break;
         }
@@ -1481,6 +1496,9 @@ void SequencePlayer::setSamplesEffect(int value)
                 break;
             case 10:
                 tremolo = new Tremolo (padNumber, sampleRate_);
+                break;
+			case 11:
+                distortion = new Distortion (padNumber, sampleRate_);
                 break;
             default:
                 break;
@@ -1564,4 +1582,9 @@ Flanger& SequencePlayer::getFlanger()
 Tremolo& SequencePlayer::getTremolo()
 {
     return *tremolo;
+}
+
+Distortion& SequencePlayer::getDistortion()
+{
+	return *distortion;
 }

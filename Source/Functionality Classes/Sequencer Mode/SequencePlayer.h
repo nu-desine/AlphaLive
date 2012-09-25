@@ -39,7 +39,9 @@
 #include "../../Audio Processing/DSP Effects/Reverb.h"
 #include "../../Audio Processing/DSP Effects/Flanger.h"
 #include "../../Audio Processing/DSP Effects/Tremolo.h"
+#include "../../Audio Processing/DSP Effects/Distortion.h"
 #include "../../Audio Processing/PanControl.h"
+
 
 class ModeSequencer;
 
@@ -130,6 +132,7 @@ public:
     ReverbClass& getReverb();
     Flanger& getFlanger();
     Tremolo& getTremolo();
+	Distortion& getDistortion();
 
     
 private:
@@ -162,6 +165,7 @@ private:
     ReverbClass *reverb;
     Flanger *flanger;
     Tremolo *tremolo;
+	Distortion *distortion;
     float sampleRate_;
     
     //audio stuff for mixing the SequenceAudioFilePlayer objects

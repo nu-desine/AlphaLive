@@ -23,6 +23,7 @@
 #include "EliteControlsComponent.h"
 #include "../Views/MainComponent.h"
 #include "../AlphaLiveLookandFeel.h"
+#include "../../Application/CommonInfoBoxText.h"
 
 enum
 {
@@ -53,11 +54,11 @@ EliteControlsComponent::EliteControlsComponent(MainComponent &ref)
     button1Button->setShape(buttonShape, true, true, false);
     button1Button->addListener(this);
     button1Button->addMouseListener(this, true);
-    addAndMakeVisible (button2Button = new ShapeButton("Button 1", AlphaColours::blue, AlphaColours::lightblue, AlphaColours::blue));
+    addAndMakeVisible (button2Button = new ShapeButton("Button 2", AlphaColours::blue, AlphaColours::lightblue, AlphaColours::blue));
     button2Button->setShape(buttonShape, true, true, false);
     button2Button->addListener(this);
     button2Button->addMouseListener(this, true);
-    addAndMakeVisible (button3Button = new ShapeButton("Button 1", AlphaColours::blue, AlphaColours::lightblue, AlphaColours::blue));
+    addAndMakeVisible (button3Button = new ShapeButton("Button 3", AlphaColours::blue, AlphaColours::lightblue, AlphaColours::blue));
     button3Button->setShape(buttonShape, true, true, false);
     button3Button->addListener(this);
     button3Button->addMouseListener(this, true);
@@ -111,10 +112,30 @@ void EliteControlsComponent::buttonClicked (Button* button)
 
 void EliteControlsComponent::mouseEnter (const MouseEvent &e)
 {
-    
+    if (dial1Button->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Elite Dial 1.") + " " + translate(CommonInfoBoxText::eliteControl));
+    }
+    else if (dial2Button->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Elite Dial 2.") + " " + translate(CommonInfoBoxText::eliteControl));
+    }
+    else if (button1Button->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Elite Button 1.") + " " + translate(CommonInfoBoxText::eliteControl));
+    }
+    else if (button2Button->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Elite Button 2.") + " " + translate(CommonInfoBoxText::eliteControl));
+    }
+    else if (button3Button->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Elite Button 3.") + " " + translate(CommonInfoBoxText::eliteControl));
+    }
 }
 
 void EliteControlsComponent::mouseExit (const MouseEvent &e)
 {
-    
+    //remove any text
+    mainComponentRef.setInfoTextBoxText (String::empty);
 }

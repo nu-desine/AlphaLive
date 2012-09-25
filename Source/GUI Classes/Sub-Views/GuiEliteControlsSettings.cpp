@@ -24,6 +24,7 @@
 #include "../../File and Settings/AppSettings.h"
 #include "../Views/MainComponent.h"
 #include "../Views/GlobalValues.h"
+#include "../../Application/CommonInfoBoxText.h"
 
 #define DIAL_NO (currentlySelectedControl - 1)
 #define BUTTON_NO (currentlySelectedControl - 3)
@@ -410,10 +411,88 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
 
 void GuiEliteControlsSettings::mouseEnter (const MouseEvent &e)
 {
+    if (dialsMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::eliteControlMenu));
+    }
+    else if (buttonsMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::eliteControlMenu));
+    }
+    else if (dialMidiCcNumber->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::eliteMidiCcNumber));
+    }
+    else if (dialMidiChannel->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::eliteMidiChannel));
+    }
+    else if (dialMidiMinRange->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Minimum MIDI Range Selector. Along with the Maximum Range Selector it sets and displays the MIDI CC data range for the selected elite control."));
+    }
+    else if (dialMidiMaxRange->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Maximum MIDI Range Selector. Along with the Minimum Range Selector it sets and displays the MIDI CC data range for the selected elite control."));
+    }
+    else if (dialOscPortNumber->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::eliteOscPortNumber));
+    }
+    else if (dialOscMinRange->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Minimum OSC Range Selector. Along with the Maximum Range Selector it sets and displays the OSC data range for the selected elite control."));
+    }
+    else if (dialOscMaxRange->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Maximum OSC Range Selector. Along with the Minimum Range Selector it sets and displays the OSC data range for the selected elite control."));
+    }
+    else if (dialOscIpAddressEditor->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::eliteOscIpAddress));
+    }
+    
+    else if (buttonSceneNumber->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Scene Number Selector. Sets and displays the scene number that the selected elite button is used to switch to."));
+    }
+    else if (buttonMidiCcNumber->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::eliteMidiCcNumber));
+    }
+    else if (buttonMidiChannel->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::eliteMidiChannel));
+    }
+    else if (buttonMidiOffNumber->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("'Off' Value Selector. Sets and displays the MIDI CC value that is sent when the selected elite button is unclicked."));
+    }
+    else if (buttonMidiOnNumber->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("'On' Value Selector. Sets and displays the MIDI CC value that is sent when the selected elite button is clicked."));
+    }
+    else if (buttonOscPortNumber->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::eliteOscPortNumber));
+    }
+    else if (buttonOscOffNumber->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("'Off' Value Selector. Sets and displays the OSC value that is sent when the selected elite button is unclicked."));
+    }
+    else if (buttonOscOnNumber->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("'On' Value Selector. Sets and displays the OSC value that is sent when the selected elite button is clicked."));
+    }
+    else if (buttonOscIpAddressEditor->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::eliteOscIpAddress));
+    }
     
 }
 
 void GuiEliteControlsSettings::mouseExit (const MouseEvent &e)
 {
-    
+    //remove any text
+    mainComponentRef.setInfoTextBoxText (String::empty);
 }

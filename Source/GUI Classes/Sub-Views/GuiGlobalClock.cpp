@@ -329,9 +329,12 @@ void GuiGlobalClock::mouseEnter (const MouseEvent &e)
     
      else if (autoStartSwitch->isMouseOver(true))
      {
-     mainComponentRef.setInfoTextBoxText (translate("Clock Auto-Start Switch. If set to 'on' the clock will automatically start the first time a note, loop or sequence is played, else the clock will need to be manually started using the Start/Stop button."));
+     mainComponentRef.setInfoTextBoxText (translate("Clock Auto-Start Switch. When turned on the clock will automatically start the first time a note, loop or sequence is played, else the clock will need to be manually started using the Start/Stop button."));
      }
-     
+     else if (metronomeButton->isMouseOver(true))
+     {
+         mainComponentRef.setInfoTextBoxText (translate("Metronome Button. When turned on an audible click track will be played when the clock is running."));
+     }
     
     else if (quantizationValueButtons[0]->isMouseOver(true))
     {

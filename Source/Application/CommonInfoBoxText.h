@@ -94,4 +94,17 @@ namespace CommonInfoBoxText
     // ==== Other ====
     static String closeButton (translate("Click to go back to the applications main interface. Pressing ESC also triggers this command."));
     
+    static String eliteControl (translate("Click this button to set and display the settings for this elite control."));
+    
+    static String eliteControlMenu (translate("Elite Control Type Menu. Sets and displays the function of the selected elite control."));
+    
+    static String eliteMidiCcNumber (translate("MIDI CC Selector. Sets and displays the MIDI CC number for the selected elite control."));
+    
+    static String eliteMidiChannel (translate("MIDI Channel Selector. Sets and displays the MIDI channel number for the selected elite control."));
+    
+    static String eliteOscPortNumber (translate("OSC Port Number Selector. Sets and displays the UDP/TCP port number that you want the selected elite control to send OSC messages over."));
+    
+    static String eliteOscIpAddress (translate("OSC IP Address Editor. Sets and displays the IP address of the device that you want the selected elite control to send OSC messages to. Set to 127.0.0.1 to send OSC messages somewhere on the same computer."));
+    
+    
 }

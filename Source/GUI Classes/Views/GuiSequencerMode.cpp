@@ -2412,7 +2412,13 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText(translate("Previous Sequence Button. Click this button to display the previous sequence in the set."));
     }
-    
+    else if (recordButton->isMouseOver(true))
+    {
+        if (modeMidiButton->getToggleState())
+            mainComponentRef.setInfoTextBoxText(translate("Record Button. When a sequencer pad is set to Record Mode it will listen for MIDI note-on data from MIDI pads that match the channel and note numbers set within this pad, and records the notes to the sequence."));
+        else if (modeSamplesButton->getToggleState())
+            mainComponentRef.setInfoTextBoxText(translate("Record Button. When a sequencer pad is set to Record Mode it will listen for triggered audio samples that match the the set of samples set within this pad, and record the notes to the sequence."));
+    }
     
     if (sequenceSettingsButton->getToggleState() == true)
     {

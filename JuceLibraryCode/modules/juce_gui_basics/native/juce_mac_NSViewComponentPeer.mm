@@ -58,7 +58,6 @@ public:
          #else
           usingCoreGraphics (false),
          #endif
-          recursiveToFrontCall (false),
           isZooming (false),
           textWasInserted (false),
           notificationCenter (nil)
@@ -242,16 +241,16 @@ public:
     Rectangle<int> getBounds (const bool global) const
     {
         NSRect r = [view frame];
-        NSWindow* window = [view window];
+        NSWindow* viewWindow = [view window];
 
-        if (global && window != nil)
+        if (global && viewWindow != nil)
         {
             r = [[view superview] convertRect: r toView: nil];
 
            #if defined (MAC_OS_X_VERSION_10_7) && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
-            r = [window convertRectToScreen: r];
+            r = [viewWindow convertRectToScreen: r];
            #else
-            r.origin = [window convertBaseToScreen: r.origin];
+            r.origin = [viewWindow convertBaseToScreen: r.origin];
            #endif
 
             r.origin.y = [[[NSScreen screens] objectAtIndex: 0] frame].size.height - r.origin.y - r.size.height;
@@ -370,10 +369,8 @@ public:
         NSView* v = [view hitTest: NSMakePoint (frameRect.origin.x + position.getX(),
                                                 frameRect.origin.y + frameRect.size.height - position.getY())];
 
-        if (trueIfInAChildWindow)
-            return v != nil;
-
-        return v == view;
+        return trueIfInAChildWindow ? (v != nil)
+                                    : (v == view);
     }
 
     BorderSize<int> getFrameSize() const
@@ -399,9 +396,8 @@ public:
         if (hasNativeTitleBar())
         {
             const Rectangle<int> screen (getFrameSize().subtractedFrom (component.getParentMonitorArea()));
-            const Rectangle<int> window (component.getScreenBounds());
 
-            fullScreen = window.expanded (2, 2).contains (screen);
+            fullScreen = component.getScreenBounds().expanded (2, 2).contains (screen);
         }
     }
 
@@ -427,18 +423,20 @@ public:
 
         if (window != nil && component.isVisible())
         {
+            ++insideToFrontCall;
+
             if (makeActiveWindow)
                 [window makeKeyAndOrderFront: nil];
             else
                 [window orderFront: nil];
 
-            if (! recursiveToFrontCall)
+            if (insideToFrontCall <= 1)
             {
-                recursiveToFrontCall = true;
                 Desktop::getInstance().getMainMouseSource().forceMouseCursorUpdate();
                 handleBroughtToFront();
-                recursiveToFrontCall = false;
             }
+
+            --insideToFrontCall;
         }
     }
 
@@ -783,6 +781,7 @@ public:
         Component* const modal = Component::getCurrentlyModalComponent();
 
         if (modal != nullptr
+             && insideToFrontCall == 0
              && (! getComponent().isParentOf (modal))
              && getComponent().isCurrentlyBlockedByAnotherModalComponent())
         {
@@ -1133,13 +1132,14 @@ public:
     NSWindow* window;
     NSView* view;
     bool isSharedWindow, fullScreen, insideDrawRect;
-    bool usingCoreGraphics, recursiveToFrontCall, isZooming, textWasInserted;
+    bool usingCoreGraphics, isZooming, textWasInserted;
     String stringBeingComposed;
     NSNotificationCenter* notificationCenter;
 
     static ModifierKeys currentModifiers;
     static ComponentPeer* currentlyFocusedPeer;
     static Array<int> keysCurrentlyDown;
+    static int insideToFrontCall;
 
 private:
     static NSView* createViewInstance();
@@ -1260,8 +1260,7 @@ private:
             if (! [NSApp isActive])
                 [NSApp activateIgnoringOtherApps: YES];
 
-            Component* const modal = Component::getCurrentlyModalComponent();
-            if (modal != nullptr)
+            if (Component* const modal = Component::getCurrentlyModalComponent())
                 modal->inputAttemptWhenModal();
         }
 
@@ -1270,6 +1269,8 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NSViewComponentPeer);
 };
+
+int NSViewComponentPeer::insideToFrontCall = 0;
 
 //==============================================================================
 struct JuceNSViewClass   : public ObjCClass <NSView>
@@ -1505,7 +1506,7 @@ private:
     static NSRange markedRange (id self, SEL)
     {
         NSViewComponentPeer* const owner = getOwner (self);
-        return owner->stringBeingComposed.isNotEmpty() ? NSMakeRange (0, owner->stringBeingComposed.length())
+        return owner->stringBeingComposed.isNotEmpty() ? NSMakeRange (0, (NSUInteger) owner->stringBeingComposed.length())
                                                        : NSMakeRange (NSNotFound, 0);
     }
 
@@ -1518,7 +1519,8 @@ private:
                 const Range<int> highlight (target->getHighlightedRegion());
 
                 if (! highlight.isEmpty())
-                    return NSMakeRange (highlight.getStart(), highlight.getLength());
+                    return NSMakeRange ((NSUInteger) highlight.getStart(),
+                                        (NSUInteger) highlight.getLength());
             }
         }
 
@@ -1789,16 +1791,16 @@ void Desktop::createMouseInputSources()
 }
 
 //==============================================================================
-void Desktop::setKioskComponent (Component* kioskModeComponent, bool enableOrDisable, bool allowMenusAndBars)
+void Desktop::setKioskComponent (Component* kioskComp, bool enableOrDisable, bool allowMenusAndBars)
 {
    #if defined (MAC_OS_X_VERSION_10_6) && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6
 
-    NSViewComponentPeer* const peer = dynamic_cast<NSViewComponentPeer*> (kioskModeComponent->getPeer());
+    NSViewComponentPeer* const peer = dynamic_cast<NSViewComponentPeer*> (kioskComp->getPeer());
+    jassert (peer != nullptr); // (this should have been checked by the caller)
 
    #if defined (MAC_OS_X_VERSION_10_7) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
-    if (peer != nullptr
-         && peer->hasNativeTitleBar()
-         && [peer->window respondsToSelector: @selector (toggleFullScreen:)])
+    if (peer->hasNativeTitleBar()
+          && [peer->window respondsToSelector: @selector (toggleFullScreen:)])
     {
         [peer->window performSelector: @selector (toggleFullScreen:)
                            withObject: [NSNumber numberWithBool: (BOOL) enableOrDisable]];
@@ -1813,7 +1815,7 @@ void Desktop::setKioskComponent (Component* kioskModeComponent, bool enableOrDis
 
             [NSApp setPresentationOptions: (allowMenusAndBars ? (NSApplicationPresentationAutoHideDock | NSApplicationPresentationAutoHideMenuBar)
                                                               : (NSApplicationPresentationHideDock | NSApplicationPresentationHideMenuBar))];
-            kioskModeComponent->setBounds (Desktop::getInstance().getDisplays().getMainDisplay().totalArea);
+            kioskComp->setBounds (Desktop::getInstance().getDisplays().getMainDisplay().totalArea);
             peer->becomeKeyWindow();
         }
         else
@@ -1821,7 +1823,7 @@ void Desktop::setKioskComponent (Component* kioskModeComponent, bool enableOrDis
             if (peer->hasNativeTitleBar())
             {
                 [peer->window setStyleMask: (NSViewComponentPeer::getNSWindowStyleMask (peer->getStyleFlags()))];
-                peer->setTitle (peer->component.getName()); // required to force the OS to update the title
+                peer->setTitle (peer->getComponent().getName()); // required to force the OS to update the title
             }
 
             [NSApp setPresentationOptions: NSApplicationPresentationDefault];
@@ -1831,7 +1833,7 @@ void Desktop::setKioskComponent (Component* kioskModeComponent, bool enableOrDis
     if (enableOrDisable)
     {
         SetSystemUIMode (kUIModeAllSuppressed, allowMenusAndBars ? kUIOptionAutoShowMenuBar : 0);
-        kioskModeComponent->setBounds (Desktop::getInstance().getDisplays().getMainDisplay().totalArea);
+        kioskComp->setBounds (Desktop::getInstance().getDisplays().getMainDisplay().totalArea);
     }
     else
     {

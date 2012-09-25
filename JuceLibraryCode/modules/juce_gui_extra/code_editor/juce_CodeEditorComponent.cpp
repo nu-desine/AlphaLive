@@ -30,41 +30,41 @@ public:
     {
     }
 
-    bool update (CodeDocument& document, int lineNum,
+    bool update (CodeDocument& codeDoc, int lineNum,
                  CodeDocument::Iterator& source,
-                 CodeTokeniser* tokeniser, const int spacesPerTab,
-                 const CodeDocument::Position& selectionStart,
-                 const CodeDocument::Position& selectionEnd)
+                 CodeTokeniser* tokeniser, const int tabSpaces,
+                 const CodeDocument::Position& selStart,
+                 const CodeDocument::Position& selEnd)
     {
         Array <SyntaxToken> newTokens;
         newTokens.ensureStorageAllocated (8);
 
         if (tokeniser == nullptr)
         {
-            const String line (document.getLine (lineNum));
+            const String line (codeDoc.getLine (lineNum));
             addToken (newTokens, line, line.length(), -1);
         }
-        else if (lineNum < document.getNumLines())
+        else if (lineNum < codeDoc.getNumLines())
         {
-            const CodeDocument::Position pos (document, lineNum, 0);
+            const CodeDocument::Position pos (codeDoc, lineNum, 0);
             createTokens (pos.getPosition(), pos.getLineText(),
                           source, *tokeniser, newTokens);
         }
 
-        replaceTabsWithSpaces (newTokens, spacesPerTab);
+        replaceTabsWithSpaces (newTokens, tabSpaces);
 
         int newHighlightStart = 0;
         int newHighlightEnd = 0;
 
-        if (selectionStart.getLineNumber() <= lineNum && selectionEnd.getLineNumber() >= lineNum)
+        if (selStart.getLineNumber() <= lineNum && selEnd.getLineNumber() >= lineNum)
         {
-            const String line (document.getLine (lineNum));
+            const String line (codeDoc.getLine (lineNum));
 
-            CodeDocument::Position lineStart (document, lineNum, 0), lineEnd (document, lineNum + 1, 0);
-            newHighlightStart = indexToColumn (jmax (0, selectionStart.getPosition() - lineStart.getPosition()),
-                                               line, spacesPerTab);
-            newHighlightEnd = indexToColumn (jmin (lineEnd.getPosition() - lineStart.getPosition(), selectionEnd.getPosition() - lineStart.getPosition()),
-                                             line, spacesPerTab);
+            CodeDocument::Position lineStart (codeDoc, lineNum, 0), lineEnd (codeDoc, lineNum + 1, 0);
+            newHighlightStart = indexToColumn (jmax (0, selStart.getPosition() - lineStart.getPosition()),
+                                               line, tabSpaces);
+            newHighlightEnd = indexToColumn (jmin (lineEnd.getPosition() - lineStart.getPosition(), selEnd.getPosition() - lineStart.getPosition()),
+                                             line, tabSpaces);
         }
 
         if (newHighlightStart != highlightColumnStart || newHighlightEnd != highlightColumnEnd)
@@ -81,17 +81,17 @@ public:
         return true;
     }
 
-    void draw (CodeEditorComponent& owner, Graphics& g, const Font& font,
+    void draw (CodeEditorComponent& owner, Graphics& g, const Font& fontToUse,
                const float leftClip, const float rightClip,
-               const float xOffset, const int y, const int baselineOffset,
-               const int lineHeight, const float charWidth,
+               const float x, const int y, const int baselineOffset,
+               const int lineH, const float characterWidth,
                const Colour& highlightColour) const
     {
         if (highlightColumnStart < highlightColumnEnd)
         {
             g.setColour (highlightColour);
-            g.fillRect (roundToInt (xOffset + highlightColumnStart * owner.getCharWidth()), y,
-                        roundToInt ((highlightColumnEnd - highlightColumnStart) * owner.getCharWidth()), lineHeight);
+            g.fillRect (roundToInt (x + highlightColumnStart * characterWidth), y,
+                        roundToInt ((highlightColumnEnd - highlightColumnStart) * characterWidth), lineH);
         }
 
         const float baselineY = (float) (y + baselineOffset);
@@ -101,7 +101,7 @@ public:
 
         for (int i = 0; i < tokens.size(); ++i)
         {
-            const float tokenX = xOffset + column * charWidth;
+            const float tokenX = x + column * characterWidth;
             if (tokenX > rightClip)
                 break;
 
@@ -119,9 +119,9 @@ public:
 
             column += token.length;
 
-            if (xOffset + column * charWidth >= leftClip)
-                ga.addCurtailedLineOfText (font, token.text, tokenX, baselineY,
-                                           (rightClip - tokenX) + charWidth, false);
+            if (x + column * characterWidth >= leftClip)
+                ga.addCurtailedLineOfText (fontToUse, token.text, tokenX, baselineY,
+                                           (rightClip - tokenX) + characterWidth, false);
         }
 
         ga.draw (g);
@@ -207,7 +207,7 @@ private:
         }
     }
 
-    int indexToColumn (int index, const String& line, int spacesPerTab) const noexcept
+    int indexToColumn (int index, const String& line, int tabSpaces) const noexcept
     {
         jassert (index <= line.length());
 
@@ -218,7 +218,7 @@ private:
             if (t.getAndAdvance() != '\t')
                 ++col;
             else
-                col += spacesPerTab - (col % spacesPerTab);
+                col += tabSpaces - (col % tabSpaces);
         }
 
         return col;
@@ -312,13 +312,14 @@ public:
         jassert (dynamic_cast <CodeEditorComponent*> (getParentComponent()) != nullptr);
         const CodeEditorComponent& editor = *static_cast <CodeEditorComponent*> (getParentComponent());
 
-        g.fillAll (editor.findColour (lineNumberBackgroundId));
+        g.fillAll (editor.findColour (CodeEditorComponent::backgroundColourId)
+                    .overlaidWith (editor.findColour (lineNumberBackgroundId)));
 
         const Rectangle<int> clip (g.getClipBounds());
-        const int lineHeight = editor.lineHeight;
-        const float lineHeightFloat = (float) lineHeight;
-        const int firstLineToDraw = jmax (0, clip.getY() / lineHeight);
-        const int lastLineToDraw = jmin (editor.lines.size(), clip.getBottom() / lineHeight + 1,
+        const int lineH = editor.lineHeight;
+        const float lineHeightFloat = (float) lineH;
+        const int firstLineToDraw = jmax (0, clip.getY() / lineH);
+        const int lastLineToDraw = jmin (editor.lines.size(), clip.getBottom() / lineH + 1,
                                          lastNumLines - editor.firstLineOnScreen);
 
         const Font lineNumberFont (editor.getFont().withHeight (jmin (13.0f, lineHeightFloat * 0.8f)));
@@ -327,7 +328,7 @@ public:
         GlyphArrangement ga;
         for (int i = firstLineToDraw; i < lastLineToDraw; ++i)
             ga.addFittedText (lineNumberFont, String (editor.firstLineOnScreen + i + 1),
-                              0, (float) (lineHeight * i), w, lineHeightFloat,
+                              0, (float) (lineH * i), w, lineHeightFloat,
                               Justification::centredRight, 1, 0.2f);
 
         g.setColour (editor.findColour (lineNumberTextId));
@@ -367,6 +368,7 @@ CodeEditorComponent::CodeEditorComponent (CodeDocument& doc, CodeTokeniser* cons
       selectionEnd (doc, 0, 0),
       verticalScrollBar (true),
       horizontalScrollBar (false),
+      appCommandManager (nullptr),
       codeTokeniser (tokeniser)
 {
     pimpl = new Pimpl (*this);
@@ -379,13 +381,13 @@ CodeEditorComponent::CodeEditorComponent (CodeDocument& doc, CodeTokeniser* cons
     setMouseCursor (MouseCursor::IBeamCursor);
     setWantsKeyboardFocus (true);
 
+    addAndMakeVisible (caret = getLookAndFeel().createCaretComponent (this));
+
     addAndMakeVisible (&verticalScrollBar);
     verticalScrollBar.setSingleStepSize (1.0);
 
     addAndMakeVisible (&horizontalScrollBar);
     horizontalScrollBar.setSingleStepSize (1.0);
-
-    addAndMakeVisible (caret = getLookAndFeel().createCaretComponent (this));
 
     Font f (12.0f);
     f.setTypefaceName (Font::getDefaultMonospacedFontName());
@@ -446,7 +448,7 @@ void CodeEditorComponent::setLineNumbersShown (const bool shouldBeShown)
         gutter = nullptr;
 
         if (shouldBeShown)
-            addAndMakeVisible (gutter = new GutterComponent(), 0);
+            addAndMakeVisible (gutter = new GutterComponent());
 
         resized();
     }
@@ -479,8 +481,8 @@ void CodeEditorComponent::paint (Graphics& g)
 
     g.fillAll (findColour (CodeEditorComponent::backgroundColourId));
 
-    const int gutter = getGutterSize();
-    g.reduceClipRegion (gutter, 0, verticalScrollBar.getX() - gutter, horizontalScrollBar.getY());
+    const int gutterSize = getGutterSize();
+    g.reduceClipRegion (gutterSize, 0, verticalScrollBar.getX() - gutterSize, horizontalScrollBar.getY());
 
     g.setFont (font);
     const int baselineOffset = (int) font.getAscent();
@@ -489,7 +491,7 @@ void CodeEditorComponent::paint (Graphics& g)
     const Rectangle<int> clip (g.getClipBounds());
     const int firstLineToDraw = jmax (0, clip.getY() / lineHeight);
     const int lastLineToDraw = jmin (lines.size(), clip.getBottom() / lineHeight + 1);
-    const float x = (float) (gutter - xOffset * charWidth);
+    const float x = (float) (gutterSize - xOffset * charWidth);
     const float leftClip  = (float) clip.getX();
     const float rightClip = (float) clip.getRight();
 
@@ -589,6 +591,7 @@ void CodeEditorComponent::moveCaretTo (const CodeDocument::Position& newPos, con
 {
     caretPos = newPos;
     columnToTryToMaintain = -1;
+    bool selectionWasActive = isHighlightActive();
 
     if (highlighting)
     {
@@ -638,6 +641,9 @@ void CodeEditorComponent::moveCaretTo (const CodeDocument::Position& newPos, con
     updateCaretPosition();
     scrollToKeepCaretOnScreen();
     updateScrollBars();
+
+    if (appCommandManager != nullptr && selectionWasActive != isHighlightActive())
+        appCommandManager->commandStatusChanged();
 }
 
 void CodeEditorComponent::deselectAll()
@@ -703,16 +709,20 @@ void CodeEditorComponent::scrollBy (int deltaLines)
     scrollToLine (firstLineOnScreen + deltaLines);
 }
 
+void CodeEditorComponent::scrollToKeepLinesOnScreen (const Range<int>& rangeToShow)
+{
+    if (rangeToShow.getStart() < firstLineOnScreen)
+        scrollBy (rangeToShow.getStart() - firstLineOnScreen);
+    else if (rangeToShow.getEnd() >= firstLineOnScreen + linesOnScreen)
+        scrollBy (rangeToShow.getEnd() - (firstLineOnScreen + linesOnScreen - 1));
+}
+
 void CodeEditorComponent::scrollToKeepCaretOnScreen()
 {
     if (getWidth() > 0 && getHeight() > 0)
     {
         const int caretLine = caretPos.getLineNumber();
-
-        if (caretLine < firstLineOnScreen)
-            scrollBy (caretLine - firstLineOnScreen);
-        else if (caretLine >= firstLineOnScreen + linesOnScreen)
-            scrollBy (caretLine - (firstLineOnScreen + linesOnScreen - 1));
+        scrollToKeepLinesOnScreen (Range<int> (caretLine, caretLine));
 
         const int column = indexToColumn (caretPos.getLineNumber(), caretPos.getIndexInLine());
         if (column >= xOffset + columnsOnScreen - 1)
@@ -1137,6 +1147,11 @@ void CodeEditorComponent::newTransaction()
     pimpl->startTimer (600);
 }
 
+void CodeEditorComponent::setCommandManager (ApplicationCommandManager* newManager) noexcept
+{
+    appCommandManager = newManager;
+}
+
 //==============================================================================
 Range<int> CodeEditorComponent::getHighlightedRegion() const
 {
@@ -1194,22 +1209,82 @@ void CodeEditorComponent::handleEscapeKey()
 }
 
 //==============================================================================
-void CodeEditorComponent::addPopupMenuItems (PopupMenu& m, const MouseEvent*)
+ApplicationCommandTarget* CodeEditorComponent::getNextCommandTarget()
 {
-    m.addItem (StandardApplicationCommandIDs::cut,   TRANS("Cut"));
-    m.addItem (StandardApplicationCommandIDs::copy,  TRANS("Copy"), ! getHighlightedRegion().isEmpty());
-    m.addItem (StandardApplicationCommandIDs::paste, TRANS("Paste"));
-    m.addItem (StandardApplicationCommandIDs::del,   TRANS("Delete"));
-    m.addSeparator();
-    m.addItem (StandardApplicationCommandIDs::selectAll, TRANS("Select All"));
-    m.addSeparator();
-    m.addItem (StandardApplicationCommandIDs::undo,  TRANS("Undo"), document.getUndoManager().canUndo());
-    m.addItem (StandardApplicationCommandIDs::redo,  TRANS("Redo"), document.getUndoManager().canRedo());
+    return findFirstTargetParentComponent();
 }
 
-void CodeEditorComponent::performPopupMenuAction (const int menuItemID)
+void CodeEditorComponent::getAllCommands (Array <CommandID>& commands)
 {
-    switch (menuItemID)
+    const CommandID ids[] = { StandardApplicationCommandIDs::cut,
+                              StandardApplicationCommandIDs::copy,
+                              StandardApplicationCommandIDs::paste,
+                              StandardApplicationCommandIDs::del,
+                              StandardApplicationCommandIDs::selectAll,
+                              StandardApplicationCommandIDs::undo,
+                              StandardApplicationCommandIDs::redo };
+
+    commands.addArray (ids, numElementsInArray (ids));
+}
+
+void CodeEditorComponent::getCommandInfo (const CommandID commandID, ApplicationCommandInfo& result)
+{
+    const bool anythingSelected = isHighlightActive();
+
+    switch (commandID)
+    {
+        case StandardApplicationCommandIDs::cut:
+            result.setInfo (TRANS ("Cut"), TRANS ("Copies the currently selected text to the clipboard and deletes it."), "Editing", 0);
+            result.setActive (anythingSelected);
+            result.defaultKeypresses.add (KeyPress ('x', ModifierKeys::commandModifier, 0));
+            break;
+
+        case StandardApplicationCommandIDs::copy:
+            result.setInfo (TRANS ("Copy"), TRANS ("Copies the currently selected text to the clipboard."), "Editing", 0);
+            result.setActive (anythingSelected);
+            result.defaultKeypresses.add (KeyPress ('c', ModifierKeys::commandModifier, 0));
+            break;
+
+        case StandardApplicationCommandIDs::paste:
+            result.setInfo (TRANS ("Paste"), TRANS ("Inserts text from the clipboard."), "Editing", 0);
+            result.defaultKeypresses.add (KeyPress ('v', ModifierKeys::commandModifier, 0));
+            break;
+
+        case StandardApplicationCommandIDs::del:
+            result.setInfo (TRANS ("Delete"), TRANS ("Deletes any selected text."), "Editing", 0);
+            result.setActive (anythingSelected);
+            break;
+
+        case StandardApplicationCommandIDs::selectAll:
+            result.setInfo (TRANS ("Select All"), TRANS ("Selects all the text in the editor."), "Editing", 0);
+            result.defaultKeypresses.add (KeyPress ('a', ModifierKeys::commandModifier, 0));
+            break;
+
+        case StandardApplicationCommandIDs::undo:
+            result.setInfo (TRANS ("Undo"), TRANS ("Undo"), "Editing", 0);
+            result.defaultKeypresses.add (KeyPress ('z', ModifierKeys::commandModifier, 0));
+            result.setActive (document.getUndoManager().canUndo());
+            break;
+
+        case StandardApplicationCommandIDs::redo:
+            result.setInfo (TRANS ("Redo"), TRANS ("Redo"), "Editing", 0);
+            result.defaultKeypresses.add (KeyPress ('z', ModifierKeys::commandModifier | ModifierKeys::shiftModifier, 0));
+            result.setActive (document.getUndoManager().canRedo());
+            break;
+
+        default:
+            break;
+    }
+}
+
+bool CodeEditorComponent::perform (const InvocationInfo& info)
+{
+    return performCommand (info.commandID);
+}
+
+bool CodeEditorComponent::performCommand (const int commandID)
+{
+    switch (commandID)
     {
         case StandardApplicationCommandIDs::cut:        cutToClipboard(); break;
         case StandardApplicationCommandIDs::copy:       copyToClipboard(); break;
@@ -1218,8 +1293,29 @@ void CodeEditorComponent::performPopupMenuAction (const int menuItemID)
         case StandardApplicationCommandIDs::selectAll:  selectAll(); break;
         case StandardApplicationCommandIDs::undo:       undo(); break;
         case StandardApplicationCommandIDs::redo:       redo(); break;
-        default: break;
+        default:                                        return false;
     }
+
+    return true;
+}
+
+//==============================================================================
+void CodeEditorComponent::addPopupMenuItems (PopupMenu& m, const MouseEvent*)
+{
+    m.addItem (StandardApplicationCommandIDs::cut,   TRANS ("Cut"));
+    m.addItem (StandardApplicationCommandIDs::copy,  TRANS ("Copy"), ! getHighlightedRegion().isEmpty());
+    m.addItem (StandardApplicationCommandIDs::paste, TRANS ("Paste"));
+    m.addItem (StandardApplicationCommandIDs::del,   TRANS ("Delete"));
+    m.addSeparator();
+    m.addItem (StandardApplicationCommandIDs::selectAll, TRANS ("Select All"));
+    m.addSeparator();
+    m.addItem (StandardApplicationCommandIDs::undo,  TRANS ("Undo"), document.getUndoManager().canUndo());
+    m.addItem (StandardApplicationCommandIDs::redo,  TRANS ("Redo"), document.getUndoManager().canRedo());
+}
+
+void CodeEditorComponent::performPopupMenuAction (const int menuItemID)
+{
+    performCommand (menuItemID);
 }
 
 static void codeEditorMenuCallback (int menuResult, CodeEditorComponent* editor)

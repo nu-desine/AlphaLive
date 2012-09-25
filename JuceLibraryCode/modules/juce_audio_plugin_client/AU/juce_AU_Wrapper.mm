@@ -312,10 +312,16 @@ public:
 
     ComponentResult RestoreState (CFPropertyListRef inData)
     {
-        ComponentResult err = JuceAUBaseClass::RestoreState (inData);
+        {
+            // Remove the data entry from the state to prevent the superclass loading the parameters
+            CFMutableDictionaryRef copyWithoutData = CFDictionaryCreateMutableCopy (nullptr, 0, (CFDictionaryRef) inData);
+            CFDictionaryRemoveValue (copyWithoutData, CFSTR (kAUPresetDataKey));
+            ComponentResult err = JuceAUBaseClass::RestoreState (copyWithoutData);
+            CFRelease (copyWithoutData);
 
-        if (err != noErr)
-            return err;
+            if (err != noErr)
+                return err;
+        }
 
         if (juceFilter != nullptr)
         {
@@ -681,8 +687,7 @@ public:
             const int numIn = juceFilter->getNumInputChannels();
             const int numOut = juceFilter->getNumOutputChannels();
 
-            unsigned int i;
-            for (i = 0; i < outBuffer.mNumberBuffers; ++i)
+            for (unsigned int i = 0; i < outBuffer.mNumberBuffers; ++i)
             {
                 AudioBuffer& buf = outBuffer.mBuffers[i];
 
@@ -704,7 +709,7 @@ public:
 
             int numInChans = 0;
 
-            for (i = 0; i < inBuffer.mNumberBuffers; ++i)
+            for (unsigned int i = 0; i < inBuffer.mNumberBuffers; ++i)
             {
                 const AudioBuffer& buf = inBuffer.mBuffers[i];
 
@@ -761,8 +766,8 @@ public:
 
                 if (juceFilter->isSuspended())
                 {
-                    for (int i = 0; i < numOut; ++i)
-                        zeromem (channels [i], sizeof (float) * numSamples);
+                    for (int j = 0; j < numOut; ++j)
+                        zeromem (channels [j], sizeof (float) * numSamples);
                 }
                 else
                 {
@@ -799,7 +804,7 @@ public:
             {
                 nextSpareBufferChan = 0;
 
-                for (i = 0; i < outBuffer.mNumberBuffers; ++i)
+                for (unsigned int i = 0; i < outBuffer.mNumberBuffers; ++i)
                 {
                     AudioBuffer& buf = outBuffer.mBuffers[i];
 
@@ -866,17 +871,17 @@ protected:
             presetsArray.ensureSize (sizeof (AUPreset) * numPrograms, true);
             AUPreset* const presets = (AUPreset*) presetsArray.getData();
 
-            CFMutableArrayRef presetsArray = CFArrayCreateMutable (0, numPrograms, 0);
+            CFMutableArrayRef presetsArrayRef = CFArrayCreateMutable (0, numPrograms, 0);
 
             for (int i = 0; i < numPrograms; ++i)
             {
                 presets[i].presetNumber = i;
                 presets[i].presetName = juceFilter->getProgramName(i).toCFString();
 
-                CFArrayAppendValue (presetsArray, presets + i);
+                CFArrayAppendValue (presetsArrayRef, presets + i);
             }
 
-            *outData = (CFArrayRef) presetsArray;
+            *outData = (CFArrayRef) presetsArrayRef;
         }
 
         return noErr;
@@ -1267,7 +1272,7 @@ private:
             setBroughtToFrontOnMouseClick (true);
 
             setSize (editor.getWidth(), editor.getHeight());
-            SizeControl (parentHIView, editor.getWidth(), editor.getHeight());
+            SizeControl (parentHIView, (SInt16) editor.getWidth(), (SInt16) editor.getHeight());
 
             WindowRef windowRef = HIViewGetWindow (parentHIView);
             hostWindow = [[NSWindow alloc] initWithWindowRef: windowRef];
@@ -1349,7 +1354,7 @@ private:
                 const int w = jmax (32, editor.getWidth());
                 const int h = jmax (32, editor.getHeight());
 
-                SizeControl (parentView, w, h);
+                SizeControl (parentView, (SInt16) w, (SInt16) h);
 
                 if (getWidth() != w || getHeight() != h)
                     setSize (w, h);

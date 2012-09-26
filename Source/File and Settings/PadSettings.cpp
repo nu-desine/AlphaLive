@@ -69,7 +69,7 @@ PadSettings::PadSettings(int arrayIndex)
     samplerEffect = 0;
     samplerPan = 0.5;
     samplerGain = 0.9;
-    samplerAttackTime = 0.01;
+    samplerAttackTime = 0;
     samplerReleaseTime = 0;
     
     //sequencer mode
@@ -288,7 +288,7 @@ void PadSettings::resetData (int whatToReset)
         setSamplerEffect (0);
         setSamplerPan (0.5);
         setSamplerGain (0.9);
-        setSamplerAttackTime(0.01);
+        setSamplerAttackTime(0);
         setSamplerReleaseTime(0);
     }
     

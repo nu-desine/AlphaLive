@@ -122,14 +122,13 @@ private:
     double attackTime, releaseTime;
     
     //audio signal processing stuff
-    float gain, panLeft, panRight;
+    float gain, panLeft, panRight, prevGainL, prevGainR;
     
     //attack/release stuff
     bool isInAttack, isInRelease;
     int attackSamples, releaseSamples;
     int attackPosition, releasePosition;
-    float currentGainL, currentGainR;
-    float prevGainL, prevGainR;
+    float attRelGainL, attRelGainR;
     
     GainAndPan *gainAndPan;
     LowpassFilter *lowPassFilter;

@@ -76,7 +76,7 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     releaseSamples = releaseTime * sampleRate_;
     isInAttack = isInRelease = false;
     attackPosition = releasePosition = 0;
-    currentGainL = currentGainR = prevGainL = prevGainR = 0;
+    attRelGainL = attRelGainR = prevGainL = prevGainR = 0;
     
     //call this here incase a loop has been 'dropped' onto a pad before this AudioFilePlayer instance actually exists,
     //which means that it wouldn't have been called from setSamplerAudioFilePath().
@@ -557,8 +557,6 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
     
     fileSource.getNextAudioBlock(bufferToFill);
     
-    int currentSample = bufferToFill.startSample;
-    
     //how can I set it so that effects will only be applied when playing, but without causing clicks at the start and the end of sound? Need something like a look ahead and release time.
     sharedMemory.enter();
     if (/*fileSource.isPlaying() == true &&*/ effect != 0)
@@ -613,27 +611,25 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
         {
             if (isInAttack)
             {
-                //ramp up to gain*pan values
+                //ramp up to 1.0
+                attRelGainL = attackPosition * (1.0/attackSamples);
+                attRelGainR = attackPosition * (1.0/attackSamples);
                 
-                //as we're not using gain ramps here there will be artefacts when
-                //the user adjusts the gain and pan values whilst in the attack.
-                //Will this be much of an ISSUE?
+                if (attRelGainL <= 1)
+                    *pOutL = *pOutL * (attRelGainL * attRelGainL * attRelGainL);
+                else
+                    *pOutL = *pOutL * attRelGainL;
                 
-                //would be nice is the ramp could be smoother here.
-                //tried cubing but it causes clicks/jumps when ending the attack.
-                
-                currentGainL = attackPosition * ((gain*panLeft)/attackSamples);
-                currentGainR = attackPosition * ((gain*panRight)/attackSamples);
-                
-                *pOutL = *pOutL * currentGainL;
-                *pOutR = *pOutR * currentGainR;
+                if (attRelGainR <= 1)
+                    *pOutR = *pOutR * (attRelGainR * attRelGainR * attRelGainR);
+                else
+                    *pOutR = *pOutR * attRelGainR;
                 
                 attackPosition++;
                 
                 //move to next pair of samples
                 pOutL++;
                 pOutR++;
-                currentSample++;
                 
                 if (attackPosition >= attackSamples)
                 {
@@ -642,41 +638,49 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
             }
             else if (isInRelease)
             {
-                //ramp down from current gains (not just gain*pan incase the release is triggered in the attack)
-                //the only PROBLEM with this is that the set pan or gain can't be changed when the release is
-                //in motion, but will this really be a problem at all?
+                //ramp down from current gains
                 
-                //would be nice is the ramp could be smoother here.
-                //tried cubing but it causes clicks/jumps when beginning the release.
+                //one thing that could be improved here is if the release is triggered before
+                //the attack is finished, the release time should be shorter - should be
+                //as long as the length of the attack until it was disturbed.
+                //this will involve finding out how many samples the attack at left to process,
+                //and then shortening the release time/samples by that much.
                 
-                double relGainL = currentGainL - (releasePosition * (currentGainL/releaseSamples));
-                double relGainR = currentGainR - (releasePosition * (currentGainR/releaseSamples));
+                double relGainL = attRelGainL - (releasePosition * (attRelGainL/releaseSamples));
+                double relGainR = attRelGainR - (releasePosition * (attRelGainR/releaseSamples));
                 
                 if (relGainL >= 0)
-                   *pOutL = *pOutL * relGainL;
+                {
+                    if (relGainL <= 1)
+                        *pOutL = *pOutL * (relGainL * relGainL * relGainL);
+                    else
+                        *pOutL = *pOutL * relGainL;
+                }
                 if (relGainR >= 0)
-                    *pOutR = *pOutR * relGainR;
+                {
+                    if (relGainR <= 1)
+                        *pOutR = *pOutR * (relGainR * relGainR * relGainR);
+                    else
+                        *pOutR = *pOutR * relGainR;
+                }
                 
                 releasePosition++;
                 
                 //move to next pair of samples
                 pOutL++;
                 pOutR++;
-                currentSample++;
                 
                 if (releasePosition == releaseSamples-1)
                 {
                     //set gains to 0.
                     //This needs to be done to avoid a click after the release.
-                    //This is either due to samples being left in the current buffer
-                    //after the release not being processed, or the samples within the next call to
-                    //getNextAudioBlock not being processed due to the stop audio file command
+                    //I think this is due the samples within the next call to
+                    //getNextAudioBlock being processed 'incorrectly' due to the stop audio file command
                     //happening asyncronosly. Not entirely sure, but this way works.
-                    currentGainL = currentGainR = 0;
+                    attRelGainL = attRelGainR = 0;
                     
                     //stop file and stuff
                     broadcaster.sendActionMessage("STOP AFTER RELEASE");
-
                 }
             }
             else
@@ -688,46 +692,34 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
         
         sharedMemory.exit();
     }
+
     
-    if (isInAttack == false && isInRelease == false)
+    //===== set gain and pan======
+    sharedMemory.enter();
+  
+    for (int i = 0; i < bufferToFill.buffer->getNumChannels(); ++i)
     {
-        //===== set gain and pan======
-        sharedMemory.enter();
-        
-        currentGainL = panLeft * gain;
-        currentGainR = panRight * gain;
-        
-        for (int i = 0; i < bufferToFill.buffer->getNumChannels(); ++i)
-        {
-            //Below, the majority of the time the gain ramp will be being
-            //applied to bufferToFill.startSample to bufferToFill.numSamples.
-            //However right after the attack has finished there will almost
-            //always be samples left in the current buffer that need the set
-            //below set/pan being applied, but you must only apply to the needed
-            //samples and not the whole buffer (as it causes a click/artefact).
-            //Therefore apply from currentSample (which is set within the attack code).
-            
-            if (i == 0) //left chan
-                bufferToFill.buffer->applyGainRamp (i,
-                                                    currentSample,
-                                                    bufferToFill.numSamples - currentSample,
-                                                    prevGainL,
-                                                    currentGainL);
-            else if (i == 1) // right chan
-                bufferToFill.buffer->applyGainRamp (i,
-                                                    currentSample,
-                                                    bufferToFill.numSamples - currentSample,
-                                                    prevGainR,
-                                                    currentGainR);
-        }
-        
-        prevGainL = currentGainL;
-        prevGainR = currentGainR;
-        
-        sharedMemory.exit();
+        if (i == 0) //left chan
+            bufferToFill.buffer->applyGainRamp (i,
+                                                bufferToFill.startSample,
+                                                bufferToFill.numSamples,
+                                                prevGainL,
+                                                panLeft * gain);
+        else if (i == 1) // right chan
+            bufferToFill.buffer->applyGainRamp (i,
+                                                bufferToFill.startSample,
+                                                bufferToFill.numSamples,
+                                                prevGainR,
+                                                panRight * gain);
     }
     
+    prevGainL = panLeft * gain;
+    prevGainR = panRight * gain;
     
+    sharedMemory.exit();
+    
+    
+
     if (fileSource.hasStreamFinished() == true) //if the audio file has ended on its own, automatically update the pad GUI
         //NOTE - hasStreamFinshed could be used above where I've been manually checking if the stream has ended on its own
     {

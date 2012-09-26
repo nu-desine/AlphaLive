@@ -81,11 +81,12 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     
     isInAttack = isInRelease = false;
     attackPosition = releasePosition = 0;
+    currentGainL = currentGainR = 0;
     
-    attackTime = 4.0;
+    attackTime = 8.0;
     attackSamples = attackTime * sampleRate_;
     
-    releaseTime = 4.0;
+    releaseTime = 8.0;
     releaseSamples = releaseTime * sampleRate_;
     
     broadcaster.addActionListener(this);
@@ -409,7 +410,6 @@ void AudioFilePlayer::playAudioFile()
     }
     
     //start audio file
-    gain = gainPrev = PAD_SETTINGS->getSamplerGain();
     fileSource.setPosition (0.0);
     fileSource.start();
     
@@ -543,9 +543,8 @@ void AudioFilePlayer::actionListenerCallback (const String& message)
         playingLastLoop = false;
         currentPlayingState = 0;
         modeSamplerRef.updatePadPlayingStatus(padNumber, 0);
-        
+    
         isInRelease = false;
-        releasePosition = 0;
     }
     
 }
@@ -558,6 +557,8 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
     //otherwise it is to CPU heavy!
     
     fileSource.getNextAudioBlock(bufferToFill);
+    
+    int currentSample = bufferToFill.startSample;
     
     //how can I set it so that effects will only be applied when playing, but without causing clicks at the start and the end of sound? Need something like a look ahead and release time.
     sharedMemory.enter();
@@ -613,82 +614,107 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
         {
             if (isInAttack)
             {
-                *pOutL = *pOutL * (attackPosition * ((gain*panLeft)/attackSamples));
-                *pOutR = *pOutR * (attackPosition * ((gain*panRight)/attackSamples));
+                //ramp up to gain*pan values
+                
+                currentGainL = attackPosition * ((gain*panLeft)/attackSamples);
+                currentGainR = attackPosition * ((gain*panRight)/attackSamples);
+                //prevGainL = currentGainL;
+                //prevGainR = currentGainR;
+                
+                *pOutL = *pOutL * currentGainL;
+                *pOutR = *pOutR * currentGainR;
                 
                 attackPosition++;
+                
+                //move to next pair of samples
+                pOutL++;
+                pOutR++;
+                currentSample++;
                 
                 if (attackPosition >= attackSamples)
                 {
                     isInAttack = false;
-                    attackPosition = 0;
                 }
             }
             else if (isInRelease)
             {
-                double newGainL = (gain*panLeft) - (releasePosition * ((gain*panLeft)/releaseSamples));
-                double newGainR = (gain*panRight) - (releasePosition * ((gain*panRight)/releaseSamples));
+                //ramp down from current gains (not just gain*pan incase the release is triggered in the attack)
                 
-                if (newGainL >= 0)
-                {
-                    if (newGainL <= 1)
-                        *pOutL = *pOutL * (newGainL * newGainL * newGainL);
-                    else
-                        *pOutL = *pOutL * newGainL;
-                }
-                if (newGainR >= 0)
-                {
-                    if (newGainR <= 1)
-                        *pOutR = *pOutR * (newGainR * newGainR * newGainR);
-                    else
-                        *pOutR = *pOutR * newGainR;
-                }
+                double relGainL = currentGainL - (releasePosition * (currentGainL/releaseSamples));
+                double relGainR = currentGainR - (releasePosition * (currentGainR/releaseSamples));
+                
+                if (relGainL >= 0)
+                   *pOutL = *pOutL * relGainL;
+                if (relGainR >= 0)
+                    *pOutR = *pOutR * relGainR;
                 
                 releasePosition++;
                 
+                //move to next pair of samples
+                pOutL++;
+                pOutR++;
+                currentSample++;
+                
                 if (releasePosition == releaseSamples-1)
                 {
-                    //set gain to 0 - without this it causes a slight artefact when the file is stopped for some reason
-                    gain = gainPrev = 0;
+                    //set gains to 0.
+                    //This needs to be done to avoid a click after the release.
+                    //This is either due to samples being left in the current buffer
+                    //after the release not being processed, or the samples within the next call to
+                    //getNextAudioBlock not being processed due to the stop audio file command
+                    //happening asyncronosly. Not entirely sure, but this way works.
+                    currentGainL = currentGainR = 0;
                     
                     //stop file and stuff
                     broadcaster.sendActionMessage("STOP AFTER RELEASE");
 
                 }
-                
+            }
+            else
+            {
+                break;
             }
             
-            //move to next pair of samples
-            pOutL++;
-            pOutR++;
         }
         
         sharedMemory.exit();
     }
-    else
+    
+    if (isInAttack == false && isInRelease == false)
     {
         //===== set gain and pan======
         sharedMemory.enter();
         
+        currentGainL = panLeft * gain;
+        currentGainR = panRight * gain;
+        
         for (int i = 0; i < bufferToFill.buffer->getNumChannels(); ++i)
         {
+            //Below, the majority of the time the gain ramp will be being
+            //applied to bufferToFill.startSample to bufferToFill.numSamples.
+            //However right after the attack has finished there will almost
+            //always be samples left in the current buffer that need the set
+            //below set/pan being applied, but you must only apply to the needed
+            //samples and not the whole buffer (as it causes a click/artefact).
+            //There for apply from currentSample (which is set within the attack code).
+            
             if (i == 0) //left chan
                 bufferToFill.buffer->applyGainRamp (i,
-                                                    bufferToFill.startSample,
-                                                    bufferToFill.numSamples,
-                                                    panLeftPrev * gainPrev,
-                                                    panLeft * gain);
+                                                    currentSample,
+                                                    bufferToFill.numSamples - currentSample,
+                                                    prevGainL,
+                                                    currentGainL);
             else if (i == 1) // right chan
                 bufferToFill.buffer->applyGainRamp (i,
-                                                    bufferToFill.startSample,
-                                                    bufferToFill.numSamples,
-                                                    panRightPrev * gainPrev,
-                                                    panRight * gain);
+                                                    currentSample,
+                                                    bufferToFill.numSamples - currentSample,
+                                                    prevGainR,
+                                                    currentGainR);
         }
         
-        gainPrev = gain;
-        panLeftPrev = panLeft;
-        panRightPrev = panRight;
+        prevGainL = currentGainL;
+        prevGainR = currentGainR;
+        
         sharedMemory.exit();
     }
     

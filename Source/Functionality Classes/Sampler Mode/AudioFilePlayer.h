@@ -73,6 +73,7 @@ public:
     //audio signal processing stuff
     void setGain (float value);
     void setPan (float value);
+    void setCurrentGains();
 
     GainAndPan& getGainAndPan();
     LowpassFilter& getLowpassFilter();
@@ -118,8 +119,17 @@ private:
     int currentPressureValue;
     int quantizeMode;
     
-    //audio signal processing stuff - now dynamically created and deleted when needed
+    //audio signal processing stuff
     float gain, gainPrev, panLeft, panLeftPrev, panRight, panRightPrev;
+    
+    //attack/release stuff
+    bool isInAttack, isInRelease;
+    double attackTime, releaseTime;
+    int attackSamples, releaseSamples;
+    int attackPosition, releasePosition;
+    float currentGainL, currentGainR;
+    float prevGainL, prevGainR;
+    
     GainAndPan *gainAndPan;
     LowpassFilter *lowPassFilter;
     HighPassFilter *highPassFilter;
@@ -139,12 +149,6 @@ private:
     //playback manipulation stuff
     double fileStartPosition, fileEndPosition, currentPositionInRegion;
     int prevPressureRegion;
-    
-    //attack/release stuff
-    bool isInAttack, isInRelease;
-    double attackTime, releaseTime;
-    int attackSamples, releaseSamples;
-    int attackPosition, releasePosition;
 };
 
 #endif

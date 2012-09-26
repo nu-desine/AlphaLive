@@ -589,7 +589,7 @@ void GuiSamplerMode::updateDisplay()
 		waveform->setFile (audioFile);
 		
         gainSlider->setValue(PAD_SETTINGS->getSamplerGain(), false);
-        panSlider->setValue(PAD_SETTINGS->getSequencerPan(), false);
+        panSlider->setValue(PAD_SETTINGS->getSamplerPan(), false);
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         triggerModeButtons[PAD_SETTINGS->getSamplerTriggerMode()-1]->setToggleState(true, false);
         loopButton->setToggleState(PAD_SETTINGS->getSamplerShouldLoop(), false);

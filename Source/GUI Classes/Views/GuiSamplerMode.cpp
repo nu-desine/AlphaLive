@@ -112,6 +112,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	addChildComponent(attackSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	attackSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
 	attackSlider->setRange(0.0, 20.0, 0.01);
+    attackSlider->setSkewFactor(0.4);
     attackSlider->addListener(this);
     attackSlider->setValue(0.01, false);
     attackSlider->addMouseListener(this, true);
@@ -120,6 +121,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	addChildComponent(releaseSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	releaseSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
 	releaseSlider->setRange(0.0, 20.0, 0.01);
+    releaseSlider->setSkewFactor(0.4);
     releaseSlider->addListener(this);
     releaseSlider->setValue(0.01, false);
     releaseSlider->addMouseListener(this, true);

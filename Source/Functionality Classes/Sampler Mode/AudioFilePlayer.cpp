@@ -619,6 +619,9 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
                 //the user adjusts the gain and pan values whilst in the attack.
                 //Will this be much of an ISSUE?
                 
+                //would be nice is the ramp could be smoother here.
+                //tried cubing but it causes clicks/jumps when ending the attack.
+                
                 currentGainL = attackPosition * ((gain*panLeft)/attackSamples);
                 currentGainR = attackPosition * ((gain*panRight)/attackSamples);
                 
@@ -642,6 +645,9 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
                 //ramp down from current gains (not just gain*pan incase the release is triggered in the attack)
                 //the only PROBLEM with this is that the set pan or gain can't be changed when the release is
                 //in motion, but will this really be a problem at all?
+                
+                //would be nice is the ramp could be smoother here.
+                //tried cubing but it causes clicks/jumps when beginning the release.
                 
                 double relGainL = currentGainL - (releasePosition * (currentGainL/releaseSamples));
                 double relGainR = currentGainR - (releasePosition * (currentGainR/releaseSamples));

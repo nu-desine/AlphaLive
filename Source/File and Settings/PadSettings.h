@@ -154,6 +154,7 @@ public:
     void setSequencerEffect (int value);
     void setSequencerPan (float value);
     void setSequencerGain (float value);
+    void setSequencerSamplesAttackTime (double value);
     
     int getSequencerMode();
     int getSequencerData (int sequenceNumber, int rowNumber, int columnNumber);
@@ -181,6 +182,7 @@ public:
     int getSequencerEffect();
     float getSequencerPan();
     float getSequencerGain();
+    double getSequencerSamplesAttackTime();
     
     //used to encode the sequence data into a more friendly form for saving to xml
     void seqDataToString();
@@ -415,6 +417,7 @@ private:
     int sequencerEffect;
     float sequencerPan;
     float sequencerGain;
+    double sequencerSamplesAttackTime;
     
     //this is the sequence data variable that is saved to xml, NOT the 3D int array above!
     String sequencerDataString[NO_OF_SEQS];

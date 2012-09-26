@@ -168,6 +168,7 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
             padData->setAttribute("sequencerEffect", PAD_SETTINGS->getSequencerEffect());
             padData->setAttribute("sequencerPan", PAD_SETTINGS->getSequencerPan());
             padData->setAttribute("sequencerGain", PAD_SETTINGS->getSequencerGain());
+            padData->setAttribute("sequencerSamplesAttack", PAD_SETTINGS->getSequencerSamplesAttackTime());
         }
     }
     
@@ -495,6 +496,8 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
                 PAD_SETTINGS->setSequencerPan(padData->getDoubleAttribute("sequencerPan"));
             if (padData->hasAttribute("sequencerGain"))
                 PAD_SETTINGS->setSequencerGain(padData->getDoubleAttribute("sequencerGain"));
+            if (padData->hasAttribute("sequencerSamplesAttack"))
+                 PAD_SETTINGS->setSequencerSamplesAttackTime(padData->getDoubleAttribute("sequencerSamplesAttack"));
         }
     }
     

@@ -40,6 +40,7 @@ public:
     void stopAudioFile();
     
     void setAudioFile (File audioFile_);
+    void setAttackTime (double value);
     
     
 private:
@@ -51,6 +52,15 @@ private:
 	File currentFile;
     AudioFormatReaderSource* currentAudioFileSource;
     TimeSliceThread *audioTransportSourceThread;
+    
+    CriticalSection sharedMemory;
+    
+    double sampleRate_;
+    
+    double attackTime;
+    bool isInAttack;
+    int attackSamples;
+    int attackPosition;
 
 };
 

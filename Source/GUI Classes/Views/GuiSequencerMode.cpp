@@ -89,6 +89,15 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     audioPanSlider->addListener(this);
     audioPanSlider->setValue(0.5, false);
     audioPanSlider->addMouseListener(this, true);
+    
+    //--------------- audio pan slider-------------------
+	addChildComponent(audioAttackSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
+	audioAttackSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
+	audioAttackSlider->setRange(0.0, 20.0, 0.01);
+    audioAttackSlider->setSkewFactor(0.4);
+    audioAttackSlider->addListener(this);
+    audioAttackSlider->setValue(0.5, false);
+    audioAttackSlider->addMouseListener(this, true);
 
     
 	addChildComponent(fxDial = new GuiFxDial(mainComponentRef));
@@ -479,6 +488,7 @@ void GuiSequencerMode::resized()
 	noteLengthSlider->setBounds(804, 381, 82, 82);
 	audioGainSlider->setBounds(804, 381, 82, 82);
 	audioPanSlider->setBounds(804, 381, 82, 82);
+    audioAttackSlider->setBounds(804, 381, 82, 82);
 	
 	notSelected->setBounds(0, 0, getWidth(), getHeight());
 	
@@ -804,6 +814,17 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
         }
         
 		setParameterLabelText(String(audioPanSlider->getValue()));
+    }
+    
+    else if (slider == audioAttackSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSequencerSamplesAttackTime(slider->getValue());
+        }
+        
+		setParameterLabelText(String(audioAttackSlider->getValue()));
     }
     
     else if (slider == numberOfSequencesSlider)
@@ -1521,6 +1542,7 @@ void GuiSequencerMode::hideComponents()
     audioGainSlider->setVisible(false);
     audioPanSlider->setVisible(false);
     plusButton->setVisible(false);
+    audioAttackSlider->setVisible(false);
     minusButton->setVisible(false);
     parameterLabel->setVisible(false);
     currentParameterLabel->setVisible(false);
@@ -1652,6 +1674,7 @@ void GuiSequencerMode::setRotaryControlDisplay()
     noteLengthSlider->setVisible(false);
     audioGainSlider->setVisible(false);
     audioPanSlider->setVisible(false);
+    audioAttackSlider->setVisible(false);
     numberOfSequencesSlider->setVisible(false);
     
     if(triggerSettingsButton->getToggleStateValue() == true)
@@ -1677,10 +1700,10 @@ void GuiSequencerMode::setRotaryControlDisplay()
         
         else if(modeSamplesButton->getToggleStateValue()==true)
         {
-            if (controlDisplayId > 2)
+            if (controlDisplayId > 3)
                 controlDisplayId = 0;
             else if (controlDisplayId < 0)
-                controlDisplayId = 2;
+                controlDisplayId = 3;
             
             if (controlDisplayId == 0)
             {
@@ -1695,6 +1718,10 @@ void GuiSequencerMode::setRotaryControlDisplay()
             else if (controlDisplayId == 2)
             {
                 audioPanSlider->setVisible(true);
+            }
+            else if (controlDisplayId == 3)
+            {
+                audioAttackSlider->setVisible(true);
             }
         }
     }
@@ -1757,6 +1784,7 @@ void GuiSequencerMode::updateDisplay()
         setNoteLengthSliderRange(sequenceLength);
         audioGainSlider->setValue(PAD_SETTINGS->getSequencerGain(), false);
         audioPanSlider->setValue(PAD_SETTINGS->getSequencerPan(), false);
+        audioAttackSlider->setValue(PAD_SETTINGS->getSequencerSamplesAttackTime(), false);
         triggerModeButtons[PAD_SETTINGS->getSequencerTriggerMode()-1]->setToggleState(true, false);
         midiPressureModeButtons[PAD_SETTINGS->getSequencerMidiPressureMode()-1]->setToggleState(true, false);
         midiChannelButtons[PAD_SETTINGS->getSequencerMidiChannel()-1]->setToggleState(true, false);
@@ -1943,6 +1971,20 @@ void GuiSequencerMode::updateDisplay()
             }
             if (i == selectedPads.size()-1)
                 audioPanSlider->setValue(pan_, false);
+        }
+        
+        //==================================================================================================
+        double attack_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerSamplesAttackTime();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSequencerSamplesAttackTime() != attack_)
+            {
+                audioAttackSlider->setValue(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                audioAttackSlider->setValue(attack_, false);
         }
         
         //==================================================================================================
@@ -2202,6 +2244,13 @@ void GuiSequencerMode::setParameterLabelText (String value)
 			parameterLabel->setText(String(audioPanSlider->getValue()), false);
 			
 		}
+        
+        else if (audioAttackSlider->isVisible())
+		{
+			currentParameterLabel->setText(translate("ATTACK"), false);
+			parameterLabel->setText(String(audioAttackSlider->getValue()), false);
+			
+		}
 	}
     
 }
@@ -2259,6 +2308,8 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
 		setParameterLabelText(String(audioGainSlider->getValue()));
 	else if (audioPanSlider->isMouseOver(true))
 		setParameterLabelText(String(audioPanSlider->getValue()));
+    else if (audioAttackSlider->isMouseOver(true))
+		setParameterLabelText(String(audioAttackSlider->getValue()));
     
     
     //update parameterHoverLabel
@@ -2325,6 +2376,10 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     else if (audioGainSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Audio Gain Control. Sets and displays the gain of the audio signal of the sequences for the selected pads."));
+    }
+    else if (audioAttackSlider->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Samples Attack Time Selector. Sets and displays the audio samples attack time in seconds for the selected pads."));
     }
     
     else if (triggerModeButtons[0]->isMouseOver(true))
@@ -2487,6 +2542,8 @@ void GuiSequencerMode::mouseExit (const MouseEvent &e)
 		setParameterLabelText(String::empty);
 	else if (e.eventComponent == audioPanSlider)
 		setParameterLabelText(String::empty);
+    else if (e.eventComponent == audioAttackSlider)
+		setParameterLabelText(String::empty);
     
     if(e.eventComponent == midiPressureMinRangeSlider || e.eventComponent == midiPressureMaxRangeSlider)
         parameterHoverLabel->setText(String::empty, false);
@@ -2497,17 +2554,14 @@ void GuiSequencerMode::mouseExit (const MouseEvent &e)
     
     if (e.eventComponent == numberOfSequencesSlider)
 		setParameterLabelText(String::empty);
-
 	if (e.eventComponent == relativeTempoSlider)
 		setParameterLabelText(String::empty);
-
 	if (e.eventComponent == noteLengthSlider)
 		setParameterLabelText(String::empty);
-
 	if (e.eventComponent == audioGainSlider)
 		setParameterLabelText(String::empty);
-    
 	if (e.eventComponent == audioPanSlider)
 		setParameterLabelText(String::empty);
-    
+    if (e.eventComponent == audioAttackSlider)
+		setParameterLabelText(String::empty);
 }

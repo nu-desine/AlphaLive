@@ -38,6 +38,11 @@ SequenceAudioFilePlayer::SequenceAudioFilePlayer(int padNumber_, int rowNumber_,
     //call this here so that the default drum sounds are loaded in correcntly before this
     //object is intialised. This will only be temporary though.
     setAudioFile(PAD_SETTINGS->getSequencerSamplesAudioFilePath(rowNumber));
+    attackTime = PAD_SETTINGS->getSequencerSamplesAttackTime();
+    
+    attackSamples = attackTime * sampleRate_;
+    isInAttack = false;
+    attackPosition = 0;
     
 }
 
@@ -108,6 +113,12 @@ void SequenceAudioFilePlayer::playAudioFile (float gain)
     //there is a bug here in that when the gain is changed to a low value, it doesn't seem to change in time
     //most likely this is a juce bug that would have been fixed in the latest version?
 
+    if (attackTime > 0)
+    {
+        isInAttack = true;
+        attackPosition = 0;
+    }
+    
     fileSource.setPosition (0.0);
     fileSource.start();
 }
@@ -124,17 +135,71 @@ void SequenceAudioFilePlayer::stopAudioFile()
 void SequenceAudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
     fileSource.getNextAudioBlock(bufferToFill);
+    
+    if (isInAttack == true)
+    {
+        //====== set attack and release =======
+        
+        sharedMemory.enter();
+        
+        //get first pair of sample data from audio buffer
+        float *pOutL = bufferToFill.buffer->getSampleData (0, bufferToFill.startSample);
+        float *pOutR = bufferToFill.buffer->getSampleData (1, bufferToFill.startSample);
+        
+        //increment through each pair of samples (left channel and right channel) in the current block of the audio buffer
+        for (int i = 0; i < bufferToFill.numSamples; ++i)
+        {
+            if (isInAttack)
+            {
+                //ramp up to 1.0.
+                
+                //would be nice is the ramp could be smoother here.
+                //tried cubing but it causes clicks/jumps when ending the attack.
+                
+                double currentGainL = attackPosition * (1.0/attackSamples);
+                double currentGainR = attackPosition * (1.0/attackSamples);
+                
+                *pOutL = *pOutL * currentGainL;
+                *pOutR = *pOutR * currentGainR;
+                
+                attackPosition++;
+                
+                //move to next pair of samples
+                pOutL++;
+                pOutR++;
+                
+                if (attackPosition >= attackSamples)
+                {
+                    isInAttack = false;
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+        
+        sharedMemory.exit();
+    }
 }
 
 void SequenceAudioFilePlayer::prepareToPlay (int samplesPerBlockExpected,double sampleRate)
 {
     fileSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    
+    sampleRate_ = sampleRate;
+    attackSamples = attackTime * sampleRate_;
 }
-
-
 
 void SequenceAudioFilePlayer::releaseResources()
 {
     fileSource.releaseResources();
+}
+
+
+void SequenceAudioFilePlayer::setAttackTime (double value)
+{
+    attackTime = value;
+    attackSamples = attackTime * sampleRate_;
 }
 

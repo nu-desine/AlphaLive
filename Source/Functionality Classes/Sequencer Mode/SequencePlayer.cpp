@@ -970,28 +970,6 @@ void SequencePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFi
     }
     sharedMemory.exit();
     
-    /*
-    //OLD GAIN AND PAN ALGORITHM
-    //get sample data from audio buffer
-    float *pOutL = bufferToFill.buffer->getSampleData (0, bufferToFill.startSample);
-    float *pOutR = bufferToFill.buffer->getSampleData (1, bufferToFill.startSample);
-    sharedMemory.enter();
-    //should 'sharedMemory' be entered on the other side where stuff like gain is actually set? YES
-    for (int i = 0; i < bufferToFill.numSamples; ++i)
-    {
-        //gain
-        *pOutL = *pOutL * samplesGain;
-        *pOutR = *pOutR * samplesGain
-        //pan
-        *pOutL = panControl.leftChanPan(*pOutL);
-        *pOutR = panControl.rightChanPan(*pOutR);
-        
-        pOutL++;
-        pOutR++;
-    }
-    sharedMemory.exit();
-     */
-    
     //gain and pan
     sharedMemory.enter();
     
@@ -1505,6 +1483,14 @@ void SequencePlayer::setSamplesPan (float value)
     panLeft = PanControl::leftChanPan_(value);
     panRight = PanControl::rightChanPan_(value);
     sharedMemory.exit();
+}
+
+void SequencePlayer::setSamplesAttackTime (double value)
+{
+    for (int i = 0; i < NO_OF_ROWS; i++)
+    {
+        sequenceAudioFilePlayer[i]->setAttackTime(value);
+    }
 }
 
 void SequencePlayer::setRecordEnabled (bool value)

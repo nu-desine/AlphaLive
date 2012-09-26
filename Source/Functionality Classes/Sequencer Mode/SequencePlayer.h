@@ -105,6 +105,7 @@ public:
     void setSamplesAudioFile (int row, File sample);
     void setSamplesGain (float value);
     void setSamplesPan (float value);
+    void setSamplesAttackTime (double value);
     
     void setRelativeTempoMode (int value);
     double getTimeInterval();

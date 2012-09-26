@@ -126,6 +126,7 @@ PadSettings::PadSettings(int arrayIndex)
     sequencerEffect = 0;
     sequencerPan = 0.5;
     sequencerGain = 1.0;
+    sequencerSamplesAttackTime = 0;
     
     //controller mode
     controllerControl = 1;
@@ -336,6 +337,7 @@ void PadSettings::resetData (int whatToReset)
         setSequencerEffect(0);
         setSequencerPan (0.5);
         setSequencerGain (1.0);
+        setSequencerSamplesAttackTime (0);
     }
     
     if (whatToReset != 4)
@@ -1229,6 +1231,14 @@ void PadSettings::setSequencerGain(float value)
     }
 }
 
+void PadSettings::setSequencerSamplesAttackTime (double value)
+{
+    sequencerSamplesAttackTime = value;
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setSamplesAttackTime(value);
+    }
+}
 
 void PadSettings::setSequencerRecordEnabled (bool value)
 {
@@ -1370,6 +1380,13 @@ float PadSettings::getSequencerGain()
 {
     return sequencerGain;
 }
+
+double PadSettings::getSequencerSamplesAttackTime()
+{
+    return sequencerSamplesAttackTime;
+}
+
+
 bool PadSettings::getSequencerRecordEnabled()
 {
     return sequencerRecordEnabled;

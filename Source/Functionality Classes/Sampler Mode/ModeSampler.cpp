@@ -131,7 +131,7 @@ void ModeSampler::killPad (int padNum)
     {
         //should there be a check here to see if the pad is currently playing?
         
-        padSampler[padNum]->stopAudioFile();
+        padSampler[padNum]->stopAudioFile(true);
         padSampler[padNum]->killAllAudio(); //to kill things like delay tails
         padSampler[padNum]->resetTriggerMode();
     }

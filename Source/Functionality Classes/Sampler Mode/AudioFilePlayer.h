@@ -55,7 +55,7 @@ public:
     
     void processAudioFile(int padValue);
     void playAudioFile();
-    void stopAudioFile();
+    void stopAudioFile(bool shouldStopInstantly);
     
     void setTriggerMode (int value);
     void setShouldLoop (int value);

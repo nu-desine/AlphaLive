@@ -228,7 +228,7 @@ void AudioFilePlayer::processAudioFile(int padValue)
             
             else if (triggerModeData.playingStatus == 0) //stop
             {
-                stopAudioFile();
+                stopAudioFile(false);
                 //currentPlayingState = 0; //now done within stopAudioFile()
             }
         }
@@ -388,7 +388,7 @@ void AudioFilePlayer::triggerQuantizationPoint()
     }
     else if (currentPlayingState == 3) //waiting to stop
     {
-        stopAudioFile();
+        stopAudioFile(false);
         //currentPlayingState = 0; //now done within stopAudioFile()
     }
 }
@@ -490,9 +490,11 @@ void AudioFilePlayer::playAudioFile()
 
 }
 
-void AudioFilePlayer::stopAudioFile()
+void AudioFilePlayer::stopAudioFile (bool shouldStopInstantly)
 {
-    if (releaseTime > 0)
+    // shouldStopInstantly will be true when called from killPads()
+    
+    if (releaseTime > 0 && shouldStopInstantly == false)
     {
         isInRelease = true;
         isInAttack = false;
@@ -616,10 +618,12 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
             {
                 //ramp up to gain*pan values
                 
+                //as we're not using gain ramps here there will be artefacts when
+                //the user adjusts the gain and pan values whilst in the attack.
+                //Will this be much of an ISSUE?
+                
                 currentGainL = attackPosition * ((gain*panLeft)/attackSamples);
                 currentGainR = attackPosition * ((gain*panRight)/attackSamples);
-                //prevGainL = currentGainL;
-                //prevGainR = currentGainR;
                 
                 *pOutL = *pOutL * currentGainL;
                 *pOutR = *pOutR * currentGainR;
@@ -639,6 +643,8 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
             else if (isInRelease)
             {
                 //ramp down from current gains (not just gain*pan incase the release is triggered in the attack)
+                //the only PROBLEM with this is that the set pan or gain can't be changed when the release is
+                //in motion, but will this really be a problem at all?
                 
                 double relGainL = currentGainL - (releasePosition * (currentGainL/releaseSamples));
                 double relGainR = currentGainR - (releasePosition * (currentGainR/releaseSamples));
@@ -696,7 +702,7 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
             //always be samples left in the current buffer that need the set
             //below set/pan being applied, but you must only apply to the needed
             //samples and not the whole buffer (as it causes a click/artefact).
-            //There for apply from currentSample (which is set within the attack code).
+            //Therefore apply from currentSample (which is set within the attack code).
             
             if (i == 0) //left chan
                 bufferToFill.buffer->applyGainRamp (i,

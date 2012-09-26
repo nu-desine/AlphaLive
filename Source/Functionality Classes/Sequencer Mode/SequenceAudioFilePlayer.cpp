@@ -151,16 +151,20 @@ void SequenceAudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& b
         {
             if (isInAttack)
             {
-                //ramp up to 1.0.
-                
-                //would be nice is the ramp could be smoother here.
-                //tried cubing but it causes clicks/jumps when ending the attack.
+                //ramp up to 1.0
                 
                 double currentGainL = attackPosition * (1.0/attackSamples);
                 double currentGainR = attackPosition * (1.0/attackSamples);
                 
-                *pOutL = *pOutL * currentGainL;
-                *pOutR = *pOutR * currentGainR;
+                if (currentGainL <= 1)
+                    *pOutL = *pOutL * (currentGainL * currentGainL * currentGainL);
+                else
+                    *pOutL = *pOutL * currentGainL;
+                
+                if (currentGainR <= 1)
+                    *pOutR = *pOutR * (currentGainR * currentGainR * currentGainR);
+                else
+                    *pOutR = *pOutR * currentGainR;
                 
                 attackPosition++;
                 

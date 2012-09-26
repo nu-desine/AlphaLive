@@ -88,7 +88,7 @@ private:
 	
     int controlDisplayId; //used to set which rotary dial is display in the centre
 	ScopedPointer <SettingsButton> plusButton, minusButton;
-    ScopedPointer <AlphaRotarySlider> gainSlider, panSlider;
+    ScopedPointer <AlphaRotarySlider> gainSlider, panSlider, attackSlider, releaseSlider;
     ScopedPointer <Label> parameterLabel;
 	
 	

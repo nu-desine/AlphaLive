@@ -49,10 +49,10 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     
     //grab the setting values (so that if this object is deleted and recreated, it will hold the previous settings)
     //do i need to enter shared memory here?
-    //do ALL effect paramters need setting here? Can I do this in the dedicated effect classes? Would be neater that way
-    gain = gainPrev = PAD_SETTINGS->getSamplerGain();
-    panLeft = panLeftPrev = PanControl::leftChanPan_(PAD_SETTINGS->getSamplerPan());
-    panRight = panRightPrev = PanControl::rightChanPan_(PAD_SETTINGS->getSamplerPan());
+    
+    gain = PAD_SETTINGS->getSamplerGain(); //should this be cubed?
+    panLeft = PanControl::leftChanPan_(PAD_SETTINGS->getSamplerPan());
+    panRight = PanControl::rightChanPan_(PAD_SETTINGS->getSamplerPan());
     triggerMode = PAD_SETTINGS->getSamplerTriggerMode();
     shouldLoop = PAD_SETTINGS->getSamplerShouldLoop();
     indestructible = PAD_SETTINGS->getSamplerIndestructible();
@@ -65,13 +65,18 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     effect = 0;
     setEffect(PAD_SETTINGS->getSamplerEffect());
     quantizeMode = PAD_SETTINGS->getQuantizeMode();
+    attackTime = PAD_SETTINGS->getSamplerAttackTime();
+    releaseTime = PAD_SETTINGS->getSamplerReleaseTime();
     
     triggerModeData.playingStatus = 0;
-    
     prevPadValue = pressureValue =  0;
-    
     playingLastLoop = false;
     
+    attackSamples = attackTime * sampleRate_;
+    releaseSamples = releaseTime * sampleRate_;
+    isInAttack = isInRelease = false;
+    attackPosition = releasePosition = 0;
+    currentGainL = currentGainR = prevGainL = prevGainR = 0;
     
     //call this here incase a loop has been 'dropped' onto a pad before this AudioFilePlayer instance actually exists,
     //which means that it wouldn't have been called from setSamplerAudioFilePath().
@@ -79,15 +84,7 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     
     columnNumber = sequenceNumber = 0;
     
-    isInAttack = isInRelease = false;
-    attackPosition = releasePosition = 0;
-    currentGainL = currentGainR = 0;
     
-    attackTime = 8.0;
-    attackSamples = attackTime * sampleRate_;
-    
-    releaseTime = 8.0;
-    releaseSamples = releaseTime * sampleRate_;
     
     broadcaster.addActionListener(this);
 }
@@ -936,6 +933,24 @@ void AudioFilePlayer::setShouldFinishLoop (int value)
 void AudioFilePlayer::setSticky (int value)
 {
     sticky = value;
+}
+
+void AudioFilePlayer::setAttackTime (double value)
+{
+    //do we actually needs the attackTime variable? Won't attackSamples be enough here?
+    sharedMemory.enter();
+    attackTime = value;
+    attackSamples = attackTime * sampleRate_;
+    sharedMemory.exit();
+}
+
+void AudioFilePlayer::setReleaseTime (double value)
+{
+    //do we actually needs the releaseTime variable? Won't releaseSamples be enough here?
+    sharedMemory.enter();
+    releaseTime = value;
+    releaseSamples = releaseTime * sampleRate_;
+    sharedMemory.exit();
 }
 
 //========================================================================================

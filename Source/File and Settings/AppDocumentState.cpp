@@ -112,6 +112,8 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
         padData->setAttribute("samplerEffect", PAD_SETTINGS->getSamplerEffect());
         padData->setAttribute("samplerPan", PAD_SETTINGS->getSamplerPan());
         padData->setAttribute("samplerGain", PAD_SETTINGS->getSamplerGain());
+        padData->setAttribute("samplerAttackTime", PAD_SETTINGS->getSamplerAttackTime());
+        padData->setAttribute("samplerReleaseTime", PAD_SETTINGS->getSamplerReleaseTime());
         
     }
     else if (PAD_SETTINGS->getMode() == 3) //sequencer mode
@@ -374,6 +376,10 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
             PAD_SETTINGS->setSamplerPan(padData->getDoubleAttribute("samplerPan"));
         if (padData->hasAttribute("samplerGain"))
             PAD_SETTINGS->setSamplerGain(padData->getDoubleAttribute("samplerGain"));
+        if (padData->hasAttribute("samplerAttackTime"))
+            PAD_SETTINGS->setSamplerAttackTime(padData->getDoubleAttribute("samplerAttackTime"));
+        if (padData->hasAttribute("samplerReleaseTime"))
+            PAD_SETTINGS->setSamplerReleaseTime(padData->getDoubleAttribute("samplerReleaseTime"));
         
     }
     

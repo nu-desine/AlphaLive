@@ -64,6 +64,8 @@ public:
     void setSticky (int value);
     void setEffect (int value);
     void setQuantizeMode (int value);
+    void setAttackTime (double value);
+    void setReleaseTime (double value);
     
     int getCurrentPlayingState();
     bool getAudioTransportSourceStatus();
@@ -73,7 +75,6 @@ public:
     //audio signal processing stuff
     void setGain (float value);
     void setPan (float value);
-    void setCurrentGains();
 
     GainAndPan& getGainAndPan();
     LowpassFilter& getLowpassFilter();
@@ -118,13 +119,13 @@ private:
     int currentPlayingState; //0 - off, 1 - playing, 2 - waiting to play, 3 - waiting to stop 
     int currentPressureValue;
     int quantizeMode;
+    double attackTime, releaseTime;
     
     //audio signal processing stuff
-    float gain, gainPrev, panLeft, panLeftPrev, panRight, panRightPrev;
+    float gain, panLeft, panRight;
     
     //attack/release stuff
     bool isInAttack, isInRelease;
-    double attackTime, releaseTime;
     int attackSamples, releaseSamples;
     int attackPosition, releasePosition;
     float currentGainL, currentGainR;

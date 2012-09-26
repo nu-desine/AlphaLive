@@ -108,6 +108,22 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     panSlider->setValue(0.5, false);
     panSlider->addMouseListener(this, true);
     
+    //--------------- attack slider -------------------
+	addChildComponent(attackSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
+	attackSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
+	attackSlider->setRange(0.0, 20.0, 0.01);
+    attackSlider->addListener(this);
+    attackSlider->setValue(0.01, false);
+    attackSlider->addMouseListener(this, true);
+    
+    //--------------- release slider -------------------
+	addChildComponent(releaseSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
+	releaseSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
+	releaseSlider->setRange(0.0, 20.0, 0.01);
+    releaseSlider->addListener(this);
+    releaseSlider->setValue(0.01, false);
+    releaseSlider->addMouseListener(this, true);
+    
     //---------------------- plus and minus buttons ------------------
     addAndMakeVisible(plusButton = new SettingsButton("+", (135 * (M_PI / 180)), 
                                                       (160 * (M_PI / 180)),
@@ -236,6 +252,8 @@ void GuiSamplerMode::resized()
 	parameterLabel->setBounds(832,453,26,10);
     gainSlider->setBounds(804, 381, 82, 82);
     panSlider->setBounds(804, 381, 82, 82);
+    attackSlider->setBounds(804, 381, 82, 82);
+    releaseSlider->setBounds(804, 381, 82, 82);
 	
 	quantiseButton->setBounds(681, 288,32, 32);
 	triggerSettingsButton->setBounds(789, 221,42, 42);
@@ -341,6 +359,27 @@ void GuiSamplerMode::sliderValueChanged (Slider* slider)
         }
         
 		setParameterLabelText(String(panSlider->getValue()));
+    }
+    
+    else if (slider == attackSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSamplerAttackTime(slider->getValue());
+        }
+        
+		setParameterLabelText(String(attackSlider->getValue()));
+    }
+    else if (slider == releaseSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSamplerReleaseTime(slider->getValue());
+        }
+        
+		setParameterLabelText(String(releaseSlider->getValue()));
     }
 
 }
@@ -484,10 +523,10 @@ void GuiSamplerMode::buttonClicked (Button* button)
         else if (button == minusButton)
             controlDisplayId--;
         
-        if (controlDisplayId > 1)
+        if (controlDisplayId > 3)
             controlDisplayId = 0;
         else if (controlDisplayId < 0)
-            controlDisplayId = 1;
+            controlDisplayId = 3;
         
         setRotaryControlDisplay();
 	}
@@ -590,6 +629,8 @@ void GuiSamplerMode::updateDisplay()
 		
         gainSlider->setValue(PAD_SETTINGS->getSamplerGain(), false);
         panSlider->setValue(PAD_SETTINGS->getSamplerPan(), false);
+        attackSlider->setValue(PAD_SETTINGS->getSamplerAttackTime(), false);
+        releaseSlider->setValue(PAD_SETTINGS->getSamplerReleaseTime(), false);
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         triggerModeButtons[PAD_SETTINGS->getSamplerTriggerMode()-1]->setToggleState(true, false);
         loopButton->setToggleState(PAD_SETTINGS->getSamplerShouldLoop(), false);
@@ -753,6 +794,34 @@ void GuiSamplerMode::updateDisplay()
         }
         
         //==================================================================================================
+        double attack_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerAttackTime();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSamplerAttackTime() != attack_)
+            {
+                attackSlider->setValue(0.01, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                attackSlider->setValue(attack_, false);
+        }
+        
+        //==================================================================================================
+        double release_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerReleaseTime();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSamplerReleaseTime() != release_)
+            {
+                releaseSlider->setValue(0.01, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                releaseSlider->setValue(release_, false);
+        }
+        
+        //==================================================================================================
         //for pressure status button
         int effect_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerEffect();
         
@@ -808,16 +877,21 @@ void GuiSamplerMode::setParameterLabelText (String value)
 	{
 		parameterLabel->setColour(Label::textColourId, LookAndFeel::getDefaultLookAndFeel().findColour(Label::textColourId));
 		
-		
 		if (gainSlider->isVisible())
 		{
 			parameterLabel->setText(String(gainSlider->getValue()), false);
 		}
-		
 		else if (panSlider->isVisible())
 		{
 			parameterLabel->setText(String(panSlider->getValue()), false);
-			
+		}
+        else if (attackSlider->isVisible())
+		{
+			parameterLabel->setText(String(attackSlider->getValue()), false);
+		}
+        else if (releaseSlider->isVisible())
+		{
+			parameterLabel->setText(String(releaseSlider->getValue()), false);
 		}
 	}
     
@@ -827,6 +901,8 @@ void GuiSamplerMode::setRotaryControlDisplay()
 {
     gainSlider->setVisible(false);
     panSlider->setVisible(false);
+    attackSlider->setVisible(false);
+    releaseSlider->setVisible(false);
     
     if (triggerSettingsButton->getToggleState())
     {
@@ -834,6 +910,10 @@ void GuiSamplerMode::setRotaryControlDisplay()
             gainSlider->setVisible(true);
         else if (controlDisplayId == 1)
             panSlider->setVisible(true);
+        else if (controlDisplayId == 2)
+            attackSlider->setVisible(true);
+        else if (controlDisplayId == 3)
+            releaseSlider->setVisible(true);
     }
     
     setParameterLabelText (String::empty);
@@ -849,6 +929,10 @@ void GuiSamplerMode::mouseEnter (const MouseEvent &e)
 		setParameterLabelText(String(gainSlider->getValue()));
 	else if (panSlider->isMouseOver(true))
 		setParameterLabelText(String(panSlider->getValue()));
+    else if (attackSlider->isMouseOver(true))
+		setParameterLabelText(String(attackSlider->getValue()));
+    else if (releaseSlider->isMouseOver(true))
+		setParameterLabelText(String(releaseSlider->getValue()));
     
     // ======= info box text command =========
     // =======================================
@@ -903,6 +987,14 @@ void GuiSamplerMode::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::finishLoopButton));
     }
+    else if (attackSlider->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Attack Time Selector. Sets and displays the audio sample attack time in seconds for the selected pads."));
+    }
+    else if (releaseSlider->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Release Time Selector. Sets and displays the audio sample release time in seconds for the selected pads."));
+    }
     
     if (fileChooser->isMouseOver(true))
     {
@@ -937,6 +1029,10 @@ void GuiSamplerMode::mouseExit (const MouseEvent &e)
 	if (e.eventComponent == gainSlider)
 		setParameterLabelText(String::empty);
 	else if (e.eventComponent == panSlider)
+		setParameterLabelText(String::empty);
+    else if (e.eventComponent == attackSlider)
+		setParameterLabelText(String::empty);
+    else if (e.eventComponent == releaseSlider)
 		setParameterLabelText(String::empty);
     
     

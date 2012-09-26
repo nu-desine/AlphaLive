@@ -110,6 +110,8 @@ public:
     void setSamplerEffect (int value);
     void setSamplerPan (float value);
     void setSamplerGain (float value);
+    void setSamplerAttackTime (double value);
+    void setSamplerReleaseTime (double value);
     
     File getSamplerAudioFilePath();
     bool getSamplerIsLibraryFile();
@@ -121,6 +123,8 @@ public:
     int getSamplerEffect();
     float getSamplerPan();
     float getSamplerGain();
+    double getSamplerAttackTime();
+    double getSamplerReleaseTime();
     
     //==================================================================
     //Sequencer mode
@@ -380,6 +384,8 @@ private:
     int samplerEffect;
     float samplerPan;
     float samplerGain;
+    double samplerAttackTime;
+    double samplerReleaseTime;
     
     //==================================================================
     //Sequencer mode

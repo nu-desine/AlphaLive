@@ -125,15 +125,17 @@ void ModeSampler::triggerQuantizationPoint (int padNum)
 }
 
 
-void ModeSampler::killPad (int padNum)
+void ModeSampler::killPad (int padNum, bool shouldStopInstantly)
 {
     if (padSampler[padNum] != NULL) //if it exists..
     {
         //should there be a check here to see if the pad is currently playing?
         
-        padSampler[padNum]->stopAudioFile(true);
-        padSampler[padNum]->killAllAudio(); //to kill things like delay tails
+        padSampler[padNum]->stopAudioFile(shouldStopInstantly);
         padSampler[padNum]->resetTriggerMode();
+        
+        if (shouldStopInstantly)
+            padSampler[padNum]->killAllAudio(); //to kill things like delay tails
     }
 }
 

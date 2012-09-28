@@ -329,7 +329,7 @@ void AlphaLiveEngine::handleExclusiveMode (int padNum)
                 modeMidi->killPad(prevPad);
                 break;
             case 2:
-                modeSampler->killPad(prevPad);
+                modeSampler->killPad(prevPad, false);
                 break;
             case 3:
                 modeSequencer->killPad(prevPad);
@@ -389,7 +389,7 @@ void AlphaLiveEngine::addPadToQueue (int padNum)
                                 modeMidi->killPad(queuedPads[i]);
                                 break;
                             case 2:
-                                modeSampler->killPad(queuedPads[i]);
+                                modeSampler->killPad(queuedPads[i], true);
                                 break;
                             case 3:
                                 modeSequencer->killPad(queuedPads[i]);
@@ -452,7 +452,7 @@ void AlphaLiveEngine::killAll()
     for (int i = 0; i <= 47; i++)
     {
         modeMidi->killPad(i);
-        modeSampler->killPad(i);
+        modeSampler->killPad(i, true);
         modeSequencer->killPad(i);
     }
     

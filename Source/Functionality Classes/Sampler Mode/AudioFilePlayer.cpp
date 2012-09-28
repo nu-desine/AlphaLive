@@ -490,7 +490,7 @@ void AudioFilePlayer::stopAudioFile (bool shouldStopInstantly)
 {
     // shouldStopInstantly will be true when called from killPads()
     
-    if (releaseTime > 0 && shouldStopInstantly == false)
+    if (releaseTime > 0 && shouldStopInstantly == false && currentPlayingState != 0)
     {
         if (attackTime == 0)
         {

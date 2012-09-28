@@ -401,9 +401,8 @@ void AudioFilePlayer::playAudioFile()
     
     if (attackTime > 0)
     {
-        isInAttack = true;
-        isInRelease = false;
         attackPosition = 0;
+        isInAttack = true;
     }
     
     //start audio file
@@ -477,13 +476,13 @@ void AudioFilePlayer::playAudioFile()
     
     
     //update pad layout gui
-    if (currentPlayingState != 1 || shouldFinishLoop == true) //if currentlyPlayingStatus doesn't already equal 1
+    if (currentPlayingState != 1 || shouldFinishLoop == true || isInRelease == true) //if currentlyPlayingStatus doesn't already equal 1
     {
         broadcaster.sendActionMessage("PLAYING");
         currentPlayingState = 1;
     }
     
-
+    isInRelease = false;
 
 }
 
@@ -493,9 +492,17 @@ void AudioFilePlayer::stopAudioFile (bool shouldStopInstantly)
     
     if (releaseTime > 0 && shouldStopInstantly == false)
     {
-        isInRelease = true;
-        isInAttack = false;
+        if (attackTime == 0)
+        {
+            //if there was no attack, the below variables will not be set correctly
+            //whic will cause an incorrect release.
+            attRelGainL = attRelGainR = 1.0;
+        }
+        
         releasePosition = 0;
+        isInRelease = true;
+        
+        broadcaster.sendActionMessage("WAITING TO STOP");
     }
     else
     {
@@ -506,6 +513,8 @@ void AudioFilePlayer::stopAudioFile (bool shouldStopInstantly)
     
         currentPlayingState = 0;
     }
+    
+      isInAttack = false;
     
 }
 

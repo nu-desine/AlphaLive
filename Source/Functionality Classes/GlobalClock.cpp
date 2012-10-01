@@ -271,7 +271,7 @@ void GlobalClock::stopClock()
     {
         for (int i = 0; i <= 47; i++)
         {
-            alphaLiveEngineRef.getModeSampler()->killPad(i, true);
+            alphaLiveEngineRef.getModeSampler()->killPad(i);
             alphaLiveEngineRef.getModeSequencer()->killPad(i);
             alphaLiveEngineRef.getModeMidi()->killPad(i);
         }

@@ -134,6 +134,8 @@ void SceneSlot::mouseDown (const MouseEvent &e)
             menu.addItem(2, translate("Export scene..."));
             menu.addItem(3, translate("Clear scene..."));
         }
+        if (status == 2)
+            menu.addItem(4, translate("Revert to saved settings..."));
         
         const int result = menu.show();
         
@@ -153,6 +155,11 @@ void SceneSlot::mouseDown (const MouseEvent &e)
         {
             clearScene();
         }
+        else if (result == 4) // revert back to settings saved within the scenes XML element
+        {
+            sceneComponentRef.getAppDocumentState().loadFromScene(slotNumber);
+        }
+        
     }
     
 }

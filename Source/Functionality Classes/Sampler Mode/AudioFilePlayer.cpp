@@ -119,7 +119,8 @@ void AudioFilePlayer::processAudioFile(int padValue)
     if (currentFile != File::nonexistent && currentAudioFileSource != NULL)
     {
         //this is needed incase audio ends on its own or is stopped via the 'exclusive mode' feature, in order to reset everything so it will trigger again properly
-        if (fileSource.isPlaying() == false && currentPlayingState == 1 && prevPadValue == 0)
+        if ((fileSource.isPlaying() == false && currentPlayingState == 1 && prevPadValue == 0) ||
+            (isInRelease == true && currentPlayingState == 1 && prevPadValue == 0))
         {
             std::cout << "stream ended on its own!!";
             currentPlayingState = 0;
@@ -496,17 +497,23 @@ void AudioFilePlayer::stopAudioFile (bool shouldStopInstantly)
     
     if (releaseTime > 0 && shouldStopInstantly == false && fileSource.isPlaying() == true)
     {
-        if (attackTime == 0)
+        if (isInRelease == false)   //to prevent cases where a pad may be in release state but then
+                                    //another pad tries to stop the pad (hence, start the release again)
+                                    //via exclusive mode. It would probably make more sense to remove
+                                    //a pad from the exclusive array when called to stop.
         {
-            //if there was no attack, the below variables will not be set correctly
-            //whic will cause an incorrect release.
-            attRelGainL = attRelGainR = 1.0;
+            if (attackTime == 0)
+            {
+                //if there was no attack, the below variables will not be set correctly
+                //whic will cause an incorrect release.
+                attRelGainL = attRelGainR = 1.0;
+            }
+            
+            releasePosition = 0;
+            isInRelease = true;
+            
+            broadcaster.sendActionMessage("WAITING TO STOP");
         }
-        
-        releasePosition = 0;
-        isInRelease = true;
-        
-        broadcaster.sendActionMessage("WAITING TO STOP");
     }
     else
     {

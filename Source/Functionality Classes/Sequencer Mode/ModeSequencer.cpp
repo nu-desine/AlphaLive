@@ -120,12 +120,13 @@ void ModeSequencer::killPad (int padNum)
     if (padSequencer[padNum] != NULL) //if it exists..
     {
         //should there be a check here to see if the pad is currently playing?
-        
-        //padSequencer[padNum]->stopThread(padSequencer[padNum]->getTimeInterval());
         padSequencer[padNum]->stopThreadAndReset();
-        
-        
     }
+}
+
+void ModeSequencer::stopPrevExclusivePad (int padNum)
+{
+    padSequencer[padNum]->stopThread(padSequencer[padNum]->getTimeInterval());
 }
 
 void ModeSequencer::setPreviewSequenceNumber (int padNum, int sequenceNumber)

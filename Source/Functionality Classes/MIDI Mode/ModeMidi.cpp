@@ -150,6 +150,7 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
             else if (triggerModeData[padNumber].playingStatus == 0) //stop
             {
                 noteOff(padNumber);
+                currentPlayingStatus[padNumber] = 0; //set pad to 'off'
             }
         }
         
@@ -359,7 +360,7 @@ void ModeMidi::noteOff (int padNumber)
     guiPadOffUpdater.add(padNumber);
     broadcaster.sendActionMessage("OFF");
     
-    currentPlayingStatus[padNumber] = 0; //set pad to 'off'
+    //currentPlayingStatus[padNumber] = 0; //Don't call this here! Screws up exclusive mode stuff.
     
     
 }
@@ -449,9 +450,14 @@ void ModeMidi::triggerQuantizationPoint (int padNum)
     int status = currentPlayingStatus[padNum];
     //call correct function based on currentPlayingStatus
     if (status == 2) //waiting to play
+    {
         noteOn(padNum);
+    }
     else if (status == 3) //waiting to stop
+    {
         noteOff(padNum);
+        currentPlayingStatus[padNum] = 0; //set pad to 'off'
+    }
 }
 
 void ModeMidi::killPad (int padNum)
@@ -463,6 +469,7 @@ void ModeMidi::killPad (int padNum)
     {
         noteOff(padNum);
         triggerModes[padNum].reset();
+        currentPlayingStatus[padNum] = 0; //set pad to 'off'
             
     }
     //if currently waiting to play or stop, just update the GUI and the relevent states
@@ -476,6 +483,11 @@ void ModeMidi::killPad (int padNum)
         currentPlayingStatus[padNum] = 0; //set pad to 'off'
         triggerModes[padNum].reset();
     }
+}
+
+void ModeMidi::stopPrevExclusivePad (int padNum)
+{
+   noteOff(padNum);
 }
 
 
@@ -545,6 +557,7 @@ void ModeMidi::setChannel (int value, int pad)
     {
         noteOff(pad);
         triggerModes[pad].reset();
+        currentPlayingStatus[pad] = 0; //set pad to 'off'
     }
     
     channel[pad] = value;
@@ -557,6 +570,7 @@ void ModeMidi::setNote (int value, int pad)
     {
         noteOff(pad);
         triggerModes[pad].reset();
+        currentPlayingStatus[pad] = 0; //set pad to 'off'
     }
     
     note[pad] = value;
@@ -635,6 +649,7 @@ void ModeMidi::setNoteStatus (bool value, int pad)
     {
         noteOff(pad);
         triggerModes[pad].reset();
+        currentPlayingStatus[pad] = 0; //set pad to 'off'
     }
 
     noteStatus[pad] = value;

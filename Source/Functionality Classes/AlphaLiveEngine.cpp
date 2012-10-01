@@ -326,16 +326,13 @@ void AlphaLiveEngine::handleExclusiveMode (int padNum)
         switch (prevPadMode)
         {
             case 1:
-                modeMidi->killPad(prevPad);
+                modeMidi->stopPrevExclusivePad(prevPad);
                 break;
             case 2:
-                modeSampler->killPad(prevPad, false);
+                modeSampler->stopPrevExclusivePad(prevPad);
                 break;
             case 3:
-                modeSequencer->killPad(prevPad);
-                break;
-            case 4:
-                //do nothing
+                modeSequencer->stopPrevExclusivePad(prevPad);
                 break;
             default:
                 //do nothing

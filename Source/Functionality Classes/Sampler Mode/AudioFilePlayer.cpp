@@ -226,7 +226,9 @@ void AudioFilePlayer::processAudioFile(int padValue)
             else if (triggerModeData.playingStatus == 0) //stop
             {
                 stopAudioFile(false);
-                //currentPlayingState = 0; //now done within stopAudioFile()
+                currentPlayingState = 0;    //needs to be done here and not within stopAudioFile,
+                                            //incase stopAudioFile is called from stopPrevExclusivePad,
+                                            //where the triggerModeData won't be reset.
             }
         }
         //==========================================================================================
@@ -381,12 +383,14 @@ void AudioFilePlayer::triggerQuantizationPoint()
     if (currentPlayingState == 2) //waiting to play
     {
         playAudioFile();
-        currentPlayingState = 1;
+        //currentPlayingState = 1;
     }
     else if (currentPlayingState == 3) //waiting to stop
     {
         stopAudioFile(false);
-        //currentPlayingState = 0; //now done within stopAudioFile()
+        currentPlayingState = 0;    //needs to be done here and not within stopAudioFile,
+                                    //incase stopAudioFile is called from stopPrevExclusivePad,
+                                    //where the triggerModeData won't be reset.
     }
 }
 
@@ -510,8 +514,6 @@ void AudioFilePlayer::stopAudioFile (bool shouldStopInstantly)
     
         playingLastLoop = false;
         broadcaster.sendActionMessage("OFF");
-    
-        currentPlayingState = 0;
     }
     
       isInAttack = false;
@@ -549,7 +551,6 @@ void AudioFilePlayer::actionListenerCallback (const String& message)
     {
         fileSource.stop();
         playingLastLoop = false;
-        currentPlayingState = 0;
         modeSamplerRef.updatePadPlayingStatus(padNumber, 0);
     
         isInRelease = false;

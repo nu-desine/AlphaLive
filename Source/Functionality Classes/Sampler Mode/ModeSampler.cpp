@@ -139,6 +139,11 @@ void ModeSampler::killPad (int padNum, bool shouldStopInstantly)
     }
 }
 
+void ModeSampler::stopPrevExclusivePad (int padNum)
+{
+    padSampler[padNum]->stopAudioFile(false);
+}
+
 AlphaLiveEngine& ModeSampler::getAlphaLiveEngineRef()
 {
     return alphaLiveEngineRef;

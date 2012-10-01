@@ -49,6 +49,8 @@ AppDocumentState::AppDocumentState()
     
     shouldDisplayAlertWindow = true;
     currentlySelectedScene = 0;
+    
+    numOfFilesAtStart = 0;
 }
 
 
@@ -888,6 +890,7 @@ void AppDocumentState::createNewProject()
         
         File::getSpecialLocation(File::tempDirectory).deleteRecursively();
         File::getSpecialLocation(File::tempDirectory).setAsCurrentWorkingDirectory();
+        numOfFilesAtStart = 0;
         
         //========= clear all XmlElement objects and update the sceneComponent display ===========
         
@@ -1155,6 +1158,9 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
                 
                 //set the Audio Files directory as the new working directory so loaded audio files can be found
                 audioFileDirectory.setAsCurrentWorkingDirectory();
+                
+                //get number of included audio files (for use at close when auto cleaning project)
+                numOfFilesAtStart = File::getCurrentWorkingDirectory().getNumberOfChildFiles(2);
                 
                 //=====================load projectData settings=======================
                 
@@ -2514,6 +2520,9 @@ void AppDocumentState::removeUneededAudioFiles (bool closingApp)
                 //set the currentWorkingDirectory
                 audioFileDirectory.setAsCurrentWorkingDirectory();
                 
+                //get number of included audio files (for use at close when auto cleaning project)
+                numOfFilesAtStart = File::getCurrentWorkingDirectory().getNumberOfChildFiles(2);
+                
                 // reset unused mode settings
                 
                 for (int i = 0; i <=47; i++)
@@ -2732,4 +2741,9 @@ int AppDocumentState::getSceneToUpdate()
 int AppDocumentState::getSceneStatus()
 {
     return sceneStatus;
+}
+
+int AppDocumentState::getNumOfFilesAtStart()
+{
+    return numOfFilesAtStart;
 }

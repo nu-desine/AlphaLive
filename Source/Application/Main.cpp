@@ -163,11 +163,20 @@ public:
             }
              */
             
-            //there needs to be a logical check below to work out if the project could need cleaning,
-            //for example, only when new audio files have been added? Take a count of the dir's contents
-            //at project lauch and then again at the end?
+            //If the option is enabled in the prefs, the project will be automatically cleaned
+            //on app shutdown.
+            //There is a logical check which compares the number files in the audio files dircetory currently
+            //to the number when the project was opened or last cleaned. If they don't match (which most
+            //likely means new audio files were added), the project is cleaned.
             if (StoredSettings::getInstance()->cleanOnClose == 2)
-                appDocumentState->removeUneededAudioFiles(true);
+            {
+                int numOfFilesAtClose = File::getCurrentWorkingDirectory().getNumberOfChildFiles(2);
+                
+                if (numOfFilesAtClose != appDocumentState->getNumOfFilesAtStart())
+                {
+                    appDocumentState->removeUneededAudioFiles(true);
+                }
+            }
             
             quit();
             

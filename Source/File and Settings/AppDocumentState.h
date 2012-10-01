@@ -136,6 +136,8 @@ public:
     
     static void registerRecentFile (const File& file);
     
+    int getNumOfFilesAtStart();
+    
 private:
     
     OwnedArray<XmlElement> sceneData;
@@ -159,6 +161,7 @@ private:
     
     int currentlySelectedScene;
     
+    int numOfFilesAtStart;
 };
 
 #endif

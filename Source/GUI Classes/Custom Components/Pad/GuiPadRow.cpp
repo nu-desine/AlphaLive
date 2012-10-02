@@ -74,20 +74,21 @@ void GuiPadRow::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
 		case 0:
 			g.setColour(normalColour);
 			//g.fillEllipse(0, 0, getWidth(), getHeight());
-            g.drawEllipse((shapeWidth*0.25), (shapeWidth*0.25), getWidth()-(shapeWidth*0.5), getHeight()-(shapeWidth*0.5), shapeWidth*0.5);
+            //g.drawEllipse((shapeWidth*0.25), (shapeWidth*0.25), getWidth()-(shapeWidth*0.5), getHeight()-(shapeWidth*0.5), 10);
+			g.drawEllipse(3, 3, getWidth()-6, getHeight()-6, 6);
             break;
 			
 		case 1:
 			g.setColour(overColour);
 			//g.fillEllipse(0, 0, getWidth(), getHeight());
-            g.drawEllipse((shapeWidth*0.25), (shapeWidth*0.25), getWidth()-(shapeWidth*0.5), getHeight()-(shapeWidth*0.5), shapeWidth*0.5);
+            g.drawEllipse(3, 3, getWidth()-6, getHeight()-6, 6);
             break;
 			
 		case 2:
 			g.setColour(downColour);
 			//g.fillEllipse(0, 0, getWidth(), getHeight());
-            g.drawEllipse((shapeWidth*0.25), (shapeWidth*0.25), getWidth()-(shapeWidth*0.5), getHeight()-(shapeWidth*0.5), shapeWidth*0.5);
-            break;
+			g.drawEllipse(3, 3, getWidth()-6, getHeight()-6, 6);  
+			break;
             
 		default:
 			break;

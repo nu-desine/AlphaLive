@@ -8,6 +8,12 @@ namespace BinaryDataNew
     extern const char*  autocycleicon_png;
     const int           autocycleicon_pngSize = 8545;
 
+    extern const char*  autostartsymbol_png;
+    const int           autostartsymbol_pngSize = 4814;
+
+    extern const char*  bitcrushicon_png;
+    const int           bitcrushicon_pngSize = 12511;
+
     extern const char*  bpficon_png;
     const int           bpficon_pngSize = 5080;
 
@@ -42,7 +48,7 @@ namespace BinaryDataNew
     const int           indestructableicon_pngSize = 6704;
 
     extern const char*  interfacemain_png;
-    const int           interfacemain_pngSize = 149050;
+    const int           interfacemain_pngSize = 152200;
 
     extern const char*  inverticon_png;
     const int           inverticon_pngSize = 5593;
@@ -77,11 +83,14 @@ namespace BinaryDataNew
     extern const char*  lpficon_png;
     const int           lpficon_pngSize = 4432;
 
+    extern const char*  metronomeicon_png;
+    const int           metronomeicon_pngSize = 5425;
+
     extern const char*  midisymbol_png;
     const int           midisymbol_pngSize = 3312;
 
     extern const char*  modeoff_png;
-    const int           modeoff_pngSize = 60204;
+    const int           modeoff_pngSize = 61201;
 
     extern const char*  modwheelicon_png;
     const int           modwheelicon_pngSize = 5955;
@@ -92,17 +101,20 @@ namespace BinaryDataNew
     extern const char*  onoff_png;
     const int           onoff_pngSize = 6183;
 
+    extern const char*  overdriveicon_png;
+    const int           overdriveicon_pngSize = 23228;
+
     extern const char*  padsbg_png;
-    const int           padsbg_pngSize = 293812;
+    const int           padsbg_pngSize = 293957;
 
     extern const char*  padsettingssymbol_png;
     const int           padsettingssymbol_pngSize = 4066;
 
     extern const char*  padsoff_png;
-    const int           padsoff_pngSize = 66756;
+    const int           padsoff_pngSize = 68141;
 
     extern const char*  padson_png;
-    const int           padson_pngSize = 84132;
+    const int           padson_pngSize = 84833;
 
     extern const char*  pitchbenddownicon_png;
     const int           pitchbenddownicon_pngSize = 8498;
@@ -135,7 +147,7 @@ namespace BinaryDataNew
     const int           standardicon_pngSize = 5287;
 
     extern const char*  statusoff_png;
-    const int           statusoff_pngSize = 57530;
+    const int           statusoff_pngSize = 58008;
 
     extern const char*  stickyicon_png;
     const int           stickyicon_pngSize = 4399;

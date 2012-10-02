@@ -30,6 +30,7 @@
 //#include "../Custom Components/General/GuiSwitch.h"
 #include "../Custom Components/General/SettingsButton.h"
 #include "../Custom Components/General/AlphaTextButton.h"
+#include "../Custom Components/General/ModeButton.h"
 
 class MainComponent;
 
@@ -77,7 +78,7 @@ private:
 	OwnedArray <AlphaTextButton> beatsPerBarButtons;
     OwnedArray <SettingsButton> quantizationValueButtons;
     
-    TextButton *metronomeButton, *autoStartSwitch;
+    ModeButton *metronomeButton, *autoStartSwitch;
 
     
 };

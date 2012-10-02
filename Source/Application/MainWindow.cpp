@@ -63,11 +63,11 @@ MainAppWindow::MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2, MenuB
     setContentOwned(mainComponent, false); 
     
     #if JUCE_MAC
-    centreWithSize (1024, 670);
+    centreWithSize (1024, 685);
     #endif
     #if ! JUCE_MAC
     //add 23 to the height to accomadate the menu bar
-    centreWithSize (1024, 693);
+    centreWithSize (1024, 708);
     #endif
     
     // Register all the app commands..

@@ -25,6 +25,7 @@
 #include "../../File and Settings/AppSettings.h"
 #include "../AlphaLiveLookandFeel.h"
 #include "../../Application/CommonInfoBoxText.h"
+#include "../Binary Data/BinaryDataNew.h"
 
 #define OFFSET_X 479
 #define OFFSET_Y 6
@@ -94,16 +95,16 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
 	
 	
     //auto-start switch
-    addAndMakeVisible(autoStartSwitch = new TextButton());
-    autoStartSwitch->setButtonText("A");
+	Image *audioStartImage = new Image(ImageCache::getFromMemory(BinaryDataNew::autostartsymbol_png, BinaryDataNew::autostartsymbol_pngSize));
+	addAndMakeVisible(autoStartSwitch = new ModeButton(audioStartImage));
     autoStartSwitch->addListener(this);
     autoStartSwitch->setClickingTogglesState(true);
     autoStartSwitch->addMouseListener(this, true);
      
     
     //metronome button
-    addAndMakeVisible(metronomeButton = new TextButton());
-    metronomeButton->setButtonText("M");
+    Image *metronomeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::metronomeicon_png, BinaryDataNew::metronomeicon_pngSize));
+	addAndMakeVisible(metronomeButton = new ModeButton(metronomeImage));
     metronomeButton->setClickingTogglesState(true);	
 	metronomeButton->addListener(this);
 	metronomeButton->addMouseListener(this, true);
@@ -136,8 +137,8 @@ void GuiGlobalClock::resized()
 {
     transportButton->setBounds(644-OFFSET_X, 42, 56, 56);
     tempoSlider->setBounds(550-OFFSET_X, 12, 50, 50);
-    metronomeButton->setBounds (490-OFFSET_X, 5, 25, 25);
-    autoStartSwitch->setBounds (520-OFFSET_X, 5, 25, 25);
+    metronomeButton->setBounds (489-OFFSET_X, 8, 16, 16);
+    autoStartSwitch->setBounds (518-OFFSET_X, 10, 24, 24);
 	
 	beatsPerBarButtons[0]->setBounds(631-OFFSET_X, 111, 17, 17);
 	beatsPerBarButtons[1]->setBounds(659-OFFSET_X, 121, 17, 17);
@@ -174,6 +175,8 @@ void GuiGlobalClock::paint (Graphics &g)
 	
 	g.setColour(Colours::black);
 	g.fillEllipse(639-OFFSET_X, 37, 66, 66);
+	g.fillEllipse(515-OFFSET_X, 7, 30, 30);
+	g.fillEllipse(486-OFFSET_X, 5, 22, 22);
 	
     //in the below call should I get the AppSettings::Instance()->getBeatsPerBar() value from a local variable instead
     //which is set everytime the beats per bar value is changed in order to reduce CPU?

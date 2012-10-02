@@ -138,9 +138,21 @@ void GuiTremolo::resized()
     
     rateMenu->setBounds(119, 52, 87, 20);
     shapeMenu->setBounds(80, 218, 87, 15);
-    syncButton->setBounds(130, 235, 32, 32);
+	syncButton->setBounds(121, 235, 32, 32);
     
+    
+}
 
+void GuiTremolo::paint (Graphics& g)
+{
+	
+	g.setColour(Colours::black);
+	g.fillEllipse(118, 232, 38, 38);
+	
+	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.drawEllipse(118, 232, 38, 38, 1.0f);
+	
+	
 }
 
 

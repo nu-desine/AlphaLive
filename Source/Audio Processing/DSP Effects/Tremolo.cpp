@@ -147,7 +147,6 @@ void Tremolo::setShape (int value)
 }
 
 
-
 void Tremolo::setAlphaTouchParam (int value)
 {
     sharedMemory.enter();
@@ -155,7 +154,7 @@ void Tremolo::setAlphaTouchParam (int value)
     sharedMemory.exit();
 }
 
-void Tremolo::setAlphaTouchIntensity (float value)
+void Tremolo::setAlphaTouchIntensity (double value)
 {
     sharedMemory.enter();
     alphaTouchIntensity = value;

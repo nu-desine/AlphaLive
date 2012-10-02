@@ -35,6 +35,7 @@
 #include "../../Audio Processing/DSP Effects/Tremolo.h"
 #include "../../Audio Processing/PanControl.h"
 #include "../../Audio Processing/DSP Effects/Distortion.h"
+#include "../../Audio Processing/DSP Effects/Bitcrusher.h"
 
 
 class ModeSampler;
@@ -84,6 +85,7 @@ public:
     Flanger& getFlanger();
     Tremolo& getTremolo();
 	Distortion& getDistortion();
+	Bitcrusher& getBitcrusher();
     
     //quantization stuff
     void triggerQuantizationPoint();
@@ -131,6 +133,7 @@ private:
     Flanger *flanger;
     Tremolo *tremolo;
 	Distortion *distortion;
+	Bitcrusher *bitcrusher;
     
     ActionBroadcaster broadcaster;
     

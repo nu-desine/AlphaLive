@@ -64,14 +64,14 @@ private:
     Reverb reverb;
     Reverb::Parameters params;
     
-    float mix, mixPrev, mixControlValue;
-    float roomSizeControl;
-    float dampingControl;
-    float widthControl;
-    float freezeModeControl;
+    double mix, mixPrev, mixControlValue;
+    double roomSizeControl;
+    double dampingControl;
+    double widthControl;
+    double freezeModeControl;
     
     int alphaTouchParam;
-    float alphaTouchIntensity;
+    double alphaTouchIntensity;
     bool alphaTouchReverse;
     
     CriticalSection sharedMemory;

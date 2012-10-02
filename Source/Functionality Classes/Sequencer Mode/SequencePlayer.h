@@ -40,6 +40,7 @@
 #include "../../Audio Processing/DSP Effects/Flanger.h"
 #include "../../Audio Processing/DSP Effects/Tremolo.h"
 #include "../../Audio Processing/DSP Effects/Distortion.h"
+#include "../../Audio Processing/DSP Effects/Bitcrusher.h"
 #include "../../Audio Processing/PanControl.h"
 
 
@@ -133,6 +134,7 @@ public:
     Flanger& getFlanger();
     Tremolo& getTremolo();
 	Distortion& getDistortion();
+	Bitcrusher& getBitcrusher();
 
     
 private:
@@ -166,6 +168,8 @@ private:
     Flanger *flanger;
     Tremolo *tremolo;
 	Distortion *distortion;
+	Bitcrusher *bitcrusher;
+	
     float sampleRate_;
     
     //audio stuff for mixing the SequenceAudioFilePlayer objects

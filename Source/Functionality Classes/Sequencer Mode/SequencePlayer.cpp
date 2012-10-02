@@ -125,6 +125,7 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     flanger = nullptr;
     tremolo = nullptr;
 	distortion = nullptr;
+	bitcrusher = nullptr;
     
     //set effect to default 0, and then call set effect to create the effect object
     //This alg. prevents any crashes caused within prepareToPlay when trying to
@@ -152,6 +153,7 @@ SequencePlayer::~SequencePlayer()
     delete flanger;
     delete tremolo;
 	delete distortion;
+	delete bitcrusher;
     
     stopThread(timeInterval);
     //stopThreadAndReset();
@@ -434,6 +436,12 @@ void SequencePlayer::processSequence(int padValue)
             case 4: //BPF
                 bandPassFilter->processAlphaTouch(pressureValue);
                 break;
+			case 5: //Distortion
+                distortion->processAlphaTouch(pressureValue);
+                break;
+			case 6: //bitcrusher
+                bitcrusher->processAlphaTouch(pressureValue);
+                break;
             case 7: //Delay
                 delay->processAlphaTouch(pressureValue);
                 break;
@@ -445,9 +453,6 @@ void SequencePlayer::processSequence(int padValue)
                 break;
             case 10: //Tremolo
                 tremolo->processAlphaTouch(pressureValue);
-                break;
-			case 11: //Distortion
-                distortion->processAlphaTouch(pressureValue);
                 break;
             default:
                 break;
@@ -962,6 +967,12 @@ void SequencePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFi
             case 4: //BPF
                 bandPassFilter->processAudio(bufferToFill);
                 break;
+			case 5: //Distortion
+                distortion->processAudio(bufferToFill);
+                break;
+			case 6: //Bitcrusher
+                bitcrusher->processAudio(bufferToFill);
+                break;
             case 7: //Delay
                 delay->processAudio(bufferToFill);
                 break;
@@ -974,9 +985,6 @@ void SequencePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFi
             case 10: //Tremolo
                 tremolo->processAudio(bufferToFill);
                 break;
-			case 11: //Distortion
-                distortion->processAudio(bufferToFill);
-                break;	
             default:
                 break;
         }
@@ -1052,6 +1060,12 @@ void SequencePlayer::prepareToPlay (int samplesPerBlockExpected,double sampleRat
         case 4:
             bandPassFilter->setSampleRate(sampleRate);
             break;
+		case 5:
+            distortion->setSampleRate(sampleRate);
+            break;	
+		case 6:
+            bitcrusher->setSampleRate(sampleRate);
+            break;
         case 7:
             delay->setSampleRate(sampleRate);
             break;
@@ -1064,9 +1078,6 @@ void SequencePlayer::prepareToPlay (int samplesPerBlockExpected,double sampleRat
         case 10:
             tremolo->setSampleRate(sampleRate);
             break;
-		case 11:
-            distortion->setSampleRate(sampleRate);
-            break;	
         default:
             break;
     }
@@ -1446,6 +1457,14 @@ void SequencePlayer::setSamplesEffect(int value)
                 delete bandPassFilter;
                 bandPassFilter = nullptr;
                 break;
+			case 5:
+                delete distortion;
+                distortion = nullptr;
+                break;
+			case 6:
+                delete bitcrusher;
+                bitcrusher = nullptr;
+                break;
             case 7:
                 delete delay;
                 delay = nullptr;
@@ -1462,10 +1481,6 @@ void SequencePlayer::setSamplesEffect(int value)
                 delete tremolo;
                 tremolo = nullptr;
                 break;
-			case 11:
-                delete distortion;
-                distortion = nullptr;
-                break;	
             default:
                 break;
         }
@@ -1485,6 +1500,12 @@ void SequencePlayer::setSamplesEffect(int value)
             case 4:
                 bandPassFilter = new BandPassFilter (padNumber, sampleRate_);
                 break;
+			case 5:
+                distortion = new Distortion (padNumber, sampleRate_);
+                break;
+			case 6:
+                bitcrusher = new Bitcrusher (padNumber, sampleRate_);
+                break;
             case 7:
                 delay = new Delay (padNumber, sampleRate_);
                 break;
@@ -1496,9 +1517,6 @@ void SequencePlayer::setSamplesEffect(int value)
                 break;
             case 10:
                 tremolo = new Tremolo (padNumber, sampleRate_);
-                break;
-			case 11:
-                distortion = new Distortion (padNumber, sampleRate_);
                 break;
             default:
                 break;
@@ -1587,4 +1605,9 @@ Tremolo& SequencePlayer::getTremolo()
 Distortion& SequencePlayer::getDistortion()
 {
 	return *distortion;
+}
+
+Bitcrusher& SequencePlayer::getBitcrusher()
+{
+	return *bitcrusher;
 }

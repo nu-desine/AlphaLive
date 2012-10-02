@@ -1,5 +1,5 @@
 //
-//  Distortion.h
+//  Bitcrusher.h
 //  AlphaLive
 //
 //  Created by Liam Meredith-Lacey on 22/12/2011.
@@ -22,40 +22,39 @@
 
 
 /*
- This seems like a good article on DSP distortion http://music.columbia.edu/cmc/music-dsp/FAQs/guitar_distortion_FAQ.html .
- It states that the processing chain of a good 'overdrive' distortion effect should be in the following format:
+ This seems like a good article on DSP Bitcrusher http://music.columbia.edu/cmc/music-dsp/FAQs/guitar_Bitcrusher_FAQ.html .
+ It states that the processing chain of a good 'overdrive' Bitcrusher effect should be in the following format:
  
  Pre-EQ (BPF) -> Pre-gain -> Nonlinear waveshaping function -> Post-EQ (LPF) -> Post-gain
  
  In the simplest form the user could be allowed to control both filters centre/cutoff frequencies ('Tone 1' and 'Tone 2'), pre-gain 
  ('Overdrive?') and post-gain (Gain), though post-gain probably won't need to be an AlphaTouch parameter.
  
- In a more advanced distortion effect, the user could have access certain parameters of the waveshaping function in order
- to have more control over the exact distortion sound. Also they could have control over the bandwidths of the filters.
+ In a more advanced Bitcrusher effect, the user could have access certain parameters of the waveshaping function in order
+ to have more control over the exact Bitcrusher sound. Also they could have control over the bandwidths of the filters.
  
- In an even more advanced distortion effect, multiple BPF could be used as part of the pre-EQ with all centre frequencies
+ In an even more advanced Bitcrusher effect, multiple BPF could be used as part of the pre-EQ with all centre frequencies
  and bandwidths being controllable.
  
  
  Things to consider
-    - also seen a LPF as the pre-EQ, would this be better or needed as well?
-    - what BPF from the dspfiltercpp library should I used? BandPass1 or BandPass2?
+ - also seen a LPF as the pre-EQ, would this be better or needed as well?
+ - what BPF from the dspfiltercpp library should I used? BandPass1 or BandPass2?
+ 
+ */
 
-*/
-
-#ifndef H_DISTORTION
-#define H_DISTORTION
+#ifndef H_Bitcrusher
+#define H_Bitcrusher
 
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
 #include "../../Third Party Libraries/DspFilters/Dsp.h"
-#include "../../Third Party Libraries/fastmath.h"
 
-class Distortion
+class Bitcrusher
 {
 public:
-	Distortion(int padNumber_, float sampleRate_);
-	~Distortion();
+	Bitcrusher(int padNumber_, float sampleRate_);
+	~Bitcrusher();
     
     //Function that processes the audio
     void processAudio (const AudioSourceChannelInfo& bufferToFill);
@@ -64,52 +63,38 @@ public:
     
     //Functions that set the effect parameters
     void setInputGain (double value);
-    void setDrive (double value);
+    void setCrush (double value);
+	void setDownsample(double value);
     void setMix (double value);
-	void setTone (double value);
-	void setHighFrequencyContent(double value);
-	
-	void setDistortionTypeMenu(int value);
+	void setSmoothing (double value);
     
     //Functions that set the AlphaTouch settings
 	void setAlphaTouchParam (int value);
     void setAlphaTouchIntensity (double value);
     void setAlphaTouchReverse (int value);
     
-    void setGain (float value);
+    void setGain (double value);
     void setSampleRate (float value);
     
 private:
     
     //The filters
-    Dsp::Filter *preFilter1;
-	Dsp::Filter *preFilter2;
-    Dsp::Filter *postFilter1;
-	Dsp::Filter *postFilter2;
-    Dsp::Params paramsPreFilter1;
-	Dsp::Params paramsPreFilter2;
-    Dsp::Params paramsPostFilter1;
-    Dsp::Params paramsPostFilter2;
+    Dsp::Filter *smoothingFilter;
+    Dsp::Params paramsSmoothingFilter;
+	
+	float sampleL, sampleR;
+	int downsample, downsampleControl, counter;
 	
     double wetDryMixControl, wetDryMix, wetDryMixPrev;
-	double drive, driveControlValue;
-    double frequencyControlPreFilter; //Tone 1
-    double frequencyControlPostFilter; //Tone 2
-	double toneControl;
-    double inputGain, inputGainPrev, inputGainControl; //Overdrive
-    double outputGain, outputGainPrev, outputGainControl;
-	
-	double preFilter1Cutoff, preFilter2Cutoff; 
-	double postFilter1Cutoff, postFilter1Bandwidth, postFilter2Cutoff, postFilter2Bandwidth;
+	double crush, crushControlValue;
+	double smoothingControl;
+    double inputGain, inputGainPrev, inputGainControl;
 	
 	float *pIn[2], *leftChannel, *rightChannel;
-	
-	float paramsPreFilter[3], paramsPostFilter[3];
-    
+
     int alphaTouchParam;
     double alphaTouchIntensity;
     bool alphaTouchReverse;
-	int comboBoxID;
 	
 	CriticalSection sharedMemory;
     
@@ -117,4 +102,4 @@ private:
     
 };
 
-#endif //H_DISTORTION
+#endif //H_Bitcrusher

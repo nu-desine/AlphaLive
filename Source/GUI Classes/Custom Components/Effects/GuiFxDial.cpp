@@ -45,6 +45,8 @@ GuiFxDial::GuiFxDial(MainComponent &ref) :  Component ("GuiFxDial"),
     addChildComponent(reverb = new GuiReverb(mainComponentRef));
     addChildComponent(flanger = new GuiFlanger(mainComponentRef));
     addChildComponent(tremolo = new GuiTremolo(mainComponentRef));
+	addChildComponent(distortion = new GuiDistortion(mainComponentRef));
+	addChildComponent(bitcrusher = new GuiBitcrusher(mainComponentRef));
     
     
     //----------------------FX buttons------------------
@@ -52,7 +54,7 @@ GuiFxDial::GuiFxDial(MainComponent &ref) :  Component ("GuiFxDial"),
 	Image *lpfIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::lpficon_png, BinaryDataNew::lpficon_pngSize));
 	Image *hpfIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::hpficon_png, BinaryDataNew::hpficon_pngSize));
 	Image *bpfIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::bpficon_png, BinaryDataNew::bpficon_pngSize));
-	Image *driveIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::offsymbol_png, BinaryDataNew::offsymbol_pngSize));
+	Image *distortionIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::offsymbol_png, BinaryDataNew::offsymbol_pngSize));
 	Image *crushIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::offsymbol_png, BinaryDataNew::offsymbol_pngSize));
 	Image *delayIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::delayicon_png, BinaryDataNew::delayicon_pngSize));
 	Image *reverbIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::reverbicon_png, BinaryDataNew::reverbicon_pngSize));
@@ -70,7 +72,7 @@ GuiFxDial::GuiFxDial(MainComponent &ref) :  Component ("GuiFxDial"),
         else if (i == 3)
             fxButtons.insert(i, new SettingsButtonImage(bpfIcon, (108 * (M_PI / 180)), (135 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 4)
-            fxButtons.insert(i, new SettingsButtonImage(driveIcon, (135 * (M_PI / 180)), (162 * (M_PI / 180)), 0.75f, 1.0f));
+			fxButtons.insert(i, new SettingsButtonImage(distortionIcon, (135 * (M_PI / 180)), (162 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 5)
             fxButtons.insert(i, new SettingsButtonImage(crushIcon, (162 * (M_PI / 180)), (189 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 6)
@@ -91,14 +93,6 @@ GuiFxDial::GuiFxDial(MainComponent &ref) :  Component ("GuiFxDial"),
     }
     
     fxButtons[0]->setToggleState(true, false);
-    
-
-    //TEMPORARY
-    fxButtons[4]->setEnabled(false);
-    fxButtons[4]->setAlpha(0.6f);
-    fxButtons[5]->setEnabled(false);
-    fxButtons[5]->setAlpha(0.6f);
-
    
 }
 
@@ -114,6 +108,8 @@ GuiFxDial::~GuiFxDial()
     delete reverb;
     delete flanger;
     delete tremolo;
+	delete distortion;
+	delete bitcrusher;
 }
 
 
@@ -129,6 +125,8 @@ void GuiFxDial::resized()
     reverb->setBounds(0, 0, getWidth(), getHeight());
     flanger->setBounds(0, 0, getWidth(), getHeight());
     tremolo->setBounds(0, 0, getWidth(), getHeight());
+	distortion->setBounds(0, 0, getWidth(), getHeight());
+	bitcrusher->setBounds(0, 0, getWidth(), getHeight());
     
     //can we give the below more specific bounds?
     //if not the below can be put into a for loop
@@ -203,13 +201,15 @@ void GuiFxDial::buttonClicked(Button *button)
         bandPassFilter->updateDisplay();
         bandPassFilter->setVisible(true);
     }
-    else if (button == fxButtons[4]) //Overdrive
+    else if (button == fxButtons[4]) //Distortion
     {
-        
+        distortion->updateDisplay();
+		distortion->setVisible(true);
     }
     else if (button == fxButtons[5]) //Bitcrusher
     {
-        
+		bitcrusher->updateDisplay();
+		bitcrusher->setVisible(true);
     }
     else if (button == fxButtons[6]) //Delay
     {
@@ -256,6 +256,8 @@ void GuiFxDial::hideAllFx()
     reverb->setVisible(false);
     flanger->setVisible(false);
     tremolo->setVisible(false);
+	distortion->setVisible(false);
+	bitcrusher->setVisible(false);
 }
 
 void GuiFxDial::setCurrentlySelectedPad (Array<int> selectedPads_)
@@ -269,6 +271,8 @@ void GuiFxDial::setCurrentlySelectedPad (Array<int> selectedPads_)
     reverb->setCurrentlySelectedPad(selectedPads);
     flanger->setCurrentlySelectedPad(selectedPads);
     tremolo->setCurrentlySelectedPad(selectedPads);
+	distortion->setCurrentlySelectedPad(selectedPads);
+	bitcrusher->setCurrentlySelectedPad(selectedPads);
 }
 
 void GuiFxDial::updateDisplay()
@@ -353,6 +357,16 @@ void GuiFxDial::updateDisplay()
         bandPassFilter->updateDisplay();
         bandPassFilter->setVisible(true);
     }
+	else if (currentEffect == 4) //Distortion
+    {
+        distortion->updateDisplay();
+        distortion->setVisible(true);
+    }
+	else if (currentEffect == 5) //Bitcrusher
+    {
+        bitcrusher->updateDisplay();
+        bitcrusher->setVisible(true);
+    }
     else if (currentEffect == 6) //Delay
     {
         delay->updateDisplay();
@@ -402,7 +416,7 @@ void GuiFxDial::mouseEnter (const MouseEvent &e)
     }
     else if (fxButtons[4]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Overdrive Distortion Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
+        mainComponentRef.setInfoTextBoxText(translate("Distortion Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
     else if (fxButtons[5]->isMouseOver(true))
     {

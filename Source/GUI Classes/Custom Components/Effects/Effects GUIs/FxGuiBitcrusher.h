@@ -2,7 +2,7 @@
 // FxGuiDistortion.h
 // AlphaLive
 //
-// Created by Felix Godden on 25/09/2012.
+// Created by Felix Godden on 02/09/2012.
 //  Copyright 2012 nu desine.
 //
 //  This file is part of AlphaLive.
@@ -20,8 +20,8 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef H_FXGUIDISTORTION
-#define H_FXGUIDISTORTION
+#ifndef H_FXGUIBITCRUSHER
+#define H_FXGUIBITCRUSHER
 
 #include "../../../../../JuceLibraryCode/JuceHeader.h"
 #include "../../General/AlphaRotarySlider.h"
@@ -30,14 +30,14 @@
 
 class MainComponent;
 
-class GuiDistortion		:	public Component,
-							public Slider::Listener,
-							public ComboBox::Listener,
-							public Button::Listener
+class GuiBitcrusher		:		public Component,
+								public Slider::Listener,
+								public ComboBox::Listener,
+								public Button::Listener
 {
 public:
-    GuiDistortion(MainComponent &ref);
-    ~GuiDistortion();
+    GuiBitcrusher(MainComponent &ref);
+    ~GuiBitcrusher();
     
     void resized();
     void sliderValueChanged (Slider *slider);
@@ -49,14 +49,14 @@ public:
     
     void setCurrentlySelectedPad (Array<int> selectedPads);
     void updateDisplay();
-
+	
     
 private:
     MainComponent &mainComponentRef;
     
-    AlphaRotarySlider *inputGainSlider, *driveSlider, *toneSlider, *wetDryMixSlider;
+    AlphaRotarySlider *inputGainSlider, *crushSlider, *downsampleSlider, *smoothingSlider, *wetDryMixSlider;
     
-    ComboBox *alphaTouchMenu, *distortionTypeMenu;
+	ComboBox *alphaTouchMenu;
 	ModeButton *reverseButton;
     AlphaTextButton *syncButton;
     AlphaRotarySlider *intensitySlider;

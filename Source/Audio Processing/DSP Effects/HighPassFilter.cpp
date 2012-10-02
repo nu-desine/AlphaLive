@@ -134,21 +134,21 @@ void HighPassFilter::processAlphaTouch (int pressureValue)
 }
 
 
-void HighPassFilter::setMix (float value)
+void HighPassFilter::setMix (double value)
 {
     sharedMemory.enter();
     mix = mixControlValue = value * value * value;
     sharedMemory.exit();
 }
 
-void HighPassFilter::setFrequency (float value)
+void HighPassFilter::setFrequency (double value)
 {
     sharedMemory.enter();
     params[1] = frequencyControlValue = value;
     sharedMemory.exit();
 }
 
-void HighPassFilter::setBandwidth(float value)
+void HighPassFilter::setBandwidth(double value)
 {
     sharedMemory.enter();
     params[2] = bandwidthControlValue = value;
@@ -164,7 +164,7 @@ void HighPassFilter::setAlphaTouchParam (int value)
     sharedMemory.exit();
 }
 
-void HighPassFilter::setAlphaTouchIntensity (float value)
+void HighPassFilter::setAlphaTouchIntensity (double value)
 {
     sharedMemory.enter();
     alphaTouchIntensity = value;

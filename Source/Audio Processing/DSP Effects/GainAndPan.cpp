@@ -124,7 +124,7 @@ void GainAndPan::processAlphaTouch (int pressureValue)
      
 }
 
-void GainAndPan::setGain (float value)
+void GainAndPan::setGain (double value)
 {
     sharedMemory.enter();
     
@@ -139,7 +139,7 @@ void GainAndPan::setGain (float value)
     sharedMemory.exit();
     
 }
-void GainAndPan::setPan (float value)
+void GainAndPan::setPan (double value)
 {
     sharedMemory.enter();
     pan = panControl = value;
@@ -152,7 +152,7 @@ void GainAndPan::setAlphaTouchParam (int value)
     alphaTouchParam = value;
     sharedMemory.exit();
 }
-void GainAndPan::setAlphaTouchIntensity (float value)
+void GainAndPan::setAlphaTouchIntensity (double value)
 {
     sharedMemory.enter();
     alphaTouchIntensity = value;

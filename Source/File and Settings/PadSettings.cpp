@@ -201,6 +201,24 @@ PadSettings::PadSettings(int arrayIndex)
     padFxTremoloAlphaTouch = 2;
     padFxTremoloAtReverse = 1;
     padFxTremoloAtIntensity = 1.0;
+	//Distortion
+	padFxDistortionInputGain = 0.8;
+	padFxDistortionDrive = 0.5;
+	padFxDistortionTone = 0.2;
+	padFxDistortionWetDryMix = 0.7;
+	padFxDistortionType = 1;
+	padFxDistortionAlphaTouch = 2;
+	padFxDistortionAtReverse = 0;
+	padFxDistortionAtIntensity = 1.0;
+	//Bitcrusher
+	padFxBitcrusherInputGain = 0.8;
+	padFxBitcrusherDownsample = 4.;
+	padFxBitcrusherCrush = 8;
+	padFxBitcrusherSmoothing = 1.;
+	padFxBitcrusherWetDryMix = 0.7;
+	padFxBitcrusherAlphaTouch = 2;
+	padFxBitcrusherAtReverse = 0;
+	padFxBitcrusherAtIntensity = 1.0;
 }
 
 //==================================================================
@@ -2116,17 +2134,9 @@ void PadSettings::setPadFxDistortionDrive (double value)
     else if (mode == 3)
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDistortion().setDrive(value);
 }
-void PadSettings::setPadFxDistortionOutputGain (double value)
+void PadSettings::setPadFxDistortionWetDryMix (double value)
 {
-    padFxDistortionOutputGain = value;
-    if (mode == 2)
-        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDistortion().setOutputGain(value);
-    else if (mode == 3)
-        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDistortion().setOutputGain(value);
-}
-void PadSettings::setPadFxDistortionMix (double value)
-{
-    padFxDistortionMix = value;
+    padFxDistortionWetDryMix = value;
     if (mode == 2)
         alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDistortion().setMix(value);
     else if (mode == 3)
@@ -2140,6 +2150,31 @@ void PadSettings::setPadFxDistortionTone (double value)
     else if (mode == 3)
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDistortion().setTone(value);
 }
+void PadSettings::setPadFxDistortionAlphaTouch (int value)
+{
+    padFxDistortionAlphaTouch = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDistortion().setAlphaTouchParam(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDistortion().setAlphaTouchParam(value);
+}
+void PadSettings::setPadFxDistortionAtReverse (int value)
+{
+    padFxDistortionAtReverse = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDistortion().setAlphaTouchReverse(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDistortion().setAlphaTouchReverse(value);
+}
+void PadSettings::setPadFxDistortionAtIntensity (double value)
+{
+    padFxDistortionAtIntensity = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDistortion().setAlphaTouchIntensity(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDistortion().setAlphaTouchIntensity(value);
+}
+
 void PadSettings::setPadFxDistortionTypeMenu (int value)
 {
     padFxDistortionType = value;
@@ -2153,13 +2188,9 @@ double PadSettings::getPadFxDistortionDrive()
 {
     return padFxDistortionDrive;
 }
-double PadSettings::getPadFxDistortionOutputGain()
+double PadSettings::getPadFxDistortionWetDryMix()
 {
-    return padFxDistortionOutputGain;
-}
-double PadSettings::getPadFxDistortionMix()
-{
-    return padFxDistortionMix;
+    return padFxDistortionWetDryMix;
 }
 double PadSettings::getPadFxDistortionTone()
 {
@@ -2183,4 +2214,102 @@ float PadSettings::getPadFxDistortionAtIntensity()
 }
 
 
+#pragma mark Bitcrusher
+void PadSettings::setPadFxBitcrusherInputGain (double value)
+{
+    padFxBitcrusherInputGain = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBitcrusher().setInputGain(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBitcrusher().setInputGain(value);
+}
+void PadSettings::setPadFxBitcrusherDownsample (double value)
+{
+    padFxBitcrusherDownsample = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBitcrusher().setDownsample(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBitcrusher().setDownsample(value);
+}
+void PadSettings::setPadFxBitcrusherCrush (double value)
+{
+    padFxBitcrusherCrush = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBitcrusher().setCrush(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBitcrusher().setCrush(value);
+}
+void PadSettings::setPadFxBitcrusherWetDryMix (double value)
+{
+    padFxBitcrusherWetDryMix = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBitcrusher().setMix(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBitcrusher().setMix(value);
+}
+void PadSettings::setPadFxBitcrusherSmoothing (double value)
+{
+    padFxBitcrusherSmoothing = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBitcrusher().setSmoothing(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBitcrusher().setSmoothing(value);
+}
+void PadSettings::setPadFxBitcrusherAlphaTouch (int value)
+{
+    padFxBitcrusherAlphaTouch = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBitcrusher().setAlphaTouchParam(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBitcrusher().setAlphaTouchParam(value);
+}
+void PadSettings::setPadFxBitcrusherAtReverse (int value)
+{
+    padFxBitcrusherAtReverse = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBitcrusher().setAlphaTouchReverse(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBitcrusher().setAlphaTouchReverse(value);
+}
+void PadSettings::setPadFxBitcrusherAtIntensity (double value)
+{
+    padFxBitcrusherAtIntensity = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBitcrusher().setAlphaTouchIntensity(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBitcrusher().setAlphaTouchIntensity(value);
+}
+
+double PadSettings::getPadFxBitcrusherInputGain()
+{
+    return padFxBitcrusherInputGain;
+}
+double PadSettings::getPadFxBitcrusherDownsample()
+{
+    return padFxBitcrusherDownsample;
+}
+double PadSettings::getPadFxBitcrusherCrush()
+{
+    return padFxBitcrusherCrush;
+}
+double PadSettings::getPadFxBitcrusherWetDryMix()
+{
+    return padFxBitcrusherWetDryMix;
+}
+double PadSettings::getPadFxBitcrusherSmoothing()
+{
+    return padFxBitcrusherSmoothing;
+}
+int PadSettings::getPadFxBitcrusherAlphaTouch()
+{
+    return padFxBitcrusherAlphaTouch;
+}
+int PadSettings::getPadFxBitcrusherAtReverse()
+{
+    return padFxBitcrusherAtReverse;
+}
+float PadSettings::getPadFxBitcrusherAtIntensity()
+{
+    return padFxBitcrusherAtIntensity;
+}
 

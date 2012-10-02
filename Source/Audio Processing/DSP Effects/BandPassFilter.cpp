@@ -134,21 +134,21 @@ void BandPassFilter::processAlphaTouch (int pressureValue)
 }
 
 
-void BandPassFilter::setMix (float value)
+void BandPassFilter::setMix (double value)
 {
     sharedMemory.enter();
     mix = mixControlValue = value * value * value;
     sharedMemory.exit();
 }
 
-void BandPassFilter::setFrequency (float value)
+void BandPassFilter::setFrequency (double value)
 {
     sharedMemory.enter();
     params[1] = frequencyControlValue = value;
     sharedMemory.exit();
 }
 
-void BandPassFilter::setBandwidth(float value)
+void BandPassFilter::setBandwidth(double value)
 {
     sharedMemory.enter();
     params[2] = bandwidthControlValue = value;
@@ -164,7 +164,7 @@ void BandPassFilter::setAlphaTouchParam (int value)
     sharedMemory.exit();
 }
 
-void BandPassFilter::setAlphaTouchIntensity (float value)
+void BandPassFilter::setAlphaTouchIntensity (double value)
 {
     sharedMemory.enter();
     alphaTouchIntensity = value;

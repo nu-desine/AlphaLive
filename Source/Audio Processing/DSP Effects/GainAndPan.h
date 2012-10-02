@@ -38,12 +38,12 @@ public:
     void processAlphaTouch (int pressureValue);
     
     //functions to set effect parameters
-    void setGain (float value);
-    void setPan (float value);
+    void setGain (double value);
+    void setPan (double value);
     
     //Functions that set the AlphaTouch settings
 	void setAlphaTouchParam (int value);
-    void setAlphaTouchIntensity (float value);
+    void setAlphaTouchIntensity (double value);
     void setAlphaTouchReverse (int value);
     
     void setSampleRate (float value);
@@ -53,11 +53,11 @@ private:
     //we need the ...Control variables as the actual gain or pan won't always be
     //equal to the value of their GUI control as the pressure could be used to
     //modulate the value
-    float gain, gainPrev, gainControl;
-    float pan, panPrev, panControl;
+    double gain, gainPrev, gainControl;
+    double pan, panPrev, panControl;
 
     int alphaTouchParam;
-    float alphaTouchIntensity;
+    double alphaTouchIntensity;
     bool alphaTouchReverse;
     
     CriticalSection sharedMemory;

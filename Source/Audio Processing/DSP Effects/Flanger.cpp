@@ -212,7 +212,7 @@ void Flanger::setAlphaTouchParam (int value)
     sharedMemory.exit();
 }
 
-void Flanger::setAlphaTouchIntensity (float value)
+void Flanger::setAlphaTouchIntensity (double value)
 {
     sharedMemory.enter();
     alphaTouchIntensity = value;

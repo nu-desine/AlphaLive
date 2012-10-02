@@ -45,7 +45,7 @@ public:
     
     //Functions that set the AlphaTouch settings
 	void setAlphaTouchParam (int value);
-    void setAlphaTouchIntensity (float value);
+    void setAlphaTouchIntensity (double value);
     void setAlphaTouchReverse (int value);
     
     void setSampleRate (float value);
@@ -61,7 +61,7 @@ private:
     int shape, shapeControlValue;
     
     int alphaTouchParam;
-    float alphaTouchIntensity;
+    double alphaTouchIntensity;
     bool alphaTouchReverse;
     
     CriticalSection sharedMemory;

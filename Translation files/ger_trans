@@ -1,6 +1,8 @@
 language: German
 countries: de
 
+//Make sure that you are editing the version of this file that is linked to the Application at runtime!
+
 "Preferences..." = "Einstellungen..."
 "Off-Mode Button. Click this button to disable/mute the selected pad/pads." = "Off-Mode-Taste. Klicken Sie auf diese Schaltfläche zu deaktivieren / Stummschalten des gewählten Pads / Pads."
 "The selected AlphaLive Project file cannot be opened with this version of AlphaLive." = "Das ausgewählte Projekt Alphalive-Datei kann nicht mit dieser Version von Alphalive geöffnet werden."
@@ -16,3 +18,5 @@ countries: de
 "Language: " = "Sprache: "
 "Restart Application" = "Anwendung neu starten"
 "Please restart AlphaLive for the language change to be fully implemented." = "Bitte starten Sie Alphalive für die Änderung der Sprache vollständig umgesetzt zu werden."
+"MIDI Channel Buttons. Sets and displays the MIDI channel for the selected pads. Click this button to set the selected pads to channel " = "translation has worked. hurray!"
+"scale 1" = "Maßstab 1"

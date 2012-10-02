@@ -47,6 +47,7 @@ public:
     void actionListenerCallback (const String& message);
     
     void killPad (int padNum);
+    void stopPrevExclusivePad (int padNum);
     
     void setMidiOutputDevice (MidiOutput &midiOutput);
     void setPadData (int padNumber);
@@ -109,6 +110,9 @@ private:
     Array<int> guiPadOffUpdater;
     Array<int> guiPadWaitingPlayUpdater;
     Array<int> guiPadWaitingStopUpdater;
+    
+    //for recording notes into sequencers
+    int columnNumber, sequenceNumber;
     
 };
 

@@ -130,11 +130,15 @@ void ModeSampler::killPad (int padNum)
     if (padSampler[padNum] != NULL) //if it exists..
     {
         //should there be a check here to see if the pad is currently playing?
-        
-        padSampler[padNum]->stopAudioFile();
         padSampler[padNum]->killAllAudio(); //to kill things like delay tails
+        padSampler[padNum]->stopAudioFile(true);
         padSampler[padNum]->resetTriggerMode();
     }
+}
+
+void ModeSampler::stopPrevExclusivePad (int padNum)
+{
+    padSampler[padNum]->stopAudioFile(false);
 }
 
 AlphaLiveEngine& ModeSampler::getAlphaLiveEngineRef()

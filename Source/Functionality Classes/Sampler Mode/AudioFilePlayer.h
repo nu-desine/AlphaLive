@@ -55,7 +55,7 @@ public:
     
     void processAudioFile(int padValue);
     void playAudioFile();
-    void stopAudioFile();
+    void stopAudioFile(bool shouldStopInstantly);
     
     void setTriggerMode (int value);
     void setShouldLoop (int value);
@@ -64,6 +64,8 @@ public:
     void setSticky (int value);
     void setEffect (int value);
     void setQuantizeMode (int value);
+    void setAttackTime (double value);
+    void setReleaseTime (double value);
     
     int getCurrentPlayingState();
     bool getAudioTransportSourceStatus();
@@ -117,9 +119,17 @@ private:
     int currentPlayingState; //0 - off, 1 - playing, 2 - waiting to play, 3 - waiting to stop 
     int currentPressureValue;
     int quantizeMode;
+    double attackTime, releaseTime;
     
-    //audio signal processing stuff - now dynamically created and deleted when needed
-    float gain, gainPrev, panLeft, panLeftPrev, panRight, panRightPrev;
+    //audio signal processing stuff
+    float gain, panLeft, panRight, prevGainL, prevGainR;
+    
+    //attack/release stuff
+    bool isInAttack, isInRelease;
+    int attackSamples, releaseSamples;
+    int attackPosition, releasePosition;
+    float attRelGainL, attRelGainR;
+    
     GainAndPan *gainAndPan;
     LowpassFilter *lowPassFilter;
     HighPassFilter *highPassFilter;
@@ -132,6 +142,9 @@ private:
     ActionBroadcaster broadcaster;
     
     bool playingLastLoop;
+    
+    //for recording notes into sequencers
+    int columnNumber, sequenceNumber;
     
     //playback manipulation stuff
     double fileStartPosition, fileEndPosition, currentPositionInRegion;

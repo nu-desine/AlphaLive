@@ -55,7 +55,7 @@ AlphaLiveEngine::AlphaLiveEngine()
 	{
 		AlertWindow::showMessageBox (AlertWindow::WarningIcon,
 									 "AlphaLive",
-									 "Couldn't open an output device!\n\n" + error);
+									 translate("Couldn't open an output device!") + "\n\n" + error);
 	}
     
     audioDeviceManager.addAudioCallback (this);
@@ -108,8 +108,12 @@ AlphaLiveEngine::AlphaLiveEngine()
     modeController = new ModeController();
     modeController->setMidiOutputDevice(*midiOutputDevice);
     
-    audioMixer.addInputSource(modeSampler,false); //add as inputsource to audioMixer
-    audioMixer.addInputSource(modeSequencer,false); //add as inputsource to audioMixer
+    //global clock stuff
+    globalClock = new GlobalClock(*this);
+    
+    audioMixer.addInputSource(modeSampler, false); //add as inputsource to audioMixer
+    audioMixer.addInputSource(modeSequencer, false); //add as inputsource to audioMixer
+    audioMixer.addInputSource(globalClock, false); //add as inputsource to audioMixer
     audioPlayer.setSource(&audioMixer);
     
     
@@ -117,8 +121,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     oscIpAddress = "127.0.0.1";
     oscPortNumber = 5004;
     
-    //global clock stuff
-    globalClock = new GlobalClock(*this);
+    
     
     for (int i = 0; i <= 23; i++)
         currentExclusivePad[i] = 100; //'100' here is used to signify an 'empty/NULL' value
@@ -323,16 +326,13 @@ void AlphaLiveEngine::handleExclusiveMode (int padNum)
         switch (prevPadMode)
         {
             case 1:
-                modeMidi->killPad(prevPad);
+                modeMidi->stopPrevExclusivePad(prevPad);
                 break;
             case 2:
-                modeSampler->killPad(prevPad);
+                modeSampler->stopPrevExclusivePad(prevPad);
                 break;
             case 3:
-                modeSequencer->killPad(prevPad);
-                break;
-            case 4:
-                //do nothing
+                modeSequencer->stopPrevExclusivePad(prevPad);
                 break;
             default:
                 //do nothing
@@ -457,6 +457,22 @@ void AlphaLiveEngine::killAll()
         globalClock->stopClock(); //currently all mode's are being killed again here
 }
 
+void AlphaLiveEngine::setRecordingSequencerPadsState (int padNum, int state)
+{
+    if (state == 1)
+    {
+        recordingPads.addIfNotAlreadyThere(padNum);
+    }
+    else if (state == 0)
+    {
+        recordingPads.removeFirstMatchingValue(padNum);
+    }
+}
+
+Array<int> AlphaLiveEngine::getRecordingPads()
+{
+    return recordingPads;
+}
 
 int AlphaLiveEngine::getPadNumberForPlayingStatus()
 {

@@ -77,9 +77,9 @@ private:
 #ifndef H_GLOBALOSCCOMPONENT
 #define H_GLOBALOSCCOMPONENT
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "AlphaLiveEngine.h"
-#include "AlphaSlider.h"
+#include "../../../JuceLibraryCode/JuceHeader.h"
+#include "../../Functionality Classes/AlphaLiveEngine.h"
+#include "../Custom Components/General/AlphaSlider.h"
 
 class MainComponent;
 
@@ -127,8 +127,8 @@ private:
 #ifndef H_GENERALPROJSETTINGSCOMPONENT
 #define H_GENERALPROJSETTINGSCOMPONENT
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "AppDocumentState.h"
+#include "../../../JuceLibraryCode/JuceHeader.h"
+#include "../../File and Settings/AppDocumentState.h"
 //#include "AlphaLiveEngine.h"
 //#include "AlphaSlider.h"
 

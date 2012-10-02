@@ -20,6 +20,52 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+#ifndef H_ELITEDIALDATA
+#define H_ELITEDIALDATA
+
+#include "../../JuceLibraryCode/JuceHeader.h"
+
+struct EliteDialData 
+{
+    int control;
+    
+    int midiCcNumber;
+    int midiChannel;
+    int midiMinRange;
+    int midiMaxRange;
+    
+    int oscPortNumber;
+    String oscIpAddress;
+    double oscMinRange;
+    double oscMaxRange;
+    
+};
+
+#endif
+
+#ifndef H_ELITEBUTTONDATA
+#define H_ELITEBUTTONDATA
+
+struct EliteButtonData 
+{
+    int control;
+    
+    int sceneNumber;
+    
+    int midiCcNumber;
+    int midiChannel;
+    int midiOffNumber;
+    int midiOnNumber;
+    
+    int oscPortNumber;
+    String oscIpAddress;
+    double oscOffNumber;
+    double oscOnNumber;
+    
+};
+
+#endif
+
 #ifndef H_APPSETTINGS
 #define H_APPSETTINGS
 
@@ -61,9 +107,7 @@ public:
     void setQuantizationValue (int value);
     void setBeatsPerBar (int value);
     void setAutoStartClock (int value);
-    
-    void setSamplerChannelMode (int channelNumber, int value);
-    void setSequencerChannelMode (int channelNumber, int value);
+    void setMetronomeStatus (bool value);
     
     void setCopyExternalFiles (bool value);
     
@@ -77,11 +121,52 @@ public:
     int getQuantizationValue();
     int getBeatsPerBar();
     int getAutoStartClock();
-    
-    int getSamplerChannelMode (int channelNumber);
-    int getSequencerChannelMode (int channelNumber);
+    bool getMetronomeStatus();
     
     bool getCopyExternalFiles();
+    
+    //Elite Controls Stuff
+    void setEliteDialControl(int value, int dialNumber);
+    void setEliteDialMidiCcNumber(int value, int dialNumber);
+    void setEliteDialMidiChannel(int value, int dialNumber);
+    void setEliteDialMidiMinRange(int value, int dialNumber);
+    void setEliteDialMidiMaxRange(int value, int dialNumber);
+    void setEliteDialOscPortNumber(int value, int dialNumber);
+    void setEliteDialOscIpAddress(String value, int dialNumber);
+    void setEliteDialOscMinRange(double value, int dialNumber);
+    void setEliteDialOscMaxRange(double value, int dialNumber);
+    
+    int getEliteDialControl(int dialNumber);
+    int getEliteDialMidiCcNumber(int dialNumber);
+    int getEliteDialMidiChannel(int dialNumber);
+    int getEliteDialMidiMinRange(int dialNumber);
+    int getEliteDialMidiMaxRange(int dialNumber);
+    int getEliteDialOscPortNumber(int dialNumber);
+    String getEliteDialOscIpAddress(int dialNumber);
+    double getEliteDialOscMinRange(int dialNumber);
+    double getEliteDialOscMaxRange(int dialNumber);
+    
+    void setEliteButtonControl(int value, int buttonNumber);
+    void setEliteButtonSceneNumber(int value, int buttonNumber);
+    void setEliteButtonMidiCcNumber(int value, int buttonNumber);
+    void setEliteButtonMidiChannel(int value, int buttonNumber);
+    void setEliteButtonMidiOffNumber(int value, int buttonNumber);
+    void setEliteButtonMidiOnNumber(int value, int buttonNumber);
+    void setEliteButtonOscPortNumber(int value, int buttonNumber);
+    void setEliteButtonOscIpAddress(String value, int buttonNumber);
+    void setEliteButtonOscOffNumber(double value, int buttonNumber);
+    void setEliteButtonOscOnNumber(double value, int buttonNumber);
+    
+    int getEliteButtonControl (int buttonNumber);
+    int getEliteButtonSceneNumber(int buttonNumber);
+    int getEliteButtonMidiCcNumber(int buttonNumber);
+    int getEliteButtonMidiChannel(int buttonNumber);
+    int getEliteButtonMidiOffNumber(int buttonNumber);
+    int getEliteButtonMidiOnNumber(int buttonNumber);
+    int getEliteButtonOscPortNumber(int buttonNumber);
+    String getEliteButtonOscIpAddress(int buttonNumber);
+    double getEliteButtonOscOffNumber(int buttonNumber);
+    double getEliteButtonOscOnNumber(int buttonNumber);
     
     
     //would be nice if this could be private, but without having to access every 
@@ -91,6 +176,9 @@ public:
     //functions for the copy/paste pad settings feature
     void copyPadSettings (int padNumber);
     void pastePadSettings (int padNumber);
+    
+    void copySequenceData (int value, int row, int column);
+    int pasteSequenceData (int row, int column);
     
     
     //~AppSettings();
@@ -121,20 +209,20 @@ private:
     float globalTempo;
     int quantizationValue; //value represents an item in the GUI quantization menu
     int beatsPerBar; //similar to time signature
-    int autoStartClock; //when 1, clock will start when the first loop/seq pad is pressed. First pad atall?
+    int autoStartClock; //when 1, clock will start when the first midi/loop/seq pad is pressed.
+    bool metronomeStatus;
     
-    
-    //THIS STUFF is no longer needed.
-    //global sampler mode
-    int samplerChannelMode[6];
-    //global sequencer mode
-    int sequencerChannelMode[6];
+    //Elite Controls stuff
+    EliteDialData eliteDial[2];
+    EliteButtonData eliteButton[3];
     
     //variable used to store copied pad settings
     ScopedPointer<PadSettings> copiedPadSettings;
     
+    int copiedSequencerData[NO_OF_ROWS][NO_OF_COLUMNS]; //[row][column]
+    
     //========================================================================================================
-    //variables which are global to the whole project and aren't changeable between individual scenes.
+    //variables which are global to the whole project (project settings) and aren't changeable between individual scenes.
     //Would it make more sense to not have them in AppSettings?
     //========================================================================================================
     

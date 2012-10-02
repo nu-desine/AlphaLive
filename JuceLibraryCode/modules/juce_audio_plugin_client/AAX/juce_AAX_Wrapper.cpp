@@ -51,14 +51,10 @@
 #include "AAX_IViewContainer.h"
 
 #if JUCE_WINDOWS
-static HINSTANCE moduleInstance = 0;
-
-extern "C" BOOL WINAPI DllMain (HINSTANCE instance, DWORD selector, LPVOID)
+void __stdcall DllMainAAX (HINSTANCE instance, DWORD reason)
 {
-    if (selector == DLL_PROCESS_ATTACH)
-        moduleInstance = instance;
-
-    return true;
+    if (reason == DLL_PROCESS_ATTACH)
+        Process::setCurrentModuleInstanceHandle (instance);
 }
 #endif
 
@@ -140,10 +136,6 @@ struct AAXClasses
     private:
         static void initialise()
         {
-           #if JUCE_WINDOWS
-            Process::setCurrentModuleInstanceHandle (moduleInstance);
-           #endif
-
             initialiseJuce_GUI();
         }
 
@@ -336,11 +328,11 @@ struct AAXClasses
         class ContentWrapperComponent  : public juce::Component
         {
         public:
-            ContentWrapperComponent (JuceAAX_GUI& owner_, AudioProcessor* plugin)
-                : owner (owner_)
+            ContentWrapperComponent (JuceAAX_GUI& gui, AudioProcessor* plugin)
+                : owner (gui)
             {
                 setOpaque (true);
-                addAndMakeVisible (pluginEditor = plugin->createEditor());
+                addAndMakeVisible (pluginEditor = plugin->createEditorIfNeeded());
                 setBounds (pluginEditor->getLocalBounds());
             }
 

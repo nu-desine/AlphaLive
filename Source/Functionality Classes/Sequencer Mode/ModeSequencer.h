@@ -62,6 +62,12 @@ public:
     void updatePadPlayingStatus(int padNumber, int playingStatus);
     
     void killPad (int padNum);
+    void stopPrevExclusivePad (int padNum);
+    
+    //preview sequence stuff (called directly from guiSequencerMode)
+    void previewSequence (int padNum, int status);
+    void setPreviewSequenceNumber (int padNum, int sequenceNumber);
+    void stopLastPreviewedSequence();
     
     //AudioSource Functions
 	void prepareToPlay (int samplesPerBlockExpected,double sampleRate);
@@ -72,6 +78,7 @@ public:
     void triggerQuantizationPoint (int padNum);
     
     void setMidiOutputDevice (MidiOutput &midiOutput);
+    
     
     AlphaLiveEngine& getAlphaLiveEngineRef();
     
@@ -93,6 +100,8 @@ private:
     int whatShouldUpdateFlag;
     
     float tempo;
+    
+    int lastPreviewedSequencePadNum;
     
     AlphaLiveEngine &alphaLiveEngineRef;
 };

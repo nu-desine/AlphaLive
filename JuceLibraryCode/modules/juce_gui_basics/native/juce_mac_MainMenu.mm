@@ -233,7 +233,7 @@ public:
             [item setState: iter.isTicked ? NSOnState : NSOffState];
             [item setTarget: (id) callback];
 
-            NSMutableArray* info = [NSMutableArray arrayWithObject: [NSNumber numberWithUnsignedLongLong: (pointer_sized_int) (void*) iter.commandManager]];
+            NSMutableArray* info = [NSMutableArray arrayWithObject: [NSNumber numberWithUnsignedLongLong: (pointer_sized_uint) (void*) iter.commandManager]];
             [info addObject: [NSNumber numberWithInt: topLevelIndex]];
             [item setRepresentedObject: info];
 
@@ -246,8 +246,8 @@ public:
                 {
                     const KeyPress& kp = keyPresses.getReference(0);
 
-                    if (kp.getKeyCode() != KeyPress::backspaceKey   // (adding these is annoying because it flashes the menu bar
-                         && kp.getKeyCode() != KeyPress::deleteKey) // every time you press the key while editing text)
+                    if (kp != KeyPress::backspaceKey   // (adding these is annoying because it flashes the menu bar
+                         && kp != KeyPress::deleteKey) // every time you press the key while editing text)
                     {
                         juce_wchar key = kp.getTextCharacter();
                         if (key == 0)

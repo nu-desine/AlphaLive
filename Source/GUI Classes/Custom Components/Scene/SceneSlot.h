@@ -28,7 +28,8 @@
 
 class SceneComponent;
 
-class SceneSlot :  public Component
+class SceneSlot :   public Component,
+                    public FileDragAndDropTarget
                     
 {
 public:
@@ -38,6 +39,8 @@ public:
     void mouseDown (const MouseEvent &e);
     void mouseEnter	(const MouseEvent & e);
     void mouseExit	(const MouseEvent & e);
+    
+    void selectSlot (bool isShiftDown = false);
     
     void resized();
     void paint (Graphics &g);
@@ -49,13 +52,21 @@ public:
     void loadScene();
     void clearScene();
     
+    // These methods implement the FileDragAndDropTarget interface, and allow the component
+    // to accept drag-and-drop of files..
+    bool isInterestedInFileDrag (const StringArray& files);
+    void fileDragEnter (const StringArray& /*files*/, int /*x*/, int /*y*/);
+    void fileDragMove (const StringArray& /*files*/, int /*x*/, int /*y*/);
+    void fileDragExit (const StringArray& /*files*/);
+    void filesDropped (const StringArray& files, int /*x*/, int /*y*/);
+    
 private:
     
     
     /*
     Status holds a slots status:
-     - 0 = empty
-     - 1 = Filled but not selected
+     - 0 = No settings (all pads set to off) 
+     - 1 = Settings applied to at least one pad
      - 2 = Selected
     */
     int status;
@@ -65,6 +76,8 @@ private:
     String slotNumberString;
     
     SceneComponent &sceneComponentRef;
+    
+    bool somethingIsBeingDraggedOver;
     
 };
 

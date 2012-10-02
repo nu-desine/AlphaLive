@@ -24,15 +24,12 @@
 #define H_TESTGUISEQUENCERMODE
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
-#include "GuiSeqMidiMode.h"
-#include "GuiSeqSamplesMode.h"
 #include "../Custom Components/Sequencer/SequencerGrid.h"
-#include "ModeSequencer.h"
+#include "../../Functionality Classes/Sequencer Mode/ModeSequencer.h"
 #include "../../Application/AbstractSubjectAndObserver.h"
 #include "../Custom Components/General/ImageSlider.h"
 #include "../Custom Components/Graphics/GuiCircleBackground.h"
 #include "../Custom Components/General/ModeButton.h"
-#include "../Custom Components/Graphics/GuiPopUpWindow.h"
 #include "../Custom Components/General/AlphaSlider.h"
 #include "../../File and Settings/AppDocumentState.h"
 #include "../Custom Components/General/SettingsButton.h"
@@ -41,6 +38,9 @@
 #include "../Custom Components/Effects/GuiFxDial.h"
 #include "../Custom Components/General/AlphaPopUpButton.h"
 #include "../Custom Components/General/AlphaRotarySlider.h"
+#include "../Custom Components/General/SettingsButtonImage.h"
+#include "../Custom Components/General/FileDropButton.h"
+
 
 class MainComponent;
 
@@ -87,6 +87,7 @@ public:
     void setParameterLabelText (String value);
     void setCurrentSequenceNumber();
     
+    int getCurrentSequenceNumber();
     
 private:
     
@@ -102,25 +103,31 @@ private:
     SequencerGrid *sequencerGrid;
     GuiFxDial *fxDial;
     GuiCircleBackground *notSelected;
+   
+    ModeButton *triggerSettingsButton, *pressureSettingsButton, *sequenceSettingsButton, *quantiseButton;
+    AlphaTextButton *nextSequenceButton, *previousSequenceButton;
+    ModeButton *loopButton, *indestructibleButton, *finishLoopButton, *stickyButton, *linkButton;
+	
+	ModeButton *modeMidiButton, *modeSamplesButton;
+  
     
-    
-    AlphaTextButton *triggerSettingsButton, *pressureSettingsButton, *sequenceSettingsButton, *quantiseButton;
-    AlphaTextButton *modeMidiButton, *modeSamplesButton, *nextSequenceButton, *previousSequenceButton;
-    AlphaTextButton *loopButton, *indestructibleButton, *finishLoopButton, *stickyButton, *linkButton;
-    OwnedArray<AlphaTextButton> midiChannelButtons;
-	OwnedArray<AlphaTextButton> audioRowButtons;
-    
-    OwnedArray<SettingsButton> triggerModeButtons;
-    OwnedArray<SettingsButton> midiPressureModeButtons;
+	OwnedArray<AlphaTextButton> midiChannelButtons;
+	OwnedArray<FileDropButton> audioRowButtons;
+	
+    OwnedArray<SettingsButtonImage> triggerModeButtons;
+    OwnedArray<SettingsButtonImage> midiPressureModeButtons;
+
     SettingsButton *plusButton, *minusButton;
     GuiSwitch *pressureStatusButton;
     AlphaPopUpButton *popUpButton;
     DrawableButton *previewButton;
 
-    AlphaRotarySlider *numberOfSequencesSlider, *relativeTempoSlider, *noteLengthSlider, *audioGainSlider, *audioPanSlider;
-    AlphaSlider *ccControllerSlider, *midiPressureMinRangeSlider, *midiPressureMaxRangeSlider;
+    AlphaRotarySlider *numberOfSequencesSlider, *midiPressureMinRangeSlider, *midiPressureMaxRangeSlider, *relativeTempoSlider, *noteLengthSlider, *audioGainSlider, *audioPanSlider, *audioAttackSlider;
+    AlphaSlider *ccControllerSlider;
     
-    Label *parameterLabel, *currentParameterLabel;
+    Label *parameterLabel, *currentParameterLabel, *parameterHoverLabel;
+    
+    TextButton *recordButton;
      
 };
 

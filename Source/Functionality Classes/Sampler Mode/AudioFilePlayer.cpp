@@ -49,10 +49,10 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     
     //grab the setting values (so that if this object is deleted and recreated, it will hold the previous settings)
     //do i need to enter shared memory here?
-    //do ALL effect paramters need setting here? Can I do this in the dedicated effect classes? Would be neater that way
-    gain = gainPrev = PAD_SETTINGS->getSamplerGain();
-    panLeft = panLeftPrev = PanControl::leftChanPan_(PAD_SETTINGS->getSamplerPan());
-    panRight = panRightPrev = PanControl::rightChanPan_(PAD_SETTINGS->getSamplerPan());
+    
+    gain = PAD_SETTINGS->getSamplerGain(); //should this be cubed?
+    panLeft = PanControl::leftChanPan_(PAD_SETTINGS->getSamplerPan());
+    panRight = PanControl::rightChanPan_(PAD_SETTINGS->getSamplerPan());
     triggerMode = PAD_SETTINGS->getSamplerTriggerMode();
     shouldLoop = PAD_SETTINGS->getSamplerShouldLoop();
     indestructible = PAD_SETTINGS->getSamplerIndestructible();
@@ -65,17 +65,26 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     effect = 0;
     setEffect(PAD_SETTINGS->getSamplerEffect());
     quantizeMode = PAD_SETTINGS->getQuantizeMode();
+    attackTime = PAD_SETTINGS->getSamplerAttackTime();
+    releaseTime = PAD_SETTINGS->getSamplerReleaseTime();
     
     triggerModeData.playingStatus = 0;
-    
     prevPadValue = pressureValue =  0;
-    
     playingLastLoop = false;
     
+    attackSamples = attackTime * sampleRate_;
+    releaseSamples = releaseTime * sampleRate_;
+    isInAttack = isInRelease = false;
+    attackPosition = releasePosition = 0;
+    attRelGainL = attRelGainR = prevGainL = prevGainR = 0;
     
     //call this here incase a loop has been 'dropped' onto a pad before this AudioFilePlayer instance actually exists,
     //which means that it wouldn't have been called from setSamplerAudioFilePath().
     setAudioFile(PAD_SETTINGS->getSamplerAudioFilePath());
+    
+    columnNumber = sequenceNumber = 0;
+    
+    
     
     broadcaster.addActionListener(this);
 }
@@ -110,7 +119,8 @@ void AudioFilePlayer::processAudioFile(int padValue)
     if (currentFile != File::nonexistent && currentAudioFileSource != NULL)
     {
         //this is needed incase audio ends on its own or is stopped via the 'exclusive mode' feature, in order to reset everything so it will trigger again properly
-        if (fileSource.isPlaying() == false && currentPlayingState == 1 && prevPadValue == 0)
+        if ((fileSource.isPlaying() == false && currentPlayingState == 1 && prevPadValue == 0) ||
+            (isInRelease == true && currentPlayingState == 1 && prevPadValue == 0))
         {
             std::cout << "stream ended on its own!!";
             currentPlayingState = 0;
@@ -194,7 +204,7 @@ void AudioFilePlayer::processAudioFile(int padValue)
                 //...and triggerModeData signifies to stop audio, DON'T LET IT...MWAHAHAHA! 
                 triggerModeData.playingStatus = 2; //ignore
             }
-            else if (triggerModeData.playingStatus == 1 && currentPlayingState == 1 && triggerMode != 6)
+            else if (triggerModeData.playingStatus == 1 && currentPlayingState == 1 && triggerMode != /*6*/4)
             {
                 //...and triggerModeData signifies to start playing, 
                 //but file is already playing and triggerMode does not equal 'trigger'
@@ -216,8 +226,10 @@ void AudioFilePlayer::processAudioFile(int padValue)
             
             else if (triggerModeData.playingStatus == 0) //stop
             {
-                stopAudioFile();
-                //currentPlayingState = 0; //now done within stopAudioFile()
+                stopAudioFile(false);
+                currentPlayingState = 0;    //needs to be done here and not within stopAudioFile,
+                                            //incase stopAudioFile is called from stopPrevExclusivePad,
+                                            //where the triggerModeData won't be reset.
             }
         }
         //==========================================================================================
@@ -372,50 +384,94 @@ void AudioFilePlayer::triggerQuantizationPoint()
     if (currentPlayingState == 2) //waiting to play
     {
         playAudioFile();
-        currentPlayingState = 1;
+        //currentPlayingState = 1;
     }
     else if (currentPlayingState == 3) //waiting to stop
     {
-        stopAudioFile();
-        //currentPlayingState = 0; //now done within stopAudioFile()
+        stopAudioFile(false);
+        currentPlayingState = 0;    //needs to be done here and not within stopAudioFile,
+                                    //incase stopAudioFile is called from stopPrevExclusivePad,
+                                    //where the triggerModeData won't be reset.
     }
 }
 
 
 void AudioFilePlayer::playAudioFile()
 {
-    //This is now in processAudioFile() - too much too much CPU usage?
-    //if (currentFile != File::nonexistent && currentAudioFileSource != NULL)
-        //currentAudioFileSource->setLooping(shouldLoop);
-    
     //set the state of certain effects
     if (effect == 9) //flanger
         flanger->restart(); //so the lfo is re-started when the file is started
     else if (effect == 10) //tremolo
         tremolo->restart(); //so the lfo is re-started when the file is started
     
+    if (attackTime > 0)
+    {
+        attackPosition = 0;
+        isInAttack = true;
+    }
+    
     //start audio file
     fileSource.setPosition (0.0);
     fileSource.start();
     
-    /*
-    AudioSampleBuffer buffer(2, 512);
-    AudioSourceChannelInfo info;
-    info.buffer = &buffer;
-    info.startSample = 0;
-    info.numSamples = 512;
     
-    fileSource.getNextAudioBlock(info);
-    
-    for (int i = 0; i < 2; ++i)
+    //NEW - recording into sequencer pads
+    if (modeSamplerRef.getAlphaLiveEngineRef().getRecordingPads().size() > 0)
     {
-        info.buffer->applyGainRamp (i,
-                                    info.startSample,
-                                    info.numSamples,
-                                    0,
-                                    gain);
+        for (int i = 0; i < modeSamplerRef.getAlphaLiveEngineRef().getRecordingPads().size(); i++)
+        {
+            int recordingPad = modeSamplerRef.getAlphaLiveEngineRef().getRecordingPads()[i];
+            
+            if (modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->isThreadRunning()) //if currently playing
+            {
+                if (AppSettings::Instance()->padSettings[recordingPad]->getSequencerMode() == 2) //if samples mode
+                {
+                    File seqFile[NO_OF_ROWS];
+                    
+                    for (int j = 0; j < NO_OF_ROWS; j++)
+                    {
+                        seqFile[j] = AppSettings::Instance()->padSettings[recordingPad]->getSequencerSamplesAudioFilePath(j);
+                        
+                        if (currentFile == seqFile[j]) //if audio file path matches
+                        {
+                            sequenceNumber = modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->getSequenceNumber();
+                            
+                            //get the closest column number
+                            Array <int> columnNumberData = modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->getClosestColumnNumber();
+                            columnNumber = columnNumberData[0];
+                            int columnNumberType = columnNumberData[1];
+                            
+                            //When recording a note to a sequencer pad the note will play twice at this point - 
+                            //from the played pad (this class) and from the recorded note in the sequence, which is note what we want.
+                            //We want the new note to be played from this class only, and not the seq notes which will all be played at the same
+                            //set length, amoung a few other unwanted behaviours.
+                            //This is done using a new variable within SequencerPlayer called recentlyAddedSequenceData.
+                            //Every time a note is recorded here it adds a 'true' to the array in the same location as the recorded note.
+                            //Then in SequencerPlayer it won't play this new note due to this 'true' flag.
+                            
+                            if (columnNumberType == 1) //if the closest number is the current column number, add it to the recentAddedSequenceData Array so it isn't played
+                                modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->setRecentlyAddedSequenceData(sequenceNumber, j, columnNumber, true);
+                            
+                            AppSettings::Instance()->padSettings[recordingPad]->setSequencerData(sequenceNumber, j, columnNumber, 110);
+                            
+                            
+                            //if currently selected pad is the recording pad, update the grid gui.
+                            //how should it be handled if multiple pads are selected? Do nothing?
+                            if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
+                            {
+                                if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == recordingPad)
+                                {
+                                    broadcaster.sendActionMessage("RECORD NOTE");
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        }
     }
-     */
+
      
     
     if (PAD_SETTINGS->getExclusiveMode() == 1)
@@ -425,27 +481,49 @@ void AudioFilePlayer::playAudioFile()
     
     
     //update pad layout gui
-    if (currentPlayingState != 1 || shouldFinishLoop == true) //if currentlyPlayingStatus doesn't already equal 1
+    if (currentPlayingState != 1 || shouldFinishLoop == true || isInRelease == true) //if currentlyPlayingStatus doesn't already equal 1
     {
         broadcaster.sendActionMessage("PLAYING");
         currentPlayingState = 1;
     }
     
-
+    isInRelease = false;
 
 }
 
-void AudioFilePlayer::stopAudioFile()
+void AudioFilePlayer::stopAudioFile (bool shouldStopInstantly)
 {
+    // shouldStopInstantly will be true when called from killPads()
     
-    fileSource.stop();
+    if (releaseTime > 0 && shouldStopInstantly == false && fileSource.isPlaying() == true)
+    {
+        if (isInRelease == false)   //to prevent cases where a pad may be in release state but then
+                                    //another pad tries to stop the pad (hence, start the release again)
+                                    //via exclusive mode. It would probably make more sense to remove
+                                    //a pad from the exclusive array when called to stop.
+        {
+            if (attackTime == 0)
+            {
+                //if there was no attack, the below variables will not be set correctly
+                //whic will cause an incorrect release.
+                attRelGainL = attRelGainR = 1.0;
+            }
+            
+            releasePosition = 0;
+            isInRelease = true;
+            
+            broadcaster.sendActionMessage("WAITING TO STOP");
+        }
+    }
+    else
+    {
+        fileSource.stop();
     
-    playingLastLoop = false;
-    broadcaster.sendActionMessage("OFF");
+        playingLastLoop = false;
+        broadcaster.sendActionMessage("OFF");
+    }
     
-    currentPlayingState = 0;
-    //triggerModes.reset(); //can't do this hear as this will cause instant retriggering
-                            //of files if stopAudioFile() is called from a pad press.
+      isInAttack = false;
     
 }
 
@@ -462,6 +540,28 @@ void AudioFilePlayer::actionListenerCallback (const String& message)
     
     else if (message == "OFF")
         modeSamplerRef.updatePadPlayingStatus(padNumber, 0);
+    
+    else if (message == "RECORD NOTE")
+    {
+        //optimise the below so we're only calling/updating what needs to be done!
+        //first, update the display of the sequence grid which gets the stored
+        //sequence data from PadSettings and puts it into the local sequenceData. This
+        //could be optimised so that it is only getting the data from the current seq,
+        //as thats all that will be changed here.
+        modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 3);
+        //next set the currently sequence display, which sets the status's of the grid points
+        modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 2);
+
+    }
+    
+    else if (message == "STOP AFTER RELEASE")
+    {
+        fileSource.stop();
+        playingLastLoop = false;
+        modeSamplerRef.updatePadPlayingStatus(padNumber, 0);
+    
+        isInRelease = false;
+    }
     
 }
 
@@ -511,32 +611,132 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
          
     }
     sharedMemory.exit();
-     
-    //gain and pan
-    sharedMemory.enter();
     
+    
+    if (isInAttack == true || isInRelease == true)
+    {
+        //====== set attack and release =======
+        
+        sharedMemory.enter();
+        
+        //get first pair of sample data from audio buffer
+        float *pOutL = bufferToFill.buffer->getSampleData (0, bufferToFill.startSample);
+        float *pOutR = bufferToFill.buffer->getSampleData (1, bufferToFill.startSample);
+        
+        //increment through each pair of samples (left channel and right channel) in the current block of the audio buffer
+        for (int i = 0; i < bufferToFill.numSamples; ++i)
+        {
+            if (isInAttack)
+            {
+                //ramp up to 1.0
+                attRelGainL = attackPosition * (1.0/attackSamples);
+                attRelGainR = attackPosition * (1.0/attackSamples);
+                
+                if (attRelGainL <= 1)
+                    *pOutL = *pOutL * (attRelGainL * attRelGainL * attRelGainL);
+                else
+                    *pOutL = *pOutL * attRelGainL;
+                
+                if (attRelGainR <= 1)
+                    *pOutR = *pOutR * (attRelGainR * attRelGainR * attRelGainR);
+                else
+                    *pOutR = *pOutR * attRelGainR;
+                
+                attackPosition++;
+                
+                //move to next pair of samples
+                pOutL++;
+                pOutR++;
+                
+                if (attackPosition >= attackSamples)
+                {
+                    isInAttack = false;
+                }
+            }
+            else if (isInRelease)
+            {
+                //ramp down from current gains
+                
+                //one thing that could be improved here is if the release is triggered before
+                //the attack is finished, the release time should be shorter - should be
+                //as long as the length of the attack until it was disturbed.
+                //this will involve finding out how many samples the attack at left to process,
+                //and then shortening the release time/samples by that much.
+                
+                double relGainL = attRelGainL - (releasePosition * (attRelGainL/releaseSamples));
+                double relGainR = attRelGainR - (releasePosition * (attRelGainR/releaseSamples));
+                
+                if (relGainL >= 0)
+                {
+                    if (relGainL <= 1)
+                        *pOutL = *pOutL * (relGainL * relGainL * relGainL);
+                    else
+                        *pOutL = *pOutL * relGainL;
+                }
+                if (relGainR >= 0)
+                {
+                    if (relGainR <= 1)
+                        *pOutR = *pOutR * (relGainR * relGainR * relGainR);
+                    else
+                        *pOutR = *pOutR * relGainR;
+                }
+                
+                releasePosition++;
+                
+                //move to next pair of samples
+                pOutL++;
+                pOutR++;
+                
+                if (releasePosition == releaseSamples-1)
+                {
+                    //set gains to 0.
+                    //This needs to be done to avoid a click after the release.
+                    //I think this is due the samples within the next call to
+                    //getNextAudioBlock being processed 'incorrectly' due to the stop audio file command
+                    //happening asyncronosly. Not entirely sure, but this way works.
+                    attRelGainL = attRelGainR = 0;
+                    
+                    //stop file and stuff
+                    broadcaster.sendActionMessage("STOP AFTER RELEASE");
+                }
+            }
+            else
+            {
+                break;
+            }
+            
+        }
+        
+        sharedMemory.exit();
+    }
+
+    
+    //===== set gain and pan======
+    sharedMemory.enter();
+  
     for (int i = 0; i < bufferToFill.buffer->getNumChannels(); ++i)
     {
         if (i == 0) //left chan
             bufferToFill.buffer->applyGainRamp (i,
                                                 bufferToFill.startSample,
                                                 bufferToFill.numSamples,
-                                                panLeftPrev * gainPrev,
+                                                prevGainL,
                                                 panLeft * gain);
         else if (i == 1) // right chan
             bufferToFill.buffer->applyGainRamp (i,
                                                 bufferToFill.startSample,
                                                 bufferToFill.numSamples,
-                                                panRightPrev * gainPrev,
+                                                prevGainR,
                                                 panRight * gain);
     }
     
-    gainPrev = gain;
-    panLeftPrev = panLeft;
-    panRightPrev = panRight;
+    prevGainL = panLeft * gain;
+    prevGainR = panRight * gain;
+    
     sharedMemory.exit();
-     
-     
+    
+    
+
     if (fileSource.hasStreamFinished() == true) //if the audio file has ended on its own, automatically update the pad GUI
         //NOTE - hasStreamFinshed could be used above where I've been manually checking if the stream has ended on its own
     {
@@ -555,6 +755,8 @@ void AudioFilePlayer::prepareToPlay (int samplesPerBlockExpected,double sampleRa
     fileSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
     
     sampleRate_ = sampleRate;
+    attackSamples = attackTime * sampleRate_;
+    releaseSamples = releaseTime * sampleRate_;
     
     
     switch (effect)
@@ -746,6 +948,24 @@ void AudioFilePlayer::setShouldFinishLoop (int value)
 void AudioFilePlayer::setSticky (int value)
 {
     sticky = value;
+}
+
+void AudioFilePlayer::setAttackTime (double value)
+{
+    //do we actually needs the attackTime variable? Won't attackSamples be enough here?
+    sharedMemory.enter();
+    attackTime = value;
+    attackSamples = attackTime * sampleRate_;
+    sharedMemory.exit();
+}
+
+void AudioFilePlayer::setReleaseTime (double value)
+{
+    //do we actually needs the releaseTime variable? Won't releaseSamples be enough here?
+    sharedMemory.enter();
+    releaseTime = value;
+    releaseSamples = releaseTime * sampleRate_;
+    sharedMemory.exit();
 }
 
 //========================================================================================

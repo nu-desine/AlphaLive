@@ -31,7 +31,7 @@ class GuiPadLayout;
 //Custom component for individual pad GUI, includes a button that references a listener in GuiPadLayout and drag and drop compatibility
 
 class GuiPad :	public Component,
-public FileDragAndDropTarget
+                public FileDragAndDropTarget
 {
 public:
     

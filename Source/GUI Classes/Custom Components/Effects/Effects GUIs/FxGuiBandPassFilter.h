@@ -24,9 +24,9 @@
 #define H_FXGUIBANDPASSFILTER
 
 #include "../../../../../JuceLibraryCode/JuceHeader.h"
-#include "../../General/AlphaImageKnob.h"
 #include "../../General/AlphaRotarySlider.h"
 #include "../../General/AlphaTextButton.h"
+#include "../../General/ModeButton.h"
 
 class MainComponent;
 
@@ -56,8 +56,9 @@ private:
     AlphaRotarySlider *mixSlider, *frequencySlider, *bandwidthSlider;
     
     ComboBox *alphaTouchMenu;
-    AlphaTextButton *reverseButton;
+    ModeButton *reverseButton;
     AlphaRotarySlider *intensitySlider;
+    Label *parameterHoverLabel;
     
     Array<int> selectedPads;
     

@@ -54,6 +54,7 @@ public:
     void updatePadPlayingStatus(int padNumber, int playingStatus);
     
     void killPad (int padNum);
+    void stopPrevExclusivePad (int padNum);
     
     //quantization stuff
     void triggerQuantizationPoint (int padNum);

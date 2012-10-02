@@ -79,8 +79,11 @@ public:
     
     
 	
-	const Font getPopupMenuFont(); // << why isn't this overriding?? Think its working now
+	const Font getPopupMenuFont();
     
+    void drawPopupMenuBackground (Graphics &g, int width, int height);
+    
+    /*
     void drawPopupMenuItem (Graphics& g,
                             int width, int height,
                             bool isSeparator,
@@ -100,10 +103,10 @@ public:
                                     int& idealHeight);
 	
 	
-    
+    */
     
 	int getDefaultScrollbarWidth(); //<-- why is this not working properly for the fileListComponent? need to scroll it first to adjust the size. Think its working now.
-                                    //it is to do with fileListComponent or just the way i've layed it all out in the tabbedcomponent?
+                                    
    	
 private:
     //==============================================================================

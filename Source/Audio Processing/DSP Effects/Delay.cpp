@@ -33,7 +33,7 @@ Delay::Delay(int padNumber_, int sampleRate_)
     // sample rate
     paramsLpFilter[0] = sampleRate;
     // cutoff frequency
-    paramsLpFilter[1] = lpfFrequencyControlValue = PAD_SETTINGS->getSamplerFxDelayLpfFreq();
+    paramsLpFilter[1] = lpfFrequencyControlValue = PAD_SETTINGS->getPadFxDelayLpfFreq();
     // Q/Bandwidth
     paramsLpFilter[2] = 1.0;
     
@@ -42,16 +42,16 @@ Delay::Delay(int padNumber_, int sampleRate_)
     // sample rate
     paramsHpFilter[0] = sampleRate;
     // cutoff frequency
-    paramsHpFilter[1] = hpfFrequencyControlValue = PAD_SETTINGS->getSamplerFxDelayHpfFreq();
+    paramsHpFilter[1] = hpfFrequencyControlValue = PAD_SETTINGS->getPadFxDelayHpfFreq();
     // Q/Bandwidth
     paramsHpFilter[2] = 1.0;
     
-    wetMix = wetMixPrev = wetMixControlValue =  PAD_SETTINGS->getSamplerFxDelayMix();
-    feedback = feedbackControlValue = PAD_SETTINGS->getSamplerFxDelayFeedback();
+    wetMix = wetMixPrev = wetMixControlValue =  PAD_SETTINGS->getPadFxDelayMix();
+    feedback = feedbackControlValue = PAD_SETTINGS->getPadFxDelayFeedback();
     
-    alphaTouchParam = PAD_SETTINGS->getSamplerFxDelayAlphaTouch();
-    alphaTouchReverse = PAD_SETTINGS->getSamplerFxDelayAtReverse();
-    alphaTouchIntensity = PAD_SETTINGS->getSamplerFxDelayAtIntensity();
+    alphaTouchParam = PAD_SETTINGS->getPadFxDelayAlphaTouch();
+    alphaTouchReverse = PAD_SETTINGS->getPadFxDelayAtReverse();
+    alphaTouchIntensity = PAD_SETTINGS->getPadFxDelayAtIntensity();
     
     maxSamplesRange = sampleRate * 4; //as a whole note at the lowest tempo of 60 equals 4 seconds
 }

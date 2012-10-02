@@ -27,9 +27,7 @@
  */
 
 #include "../../../../JuceLibraryCode/JuceHeader.h"
-#include "GuiFxButtons.h"
-#include "../General/AlphaImageKnob.h"
-#include "../General/SettingsButton.h"
+#include "../General/SettingsButtonImage.h"
 #include "Effects GUIs/FxGuiPanAndGain.h"
 #include "Effects GUIs/FxGuiLowPassFilter.h"
 #include "Effects GUIs/FxGuiHighPassFilter.h"
@@ -69,7 +67,7 @@ private:
     MainComponent &mainComponentRef;
     Path hitPath;
     
-	OwnedArray <SettingsButton> fxButtons;
+	OwnedArray <SettingsButtonImage> fxButtons;
     
     //FX displays
     //should all the effect objects be put into a Juce Array and accessed through that throughout the class?

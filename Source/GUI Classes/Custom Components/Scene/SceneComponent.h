@@ -41,13 +41,12 @@ public:
     void paint (Graphics &g);
     
     void clearAll();
-    void slotClicked(SceneSlot *sceneSlot);
+    void configureSelectedSlot (int clickedSlot, int lastSlotStatus);
     
     int getSelectedSceneNumber();
     void setSelectedSceneNumber(int value);
     
     void setSlotStatus (int slotNumber, int statusValue);
-    void selectDefaultScene();
     
     //override the Observer virtual update function
     bool update(const Subject& theChangedSubject);

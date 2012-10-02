@@ -149,7 +149,7 @@ public:
     //==============================================================================
     void systemRequestedQuit()
     {
-        bool shouldQuit = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Quit", "Are you sure you want to quit?", "Yes", "No");
+        bool shouldQuit = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("Quit"), translate("Are you sure you want to quit?"));
         
         if (shouldQuit == true)
         {
@@ -162,6 +162,21 @@ public:
                 appDocumentState->savePerformance(0);
             }
              */
+            
+            //If the option is enabled in the prefs, the project will be automatically cleaned
+            //on app shutdown.
+            //There is a logical check which compares the number files in the audio files dircetory currently
+            //to the number when the project was opened or last cleaned. If they don't match (which most
+            //likely means new audio files were added), the project is cleaned.
+            if (StoredSettings::getInstance()->cleanOnClose == 2)
+            {
+                int numOfFilesAtClose = File::getCurrentWorkingDirectory().getNumberOfChildFiles(2);
+                
+                if (numOfFilesAtClose != appDocumentState->getNumOfFilesAtStart())
+                {
+                    appDocumentState->removeUneededAudioFiles(true);
+                }
+            }
             
             quit();
             
@@ -237,35 +252,35 @@ public:
         
         if(commandID == CommandIDs::New)
         {
-            result.setInfo ("New...",
+            result.setInfo (translate("New..."),
                             "Creates a new project.",
                             CommandCategories::FileCommands, 0);
             result.defaultKeypresses.add (KeyPress ('n', cmd, 0));
         }
         else if(commandID == CommandIDs::Open)
         {
-            result.setInfo ("Open...",
+            result.setInfo (translate("Open..."),
                             "Opens an AlphaLive Project file (.alphalive).",
                             CommandCategories::FileCommands, 0);
             result.defaultKeypresses.add (KeyPress ('o', cmd, 0));
         }
         else if(commandID == CommandIDs::Save)
         {
-            result.setInfo ("Save",
+            result.setInfo (translate("Save"),
                             "Saves the current settings to an AlphaLive Project file (.alphalive).",
                             CommandCategories::FileCommands, 0);
             result.defaultKeypresses.add (KeyPress ('s', cmd, 0));
         }
         else if(commandID == CommandIDs::SaveAs)
         {
-            result.setInfo ("Save As...",
+            result.setInfo (translate("Save As..."),
                             "Saves the current settings to an AlphaLive Project file (.alphalive).",
                             CommandCategories::FileCommands, 0);
             result.defaultKeypresses.add (KeyPress ('s', cmd|shift, 0));
         }
         else if (commandID == CommandIDs::CleanUpProject)
         {
-            result.setInfo ("Clean Up Project...",
+            result.setInfo (translate("Clean Up Project..."),
                             "Removes any unused audio files from the projects 'Audio Files' directory.",
                             CommandCategories::FileCommands, 0);
         }
@@ -294,7 +309,7 @@ public:
         
         else if(info.commandID == CommandIDs::CleanUpProject)
         {
-            appDocumentState->removeUneededAudioFiles();
+            appDocumentState->removeUneededAudioFiles(false);
         }
         
         return true;

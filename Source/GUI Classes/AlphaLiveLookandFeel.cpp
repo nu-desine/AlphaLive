@@ -111,6 +111,10 @@ AlphaLiveLookandFeel::AlphaLiveLookandFeel()
         TextButton::buttonOnColourId,               0xff1a56ab,
         TextButton::textColourOnId,                 0xffffffff,
         TextButton::textColourOffId,                0xffffffff,
+        
+        DrawableButton::backgroundColourId,         0x00000000,
+        DrawableButton::backgroundOnColourId,       AlphaColours::blue_,
+
 		
         ComboBox::buttonColourId,                   0xffcccccc,
         ComboBox::outlineColourId,                  standardOutlineColour,
@@ -156,7 +160,7 @@ AlphaLiveLookandFeel::AlphaLiveLookandFeel()
         Slider::thumbColourId,                      textButtonColour,
         Slider::trackColourId,                      AlphaColours::blue_,
         Slider::rotarySliderFillColourId,           AlphaColours::blue_,
-        Slider::rotarySliderOutlineColourId,        0xff1c1c1c, //0xff3c3c3c
+        Slider::rotarySliderOutlineColourId,        0xff2c2c2c, //0xff3c3c3c
         Slider::textBoxTextColourId,                0xffffffff,
         Slider::textBoxBackgroundColourId,          0x00000000,
         Slider::textBoxHighlightColourId,           textHighlightColour,
@@ -458,7 +462,7 @@ void AlphaLiveLookandFeel::layoutFilenameComponent (FilenameComponent& filenameC
     browseButton->setBounds((xBrowseButton + (widthBrowseButton * 0.16)), (widthBrowseButton * 0.16),
 							(widthBrowseButton * 0.7),(widthBrowseButton * 0.7));
 	
-    filenameBox->setBounds (0, ((filenameComp.getWidth() * 0.5) + 2), (filenameComp.getWidth() * 0.75), filenameComp.getHeight() - ((filenameComp.getWidth() * 0.5) + 2));
+    filenameBox->setBounds (15, ((filenameComp.getWidth() * 0.5) + 20), (filenameComp.getWidth() * 0.75), filenameComp.getHeight() - ((filenameComp.getWidth() * 0.7) + 2));
 }
 
 //==============================================================================
@@ -559,7 +563,7 @@ void AlphaLiveLookandFeel::drawRotarySlider (Graphics& g,
         else
             g.setColour (Colour (0x80808080));
 		
-        const float thickness = (1 - 0.2) + (0.2 * (radius * 0.007));
+        const float thickness = (1 - 0.2) + (0.2 * (radius * 0.0055));
 		
         {
             Path filledArc;
@@ -571,7 +575,7 @@ void AlphaLiveLookandFeel::drawRotarySlider (Graphics& g,
             g.fillPath (filledArc);
         }
 		
-        g.setColour(slider.findColour (Slider::rotarySliderOutlineColourId));
+        g.setColour(slider.findColour (Slider::rotarySliderOutlineColourId).withAlpha (isMouseOver ? 1.0f : 0.5f));
         Path outlineArc;
         outlineArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness);
         outlineArc.closeSubPath();
@@ -604,20 +608,38 @@ void AlphaLiveLookandFeel::drawRotarySlider (Graphics& g,
 
 
 
-const Font AlphaLiveLookandFeel::getPopupMenuFont() // << why isn't this overriding??
+const Font AlphaLiveLookandFeel::getPopupMenuFont() 
 {
-    std::cout << "getting font" << std::endl;
     return Font (13.0f);
 }
 
+void AlphaLiveLookandFeel::drawPopupMenuBackground (Graphics& g, int width, int height)
+{
+    const Colour background (findColour (PopupMenu::backgroundColourId));
+    
+    g.fillAll (background);
+    
+    //The below code draws the horrible lines
+    //g.setColour (background.overlaidWith (Colour (0x2badd8e6)));
+    //for (int i = 0; i < height; i += 3)
+        //g.fillRect (0, i, width, 1);
+    
+    g.setColour (background.overlaidWith (Colour (AlphaColours::verydarkgrey_).withAlpha(0.8f)));
+    g.fillRect (0, 0, width, height);
+    
+    #if ! JUCE_MAC
+    g.setColour (findColour (PopupMenu::textColourId).withAlpha (0.6f));
+    g.drawRect (0, 0, width, height);
+    #endif
+}
+
+/*
 void AlphaLiveLookandFeel::getIdealPopupMenuItemSize (const String& text,
                                                       const bool isSeparator,
                                                       int standardMenuItemHeight,
                                                       int& idealWidth,
                                                       int& idealHeight)
 {
-    std::cout << "getting font" << std::endl;
-    
     if (isSeparator)
     {
         idealWidth = 50;
@@ -648,7 +670,6 @@ void AlphaLiveLookandFeel::drawPopupMenuItem (Graphics& g,
                                      Image* image,
                                      const Colour* const textColourToUse)
 {
-    std::cout << "getting font" << std::endl;
     
     const float halfH = height * 0.5f;
     
@@ -746,7 +767,7 @@ void AlphaLiveLookandFeel::drawPopupMenuItem (Graphics& g,
     }
 }
 
-
+*/
 
 int AlphaLiveLookandFeel::getDefaultScrollbarWidth()
 {

@@ -140,17 +140,26 @@ void AlphaSlider::labelTextChanged (Label* labelThatHasChanged)
 
 void AlphaSlider::setComponentValue (double value)
 {
-    setValue(value, false);
+    if (value != -999)
+    {
+        setValue(value, false);
+        
+        //the below alg. needs changing as what if we want to display things to 2 decimal places? Though will that currently fit?
+        if (getInterval() >= 1)
+        {
+            sliderValueLabel->setText(String(value), false);
+        }
+        else
+        {
+            sliderValueLabel->setText(String(value, 1), false);
+        }
+    }
+    else //just set a default display without changing the actual slider value
+    {
+        sliderValueLabel->setText("-", false);
+    }
     
-    //the below alg. needs changing as what if we want to display things to 2 decimal places? Though will that currently fit?
-    if (getInterval() >= 1)
-    {
-        sliderValueLabel->setText(String(value), false);
-    }
-    else
-    {
-        sliderValueLabel->setText(String(value, 1), false);
-    }
+    
 }
 
 

@@ -24,9 +24,9 @@
 #define H_FXGUIFLANGER
 
 #include "../../../../../JuceLibraryCode/JuceHeader.h"
-#include "../../General/AlphaImageKnob.h"
 #include "../../General/AlphaRotarySlider.h"
 #include "../../General/AlphaTextButton.h"
+#include "../../General/ModeButton.h"
 
 class MainComponent;
 
@@ -58,8 +58,10 @@ private:
     AlphaRotarySlider *mixSlider, *rateSlider, *feedbackSlider, *flangerIntensitySlider;
     
     ComboBox *alphaTouchMenu, *rateMenu;
-    AlphaTextButton *reverseButton, *syncButton;
+	ModeButton *reverseButton;
+    AlphaTextButton *syncButton;
     AlphaRotarySlider *intensitySlider;
+    Label *parameterHoverLabel;
     
     Array<int> selectedPads;
     float tempo;

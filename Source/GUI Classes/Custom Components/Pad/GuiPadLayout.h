@@ -28,8 +28,8 @@
 #include "GuiPadRow.h"
 #include "../../../Application/AbstractSubjectAndObserver.h"
 #include "../../../Functionality Classes/AlphaLiveEngine.h"
-
-class MainComponent;
+#include "../../Views/MainComponent.h" //how come I can include this here and don't have to use a forward declaration?
+//class MainComponent;
 
 //Component class for GUI pad arrangement. Inherits from button listener to monitor buttons clicked within the component
 
@@ -58,8 +58,6 @@ public:
     
     //override the Observer virtual update function
     bool update(const Subject& theChangedSubject);
-    
-    //MainComponent& getMainComponent();
     void updateCurrentlySelectedPad();
     
     void mouseEnter (const MouseEvent &e);
@@ -69,6 +67,7 @@ public:
     MainComponent& getMainComponent();
     
     void setShouldDisplaySettings (bool value);
+    void deselectAllPads();
     
     //access by the menu bar/command manager in MainComponent
     //which will only be available when a single pad is selected
@@ -77,7 +76,10 @@ public:
 	
 private:
 	
-    //int currentlySelectedPad;
+    //create a reference to the subject that you want this class to observe
+    AlphaLiveEngine &mSubject;
+    MainComponent &mainComponentRef;
+    
     Array <int> selectedPads;
 	OwnedArray<GuiPad> pads;
 	
@@ -97,10 +99,7 @@ private:
 	
 	unsigned char alphaThreshold;
     
-    //create a reference to the subject that you want this class to observe
-    AlphaLiveEngine &mSubject;
     
-    MainComponent &mainComponentRef;
     
     bool shouldDisplaySettings;
 	

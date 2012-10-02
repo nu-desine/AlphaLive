@@ -24,6 +24,7 @@
 #include "GlobalValues.h"
 #include "../Custom Components/Scene/SceneValues.h"
 #include "../../File and Settings/AppSettings.h"
+#include "../../Application/CommonInfoBoxText.h"
 #include "MainComponent.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
@@ -34,21 +35,6 @@
 GuiControllerMode::GuiControllerMode(MainComponent &ref)
                                             :   mainComponentRef(ref)
 {
-    /*
-    addAndMakeVisible(speakerLeft = new GuiSpeaker());
-    addAndMakeVisible(circleBackgroundSmall = new GuiCircleBackground());
-    addAndMakeVisible(circleBackgroundRight = new GuiCircleBackground());
-    
-    addAndMakeVisible(controlMenu = new ComboBox());
-    controlMenu->addListener(this);
-    controlMenu->addMouseListener(this, true);
-    controlMenu->addItem("None Selected...", 1);
-    controlMenu->addItem("Scene Switcher", 2);
-    controlMenu->addItem("MIDI Program Change", 4);
-    controlMenu->addItem("Scene & MIDI Program Switcher", 5);
-    controlMenu->addItem("OSC Ouput", 3);
-    controlMenu->setSelectedId(1, true);
-     */
     
     for (int i = 0; i < 4; i++)
     {
@@ -124,18 +110,7 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
         
         addChildComponent(midiChannelButtons[i]);
 	}
-    
-    /*
-    addAndMakeVisible(midiProgramChangeChannelSlider = new AlphaSlider());
-    midiProgramChangeChannelSlider->setRange(1, 16, 1);
-    midiProgramChangeChannelSlider->setValue(1, false);
-    midiProgramChangeChannelSlider->addListener(this);
-    midiProgramChangeChannelSlider->addMouseListener(this, true);
-    midiProgramChangeChannelSlider->setVisible(false);
-     */
-
-
-    
+   
 }
 
 
@@ -261,54 +236,7 @@ void GuiControllerMode::setCurrentlySelectedPad (Array <int> selectedPads_)
 
 void GuiControllerMode::comboBoxChanged (ComboBox* comboBox)
 {
-    /*
-    //==============================================================================
-    //pressure mode combobox
-    if (comboBox == controlMenu)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setControllerControl(controlMenu->getSelectedId());
-        }
-        
-         
-        //==============set what other components are visible===============
-        
-        //first set other componets invisble (saves having to set the visibility of each one in each next if statement)... 
-        sceneNumberSlider->setVisible(false);
-        oscIpAddressEditor->setVisible(false);
-        oscPortNumberSlider->setVisible(false);
-        midiProgramChangeNumberSlider->setVisible(false);
-        midiProgramChangeChannelSlider->setVisible(false);
-        
-        //...and then set the right one visible
-        if (controlMenu->getSelectedId() == 2) //scene switcher control selected
-        {
-            sceneNumberSlider->setVisible(true);
-        }
-        else if(controlMenu->getSelectedId() == 3) //OSC output control selected
-        {
-            oscIpAddressEditor->setVisible(true);
-            oscPortNumberSlider->setVisible(true);
-        }
-        else if(controlMenu->getSelectedId() == 4) //MIDI program change
-        {
-            midiProgramChangeNumberSlider->setVisible(true);
-            midiProgramChangeChannelSlider->setVisible(true);
-        }
-        else if(controlMenu->getSelectedId() == 5) //Dual Scene/MIDI program change
-        {
-            sceneNumberSlider->setVisible(true);
-            midiProgramChangeNumberSlider->setVisible(true);
-            midiProgramChangeChannelSlider->setVisible(true);
-        }
-        
-        
-    }
-    
-    //==============================================================================
-*/
+   
     
 }
 
@@ -351,19 +279,6 @@ void GuiControllerMode::sliderValueChanged (Slider* slider)
         
     }
     
-    
-    /*
-    //MIDI program change channel slider
-    else if (slider == midiProgramChangeChannelSlider)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setControllerMidiProgramChangeChannel(midiProgramChangeChannelSlider->getValue());
-        }
-        
-    }
-     */
 
     
 }
@@ -447,18 +362,19 @@ void GuiControllerMode::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        controlButtons[PAD_SETTINGS->getControllerControl()]->setToggleState(true, false);
-        sceneNumberSlider->setComponentValue(PAD_SETTINGS->getControllerPresentNumber());
+        controlButtons[PAD_SETTINGS->getControllerControl()-1]->setToggleState(true, false);
+        sceneNumberSlider->setComponentValue(PAD_SETTINGS->getControllerSceneNumber());
         oscIpAddressEditor->setText(PAD_SETTINGS->getControllerOscIpAddress(), false);
         oscPortNumberSlider->setComponentValue(PAD_SETTINGS->getControllerOscPort());
         midiProgramChangeNumberSlider->setComponentValue(PAD_SETTINGS->getControllerMidiProgramChangeNumber());
         midiChannelButtons[PAD_SETTINGS->getControllerMidiProgramChangeChannel()-1]->setToggleState(true, false);
         
-        setDisplay(PAD_SETTINGS->getControllerControl());
+        setDisplay(PAD_SETTINGS->getControllerControl()-1);
     }
     
     else if(MULTI_PADS)
     {
+        /*
         controlButtons[0]->setToggleState(true, false);
         sceneNumberSlider->setComponentValue(1);
         oscIpAddressEditor->setText("127.0.0.1", false);
@@ -467,7 +383,100 @@ void GuiControllerMode::updateDisplay()
         midiChannelButtons[0]->setToggleState(true, false);
         
         setDisplay(0);
+         */
+        
+        int controlMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getControllerControl();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getControllerControl() != controlMode_)
+            {
+                for (int i = 0; i < 4; i++)
+                    controlButtons[i]->setToggleState(0, false);
+                
+                setDisplay(-1); //will effectively hide all components
+                break;
+            }
+            if (i == selectedPads.size()-1)
+            {
+                controlButtons[controlMode_-1]->setToggleState(true, false);
+                setDisplay(controlMode_-1);
+            }
+        }
+        
+        //==================================================================================================
+        int channel_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getControllerMidiProgramChangeChannel();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getControllerMidiProgramChangeChannel() != channel_)
+            {
+                for (int i = 0; i <16; i++)
+                    midiChannelButtons[i]->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                midiChannelButtons[channel_-1]->setToggleState(true, false);
+        }
+        
+        //==================================================================================================
+        int scene_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getControllerSceneNumber();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getControllerSceneNumber() != scene_)
+            {
+                sceneNumberSlider->setComponentValue(-999);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                sceneNumberSlider->setComponentValue(scene_);
+        }
+        
+        //==================================================================================================
+        int oscPort_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getControllerOscPort();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getControllerOscPort() != oscPort_)
+            {
+                oscPortNumberSlider->setComponentValue(-999);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                oscPortNumberSlider->setComponentValue(oscPort_);
+        }
+        
+        //==================================================================================================
+        int programChange_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getControllerMidiProgramChangeNumber();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getControllerMidiProgramChangeNumber() != programChange_)
+            {
+                midiProgramChangeNumberSlider->setComponentValue(-999);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                midiProgramChangeNumberSlider->setComponentValue(programChange_);
+        }
+        
+        //==================================================================================================
+        String oscIp_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getControllerOscIpAddress();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getControllerOscIpAddress() != oscIp_)
+            {
+                oscIpAddressEditor->setText("-", false);;
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                oscIpAddressEditor->setText(oscIp_, false);
+        }
+        
     }
+
     
 }
 
@@ -532,33 +541,53 @@ void GuiControllerMode::setDisplay (int controlSelected)
 
 void GuiControllerMode::mouseEnter (const MouseEvent &e)
 {
-    /*
-    if (controlMenu->isMouseOver(true))
+    for (int i = 0; i < 4; i++)
     {
-        mainComponentRef.setInfoTextBoxText("Control Drop-Down Menu. Sets and displays the control for the selected pad/pads.");
+        if (controlButtons[0]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate("Scene Switch Mode. Select this button to enable the selected pads to be used to switch to a defined scene number."));
+        }
+        else if (controlButtons[1]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate("MIDI Program Change Mode. Select this button to enable the selected pads to be used to send out a MIDI program change message."));
+        }
+        else if (controlButtons[2]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate("Dual Scene Switch/MIDI Program Change Mode. Select this button to enable the selected pads to be used to send out a MIDI program change message as well as a scene switch command."));
+        }
+        else if (controlButtons[3]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate("OSC Output Mode. Select this button to enable the selected pads to be used to send out Open Sound Control messages."));
+        }
     }
-    else if (sceneNumberSlider->isMouseOver(true))
+    
+    if (sceneNumberSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Scene Number Selector. Sets and displays the scene number for the selected pad/pads. When the pad is pressed it will cause settings to be loaded from the selected scene.");
+        mainComponentRef.setInfoTextBoxText(translate("Scene Number Selector. Sets and displays the scene number for the selected pads. When the pad is pressed it will cause settings to be loaded from the selected scene."));
     }
     else if (oscIpAddressEditor->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("IP Address Editor. Sets and displays the IP address of the device that you want to send OSC messages to from the selected pad/pads. Set to 127.0.0.1 to send OSC messages somewhere on the same computer.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::oscIpAddressEditor));
     }
     else if (oscPortNumberSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Port Number Selector. Sets and displays the UDP/TCP port number that you want to send OSC messages over from the selected pad/pads. Warning: Do not select port 5003 as this is AlphaLive's listening port!");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::oscportNumberSlider));
     }
     else if (midiProgramChangeNumberSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("MIDI Program Change Number Selector. Sets and displays the MIDI Program Change Number for the selected pad/pads.");
-    }
-    else if (midiProgramChangeChannelSlider->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("MIDI Program Change Channel Selector. Sets and displays the MIDI Program Change Channel for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate("MIDI Program Change Number Selector. Sets and displays the MIDI Program Change Number for the selected pads."));
     }
     
-    */
+    for (int i = 0; i < 16; i++)
+    {
+        if (midiChannelButtons[i]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::midiChannelButtons) + " " + String(i+1) + ".");
+            break;
+        }
+    }
+    
+    
 }
 
 void GuiControllerMode::mouseExit (const MouseEvent &e)

@@ -5,9 +5,6 @@
 //  Created by Liam Meredith-Lacey on 13/07/2012.
 //  Copyright 2012 nu desine.
 //
-//  Created by Liam Meredith-Lacey on 10/07/2012.
-//  Copyright 2012 nu desine. All rights reserved.
-//
 //  This file is part of AlphaLive.
 //
 //  AlphaLive is free software: you can redistribute it and/or modify
@@ -26,6 +23,8 @@
 #include "FxGuiTremolo.h"
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
+#include "../../../Binary Data/BinaryDataNew.h"
+#include "../../../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
@@ -71,7 +70,7 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     //what about other values, such as the d's and t's in Logic's tremolo?
     rateMenu->setSelectedId(3, true);
     
-    addAndMakeVisible(syncButton = new AlphaTextButton("SYNC"));
+    addAndMakeVisible(syncButton = new AlphaTextButton(translate("SYNC")));
     syncButton->setClickingTogglesState(true);
     syncButton->setToggleState(1, false);
     syncButton->addListener(this);
@@ -80,27 +79,35 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     addAndMakeVisible(shapeMenu = new ComboBox());
     shapeMenu->addListener(this);
     shapeMenu->addMouseListener(this, true);
-    shapeMenu->addItem("Sine", 1);
-    shapeMenu->addItem("Square", 2);
-    shapeMenu->addItem("Triangle", 3);
-    shapeMenu->addItem("Rising Sawtooth", 4);
-    shapeMenu->addItem("Falling Sawtooth", 5);
+    shapeMenu->addItem(translate("Sine"), 1);
+    shapeMenu->addItem(translate("Square"), 2);
+    shapeMenu->addItem(translate("Triangle"), 3);
+    shapeMenu->addItem(translate("Rising Sawtooth"), 4);
+    shapeMenu->addItem(translate("Falling Sawtooth"), 5);
     shapeMenu->setSelectedId(1, true);
     
     
     addAndMakeVisible(alphaTouchMenu = new ComboBox());
     alphaTouchMenu->addListener(this);
     alphaTouchMenu->addMouseListener(this, true);
-    alphaTouchMenu->addItem("Off", 1);
-    alphaTouchMenu->addItem("Depth/Mix", 2);
-    alphaTouchMenu->addItem("Rate", 3);
-    alphaTouchMenu->addItem("Wave Shape", 4);
+    alphaTouchMenu->addItem(translate("Off"), 1);
+    alphaTouchMenu->addItem(translate("Depth/Mix"), 2);
+    alphaTouchMenu->addItem(translate("Rate"), 3);
+    alphaTouchMenu->addItem(translate("Wave Shape"), 4);
     alphaTouchMenu->setSelectedId(1, true);
     
-    addAndMakeVisible(reverseButton = new AlphaTextButton("INVERT"));
+    Image *reverseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::inverticon_png, BinaryDataNew::inverticon_pngSize));
+    addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);
     reverseButton->addMouseListener(this, true);
+    
+    //---------------parameter label -------------------------------------
+    addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
+    parameterHoverLabel->setJustificationType(Justification::centred);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
+    parameterHoverLabel->setFont(Font(9));
+    parameterHoverLabel->addMouseListener(this, true);
     
     tempo = AppSettings::Instance()->getGlobalTempo();
     
@@ -125,11 +132,12 @@ void GuiTremolo::resized()
     rateSlider->setBounds(87, 87, 150, 150);
     intensitySlider->setBounds(77, 77, 170, 170);
     
-    alphaTouchMenu->setBounds(119, 192, 87, 20);
+    alphaTouchMenu->setBounds(119, 202, 87, 15);
     reverseButton->setBounds(211,211, 32, 32);
+    parameterHoverLabel->setBounds(144, 187, 36, 15);
     
     rateMenu->setBounds(119, 52, 87, 20);
-    shapeMenu->setBounds(80, 213, 87, 20);
+    shapeMenu->setBounds(80, 218, 87, 15);
     syncButton->setBounds(130, 235, 32, 32);
     
 
@@ -144,8 +152,10 @@ void GuiTremolo::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxTremoloDepth(depthSlider->getValue());
+            PAD_SETTINGS->setPadFxTremoloDepth(depthSlider->getValue());
         }
+        
+        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
         
     }
     
@@ -154,8 +164,10 @@ void GuiTremolo::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxTremoloRate(rateSlider->getValue());
+            PAD_SETTINGS->setPadFxTremoloRate(rateSlider->getValue());
         }
+        
+        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
         
     }
     
@@ -165,8 +177,10 @@ void GuiTremolo::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxTremoloAtIntensity(intensitySlider->getValue());
+            PAD_SETTINGS->setPadFxTremoloAtIntensity(intensitySlider->getValue());
         }
+        
+        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
         
     }
     
@@ -181,7 +195,7 @@ void GuiTremolo::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxTremoloAlphaTouch(alphaTouchMenu->getSelectedId());
+            PAD_SETTINGS->setPadFxTremoloAlphaTouch(alphaTouchMenu->getSelectedId());
         }
         
     }
@@ -191,7 +205,7 @@ void GuiTremolo::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxTremoloShape(shapeMenu->getSelectedId());
+            PAD_SETTINGS->setPadFxTremoloShape(shapeMenu->getSelectedId());
         }
         
     }
@@ -238,8 +252,8 @@ void GuiTremolo::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxTremoloRate(lfoRate);
-            PAD_SETTINGS->setSamplerFxTremoloRateMenu(rateMenu->getSelectedId());
+            PAD_SETTINGS->setPadFxTremoloRate(lfoRate);
+            PAD_SETTINGS->setPadFxTremoloRateMenu(rateMenu->getSelectedId());
         }
         
     }
@@ -254,7 +268,7 @@ void GuiTremolo::buttonClicked (Button *button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxTremoloAtReverse(reverseButton->getToggleState());
+            PAD_SETTINGS->setPadFxTremoloAtReverse(reverseButton->getToggleState());
         }
         
     }
@@ -264,7 +278,7 @@ void GuiTremolo::buttonClicked (Button *button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxTremoloSync(syncButton->getToggleState());
+            PAD_SETTINGS->setPadFxTremoloSync(syncButton->getToggleState());
         }
         
         rateSlider->setVisible(false);
@@ -293,15 +307,15 @@ void GuiTremolo::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        depthSlider->setValue(PAD_SETTINGS->getSamplerFxTremoloDepth(), false);
-        rateSlider->setValue(PAD_SETTINGS->getSamplerFxTremoloRate(), false);
-        rateMenu->setSelectedId(PAD_SETTINGS->getSamplerFxTremoloRateMenu(), true);
-        syncButton->setToggleState(PAD_SETTINGS->getSamplerFxTremoloSync(), false);
-        shapeMenu->setSelectedId(PAD_SETTINGS->getSamplerFxTremoloShape(), true);
+        depthSlider->setValue(PAD_SETTINGS->getPadFxTremoloDepth(), false);
+        rateSlider->setValue(PAD_SETTINGS->getPadFxTremoloRate(), false);
+        rateMenu->setSelectedId(PAD_SETTINGS->getPadFxTremoloRateMenu(), true);
+        syncButton->setToggleState(PAD_SETTINGS->getPadFxTremoloSync(), false);
+        shapeMenu->setSelectedId(PAD_SETTINGS->getPadFxTremoloShape(), true);
         
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxTremoloAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxTremoloAtReverse(), false);
-        intensitySlider->setValue(PAD_SETTINGS->getSamplerFxTremoloAtIntensity(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxTremoloAlphaTouch(), true);
+        reverseButton->setToggleState(PAD_SETTINGS->getPadFxTremoloAtReverse(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getPadFxTremoloAtIntensity(), false);
     }
     
     else if(MULTI_PADS)
@@ -337,35 +351,38 @@ void GuiTremolo::mouseEnter (const MouseEvent &e)
 {
     if (depthSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Depth/Mix Control. Sets the depth/mix of the LFO for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate("Depth/Mix Control. Sets the depth/mix of the LFO for the selected pads."));
+        parameterHoverLabel->setText(String(depthSlider->getValue(), 3), false);
     }
     else if (rateSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("LFO Rate Control. Sets the rate in Hz for the selected pad/pads. If you would like to set the rate based on the tempo, click on the 'Tempo Sync' button.");
+        mainComponentRef.setInfoTextBoxText(translate("LFO Rate Control. Sets the rate in Hz for the selected pads. If you would like to set the rate based on the tempo, click on the 'Sync' button."));
+        parameterHoverLabel->setText(String(rateSlider->getValue(), 3), false);
     }
     else if (rateMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("LFO Rate Menu. Sets the LFO rate for the selected pad/pads. If you would like to set the rate in Hz, click on the 'Tempo Sync' button.");
+        mainComponentRef.setInfoTextBoxText(translate("LFO Rate Menu. Sets the LFO rate for the selected pads. If you would like to set the rate in Hz, click on the 'Sync' button."));
     }
     else if (syncButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Tempo Sync Button. Turn this button on to sync the LFO to the tempo, else you can set the LFO is Hz.");
+        mainComponentRef.setInfoTextBoxText(translate("Tempo Sync Button. Turn this button on to sync the LFO to the tempo, else you can set the LFO is Hz."));
     }
     else if (shapeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Waveshape Menu. Sets the LFO waveshape for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate("Wave Shape Menu. Sets the LFO wave shape for the selected pads."));
     }
     else if (alphaTouchMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("AlphaTouch Menu. Sets the effect parameter that the pads pressure will control for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::alphaTouchMenu));
     }
     else if (reverseButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("AlphaTouch Reverse Button. Activate this button to reverse/invert the direction of the modulated created by the pressure of the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::inverseButton));
     }
     else if (intensitySlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("AlphaTouch Intensity Control. Sets the intensity/range of modulation created by the pressure of the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
     }
     
 }
@@ -374,5 +391,6 @@ void GuiTremolo::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
+    parameterHoverLabel->setText(String::empty, false);
     
 }

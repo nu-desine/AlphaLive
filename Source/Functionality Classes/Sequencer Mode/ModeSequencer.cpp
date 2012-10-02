@@ -45,6 +45,8 @@ ModeSequencer::ModeSequencer(MidiOutput &midiOutput, AlphaLiveEngine &ref)
     
     audioTransportSourceThread = new TimeSliceThread("Sequencer Audio Thread");
     audioTransportSourceThread->startThread();
+    
+    lastPreviewedSequencePadNum = 100; //no sequence default value
 }
 
 
@@ -118,21 +120,50 @@ void ModeSequencer::killPad (int padNum)
     if (padSequencer[padNum] != NULL) //if it exists..
     {
         //should there be a check here to see if the pad is currently playing?
-        
-        //padSequencer[padNum]->stopThread(padSequencer[padNum]->getTimeInterval());
         padSequencer[padNum]->stopThreadAndReset();
-        
-        
     }
 }
 
+void ModeSequencer::stopPrevExclusivePad (int padNum)
+{
+    padSequencer[padNum]->stopThread(padSequencer[padNum]->getTimeInterval());
+}
+
+void ModeSequencer::setPreviewSequenceNumber (int padNum, int sequenceNumber)
+{
+    padSequencer[padNum]->setSequenceNumber(sequenceNumber);
+}
+
+void ModeSequencer::previewSequence (int padNum, int status)
+{
+    //what should I do here?
+    //should there be a dedicated class/object similar to sequencerplayer
+    //that just plays a sequence completetly seperate from the sequenceplayer
+    //objects for each pad?
+    //or not...?
+    if (status == 1)
+        padSequencer[padNum]->processSequence(1);
+    else
+        padSequencer[padNum]->stopThreadAndReset();
+    
+    lastPreviewedSequencePadNum = padNum;
+    
+}
+
+void ModeSequencer::stopLastPreviewedSequence()
+{
+    if (padSequencer[lastPreviewedSequencePadNum] != nullptr &&
+        padSequencer[lastPreviewedSequencePadNum]->isThreadRunning() == true)
+    {
+        padSequencer[lastPreviewedSequencePadNum]->stopThreadAndReset();
+        lastPreviewedSequencePadNum = 100; //no sequence default value
+    }
+}
 
 void ModeSequencer::updatePadPlayingStatus(int padNumber, int playingStatus)
 {
     alphaLiveEngineRef.updatePadPlayingStatus(padNumber, playingStatus);
 }
-
-
 
 SequencePlayer* ModeSequencer::getSequencePlayerInstance (int padNumber)
 {

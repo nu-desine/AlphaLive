@@ -24,6 +24,9 @@
 #include "../Views/MainComponent.h"
 #include "../../File and Settings/AppSettings.h"
 #include "../../Functionality Classes/Sequencer Mode/SequencerValues.h"
+#include "../../Application/CommonInfoBoxText.h"
+#include "../AlphaLiveLookandFeel.h"
+
 
 
 ProjectSettingsComponent::ProjectSettingsComponent(MainComponent &ref, AlphaLiveEngine &ref2, AppDocumentState &ref3)
@@ -36,11 +39,11 @@ ProjectSettingsComponent::ProjectSettingsComponent(MainComponent &ref, AlphaLive
     
     //create tabbed component and add tabs/child components
     addAndMakeVisible(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
-    tabbedComponent->addTab("General Settings", Colours::darkgrey, generalSettingsComponent, true);
-    tabbedComponent->addTab("Global OSC Settings", Colours::darkgrey, globalOscComponent, true);
+    tabbedComponent->addTab(translate("General Settings"), Colours::darkgrey, generalSettingsComponent, true);
+    tabbedComponent->addTab(translate("Global OSC Settings"), Colours::darkgrey, globalOscComponent, true);
     
     addAndMakeVisible(closeButton = new TextButton());
-    closeButton->setButtonText("Close");
+    closeButton->setButtonText(translate("Close"));
     closeButton->addListener(this);
     closeButton->addMouseListener(this, true);
     
@@ -59,7 +62,7 @@ ProjectSettingsComponent::~ProjectSettingsComponent()
 void ProjectSettingsComponent::resized()
 {
     tabbedComponent->setBounds(getWidth()/4, getHeight()/6, getWidth()/2, ((getHeight()/6)*4)-70);
-    closeButton->setBounds((getWidth()/2)-35, ((getHeight()/6)*5)-60, 70, 20);
+    closeButton->setBounds((getWidth()/2)-20, ((getHeight()/6)*5)-68, 40, 35);
 }
 
 void ProjectSettingsComponent::paint (Graphics& g)
@@ -67,7 +70,7 @@ void ProjectSettingsComponent::paint (Graphics& g)
     g.setColour(Colours::black.withAlpha(0.8f));
     g.fillRect(0, 0, getWidth(), getHeight());
     
-    g.setColour(Colours::grey.withAlpha(0.9f));
+    g.setColour(AlphaColours::verydarkgrey.withAlpha(1.0f));
     g.fillRoundedRectangle(getWidth()/4, getHeight()/6, getWidth()/2, ((getHeight()/6)*4)-30, 10);
     
 }
@@ -85,7 +88,7 @@ void ProjectSettingsComponent::mouseEnter (const MouseEvent &e)
 {
     if (closeButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Click to go back to the application's main interface. Pressing ESC also triggers this command.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::closeButton));
     }
 }
 
@@ -134,11 +137,11 @@ GlobalOscComponent::GlobalOscComponent(MainComponent &ref, AlphaLiveEngine &ref2
 {
     //GLOBAL OSC OUTPUT SETTINGS
     addAndMakeVisible(globalOscLabel = new Label());
-    globalOscLabel->setText("Global OSC Mode:", false);
+    globalOscLabel->setText(translate("Global OSC Mode:"), false);
     globalOscLabel->setColour(Label::textColourId, Colours::lightgrey);
     
     addAndMakeVisible(globalOscSwitch = new TextButton());
-    globalOscSwitch->setButtonText("Off");
+    globalOscSwitch->setButtonText(translate("Off"));
     globalOscSwitch->setClickingTogglesState(true);
     globalOscSwitch->setToggleState(false, false);
     globalOscSwitch->addListener(this);
@@ -155,12 +158,11 @@ GlobalOscComponent::GlobalOscComponent(MainComponent &ref, AlphaLiveEngine &ref2
     oscIpAddressEditor->setVisible(false);
     //AT SOME POINT USE LABEL::CREATEEDITORCOMPONENT() TO SET INPUT RESTRICTIONS TO THE EDITOR
     
-    addAndMakeVisible(oscPortNumberSlider = new AlphaSlider());
+    addChildComponent(oscPortNumberSlider = new AlphaSlider());
     oscPortNumberSlider->setRange(0, 65535, 1);
     oscPortNumberSlider->addListener(this);
     oscPortNumberSlider->setValue(5004, false);
     oscPortNumberSlider->addMouseListener(this, true);
-    oscPortNumberSlider->setVisible(false);
     
     
 }
@@ -173,9 +175,9 @@ GlobalOscComponent::~GlobalOscComponent()
 void GlobalOscComponent::resized()
 {
     globalOscLabel->setBounds(160, 10, 120, 20);
-    globalOscSwitch->setBounds(290, 10, 50, 20);
+    globalOscSwitch->setBounds(290, 8, 40, 25);
     oscIpAddressEditor->setBounds(200, 40, 100, 20);
-    oscPortNumberSlider->setBounds(200, 70, 100, 20);
+    oscPortNumberSlider->setBounds(224, 70, 48, 48);
 }
 
 void GlobalOscComponent::paint (Graphics& g)
@@ -204,7 +206,7 @@ void GlobalOscComponent::buttonClicked (Button* button)
             oscIpAddressEditor->setVisible(true);
             oscPortNumberSlider->setVisible(true);
             
-            globalOscSwitch->setButtonText("On");
+            globalOscSwitch->setButtonText(translate("On"));
         }
         else
         {
@@ -214,7 +216,7 @@ void GlobalOscComponent::buttonClicked (Button* button)
             oscIpAddressEditor->setVisible(false);
             oscPortNumberSlider->setVisible(false);
             
-            globalOscSwitch->setButtonText("Off");
+            globalOscSwitch->setButtonText(translate("Off"));
         }
     }
 }
@@ -232,15 +234,15 @@ void GlobalOscComponent::mouseEnter (const MouseEvent &e)
 {
     if (globalOscSwitch->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Global OSC Mode. Use this switch to turn on Global OSC Mode which allows you to send out OSC messages from each pad whilst still maintaining the functionality of adding audio/MIDI modes.");
+        mainComponentRef.setInfoTextBoxText(translate("Global OSC Mode. Use this switch to turn on Global OSC Mode which allows you to send out Open Sound Control messages from each pad whilst still maintaining the functionality of their audio/MIDI modes."));
     }
     else if (oscIpAddressEditor->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("IP Address Editor. Sets and displays the IP address of the device that you want to send the OSC messages to. Set to 127.0.0.1 to send OSC messages somewhere on the same computer.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::oscIpAddressEditor));
     }
     else if (oscPortNumberSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Port Number Selector. Sets and displays the UDP/TCP port number that you want to send OSC messages over. Warning: Do not select port 5003 as this is AlphaLive's listening port!");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::oscportNumberSlider));
     }
 }
 
@@ -265,9 +267,9 @@ GeneralProjSettingsComponent::GeneralProjSettingsComponent(MainComponent &ref, A
     copyExternalFilesSwitch->setClickingTogglesState(true);
     copyExternalFilesSwitch->setToggleState(AppSettings::Instance()->getCopyExternalFiles(), false);
     if(copyExternalFilesSwitch->getToggleStateValue() == true)
-        copyExternalFilesSwitch->setButtonText("On");
+        copyExternalFilesSwitch->setButtonText(translate("On"));
     else
-        copyExternalFilesSwitch->setButtonText("Off"); 
+        copyExternalFilesSwitch->setButtonText(translate("Off")); 
     
     copyExternalFilesSwitch->addListener(this);
     copyExternalFilesSwitch->addMouseListener(this, true);
@@ -286,7 +288,7 @@ GeneralProjSettingsComponent::~GeneralProjSettingsComponent()
 void GeneralProjSettingsComponent::resized()
 {
     copyExternalFilesLabel->setBounds(160, 10, 120, 20);
-    copyExternalFilesSwitch->setBounds(290, 10, 50, 20);
+    copyExternalFilesSwitch->setBounds(290, 8, 40, 25);
     
 }
 
@@ -311,7 +313,7 @@ void GeneralProjSettingsComponent::buttonClicked (Button* button)
     {
         if(copyExternalFilesSwitch->getToggleStateValue() == true)
         {
-            bool shouldImport = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Copy External Files", "This command will allow all imported audio files to be copied into the projects directory. It will also instantly import any files currently included in the project that are stored externally. This may take a couple of seconds depending on the number and size of audio files.");
+            bool shouldImport = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("Copy External Files"), translate("This command will allow all imported audio files to be copied into the projects directory. It will also instantly import any files currently included in the project that are stored externally. This may take a couple of seconds depending on the number and size of audio files."));
             
             if (shouldImport == true)
             {
@@ -326,7 +328,7 @@ void GeneralProjSettingsComponent::buttonClicked (Button* button)
                 appDocumentStateRef.importAudioFiles();
                 
                 AppSettings::Instance()->setCopyExternalFiles(true);
-                copyExternalFilesSwitch->setButtonText("On");
+                copyExternalFilesSwitch->setButtonText(translate("On"));
             }
             else
             {
@@ -337,7 +339,7 @@ void GeneralProjSettingsComponent::buttonClicked (Button* button)
         else
         {
             AppSettings::Instance()->setCopyExternalFiles(false);
-            copyExternalFilesSwitch->setButtonText("Off");
+            copyExternalFilesSwitch->setButtonText(translate("Off"));
         }
     }
     
@@ -347,16 +349,16 @@ void GeneralProjSettingsComponent::updateDisplay()
 {
     copyExternalFilesSwitch->setToggleState(AppSettings::Instance()->getCopyExternalFiles(), false);
     if(copyExternalFilesSwitch->getToggleStateValue() == true)
-        copyExternalFilesSwitch->setButtonText("On");
+        copyExternalFilesSwitch->setButtonText(translate("On"));
     else
-        copyExternalFilesSwitch->setButtonText("Off");
+        copyExternalFilesSwitch->setButtonText(translate("Off"));
 }
 
 void GeneralProjSettingsComponent::mouseEnter (const MouseEvent &e)
 {
     if (copyExternalFilesSwitch->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Copy External Audio Files Options. By default when an external audio file is added to an AlphaLive project it is copied into the projects directory. Use this button to turn this option off. Be aware that with this set to off the project will not beable to link to any external audio files if moved onto another computer.");
+        mainComponentRef.setInfoTextBoxText(translate("Copy External Audio Files Options. By default when an external audio file is added to an AlphaLive project it is copied into the projects directory. Use this button to turn this option off. Be aware that with this set to off the project will not be able to link to any external audio files if moved onto another computer."));
     }
 
 }

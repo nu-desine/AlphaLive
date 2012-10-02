@@ -34,15 +34,15 @@ LowpassFilter::LowpassFilter(int padNumber_, float sampleRate_)
     // sample rate
     params[0] = sampleRate_;
     // cutoff frequency
-    params[1] = frequencyControlValue = PAD_SETTINGS->getSamplerFxLpfFreq();
+    params[1] = frequencyControlValue = PAD_SETTINGS->getPadFxLpfFreq();
     // Q/Bandwidth
-    params[2] = bandwidthControlValue = PAD_SETTINGS->getSamplerFxLpfBandwidth();
+    params[2] = bandwidthControlValue = PAD_SETTINGS->getPadFxLpfBandwidth();
     
-    mix = mixPrev = mixControlValue =  PAD_SETTINGS->getSamplerFxLpfMix();
+    mix = mixPrev = mixControlValue =  PAD_SETTINGS->getPadFxLpfMix();
     
-    alphaTouchParam = PAD_SETTINGS->getSamplerFxLpfAlphaTouch();
-    alphaTouchReverse = PAD_SETTINGS->getSamplerFxLpfAtReverse();
-    alphaTouchIntensity = PAD_SETTINGS->getSamplerFxLpfAtIntensity();
+    alphaTouchParam = PAD_SETTINGS->getPadFxLpfAlphaTouch();
+    alphaTouchReverse = PAD_SETTINGS->getPadFxLpfAtReverse();
+    alphaTouchIntensity = PAD_SETTINGS->getPadFxLpfAtIntensity();
 
 }
 

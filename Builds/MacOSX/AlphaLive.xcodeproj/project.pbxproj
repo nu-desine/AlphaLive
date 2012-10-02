@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C1657D815E95709002E924A /* notational_arrangements.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0C1657D715E95709002E924A /* notational_arrangements.xml */; };
+		0C1A3C4F15E50D65004306A3 /* FileDropButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C1A3C4D15E50D65004306A3 /* FileDropButton.cpp */; };
 		0C41D38815B456E90002DCD1 /* document_icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0C41D38615B456E90002DCD1 /* document_icon.icns */; };
 		0C41D38915B456E90002DCD1 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0C41D38715B456E90002DCD1 /* icon.icns */; };
 		0C52F28B15D6914600E76547 /* AlphaPopUpButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C52F28715D6914600E76547 /* AlphaPopUpButton.cpp */; };
@@ -17,7 +19,6 @@
 		0C52F29915D6964A00E76547 /* GuiKeys.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C52F29715D6964A00E76547 /* GuiKeys.cpp */; };
 		0C52F2A215D6983300E76547 /* GuiPiano.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C52F2A015D6983300E76547 /* GuiPiano.cpp */; };
 		0C52F2AB15D69D6000E76547 /* SettingsButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C52F2A915D69D5C00E76547 /* SettingsButton.cpp */; };
-		0C52F2AE15D69E2C00E76547 /* Toolbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C52F2AC15D69E2C00E76547 /* Toolbox.cpp */; };
 		0C52F2B415D6BF4E00E76547 /* GuiGlobalPadSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C52F2B215D6BF4D00E76547 /* GuiGlobalPadSettings.cpp */; };
 		0C78A3C115B467910049C0C8 /* AbstractSubjectAndObserver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2AC15B467900049C0C8 /* AbstractSubjectAndObserver.cpp */; };
 		0C78A3C215B467910049C0C8 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2B015B467900049C0C8 /* Main.cpp */; };
@@ -48,16 +49,6 @@
 		0C78A3DB15B467910049C0C8 /* ModeSequencer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2EA15B467900049C0C8 /* ModeSequencer.cpp */; };
 		0C78A3DC15B467910049C0C8 /* SequenceAudioFilePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2EC15B467900049C0C8 /* SequenceAudioFilePlayer.cpp */; };
 		0C78A3DD15B467910049C0C8 /* SequencePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2EE15B467900049C0C8 /* SequencePlayer.cpp */; };
-		0C78A3DE15B467910049C0C8 /* BinaryData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2F315B467900049C0C8 /* BinaryData.cpp */; };
-		0C78A3DF15B467910049C0C8 /* CirclePianoBinaryData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2F515B467900049C0C8 /* CirclePianoBinaryData.cpp */; };
-		0C78A3E015B467910049C0C8 /* ImageSliderBinaryData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2F715B467900049C0C8 /* ImageSliderBinaryData.cpp */; };
-		0C78A3E115B467910049C0C8 /* PadBinaryData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2F915B467900049C0C8 /* PadBinaryData.cpp */; };
-		0C78A3E215B467910049C0C8 /* PressureBinaryData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2FB15B467900049C0C8 /* PressureBinaryData.cpp */; };
-		0C78A3E315B467910049C0C8 /* SequencerBinaryData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2FD15B467900049C0C8 /* SequencerBinaryData.cpp */; };
-		0C78A3E415B467910049C0C8 /* GuiCirclePiano.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A30115B467900049C0C8 /* GuiCirclePiano.cpp */; };
-		0C78A3E515B467910049C0C8 /* GuiCirclePianoForScales.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A30315B467900049C0C8 /* GuiCirclePianoForScales.cpp */; };
-		0C78A3E615B467910049C0C8 /* GuiCirclePianoOneOctave.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A30515B467900049C0C8 /* GuiCirclePianoOneOctave.cpp */; };
-		0C78A3E715B467910049C0C8 /* GuiPianoKeys.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A30715B467900049C0C8 /* GuiPianoKeys.cpp */; };
 		0C78A3E815B467910049C0C8 /* CircleWaveform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A30A15B467900049C0C8 /* CircleWaveform.cpp */; };
 		0C78A3E915B467910049C0C8 /* CircleWaveformCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A30C15B467900049C0C8 /* CircleWaveformCache.cpp */; };
 		0C78A3EA15B467910049C0C8 /* DemoThumbnailComp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A30E15B467900049C0C8 /* DemoThumbnailComp.cpp */; };
@@ -69,18 +60,13 @@
 		0C78A3F015B467910049C0C8 /* FxGuiPanAndGain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A31C15B467900049C0C8 /* FxGuiPanAndGain.cpp */; };
 		0C78A3F115B467910049C0C8 /* FxGuiReverb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A31E15B467900049C0C8 /* FxGuiReverb.cpp */; };
 		0C78A3F215B467910049C0C8 /* FxGuiTremolo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A32015B467900049C0C8 /* FxGuiTremolo.cpp */; };
-		0C78A3F315B467910049C0C8 /* GuiFxButtons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A32215B467900049C0C8 /* GuiFxButtons.cpp */; };
 		0C78A3F415B467910049C0C8 /* GuiFxDial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A32415B467900049C0C8 /* GuiFxDial.cpp */; };
 		0C78A3F515B467910049C0C8 /* AlphaAudioSettingsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A32715B467900049C0C8 /* AlphaAudioSettingsComponent.cpp */; };
-		0C78A3F615B467910049C0C8 /* AlphaImageKnob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A32915B467900049C0C8 /* AlphaImageKnob.cpp */; };
 		0C78A3F715B467910049C0C8 /* AlphaSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A32B15B467900049C0C8 /* AlphaSlider.cpp */; };
 		0C78A3F815B467910049C0C8 /* GuiSwitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A32D15B467900049C0C8 /* GuiSwitch.cpp */; };
 		0C78A3F915B467910049C0C8 /* ImageSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A32F15B467900049C0C8 /* ImageSlider.cpp */; };
 		0C78A3FA15B467910049C0C8 /* ModeButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A33115B467900049C0C8 /* ModeButton.cpp */; };
 		0C78A3FB15B467910049C0C8 /* GuiCircleBackground.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A33415B467900049C0C8 /* GuiCircleBackground.cpp */; };
-		0C78A3FC15B467910049C0C8 /* GuiPopUpWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A33615B467900049C0C8 /* GuiPopUpWindow.cpp */; };
-		0C78A3FD15B467910049C0C8 /* GuiSpeaker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A33815B467900049C0C8 /* GuiSpeaker.cpp */; };
-		0C78A3FE15B467910049C0C8 /* GuiBeatIndicator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A33A15B467900049C0C8 /* GuiBeatIndicator.cpp */; };
 		0C78A3FF15B467910049C0C8 /* GuiPad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A33D15B467900049C0C8 /* GuiPad.cpp */; };
 		0C78A40015B467910049C0C8 /* GuiPadLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A33F15B467900049C0C8 /* GuiPadLayout.cpp */; };
 		0C78A40115B467910049C0C8 /* GuiPadRow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A34115B467900049C0C8 /* GuiPadRow.cpp */; };
@@ -99,8 +85,6 @@
 		0C78A40F15B467910049C0C8 /* GuiControllerMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A36415B467910049C0C8 /* GuiControllerMode.cpp */; };
 		0C78A41015B467910049C0C8 /* GuiSamplerMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A36615B467910049C0C8 /* GuiSamplerMode.cpp */; };
 		0C78A41115B467910049C0C8 /* GuiMidiMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A36815B467910049C0C8 /* GuiMidiMode.cpp */; };
-		0C78A41215B467910049C0C8 /* GuiSeqMidiMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A36A15B467910049C0C8 /* GuiSeqMidiMode.cpp */; };
-		0C78A41315B467910049C0C8 /* GuiSeqSamplesMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A36C15B467910049C0C8 /* GuiSeqSamplesMode.cpp */; };
 		0C78A41415B467910049C0C8 /* GuiSequencerMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A36E15B467910049C0C8 /* GuiSequencerMode.cpp */; };
 		0C78A41515B467910049C0C8 /* MainComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A37015B467910049C0C8 /* MainComponent.cpp */; };
 		0C78A41815B467910049C0C8 /* OscInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A37715B467910049C0C8 /* OscInput.cpp */; };
@@ -129,6 +113,13 @@
 		0C78A43015B467910049C0C8 /* OscPrintReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A3BB15B467910049C0C8 /* OscPrintReceivedElements.cpp */; };
 		0C78A43115B467910049C0C8 /* OscReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A3BD15B467910049C0C8 /* OscReceivedElements.cpp */; };
 		0C78A43215B467910049C0C8 /* OscTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A3BF15B467910049C0C8 /* OscTypes.cpp */; };
+		0C85C32515E526140043797E /* SettingsButtonImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C85C32315E526140043797E /* SettingsButtonImage.cpp */; };
+		0C8BD8C216075E2F003A1057 /* EliteControlsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C8BD8C016075E2F003A1057 /* EliteControlsComponent.cpp */; };
+		0C8BD8C616077158003A1057 /* GuiEliteControlsSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C8BD8C416077158003A1057 /* GuiEliteControlsSettings.cpp */; };
+		0C9950CC15E902C30060688B /* scales.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0C9950CB15E902C30060688B /* scales.xml */; };
+		0C9950D115E9046C0060688B /* Toolbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C9950CF15E9046C0060688B /* Toolbox.cpp */; };
+		0C9950D415E909870060688B /* AlphaListBoxModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C9950D215E909870060688B /* AlphaListBoxModel.cpp */; };
+		0C9950D715E9169E0060688B /* XmlAttributesListBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C9950D515E9169D0060688B /* XmlAttributesListBox.cpp */; };
 		0CA0A4FA15B97E8C001362B3 /* TriggerModes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CA0A4F815B97E8C001362B3 /* TriggerModes.cpp */; };
 		25CABBE894F6F3FE24224C5B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97FE2821188200B689631086 /* QuartzCore.framework */; };
 		2E4F3ED4068A7F5AC3B49264 /* juce_audio_utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = AE8AA00C09CDA8BD939E2BC5 /* juce_audio_utils.mm */; };
@@ -211,6 +202,9 @@
 		0BA10572CEE7B9491160A103 /* juce_GraphicsContext.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_GraphicsContext.cpp; path = ../../JuceLibraryCode/modules/juce_graphics/contexts/juce_GraphicsContext.cpp; sourceTree = SOURCE_ROOT; };
 		0BB5F1152C93577E4AB4958E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		0C0EBD8EA4693EEDBFEDFAB9 /* juce_ArrowButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_ArrowButton.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/buttons/juce_ArrowButton.cpp; sourceTree = SOURCE_ROOT; };
+		0C1657D715E95709002E924A /* notational_arrangements.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = notational_arrangements.xml; sourceTree = "<group>"; };
+		0C1A3C4D15E50D65004306A3 /* FileDropButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileDropButton.cpp; sourceTree = "<group>"; };
+		0C1A3C4E15E50D65004306A3 /* FileDropButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileDropButton.h; sourceTree = "<group>"; };
 		0C287D087BCB039AABDDD356 /* juce_DynamicLibrary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_DynamicLibrary.h; path = ../../JuceLibraryCode/modules/juce_core/threads/juce_DynamicLibrary.h; sourceTree = SOURCE_ROOT; };
 		0C41D38615B456E90002DCD1 /* document_icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = document_icon.icns; sourceTree = "<group>"; };
 		0C41D38715B456E90002DCD1 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
@@ -230,10 +224,9 @@
 		0C52F2A115D6983300E76547 /* GuiPiano.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiPiano.h; sourceTree = "<group>"; };
 		0C52F2A915D69D5C00E76547 /* SettingsButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SettingsButton.cpp; sourceTree = "<group>"; };
 		0C52F2AA15D69D5E00E76547 /* SettingsButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsButton.h; sourceTree = "<group>"; };
-		0C52F2AC15D69E2C00E76547 /* Toolbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Toolbox.cpp; sourceTree = "<group>"; };
-		0C52F2AD15D69E2C00E76547 /* Toolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Toolbox.h; sourceTree = "<group>"; };
 		0C52F2B215D6BF4D00E76547 /* GuiGlobalPadSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiGlobalPadSettings.cpp; sourceTree = "<group>"; };
-		0C52F2B315D6BF4E00E76547 /* GuiGlobalPadSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; path = GuiGlobalPadSettings.h; sourceTree = "<group>"; };
+		0C52F2B315D6BF4E00E76547 /* GuiGlobalPadSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiGlobalPadSettings.h; sourceTree = "<group>"; };
+		0C669E7C15E6974B003B83C1 /* CommonInfoBoxText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonInfoBoxText.h; sourceTree = "<group>"; };
 		0C68958415D123AA00848D62 /* ger_trans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ger_trans; sourceTree = "<group>"; };
 		0C78A2AC15B467900049C0C8 /* AbstractSubjectAndObserver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractSubjectAndObserver.cpp; sourceTree = "<group>"; };
 		0C78A2AD15B467900049C0C8 /* AbstractSubjectAndObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractSubjectAndObserver.h; sourceTree = "<group>"; };
@@ -295,26 +288,6 @@
 		0C78A2EE15B467900049C0C8 /* SequencePlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SequencePlayer.cpp; sourceTree = "<group>"; };
 		0C78A2EF15B467900049C0C8 /* SequencePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequencePlayer.h; sourceTree = "<group>"; };
 		0C78A2F015B467900049C0C8 /* SequencerValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequencerValues.h; sourceTree = "<group>"; };
-		0C78A2F315B467900049C0C8 /* BinaryData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinaryData.cpp; sourceTree = "<group>"; };
-		0C78A2F415B467900049C0C8 /* BinaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryData.h; sourceTree = "<group>"; };
-		0C78A2F515B467900049C0C8 /* CirclePianoBinaryData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CirclePianoBinaryData.cpp; sourceTree = "<group>"; };
-		0C78A2F615B467900049C0C8 /* CirclePianoBinaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CirclePianoBinaryData.h; sourceTree = "<group>"; };
-		0C78A2F715B467900049C0C8 /* ImageSliderBinaryData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageSliderBinaryData.cpp; sourceTree = "<group>"; };
-		0C78A2F815B467900049C0C8 /* ImageSliderBinaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageSliderBinaryData.h; sourceTree = "<group>"; };
-		0C78A2F915B467900049C0C8 /* PadBinaryData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PadBinaryData.cpp; sourceTree = "<group>"; };
-		0C78A2FA15B467900049C0C8 /* PadBinaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PadBinaryData.h; sourceTree = "<group>"; };
-		0C78A2FB15B467900049C0C8 /* PressureBinaryData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PressureBinaryData.cpp; sourceTree = "<group>"; };
-		0C78A2FC15B467900049C0C8 /* PressureBinaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PressureBinaryData.h; sourceTree = "<group>"; };
-		0C78A2FD15B467900049C0C8 /* SequencerBinaryData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerBinaryData.cpp; sourceTree = "<group>"; };
-		0C78A2FE15B467900049C0C8 /* SequencerBinaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequencerBinaryData.h; sourceTree = "<group>"; };
-		0C78A30115B467900049C0C8 /* GuiCirclePiano.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiCirclePiano.cpp; sourceTree = "<group>"; };
-		0C78A30215B467900049C0C8 /* GuiCirclePiano.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiCirclePiano.h; sourceTree = "<group>"; };
-		0C78A30315B467900049C0C8 /* GuiCirclePianoForScales.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiCirclePianoForScales.cpp; sourceTree = "<group>"; };
-		0C78A30415B467900049C0C8 /* GuiCirclePianoForScales.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiCirclePianoForScales.h; sourceTree = "<group>"; };
-		0C78A30515B467900049C0C8 /* GuiCirclePianoOneOctave.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiCirclePianoOneOctave.cpp; sourceTree = "<group>"; };
-		0C78A30615B467900049C0C8 /* GuiCirclePianoOneOctave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiCirclePianoOneOctave.h; sourceTree = "<group>"; };
-		0C78A30715B467900049C0C8 /* GuiPianoKeys.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiPianoKeys.cpp; sourceTree = "<group>"; };
-		0C78A30815B467900049C0C8 /* GuiPianoKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiPianoKeys.h; sourceTree = "<group>"; };
 		0C78A30A15B467900049C0C8 /* CircleWaveform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CircleWaveform.cpp; sourceTree = "<group>"; };
 		0C78A30B15B467900049C0C8 /* CircleWaveform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleWaveform.h; sourceTree = "<group>"; };
 		0C78A30C15B467900049C0C8 /* CircleWaveformCache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CircleWaveformCache.cpp; sourceTree = "<group>"; };
@@ -337,14 +310,10 @@
 		0C78A31F15B467900049C0C8 /* FxGuiReverb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FxGuiReverb.h; sourceTree = "<group>"; };
 		0C78A32015B467900049C0C8 /* FxGuiTremolo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FxGuiTremolo.cpp; sourceTree = "<group>"; };
 		0C78A32115B467900049C0C8 /* FxGuiTremolo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FxGuiTremolo.h; sourceTree = "<group>"; };
-		0C78A32215B467900049C0C8 /* GuiFxButtons.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiFxButtons.cpp; sourceTree = "<group>"; };
-		0C78A32315B467900049C0C8 /* GuiFxButtons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiFxButtons.h; sourceTree = "<group>"; };
 		0C78A32415B467900049C0C8 /* GuiFxDial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiFxDial.cpp; sourceTree = "<group>"; };
 		0C78A32515B467900049C0C8 /* GuiFxDial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiFxDial.h; sourceTree = "<group>"; };
 		0C78A32715B467900049C0C8 /* AlphaAudioSettingsComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlphaAudioSettingsComponent.cpp; sourceTree = "<group>"; };
 		0C78A32815B467900049C0C8 /* AlphaAudioSettingsComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlphaAudioSettingsComponent.h; sourceTree = "<group>"; };
-		0C78A32915B467900049C0C8 /* AlphaImageKnob.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlphaImageKnob.cpp; sourceTree = "<group>"; };
-		0C78A32A15B467900049C0C8 /* AlphaImageKnob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlphaImageKnob.h; sourceTree = "<group>"; };
 		0C78A32B15B467900049C0C8 /* AlphaSlider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlphaSlider.cpp; sourceTree = "<group>"; };
 		0C78A32C15B467900049C0C8 /* AlphaSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlphaSlider.h; sourceTree = "<group>"; };
 		0C78A32D15B467900049C0C8 /* GuiSwitch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiSwitch.cpp; sourceTree = "<group>"; };
@@ -355,12 +324,6 @@
 		0C78A33215B467900049C0C8 /* ModeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModeButton.h; sourceTree = "<group>"; };
 		0C78A33415B467900049C0C8 /* GuiCircleBackground.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiCircleBackground.cpp; sourceTree = "<group>"; };
 		0C78A33515B467900049C0C8 /* GuiCircleBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiCircleBackground.h; sourceTree = "<group>"; };
-		0C78A33615B467900049C0C8 /* GuiPopUpWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiPopUpWindow.cpp; sourceTree = "<group>"; };
-		0C78A33715B467900049C0C8 /* GuiPopUpWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiPopUpWindow.h; sourceTree = "<group>"; };
-		0C78A33815B467900049C0C8 /* GuiSpeaker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiSpeaker.cpp; sourceTree = "<group>"; };
-		0C78A33915B467900049C0C8 /* GuiSpeaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiSpeaker.h; sourceTree = "<group>"; };
-		0C78A33A15B467900049C0C8 /* GuiBeatIndicator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiBeatIndicator.cpp; sourceTree = "<group>"; };
-		0C78A33B15B467900049C0C8 /* GuiBeatIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiBeatIndicator.h; sourceTree = "<group>"; };
 		0C78A33D15B467900049C0C8 /* GuiPad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiPad.cpp; sourceTree = "<group>"; };
 		0C78A33E15B467900049C0C8 /* GuiPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiPad.h; sourceTree = "<group>"; };
 		0C78A33F15B467900049C0C8 /* GuiPadLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiPadLayout.cpp; sourceTree = "<group>"; };
@@ -399,10 +362,6 @@
 		0C78A36715B467910049C0C8 /* GuiSamplerMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiSamplerMode.h; sourceTree = "<group>"; };
 		0C78A36815B467910049C0C8 /* GuiMidiMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiMidiMode.cpp; sourceTree = "<group>"; };
 		0C78A36915B467910049C0C8 /* GuiMidiMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiMidiMode.h; sourceTree = "<group>"; };
-		0C78A36A15B467910049C0C8 /* GuiSeqMidiMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiSeqMidiMode.cpp; sourceTree = "<group>"; };
-		0C78A36B15B467910049C0C8 /* GuiSeqMidiMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiSeqMidiMode.h; sourceTree = "<group>"; };
-		0C78A36C15B467910049C0C8 /* GuiSeqSamplesMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiSeqSamplesMode.cpp; sourceTree = "<group>"; };
-		0C78A36D15B467910049C0C8 /* GuiSeqSamplesMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiSeqSamplesMode.h; sourceTree = "<group>"; };
 		0C78A36E15B467910049C0C8 /* GuiSequencerMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiSequencerMode.cpp; sourceTree = "<group>"; };
 		0C78A36F15B467910049C0C8 /* GuiSequencerMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiSequencerMode.h; sourceTree = "<group>"; };
 		0C78A37015B467910049C0C8 /* MainComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainComponent.cpp; sourceTree = "<group>"; };
@@ -472,9 +431,23 @@
 		0C78A3BE15B467910049C0C8 /* OscReceivedElements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscReceivedElements.h; sourceTree = "<group>"; };
 		0C78A3BF15B467910049C0C8 /* OscTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OscTypes.cpp; sourceTree = "<group>"; };
 		0C78A3C015B467910049C0C8 /* OscTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscTypes.h; sourceTree = "<group>"; };
+		0C85C32315E526140043797E /* SettingsButtonImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SettingsButtonImage.cpp; sourceTree = "<group>"; };
+		0C85C32415E526140043797E /* SettingsButtonImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsButtonImage.h; sourceTree = "<group>"; };
+		0C8BD8C016075E2F003A1057 /* EliteControlsComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EliteControlsComponent.cpp; sourceTree = "<group>"; };
+		0C8BD8C116075E2F003A1057 /* EliteControlsComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EliteControlsComponent.h; sourceTree = "<group>"; };
+		0C8BD8C416077158003A1057 /* GuiEliteControlsSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiEliteControlsSettings.cpp; sourceTree = "<group>"; };
+		0C8BD8C516077158003A1057 /* GuiEliteControlsSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiEliteControlsSettings.h; sourceTree = "<group>"; };
+		0C9950CB15E902C30060688B /* scales.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = scales.xml; sourceTree = "<group>"; };
+		0C9950CF15E9046C0060688B /* Toolbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Toolbox.cpp; sourceTree = "<group>"; };
+		0C9950D015E9046C0060688B /* Toolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Toolbox.h; sourceTree = "<group>"; };
+		0C9950D215E909870060688B /* AlphaListBoxModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlphaListBoxModel.cpp; sourceTree = "<group>"; };
+		0C9950D315E909870060688B /* AlphaListBoxModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlphaListBoxModel.h; sourceTree = "<group>"; };
+		0C9950D515E9169D0060688B /* XmlAttributesListBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XmlAttributesListBox.cpp; sourceTree = "<group>"; };
+		0C9950D615E9169E0060688B /* XmlAttributesListBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XmlAttributesListBox.h; sourceTree = "<group>"; };
 		0CA0A4F815B97E8C001362B3 /* TriggerModes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TriggerModes.cpp; sourceTree = "<group>"; };
 		0CA0A4F915B97E8C001362B3 /* TriggerModes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriggerModes.h; sourceTree = "<group>"; };
 		0CA92FACC9C857515F5DC895 /* juce_Colours.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Colours.h; path = ../../JuceLibraryCode/modules/juce_graphics/colour/juce_Colours.h; sourceTree = SOURCE_ROOT; };
+		0CABB5C615E267EF00F27184 /* FirmwareStruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirmwareStruct.h; sourceTree = "<group>"; };
 		0CE4BE3A15D056EE00B444EE /* jap_trans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = jap_trans; sourceTree = "<group>"; };
 		0D5838014A4AB76B63EC13C4 /* juce_FileTreeComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_FileTreeComponent.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/filebrowser/juce_FileTreeComponent.cpp; sourceTree = SOURCE_ROOT; };
 		0D683EFC0C730B43D4BA49E6 /* juce_OggVorbisAudioFormat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_OggVorbisAudioFormat.cpp; path = ../../JuceLibraryCode/modules/juce_audio_formats/codecs/juce_OggVorbisAudioFormat.cpp; sourceTree = SOURCE_ROOT; };
@@ -1417,6 +1390,7 @@
 				0C78A2AC15B467900049C0C8 /* AbstractSubjectAndObserver.cpp */,
 				0C78A2AF15B467900049C0C8 /* Common.h */,
 				0C78A2AE15B467900049C0C8 /* CommandIDs.h */,
+				0C669E7C15E6974B003B83C1 /* CommonInfoBoxText.h */,
 			);
 			name = Application;
 			path = ../../Source/Application;
@@ -1470,6 +1444,7 @@
 				0C78A2D115B467900049C0C8 /* PadSettings.cpp */,
 				0C78A2D415B467900049C0C8 /* StoredSettings.h */,
 				0C78A2D315B467900049C0C8 /* StoredSettings.cpp */,
+				0CABB5C615E267EF00F27184 /* FirmwareStruct.h */,
 			);
 			name = "File and Settings";
 			path = "../../Source/File and Settings";
@@ -1495,8 +1470,8 @@
 		0C78A2D615B467900049C0C8 /* Controller Mode */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A2D715B467900049C0C8 /* ModeController.cpp */,
 				0C78A2D815B467900049C0C8 /* ModeController.h */,
+				0C78A2D715B467900049C0C8 /* ModeController.cpp */,
 			);
 			path = "Controller Mode";
 			sourceTree = "<group>";
@@ -1565,18 +1540,6 @@
 		0C78A2F215B467900049C0C8 /* Binary Data */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A2F315B467900049C0C8 /* BinaryData.cpp */,
-				0C78A2F415B467900049C0C8 /* BinaryData.h */,
-				0C78A2F515B467900049C0C8 /* CirclePianoBinaryData.cpp */,
-				0C78A2F615B467900049C0C8 /* CirclePianoBinaryData.h */,
-				0C78A2F715B467900049C0C8 /* ImageSliderBinaryData.cpp */,
-				0C78A2F815B467900049C0C8 /* ImageSliderBinaryData.h */,
-				0C78A2F915B467900049C0C8 /* PadBinaryData.cpp */,
-				0C78A2FA15B467900049C0C8 /* PadBinaryData.h */,
-				0C78A2FB15B467900049C0C8 /* PressureBinaryData.cpp */,
-				0C78A2FC15B467900049C0C8 /* PressureBinaryData.h */,
-				0C78A2FD15B467900049C0C8 /* SequencerBinaryData.cpp */,
-				0C78A2FE15B467900049C0C8 /* SequencerBinaryData.h */,
 				0C52F29515D6943A00E76547 /* BinaryDataNew.h */,
 				0C52F29415D6943A00E76547 /* BinaryDataNew.cpp */,
 			);
@@ -1591,10 +1554,9 @@
 				0C78A31015B467900049C0C8 /* Effects */,
 				0C78A32615B467900049C0C8 /* General */,
 				0C78A33315B467900049C0C8 /* Graphics */,
-				0C78A33A15B467900049C0C8 /* GuiBeatIndicator.cpp */,
-				0C78A33B15B467900049C0C8 /* GuiBeatIndicator.h */,
 				0C78A33C15B467900049C0C8 /* Pad */,
 				0C78A34315B467900049C0C8 /* Scene */,
+				0C9950CE15E9046C0060688B /* Toolbox */,
 				0C78A34915B467900049C0C8 /* Sequencer */,
 			);
 			path = "Custom Components";
@@ -1603,14 +1565,6 @@
 		0C78A30015B467900049C0C8 /* Circle Piano */ = {
 			isa = PBXGroup;
 			children = (
-				0C78A30215B467900049C0C8 /* GuiCirclePiano.h */,
-				0C78A30115B467900049C0C8 /* GuiCirclePiano.cpp */,
-				0C78A30415B467900049C0C8 /* GuiCirclePianoForScales.h */,
-				0C78A30315B467900049C0C8 /* GuiCirclePianoForScales.cpp */,
-				0C78A30615B467900049C0C8 /* GuiCirclePianoOneOctave.h */,
-				0C78A30515B467900049C0C8 /* GuiCirclePianoOneOctave.cpp */,
-				0C78A30815B467900049C0C8 /* GuiPianoKeys.h */,
-				0C78A30715B467900049C0C8 /* GuiPianoKeys.cpp */,
 				0C52F29815D6964A00E76547 /* GuiKeys.h */,
 				0C52F29715D6964A00E76547 /* GuiKeys.cpp */,
 				0C52F2A115D6983300E76547 /* GuiPiano.h */,
@@ -1637,8 +1591,6 @@
 			children = (
 				0C78A32515B467900049C0C8 /* GuiFxDial.h */,
 				0C78A32415B467900049C0C8 /* GuiFxDial.cpp */,
-				0C78A32315B467900049C0C8 /* GuiFxButtons.h */,
-				0C78A32215B467900049C0C8 /* GuiFxButtons.cpp */,
 				0C78A31115B467900049C0C8 /* Effects GUIs */,
 			);
 			path = Effects;
@@ -1672,8 +1624,6 @@
 			children = (
 				0C78A32815B467900049C0C8 /* AlphaAudioSettingsComponent.h */,
 				0C78A32715B467900049C0C8 /* AlphaAudioSettingsComponent.cpp */,
-				0C78A32A15B467900049C0C8 /* AlphaImageKnob.h */,
-				0C78A32915B467900049C0C8 /* AlphaImageKnob.cpp */,
 				0C78A32C15B467900049C0C8 /* AlphaSlider.h */,
 				0C78A32B15B467900049C0C8 /* AlphaSlider.cpp */,
 				0C78A32E15B467900049C0C8 /* GuiSwitch.h */,
@@ -1690,6 +1640,10 @@
 				0C52F29115D6939B00E76547 /* AlphaTextButton.cpp */,
 				0C52F2AA15D69D5E00E76547 /* SettingsButton.h */,
 				0C52F2A915D69D5C00E76547 /* SettingsButton.cpp */,
+				0C85C32415E526140043797E /* SettingsButtonImage.h */,
+				0C85C32315E526140043797E /* SettingsButtonImage.cpp */,
+				0C1A3C4E15E50D65004306A3 /* FileDropButton.h */,
+				0C1A3C4D15E50D65004306A3 /* FileDropButton.cpp */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -1699,10 +1653,6 @@
 			children = (
 				0C78A33415B467900049C0C8 /* GuiCircleBackground.cpp */,
 				0C78A33515B467900049C0C8 /* GuiCircleBackground.h */,
-				0C78A33615B467900049C0C8 /* GuiPopUpWindow.cpp */,
-				0C78A33715B467900049C0C8 /* GuiPopUpWindow.h */,
-				0C78A33815B467900049C0C8 /* GuiSpeaker.cpp */,
-				0C78A33915B467900049C0C8 /* GuiSpeaker.h */,
 			);
 			path = Graphics;
 			sourceTree = "<group>";
@@ -1769,10 +1719,12 @@
 				0C78A35E15B467910049C0C8 /* PreferencesComponent.cpp */,
 				0C78A36115B467910049C0C8 /* ProjectSettingsComponent.h */,
 				0C78A36015B467910049C0C8 /* ProjectSettingsComponent.cpp */,
-				0C52F2AD15D69E2C00E76547 /* Toolbox.h */,
-				0C52F2AC15D69E2C00E76547 /* Toolbox.cpp */,
 				0C52F2B315D6BF4E00E76547 /* GuiGlobalPadSettings.h */,
 				0C52F2B215D6BF4D00E76547 /* GuiGlobalPadSettings.cpp */,
+				0C8BD8C116075E2F003A1057 /* EliteControlsComponent.h */,
+				0C8BD8C016075E2F003A1057 /* EliteControlsComponent.cpp */,
+				0C8BD8C516077158003A1057 /* GuiEliteControlsSettings.h */,
+				0C8BD8C416077158003A1057 /* GuiEliteControlsSettings.cpp */,
 			);
 			path = "Sub-Views";
 			sourceTree = "<group>";
@@ -1789,10 +1741,6 @@
 				0C78A36615B467910049C0C8 /* GuiSamplerMode.cpp */,
 				0C78A36F15B467910049C0C8 /* GuiSequencerMode.h */,
 				0C78A36E15B467910049C0C8 /* GuiSequencerMode.cpp */,
-				0C78A36B15B467910049C0C8 /* GuiSeqMidiMode.h */,
-				0C78A36A15B467910049C0C8 /* GuiSeqMidiMode.cpp */,
-				0C78A36D15B467910049C0C8 /* GuiSeqSamplesMode.h */,
-				0C78A36C15B467910049C0C8 /* GuiSeqSamplesMode.cpp */,
 				0C78A36515B467910049C0C8 /* GuiControllerMode.h */,
 				0C78A36415B467910049C0C8 /* GuiControllerMode.cpp */,
 			);
@@ -1926,6 +1874,29 @@
 				0C78A3C015B467910049C0C8 /* OscTypes.h */,
 			);
 			path = osc;
+			sourceTree = "<group>";
+		};
+		0C9950CA15E902C30060688B /* Other Files */ = {
+			isa = PBXGroup;
+			children = (
+				0C9950CB15E902C30060688B /* scales.xml */,
+				0C1657D715E95709002E924A /* notational_arrangements.xml */,
+			);
+			name = "Other Files";
+			path = "../../Other Files";
+			sourceTree = "<group>";
+		};
+		0C9950CE15E9046C0060688B /* Toolbox */ = {
+			isa = PBXGroup;
+			children = (
+				0C9950D015E9046C0060688B /* Toolbox.h */,
+				0C9950CF15E9046C0060688B /* Toolbox.cpp */,
+				0C9950D615E9169E0060688B /* XmlAttributesListBox.h */,
+				0C9950D515E9169D0060688B /* XmlAttributesListBox.cpp */,
+				0C9950D315E909870060688B /* AlphaListBoxModel.h */,
+				0C9950D215E909870060688B /* AlphaListBoxModel.cpp */,
+			);
+			path = Toolbox;
 			sourceTree = "<group>";
 		};
 		0CE4BE3915D056EE00B444EE /* Translation files */ = {
@@ -3054,6 +3025,7 @@
 				CDBADE64352FD356CBAD11BE /* AlphaLive */,
 				1AC53D384541E9928C012897 /* Juce Modules */,
 				DCA3EA8A1A8E8E9060589C1E /* Juce Library Code */,
+				0C9950CA15E902C30060688B /* Other Files */,
 				0CE4BE3915D056EE00B444EE /* Translation files */,
 				90004462C48C6E13E0AFD50B /* Resources */,
 				81B322E1A4AEBC13016E085C /* Frameworks */,
@@ -3540,6 +3512,8 @@
 			files = (
 				0C41D38815B456E90002DCD1 /* document_icon.icns in Resources */,
 				0C41D38915B456E90002DCD1 /* icon.icns in Resources */,
+				0C9950CC15E902C30060688B /* scales.xml in Resources */,
+				0C1657D815E95709002E924A /* notational_arrangements.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3593,16 +3567,6 @@
 				0C78A3DB15B467910049C0C8 /* ModeSequencer.cpp in Sources */,
 				0C78A3DC15B467910049C0C8 /* SequenceAudioFilePlayer.cpp in Sources */,
 				0C78A3DD15B467910049C0C8 /* SequencePlayer.cpp in Sources */,
-				0C78A3DE15B467910049C0C8 /* BinaryData.cpp in Sources */,
-				0C78A3DF15B467910049C0C8 /* CirclePianoBinaryData.cpp in Sources */,
-				0C78A3E015B467910049C0C8 /* ImageSliderBinaryData.cpp in Sources */,
-				0C78A3E115B467910049C0C8 /* PadBinaryData.cpp in Sources */,
-				0C78A3E215B467910049C0C8 /* PressureBinaryData.cpp in Sources */,
-				0C78A3E315B467910049C0C8 /* SequencerBinaryData.cpp in Sources */,
-				0C78A3E415B467910049C0C8 /* GuiCirclePiano.cpp in Sources */,
-				0C78A3E515B467910049C0C8 /* GuiCirclePianoForScales.cpp in Sources */,
-				0C78A3E615B467910049C0C8 /* GuiCirclePianoOneOctave.cpp in Sources */,
-				0C78A3E715B467910049C0C8 /* GuiPianoKeys.cpp in Sources */,
 				0C78A3E815B467910049C0C8 /* CircleWaveform.cpp in Sources */,
 				0C78A3E915B467910049C0C8 /* CircleWaveformCache.cpp in Sources */,
 				0C78A3EA15B467910049C0C8 /* DemoThumbnailComp.cpp in Sources */,
@@ -3614,18 +3578,13 @@
 				0C78A3F015B467910049C0C8 /* FxGuiPanAndGain.cpp in Sources */,
 				0C78A3F115B467910049C0C8 /* FxGuiReverb.cpp in Sources */,
 				0C78A3F215B467910049C0C8 /* FxGuiTremolo.cpp in Sources */,
-				0C78A3F315B467910049C0C8 /* GuiFxButtons.cpp in Sources */,
 				0C78A3F415B467910049C0C8 /* GuiFxDial.cpp in Sources */,
 				0C78A3F515B467910049C0C8 /* AlphaAudioSettingsComponent.cpp in Sources */,
-				0C78A3F615B467910049C0C8 /* AlphaImageKnob.cpp in Sources */,
 				0C78A3F715B467910049C0C8 /* AlphaSlider.cpp in Sources */,
 				0C78A3F815B467910049C0C8 /* GuiSwitch.cpp in Sources */,
 				0C78A3F915B467910049C0C8 /* ImageSlider.cpp in Sources */,
 				0C78A3FA15B467910049C0C8 /* ModeButton.cpp in Sources */,
 				0C78A3FB15B467910049C0C8 /* GuiCircleBackground.cpp in Sources */,
-				0C78A3FC15B467910049C0C8 /* GuiPopUpWindow.cpp in Sources */,
-				0C78A3FD15B467910049C0C8 /* GuiSpeaker.cpp in Sources */,
-				0C78A3FE15B467910049C0C8 /* GuiBeatIndicator.cpp in Sources */,
 				0C78A3FF15B467910049C0C8 /* GuiPad.cpp in Sources */,
 				0C78A40015B467910049C0C8 /* GuiPadLayout.cpp in Sources */,
 				0C78A40115B467910049C0C8 /* GuiPadRow.cpp in Sources */,
@@ -3644,8 +3603,6 @@
 				0C78A40F15B467910049C0C8 /* GuiControllerMode.cpp in Sources */,
 				0C78A41015B467910049C0C8 /* GuiSamplerMode.cpp in Sources */,
 				0C78A41115B467910049C0C8 /* GuiMidiMode.cpp in Sources */,
-				0C78A41215B467910049C0C8 /* GuiSeqMidiMode.cpp in Sources */,
-				0C78A41315B467910049C0C8 /* GuiSeqSamplesMode.cpp in Sources */,
 				0C78A41415B467910049C0C8 /* GuiSequencerMode.cpp in Sources */,
 				0C78A41515B467910049C0C8 /* MainComponent.cpp in Sources */,
 				0C78A41815B467910049C0C8 /* OscInput.cpp in Sources */,
@@ -3683,8 +3640,14 @@
 				0C52F29915D6964A00E76547 /* GuiKeys.cpp in Sources */,
 				0C52F2A215D6983300E76547 /* GuiPiano.cpp in Sources */,
 				0C52F2AB15D69D6000E76547 /* SettingsButton.cpp in Sources */,
-				0C52F2AE15D69E2C00E76547 /* Toolbox.cpp in Sources */,
 				0C52F2B415D6BF4E00E76547 /* GuiGlobalPadSettings.cpp in Sources */,
+				0C1A3C4F15E50D65004306A3 /* FileDropButton.cpp in Sources */,
+				0C85C32515E526140043797E /* SettingsButtonImage.cpp in Sources */,
+				0C9950D115E9046C0060688B /* Toolbox.cpp in Sources */,
+				0C9950D415E909870060688B /* AlphaListBoxModel.cpp in Sources */,
+				0C9950D715E9169E0060688B /* XmlAttributesListBox.cpp in Sources */,
+				0C8BD8C216075E2F003A1057 /* EliteControlsComponent.cpp in Sources */,
+				0C8BD8C616077158003A1057 /* GuiEliteControlsSettings.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

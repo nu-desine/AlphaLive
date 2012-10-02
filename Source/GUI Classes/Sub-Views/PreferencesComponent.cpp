@@ -22,6 +22,8 @@
 
 #include "PreferencesComponent.h"
 #include "../Views/MainComponent.h"
+#include "../../Application/CommonInfoBoxText.h"
+#include "../AlphaLiveLookandFeel.h"
 
 
 PreferencesComponent::PreferencesComponent(MainComponent &ref, AlphaLiveEngine &ref2)
@@ -44,11 +46,11 @@ PreferencesComponent::PreferencesComponent(MainComponent &ref, AlphaLiveEngine &
     
     //create tabbed component and add tabs/child components
     addAndMakeVisible(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
-    tabbedComponent->addTab("Audio and MIDI Settings", Colours::darkgrey, audioAndMidiSettingsComponent, true);
-    tabbedComponent->addTab("General Settings", Colours::darkgrey, generalSettingsComponent, true);
+    tabbedComponent->addTab(translate("Audio Output Settings"), Colours::darkgrey, audioAndMidiSettingsComponent, true);
+    tabbedComponent->addTab(translate("General Settings"), Colours::darkgrey, generalSettingsComponent, true);
     
     addAndMakeVisible(closeButton = new TextButton());
-    closeButton->setButtonText("Close");
+    closeButton->setButtonText(translate("Close"));
     closeButton->addListener(this);
     closeButton->addMouseListener(this, true);
     
@@ -66,7 +68,7 @@ void PreferencesComponent::resized()
 {
     tabbedComponent->setBounds(getWidth()/4, getHeight()/6, getWidth()/2, ((getHeight()/6)*4)-70);
     
-    closeButton->setBounds((getWidth()/2)-35, ((getHeight()/6)*5)-60, 70, 20);
+    closeButton->setBounds((getWidth()/2)-20, ((getHeight()/6)*5)-68, 40, 35);
 }
 
 void PreferencesComponent::paint (Graphics& g)
@@ -74,7 +76,7 @@ void PreferencesComponent::paint (Graphics& g)
     g.setColour(Colours::black.withAlpha(0.8f));
     g.fillRect(0, 0, getWidth(), getHeight());
     
-    g.setColour(Colours::grey.withAlpha(0.9f));
+    g.setColour(AlphaColours::verydarkgrey.withAlpha(1.0f));
     g.fillRoundedRectangle(getWidth()/4, getHeight()/6, getWidth()/2, ((getHeight()/6)*4)-30, 10);
     
 }
@@ -102,11 +104,11 @@ void PreferencesComponent::mouseEnter (const MouseEvent &e)
 {
     if (closeButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Click to go back to the application's main interface. Pressing ESC also triggers this command.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::closeButton));
     }
     else if (audioAndMidiSettingsComponent->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText ("Audio Output Settings. Sets and displays the global audio output settings of AlphaLive. Output device, sample rate, and audio buffer size can be set along with a button that allows a test signal to be played.");
+        mainComponentRef.setInfoTextBoxText (translate("Audio Output Settings. Sets and displays the global audio output settings of AlphaLive. Output device, sample rate, and audio buffer size can be set along with a button that allows a test signal to be played."));
     }
 }
 
@@ -145,55 +147,37 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
                                                                 :   mainComponentRef(ref),
                                                                     alphaLiveEngineRef(ref2)
 {
-    
-    addAndMakeVisible(languageLabel = new Label ("language label", translate("Language: ")));
-    languageLabel->setColour(Label::textColourId, Colours::lightgrey);
-    
-    addAndMakeVisible(languageMenu = new ComboBox());
-    languageMenu->addItem("English", 1);
-    languageMenu->addItem(CharPointer_UTF8("Français"), 2);
-    languageMenu->addItem("Deutsch", 3);
-    //languageMenu->addItem(CharPointer_UTF8 ("日本の"), 4);
-    //languageMenu->addItem(CharPointer_UTF8 ("普通話"), 5);
-    languageMenu->addItem("Japanese", 4);
-    languageMenu->addItem("Mandarin", 5);
-    languageMenu->addListener(this);
-    languageMenu->addMouseListener(this, true);
-    languageMenu->setSelectedId(StoredSettings::getInstance()->language, true);
+    //To add a non-standard character to a label, combobox, etc..
+    // you must wrap the string like this - CharPointer_UTF8 ("日本の").
     
     
-    appProjectDirChooser = new FilenameComponent ("app project directory",
-                                                  StoredSettings::getInstance()->appProjectDir.getParentDirectory(),
-                                                  false, true, false,
-                                                  String::empty,
-                                                  String::empty,
-                                                  "Choose the AlphaLive Project Directory");
-    
-    appProjectDirChooser->addListener (this);					
-	///appProjectDirChooser->setBrowseButtonText ("Browse...");
-	appProjectDirChooser->setMaxNumberOfRecentFiles(0);
-	addAndMakeVisible (appProjectDirChooser);
+    addAndMakeVisible(appProjectDirChooser = new ComboBox());
+    appProjectDirChooser->addItem(StoredSettings::getInstance()->appProjectDir.getFullPathName(), 1);
+    appProjectDirChooser->addSeparator();
+    appProjectDirChooser->addItem(translate("Set Directory..."), 2);
+    appProjectDirChooser->addListener(this);
     appProjectDirChooser->addMouseListener(this, true);
+    appProjectDirChooser->setSelectedId(1, true);
     
-    addAndMakeVisible(directoryLabel = new Label("directory label", "Projects Directory:"));
+    addAndMakeVisible(directoryLabel = new Label("directory label", translate("Projects Directory:")));
     directoryLabel->setColour(Label::textColourId, Colours::lightgrey);
     
-    addAndMakeVisible(midiNoteDisplayTypeLabel = new Label ("midi display label", "Note Display Type:"));
+    addAndMakeVisible(midiNoteDisplayTypeLabel = new Label ("midi display label", translate("Note Display Type:")));
     midiNoteDisplayTypeLabel->setColour(Label::textColourId, Colours::lightgrey);
     
     addAndMakeVisible(midiNoteDisplayTypeMenu = new ComboBox());
-    midiNoteDisplayTypeMenu->addItem("MIDI Note Number", 1);
-    midiNoteDisplayTypeMenu->addItem("MIDI Note Name", 2);
+    midiNoteDisplayTypeMenu->addItem(translate("MIDI Note Number"), 1);
+    midiNoteDisplayTypeMenu->addItem(translate("MIDI Note Name"), 2);
     midiNoteDisplayTypeMenu->addListener(this);
     midiNoteDisplayTypeMenu->addMouseListener(this, true);
     midiNoteDisplayTypeMenu->setSelectedId(StoredSettings::getInstance()->midiNoteDisplayType, true);
     
-    addAndMakeVisible(launchTaskLabel = new Label ("Launch Task Label", "On Launch:"));
+    addAndMakeVisible(launchTaskLabel = new Label ("Launch Task Label", translate("On Launch:")));
     launchTaskLabel->setColour(Label::textColourId, Colours::lightgrey);
     
     addAndMakeVisible(launchTaskMenu = new ComboBox());
-    launchTaskMenu->addItem("Open new project", 1);
-    launchTaskMenu->addItem("Open last project", 2);
+    launchTaskMenu->addItem(translate("Open new project"), 1);
+    launchTaskMenu->addItem(translate("Open last project"), 2);
     launchTaskMenu->addListener(this);
     launchTaskMenu->addMouseListener(this, true);
     launchTaskMenu->setSelectedId(StoredSettings::getInstance()->launchTask, true);
@@ -203,17 +187,36 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     killOnClockStopButton->setClickingTogglesState(true);
     killOnClockStopButton->setToggleState(StoredSettings::getInstance()->killOnClockStop, false);
     if(killOnClockStopButton->getToggleStateValue() == true)
-        killOnClockStopButton->setButtonText("On");
+        killOnClockStopButton->setButtonText(translate("On"));
     else
-        killOnClockStopButton->setButtonText("Off"); 
+        killOnClockStopButton->setButtonText(translate("Off")); 
     
     killOnClockStopButton->addListener(this);
     killOnClockStopButton->addMouseListener(this, true);
     
     addAndMakeVisible(killOnClockStopLabel = new Label());
-    killOnClockStopLabel->setText("Kill Pads On Clock Stop:", false);
+    killOnClockStopLabel->setText(translate("Stop All Sound On Clock Stop:"), false);
     killOnClockStopLabel->setColour(Label::textColourId, Colours::lightgrey);
     
+    
+    
+    
+    addAndMakeVisible(cleanOnCloseButton = new TextButton());
+    cleanOnCloseButton->setClickingTogglesState(true);
+    cleanOnCloseButton->setToggleState(StoredSettings::getInstance()->cleanOnClose-1, false);
+    if(cleanOnCloseButton->getToggleStateValue() == true)
+        cleanOnCloseButton->setButtonText(translate("On"));
+    else
+        cleanOnCloseButton->setButtonText(translate("Off")); 
+    
+    cleanOnCloseButton->addListener(this);
+    cleanOnCloseButton->addMouseListener(this, true);
+    
+    addAndMakeVisible(cleanOnCloseLabel = new Label());
+    cleanOnCloseLabel->setText(translate("Clean Project On Close:"), false);
+    cleanOnCloseLabel->setColour(Label::textColourId, Colours::lightgrey);
+    
+
     
 }
 
@@ -226,8 +229,6 @@ GeneralSettingsComponent::~GeneralSettingsComponent()
 
 void GeneralSettingsComponent::resized()
 {
-    //languageLabel->setBounds(60, 10, 120, 20);
-    //languageMenu->setBounds(200, 10, 150, 20);
     
     appProjectDirChooser->setBounds(200, 50, 210, 20);
     directoryLabel->setBounds(60, 50, 120, 20);
@@ -238,8 +239,11 @@ void GeneralSettingsComponent::resized()
     launchTaskMenu->setBounds(200, 130, 210, 20);
     launchTaskLabel->setBounds(60, 130, 120, 20);
     
-    killOnClockStopButton->setBounds(230, 170, 180, 20);
+    killOnClockStopButton->setBounds(230, 168, 40, 25);
     killOnClockStopLabel->setBounds(60, 170, 150, 20);
+    
+    cleanOnCloseButton->setBounds(230, 208, 40, 25);
+    cleanOnCloseLabel->setBounds(60, 210, 150, 20);
 }
 
 void GeneralSettingsComponent::paint (Graphics& g)
@@ -249,20 +253,36 @@ void GeneralSettingsComponent::paint (Graphics& g)
 
 void GeneralSettingsComponent::buttonClicked (Button* button)
 {
-    
-    
     if (button == killOnClockStopButton)
     {
         if(killOnClockStopButton->getToggleStateValue() == true)
         {
             StoredSettings::getInstance()->killOnClockStop = 1;
-            killOnClockStopButton->setButtonText("On");
+            killOnClockStopButton->setButtonText(translate("On"));
         }
         
         else
         {
             StoredSettings::getInstance()->killOnClockStop = 0;
-            killOnClockStopButton->setButtonText("Off");
+            killOnClockStopButton->setButtonText(translate("Off"));
+        }
+        
+        StoredSettings::getInstance()->flush();
+    }
+    
+    
+    else if (button == cleanOnCloseButton)
+    {
+        if(button->getToggleStateValue() == true)
+        {
+            StoredSettings::getInstance()->cleanOnClose = 2;
+            button->setButtonText(translate("On"));
+        }
+        
+        else
+        {
+            StoredSettings::getInstance()->cleanOnClose = 1;
+            button->setButtonText(translate("Off"));
         }
         
         StoredSettings::getInstance()->flush();
@@ -284,52 +304,61 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
         StoredSettings::getInstance()->flush();
     }
     
-    else if (comboBox == languageMenu)
+    else if (comboBox == appProjectDirChooser)
     {
-        StoredSettings::getInstance()->language = comboBox->getSelectedId();
-        StoredSettings::getInstance()->flush();
-        
-        mainComponentRef.setLocalisation();
-        
-        AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, translate("Restart Application"), translate("Please restart AlphaLive for the language change to be fully implemented."));  
-    }
-}
-
-void GeneralSettingsComponent::filenameComponentChanged (FilenameComponent* filenameComponent)
-{
-    if (filenameComponent == appProjectDirChooser)
-    {
-        if (StoredSettings::getInstance()->appProjectDir.getParentDirectory() != appProjectDirChooser->getCurrentFile())
+        if (comboBox->getSelectedId() == 2) //set directory
         {
-            //create new directory based on the users selection
-            File newProjectDirectory = (appProjectDirChooser->getCurrentFile().getFullPathName() + "/AlphaLive Projects");
-            //move old directory to the new one
-            StoredSettings::getInstance()->appProjectDir.moveFileTo(newProjectDirectory);
+            FileChooser myChooser (translate("Please select a directory to move the AlphaLive Projects directory to..."),
+                                   StoredSettings::getInstance()->appProjectDir.getParentDirectory());
             
-            StoredSettings::getInstance()->appProjectDir = newProjectDirectory;
-            StoredSettings::getInstance()->flush();
+            if (myChooser.browseForDirectory() == true)
+            {
+                File selectedDir (myChooser.getResult());
+                
+                if (StoredSettings::getInstance()->appProjectDir.getParentDirectory() != selectedDir &&
+                    StoredSettings::getInstance()->appProjectDir != selectedDir)
+                {
+                    //create new directory based on the users selection
+                    File newProjectDirectory = (selectedDir.getFullPathName() + File::separatorString + "AlphaLive Projects");
+                    //move old directory to the new one
+                    StoredSettings::getInstance()->appProjectDir.moveFileTo(newProjectDirectory);
+                    //Add to stored settings
+                    StoredSettings::getInstance()->appProjectDir = newProjectDirectory;
+                    StoredSettings::getInstance()->flush();
+                    //set menu item 1 to new directory
+                    appProjectDirChooser->changeItemText(1, StoredSettings::getInstance()->appProjectDir.getFullPathName());
+                }
+            }
+            
+            comboBox->setSelectedId(1, true);
         }
     }
+    
 }
+
 
 void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
 {
     
     if (appProjectDirChooser->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("AlphaLive Projects Directory Chooser. This control allows you to change the location of the applications projects folder. The previous folder and its contents will be moved to the new location.");
+        mainComponentRef.setInfoTextBoxText(translate("AlphaLive Projects Directory Chooser. This control allows you to change the location of the applications projects folder. The previous folder and its contents will be moved to the new location."));
     }
     else if (midiNoteDisplayTypeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("MIDI note display type selector. Use this menu to configure how MIDI notes are displayed on the circular pianos.");
+        mainComponentRef.setInfoTextBoxText(translate("MIDI note display type selector. Use this menu to configure how MIDI notes are displayed within the application."));
     }
     else if (launchTaskMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Application Launch Task selector. Use this menu to configure what happens when the application is lauched.");
+        mainComponentRef.setInfoTextBoxText(translate("Application Launch Task selector. Use this menu to configure what happens when the application is launched."));
     }
     else if (killOnClockStopButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("If this option is set to 'On' any playing pads will be stopped when the clock is stopped.");
+        mainComponentRef.setInfoTextBoxText(translate("If this option is set to 'on' any playing pads will be stopped when the clock is stopped."));
+    }
+    else if (cleanOnCloseButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("'Cleaning' a project is the process of searching through the projects Audio Files directory and removing any unused audio files. If this option is set to 'on' the project will automatically be cleaned when the application is shut down. This will prevent a build-up of unused data."));
     }
 }
 

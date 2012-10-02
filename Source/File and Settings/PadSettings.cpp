@@ -40,10 +40,6 @@ PadSettings::PadSettings(int arrayIndex)
     //------------default values--------------
     mode = 0; //or should default mode be midi (1) ?
     pressureSensitivityMode = 2; //standard
-    prevMode = 0;
-    currentState = 0;
-    currentPlayingState = 0;
-    currentValue = 0;
     exclusiveMode = 0;
     exclusiveGroup = 1;
     quantizeMode = 0; //unquantized
@@ -72,75 +68,9 @@ PadSettings::PadSettings(int arrayIndex)
     samplerSticky = 0;
     samplerEffect = 0;
     samplerPan = 0.5;
-    samplerGain = 1.0;
-    
-    //----sampler effects----
-    //Gain and Pan
-    samplerFxGainPanGain = 1.0;
-    samplerFxGainPanPan = 0.5;
-    samplerFxGainPanAlphaTouch = 2;
-    samplerFxGainPanAtReverse = 1;
-    samplerFxGainPanAtIntensity = 1.0;
-    //LPF
-    samplerFxLpfMix = 1.0;
-    samplerFxLpfFreq = 500;
-    samplerFxLpfBandwidth = 5;
-    samplerFxLpfAlphaTouch = 3;
-    samplerFxLpfAtReverse = 0;
-    samplerFxLpfAtIntensity = 1.0;
-    //HPF
-    samplerFxHpfMix = 1.0;
-    samplerFxHpfFreq = 500;
-    samplerFxHpfBandwidth = 5;
-    samplerFxHpfAlphaTouch = 3;
-    samplerFxHpfAtReverse = 0;
-    samplerFxHpfAtIntensity = 1.0;
-    //BPF
-    samplerFxBpfMix = 1.0;
-    samplerFxBpfFreq = 500;
-    samplerFxBpfBandwidth = 5;
-    samplerFxBpfAlphaTouch = 3;
-    samplerFxBpfAtReverse = 0;
-    samplerFxBpfAtIntensity = 1.0;
-    //Delay
-    samplerFxDelayMix = 0.7;
-    samplerFxDelayTime = 500.0;
-    samplerFxDelayFeedback = 0.5;
-    samplerFxDelayLpfFreq = 20000.0;
-    samplerFxDelayHpfFreq = 30.0;
-    samplerFxDelaySync = 1;
-    samplerFxDelayTimeMenu = 4;
-    samplerFxDelayAlphaTouch = 4;
-    samplerFxDelayAtReverse = 0;
-    samplerFxDelayAtIntensity = 1.0;
-    //Reverb
-    samplerFxReverbMix = 0.7;
-    samplerFxReverbRoomSize = 0.25;
-    samplerFxReverbDamping = 0.5;
-    samplerFxReverbWidth = 0.5;
-    samplerFxReverbFreezeMode = 0.2;
-    samplerFxReverbAlphaTouch = 3;
-    samplerFxReverbAtReverse = 0;
-    samplerFxReverbAtIntensity = 1.0;
-    //Flanger
-    samplerFxFlangerMix = 0.7;
-    samplerFxFlangerRate = 0.25;
-    samplerFxFlangerFeedback = 0.9;
-    samplerFxFlangerIntensity = 0.1;
-    samplerFxFlangerSync = 1;
-    samplerFxFlangerRateMenu = 4;
-    samplerFxFlangerAlphaTouch = 5;
-    samplerFxFlangerAtReverse = 0;
-    samplerFxFlangerAtIntensity = 1.0;
-    //Tremolo
-    samplerFxTremoloDepth = 1.0;
-    samplerFxTremoloRate = 5.0;
-    samplerFxTremoloShape = 1;
-    samplerFxTremoloSync = 1;
-    samplerFxTremoloRateMenu = 3;
-    samplerFxTremoloAlphaTouch = 2;
-    samplerFxTremoloAtReverse = 1;
-    samplerFxTremoloAtIntensity = 1.0;
+    samplerGain = 0.9;
+    samplerAttackTime = 0;
+    samplerReleaseTime = 0;
     
     //sequencer mode
     //init all indexes of the sequencerData 3D array to 0.
@@ -169,7 +99,7 @@ PadSettings::PadSettings(int arrayIndex)
     sequencerShouldFinishLoop = 0;
     sequencerSticky = 0;
     sequencerLength = 32;
-    sequencerRelativeTempoMode = 3; //regular time
+    sequencerRelativeTempoMode = 0; //regular time
     sequencerDynamicMode = 0;
     
     //set a default sequencer note midi layout of 60-72
@@ -193,8 +123,10 @@ PadSettings::PadSettings(int arrayIndex)
         sequencerSamplesAudioFilePath[i] = String::empty;
     }
      
+    sequencerEffect = 0;
     sequencerPan = 0.5;
     sequencerGain = 1.0;
+    sequencerSamplesAttackTime = 0;
     
     //controller mode
     controllerControl = 1;
@@ -204,6 +136,74 @@ PadSettings::PadSettings(int arrayIndex)
     controllerMidiProgramChangeNumber = 1;
     controllerMidiProgramChangeChannel = 1;
     
+    
+    //----pad effects----
+    //Gain and Pan
+    padFxGainPanGain = 1.0;
+    padFxGainPanPan = 0.5;
+    padFxGainPanAlphaTouch = 2;
+    padFxGainPanAtReverse = 1;
+    padFxGainPanAtIntensity = 1.0;
+    //LPF
+    padFxLpfMix = 1.0;
+    padFxLpfFreq = 500;
+    padFxLpfBandwidth = 5;
+    padFxLpfAlphaTouch = 3;
+    padFxLpfAtReverse = 0;
+    padFxLpfAtIntensity = 1.0;
+    //HPF
+    padFxHpfMix = 1.0;
+    padFxHpfFreq = 500;
+    padFxHpfBandwidth = 5;
+    padFxHpfAlphaTouch = 3;
+    padFxHpfAtReverse = 0;
+    padFxHpfAtIntensity = 1.0;
+    //BPF
+    padFxBpfMix = 1.0;
+    padFxBpfFreq = 500;
+    padFxBpfBandwidth = 5;
+    padFxBpfAlphaTouch = 3;
+    padFxBpfAtReverse = 0;
+    padFxBpfAtIntensity = 1.0;
+    //Delay
+    padFxDelayMix = 0.7;
+    padFxDelayTime = 500.0;
+    padFxDelayFeedback = 0.5;
+    padFxDelayLpfFreq = 20000.0;
+    padFxDelayHpfFreq = 30.0;
+    padFxDelaySync = 1;
+    padFxDelayTimeMenu = 4;
+    padFxDelayAlphaTouch = 4;
+    padFxDelayAtReverse = 0;
+    padFxDelayAtIntensity = 1.0;
+    //Reverb
+    padFxReverbMix = 0.7;
+    padFxReverbRoomSize = 0.25;
+    padFxReverbDamping = 0.5;
+    padFxReverbWidth = 0.5;
+    padFxReverbFreezeMode = 0.2;
+    padFxReverbAlphaTouch = 3;
+    padFxReverbAtReverse = 0;
+    padFxReverbAtIntensity = 1.0;
+    //Flanger
+    padFxFlangerMix = 0.7;
+    padFxFlangerRate = 0.25;
+    padFxFlangerFeedback = 0.9;
+    padFxFlangerIntensity = 0.1;
+    padFxFlangerSync = 1;
+    padFxFlangerRateMenu = 4;
+    padFxFlangerAlphaTouch = 5;
+    padFxFlangerAtReverse = 0;
+    padFxFlangerAtIntensity = 1.0;
+    //Tremolo
+    padFxTremoloDepth = 1.0;
+    padFxTremoloRate = 5.0;
+    padFxTremoloShape = 1;
+    padFxTremoloSync = 1;
+    padFxTremoloRateMenu = 3;
+    padFxTremoloAlphaTouch = 2;
+    padFxTremoloAtReverse = 1;
+    padFxTremoloAtIntensity = 1.0;
 }
 
 //==================================================================
@@ -268,7 +268,7 @@ void PadSettings::resetData (int whatToReset)
         setMidiChannel(1);
         setMidiMinPressureRange(0);
         setMidiMaxPressureRange(127);
-        setMidiPressureMode(0);
+        setMidiPressureMode(1);
         setMidiTriggerMode(1);
         setMidiIndestructible(0);
         setMidiSticky(0);
@@ -287,9 +287,9 @@ void PadSettings::resetData (int whatToReset)
         setSamplerSticky(0);
         setSamplerEffect (0);
         setSamplerPan (0.5);
-        setSamplerGain (1.0);
-        
-        //what about reseting the FX values?
+        setSamplerGain (0.9);
+        setSamplerAttackTime(0);
+        setSamplerReleaseTime(0);
     }
     
     if (whatToReset != 3)
@@ -313,7 +313,7 @@ void PadSettings::resetData (int whatToReset)
         setSequencerShouldFinishLoop(0);
         setSequencerSticky(0);
         setSequencerLength (32);
-        setSequencerRelativeTempoMode(3);
+        setSequencerRelativeTempoMode(0);
         setSequencerDynamicMode(0);
         
         for (int i = 0, num = 60; i <= NO_OF_ROWS-1; i++)
@@ -334,8 +334,10 @@ void PadSettings::resetData (int whatToReset)
         {
             setSequencerSamplesAudioFilePath (File::nonexistent, i);
         }
+        setSequencerEffect(0);
         setSequencerPan (0.5);
         setSequencerGain (1.0);
+        setSequencerSamplesAttackTime (0);
     }
     
     if (whatToReset != 4)
@@ -347,6 +349,9 @@ void PadSettings::resetData (int whatToReset)
         setControllerMidiProgramChangeNumber(1);
         setControllerMidiProgramChangeChannel(1);
     }
+    
+    
+    //what about reseting the FX values?
 }
 
 
@@ -392,6 +397,12 @@ void PadSettings::setMode(int value)
         }
         else if (mode == 3 && value != 3) //to prevent non-existent Sequencer SequencePlayer objects from being deleted
         {
+            //the below has to be called here and not within the sequencePlayer destructor
+            //as on shutdown PadSettings is deleted before the sequencerPlayer objects.
+            //Therefore the app would crash when shutting down as it would try to access
+            //pad settings when it doesn't exist, but for some reason it seems to think it does exist.
+            setSequencerRecordEnabled (false);
+            
             //delete instance of SequencePlayer for pad 'padNumber'
             alphaLiveEngineRef->getModeSequencer()->deleteSequencePlayer(padNumber);
         }
@@ -402,21 +413,6 @@ void PadSettings::setMode(int value)
     }
 }
 
-
-void PadSettings::setCurrentState(int value)
-{
-    currentState = value;
-}
-
-void PadSettings::setCurrentPlayingState (int value)
-{
-    currentPlayingState = value;
-}
-
-void PadSettings::setCurrentValue (int value)
-{
-    currentValue = value;
-}
 
 void PadSettings::setPressureSensitivityMode (int value)
 {
@@ -457,20 +453,6 @@ int PadSettings::getMode()
     return mode;
 }
 
-int PadSettings::getCurrentState()
-{
-    return currentState;
-}
-
-int PadSettings::getCurrentValue()
-{
-    return currentValue;
-}
-
-int PadSettings::getCurrentPlayingState()
-{
-    return currentPlayingState;
-}
 int PadSettings::getPressureSensitivityMode()
 {
     return pressureSensitivityMode;
@@ -675,9 +657,9 @@ void PadSettings::setSamplerAudioFilePath(File value)
                     audioFileCopy = audioFileCopy.getNonexistentSibling();
                     value.copyFileTo(audioFileCopy); 
                 }
-                
-                value = audioFileCopy;
             }
+            
+            value = audioFileCopy;
         }
         
         //OLD - store just the FILE NAME of the audio file.
@@ -769,6 +751,24 @@ void PadSettings::setSamplerGain(float value)
     }
 }
 
+void PadSettings::setSamplerAttackTime (double value)
+{
+    samplerAttackTime = value;
+    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setAttackTime(value);
+    }
+}
+
+void PadSettings::setSamplerReleaseTime (double value)
+{
+    samplerReleaseTime = value;
+    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setReleaseTime(value);
+    }
+}
+
 #pragma mark Sampler mode accessor functions
 
 File PadSettings::getSamplerAudioFilePath()
@@ -779,7 +779,7 @@ File PadSettings::getSamplerAudioFilePath()
         
         if (audioFile.existsAsFile() == false) //if for some reason it doesn't exist
         {
-            AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + samplerAudioFilePath + "\"" + " for Pad " + String(padNumber+1) + " could not be found.");
+            AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), samplerAudioFilePath + " " + translate("could not be found."));
             //IN NEXT VERSION USE A YES/NO ALERTWINDOW THAT ASKS IF YOU WOULD LIKE TO MANUALLY LOCATE THE AUDIO FILE.
             //THIS WILL BRING UP A FILEBROWSERWINDOW AND THE CHOSEN FILE WILL THEN BE MOVED TO THE CURRENT WORKING DIRECTORY AND
             //SAVED INTO THE samplerAudioFilePath STRING IN THE CORRECT FORMAT.
@@ -834,553 +834,15 @@ float PadSettings::getSamplerGain()
     return samplerGain;
 }
 
-
-#pragma mark Sampler FX functions
-//---SAMPLER EFFECTS---
-#pragma mark Gain/Pan FX
-//Gain&Pan
-void PadSettings::setSamplerFxGainPanGain (float value)
+double PadSettings::getSamplerAttackTime()
 {
-    samplerFxGainPanGain = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setGain(value);
-}
-void PadSettings::setSamplerFxGainPanPan (float value)
-{
-    samplerFxGainPanPan = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setPan(value);
-}
-void PadSettings::setSamplerFxGainPanAlphaTouch (int value)
-{
-    samplerFxGainPanAlphaTouch = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setAlphaTouchParam(value);
-}
-void PadSettings::setSamplerFxGainPanAtReverse (int value)
-{
-    samplerFxGainPanAtReverse = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setAlphaTouchReverse(value);
-}
-void PadSettings::setSamplerFxGainPanAtIntensity (float value)
-{
-    samplerFxGainPanAtIntensity = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setAlphaTouchIntensity(value);
-}
-float PadSettings::getSamplerFxGainPanGain()
-{
-    return samplerFxGainPanGain;
-}
-float PadSettings::getSamplerFxGainPanPan()
-{
-    return samplerFxGainPanPan;
-}
-int PadSettings::getSamplerFxGainPanAlphaTouch()
-{
-    return samplerFxGainPanAlphaTouch;
-}
-int PadSettings::getSamplerFxGainPanAtReverse()
-{
-    return samplerFxGainPanAtReverse;
-}
-float PadSettings::getSamplerFxGainPanAtIntensity()
-{
-    return samplerFxGainPanAtIntensity;
+    return samplerAttackTime;
 }
 
-#pragma mark LPF FX
-//LPF
-void PadSettings::setSamplerFxLpfMix (float value)
+double PadSettings::getSamplerReleaseTime()
 {
-    samplerFxLpfMix = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setMix(samplerFxLpfMix);
+    return samplerReleaseTime;
 }
-void PadSettings::setSamplerFxLpfFreq (float value)
-{
-    samplerFxLpfFreq = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setFrequency(samplerFxLpfFreq);
-}
-void PadSettings::setSamplerFxLpfBandwidth (float value)
-{
-    samplerFxLpfBandwidth = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setBandwidth(samplerFxLpfBandwidth);
-}
-void PadSettings::setSamplerFxLpfAlphaTouch (int value)
-{
-    samplerFxLpfAlphaTouch = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setAlphaTouchParam(samplerFxLpfAlphaTouch);
-}
-void PadSettings::setSamplerFxLpfAtReverse (int value)
-{
-    samplerFxLpfAtReverse = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setAlphaTouchReverse(samplerFxLpfAtReverse);
-    
-}
-void PadSettings::setSamplerFxLpfAtIntensity (float value)
-{
-    samplerFxLpfAtIntensity = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setAlphaTouchIntensity(samplerFxLpfAtIntensity);
-}
-
-float PadSettings::getSamplerFxLpfMix()
-{
-    return samplerFxLpfMix;
-}
-float PadSettings::getSamplerFxLpfFreq()
-{
-    return samplerFxLpfFreq;
-}
-float PadSettings::getSamplerFxLpfBandwidth()
-{
-    return samplerFxLpfBandwidth;
-}
-int PadSettings::getSamplerFxLpfAlphaTouch()
-{
-    return samplerFxLpfAlphaTouch;
-}
-int PadSettings::getSamplerFxLpfAtReverse()
-{
-    return samplerFxLpfAtReverse;
-}
-float PadSettings::getSamplerFxLpfAtIntensity()
-{
-    return samplerFxLpfAtIntensity;
-}
-
-#pragma mark HPF FX
-//HPF
-void PadSettings::setSamplerFxHpfMix (float value)
-{
-    samplerFxHpfMix = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setMix(samplerFxHpfMix);
-}
-void PadSettings::setSamplerFxHpfFreq (float value)
-{
-    samplerFxHpfFreq = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setFrequency(samplerFxHpfFreq);
-}
-void PadSettings::setSamplerFxHpfBandwidth (float value)
-{
-    samplerFxHpfBandwidth = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setBandwidth(samplerFxHpfBandwidth);
-}
-void PadSettings::setSamplerFxHpfAlphaTouch (int value)
-{
-    samplerFxHpfAlphaTouch = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setAlphaTouchParam(samplerFxHpfAlphaTouch);
-}
-void PadSettings::setSamplerFxHpfAtReverse (int value)
-{
-    samplerFxHpfAtReverse = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setAlphaTouchReverse(samplerFxHpfAtReverse);
-    
-}
-void PadSettings::setSamplerFxHpfAtIntensity (float value)
-{
-    samplerFxHpfAtIntensity = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setAlphaTouchIntensity(samplerFxHpfAtIntensity);
-}
-
-float PadSettings::getSamplerFxHpfMix()
-{
-    return samplerFxHpfMix;
-}
-float PadSettings::getSamplerFxHpfFreq()
-{
-    return samplerFxHpfFreq;
-}
-float PadSettings::getSamplerFxHpfBandwidth()
-{
-    return samplerFxHpfBandwidth;
-}
-int PadSettings::getSamplerFxHpfAlphaTouch()
-{
-    return samplerFxHpfAlphaTouch;
-}
-int PadSettings::getSamplerFxHpfAtReverse()
-{
-    return samplerFxHpfAtReverse;
-}
-float PadSettings::getSamplerFxHpfAtIntensity()
-{
-    return samplerFxHpfAtIntensity;
-}
-
-#pragma mark BPF FX
-//BPF
-void PadSettings::setSamplerFxBpfMix (float value)
-{
-    samplerFxBpfMix = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setMix(samplerFxBpfMix);
-}
-void PadSettings::setSamplerFxBpfFreq (float value)
-{
-    samplerFxBpfFreq = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setFrequency(samplerFxBpfFreq);
-}
-void PadSettings::setSamplerFxBpfBandwidth (float value)
-{
-    samplerFxBpfBandwidth = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setBandwidth(samplerFxBpfBandwidth);
-}
-void PadSettings::setSamplerFxBpfAlphaTouch (int value)
-{
-    samplerFxBpfAlphaTouch = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setAlphaTouchParam(samplerFxBpfAlphaTouch);
-}
-void PadSettings::setSamplerFxBpfAtReverse (int value)
-{
-    samplerFxBpfAtReverse = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setAlphaTouchReverse(samplerFxBpfAtReverse);
-    
-}
-void PadSettings::setSamplerFxBpfAtIntensity (float value)
-{
-    samplerFxBpfAtIntensity = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setAlphaTouchIntensity(samplerFxBpfAtIntensity);
-}
-
-float PadSettings::getSamplerFxBpfMix()
-{
-    return samplerFxBpfMix;
-}
-float PadSettings::getSamplerFxBpfFreq()
-{
-    return samplerFxBpfFreq;
-}
-float PadSettings::getSamplerFxBpfBandwidth()
-{
-    return samplerFxBpfBandwidth;
-}
-int PadSettings::getSamplerFxBpfAlphaTouch()
-{
-    return samplerFxBpfAlphaTouch;
-}
-int PadSettings::getSamplerFxBpfAtReverse()
-{
-    return samplerFxBpfAtReverse;
-}
-float PadSettings::getSamplerFxBpfAtIntensity()
-{
-    return samplerFxBpfAtIntensity;
-}
-
-#pragma mark Delay FX
-//Delay
-void PadSettings::setSamplerFxDelayMix (float value)
-{
-    samplerFxDelayMix = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setWetMix(value);
-}
-void PadSettings::setSamplerFxDelayTime (float value)
-{
-    samplerFxDelayTime = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setDelayTime(value);
-}
-void PadSettings::setSamplerFxDelayFeedback (float value)
-{
-    samplerFxDelayFeedback = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setFeedback(value);
-}
-void PadSettings::setSamplerFxDelayLpfFreq (float value)
-{
-    samplerFxDelayLpfFreq = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setLpfFrequency(value);
-}
-void PadSettings::setSamplerFxDelayHpfFreq (float value)
-{
-    samplerFxDelayHpfFreq = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setHpfFrequency(value);
-}
-void PadSettings::setSamplerFxDelaySync (int value)
-{
-    samplerFxDelaySync = value;
-}
-void PadSettings::setSamplerFxDelayTimeMenu (int value)
-{
-    samplerFxDelayTimeMenu = value;
-}
-void PadSettings::setSamplerFxDelayAlphaTouch (int value)
-{
-    samplerFxDelayAlphaTouch = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setAlphaTouchParam(value);
-}
-void PadSettings::setSamplerFxDelayAtReverse (int value)
-{
-    samplerFxDelayAtReverse = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setAlphaTouchReverse(value);
-}
-void PadSettings::setSamplerFxDelayAtIntensity (float value)
-{
-    samplerFxDelayAtIntensity = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setAlphaTouchIntensity(value);
-}
-float PadSettings::getSamplerFxDelayMix()
-{
-    return samplerFxDelayMix;
-}
-float PadSettings::getSamplerFxDelayTime()
-{
-    return samplerFxDelayTime;
-}
-float PadSettings::getSamplerFxDelayFeedback()
-{
-    return samplerFxDelayFeedback;
-}
-float PadSettings::getSamplerFxDelayLpfFreq()
-{
-    return samplerFxDelayLpfFreq;
-}
-float PadSettings::getSamplerFxDelayHpfFreq()
-{
-    return samplerFxDelayHpfFreq;
-}
-int PadSettings::getSamplerFxDelaySync()
-{
-    return samplerFxDelaySync;
-}
-int PadSettings::getSamplerFxDelayTimeMenu()
-{
-    return samplerFxDelayTimeMenu;
-}
-int PadSettings::getSamplerFxDelayAlphaTouch()
-{
-    return samplerFxDelayAlphaTouch;
-}
-int PadSettings::getSamplerFxDelayAtReverse()
-{
-    return samplerFxDelayAtReverse;
-}
-float PadSettings::getSamplerFxDelayAtIntensity()
-{
-    return samplerFxDelayAtIntensity;
-}
-
-#pragma mark Reverb FX
-//Reverb
-void PadSettings::setSamplerFxReverbMix (float value)
-{
-    samplerFxReverbMix = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setMix(value);
-}
-void PadSettings::setSamplerFxReverbRoomSize (float value)
-{
-    samplerFxReverbRoomSize = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setRoomSize(value);
-}
-void PadSettings::setSamplerFxReverbDamping (float value)
-{
-    samplerFxReverbDamping = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setDamping(value);
-}
-void PadSettings::setSamplerFxReverbWidth (float value)
-{
-    samplerFxReverbWidth = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setWidth(value);
-}
-void PadSettings::setSamplerFxReverbFreezeMode (float value)
-{
-    samplerFxReverbFreezeMode = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setFreezeMode(value);
-}
-void PadSettings::setSamplerFxReverbAlphaTouch (int value)
-{
-    samplerFxReverbAlphaTouch = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setAlphaTouchParam(value);
-}
-void PadSettings::setSamplerFxReverbAtReverse (int value)
-{
-    samplerFxReverbAtReverse = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setAlphaTouchReverse(value);
-}
-void PadSettings::setSamplerFxReverbAtIntensity (float value)
-{
-    samplerFxReverbAtIntensity = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setAlphaTouchIntensity(value);
-}
-float PadSettings::getSamplerFxReverbMix()
-{
-    return samplerFxReverbMix;
-}
-float PadSettings::getSamplerFxReverbRoomSize()
-{
-    return samplerFxReverbRoomSize;
-}
-float PadSettings::getSamplerFxReverbDamping()
-{
-    return samplerFxReverbDamping;
-}
-float PadSettings::getSamplerFxReverbWidth()
-{
-    return samplerFxReverbWidth;
-}
-float PadSettings::getSamplerFxReverbFreezeMode()
-{
-    return samplerFxReverbFreezeMode;
-}
-int PadSettings::getSamplerFxReverbAlphaTouch()
-{
-    return samplerFxReverbAlphaTouch;
-}
-int PadSettings::getSamplerFxReverbAtReverse()
-{
-    return samplerFxReverbAtReverse;
-}
-float PadSettings::getSamplerFxReverbAtIntensity()
-{
-    return samplerFxReverbAtIntensity;
-}
-
-#pragma mark Flanger
-void PadSettings::setSamplerFxFlangerMix (double value)
-{
-    samplerFxFlangerMix = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setMix(value);
-}
-void PadSettings::setSamplerFxFlangerRate(double value)
-{
-    samplerFxFlangerRate = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setRate(value);
-}
-void PadSettings::setSamplerFxFlangerFeedback (double value)
-{
-    samplerFxFlangerFeedback = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setFeedback(value);
-}
-void PadSettings::setSamplerFxFlangerIntensity (double value)
-{
-    samplerFxFlangerIntensity = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setIntensity(value);
-}
-void PadSettings::setSamplerFxFlangerSync (int value)
-{
-    samplerFxFlangerSync = value;
-}
-void PadSettings::setSamplerFxFlangerRateMenu (int value)
-{
-    samplerFxFlangerRateMenu = value;
-}
-void PadSettings::setSamplerFxFlangerAlphaTouch (int value)
-{
-    samplerFxFlangerAlphaTouch = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setAlphaTouchParam(value);
-}
-void PadSettings::setSamplerFxFlangerAtReverse (int value)
-{
-    samplerFxFlangerAtReverse = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setAlphaTouchReverse(value);
-}
-void PadSettings::setSamplerFxFlangerAtIntensity (double value)
-{
-    samplerFxFlangerAtIntensity = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setAlphaTouchIntensity(value);
-}
-double PadSettings::getSamplerFxFlangerMix()
-{
-    return samplerFxFlangerMix;
-}
-double PadSettings::getSamplerFxFlangerRate()
-{
-    return samplerFxFlangerRate;
-}
-double PadSettings::getSamplerFxFlangerFeedback()
-{
-    return samplerFxFlangerFeedback;
-}
-double PadSettings::getSamplerFxFlangerIntensity()
-{
-    return samplerFxFlangerIntensity;
-}
-int PadSettings::getSamplerFxFlangerSync()
-{
-    return samplerFxFlangerSync;
-}
-int PadSettings::getSamplerFxFlangerRateMenu()
-{
-    return samplerFxFlangerRateMenu;
-}
-int PadSettings::getSamplerFxFlangerAlphaTouch()
-{
-    return samplerFxFlangerAlphaTouch;
-}
-int PadSettings::getSamplerFxFlangerAtReverse()
-{
-    return samplerFxFlangerAtReverse;
-}
-double PadSettings::getSamplerFxFlangerAtIntensity()
-{
-    return samplerFxFlangerAtIntensity;
-}
-
-#pragma mark Tremolo
-void PadSettings::setSamplerFxTremoloDepth (double value)
-{
-    samplerFxTremoloDepth = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setDepth(value);
-}
-void PadSettings::setSamplerFxTremoloRate (double value)
-{
-    samplerFxTremoloRate = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setRate(value);
-}
-void PadSettings::setSamplerFxTremoloShape (int value)
-{
-    samplerFxTremoloShape = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setShape(value);
-}
-void PadSettings::setSamplerFxTremoloSync (int value)
-{
-    samplerFxTremoloSync = value;
-}
-void PadSettings::setSamplerFxTremoloRateMenu (int value)
-{
-    samplerFxTremoloRateMenu = value;
-}
-void PadSettings::setSamplerFxTremoloAlphaTouch (int value)
-{
-    samplerFxTremoloAlphaTouch = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setAlphaTouchParam(value);
-}
-void PadSettings::setSamplerFxTremoloAtReverse (int value)
-{
-    samplerFxTremoloAtReverse = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setAlphaTouchReverse(value);
-}
-void PadSettings::setSamplerFxTremoloAtIntensity (double value)
-{
-    samplerFxTremoloAtIntensity = value;
-    alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setAlphaTouchIntensity(value);
-}
-double PadSettings::getSamplerFxTremoloDepth()
-{
-    return samplerFxTremoloDepth;
-}
-double PadSettings::getSamplerFxTremoloRate()
-{
-    return samplerFxTremoloRate;
-}
-int PadSettings::getSamplerFxTremoloShape()
-{
-    return samplerFxTremoloShape;
-}
-int PadSettings::getSamplerFxTremoloSync()
-{
-    return samplerFxTremoloSync;
-}
-int PadSettings::getSamplerFxTremoloRateMenu()
-{
-    return samplerFxTremoloRateMenu;
-}
-int PadSettings::getSamplerFxTremoloAlphaTouch()
-{
-    return samplerFxTremoloAlphaTouch;
-}
-int PadSettings::getSamplerFxTremoloAtReverse()
-{
-    return samplerFxTremoloAtReverse;
-}
-double PadSettings::getSamplerFxTremoloAtIntensity()
-{
-    return samplerFxTremoloAtIntensity;
-}
-
 
 
 //==================================================================
@@ -1715,10 +1177,9 @@ void PadSettings::setSequencerSamplesAudioFilePath(File value, int rowNumber)
                     audioFileCopy = audioFileCopy.getNonexistentSibling();
                     value.copyFileTo(audioFileCopy); 
                 }
-                
-                value = audioFileCopy;
             }
             
+            value = audioFileCopy;
         }
         
         //OLD - store just the FILE NAME of the audio file.
@@ -1740,7 +1201,18 @@ void PadSettings::setSequencerSamplesAudioFilePath(File value, int rowNumber)
     //}
 }
 
-
+void PadSettings::setSequencerEffect(int value)
+{
+    sequencerEffect = value;
+    
+    
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setSamplesEffect(sequencerEffect);
+    }
+     
+    
+}
 
 void PadSettings::setSequencerPan(float value)
 {
@@ -1756,6 +1228,27 @@ void PadSettings::setSequencerGain(float value)
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setSamplesGain(value);
+    }
+}
+
+void PadSettings::setSequencerSamplesAttackTime (double value)
+{
+    sequencerSamplesAttackTime = value;
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setSamplesAttackTime(value);
+    }
+}
+
+void PadSettings::setSequencerRecordEnabled (bool value)
+{
+    
+    sequencerRecordEnabled = value;
+    alphaLiveEngineRef->setRecordingSequencerPadsState(padNumber, value);
+    
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setRecordEnabled(value);
     }
 }
 
@@ -1856,7 +1349,7 @@ File PadSettings::getSequencerSamplesAudioFilePath(int rowNumber)
         
         if (audioFile.existsAsFile() == false) //if for some reason it doesn't exist
         {
-            AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + sequencerSamplesAudioFilePath[rowNumber] + "\"" + " for Pad " + String(padNumber+1) + " could not be found.");
+            AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), sequencerSamplesAudioFilePath[rowNumber] + " " + translate("could not be found."));
             //IN NEXT VERSION USE A YES/NO ALERTWINDOW THAT ASKS IF YOU WOULD LIKE TO MANUALLY LOCATE THE AUDIO FILE.
             //THIS WILL BRING UP A FILEBROWSERWINDOW AND THE CHOSEN FILE WILL THEN BE MOVED TO THE CURRENT WORKING DIRECTORY AND
             //SAVED INTO THE samplerAudioFilePath STRING IN THE CORRECT FORMAT.
@@ -1874,6 +1367,10 @@ File PadSettings::getSequencerSamplesAudioFilePath(int rowNumber)
     
 }
 
+int PadSettings::getSequencerEffect()
+{
+    return sequencerEffect;
+}
 
 float PadSettings::getSequencerPan()
 {
@@ -1882,6 +1379,17 @@ float PadSettings::getSequencerPan()
 float PadSettings::getSequencerGain()
 {
     return sequencerGain;
+}
+
+double PadSettings::getSequencerSamplesAttackTime()
+{
+    return sequencerSamplesAttackTime;
+}
+
+
+bool PadSettings::getSequencerRecordEnabled()
+{
+    return sequencerRecordEnabled;
 }
 
 
@@ -1921,7 +1429,7 @@ int PadSettings::getControllerControl()
 {
     return controllerControl;
 }
-int PadSettings::getControllerPresentNumber()
+int PadSettings::getControllerSceneNumber()
 {
     return controllerSceneNumber;
 }
@@ -1943,8 +1451,706 @@ int PadSettings::getControllerMidiProgramChangeChannel()
 }
 
 
+#pragma mark Pad Effect functions
+//---PAD EFFECTS---
+#pragma mark Gain/Pan FX
+//Gain&Pan
+void PadSettings::setPadFxGainPanGain (float value)
+{
+    padFxGainPanGain = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setGain(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getGainAndPan().setGain(value);
+}
+void PadSettings::setPadFxGainPanPan (float value)
+{
+    padFxGainPanPan = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setPan(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getGainAndPan().setPan(value);
+}
+void PadSettings::setPadFxGainPanAlphaTouch (int value)
+{
+    padFxGainPanAlphaTouch = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setAlphaTouchParam(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getGainAndPan().setAlphaTouchParam(value);
+}
+void PadSettings::setPadFxGainPanAtReverse (int value)
+{
+    padFxGainPanAtReverse = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setAlphaTouchReverse(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getGainAndPan().setAlphaTouchReverse(value);
+}
+void PadSettings::setPadFxGainPanAtIntensity (float value)
+{
+    padFxGainPanAtIntensity = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getGainAndPan().setAlphaTouchIntensity(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getGainAndPan().setAlphaTouchIntensity(value);
+}
+float PadSettings::getPadFxGainPanGain()
+{
+    return padFxGainPanGain;
+}
+float PadSettings::getPadFxGainPanPan()
+{
+    return padFxGainPanPan;
+}
+int PadSettings::getPadFxGainPanAlphaTouch()
+{
+    return padFxGainPanAlphaTouch;
+}
+int PadSettings::getPadFxGainPanAtReverse()
+{
+    return padFxGainPanAtReverse;
+}
+float PadSettings::getPadFxGainPanAtIntensity()
+{
+    return padFxGainPanAtIntensity;
+}
 
+#pragma mark LPF FX
+//LPF
+void PadSettings::setPadFxLpfMix (float value)
+{
+    padFxLpfMix = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setMix(padFxLpfMix);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getLowpassFilter().setMix(padFxLpfMix);
+}
+void PadSettings::setPadFxLpfFreq (float value)
+{
+    padFxLpfFreq = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setFrequency(padFxLpfFreq);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getLowpassFilter().setFrequency(padFxLpfFreq);
+}
+void PadSettings::setPadFxLpfBandwidth (float value)
+{
+    padFxLpfBandwidth = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setBandwidth(padFxLpfBandwidth);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getLowpassFilter().setBandwidth(padFxLpfBandwidth);
+}
+void PadSettings::setPadFxLpfAlphaTouch (int value)
+{
+    padFxLpfAlphaTouch = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setAlphaTouchParam(padFxLpfAlphaTouch);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getLowpassFilter().setAlphaTouchParam(padFxLpfAlphaTouch);
+}
+void PadSettings::setPadFxLpfAtReverse (int value)
+{
+    padFxLpfAtReverse = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setAlphaTouchReverse(padFxLpfAtReverse);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getLowpassFilter().setAlphaTouchReverse(padFxLpfAtReverse);
+    
+}
+void PadSettings::setPadFxLpfAtIntensity (float value)
+{
+    padFxLpfAtIntensity = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getLowpassFilter().setAlphaTouchIntensity(padFxLpfAtIntensity);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getLowpassFilter().setAlphaTouchIntensity(padFxLpfAtIntensity);
+}
 
+float PadSettings::getPadFxLpfMix()
+{
+    return padFxLpfMix;
+}
+float PadSettings::getPadFxLpfFreq()
+{
+    return padFxLpfFreq;
+}
+float PadSettings::getPadFxLpfBandwidth()
+{
+    return padFxLpfBandwidth;
+}
+int PadSettings::getPadFxLpfAlphaTouch()
+{
+    return padFxLpfAlphaTouch;
+}
+int PadSettings::getPadFxLpfAtReverse()
+{
+    return padFxLpfAtReverse;
+}
+float PadSettings::getPadFxLpfAtIntensity()
+{
+    return padFxLpfAtIntensity;
+}
 
+#pragma mark HPF FX
+//HPF
+void PadSettings::setPadFxHpfMix (float value)
+{
+    padFxHpfMix = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setMix(padFxHpfMix);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getHighPassFilter().setMix(padFxHpfMix);
+}
+void PadSettings::setPadFxHpfFreq (float value)
+{
+    padFxHpfFreq = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setFrequency(padFxHpfFreq);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getHighPassFilter().setFrequency(padFxHpfFreq);
+}
+void PadSettings::setPadFxHpfBandwidth (float value)
+{
+    padFxHpfBandwidth = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setBandwidth(padFxHpfBandwidth);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getHighPassFilter().setBandwidth(padFxHpfBandwidth);
+}
+void PadSettings::setPadFxHpfAlphaTouch (int value)
+{
+    padFxHpfAlphaTouch = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setAlphaTouchParam(padFxHpfAlphaTouch);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getHighPassFilter().setAlphaTouchParam(padFxHpfAlphaTouch);
+}
+void PadSettings::setPadFxHpfAtReverse (int value)
+{
+    padFxHpfAtReverse = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setAlphaTouchReverse(padFxHpfAtReverse);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getHighPassFilter().setAlphaTouchReverse(padFxHpfAtReverse);
+    
+}
+void PadSettings::setPadFxHpfAtIntensity (float value)
+{
+    padFxHpfAtIntensity = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getHighPassFilter().setAlphaTouchIntensity(padFxHpfAtIntensity);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getHighPassFilter().setAlphaTouchIntensity(padFxHpfAtIntensity);
+}
 
+float PadSettings::getPadFxHpfMix()
+{
+    return padFxHpfMix;
+}
+float PadSettings::getPadFxHpfFreq()
+{
+    return padFxHpfFreq;
+}
+float PadSettings::getPadFxHpfBandwidth()
+{
+    return padFxHpfBandwidth;
+}
+int PadSettings::getPadFxHpfAlphaTouch()
+{
+    return padFxHpfAlphaTouch;
+}
+int PadSettings::getPadFxHpfAtReverse()
+{
+    return padFxHpfAtReverse;
+}
+float PadSettings::getPadFxHpfAtIntensity()
+{
+    return padFxHpfAtIntensity;
+}
+
+#pragma mark BPF FX
+//BPF
+void PadSettings::setPadFxBpfMix (float value)
+{
+    padFxBpfMix = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setMix(padFxBpfMix);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBandPassFilter().setMix(padFxBpfMix);
+}
+void PadSettings::setPadFxBpfFreq (float value)
+{
+    padFxBpfFreq = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setFrequency(padFxBpfFreq);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBandPassFilter().setFrequency(padFxBpfFreq);
+}
+void PadSettings::setPadFxBpfBandwidth (float value)
+{
+    padFxBpfBandwidth = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setBandwidth(padFxBpfBandwidth);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBandPassFilter().setBandwidth(padFxBpfBandwidth);
+}
+void PadSettings::setPadFxBpfAlphaTouch (int value)
+{
+    padFxBpfAlphaTouch = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setAlphaTouchParam(padFxBpfAlphaTouch);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBandPassFilter().setAlphaTouchParam(padFxBpfAlphaTouch);
+}
+void PadSettings::setPadFxBpfAtReverse (int value)
+{
+    padFxBpfAtReverse = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setAlphaTouchReverse(padFxBpfAtReverse);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBandPassFilter().setAlphaTouchReverse(padFxBpfAtReverse);
+    
+}
+void PadSettings::setPadFxBpfAtIntensity (float value)
+{
+    padFxBpfAtIntensity = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getBandPassFilter().setAlphaTouchIntensity(padFxBpfAtIntensity);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBandPassFilter().setAlphaTouchIntensity(padFxBpfAtIntensity);
+}
+
+float PadSettings::getPadFxBpfMix()
+{
+    return padFxBpfMix;
+}
+float PadSettings::getPadFxBpfFreq()
+{
+    return padFxBpfFreq;
+}
+float PadSettings::getPadFxBpfBandwidth()
+{
+    return padFxBpfBandwidth;
+}
+int PadSettings::getPadFxBpfAlphaTouch()
+{
+    return padFxBpfAlphaTouch;
+}
+int PadSettings::getPadFxBpfAtReverse()
+{
+    return padFxBpfAtReverse;
+}
+float PadSettings::getPadFxBpfAtIntensity()
+{
+    return padFxBpfAtIntensity;
+}
+
+#pragma mark Delay FX
+//Delay
+void PadSettings::setPadFxDelayMix (float value)
+{
+    padFxDelayMix = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setWetMix(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDelay().setWetMix(value);
+}
+void PadSettings::setPadFxDelayTime (float value)
+{
+    padFxDelayTime = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setDelayTime(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDelay().setDelayTime(value);
+}
+void PadSettings::setPadFxDelayFeedback (float value)
+{
+    padFxDelayFeedback = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setFeedback(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDelay().setFeedback(value);
+}
+void PadSettings::setPadFxDelayLpfFreq (float value)
+{
+    padFxDelayLpfFreq = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setLpfFrequency(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDelay().setLpfFrequency(value);
+}
+void PadSettings::setPadFxDelayHpfFreq (float value)
+{
+    padFxDelayHpfFreq = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setHpfFrequency(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDelay().setHpfFrequency(value);
+}
+void PadSettings::setPadFxDelaySync (int value)
+{
+    padFxDelaySync = value;
+}
+void PadSettings::setPadFxDelayTimeMenu (int value)
+{
+    padFxDelayTimeMenu = value;
+}
+void PadSettings::setPadFxDelayAlphaTouch (int value)
+{
+    padFxDelayAlphaTouch = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setAlphaTouchParam(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDelay().setAlphaTouchParam(value);
+}
+void PadSettings::setPadFxDelayAtReverse (int value)
+{
+    padFxDelayAtReverse = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setAlphaTouchReverse(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDelay().setAlphaTouchReverse(value);
+}
+void PadSettings::setPadFxDelayAtIntensity (float value)
+{
+    padFxDelayAtIntensity = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDelay().setAlphaTouchIntensity(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDelay().setAlphaTouchIntensity(value);
+}
+float PadSettings::getPadFxDelayMix()
+{
+    return padFxDelayMix;
+}
+float PadSettings::getPadFxDelayTime()
+{
+    return padFxDelayTime;
+}
+float PadSettings::getPadFxDelayFeedback()
+{
+    return padFxDelayFeedback;
+}
+float PadSettings::getPadFxDelayLpfFreq()
+{
+    return padFxDelayLpfFreq;
+}
+float PadSettings::getPadFxDelayHpfFreq()
+{
+    return padFxDelayHpfFreq;
+}
+int PadSettings::getPadFxDelaySync()
+{
+    return padFxDelaySync;
+}
+int PadSettings::getPadFxDelayTimeMenu()
+{
+    return padFxDelayTimeMenu;
+}
+int PadSettings::getPadFxDelayAlphaTouch()
+{
+    return padFxDelayAlphaTouch;
+}
+int PadSettings::getPadFxDelayAtReverse()
+{
+    return padFxDelayAtReverse;
+}
+float PadSettings::getPadFxDelayAtIntensity()
+{
+    return padFxDelayAtIntensity;
+}
+
+#pragma mark Reverb FX
+//Reverb
+void PadSettings::setPadFxReverbMix (float value)
+{
+    padFxReverbMix = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setMix(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getReverb().setMix(value);
+}
+void PadSettings::setPadFxReverbRoomSize (float value)
+{
+    padFxReverbRoomSize = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setRoomSize(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getReverb().setRoomSize(value);
+}
+void PadSettings::setPadFxReverbDamping (float value)
+{
+    padFxReverbDamping = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setDamping(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getReverb().setDamping(value);
+}
+void PadSettings::setPadFxReverbWidth (float value)
+{
+    padFxReverbWidth = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setWidth(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getReverb().setWidth(value);
+}
+void PadSettings::setPadFxReverbFreezeMode (float value)
+{
+    padFxReverbFreezeMode = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setFreezeMode(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getReverb().setFreezeMode(value);
+}
+void PadSettings::setPadFxReverbAlphaTouch (int value)
+{
+    padFxReverbAlphaTouch = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setAlphaTouchParam(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getReverb().setAlphaTouchParam(value);
+}
+void PadSettings::setPadFxReverbAtReverse (int value)
+{
+    padFxReverbAtReverse = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setAlphaTouchReverse(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getReverb().setAlphaTouchReverse(value);
+}
+void PadSettings::setPadFxReverbAtIntensity (float value)
+{
+    padFxReverbAtIntensity = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getReverb().setAlphaTouchIntensity(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getReverb().setAlphaTouchIntensity(value);
+}
+float PadSettings::getPadFxReverbMix()
+{
+    return padFxReverbMix;
+}
+float PadSettings::getPadFxReverbRoomSize()
+{
+    return padFxReverbRoomSize;
+}
+float PadSettings::getPadFxReverbDamping()
+{
+    return padFxReverbDamping;
+}
+float PadSettings::getPadFxReverbWidth()
+{
+    return padFxReverbWidth;
+}
+float PadSettings::getPadFxReverbFreezeMode()
+{
+    return padFxReverbFreezeMode;
+}
+int PadSettings::getPadFxReverbAlphaTouch()
+{
+    return padFxReverbAlphaTouch;
+}
+int PadSettings::getPadFxReverbAtReverse()
+{
+    return padFxReverbAtReverse;
+}
+float PadSettings::getPadFxReverbAtIntensity()
+{
+    return padFxReverbAtIntensity;
+}
+
+#pragma mark Flanger
+void PadSettings::setPadFxFlangerMix (double value)
+{
+    padFxFlangerMix = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setMix(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getFlanger().setMix(value);
+    
+}
+void PadSettings::setPadFxFlangerRate(double value)
+{
+    padFxFlangerRate = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setRate(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getFlanger().setRate(value);
+}
+void PadSettings::setPadFxFlangerFeedback (double value)
+{
+    padFxFlangerFeedback = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setFeedback(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getFlanger().setFeedback(value);
+}
+void PadSettings::setPadFxFlangerIntensity (double value)
+{
+    padFxFlangerIntensity = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setIntensity(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getFlanger().setIntensity(value);
+}
+void PadSettings::setPadFxFlangerSync (int value)
+{
+    padFxFlangerSync = value;
+}
+void PadSettings::setPadFxFlangerRateMenu (int value)
+{
+    padFxFlangerRateMenu = value;
+}
+void PadSettings::setPadFxFlangerAlphaTouch (int value)
+{
+    padFxFlangerAlphaTouch = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setAlphaTouchParam(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getFlanger().setAlphaTouchParam(value);
+}
+void PadSettings::setPadFxFlangerAtReverse (int value)
+{
+    padFxFlangerAtReverse = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setAlphaTouchReverse(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getFlanger().setAlphaTouchReverse(value);
+}
+void PadSettings::setPadFxFlangerAtIntensity (double value)
+{
+    padFxFlangerAtIntensity = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getFlanger().setAlphaTouchIntensity(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getFlanger().setAlphaTouchIntensity(value);
+}
+double PadSettings::getPadFxFlangerMix()
+{
+    return padFxFlangerMix;
+}
+double PadSettings::getPadFxFlangerRate()
+{
+    return padFxFlangerRate;
+}
+double PadSettings::getPadFxFlangerFeedback()
+{
+    return padFxFlangerFeedback;
+}
+double PadSettings::getPadFxFlangerIntensity()
+{
+    return padFxFlangerIntensity;
+}
+int PadSettings::getPadFxFlangerSync()
+{
+    return padFxFlangerSync;
+}
+int PadSettings::getPadFxFlangerRateMenu()
+{
+    return padFxFlangerRateMenu;
+}
+int PadSettings::getPadFxFlangerAlphaTouch()
+{
+    return padFxFlangerAlphaTouch;
+}
+int PadSettings::getPadFxFlangerAtReverse()
+{
+    return padFxFlangerAtReverse;
+}
+double PadSettings::getPadFxFlangerAtIntensity()
+{
+    return padFxFlangerAtIntensity;
+}
+
+#pragma mark Tremolo
+void PadSettings::setPadFxTremoloDepth (double value)
+{
+    padFxTremoloDepth = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setDepth(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getTremolo().setDepth(value);
+}
+void PadSettings::setPadFxTremoloRate (double value)
+{
+    padFxTremoloRate = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setRate(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getTremolo().setRate(value);
+}
+void PadSettings::setPadFxTremoloShape (int value)
+{
+    padFxTremoloShape = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setShape(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getTremolo().setShape(value);
+}
+void PadSettings::setPadFxTremoloSync (int value)
+{
+    padFxTremoloSync = value;
+}
+void PadSettings::setPadFxTremoloRateMenu (int value)
+{
+    padFxTremoloRateMenu = value;
+}
+void PadSettings::setPadFxTremoloAlphaTouch (int value)
+{
+    padFxTremoloAlphaTouch = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setAlphaTouchParam(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getTremolo().setAlphaTouchParam(value);
+}
+void PadSettings::setPadFxTremoloAtReverse (int value)
+{
+    padFxTremoloAtReverse = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setAlphaTouchReverse(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getTremolo().setAlphaTouchReverse(value);
+}
+void PadSettings::setPadFxTremoloAtIntensity (double value)
+{
+    padFxTremoloAtIntensity = value;
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getTremolo().setAlphaTouchIntensity(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getTremolo().setAlphaTouchIntensity(value);
+}
+double PadSettings::getPadFxTremoloDepth()
+{
+    return padFxTremoloDepth;
+}
+double PadSettings::getPadFxTremoloRate()
+{
+    return padFxTremoloRate;
+}
+int PadSettings::getPadFxTremoloShape()
+{
+    return padFxTremoloShape;
+}
+int PadSettings::getPadFxTremoloSync()
+{
+    return padFxTremoloSync;
+}
+int PadSettings::getPadFxTremoloRateMenu()
+{
+    return padFxTremoloRateMenu;
+}
+int PadSettings::getPadFxTremoloAlphaTouch()
+{
+    return padFxTremoloAlphaTouch;
+}
+int PadSettings::getPadFxTremoloAtReverse()
+{
+    return padFxTremoloAtReverse;
+}
+double PadSettings::getPadFxTremoloAtIntensity()
+{
+    return padFxTremoloAtIntensity;
+}
 

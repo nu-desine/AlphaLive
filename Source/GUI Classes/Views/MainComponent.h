@@ -38,32 +38,33 @@
 #include "GuiControllerMode.h"
 #include "../../Functionality Classes/AlphaLiveEngine.h"
 #include "../Custom Components/Pad/GuiPadLayout.h"
-#include "../Custom Components/Graphics/GuiSpeaker.h"
 #include "../Custom Components/Graphics/GuiCircleBackground.h"
 #include "../Custom Components/General/ModeButton.h"
 #include "../Custom Components/General/GuiSwitch.h"
-#include "../Custom Components/Graphics/GuiPopUpWindow.h"
 #include "../Custom Components/General/AlphaSlider.h"
+#include "../Custom Components/General/AlphaRotarySlider.h"
 #include "../Custom Components/General/AlphaTextButton.h"
 #include "../Custom Components/Scene/SceneComponent.h"
 #include "../../File and Settings/AppDocumentState.h"
 #include "../../Application/AbstractSubjectAndObserver.h"
-#include "../Custom Components/General/AlphaImageKnob.h"
 #include "../Sub-Views/GuiGlobalClock.h"
 #include "../Sub-Views/AboutComponent.h"
 #include "../Sub-Views/PreferencesComponent.h"
 #include "../Sub-Views/ProjectSettingsComponent.h"
-#include "../Sub-Views/Toolbox.h"
+#include "../Custom Components/Toolbox/Toolbox.h"
 #include "../Sub-Views/GuiGlobalPadSettings.h"
 #include "../Custom Components/Circle Piano/GuiPiano.h"
 #include "../AlphaLiveLookandFeel.h"
+#include "../Sub-Views/EliteControlsComponent.h"
+#include "../Sub-Views/GuiEliteControlsSettings.h"
 
 class MainComponent :   public Component,
                         public Button::Listener,
                         public Slider::Listener,
                         public ComboBox::Listener,
                         public Observer, //so this class can 'observe' appDocumentState
-                        public ApplicationCommandTarget
+                        public ApplicationCommandTarget,
+                        public Thread
 {
 public:
     //==============================================================================
@@ -89,7 +90,10 @@ public:
     void setToSamplerMode();
     void setToSequencerMode();
     void setToControllerMode();
+    void setGlobalPadSettingsDisplay();
+    void setEliteControlsSettingsDisplay (int controlNumber);
     
+    void run();
     void setInfoTextBoxText (String text);
     
     void mouseDown (const MouseEvent &e);
@@ -97,8 +101,12 @@ public:
     void mouseExit (const MouseEvent &e);
     
     AlphaLiveEngine& getAlphaLiveEngineRef();
+    AppDocumentState& getAppDocumentStateRef();
     
+    GuiSamplerMode* getGuiSamplerMode();
+    GuiSequencerMode* getGuiSequencerMode();
     GuiPiano* getGuiPiano();
+    Toolbox* getToolbox();
 	
     //==============================================================================
     //application command target stuff
@@ -121,30 +129,23 @@ private:
     
     Image backgroundImage, padsOff, padsOn, modeOff, padsBg;
     
-    
-    AlphaTextButton *openButton, *saveButton;
-    //TextButton *clearScenesButton;
-    //TextButton *cleanUpProjectButton;
-    
-    //AlphaSlider *tempoSlider;
+    ModeButton *openButton, *saveButton;
 
     GuiMidiMode *guiMidiMode;
     GuiSamplerMode *guiSamplerMode;
     GuiSequencerMode *guiSequencerMode;
     GuiControllerMode *guiControllerMode;
     GuiGlobalPadSettings *guiGlobalPadSettings;
+    GuiEliteControlsSettings *eliteControlsSettings;
     
     AlphaLiveEngine &alphaLiveEngineRef;
     AppDocumentState &appDocumentStateRef;
     
-    //int currentlySelectedPad;
     Array <int> selectedPads;
     
     SceneComponent *sceneComponent;
     
     TextEditor *infoTextBox;
-    
-    //ComboBox *padDisplayTextMenu, *pressureSensitivityMenu;
     
     bool isInfoBoxEnabled;
     
@@ -156,10 +157,11 @@ private:
     
     DocumentWindow* owner;
     
-    int noPadsSelected, noModeSelected;
+    int noPadsSelected, noModeSelected, eliteControlSelected, selectedEliteControl;
     
     GuiPadLayout *guiPadLayout;
-    AlphaImageKnob *gainSlider, *panSlider;
+    AlphaRotarySlider *gainSlider, *panSlider;
+    Label *gainPanValueLabel;
 
     //'rotate pad display' stuff
     Slider *padRotate;
@@ -177,29 +179,18 @@ private:
 	ModeButton *modeControllerButton;
     ModeButton *globalSettingsButton;
     
-    /*
-    //should this stuff be in it's own component?
-    GuiSpeaker *speakerLeft, *speakerRight;
-    GuiCircleBackground *circleBackground;
-    
-    GuiPopUpWindow *popUpWindow;
-     */
-    
     GuiGlobalClock *globalClock;
     GuiPiano *midiPiano;
     Toolbox *toolbox;
+    EliteControlsComponent *eliteControls;
     
     //GuiSwitch *autoShowSettingsSwitch;
 
-    
     AboutComponent *aboutComponent;
     PreferencesComponent *preferencesComponent;
     ProjectSettingsComponent *projectSettingsComponent;
     
-    //TextButton *exclusiveModeButton;
-    //AlphaSlider *exclusiveGroupSlider;
-    
-    //TextButton *quantizeModeButton;
+    String infoBoxText;
     
     //==============================================================================
 };

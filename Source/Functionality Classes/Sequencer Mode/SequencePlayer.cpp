@@ -46,6 +46,7 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
             for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
             {
                 sequenceData[seq][row][column] = PAD_SETTINGS->getSequencerData(seq, row, column);
+                recentlyAddedSequenceData[seq][row][column] = false;
             }
         }
     }
@@ -79,6 +80,8 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     panLeft = panLeftPrev = PanControl::leftChanPan_(PAD_SETTINGS->getSequencerPan());
     panRight = panRightPrev = PanControl::rightChanPan_(PAD_SETTINGS->getSequencerPan());
     
+    recordEnabled = false;
+    
     triggerModeData.playingStatus = 0;
     triggerModeData.moveToNextSeq = false;
     
@@ -103,7 +106,7 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
 
     //audio stuff
     //init audio file player objects, 1 for each row
-    //LOOK INTO DOING THIS STUFF ONLY WHEN MODE IS SET TO SAMPLES MODE
+    //LOOK INTO DOING THIS STUFF ONLY WHEN MODE IS SET TO SAMPLES MODE?
     for (int row = 0; row <= NO_OF_ROWS-1; row++)
     {
         sequenceAudioFilePlayer[row] = new SequenceAudioFilePlayer(padNumber, row, audioTransportSourceThread);
@@ -111,6 +114,22 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     }
     
     broadcaster.addActionListener(this);
+    
+    //init all effects to be null
+    gainAndPan = nullptr;
+    lowPassFilter = nullptr;
+    highPassFilter = nullptr;
+    bandPassFilter = nullptr;
+    reverb = nullptr;
+    delay = nullptr;
+    flanger = nullptr;
+    tremolo = nullptr;
+    
+    //set effect to default 0, and then call set effect to create the effect object
+    //This alg. prevents any crashes caused within prepareToPlay when trying to
+    //set the sampleRate, where the effect object must exist
+    effect = 0;
+    setSamplesEffect(PAD_SETTINGS->getSequencerEffect());
     
     prevPadValue = pressureValue =  0;
     playingLastLoop = false;
@@ -123,6 +142,15 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
 
 SequencePlayer::~SequencePlayer()
 {
+    delete gainAndPan;
+    delete lowPassFilter;
+    delete highPassFilter;
+    delete bandPassFilter;
+    delete delay;
+    delete reverb;
+    delete flanger;
+    delete tremolo;
+    
     stopThread(timeInterval);
     //stopThreadAndReset();
     modeSequencerRef.updatePadPlayingStatus(padNumber, 0);
@@ -134,6 +162,7 @@ SequencePlayer::~SequencePlayer()
     
     audioMixer.removeAllInputs();
     audioPlayer.setSource(NULL);
+     
 }
 
 //=====================================================================================
@@ -273,7 +302,8 @@ void SequencePlayer::processSequence(int padValue)
                 broadcaster.sendActionMessage("PLAYING ON");
             }
             
-            startThread();
+            sequenceNumber = 0;
+            startThread(8);
             currentPlayingState = 1;
             
             //EXCLUSIVE MODE STUFF 
@@ -380,7 +410,37 @@ void SequencePlayer::processSequence(int padValue)
     }
     else if (mode == 2)
     {
-        //control DSP effects
+        //determine what effect and parameter the pressure is controlling
+        
+        switch (effect)
+        {
+            case 1: //Gain and Pan
+                gainAndPan->processAlphaTouch(pressureValue);
+                break;
+            case 2: //LPF
+                lowPassFilter->processAlphaTouch(pressureValue);
+                break;
+            case 3: //HPF
+                highPassFilter->processAlphaTouch(pressureValue);
+                break;
+            case 4: //BPF
+                bandPassFilter->processAlphaTouch(pressureValue);
+                break;
+            case 7: //Delay
+                delay->processAlphaTouch(pressureValue);
+                break;
+            case 8: //Reverb
+                reverb->processAlphaTouch(pressureValue);
+                break;
+            case 9: //Flanger
+                flanger->processAlphaTouch(pressureValue);
+                break;
+            case 10: //Tremolo
+                tremolo->processAlphaTouch(pressureValue);
+                break;
+            default:
+                break;
+        }
     }
     
     
@@ -450,7 +510,7 @@ void SequencePlayer::triggerQuantizationPoint()
             broadcaster.sendActionMessage("PLAYING ON");
         }
         
-        startThread();
+        startThread(8);
           
         currentPlayingState = 1;
         
@@ -501,7 +561,16 @@ void SequencePlayer::run()
 
     columnNumber = 0; //counter variable
     //will this be ok being here?
-    sequenceNumber = 0;
+    //sequenceNumber = 0;
+    
+    if (mode == 2)
+    {
+        //set the state of certain effects
+        if (effect == 9) //flanger
+            flanger->restart(); //so the lfo is re-started when the file is started
+        else if (effect == 10) //tremolo
+            tremolo->restart(); //so the lfo is re-started when the file is started
+    }
     
     //initally reset sequence display
     if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
@@ -558,7 +627,8 @@ void SequencePlayer::run()
                 }
                 
                 //then check for any midi note-on messages
-                if (sequenceData[sequenceNumber][rowNumber][columnNumber] >= 1) //if 'on'
+                if (sequenceData[sequenceNumber][rowNumber][columnNumber] >= 1 && 
+                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == false) //if 'on' and not a 'recently recorded' notes
                 {
                     int velocity = sequenceData[sequenceNumber][rowNumber][columnNumber];
                     //trigger note-on message
@@ -579,6 +649,10 @@ void SequencePlayer::run()
                     midiNoteOnCounter++;
                     
                 }
+                else if (recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == true)
+                {
+                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] = false;
+                }
             }
         }
         
@@ -590,10 +664,15 @@ void SequencePlayer::run()
             //cycle through each row to look for any note on messages
             for (int rowNumber = 0; rowNumber <= NO_OF_ROWS-1; rowNumber++)
             {
-                if (sequenceData[sequenceNumber][rowNumber][columnNumber] >= 1) //if 'on'
+                if (sequenceData[sequenceNumber][rowNumber][columnNumber] >= 1 &&
+                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == false) //if 'on' and not a recently recorded note
                 {
                     int velocity = sequenceData[sequenceNumber][rowNumber][columnNumber];
                     triggerAudioMessage(rowNumber, velocity);
+                }
+                else if (recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == true)
+                {
+                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] = false;
                 }
             }
         }
@@ -733,6 +812,14 @@ void SequencePlayer::stopThreadAndReset()
         broadcaster.sendActionMessage("PLAYING OFF"); 
     }
     
+    if (mode == 2)
+    {
+        if (effect == 7) //delay
+            delay->resetBuffers();
+        else if (effect == 9) //flanger
+            flanger->resetBuffers();
+    }
+    
 }
 
 
@@ -781,11 +868,11 @@ void SequencePlayer::sendMidiPressureData()
             case 1: //channel aftertouch
                 message = MidiMessage::channelPressureChange(midiChannel, pressureValueScaled);
                 break;
-            case 3: //CC messages
-                message = MidiMessage::controllerEvent(midiChannel, midiControllerNumber, pressureValueScaled);
-                break;
             case 2: // mod wheel
                 message = MidiMessage::controllerEvent(midiChannel, 1, pressureValueScaled);
+                break;
+            case 3: //CC messages
+                message = MidiMessage::controllerEvent(midiChannel, midiControllerNumber, pressureValueScaled);
                 break;
             case 4: //pitch bend up
                 //convert 0-127 to 8191-16383
@@ -846,27 +933,42 @@ void SequencePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFi
     
     audioMixer.getNextAudioBlock(bufferToFill);
     
-    /*
-    //OLD GAIN AND PAN ALGORITHM
-    //get sample data from audio buffer
-    float *pOutL = bufferToFill.buffer->getSampleData (0, bufferToFill.startSample);
-    float *pOutR = bufferToFill.buffer->getSampleData (1, bufferToFill.startSample);
     sharedMemory.enter();
-    //should 'sharedMemory' be entered on the other side where stuff like gain is actually set? YES
-    for (int i = 0; i < bufferToFill.numSamples; ++i)
+    if (/*fileSource.isPlaying() == true &&*/ effect != 0)
     {
-        //gain
-        *pOutL = *pOutL * samplesGain;
-        *pOutR = *pOutR * samplesGain
-        //pan
-        *pOutL = panControl.leftChanPan(*pOutL);
-        *pOutR = panControl.rightChanPan(*pOutR);
         
-        pOutL++;
-        pOutR++;
+        switch (effect) 
+        {
+            case 1: //Gain and Pan
+                gainAndPan->processAudio(bufferToFill);
+                break;
+            case 2: //LPF
+                lowPassFilter->processAudio(bufferToFill);
+                break;
+            case 3://HPF
+                highPassFilter->processAudio(bufferToFill);
+                break;
+            case 4: //BPF
+                bandPassFilter->processAudio(bufferToFill);
+                break;
+            case 7: //Delay
+                delay->processAudio(bufferToFill);
+                break;
+            case 8: //Reverb
+                reverb->processAudio(bufferToFill);
+                break;
+            case 9: //Flanger
+                flanger->processAudio(bufferToFill);
+                break;
+            case 10: //Tremolo
+                tremolo->processAudio(bufferToFill);
+                break;
+            default:
+                break;
+        }
+        
     }
     sharedMemory.exit();
-     */
     
     //gain and pan
     sharedMemory.enter();
@@ -897,6 +999,38 @@ void SequencePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFi
 void SequencePlayer::prepareToPlay (int samplesPerBlockExpected,double sampleRate)
 {
     audioMixer.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    
+    sampleRate_ = sampleRate;
+    
+    switch (effect)
+    {
+        case 1:
+            gainAndPan->setSampleRate(sampleRate);
+            break;
+        case 2:
+            lowPassFilter->setSampleRate(sampleRate);
+            break;
+        case 3:
+            highPassFilter->setSampleRate(sampleRate);
+            break;
+        case 4:
+            bandPassFilter->setSampleRate(sampleRate);
+            break;
+        case 7:
+            delay->setSampleRate(sampleRate);
+            break;
+        case 8:
+            reverb->setSampleRate(sampleRate);
+            break;
+        case 9:
+            flanger->setSampleRate(sampleRate);
+            break;
+        case 10:
+            tremolo->setSampleRate(sampleRate);
+            break;
+        default:
+            break;
+    }
 }
 
 void SequencePlayer::releaseResources()
@@ -996,6 +1130,55 @@ int SequencePlayer::getCurrentPlayingState()
     return currentPlayingState;
 }
 
+void SequencePlayer::setSequenceNumber (int value)
+{
+    sequenceNumber = value;
+}
+
+int SequencePlayer::getSequenceNumber()
+{
+    return sequenceNumber;
+}
+
+Array<int> SequencePlayer::getClosestColumnNumber()
+{
+    //get the exact system time and compare it to currentTime
+    //if the exact time is closer to current time, return the current column number
+    //if the exact time is closer to currentTime - timeInterval, return the last column
+    //is this the right algorithm?
+    
+    int exactTime = Time::getMillisecondCounter();
+    int timeFromLastColumn = exactTime - (currentTime - timeInterval); 
+    int timeTillNextColumn = currentTime - exactTime;
+    
+    //index 0 stores closest column number, 
+    //index 1 stores whether this is the last column or the current/next column
+    Array <int> closestColumnData; 
+    
+    if (timeFromLastColumn <= timeTillNextColumn) //closer to last column
+    {
+        int lastColumnNumber = columnNumber - 1;
+        if (lastColumnNumber < 0)
+            lastColumnNumber = sequenceLength - 1;
+        
+        closestColumnData.insert(0, lastColumnNumber);
+        closestColumnData.insert(1, 0);
+        
+        //std::cout << "returning last column number..." << std::endl;
+    }
+    else //timeTillNextColumn < timeFromLastColumn, closer to next column
+    {
+        //sstd::cout << "returning current column number..." << std::endl;
+        
+        closestColumnData.insert(0, columnNumber);
+        closestColumnData.insert(1, 1);
+    }
+    
+    //std::cout << std::endl;
+    
+    return closestColumnData;
+}
+
 //=====================================================================================
 //=Settings Stuff======================================================================
 //=====================================================================================
@@ -1021,23 +1204,23 @@ void SequencePlayer::setTempo(float value)
     
     switch (relativeTempoMode)
     {
-    case 1: //quarter time
+    case -2: //quarter time
         tempo = value/4.0;
         break;
         
-    case 2: //half time
+    case -1: //half time
         tempo = value/2.0;
         break;
     
-        case 3: //regular time
+    case 0: //regular time
         tempo = value;
         break;
         
-    case 4: //double time
+    case 1: //double time
         tempo = value*2.0;
         break;
         
-    case 5: //quadrupal time
+    case 2: //quadrupal time
         tempo = value*4.0;
         break;
         
@@ -1055,9 +1238,24 @@ void SequencePlayer::setSequenceData(int seq, int row, int column, int value)
 {
     sequenceData[seq][row][column] = value;
 }
+
 void SequencePlayer::setMode(int value)
 {
+    //if previous mode was MIDI, prevent any hanging midi notes
+    if (mode == 1 && mode != value && isThreadRunning() == true)
+    {
+        for (int i = 0; i < NO_OF_ROWS; i++)
+        {
+            triggerMidiNoteOffMessage(i);
+        }
+    }
+    
     mode = value;
+}
+
+void SequencePlayer::setRecentlyAddedSequenceData (int sequenceNumber, int rowNumber, int columnNumber, bool value)
+{
+    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] = value;
 }
 
 void SequencePlayer::setNumberOfSequences (int value)
@@ -1103,14 +1301,31 @@ void SequencePlayer::setDynamicMode (int value)
 
 void SequencePlayer::setMidiNote (int row, int value)
 {
-    //should i do a check here like in ModeMidi?
+
+    if (midiNote[row] != value && isThreadRunning() == true)
+    {
+        triggerMidiNoteOffMessage(row);
+    }
+    
     midiNote[row] = value;
 }
+
 void SequencePlayer::setMidiChannel (int value)
 {
-    //should i do a check here like in ModeMidi?
+    //if new channel is different from current channel, 
+    //stop MIDI notes if seq is currently playing to prevent hanging notes
+    
+    if (midiChannel != value && isThreadRunning() == true)
+    {
+        for (int i = 0; i < NO_OF_ROWS; i++)
+        {
+            triggerMidiNoteOffMessage(i);
+        }
+    }
+    
     midiChannel = value;
 }
+
 void SequencePlayer::setMidiVelocity (int value)
 {
     midiVelocity = value;
@@ -1167,7 +1382,88 @@ void SequencePlayer::setMidiPressureStatus (bool value)
 }
 
 
-
+void SequencePlayer::setSamplesEffect(int value)
+{
+    sharedMemory.enter();
+    
+    if (effect != value) //if the effect is being changed
+    {
+        //first, delete the current effect...
+        switch (effect)
+        {
+            case 1:
+                delete gainAndPan;
+                gainAndPan = nullptr;
+                break;
+            case 2:
+                delete lowPassFilter;
+                lowPassFilter = nullptr;
+                break;
+            case 3:
+                delete highPassFilter;
+                highPassFilter = nullptr;
+                break;
+            case 4:
+                delete bandPassFilter;
+                bandPassFilter = nullptr;
+                break;
+            case 7:
+                delete delay;
+                delay = nullptr;
+                break;
+            case 8:
+                delete reverb;
+                reverb = nullptr;
+                break;
+            case 9:
+                delete flanger;
+                flanger = nullptr;
+                break;
+            case 10:
+                delete tremolo;
+                tremolo = nullptr;
+                break;
+            default:
+                break;
+        }
+        
+        //Next, create the new effect...
+        switch (value)
+        {
+            case 1:
+                gainAndPan = new GainAndPan (padNumber, sampleRate_);
+                break;
+            case 2:
+                lowPassFilter = new LowpassFilter (padNumber, sampleRate_);
+                break;
+            case 3:
+                highPassFilter = new HighPassFilter (padNumber, sampleRate_);
+                break;
+            case 4:
+                bandPassFilter = new BandPassFilter (padNumber, sampleRate_);
+                break;
+            case 7:
+                delay = new Delay (padNumber, sampleRate_);
+                break;
+            case 8:
+                reverb = new ReverbClass (padNumber, sampleRate_);
+                break;
+            case 9:
+                flanger = new Flanger (padNumber, sampleRate_);
+                break;
+            case 10:
+                tremolo = new Tremolo (padNumber, sampleRate_);
+                break;
+            default:
+                break;
+        }
+        
+        //Finally, set the new effect to be the current effect
+        effect = value;
+    }
+    sharedMemory.exit();
+    
+}
 
 
 void SequencePlayer::setSamplesGain (float value)
@@ -1189,6 +1485,19 @@ void SequencePlayer::setSamplesPan (float value)
     sharedMemory.exit();
 }
 
+void SequencePlayer::setSamplesAttackTime (double value)
+{
+    for (int i = 0; i < NO_OF_ROWS; i++)
+    {
+        sequenceAudioFilePlayer[i]->setAttackTime(value);
+    }
+}
+
+void SequencePlayer::setRecordEnabled (bool value)
+{
+    recordEnabled = value;
+}
+
 
 
 double SequencePlayer::getTimeInterval()
@@ -1196,3 +1505,43 @@ double SequencePlayer::getTimeInterval()
     return timeInterval;
 }
 
+
+//========================================================================================
+GainAndPan& SequencePlayer::getGainAndPan()
+{
+    return *gainAndPan;
+}
+LowpassFilter& SequencePlayer::getLowpassFilter()
+{
+    return *lowPassFilter;
+}
+
+HighPassFilter& SequencePlayer::getHighPassFilter()
+{
+    return *highPassFilter;
+}
+
+BandPassFilter& SequencePlayer::getBandPassFilter()
+{
+    return *bandPassFilter;
+}
+
+Delay& SequencePlayer::getDelay()
+{
+    return *delay;
+}
+
+ReverbClass& SequencePlayer::getReverb()
+{
+    return *reverb;
+}
+
+Flanger& SequencePlayer::getFlanger()
+{
+    return *flanger;
+}
+
+Tremolo& SequencePlayer::getTremolo()
+{
+    return *tremolo;
+}

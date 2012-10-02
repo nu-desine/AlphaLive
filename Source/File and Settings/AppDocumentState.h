@@ -80,33 +80,63 @@ public:
     
     void setMainAppWindowRef (MainAppWindow *ref);
     
-    void createNewProject();
-    void saveProject();
-    void saveProjectAs();
-    void loadProject(bool openBrowser, File fileToOpen = File::nonexistent);
-    void saveSceneToDisk (int sceneNumber);
-    bool loadSceneFromDisk(int sceneNumber);
-    
+    void savePadSettings (int padNumber, XmlElement *padData);
+    void loadPadSettings (int padNumber, XmlElement *padData);
     void saveProjectSettings();
     void loadProjectSettings();
+    
     void saveToScene (int sceneNumber);
     void loadFromScene (int sceneNumber);
     void clearScene (int sceneNumber);
     
-    void saveSequence (int currentlySelectedSeqNumber, int currentlySelectedPad);
-    void loadSequence (int currentlySeletedSeqNumber, Array<int> selectedPads_);
+    void createNewProject();
+    void saveProject();
+    void saveProjectAs();
+    void loadProject(bool openBrowser, File fileToOpen = File::nonexistent);
+    
+    void saveSceneToDisk (int sceneNumber);
+    bool loadSceneFromDisk (int sceneNumber, 
+                            bool openBrowser = true, 
+                            File fileToOpen = File::nonexistent);
+    
+    void savePadToDisk (int padNumber);
+    void loadPadFromDisk (Array<int> selectedPads_, 
+                          bool openBrowser = true, 
+                          File fileToOpen = File::nonexistent);
+    
+    void saveSequence (int currentlySelectedSeqNumber, 
+                       int currentlySelectedPad);
+    void loadSequence (int currentlySeletedSeqNumber, 
+                       Array<int> selectedPads_, 
+                       bool openBrowser = true, 
+                       File fileToOpen = File::nonexistent);
+    
     void saveSequenceSet (int currentlySelectedPad);
-    void loadSequenceSet (Array<int> selectedPads_);
+    void loadSequenceSet (Array<int> selectedPads_, 
+                          bool openBrowser = true, 
+                          File fileToOpen = File::nonexistent);
+    
+    void createMidiFile (int currentlySelectedSeqNumber, 
+                         int currentlySelectedPad,
+                         int isSeqSet);
+    void importMidiFile (int currentlySelectedSeqNumber, 
+                         Array<int> selectedPads_,
+                         int isSeqSet,
+                         bool shouldImportNoteData,
+                         bool openBrowser = true, 
+                         File fileToOpen = File::nonexistent);
     
     int getGuiUpdateFlag();
     int getSceneToUpdate();
     int getSceneStatus();
     
-    void removeUneededAudioFiles();
+    void removeUneededAudioFiles(bool closingApp);
     void importAudioFiles();   
     void setCurrentlySelectedScene(int value);
     
     static void registerRecentFile (const File& file);
+    
+    int getNumOfFilesAtStart();
     
 private:
     
@@ -126,10 +156,12 @@ private:
     
     MainAppWindow *mainAppWindowRef;
     
-    bool shouldDisplayAlertWindow;
+    bool shouldDisplayAlertWindow;  //Don't think this is needed anymore as it was a 
+                                    //bad idea to display an alert window when saving
     
     int currentlySelectedScene;
     
+    int numOfFilesAtStart;
 };
 
 #endif

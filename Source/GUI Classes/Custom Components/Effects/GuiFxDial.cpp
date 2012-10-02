@@ -1,16 +1,30 @@
 /*
  *  GuiFxDial.cpp
- *  sdaJuce
- *
- *  Created by Sam Davies on 19/10/2011.
- *  Copyright 2011 __MyCompanyName__.
- *
+ //  AlphaLive
+ //
+ //  Created by Liam Meredith-Lacey on 22/12/2011.
+ //  Copyright 2011 nu desine.
+ //
+ //  This file is part of AlphaLive.
+ //
+ //  AlphaLive is free software: you can redistribute it and/or modify
+ //  it under the terms of the GNU General Public License, version 2, 
+ //  as published by the Free Software Foundation.
+ //  
+ //  AlphaLive is distributed in the hope that it will be useful,
+ //  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ //  GNU General Public License for more details.
+ //
+ //  You should have received a copy of the GNU General Public License
+ //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "GuiFxDial.h"
-#include "../../Binary Data/PressureBinaryData.h"
+#include "../../Binary Data/BinaryDataNew.h"
 #include "../../../File and Settings/AppSettings.h"
 #include "../../Views/MainComponent.h"
+#include "../../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
@@ -34,28 +48,39 @@ GuiFxDial::GuiFxDial(MainComponent &ref) :  Component ("GuiFxDial"),
     
     
     //----------------------FX buttons------------------
+	Image *gainIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::gainicon_png, BinaryDataNew::gainicon_pngSize));
+	Image *lpfIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::lpficon_png, BinaryDataNew::lpficon_pngSize));
+	Image *hpfIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::hpficon_png, BinaryDataNew::hpficon_pngSize));
+	Image *bpfIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::bpficon_png, BinaryDataNew::bpficon_pngSize));
+	Image *driveIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::offsymbol_png, BinaryDataNew::offsymbol_pngSize));
+	Image *crushIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::offsymbol_png, BinaryDataNew::offsymbol_pngSize));
+	Image *delayIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::delayicon_png, BinaryDataNew::delayicon_pngSize));
+	Image *reverbIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::reverbicon_png, BinaryDataNew::reverbicon_pngSize));
+	Image *flangerIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::flangericon_png, BinaryDataNew::flangericon_pngSize));
+	Image *tremoloIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::tremoloicon_png, BinaryDataNew::tremoloicon_pngSize));
+		
     for (int i = 0; i < 10; i++)
     {
         if (i == 0)
-            fxButtons.insert(i, new SettingsButton(translate("GAIN"), (27 * (M_PI / 180)), (54 * (M_PI / 180)), 0.75f, -5, 0.3, 0.3));
+            fxButtons.insert(i, new SettingsButtonImage(gainIcon, (27 * (M_PI / 180)), (54 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 1)
-            fxButtons.insert(i, new SettingsButton(translate("LPF"), (54 * (M_PI / 180)), (81 * (M_PI / 180)), 0.75f, -5, 0.38, 0.3));
+            fxButtons.insert(i, new SettingsButtonImage(lpfIcon, (54 * (M_PI / 180)), (81 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 2)
-            fxButtons.insert(i, new SettingsButton(translate("HPF"), (81 * (M_PI / 180)), (108 * (M_PI / 180)), 0.75f, -5, 0.35, 0.3));
+            fxButtons.insert(i, new SettingsButtonImage(hpfIcon, (81 * (M_PI / 180)), (108 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 3)
-            fxButtons.insert(i, new SettingsButton(translate("BPF"), (108 * (M_PI / 180)), (135 * (M_PI / 180)), 0.75f, 185, 0.6, 0.37));
+            fxButtons.insert(i, new SettingsButtonImage(bpfIcon, (108 * (M_PI / 180)), (135 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 4)
-            fxButtons.insert(i, new SettingsButton(translate("DRIVE"), (135 * (M_PI / 180)), (162 * (M_PI / 180)), 0.75f, 185, 0.7, 0.37));
+            fxButtons.insert(i, new SettingsButtonImage(driveIcon, (135 * (M_PI / 180)), (162 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 5)
-            fxButtons.insert(i, new SettingsButton(translate("CRUSH"), (162 * (M_PI / 180)), (189 * (M_PI / 180)), 0.75f,  185, 0.73, 0.37));
+            fxButtons.insert(i, new SettingsButtonImage(crushIcon, (162 * (M_PI / 180)), (189 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 6)
-            fxButtons.insert(i, new SettingsButton(translate("DELAY"), (189 * (M_PI / 180)), (216 * (M_PI / 180)), 0.75f, 185, 0.7, 0.37));
+            fxButtons.insert(i, new SettingsButtonImage(delayIcon, (189 * (M_PI / 180)), (216 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 7)
-            fxButtons.insert(i, new SettingsButton(translate("REVERB"), (216 * (M_PI / 180)), (243 * (M_PI / 180)), 0.75f, 188, 0.75, 0.37));
+            fxButtons.insert(i, new SettingsButtonImage(reverbIcon, (216 * (M_PI / 180)), (243 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 8)
-            fxButtons.insert(i, new SettingsButton(translate("FLANGER"), (243 * (M_PI / 180)), (270 * (M_PI / 180)), 0.75f, 188, 0.75, 0.37));
+            fxButtons.insert(i, new SettingsButtonImage(flangerIcon, (243 * (M_PI / 180)), (270 * (M_PI / 180)), 0.75f, 1.0f));
         else if (i == 9)
-            fxButtons.insert(i, new SettingsButton(translate("TREMOLO"), (270 * (M_PI / 180)), (297 * (M_PI / 180)), 0.75f, 190, 0.85, 0.37));
+            fxButtons.insert(i, new SettingsButtonImage(tremoloIcon, (270 * (M_PI / 180)), (297 * (M_PI / 180)), 0.75f, 1.0f));
         
         fxButtons[i]->addListener(this);
         fxButtons[i]->setOpaque(false);
@@ -147,7 +172,11 @@ void GuiFxDial::buttonClicked(Button *button)
                 for (int i = 0; i < selectedPads.size(); i++)
                 {
                     int padNum = selectedPads[i];
-                    PAD_SETTINGS->setSamplerEffect(fx+1);
+                    
+                    if (PAD_SETTINGS->getMode() == 2)
+                        PAD_SETTINGS->setSamplerEffect(fx+1);
+                    else if (PAD_SETTINGS->getMode() == 3)
+                        PAD_SETTINGS->setSequencerEffect(fx+1);
                 }
                 
                 //repaint(); // repaint with bounds!! what is ths repaint? do we need it anymore?
@@ -244,67 +273,106 @@ void GuiFxDial::setCurrentlySelectedPad (Array<int> selectedPads_)
 
 void GuiFxDial::updateDisplay()
 {
-    //This method is used to set all the components to the currently selected pad's settings,
-    //as well as show and hide the relavent components
-    
     hideAllFx();
     
-    int currentEffect;
+    int currentEffect = 0;
     
     //if an individual pad number is currently selected
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        currentEffect = PAD_SETTINGS->getSamplerEffect() - 1;
         
-        if (currentEffect == 0) //Gain and Pan
-        {
-            gainAndPan->updateDisplay();
-            gainAndPan->setVisible(true);
-        }
-        else if (currentEffect == 1) //LPF
-        {
-            lowpassFilter->updateDisplay();
-            lowpassFilter->setVisible(true);
-        }
-        else if (currentEffect == 2) //HPF
-        {
-            highPassFilter->updateDisplay();
-            highPassFilter->setVisible(true);
-        }
-        else if (currentEffect == 3) //BPF
-        {
-            bandPassFilter->updateDisplay();
-            bandPassFilter->setVisible(true);
-        }
-        else if (currentEffect == 6) //Delay
-        {
-            delay->updateDisplay();
-            delay->setVisible(true);
-        }
-        else if (currentEffect == 7) //Reverb
-        {
-            reverb->updateDisplay();
-            reverb->setVisible(true);
-        }
-        else if (currentEffect == 8) //Flanger
-        {
-            flanger->updateDisplay();
-            flanger->setVisible(true);
-        }
-        else if (currentEffect == 9) //Tremolo
-        {
-            tremolo->updateDisplay();
-            tremolo->setVisible(true);
-        }
-        
+        if (PAD_SETTINGS->getMode() == 2)
+            currentEffect = PAD_SETTINGS->getSamplerEffect() - 1;
+        else if (PAD_SETTINGS->getMode() == 3)
+            currentEffect = PAD_SETTINGS->getSequencerEffect() - 1;
     }
 
     else if(MULTI_PADS)
     {
-        currentEffect = 0;
+        if (AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 2)
+        {
+            int effect_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerEffect();
+            for (int i = 1; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                if (PAD_SETTINGS->getSamplerEffect() != effect_)
+                {
+                    for (int i = 0; i < 10; i++)
+                        fxButtons[i]->setToggleState(0, false);
+                    
+                    currentEffect = 0;
+                    break;
+                }
+                if (i == selectedPads.size()-1)
+                {
+                    currentEffect = effect_-1;
+                }
+            }
+        }
+        else if (AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 3)
+        {
+            int effect_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerEffect();
+            for (int i = 1; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                if (PAD_SETTINGS->getSequencerEffect() != effect_)
+                {
+                    for (int i = 0; i < 10; i++)
+                        fxButtons[i]->setToggleState(0, false);
+                    
+                    currentEffect = 0;
+                    break;
+                }
+                if (i == selectedPads.size()-1)
+                {
+                    currentEffect = effect_-1;
+                }
+            }
+        }
     }
     
+    
+    if (currentEffect == 0) //Gain and Pan
+    {
+        gainAndPan->updateDisplay();
+        gainAndPan->setVisible(true);
+    }
+    else if (currentEffect == 1) //LPF
+    {
+        lowpassFilter->updateDisplay();
+        lowpassFilter->setVisible(true);
+    }
+    else if (currentEffect == 2) //HPF
+    {
+        highPassFilter->updateDisplay();
+        highPassFilter->setVisible(true);
+    }
+    else if (currentEffect == 3) //BPF
+    {
+        bandPassFilter->updateDisplay();
+        bandPassFilter->setVisible(true);
+    }
+    else if (currentEffect == 6) //Delay
+    {
+        delay->updateDisplay();
+        delay->setVisible(true);
+    }
+    else if (currentEffect == 7) //Reverb
+    {
+        reverb->updateDisplay();
+        reverb->setVisible(true);
+    }
+    else if (currentEffect == 8) //Flanger
+    {
+        flanger->updateDisplay();
+        flanger->setVisible(true);
+    }
+    else if (currentEffect == 9) //Tremolo
+    {
+        tremolo->updateDisplay();
+        tremolo->setVisible(true);
+    }
   
     if (currentEffect >= 0)
         fxButtons[currentEffect]->setToggleState(true, false);
@@ -315,60 +383,49 @@ void GuiFxDial::updateDisplay()
 
 void GuiFxDial::mouseEnter (const MouseEvent &e)
 {
-    /*
-    if (buttons[0]->isMouseOver(true))
+    
+    if (fxButtons[0]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("No Effect. The pressure of the selected pad/pads will not control any effect.");
+        mainComponentRef.setInfoTextBoxText(translate("Gain and Pan Effect. Allows the pressure of the selected pads to manipulate the gain and pan of the audio."));
     }
-    else if (buttons[1]->isMouseOver(true))
+    else if (fxButtons[1]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Gain and Pan. Allows the pressure of the selected pad/pads to manipulate the gain and pan of the audio.");
+        mainComponentRef.setInfoTextBoxText(translate("Low-pass Filter Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[2]->isMouseOver(true))
+    else if (fxButtons[2]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Low-Pass Filter. Allows the pressure of the selected pad/pads to manipulate audio with a Low-Pass Filter.");
+        mainComponentRef.setInfoTextBoxText(translate("High-pass Filter Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[3]->isMouseOver(true))
+    else if (fxButtons[3]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("High-Pass Filter. Allows the pressure of the selected pad/pads to manipulate audio with a High-Pass Filter.");
+       mainComponentRef.setInfoTextBoxText(translate("Band-pass Filter Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[4]->isMouseOver(true))
+    else if (fxButtons[4]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Band-Pass Filter. Allows the pressure of the selected pad/pads to manipulate audio with a Band-Pass Filter.");
+        mainComponentRef.setInfoTextBoxText(translate("Overdrive Distortion Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[5]->isMouseOver(true))
+    else if (fxButtons[5]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Overdrive Distortion. Allows the pressure of the selected pad/pads to manipulate audio with a overdrive distortion effect. Coming Soon!");
+        mainComponentRef.setInfoTextBoxText(translate("Bitcrusher Distortion Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[6]->isMouseOver(true))
+    else if (fxButtons[6]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Delay. Allows the pressure of the selected pad/pads to manipulate audio with a simple delay effect.");
+        mainComponentRef.setInfoTextBoxText(translate("Delay/Echo Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[7]->isMouseOver(true))
+    else if (fxButtons[7]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Reverb. Allows the pressure of the selected pad/pads to manipulate audio with a simple reverb effect.");
+       mainComponentRef.setInfoTextBoxText(translate("Reverb Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[8]->isMouseOver(true))
+    else if (fxButtons[8]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Chorus. Allows the pressure of the selected pad/pads to manipulate audio with a chorus effect. Coming Soon!");
+        mainComponentRef.setInfoTextBoxText(translate("Flanger/Phaser Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[9]->isMouseOver(true))
+    else if (fxButtons[9]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Flanger. Allows the pressure of the selected pad/pads to manipulate audio with a flanger effect.");
+        mainComponentRef.setInfoTextBoxText(translate("Tremolo Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
-    else if (buttons[10]->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Tremolo. Allows the pressure of the selected pad/pads to manipulate audio with a tremolo effect.");
-    }
-    else if (buttons[11]->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Vibrato. Allows the pressure of the selected pad/pads to manipulate audio with a vibrato effect. Coming Soon!");
-    }
-    else if (buttons[12]->isMouseOver(true))
-    {
-        mainComponentRef.setInfoTextBoxText("Pitchshifter. Allows the pressure of the selected pad/pads to manipulate audio with a pitchshifter. Coming Soon!");
-    }
-     */
+    
+     
 }
 
 void GuiFxDial::mouseExit (const MouseEvent &e)

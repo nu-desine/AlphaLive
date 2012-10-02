@@ -25,6 +25,8 @@
 
 namespace PanControl 
 {
+    //Should these be inline functions????????
+    
     static float leftChanPan_(float control)
     {
         //takes the the pan control value and formulates

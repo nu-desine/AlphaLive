@@ -34,15 +34,15 @@ BandPassFilter::BandPassFilter(int padNumber_, float sampleRate_)
     // sample rate
     params[0] = sampleRate_;
     // cutoff frequency
-    params[1] = frequencyControlValue = PAD_SETTINGS->getSamplerFxBpfFreq();
+    params[1] = frequencyControlValue = PAD_SETTINGS->getPadFxBpfFreq();
     // Q/Bandwidth
-    params[2] = bandwidthControlValue = PAD_SETTINGS->getSamplerFxBpfBandwidth();
+    params[2] = bandwidthControlValue = PAD_SETTINGS->getPadFxBpfBandwidth();
     
-    mix = mixPrev = mixControlValue =  PAD_SETTINGS->getSamplerFxBpfMix();
+    mix = mixPrev = mixControlValue =  PAD_SETTINGS->getPadFxBpfMix();
     
-    alphaTouchParam = PAD_SETTINGS->getSamplerFxBpfAlphaTouch();
-    alphaTouchReverse = PAD_SETTINGS->getSamplerFxBpfAtReverse();
-    alphaTouchIntensity = PAD_SETTINGS->getSamplerFxBpfAtIntensity();
+    alphaTouchParam = PAD_SETTINGS->getPadFxBpfAlphaTouch();
+    alphaTouchReverse = PAD_SETTINGS->getPadFxBpfAtReverse();
+    alphaTouchIntensity = PAD_SETTINGS->getPadFxBpfAtIntensity();
     
 }
 

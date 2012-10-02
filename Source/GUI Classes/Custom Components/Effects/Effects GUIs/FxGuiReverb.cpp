@@ -23,6 +23,8 @@
 #include "FxGuiReverb.h"
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
+#include "../../../Binary Data/BinaryDataNew.h"
+#include "../../../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
@@ -66,14 +68,15 @@ GuiReverb::GuiReverb(MainComponent &ref)
     addAndMakeVisible(alphaTouchMenu = new ComboBox());
     alphaTouchMenu->addListener(this);
     alphaTouchMenu->addMouseListener(this, true);
-    alphaTouchMenu->addItem("Off", 1);
-    alphaTouchMenu->addItem("Mix", 2);
-    alphaTouchMenu->addItem("Room Size", 3);
-    alphaTouchMenu->addItem("Damping", 4);
-    alphaTouchMenu->addItem("Width", 5);
+    alphaTouchMenu->addItem(translate("Off"), 1);
+    alphaTouchMenu->addItem(translate("Mix"), 2);
+    alphaTouchMenu->addItem(translate("Room Size"), 3);
+    alphaTouchMenu->addItem(translate("Damping"), 4);
+    alphaTouchMenu->addItem(translate("Width"), 5);
     alphaTouchMenu->setSelectedId(1, true);
     
-    addAndMakeVisible(reverseButton = new AlphaTextButton("INVERT"));
+    Image *reverseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::inverticon_png, BinaryDataNew::inverticon_pngSize));
+    addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);
     reverseButton->addMouseListener(this, true);
@@ -86,6 +89,12 @@ GuiReverb::GuiReverb(MainComponent &ref)
     intensitySlider->addMouseListener(this, true);
     intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
     
+    //---------------parameter label -------------------------------------
+    addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
+    parameterHoverLabel->setJustificationType(Justification::centred);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
+    parameterHoverLabel->setFont(Font(9));
+    parameterHoverLabel->addMouseListener(this, true);
     
     setInterceptsMouseClicks(false, true);
 }
@@ -105,8 +114,9 @@ void GuiReverb::resized()
 	widthSlider->setBounds(67, 67, 190, 190);
     intensitySlider->setBounds(57, 57, 210, 210);
     
-    alphaTouchMenu->setBounds(119, 192, 87, 20);
+    alphaTouchMenu->setBounds(119, 202, 87, 15);
     reverseButton->setBounds(211,211, 32, 32);
+    parameterHoverLabel->setBounds(144, 187, 36, 15);
 }
 
 
@@ -118,9 +128,10 @@ void GuiReverb::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbMix(mixSlider->getValue());
+            PAD_SETTINGS->setPadFxReverbMix(mixSlider->getValue());
         }
         
+        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
     }
     
     else if (slider == roomSizeSlider)
@@ -128,9 +139,10 @@ void GuiReverb::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbRoomSize(roomSizeSlider->getValue());
+            PAD_SETTINGS->setPadFxReverbRoomSize(roomSizeSlider->getValue());
         }
         
+        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
     }
     
     else if (slider == dampingSlider)
@@ -138,9 +150,10 @@ void GuiReverb::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbDamping(dampingSlider->getValue());
+            PAD_SETTINGS->setPadFxReverbDamping(dampingSlider->getValue());
         }
         
+        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
     }
     
     else if (slider == widthSlider)
@@ -148,9 +161,10 @@ void GuiReverb::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbWidth(widthSlider->getValue());
+            PAD_SETTINGS->setPadFxReverbWidth(widthSlider->getValue());
         }
         
+        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
     }
     
 
@@ -160,10 +174,11 @@ void GuiReverb::sliderValueChanged (Slider *slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbAtIntensity(intensitySlider->getValue());
+            PAD_SETTINGS->setPadFxReverbAtIntensity(intensitySlider->getValue());
         }
+        
+        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
     }
-    
     
 }
 
@@ -174,7 +189,7 @@ void GuiReverb::comboBoxChanged (ComboBox *comboBox)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbAlphaTouch(alphaTouchMenu->getSelectedId());
+            PAD_SETTINGS->setPadFxReverbAlphaTouch(alphaTouchMenu->getSelectedId());
         }
     }
     
@@ -188,7 +203,7 @@ void GuiReverb::buttonClicked (Button *button)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerFxReverbAtReverse(reverseButton->getToggleState());
+            PAD_SETTINGS->setPadFxReverbAtReverse(reverseButton->getToggleState());
         }
         
     }
@@ -207,14 +222,14 @@ void GuiReverb::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        mixSlider->setValue(PAD_SETTINGS->getSamplerFxReverbMix(), false);
-        roomSizeSlider->setValue(PAD_SETTINGS->getSamplerFxReverbRoomSize(), false);
-        dampingSlider->setValue(PAD_SETTINGS->getSamplerFxReverbDamping(), false);
-        widthSlider->setValue(PAD_SETTINGS->getSamplerFxReverbWidth(), false);
+        mixSlider->setValue(PAD_SETTINGS->getPadFxReverbMix(), false);
+        roomSizeSlider->setValue(PAD_SETTINGS->getPadFxReverbRoomSize(), false);
+        dampingSlider->setValue(PAD_SETTINGS->getPadFxReverbDamping(), false);
+        widthSlider->setValue(PAD_SETTINGS->getPadFxReverbWidth(), false);
         
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getSamplerFxReverbAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getSamplerFxReverbAtReverse(), false);
-        intensitySlider->setValue(PAD_SETTINGS->getSamplerFxReverbAtIntensity(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxReverbAlphaTouch(), true);
+        reverseButton->setToggleState(PAD_SETTINGS->getPadFxReverbAtReverse(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getPadFxReverbAtIntensity(), false);
     }
     
     else if(MULTI_PADS)
@@ -236,32 +251,37 @@ void GuiReverb::mouseEnter (const MouseEvent &e)
 {
     if (mixSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Reverb Mix Control. Sets the wet/dry ratio for reverb level for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate("Reverb Mix Control. Sets the wet/dry ratio for reverb level for the selected pads."));
+        parameterHoverLabel->setText(String(mixSlider->getValue(), 3), false);
     }
     else if (roomSizeSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Reverb Room Size Control. Sets the reverb room size for the selected pad/pads. A larger room size will create a longer reverberation time.");
+        mainComponentRef.setInfoTextBoxText(translate("Reverb Room Size Control. Sets the reverb room size for the selected pads. A larger room size will create a longer reverberation time."));
+        parameterHoverLabel->setText(String(roomSizeSlider->getValue(), 3), false);
     }
     else if (dampingSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Reverb Damping Control. Sets the reverb damping level for the selected pad/pads. A larger damping value create a more subtle reverberation tail.");
+        mainComponentRef.setInfoTextBoxText(translate("Reverb Damping Control. Sets the reverb damping level for the selected pad/pads. A larger damping value create a more subtle reverberation tail."));
+        parameterHoverLabel->setText(String(dampingSlider->getValue(), 3), false);
     }
     else if (widthSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("Reverb Width Control. Sets the reverb width for the selected pad/pads. A larger width will create a wider reverb sound in the stereo spread.");
+        mainComponentRef.setInfoTextBoxText(translate("Reverb Width Control. Sets the reverb width for the selected pad/pads. A larger width will create a wider reverb sound in the stereo spread."));
+        parameterHoverLabel->setText(String(widthSlider->getValue(), 3), false);
     }
         
     else if (alphaTouchMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("AlphaTouch Menu. Sets the effect parameter that the pads pressure will control for the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::alphaTouchMenu));
     }
     else if (reverseButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("AlphaTouch Reverse Button. Activate this button to reverse/invert the direction of the modulated created by the pressure of the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::inverseButton));
     }
     else if (intensitySlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText("AlphaTouch Intensity Control. Sets the intensity/range of modulation created by the pressure of the selected pad/pads.");
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
     }
     
 }
@@ -270,5 +290,6 @@ void GuiReverb::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
+    parameterHoverLabel->setText(String::empty, false);
     
 }

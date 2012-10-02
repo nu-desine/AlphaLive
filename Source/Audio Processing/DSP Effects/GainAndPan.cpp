@@ -28,13 +28,13 @@
 GainAndPan::GainAndPan(int padNumber_, float sampleRate_)
             : padNumber(padNumber_)
 {
-    gain = gainPrev =  gainControl = PAD_SETTINGS->getSamplerFxGainPanGain();
-    pan = panPrev = panControl = PAD_SETTINGS->getSamplerFxGainPanPan();
+    gain = gainPrev =  gainControl = PAD_SETTINGS->getPadFxGainPanGain();
+    pan = panPrev = panControl = PAD_SETTINGS->getPadFxGainPanPan();
     //pan.setPanControlValue(panControl);
     
-    alphaTouchParam = PAD_SETTINGS->getSamplerFxGainPanAlphaTouch();
-    alphaTouchReverse = PAD_SETTINGS->getSamplerFxGainPanAtReverse();
-    alphaTouchIntensity = PAD_SETTINGS->getSamplerFxGainPanAtIntensity();
+    alphaTouchParam = PAD_SETTINGS->getPadFxGainPanAlphaTouch();
+    alphaTouchReverse = PAD_SETTINGS->getPadFxGainPanAtReverse();
+    alphaTouchIntensity = PAD_SETTINGS->getPadFxGainPanAtIntensity();
     
     sampleRate = 44100;
     

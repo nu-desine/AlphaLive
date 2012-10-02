@@ -71,8 +71,8 @@ private:
 class ColourSelector::ColourSpaceView  : public Component
 {
 public:
-    ColourSpaceView (ColourSelector& owner_, float& h_, float& s_, float& v_, const int edgeSize)
-        : owner (owner_), h (h_), s (s_), v (v_), lastHue (0.0f), edge (edgeSize)
+    ColourSpaceView (ColourSelector& cs, float& hue, float& sat, float& val, const int edgeSize)
+        : owner (cs), h (hue), s (sat), v (val), lastHue (0.0f), edge (edgeSize)
     {
         addAndMakeVisible (&marker);
         setMouseCursor (MouseCursor::CrosshairCursor);
@@ -167,17 +167,17 @@ public:
 
     void paint (Graphics& g)
     {
-        const float w = (float) getWidth();
-        const float h = (float) getHeight();
+        const float cw = (float) getWidth();
+        const float ch = (float) getHeight();
 
         Path p;
         p.addTriangle (1.0f, 1.0f,
-                       w * 0.3f, h * 0.5f,
-                       1.0f, h - 1.0f);
+                       cw * 0.3f, ch * 0.5f,
+                       1.0f, ch - 1.0f);
 
-        p.addTriangle (w - 1.0f, 1.0f,
-                       w * 0.7f, h * 0.5f,
-                       w - 1.0f, h - 1.0f);
+        p.addTriangle (cw - 1.0f, 1.0f,
+                       cw * 0.7f, ch * 0.5f,
+                       cw - 1.0f, ch - 1.0f);
 
         g.setColour (Colours::white.withAlpha (0.75f));
         g.fillPath (p);
@@ -194,8 +194,8 @@ private:
 class ColourSelector::HueSelectorComp  : public Component
 {
 public:
-    HueSelectorComp (ColourSelector& owner_, float& h_, float& s_, float& v_, const int edgeSize)
-        : owner (owner_), h (h_), s (s_), v (v_), edge (edgeSize)
+    HueSelectorComp (ColourSelector& cs, float& hue, float& sat, float& val, const int edgeSize)
+        : owner (cs), h (hue), s (sat), v (val), edge (edgeSize)
     {
         addAndMakeVisible (&marker);
     }
@@ -248,18 +248,18 @@ private:
 class ColourSelector::SwatchComponent   : public Component
 {
 public:
-    SwatchComponent (ColourSelector& owner_, int index_)
-        : owner (owner_), index (index_)
+    SwatchComponent (ColourSelector& cs, int itemIndex)
+        : owner (cs), index (itemIndex)
     {
     }
 
     void paint (Graphics& g)
     {
-        const Colour colour (owner.getSwatchColour (index));
+        const Colour c (owner.getSwatchColour (index));
 
         g.fillCheckerBoard (getLocalBounds(), 6, 6,
-                            Colour (0xffdddddd).overlaidWith (colour),
-                            Colour (0xffffffff).overlaidWith (colour));
+                            Colour (0xffdddddd).overlaidWith (c),
+                            Colour (0xffffffff).overlaidWith (c));
     }
 
     void mouseDown (const MouseEvent&)
@@ -306,15 +306,13 @@ private:
 };
 
 //==============================================================================
-ColourSelector::ColourSelector (const int flags_,
-                                const int edgeGap_,
-                                const int gapAroundColourSpaceComponent)
+ColourSelector::ColourSelector (const int sectionsToShow, const int edge, const int gapAroundColourSpaceComponent)
     : colour (Colours::white),
-      flags (flags_),
-      edgeGap (edgeGap_)
+      flags (sectionsToShow),
+      edgeGap (edge)
 {
     // not much point having a selector with no components in it!
-    jassert ((flags_ & (showColourAtTop | showSliders | showColourspace)) != 0);
+    jassert ((flags & (showColourAtTop | showSliders | showColourspace)) != 0);
 
     updateHSV();
 

@@ -58,6 +58,8 @@ ModeMidi::ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref)
         pressureValue[i] = 0;
     }
     
+    columnNumber = sequenceNumber = 0;
+    
     broadcaster.addActionListener(this);
             
 }
@@ -148,6 +150,7 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
             else if (triggerModeData[padNumber].playingStatus == 0) //stop
             {
                 noteOff(padNumber);
+                currentPlayingStatus[padNumber] = 0; //set pad to 'off'
             }
         }
         
@@ -256,11 +259,69 @@ void ModeMidi::noteOn (int padNumber)
         isCurrentlyPlaying[padNumber] = false;
     }
     
+    
     MidiMessage message = MidiMessage::noteOn(channel[padNumber], note[padNumber], (uint8)velocity[padNumber]);
     sendMidiMessage(message);
     isCurrentlyPlaying[padNumber] = true;
     
-    
+    //NEW - recording into sequencer pads
+    if (alphaLiveEngineRef.getRecordingPads().size() > 0)
+    {
+        for (int i = 0; i < alphaLiveEngineRef.getRecordingPads().size(); i++)
+        {
+            int recordingPad = alphaLiveEngineRef.getRecordingPads()[i];
+            
+            if (alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->isThreadRunning()) //if currently playing
+            {
+                if (AppSettings::Instance()->padSettings[recordingPad]->getSequencerMode() == 1) //if MIDI mode
+                {
+                    if (channel[padNumber] == AppSettings::Instance()->padSettings[recordingPad]->getSequencerMidiChannel()) //if MIDI channels match
+                    {
+                        int seqNote[NO_OF_ROWS];
+                        
+                        for (int j = 0; j < NO_OF_ROWS; j++)
+                        {
+                            seqNote[j] = AppSettings::Instance()->padSettings[recordingPad]->getSequencerMidiNote(j);
+                            
+                            if (note[padNumber] == seqNote[j]) //if MIDI notes match
+                            {
+                                sequenceNumber = alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->getSequenceNumber();
+                                
+                                //get the closest column number
+                                Array <int> columnNumberData = alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->getClosestColumnNumber();
+                                columnNumber = columnNumberData[0];
+                                int columnNumberType = columnNumberData[1];
+                                
+                                //When recording a note to a sequencer pad the note will play twice at this point - 
+                                //from the played pad (this class) and from the recorded note in the sequence, which is note what we want.
+                                //We want the new note to be played from this class only, and not the seq notes which will all be played at the same
+                                //set length, amoung a few other unwanted behaviours.
+                                //This is done using a new variable within SequencerPlayer called recentlyAddedSequenceData.
+                                //Every time a note is recorded here it adds a 'true' to the array in the same location as the recorded note.
+                                //Then in SequencerPlayer it won't play this new note due to this 'true' flag.
+                                
+                                if (columnNumberType == 1) //if the closest number is the current column number, add it to the recentAddedSequenceData Array so it isn't played
+                                    alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->setRecentlyAddedSequenceData(sequenceNumber, j, columnNumber, true);
+                                
+                                AppSettings::Instance()->padSettings[recordingPad]->setSequencerData(sequenceNumber, j, columnNumber, velocity[padNumber]);
+                                
+                                //if currently selected pad is the recording pad, update the grid gui.
+                                //how should it be handled if multiple pads are selected? Do nothing?
+                                if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
+                                {
+                                    if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == recordingPad)
+                                    {
+                                        broadcaster.sendActionMessage("RECORD NOTE");
+                                    }
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     //update pad GUI
     if (currentPlayingStatus[padNumber] != 1) //GUI won't need updating if this is false
@@ -273,13 +334,13 @@ void ModeMidi::noteOn (int padNumber)
     currentPlayingStatus[padNumber] = 1; 
     
     
-    
     //Exclusive mode stuff
     if (PAD_SETTINGS->getExclusiveMode() == 1)
     {
         alphaLiveEngineRef.handleExclusiveMode(padNumber);
     }
     
+   
 }
 
 
@@ -299,7 +360,8 @@ void ModeMidi::noteOff (int padNumber)
     guiPadOffUpdater.add(padNumber);
     broadcaster.sendActionMessage("OFF");
     
-    currentPlayingStatus[padNumber] = 0; //set pad to 'off'
+    //currentPlayingStatus[padNumber] = 0; //Don't call this here! Screws up exclusive mode stuff.
+    
     
 }
 
@@ -388,9 +450,14 @@ void ModeMidi::triggerQuantizationPoint (int padNum)
     int status = currentPlayingStatus[padNum];
     //call correct function based on currentPlayingStatus
     if (status == 2) //waiting to play
+    {
         noteOn(padNum);
+    }
     else if (status == 3) //waiting to stop
+    {
         noteOff(padNum);
+        currentPlayingStatus[padNum] = 0; //set pad to 'off'
+    }
 }
 
 void ModeMidi::killPad (int padNum)
@@ -402,6 +469,7 @@ void ModeMidi::killPad (int padNum)
     {
         noteOff(padNum);
         triggerModes[padNum].reset();
+        currentPlayingStatus[padNum] = 0; //set pad to 'off'
             
     }
     //if currently waiting to play or stop, just update the GUI and the relevent states
@@ -415,6 +483,11 @@ void ModeMidi::killPad (int padNum)
         currentPlayingStatus[padNum] = 0; //set pad to 'off'
         triggerModes[padNum].reset();
     }
+}
+
+void ModeMidi::stopPrevExclusivePad (int padNum)
+{
+   noteOff(padNum);
 }
 
 
@@ -442,6 +515,18 @@ void ModeMidi::actionListenerCallback (const String& message)
     {
         alphaLiveEngineRef.updatePadPlayingStatus(guiPadWaitingStopUpdater.getLast(), 3);
         guiPadWaitingStopUpdater.removeLast();
+    }
+    
+    else if (message == "RECORD NOTE")
+    {
+        //optimise the below so we're only calling/updating what needs to be done!
+        //first, update the display of the sequence grid which gets the stored
+        //sequence data from PadSettings and puts it into the local sequenceData. This
+        //could be optimised so that it is only getting the data from the current seq,
+        //as thats all that will be changed here.
+        alphaLiveEngineRef.getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 3);
+        //next set the currently sequence display, which sets the status's of the grid points
+        alphaLiveEngineRef.getModeSequencer()->updateSequencerGridGui (columnNumber, sequenceNumber, 2);
     }
     
 }
@@ -472,6 +557,7 @@ void ModeMidi::setChannel (int value, int pad)
     {
         noteOff(pad);
         triggerModes[pad].reset();
+        currentPlayingStatus[pad] = 0; //set pad to 'off'
     }
     
     channel[pad] = value;
@@ -484,6 +570,7 @@ void ModeMidi::setNote (int value, int pad)
     {
         noteOff(pad);
         triggerModes[pad].reset();
+        currentPlayingStatus[pad] = 0; //set pad to 'off'
     }
     
     note[pad] = value;
@@ -562,6 +649,7 @@ void ModeMidi::setNoteStatus (bool value, int pad)
     {
         noteOff(pad);
         triggerModes[pad].reset();
+        currentPlayingStatus[pad] = 0; //set pad to 'off'
     }
 
     noteStatus[pad] = value;

@@ -24,6 +24,17 @@
 #include "Common.h"
 #include "../File and Settings/StoredSettings.h"
 
+/*
+ Below are some strings that need wrapping in the translate() function
+ so that the translationfilegenerator app will add them to the trans file,
+ as for some reason they're not picked up within the juce library code.
+ 
+ translate("Services")
+ translate("Hide AlphaLive")
+ translate("Hide Other")
+ translate("Show All")
+ translate("Quit AlphaLive")
+ */
 
 
 MainMenuModel::MainMenuModel(AppDocumentState &ref)
@@ -77,8 +88,8 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         PopupMenu recentFiles;
         StoredSettings::getInstance()->recentFiles.createPopupMenuItems (recentFiles, 100, true, true);
         recentFiles.addSeparator();
-        recentFiles.addItem(99, "Clear Menu");
-        menu.addSubMenu (translate("Open Recent"), recentFiles, StoredSettings::getInstance()->recentFiles.getNumFiles() > 0);
+        recentFiles.addItem(99, translate("Clear Menu"));
+        menu.addSubMenu (translate(translate("Open Recent")), recentFiles, StoredSettings::getInstance()->recentFiles.getNumFiles() > 0);
         
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::Save);

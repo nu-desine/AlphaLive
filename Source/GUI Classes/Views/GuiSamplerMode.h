@@ -28,10 +28,12 @@
 #include "../Custom Components/General/ImageSlider.h"
 #include "../Custom Components/Graphics/GuiCircleBackground.h"
 #include "../Custom Components/Circle Waveform/DemoThumbnailComp.h"
-#include "../Custom Components/General/AlphaImageKnob.h"
 #include "../Custom Components/General/AlphaTextButton.h"
 #include "../Custom Components/General/SettingsButton.h"
 #include "../Custom Components/General/GuiSwitch.h"
+#include "../Custom Components/General/ModeButton.h"
+#include "../Custom Components/General/SettingsButtonImage.h"
+#include "../Custom Components/General/AlphaRotarySlider.h"
 
 
 class MainComponent;
@@ -55,8 +57,12 @@ public:
     void filenameComponentChanged (FilenameComponent* filenameComponent);
     void buttonClicked (Button* button);
     
+    void setAudioFileDisplay(File file);
+    
     void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
+    void setParameterLabelText (String value);
+    void setRotaryControlDisplay();
     
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);
@@ -70,19 +76,20 @@ private:
     MainComponent &mainComponentRef;
     
     ScopedPointer <FilenameComponent> fileChooser;
-    ScopedPointer <AlphaTextButton> loopButton, indestructibleButton, finishLoopButton, stickyButton;
-    ScopedPointer <AlphaTextButton> triggerSettingsButton, pressureSettingsButton, quantiseButton; //quantise button should probably now be global.
+    ScopedPointer <ModeButton> loopButton, indestructibleButton, finishLoopButton, stickyButton;
+    ScopedPointer <ModeButton> triggerSettingsButton, pressureSettingsButton, quantiseButton; //quantise button should probably now be global.
 
     ScopedPointer <GuiSwitch> pressureStatusButton;
-    OwnedArray<SettingsButton> triggerModeButtons;
+    OwnedArray<SettingsButtonImage> triggerModeButtons;
     ScopedPointer <GuiFxDial> fxDial;
-    //AlphaImageKnob *gainSlider;
-	//AlphaImageKnob *panSlider;
     ScopedPointer <GuiCircleBackground> notSelected;
 	
 	ScopedPointer <DemoThumbnailComp> waveform;
 	
-	
+    int controlDisplayId; //used to set which rotary dial is display in the centre
+	ScopedPointer <SettingsButton> plusButton, minusButton;
+    ScopedPointer <AlphaRotarySlider> gainSlider, panSlider, attackSlider, releaseSlider;
+    ScopedPointer <Label> parameterLabel;
 	
 	
 	double startTime, endTime;

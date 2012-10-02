@@ -24,7 +24,6 @@
 #define H_TESTGUICONTROLLERMODE
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
-#include "../Custom Components/Graphics/GuiSpeaker.h"
 #include "../Custom Components/Graphics/GuiCircleBackground.h"
 #include "../Custom Components/General/AlphaSlider.h"
 #include "../Custom Components/General/SettingsButton.h"
@@ -71,15 +70,10 @@ private:
     Array<int> selectedPads;
     MainComponent &mainComponentRef;
     
-    //GuiSpeaker *speakerLeft;
-    //GuiCircleBackground *circleBackgroundSmall, *circleBackgroundRight;
-    
-    //ComboBox *controlMenu;
-    
     OwnedArray <SettingsButton> controlButtons;
     
     AlphaSlider *sceneNumberSlider, *oscPortNumberSlider;
-    AlphaSlider *midiProgramChangeNumberSlider;// *midiProgramChangeChannelSlider;
+    AlphaSlider *midiProgramChangeNumberSlider;
     OwnedArray<AlphaTextButton> midiChannelButtons;
     Label *oscIpAddressEditor;
     

@@ -25,16 +25,14 @@
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
 #include "../Custom Components/General/ImageSlider.h"
-#include "../Custom Components/Circle Piano/GuiCirclePiano.h"
-#include "../Custom Components/Circle Piano/GuiCirclePianoForScales.h"
-#include "../Custom Components/Circle Piano/GuiCirclePianoOneOctave.h"
 #include "../Custom Components/General/GuiSwitch.h"
 #include "../Custom Components/Graphics/GuiCircleBackground.h"
-#include "../Custom Components/Graphics/GuiSpeaker.h"
 #include "../Custom Components/General/AlphaSlider.h"
-#include "../Custom Components/General/AlphaImageKnob.h"
+#include "../Custom Components/General/AlphaRotarySlider.h"
 #include "../Custom Components/General/AlphaTextButton.h"
 #include "../Custom Components/General/SettingsButton.h"
+#include "../Custom Components/General/ModeButton.h"
+#include "../Custom Components/General/SettingsButtonImage.h"
 
 class MainComponent;
 
@@ -74,16 +72,18 @@ private:
     MainComponent &mainComponentRef;
     
 	//GUI Components
-    AlphaTextButton *triggerSettingsButton, *pressureSettingsButton, *quantiseButton; //should the quantize button be global now? think so :)
-    AlphaSlider *pressureMinRangeSlider, *pressureMaxRangeSlider, *ccControllerSlider;
-    AlphaTextButton *indestructibleButton, *stickyButton;
+    ModeButton *triggerSettingsButton, *pressureSettingsButton, *quantiseButton; //should the quantize button be global now? think so :)
+    AlphaRotarySlider *pressureMinRangeSlider, *pressureMaxRangeSlider;
+	AlphaSlider *ccControllerSlider;
+    ModeButton *indestructibleButton, *stickyButton;
     GuiSwitch *pressureStatusButton, *noteStatusButton;
+    Label *parameterHoverLabel;
     
     GuiCircleBackground *notSelected;
     
     OwnedArray<AlphaTextButton> channelButtons;
-    OwnedArray<SettingsButton> triggerModeButtons;
-    OwnedArray<SettingsButton> pressureModeButtons;
+    OwnedArray<SettingsButtonImage> triggerModeButtons;
+    OwnedArray<SettingsButtonImage> pressureModeButtons;
     
 };
 

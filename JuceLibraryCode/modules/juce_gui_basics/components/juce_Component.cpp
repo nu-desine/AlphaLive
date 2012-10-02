@@ -565,6 +565,7 @@ void Component::addToDesktop (int styleWanted, void* nativeWindowToAttachTo)
         bool wasMinimised = false;
         ComponentBoundsConstrainer* currentConstainer = nullptr;
         Rectangle<int> oldNonFullScreenBounds;
+        int oldRenderingEngine = -1;
 
         if (peer != nullptr)
         {
@@ -574,6 +575,7 @@ void Component::addToDesktop (int styleWanted, void* nativeWindowToAttachTo)
             wasMinimised = peer->isMinimised();
             currentConstainer = peer->getConstrainer();
             oldNonFullScreenBounds = peer->getNonFullScreenBounds();
+            oldRenderingEngine = peer->getCurrentRenderingEngine();
 
             flags.hasHeavyweightPeerFlag = false;
             Desktop::getInstance().removeDesktopComponent (this);
@@ -598,6 +600,10 @@ void Component::addToDesktop (int styleWanted, void* nativeWindowToAttachTo)
 
             bounds.setPosition (topLeft);
             peer->setBounds (topLeft.x, topLeft.y, getWidth(), getHeight(), false);
+
+            if (oldRenderingEngine >= 0)
+                peer->setCurrentRenderingEngine (oldRenderingEngine);
+
             peer->setVisible (isVisible());
 
             peer = ComponentPeer::getPeerFor (this);
@@ -1421,11 +1427,11 @@ void Component::addAndMakeVisible (Component* const child, int zOrder)
     }
 }
 
-void Component::addChildAndSetID (Component* const child, const String& componentID)
+void Component::addChildAndSetID (Component* const child, const String& childID)
 {
     if (child != nullptr)
     {
-        child->setComponentID (componentID);
+        child->setComponentID (childID);
         addAndMakeVisible (child);
     }
 }
@@ -2018,16 +2024,9 @@ void Component::setComponentEffect (ImageEffectFilter* const newEffect)
 //==============================================================================
 LookAndFeel& Component::getLookAndFeel() const noexcept
 {
-    const Component* c = this;
-
-    do
-    {
+    for (const Component* c = this; c != nullptr; c = c->parentComponent)
         if (c->lookAndFeel != nullptr)
             return *(c->lookAndFeel);
-
-        c = c->parentComponent;
-    }
-    while (c != nullptr);
 
     return LookAndFeel::getDefaultLookAndFeel();
 }

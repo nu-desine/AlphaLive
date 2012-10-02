@@ -49,9 +49,9 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
     addAndMakeVisible(pressureSensitivityMenu = new ComboBox());
     pressureSensitivityMenu->addListener(this);
     pressureSensitivityMenu->addMouseListener(this, true);
-    pressureSensitivityMenu->addItem("Non-Sensitive", 1);
-    pressureSensitivityMenu->addItem("Standard", 2);
-    pressureSensitivityMenu->addItem("Sensitive", 3);
+    pressureSensitivityMenu->addItem(translate("Non-Sensitive"), 1);
+    pressureSensitivityMenu->addItem(translate("Standard"), 2);
+    pressureSensitivityMenu->addItem(translate("Sensitive"), 3);
     pressureSensitivityMenu->setSelectedId(2);
 	
 }
@@ -136,9 +136,55 @@ void GuiGlobalPadSettings::updateDisplay()
     }
     else if(MULTI_PADS)
     {
+        /*
         pressureSensitivityMenu->setSelectedId(2, true);
         exclusiveModeButton->setToggleState(false, false);
         exclusiveGroupSlider->setComponentValue(1);
+         */
+        
+        //==================================================================================================
+        int exclusiveMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getExclusiveMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getExclusiveMode() != exclusiveMode_)
+            {
+                exclusiveModeButton->setToggleState(0, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                exclusiveModeButton->setToggleState(exclusiveMode_, false);
+        }
+        
+        //==================================================================================================
+        int exclusiveGroup_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getExclusiveGroup();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getExclusiveGroup() != exclusiveGroup_)
+            {
+                exclusiveGroupSlider->setComponentValue(-999);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                exclusiveGroupSlider->setComponentValue(exclusiveGroup_);
+        }
+        
+        //==================================================================================================
+        int pressureSensitivity_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getPressureSensitivityMode();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getPressureSensitivityMode() != pressureSensitivity_)
+            {
+                pressureSensitivityMenu->setSelectedId(2, true);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                pressureSensitivityMenu->setSelectedId(pressureSensitivity_, true);
+        }
+        
+        
     }
     
     if (exclusiveModeButton->getToggleState() == true)
@@ -150,7 +196,19 @@ void GuiGlobalPadSettings::updateDisplay()
 
 void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
 {
-    
+    if (exclusiveModeButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Exclusive Mode Button. If this button is set to 'on' the selected pads will be set to 'Exclusive Mode' - only a single pad can be playing at any time for each exclusive group."));
+    }
+    else if (exclusiveGroupSlider->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Exclusive Group Selector. Sets and displays the exclusive group number for the selected pads."));
+        
+    }
+    else if (pressureSensitivityMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Pressure Curve Menu. Use this menu to select the curve for the pressure."));
+    }
 }
 
 void GuiGlobalPadSettings::mouseExit (const MouseEvent &e)

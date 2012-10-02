@@ -49,6 +49,8 @@ AppDocumentState::AppDocumentState()
     
     shouldDisplayAlertWindow = true;
     currentlySelectedScene = 0;
+    
+    numOfFilesAtStart = 0;
 }
 
 
@@ -62,19 +64,790 @@ void AppDocumentState::setMainAppWindowRef (MainAppWindow *ref)
     mainAppWindowRef = ref;
 }
 
+void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
+{
+    int i = padNumber;
+    
+    //put data into this the temp XmlElement
+    padData->setAttribute("mode", PAD_SETTINGS->getMode());
+    padData->setAttribute("pressureSensitivityMode", PAD_SETTINGS->getPressureSensitivityMode());
+    padData->setAttribute("exclusiveMode", PAD_SETTINGS->getExclusiveMode());
+    padData->setAttribute("exclusiveGroup", PAD_SETTINGS->getExclusiveGroup());
+    padData->setAttribute("quantizeMode", PAD_SETTINGS->getQuantizeMode());
+    
+    //only save whats necessary
+    if (PAD_SETTINGS->getMode() == 1) //midi mode
+    {
+        padData->setAttribute("midiNote", PAD_SETTINGS->getMidiNote());
+        padData->setAttribute("midiVelocity", PAD_SETTINGS->getMidiVelocity());
+        padData->setAttribute("midiChannel", PAD_SETTINGS->getMidiChannel());
+        padData->setAttribute("midiMinPressureRange", PAD_SETTINGS->getMidiMinPressureRange());
+        padData->setAttribute("midiMaxPressureRange", PAD_SETTINGS->getMidiMaxPressureRange());
+        padData->setAttribute("midiPressureMode", PAD_SETTINGS->getMidiPressureMode());
+        padData->setAttribute("midiTriggerMode", PAD_SETTINGS->getMidiTriggerMode());
+        padData->setAttribute("midiIndestructible", PAD_SETTINGS->getMidiIndestructible());
+        padData->setAttribute("midiSticky", PAD_SETTINGS->getMidiSticky());
+        padData->setAttribute("midiPressureStatus", PAD_SETTINGS->getMidiPressureStatus());
+        padData->setAttribute("midiNoteStatus", PAD_SETTINGS->getMidiNoteStatus());
+        padData->setAttribute("midiCcController", PAD_SETTINGS->getMidiCcController());
+    }
+    else if (PAD_SETTINGS->getMode() == 2) //sampler mode
+    {
+        
+        if (AppSettings::Instance()->getCopyExternalFiles() == true)
+        {
+            //if project currently allows audio files to be copied to project, only save the file name
+            padData->setAttribute("samplerAudioFilePath", PAD_SETTINGS->getSamplerAudioFilePath().getFileName());
+            
+        }
+        else if (AppSettings::Instance()->getCopyExternalFiles() == false)
+        {
+            //else save the full pathname
+            padData->setAttribute("samplerAudioFilePath", PAD_SETTINGS->getSamplerAudioFilePath().getFullPathName());
+        }
+        
+        padData->setAttribute("samplerTriggerMode", PAD_SETTINGS->getSamplerTriggerMode());
+        padData->setAttribute("samplerShouldLoop", PAD_SETTINGS->getSamplerShouldLoop());
+        padData->setAttribute("samplerIndestructible", PAD_SETTINGS->getSamplerIndestructible());
+        padData->setAttribute("samplerShouldFinishLoop", PAD_SETTINGS->getSamplerShouldFinishLoop());
+        padData->setAttribute("samplerSticky", PAD_SETTINGS->getSamplerSticky());
+        padData->setAttribute("samplerEffect", PAD_SETTINGS->getSamplerEffect());
+        padData->setAttribute("samplerPan", PAD_SETTINGS->getSamplerPan());
+        padData->setAttribute("samplerGain", PAD_SETTINGS->getSamplerGain());
+        padData->setAttribute("samplerAttackTime", PAD_SETTINGS->getSamplerAttackTime());
+        padData->setAttribute("samplerReleaseTime", PAD_SETTINGS->getSamplerReleaseTime());
+        
+    }
+    else if (PAD_SETTINGS->getMode() == 3) //sequencer mode
+    {
+        padData->setAttribute("sequencerMode", PAD_SETTINGS->getSequencerMode());
+        for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
+        {
+            padData->setAttribute("newSequencerData"+String(seq), PAD_SETTINGS->getSequencerDataString(seq));
+        }
+        
+        padData->setAttribute("sequencerNumberOfSequences", PAD_SETTINGS->getSequencerNumberOfSequences());
+        padData->setAttribute("sequencerTriggerMode", PAD_SETTINGS->getSequencerTriggerMode());
+        padData->setAttribute("sequencerShouldLoop", PAD_SETTINGS->getSequencerShouldLoop());
+        padData->setAttribute("sequencerIndestructible", PAD_SETTINGS->getSequencerIndestructible());
+        padData->setAttribute("sequencerShouldFinishLoop", PAD_SETTINGS->getSequencerShouldFinishLoop());
+        padData->setAttribute("sequencerSticky", PAD_SETTINGS->getSequencerSticky());
+        padData->setAttribute("sequencerLength", PAD_SETTINGS->getSequencerLength());
+        padData->setAttribute("sequencerRelativeTempoMode", PAD_SETTINGS->getSequencerRelativeTempoMode());
+        padData->setAttribute("sequencerDynamicMode", PAD_SETTINGS->getSequencerDynamicMode());
+        
+        if (PAD_SETTINGS->getSequencerMode() == 1) //sequencer midi mode
+        {
+            for (int row = 0; row <= NO_OF_ROWS-1; row++)
+            {
+                padData->setAttribute("sequencerMidiNote"+String(row), PAD_SETTINGS->getSequencerMidiNote(row));
+            }
+            padData->setAttribute("sequencerMidiVelocity", PAD_SETTINGS->getSequencerMidiVelocity());
+            padData->setAttribute("sequencerMidiChannel", PAD_SETTINGS->getSequencerMidiChannel());
+            padData->setAttribute("sequencerMidiNoteLength", PAD_SETTINGS->getSequencerMidiNoteLength());
+            padData->setAttribute("sequencerMidiMinPressureRange", PAD_SETTINGS->getSequencerMidiMinPressureRange());
+            padData->setAttribute("sequencerMidiMaxPressureRange", PAD_SETTINGS->getSequencerMidiMaxPressureRange());
+            padData->setAttribute("sequencerMidiPressureMode", PAD_SETTINGS->getSequencerMidiPressureMode());
+            padData->setAttribute("sequencerMidiPressureStatus", PAD_SETTINGS->getSequencerMidiPressureStatus());
+            padData->setAttribute("sequencerMidiCcController", PAD_SETTINGS->getSequencerMidiCcController());
+            
+        }
+        else if (PAD_SETTINGS->getSequencerMode() == 2) //sequencer samples mode
+        {
+            for (int row = 0; row <= NO_OF_ROWS-1; row++)
+            {
+                if (AppSettings::Instance()->getCopyExternalFiles() == true)
+                {
+                    //if project currently allows external audio files to be copied to project, only save the file name
+                    padData->setAttribute("sequencerSamplesAudioFilePath"+String(row), PAD_SETTINGS->getSequencerSamplesAudioFilePath(row).getFileName());
+                }
+                else
+                {
+                    //else save the full pathname
+                    padData->setAttribute("sequencerSamplesAudioFilePath"+String(row), PAD_SETTINGS->getSequencerSamplesAudioFilePath(row).getFullPathName());
+                }
+            }
+            padData->setAttribute("sequencerEffect", PAD_SETTINGS->getSequencerEffect());
+            padData->setAttribute("sequencerPan", PAD_SETTINGS->getSequencerPan());
+            padData->setAttribute("sequencerGain", PAD_SETTINGS->getSequencerGain());
+            padData->setAttribute("sequencerSamplesAttack", PAD_SETTINGS->getSequencerSamplesAttackTime());
+        }
+    }
+    
+    else if (PAD_SETTINGS->getMode() == 4) //controller mode
+    {
+        padData->setAttribute("controllerControl", PAD_SETTINGS->getControllerControl());
+        padData->setAttribute("controllerSceneNumber", PAD_SETTINGS->getControllerSceneNumber());
+        padData->setAttribute("controllerOscIpAddress", PAD_SETTINGS->getControllerOscIpAddress());
+        padData->setAttribute("controllerOscPortNumber", PAD_SETTINGS->getControllerOscPort());
+        padData->setAttribute("controllerMidiProgramChangeNumber", PAD_SETTINGS->getControllerMidiProgramChangeNumber());
+        padData->setAttribute("controllerMidiProgramChangeChannel", PAD_SETTINGS->getControllerMidiProgramChangeChannel());
+    }
+    
+    int modeCheck = PAD_SETTINGS->getMode();
+    int effect = 0;
+    if (modeCheck == 2)
+        effect = PAD_SETTINGS->getSamplerEffect();
+    else if (modeCheck == 3)
+    {
+        if (PAD_SETTINGS->getSequencerMode() == 2)
+            effect = PAD_SETTINGS->getSequencerEffect();
+    }
+    
+    if (effect == 1) //Gain and Pan
+    {
+        padData->setAttribute("padFxGainPanGain", PAD_SETTINGS->getPadFxGainPanGain());
+        padData->setAttribute("padFxGainPanPan", PAD_SETTINGS->getPadFxGainPanPan());
+        padData->setAttribute("padFxGainPanAlphaTouch", PAD_SETTINGS->getPadFxGainPanAlphaTouch());
+        padData->setAttribute("padFxGainPanAtReverse", PAD_SETTINGS->getPadFxGainPanAtReverse());
+        padData->setAttribute("padFxGainPanAtIntensity", PAD_SETTINGS->getPadFxGainPanAtIntensity());
+    }
+    else if (effect == 2) //LPF
+    {
+        padData->setAttribute("padFxLpfMix", PAD_SETTINGS->getPadFxLpfMix());
+        padData->setAttribute("padFxLpfFreq", PAD_SETTINGS->getPadFxLpfFreq());
+        padData->setAttribute("padFxLpfBandwidth", PAD_SETTINGS->getPadFxLpfBandwidth());
+        padData->setAttribute("padFxLpfAlphaTouch", PAD_SETTINGS->getPadFxLpfAlphaTouch());
+        padData->setAttribute("padFxLpfAtReverse", PAD_SETTINGS->getPadFxLpfAtReverse());
+        padData->setAttribute("padFxLpfAtIntensity", PAD_SETTINGS->getPadFxLpfAtIntensity());
+    }
+    else if (effect == 3) //HPF
+    {
+        padData->setAttribute("padFxHpfMix", PAD_SETTINGS->getPadFxHpfMix());
+        padData->setAttribute("padFxHpfFreq", PAD_SETTINGS->getPadFxHpfFreq());
+        padData->setAttribute("padFxHpfBandwidth", PAD_SETTINGS->getPadFxHpfBandwidth());
+        padData->setAttribute("padFxHpfAlphaTouch", PAD_SETTINGS->getPadFxHpfAlphaTouch());
+        padData->setAttribute("padFxHpfAtReverse", PAD_SETTINGS->getPadFxHpfAtReverse());
+        padData->setAttribute("padFxHpfAtIntensity", PAD_SETTINGS->getPadFxHpfAtIntensity());
+    }
+    else if (effect == 4) //BPF
+    {
+        padData->setAttribute("padFxBpfMix", PAD_SETTINGS->getPadFxBpfMix());
+        padData->setAttribute("padFxBpfFreq", PAD_SETTINGS->getPadFxBpfFreq());
+        padData->setAttribute("padFxBpfBandwidth", PAD_SETTINGS->getPadFxBpfBandwidth());
+        padData->setAttribute("padFxBpfAlphaTouch", PAD_SETTINGS->getPadFxBpfAlphaTouch());
+        padData->setAttribute("padFxBpfAtReverse", PAD_SETTINGS->getPadFxBpfAtReverse());
+        padData->setAttribute("padFxBpfAtIntensity", PAD_SETTINGS->getPadFxBpfAtIntensity());
+    }
+    else if (effect == 7) //Delay
+    {
+        padData->setAttribute("padFxDelayMix", PAD_SETTINGS->getPadFxDelayMix());
+        padData->setAttribute("padFxDelayTime", PAD_SETTINGS->getPadFxDelayTime());
+        padData->setAttribute("padFxDelayFeedback", PAD_SETTINGS->getPadFxDelayFeedback());
+        padData->setAttribute("padFxDelayLpfFreq", PAD_SETTINGS->getPadFxDelayLpfFreq());
+        padData->setAttribute("padFxDelayHpfFreq", PAD_SETTINGS->getPadFxDelayHpfFreq());
+        padData->setAttribute("padFxDelaySync", PAD_SETTINGS->getPadFxDelaySync());
+        padData->setAttribute("padFxDelayTimeMenu", PAD_SETTINGS->getPadFxDelayTimeMenu());
+        padData->setAttribute("padFxDelayAlphaTouch", PAD_SETTINGS->getPadFxDelayAlphaTouch());
+        padData->setAttribute("padFxDelayAtReverse", PAD_SETTINGS->getPadFxDelayAtReverse());
+        padData->setAttribute("padFxDelayAtIntensity", PAD_SETTINGS->getPadFxDelayAtIntensity());
+    }
+    else if (effect == 8) //Reverb
+    {
+        padData->setAttribute("padFxReverbMix", PAD_SETTINGS->getPadFxReverbMix());
+        padData->setAttribute("padFxReverbRoomSize", PAD_SETTINGS->getPadFxReverbRoomSize());
+        padData->setAttribute("padFxReverbDamping", PAD_SETTINGS->getPadFxReverbDamping());
+        padData->setAttribute("padFxReverbWidth", PAD_SETTINGS->getPadFxReverbWidth());
+        padData->setAttribute("padFxReverbFreezeMode", PAD_SETTINGS->getPadFxReverbFreezeMode());
+        padData->setAttribute("padFxReverbAlphaTouch", PAD_SETTINGS->getPadFxReverbAlphaTouch());
+        padData->setAttribute("padFxReverbAtReverse", PAD_SETTINGS->getPadFxReverbAtReverse());
+        padData->setAttribute("padFxReverbAtIntensity", PAD_SETTINGS->getPadFxReverbAtIntensity());
+    }
+    else if (effect == 9) //Flanger
+    {
+        padData->setAttribute("padFxFlangerMix", PAD_SETTINGS->getPadFxFlangerMix());
+        padData->setAttribute("padFxFlangerRate", PAD_SETTINGS->getPadFxFlangerRate());
+        padData->setAttribute("padFxFlangerFeedback", PAD_SETTINGS->getPadFxFlangerFeedback());
+        padData->setAttribute("padFxFlangerIntensity", PAD_SETTINGS->getPadFxFlangerIntensity());
+        padData->setAttribute("padFxFlangerRateMenu", PAD_SETTINGS->getPadFxFlangerRateMenu());
+        padData->setAttribute("padFxFlangerSync", PAD_SETTINGS->getPadFxFlangerSync());
+        padData->setAttribute("padFxFlangerAlphaTouch", PAD_SETTINGS->getPadFxFlangerAlphaTouch());
+        padData->setAttribute("padFxFlangerAtReverse", PAD_SETTINGS->getPadFxFlangerAtReverse());
+        padData->setAttribute("padFxFlangerAtIntensity", PAD_SETTINGS->getPadFxFlangerAtIntensity());
+    }
+    else if (effect == 10) //Tremolo
+    {
+        padData->setAttribute("padFxTremoloDepth", PAD_SETTINGS->getPadFxTremoloDepth());
+        padData->setAttribute("padFxTremoloRate", PAD_SETTINGS->getPadFxTremoloRate());
+        padData->setAttribute("padFxTremoloShape", PAD_SETTINGS->getPadFxTremoloShape());
+        padData->setAttribute("padFxTremoloSync", PAD_SETTINGS->getPadFxTremoloSync());
+        padData->setAttribute("padFxTremoloRateMenu", PAD_SETTINGS->getPadFxTremoloRateMenu());
+        padData->setAttribute("padFxTremoloAlphaTouch", PAD_SETTINGS->getPadFxTremoloAlphaTouch());
+        padData->setAttribute("padFxTremoloAtReverse", PAD_SETTINGS->getPadFxTremoloAtReverse());
+        padData->setAttribute("padFxTremoloAtIntensity", PAD_SETTINGS->getPadFxTremoloAtIntensity());
+    }
+}
+
+
+
+
+
+
+
+void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
+{
+    int i = padNumber;
+    
+    if (padData->hasAttribute("mode")) //WHICH IT SHOULD ALWAYS HAVE!
+        PAD_SETTINGS->setMode(padData->getIntAttribute("mode"));
+    if (padData->hasAttribute("pressureSensitivityMode"))
+        PAD_SETTINGS->setPressureSensitivityMode(padData->getIntAttribute("pressureSensitivityMode"));
+    
+    if (padData->hasAttribute("exclusiveMode"))
+        PAD_SETTINGS->setExclusiveMode(padData->getIntAttribute("exclusiveMode"));
+    if (padData->hasAttribute("exclusiveGroup"))
+        PAD_SETTINGS->setExclusiveGroup(padData->getIntAttribute("exclusiveGroup"));
+    if (padData->hasAttribute("quantizeMode"))
+        PAD_SETTINGS->setQuantizeMode(padData->getIntAttribute("quantizeMode"));
+    
+    //only load needed data to reduce loading times and CPU usage, plus
+    //can not load settings into seq and sampler modes where the pads player objects don't exist (yet)
+    
+    //midi mode
+    if (PAD_SETTINGS->getMode() == 1)
+    {
+        if (padData->hasAttribute("midiNote"))
+            PAD_SETTINGS->setMidiNote(padData->getIntAttribute("midiNote"));
+        if (padData->hasAttribute("midiVelocity"))
+            PAD_SETTINGS->setMidiVelocity(padData->getIntAttribute("midiVelocity"));
+        if (padData->hasAttribute("midiChannel"))
+            PAD_SETTINGS->setMidiChannel(padData->getIntAttribute("midiChannel"));
+        if (padData->hasAttribute("midiMinPressureRange"))
+            PAD_SETTINGS->setMidiMinPressureRange(padData->getIntAttribute("midiMinPressureRange"));
+        if (padData->hasAttribute("midiMaxPressureRange"))
+            PAD_SETTINGS->setMidiMaxPressureRange(padData->getIntAttribute("midiMaxPressureRange"));
+        if (padData->hasAttribute("midiPressureMode"))
+            PAD_SETTINGS->setMidiPressureMode(padData->getIntAttribute("midiPressureMode"));
+        if (padData->hasAttribute("midiTriggerMode"))
+            PAD_SETTINGS->setMidiTriggerMode(padData->getIntAttribute("midiTriggerMode"));
+        if (padData->hasAttribute("midiIndestructible"))
+            PAD_SETTINGS->setMidiIndestructible(padData->getIntAttribute("midiIndestructible"));
+        if (padData->hasAttribute("midiSticky"))
+            PAD_SETTINGS->setMidiSticky(padData->getIntAttribute("midiSticky"));
+        if (padData->hasAttribute("midiPressureStatus"))
+            PAD_SETTINGS->setMidiPressureStatus(padData->getBoolAttribute("midiPressureStatus"));
+        if (padData->hasAttribute("midiNoteStatus"))
+            PAD_SETTINGS->setMidiNoteStatus(padData->getBoolAttribute("midiNoteStatus"));
+        if (padData->hasAttribute("midiCcController"))
+            PAD_SETTINGS->setMidiCcController(padData->getIntAttribute("midiCcController"));
+        
+    }
+    
+    //sampler mode
+    else if (PAD_SETTINGS->getMode() == 2)
+    {
+        File newFile;
+        String newFileString(String::empty);
+        
+        if (padData->hasAttribute("samplerAudioFilePath"))
+        {
+            newFileString = padData->getStringAttribute("samplerAudioFilePath");
+            
+            if (newFileString != String::empty) //to prevent trying to load in a file if there's nothing to load
+            {
+                if (File::isAbsolutePath(newFileString) == false)
+                {
+                    //check if the saved audio file path is just the file name
+                    //if so, get it from the working directory and apply the full pathname to it
+                    newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + newFileString;
+                }
+                else if (File::isAbsolutePath(newFileString) == true)
+                {
+                    //else, it should be the full path name already
+                    newFile = newFileString;
+                }
+                
+                PAD_SETTINGS->setSamplerAudioFilePath(newFile);
+            }
+            else
+                PAD_SETTINGS->setSamplerAudioFilePath(File::nonexistent);
+        }
+        
+        if (padData->hasAttribute("samplerTriggerMode"))
+            PAD_SETTINGS->setSamplerTriggerMode(padData->getIntAttribute("samplerTriggerMode"));
+        if (padData->hasAttribute("samplerShouldLoop"))
+            PAD_SETTINGS->setSamplerShouldLoop(padData->getIntAttribute("samplerShouldLoop"));
+        if (padData->hasAttribute("samplerIndestructible"))
+            PAD_SETTINGS->setSamplerIndestructible(padData->getIntAttribute("samplerIndestructible"));
+        if (padData->hasAttribute("samplerShouldFinishLoop"))
+            PAD_SETTINGS->setSamplerShouldFinishLoop(padData->getIntAttribute("samplerShouldFinishLoop"));
+        if (padData->hasAttribute("samplerSticky"))
+            PAD_SETTINGS->setSamplerSticky(padData->getIntAttribute("samplerSticky"));
+        if (padData->hasAttribute("samplerEffect"))
+            PAD_SETTINGS->setSamplerEffect(padData->getIntAttribute("samplerEffect"));
+        if (padData->hasAttribute("samplerPan"))
+            PAD_SETTINGS->setSamplerPan(padData->getDoubleAttribute("samplerPan"));
+        if (padData->hasAttribute("samplerGain"))
+            PAD_SETTINGS->setSamplerGain(padData->getDoubleAttribute("samplerGain"));
+        if (padData->hasAttribute("samplerAttackTime"))
+            PAD_SETTINGS->setSamplerAttackTime(padData->getDoubleAttribute("samplerAttackTime"));
+        if (padData->hasAttribute("samplerReleaseTime"))
+            PAD_SETTINGS->setSamplerReleaseTime(padData->getDoubleAttribute("samplerReleaseTime"));
+        
+    }
+    
+    //sequencer mode
+    else if (PAD_SETTINGS->getMode() == 3)
+    {
+        if (padData->hasAttribute("sequencerMode")) //WHICH IT SHOULD ALWAYS HAVE
+            PAD_SETTINGS->setSequencerMode(padData->getIntAttribute("sequencerMode"));
+        
+        //should probably change this now as there's no 'new' data - just data
+        
+        if (padData->hasAttribute("newSequencerData0") == true) //new seq data format (0-127)
+        {
+            for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
+            {
+                PAD_SETTINGS->stringToSeqData(padData->getStringAttribute("newSequencerData"+String(seq)), seq);
+            }
+        }
+        
+        /*
+         else if (padData->hasAttribute("sequencerData0") == true) //old seq data format (0-1)
+         {
+         for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
+         {
+         //convert any '1s' in the string to '110'
+         PAD_SETTINGS->stringToSeqDataFormatConversion(padData->getStringAttribute("sequencerData"+String(seq)), seq);
+         }
+         }
+         */
+        
+        if (padData->hasAttribute("sequencerNumberOfSequences"))
+            PAD_SETTINGS->setSequencerNumberOfSequences(padData->getIntAttribute("sequencerNumberOfSequences"));
+        if (padData->hasAttribute("sequencerTriggerMode"))
+            PAD_SETTINGS->setSequencerTriggerMode(padData->getIntAttribute("sequencerTriggerMode"));
+        if (padData->hasAttribute("sequencerShouldLoop"))
+            PAD_SETTINGS->setSequencerShouldLoop(padData->getIntAttribute("sequencerShouldLoop"));
+        if (padData->hasAttribute("sequencerIndestructible"))
+            PAD_SETTINGS->setSequencerIndestructible(padData->getIntAttribute("sequencerIndestructible"));
+        if (padData->hasAttribute("sequencerShouldFinishLoop"))
+            PAD_SETTINGS->setSequencerShouldFinishLoop(padData->getIntAttribute("sequencerShouldFinishLoop"));
+        if (padData->hasAttribute("sequencerSticky"))
+            PAD_SETTINGS->setSequencerSticky(padData->getIntAttribute("sequencerSticky"));
+        if (padData->hasAttribute("sequencerLength"))
+            PAD_SETTINGS->setSequencerLength(padData->getIntAttribute("sequencerLength"));
+        if (padData->hasAttribute("sequencerRelativeTempoMode"))
+            PAD_SETTINGS->setSequencerRelativeTempoMode(padData->getIntAttribute("sequencerRelativeTempoMode"));
+        if (padData->hasAttribute("sequencerDynamicMode"))
+            PAD_SETTINGS->setSequencerDynamicMode(padData->getIntAttribute("sequencerDynamicMode"));
+        
+        //sequencer midi mode
+        if (padData->getIntAttribute("sequencerMode") == 1)
+        {
+            for (int row = 0; row <= NO_OF_ROWS-1; row++)
+            {
+                if (padData->hasAttribute("sequencerMidiNote"+String(row)))
+                    PAD_SETTINGS->setSequencerMidiNote(padData->getIntAttribute("sequencerMidiNote"+String(row)), row);
+            }
+            
+            if (padData->hasAttribute("sequencerMidiVelocity"))
+                PAD_SETTINGS->setSequencerMidiVelocity(padData->getIntAttribute("sequencerMidiVelocity"));
+            if (padData->hasAttribute("sequencerMidiChannel"))
+                PAD_SETTINGS->setSequencerMidiChannel(padData->getIntAttribute("sequencerMidiChannel"));
+            if (padData->hasAttribute("sequencerMidiNoteLength"))
+                PAD_SETTINGS->setSequencerMidiNoteLength(padData->getIntAttribute("sequencerMidiNoteLength"));
+            if (padData->hasAttribute("sequencerMidiMinPressureRange"))
+                PAD_SETTINGS->setSequencerMidiMinPressureRange(padData->getIntAttribute("sequencerMidiMinPressureRange"));
+            if (padData->hasAttribute("sequencerMidiMaxPressureRange"))
+                PAD_SETTINGS->setSequencerMidiMaxPressureRange(padData->getIntAttribute("sequencerMidiMaxPressureRange"));
+            if (padData->hasAttribute("sequencerMidiPressureMode"))
+                PAD_SETTINGS->setSequencerMidiPressureMode(padData->getIntAttribute("sequencerMidiPressureMode"));
+            if (padData->hasAttribute("sequencerMidiPressureStatus"))
+                PAD_SETTINGS->setSequencerMidiPressureStatus(padData->getBoolAttribute("sequencerMidiPressureStatus"));
+            if (padData->hasAttribute("sequencerMidiCcController"))
+                PAD_SETTINGS->setSequencerMidiCcController(padData->getIntAttribute("sequencerMidiCcController"));
+        }
+        
+        //sequencer samples mode
+        else if (padData->getIntAttribute("sequencerMode") == 2)
+        {
+            for (int row = 0; row <= NO_OF_ROWS-1; row++)
+            {
+                File newFile;
+                String newFileString(String::empty);
+                
+                if (padData->hasAttribute("sequencerSamplesAudioFilePath"+String(row)))
+                {
+                    newFileString = padData->getStringAttribute("sequencerSamplesAudioFilePath"+String(row));
+                    
+                    if (newFileString != String::empty) //to prevent trying to load in a file if there's nothing to load
+                    {
+                        if (File::isAbsolutePath(newFileString) == false)
+                        {
+                            //check if the saved audio file path is just the file name
+                            //if so, get it from the working directory and apply the full pathname to it
+                            newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + newFileString;
+                        }
+                        else
+                        {
+                            //else, it should be the full path name already
+                            newFile = newFileString;
+                        }
+                        
+                        PAD_SETTINGS->setSequencerSamplesAudioFilePath(newFile, row);
+                    }
+                    else
+                        PAD_SETTINGS->setSequencerSamplesAudioFilePath(File::nonexistent, row);
+                }
+            }
+            
+            if (padData->hasAttribute("sequencerEffect"))
+                PAD_SETTINGS->setSequencerEffect(padData->getIntAttribute("sequencerEffect"));
+            if (padData->hasAttribute("sequencerPan"))
+                PAD_SETTINGS->setSequencerPan(padData->getDoubleAttribute("sequencerPan"));
+            if (padData->hasAttribute("sequencerGain"))
+                PAD_SETTINGS->setSequencerGain(padData->getDoubleAttribute("sequencerGain"));
+            if (padData->hasAttribute("sequencerSamplesAttack"))
+                 PAD_SETTINGS->setSequencerSamplesAttackTime(padData->getDoubleAttribute("sequencerSamplesAttack"));
+        }
+    }
+    
+    //controller mode
+    else if (PAD_SETTINGS->getMode() == 4)
+    {
+        if (padData->hasAttribute("controllerControl"))
+            PAD_SETTINGS->setControllerControl(padData->getIntAttribute("controllerControl"));
+        if (padData->hasAttribute("controllerSceneNumber"))
+            PAD_SETTINGS->setControllerSceneNumber(padData->getIntAttribute("controllerSceneNumber"));
+        
+        if (padData->hasAttribute("controllerOscIpAddress"))
+            PAD_SETTINGS->setControllerOscIpAddress(padData->getStringAttribute("controllerOscIpAddress"));
+        if (padData->hasAttribute("controllerOscPortNumber"))
+            PAD_SETTINGS->setControllerOscPort(padData->getIntAttribute("controllerOscPortNumber"));
+        if (padData->hasAttribute("controllerMidiProgramChangeNumber"))
+            PAD_SETTINGS->setControllerMidiProgramChangeNumber(padData->getIntAttribute("controllerMidiProgramChangeNumber"));
+        if (padData->hasAttribute("controllerMidiProgramChangeChannel"))
+            PAD_SETTINGS->setControllerMidiProgramChangeChannel(padData->getIntAttribute("controllerMidiProgramChangeChannel"));
+    }
+    
+    int modeCheck = PAD_SETTINGS->getMode();
+    int effect = 0;
+    if (modeCheck == 2)
+    {
+        if (padData->hasAttribute("effect")) //if padData is from an effects preset file
+            PAD_SETTINGS->setSamplerEffect(padData->getIntAttribute("effect"));
+    
+        effect = PAD_SETTINGS->getSamplerEffect();
+    }
+    else if (modeCheck == 3)
+    {
+        if (padData->hasAttribute("effect"))
+            PAD_SETTINGS->setSequencerEffect(padData->getIntAttribute("effect"));
+        
+        if (PAD_SETTINGS->getSequencerMode() == 2)
+            effect = PAD_SETTINGS->getSequencerEffect();
+    }
+    
+    if (padData->hasAttribute("samplerEffect") || 
+        padData->hasAttribute("sequencerEffect") || 
+        padData->hasAttribute("effect"))
+    {
+        if (effect == 1) //Gain and Pan
+        {
+            PAD_SETTINGS->setPadFxGainPanGain(padData->getDoubleAttribute("padFxGainPanGain"));
+            PAD_SETTINGS->setPadFxGainPanPan(padData->getDoubleAttribute("padFxGainPanPan"));
+            PAD_SETTINGS->setPadFxGainPanAlphaTouch(padData->getIntAttribute("padFxGainPanAlphaTouch"));
+            PAD_SETTINGS->setPadFxGainPanAtReverse(padData->getIntAttribute("padFxGainPanAtReverse"));
+            PAD_SETTINGS->setPadFxGainPanAtIntensity(padData->getDoubleAttribute("padFxGainPanAtIntensity"));
+        }
+        else if (effect == 2) //LPF
+        {
+            PAD_SETTINGS->setPadFxLpfMix(padData->getDoubleAttribute("padFxLpfMix"));
+            PAD_SETTINGS->setPadFxLpfFreq(padData->getDoubleAttribute("padFxLpfFreq"));
+            PAD_SETTINGS->setPadFxLpfBandwidth(padData->getDoubleAttribute("padFxLpfBandwidth"));
+            PAD_SETTINGS->setPadFxLpfAlphaTouch(padData->getIntAttribute("padFxLpfAlphaTouch"));
+            PAD_SETTINGS->setPadFxLpfAtReverse(padData->getIntAttribute("padFxLpfAtReverse"));
+            PAD_SETTINGS->setPadFxLpfAtIntensity(padData->getDoubleAttribute("padFxLpfAtIntensity"));
+            
+        }
+        else if (effect == 3) //HPF
+        {
+            PAD_SETTINGS->setPadFxHpfMix(padData->getDoubleAttribute("padFxHpfMix"));
+            PAD_SETTINGS->setPadFxHpfFreq(padData->getDoubleAttribute("padFxHpfFreq"));
+            PAD_SETTINGS->setPadFxHpfBandwidth(padData->getDoubleAttribute("padFxHpfBandwidth"));
+            PAD_SETTINGS->setPadFxHpfAlphaTouch(padData->getIntAttribute("padFxHpfAlphaTouch"));
+            PAD_SETTINGS->setPadFxHpfAtReverse(padData->getIntAttribute("padFxHpfAtReverse"));
+            PAD_SETTINGS->setPadFxHpfAtIntensity(padData->getDoubleAttribute("padFxHpfAtIntensity"));
+        }
+        else if (effect == 4) //BPF
+        {
+            PAD_SETTINGS->setPadFxBpfMix(padData->getDoubleAttribute("padFxBpfMix"));
+            PAD_SETTINGS->setPadFxBpfFreq(padData->getDoubleAttribute("padFxBpfFreq"));
+            PAD_SETTINGS->setPadFxBpfBandwidth(padData->getDoubleAttribute("padFxBpfBandwidth"));
+            PAD_SETTINGS->setPadFxBpfAlphaTouch(padData->getIntAttribute("padFxBpfAlphaTouch"));
+            PAD_SETTINGS->setPadFxBpfAtReverse(padData->getIntAttribute("padFxBpfAtReverse"));
+            PAD_SETTINGS->setPadFxBpfAtIntensity(padData->getDoubleAttribute("padFxBpfAtIntensity"));
+        }
+        else if (effect == 7) //Delay
+        {
+            PAD_SETTINGS->setPadFxDelayMix(padData->getDoubleAttribute("padFxDelayMix"));
+            PAD_SETTINGS->setPadFxDelayTime(padData->getDoubleAttribute("padFxDelayTime"));
+            PAD_SETTINGS->setPadFxDelayFeedback(padData->getDoubleAttribute("padFxDelayFeedback"));
+            PAD_SETTINGS->setPadFxDelayLpfFreq(padData->getDoubleAttribute("padFxDelayLpfFreq"));
+            PAD_SETTINGS->setPadFxDelayHpfFreq(padData->getDoubleAttribute("padFxDelayHpfFreq"));
+            PAD_SETTINGS->setPadFxDelaySync(padData->getIntAttribute("padFxDelaySync"));
+            PAD_SETTINGS->setPadFxDelayTimeMenu(padData->getIntAttribute("padFxDelayTimeMenu"));
+            PAD_SETTINGS->setPadFxDelayAlphaTouch(padData->getIntAttribute("padFxDelayAlphaTouch"));
+            PAD_SETTINGS->setPadFxDelayAtReverse(padData->getIntAttribute("padFxDelayAtReverse"));
+            PAD_SETTINGS->setPadFxDelayAtIntensity(padData->getDoubleAttribute("padFxDelayAtIntensity"));
+        }
+        else if (effect == 8) //Reverb
+        {
+            PAD_SETTINGS->setPadFxReverbMix(padData->getDoubleAttribute("padFxReverbMix"));
+            PAD_SETTINGS->setPadFxReverbRoomSize(padData->getDoubleAttribute("padFxReverbRoomSize"));
+            PAD_SETTINGS->setPadFxReverbDamping(padData->getDoubleAttribute("padFxReverbDamping"));
+            PAD_SETTINGS->setPadFxReverbWidth(padData->getDoubleAttribute("padFxReverbWidth"));
+            PAD_SETTINGS->setPadFxReverbFreezeMode(padData->getDoubleAttribute("padFxReverbFreezeMode"));
+            PAD_SETTINGS->setPadFxReverbAlphaTouch(padData->getIntAttribute("padFxReverbAlphaTouch"));
+            PAD_SETTINGS->setPadFxReverbAtReverse(padData->getIntAttribute("padFxReverbAtReverse"));
+            PAD_SETTINGS->setPadFxReverbAtIntensity(padData->getDoubleAttribute("padFxReverbAtIntensity"));
+        }
+        else if (effect == 9) //Flanger
+        {
+            PAD_SETTINGS->setPadFxFlangerMix(padData->getDoubleAttribute("padFxFlangerMix"));
+            PAD_SETTINGS->setPadFxFlangerRate(padData->getDoubleAttribute("padFxFlangerRate"));
+            PAD_SETTINGS->setPadFxFlangerFeedback(padData->getDoubleAttribute("padFxFlangerFeedback"));
+            PAD_SETTINGS->setPadFxFlangerIntensity(padData->getDoubleAttribute("padFxFlangerIntensity"));
+            PAD_SETTINGS->setPadFxFlangerSync(padData->getIntAttribute("padFxFlangerSync"));
+            PAD_SETTINGS->setPadFxFlangerRateMenu(padData->getIntAttribute("padFxFlangerRateMenu"));
+            PAD_SETTINGS->setPadFxFlangerAlphaTouch(padData->getIntAttribute("padFxFlangerAlphaTouch"));
+            PAD_SETTINGS->setPadFxFlangerAtReverse(padData->getIntAttribute("padFxFlangerAtReverse"));
+            PAD_SETTINGS->setPadFxFlangerAtIntensity(padData->getDoubleAttribute("padFxFlangerAtIntensity"));
+        }
+        
+        else if (effect == 10) //Tremolo
+        {
+            PAD_SETTINGS->setPadFxTremoloDepth(padData->getDoubleAttribute("padFxTremoloDepth"));
+            PAD_SETTINGS->setPadFxTremoloRate(padData->getDoubleAttribute("padFxTremoloRate"));
+            PAD_SETTINGS->setPadFxTremoloShape(padData->getIntAttribute("padFxTremoloShape"));
+            PAD_SETTINGS->setPadFxTremoloSync(padData->getIntAttribute("padFxTremoloSync"));
+            PAD_SETTINGS->setPadFxTremoloRateMenu(padData->getIntAttribute("padFxTremoloRateMenu"));
+            PAD_SETTINGS->setPadFxTremoloAlphaTouch(padData->getIntAttribute("padFxTremoloAlphaTouch"));
+            PAD_SETTINGS->setPadFxTremoloAtReverse(padData->getIntAttribute("padFxTremoloAtReverse"));
+            PAD_SETTINGS->setPadFxTremoloAtIntensity(padData->getDoubleAttribute("padFxTremoloAtIntensity"));
+        }
+    }
+}
+
+
+
+
+
+
+void AppDocumentState::saveProjectSettings()
+{
+    //reset/clear XmlElement.
+    if (projectData != nullptr) //if there is data in the scene's XmlElement
+        projectData->removeAllAttributes();
+    
+    projectData->setAttribute("copyExternalFiles", AppSettings::Instance()->getCopyExternalFiles());
+    
+}
+
+void AppDocumentState::loadProjectSettings()
+{
+    if (projectData->hasAttribute("copyExternalFiles") == true)
+        AppSettings::Instance()->setCopyExternalFiles(projectData->getIntAttribute("copyExternalFiles"));
+    else
+        AppSettings::Instance()->setCopyExternalFiles(true); //default value
+    
+}
+
+
+
+
+
+
+
+void AppDocumentState::saveToScene (int sceneNumber)
+{
+    //reset/clear XmlElement.
+    clearScene(sceneNumber);
+    
+    //===global settings===
+    XmlElement *globalData  = new XmlElement ("GLOBAL_DATA");
+    globalData->setAttribute("globalGain", AppSettings::Instance()->getGlobalGain());
+    globalData->setAttribute("globalPan", AppSettings::Instance()->getGlobalPan());
+    
+    globalData->setAttribute("globalTempo", AppSettings::Instance()->getGlobalTempo());
+    globalData->setAttribute("quantizationValue", AppSettings::Instance()->getQuantizationValue());
+    globalData->setAttribute("beatsPerBar", AppSettings::Instance()->getBeatsPerBar());
+    globalData->setAttribute("autoStartClock", AppSettings::Instance()->getAutoStartClock());
+    
+    //==========elite dials=============
+    for (int i = 0; i < 2; i++)
+    {
+        globalData->setAttribute("eliteDialControl" + String(i), AppSettings::Instance()->getEliteDialControl(i));
+        
+        if (AppSettings::Instance()->getEliteDialControl(i) == 4) //midi cc
+        {
+            globalData->setAttribute("eliteDialMidiCcNumber" + String(i), AppSettings::Instance()->getEliteDialMidiCcNumber(i));
+            globalData->setAttribute("eliteDialMidiChannel" + String(i), AppSettings::Instance()->getEliteDialMidiChannel(i));
+            globalData->setAttribute("eliteDialMidiMinRange" + String(i), AppSettings::Instance()->getEliteDialMidiMinRange(i));
+            globalData->setAttribute("eliteDialMidiMaxRange" + String(i), AppSettings::Instance()->getEliteDialMidiMaxRange(i));
+        }
+        else if (AppSettings::Instance()->getEliteDialControl(i) == 5) //osc
+        {
+            globalData->setAttribute("eliteDialOscPortNumber" + String(i), AppSettings::Instance()->getEliteDialOscPortNumber(i));
+            globalData->setAttribute("eliteDialOscMinRange" + String(i), AppSettings::Instance()->getEliteDialOscMinRange(i));
+            globalData->setAttribute("eliteDialOscMaxRange" + String(i), AppSettings::Instance()->getEliteDialOscMaxRange(i));
+            globalData->setAttribute("eliteDialOscIpAddress" + String(i), AppSettings::Instance()->getEliteDialOscIpAddress(i));
+        }
+    }
+    //==========elite buttons=============
+    for (int i = 0; i < 3; i++)
+    {
+        globalData->setAttribute("eliteButtonControl" + String(i), AppSettings::Instance()->getEliteButtonControl(i));
+        
+        if (AppSettings::Instance()->getEliteButtonControl(i) == 2) //scene switcher
+        {
+            globalData->setAttribute("eliteButtonSceneNumber" + String(i), AppSettings::Instance()->getEliteButtonSceneNumber(i));
+        }
+        else if (AppSettings::Instance()->getEliteButtonControl(i) == 4) //midi cc
+        {
+            globalData->setAttribute("eliteButtonMidiCcNumber" + String(i), AppSettings::Instance()->getEliteButtonMidiCcNumber(i));
+            globalData->setAttribute("eliteButtonMidiChannel" + String(i), AppSettings::Instance()->getEliteButtonMidiChannel(i));
+            globalData->setAttribute("eliteButtonMidiOffNumber" + String(i), AppSettings::Instance()->getEliteButtonMidiOffNumber(i));
+            globalData->setAttribute("eliteButtonMidiOnNumber" + String(i), AppSettings::Instance()->getEliteButtonMidiOnNumber(i));
+        }
+        else if (AppSettings::Instance()->getEliteButtonControl(i) == 5) //osc
+        {
+            globalData->setAttribute("eliteButtonOscPortNumber" + String(i), AppSettings::Instance()->getEliteButtonOscPortNumber(i));
+            globalData->setAttribute("eliteButtonOscOffNumber" + String(i), AppSettings::Instance()->getEliteButtonOscOffNumber(i));
+            globalData->setAttribute("eliteButtonOscOnNumber" + String(i), AppSettings::Instance()->getEliteButtonOscOnNumber(i));
+            globalData->setAttribute("eliteButtonOscIpAddress" + String(i), AppSettings::Instance()->getEliteButtonOscIpAddress(i));
+        }
+    }
+    
+    //===pad settings (pad number = i)
+    for (int i = 0; i <= 47; i++)
+    {
+        //create a 'temp' XmlElement to store data for a single pad
+        XmlElement *padData  = new XmlElement ("PAD_DATA_" + String(i));
+        
+        savePadSettings (i, padData);
+        
+        //add temp xmlElement as a child element of the main scene XmlElement
+        sceneData[sceneNumber]->addChildElement(new XmlElement(*padData));
+        
+        delete padData; 
+        
+    }
+    
+    //add globalData as child element.
+    //WHY DO I HAVE TO DO THIS HERE AND NOT BEFORE DOING THE PADDATA STUFF?
+    //caused hours of confusion and crashing if this was done first
+    //UPDATE 29/8/12 - does the above comment still apply now?
+    sceneData[sceneNumber]->addChildElement(new XmlElement(*globalData));
+    
+    delete globalData;
+}
+
+
+
+
+void AppDocumentState::loadFromScene (int sceneNumber)
+{
+    
+    if (sceneData[sceneNumber] != nullptr && sceneData[sceneNumber]->hasTagName("SCENE_"+String(sceneNumber)))
+    {
+        //===global settings===
+        XmlElement *globalData = new XmlElement(*sceneData[sceneNumber]->getChildByName("GLOBAL_DATA"));
+        
+        AppSettings::Instance()->setGlobalGain(globalData->getDoubleAttribute("globalGain"));
+        AppSettings::Instance()->setGlobalPan(globalData->getDoubleAttribute("globalPan"));
+        
+        AppSettings::Instance()->setGlobalTempo(globalData->getDoubleAttribute("globalTempo"));
+        AppSettings::Instance()->setQuantizationValue(globalData->getIntAttribute("quantizationValue"));
+        AppSettings::Instance()->setBeatsPerBar(globalData->getIntAttribute("beatsPerBar"));
+        AppSettings::Instance()->setAutoStartClock(globalData->getIntAttribute("autoStartClock"));
+        
+        //==========elite dials=============
+        for (int i = 0; i < 2; i++)
+        {
+            AppSettings::Instance()->setEliteDialControl(globalData->getIntAttribute("eliteDialControl" + String(i)), i);
+            
+            if (AppSettings::Instance()->getEliteDialControl(i) == 4) //midi cc
+            {
+                AppSettings::Instance()->setEliteDialMidiCcNumber(globalData->getIntAttribute("eliteDialMidiCcNumber" + String(i)), i);
+                AppSettings::Instance()->setEliteDialMidiChannel(globalData->getIntAttribute("eliteDialMidiChannel" + String(i)), i);
+                AppSettings::Instance()->setEliteDialMidiMinRange(globalData->getIntAttribute("eliteDialMidiMinRange" + String(i)), i);
+                AppSettings::Instance()->setEliteDialMidiMaxRange(globalData->getIntAttribute("eliteDialMidiMaxRange" + String(i)), i);
+            }
+            else if (AppSettings::Instance()->getEliteDialControl(i) == 5) //osc
+            {
+                AppSettings::Instance()->setEliteDialOscPortNumber(globalData->getIntAttribute("eliteDialOscPortNumber" + String(i)), i);
+                AppSettings::Instance()->setEliteDialOscMinRange(globalData->getDoubleAttribute("eliteDialOscMinRange" + String(i)), i);
+                AppSettings::Instance()->setEliteDialOscMaxRange(globalData->getDoubleAttribute("eliteDialOscMaxRange" + String(i)), i);
+                AppSettings::Instance()->setEliteDialOscIpAddress(globalData->getStringAttribute("eliteDialOscIpAddress" + String(i)), i);
+            }
+        }
+        //==========elite buttons=============
+        for (int i = 0; i < 3; i++)
+        {
+            AppSettings::Instance()->setEliteButtonControl(globalData->getIntAttribute("eliteButtonControl" + String(i)), i);
+            
+            if (AppSettings::Instance()->getEliteButtonControl(i) == 2) //scene switcher
+            {
+                AppSettings::Instance()->setEliteButtonSceneNumber(globalData->getIntAttribute("eliteButtonSceneNumber" + String(i)), i);
+            }
+            else if (AppSettings::Instance()->getEliteButtonControl(i) == 4) //midi cc
+            {
+                AppSettings::Instance()->setEliteButtonMidiCcNumber(globalData->getIntAttribute("eliteButtonMidiCcNumber" + String(i)), i);
+                AppSettings::Instance()->setEliteButtonMidiChannel(globalData->getIntAttribute("eliteButtonMidiChannel" + String(i)), i);
+                AppSettings::Instance()->setEliteButtonMidiOffNumber(globalData->getIntAttribute("eliteButtonMidiOffNumber" + String(i)), i);
+                AppSettings::Instance()->setEliteButtonMidiOnNumber(globalData->getIntAttribute("eliteButtonMidiOnNumber" + String(i)), i);
+            }
+            else if (AppSettings::Instance()->getEliteButtonControl(i) == 5) //osc
+            {
+                AppSettings::Instance()->setEliteButtonOscPortNumber(globalData->getIntAttribute("eliteButtonOscPortNumber" + String(i)), i);
+                AppSettings::Instance()->setEliteButtonOscOffNumber(globalData->getDoubleAttribute("eliteButtonOscOffNumber" + String(i)), i);
+                AppSettings::Instance()->setEliteButtonOscOnNumber(globalData->getDoubleAttribute("eliteButtonOscOnNumber" + String(i)), i);
+                AppSettings::Instance()->setEliteButtonOscIpAddress(globalData->getStringAttribute("eliteButtonOscIpAddress" + String(i)), i);
+            }
+        }
+        
+        delete globalData;
+        
+        //===pad settings (pad number = i)
+        for (int i = 0; i <= 47; i++)
+        {
+            //creates a deep copy of sceneData, not just a copy of the pointer
+            XmlElement *padData = new XmlElement(*sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))); 
+            
+            loadPadSettings(i, padData);
+            
+            delete padData;
+        }
+        
+    }
+    
+    //update GUI - calls update() in mainComponent
+    notifyObs();
+}
+
+
+void AppDocumentState::clearScene (int sceneNumber)
+{
+    
+    //reset/clear XmlElement.
+    if (sceneData[sceneNumber] != nullptr) //if there is data in the scene's XmlElement
+    {
+        sceneData[sceneNumber]->deleteAllChildElements();
+    }
+}
+
+
+
+
+
+
+
+
+
 void AppDocumentState::createNewProject()
 {
-    /*
-     - ask the user if they want to save the current project
-     - reset all settings; pad and global, and the project settings
-     - clear all sceneData XmlElements
-     - reset the currentWorkingDirectory back to the temp directory. Clear it's current contents
-     - set the currectProjectFile to nonexistent
-     - reset the sceneComponent
-     - reset the window title bar text
-     
-     */
-    
     //========== ask user if they would like to save the current project first =========
     int modeCheck = 0; //don't show 'save?' alert
     int shouldSave = 2; //don't save
@@ -92,7 +865,7 @@ void AppDocumentState::createNewProject()
     //if found a pad with a mode set to it, ask if user wants to save first
     if (modeCheck != 0)
     {
-        shouldSave = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon, "Create New Project", "Would you like to save the current project first?", "Yes", "No", "Cancel");
+        shouldSave = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon, translate("Create New Project"), translate("Would you like to save the current project first?"));
     }
     
     //if the user didn't press cancel on the alertwindow ('cancel load command')
@@ -113,11 +886,11 @@ void AppDocumentState::createNewProject()
         for (int i = 0; i <= 47; i++)
             PAD_SETTINGS->resetData(0);
         
-        
         currentProjectFile = File::nonexistent;
         
         File::getSpecialLocation(File::tempDirectory).deleteRecursively();
         File::getSpecialLocation(File::tempDirectory).setAsCurrentWorkingDirectory();
+        numOfFilesAtStart = 0;
         
         //========= clear all XmlElement objects and update the sceneComponent display ===========
         
@@ -131,8 +904,8 @@ void AppDocumentState::createNewProject()
             //accessed by observer in order to update the relevent scene slot's GUI
             sceneToUpdate = i;
             
-            //clear the xmlelement for the current scene number
-            clearScene(i);
+            //reset the scene data by saving the default settings to the scene
+            saveToScene(i);
             
             //display GUI scene slot as empty
             sceneStatus = 0;
@@ -156,7 +929,7 @@ void AppDocumentState::createNewProject()
         notifyObs();
         
         //change the window title bar text
-        mainAppWindowRef->setTitleBarText("untitled");
+        mainAppWindowRef->setTitleBarText(translate("untitled"));
         
     }
 }
@@ -200,11 +973,13 @@ void AppDocumentState::saveProject()
             performanceSettings.removeChildElement(sceneData[i], false);
         }
         
+        /*
         if (shouldDisplayAlertWindow == true)
         {
             AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Project Saved", "The project settings have been successfully saved to file");
         }
         shouldDisplayAlertWindow = true;
+         */
         
         
         //add the file to the 'recent files' list
@@ -217,7 +992,7 @@ void AppDocumentState::saveProject()
 void AppDocumentState::saveProjectAs()
 {
     //navigate to app directory
-    FileChooser saveFileChooser("Create a AlphaLive project to save...", 
+    FileChooser saveFileChooser(translate("Create a AlphaLive project to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphalive");
     
@@ -252,7 +1027,7 @@ void AppDocumentState::saveProjectAs()
         //delete the file if it exists & write the new data
         if (savedFile.exists())
         {
-            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "This File Already Exists!", "Are you sure you want to overwrite this file?");
+            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("This File Already Exists!"), translate("Are you sure you want to overwrite this file?"));
         }
         
         if (overwrite == true)
@@ -292,10 +1067,11 @@ void AppDocumentState::saveProjectAs()
             //change the window title bar text
             mainAppWindowRef->setTitleBarText(currentProjectFile.getFileNameWithoutExtension());
             
+            /*
             if (shouldDisplayAlertWindow == true)
                 AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Project Saved", "The project settings have been successfully saved to file");
-            
             shouldDisplayAlertWindow = true;
+             */
             
             //add the file to the 'recent files' list
             registerRecentFile (currentProjectFile);
@@ -329,7 +1105,7 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
     //if found a pad with a mode set to it, ask if user wants to save first
     if (modeCheck != 0)
     {
-        shouldSave = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon, "Load New Project", "Would you like to save the current project first?", "Yes", "No", "Cancel");
+        shouldSave = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon, translate("Load New Project"), translate("Would you like to save the current project first?"));
     }
     
     //if the user didn't press cancel on the alertwindow ('cancel load command')
@@ -345,7 +1121,7 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
         // ========================== 'LOAD PROJECT' CODE ==================================
         
         //navigate to app directory
-        FileChooser loadFileChooser("Select a .alphalive file to load...", 
+        FileChooser loadFileChooser(translate("Select a .alphalive file to open..."), 
                                     StoredSettings::getInstance()->appProjectDir, 
                                     "*.alphalive");
         
@@ -383,6 +1159,9 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
                 //set the Audio Files directory as the new working directory so loaded audio files can be found
                 audioFileDirectory.setAsCurrentWorkingDirectory();
                 
+                //get number of included audio files (for use at close when auto cleaning project)
+                numOfFilesAtStart = File::getCurrentWorkingDirectory().getNumberOfChildFiles(2);
+                
                 //=====================load projectData settings=======================
                 
                 //reset/clear XmlElement.
@@ -406,33 +1185,34 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
                 //in anyway.
                 
                 //=========load the child elements of loadedXml and put them in the sceneData objects===========
-                for (int i = 0; i <= NO_OF_SCENES-1; i++)
+                for (int scene = 0; scene <= NO_OF_SCENES-1; scene++)
                 {
                     //accessed by observer in order to update the relevent scene slot's GUI
-                    sceneToUpdate = i;
+                    sceneToUpdate = scene;
                     
                     //clear the xmlelement for the current scene number
-                    clearScene(i);
+                    clearScene(scene);
                     
                     //put the loaded xml data into the xmlelement for the current scene
-                    XmlElement* childToInsert = loadedXml->getChildByName("SCENE_" + String(i));
-                    sceneData.insert (i, childToInsert);
+                    XmlElement* childToInsert = loadedXml->getChildByName("SCENE_" + String(scene));
+                    sceneData.insert (scene, childToInsert);
                     //remove sceneData childelement from loadedXml so it isn't deleted when loadedXml goes out of scope!
                     loadedXml->removeChildElement (childToInsert, false);
                     
-                    if (sceneData[i]->getNumChildElements() > 0) //if this scene contains something
+                    //determine the status of the scene
+                    for (int i = 0; i < 48; i++)
                     {
-                        //display GUI scene slot as filled 
-                        sceneStatus = 1;
-                    }
-                    else if (sceneData[i]->getNumChildElements() == 0) //if this scene contains nothing
-                    {
-                        //display GUI scene slot as empty
                         sceneStatus = 0;
+                        
+                        if (sceneData[scene]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") != 0)
+                        {
+                            sceneStatus = 1;
+                            break;
+                        }
                     }
-                    
+                     
                     //set the first scene to be display as 'selected'
-                    if (i == 0)
+                    if (scene == 0)
                     {
                         sceneStatus = 2;
                         setCurrentlySelectedScene(0);
@@ -474,7 +1254,7 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
             }
             else
             {
-                AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Cannot Open File", "The selected AlphaLive Project file seems to be corrupt.");
+                AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, translate("Cannot Open File"), translate("The selected AlphaLive Project file seems to be corrupt."));
             }
             
         }
@@ -487,11 +1267,10 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
 
 void AppDocumentState::saveSceneToDisk (int sceneNumber)
 {
-    //first save the current settings to the current scene (saves the user having to first save into the scene and then save to disk!)
     saveToScene(sceneNumber);
     
     //navigate to app directory
-    FileChooser saveFileChooser("Create an AlphaLive Scene file to save...", 
+    FileChooser saveFileChooser(translate("Create an AlphaLive Scene file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphascene");
     if (saveFileChooser.browseForFileToSave(false))
@@ -512,7 +1291,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
         //delete the file if it exists &write the new data
         if (savedFile.existsAsFile())
         {
-            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "This File Already Exists!", "Are you sure you want to overwrite this file?");
+            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("This File Already Exists!"), translate("Are you sure you want to overwrite this file?"));
         }
         
         if (overwrite == true)
@@ -563,7 +1342,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
                                 }
                                 else
                                 {
-                                    AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + newFileName + "\"" + " for Pad " + String(i+1) + " could not be found.");
+                                    AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), newFileName + " " + translate("could not be found."));
                                     //do something here so the loaded data is string::empty and NOT the missing audio file name
                                     //can i do this here or does it need to be done in the loadforscene method?
                                 }
@@ -601,7 +1380,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
                                     }
                                     else
                                     {
-                                        AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + newFileName + "\"" + " for Pad " + String(i+1) + " could not be found.");
+                                        AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), newFileName + " " + translate("could not be found."));
                                         //do something here so the loaded data is string::empty and NOT the missing audio file name
                                         //can i do this here or does it need to be done in the loadforscene method?
                                     }
@@ -642,7 +1421,6 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
             
             //----
             
-            AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Single Scene Saved", "The Scene has been successfully saved to file.");
         }
     }
     
@@ -651,18 +1429,26 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
 
 
 
-bool AppDocumentState::loadSceneFromDisk(int sceneNumber)
+bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File fileToOpen)
 {
-
     //navigate to app directory
-    FileChooser loadFileChooser("Select a .alphascene file to load...", 
+    FileChooser loadFileChooser(translate("Select a .alphascene file to load..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphascene");
     
-    if (loadFileChooser.browseForFileToOpen())
+    bool shouldLoad;
+    
+    if (openBrowser == true)
+        shouldLoad = loadFileChooser.browseForFileToOpen(); //open file browser
+    
+    if (shouldLoad || openBrowser == false)
     {
-        //get file
-        File loadedFile (loadFileChooser.getResult());
+        File loadedFile;
+        
+        if (openBrowser == true)
+            loadedFile = loadFileChooser.getResult();
+        else
+            loadedFile = fileToOpen;
         
         //parse file into xml file
         ScopedPointer<XmlElement> loadedXml (XmlDocument::parse(loadedFile));
@@ -673,7 +1459,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber)
             clearScene(sceneNumber);
             
             //put the loaded xml data into the xmlelement for the current scene
-            //howcome i need to load each child individually here but not anywhere else (where i just load/save first child and it weird does the same for the others)???
+            //howcome i need to load each child individually here but not anywhere else (where i just load/save first child and it weird does the same for the others)??? (21/8/12 - does this comment still apply now?)
             for ( int i = 0; i <= 47; i++)
             {
                 XmlElement* childToInsert = loadedXml->getChildByName("PAD_DATA_"+String(i));
@@ -685,6 +1471,8 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber)
             
             //remove sceneData childelement from loadedXml so it isn't deleted when loadedXml goes out of scope!
             loadedXml->removeChildElement (childToInsert, false);
+            
+            
             
             //------------
             if (AppSettings::Instance()->getCopyExternalFiles() == true)
@@ -738,7 +1526,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber)
                             }
                             else
                             {
-                                AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + newFileName + "\"" + " for Pad " + String(i+1) + " could not be found.");
+                                AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), newFileName + " " + translate("could not be found."));
                                 //do something here so the loaded data is string::empty and NOT the missing audio file name
                             }
                         }
@@ -790,7 +1578,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber)
                                 }
                                 else
                                 {
-                                    AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, "File not found!", "\"" + newFileName + "\"" + " for Pad " + String(i+1) + " could not be found.");
+                                    AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), newFileName + " " + translate("could not be found."));
                                     //do something here so the loaded data is string::empty and NOT the missing audio file name
                                 }
                                 
@@ -861,7 +1649,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber)
         }
         else
         {
-            AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Cannot Open File", "The selected AlphaLive Scene file seems to be corrupt.");
+            AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, translate("Cannot Open File"), translate("The selected AlphaLive Scene file seems to be corrupt."));
             
             return false;
         } 
@@ -877,551 +1665,78 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber)
 
 
 
-void AppDocumentState::saveProjectSettings()
+void AppDocumentState::savePadToDisk (int padNumber)
 {
-    //reset/clear XmlElement.
-    if (projectData != nullptr) //if there is data in the scene's XmlElement
-        projectData->removeAllAttributes();
-
-    projectData->setAttribute("copyExternalFiles", AppSettings::Instance()->getCopyExternalFiles());
+    //This function will be similar to 'saveSceneToDisk()'
+    //and will extract the pad data element of sceneData[currentlySelectedScene]
+    //and put it int a new XmlElment which is then saved as an external file.
+    //The only reason I'm not implementing that right now is because,
+    //like with exporting scenes, the audio files need to be copied to
+    //an associated audio files directory. Also when we implement this function/feature,
+    //the 'loadPadFromDisk()' function will need to import any associated
+    //audio files into the current projects audio files directory.
+    
+    //Like with loadFromScene(), all the code that access padData within saveToScene()
+    //has been moved to a seperate function which will be called winthin this function
+    //to get the right data from PadSettings.
+    
+    //Importing and exporting pad data should be accessible from right-clicking
+    //on a pad, as well as from the menu bar (within the menu bar export settings
+    //will only be selectable when a single pad is selected).
     
 }
 
-void AppDocumentState::loadProjectSettings()
+void AppDocumentState::loadPadFromDisk (Array<int> selectedPads_, bool openBrowser, File fileToOpen)
 {
-    if (projectData->hasAttribute("copyExternalFiles") == true)
-        AppSettings::Instance()->setCopyExternalFiles(projectData->getIntAttribute("copyExternalFiles"));
-    else
-        AppSettings::Instance()->setCopyExternalFiles(true); //default value
+    //navigate to app directory
+    FileChooser loadFileChooser(translate("Select a .alphapad file to load..."), 
+                                StoredSettings::getInstance()->appProjectDir, 
+                                "*.alphapad");
     
-}
-
-
-
-void AppDocumentState::saveToScene (int sceneNumber)
-{
-    //reset/clear XmlElement.
-    clearScene(sceneNumber);
+    bool shouldLoad;
     
-    //===global settings===
-    XmlElement *globalData  = new XmlElement ("GLOBAL_DATA");
-    globalData->setAttribute("globalGain", AppSettings::Instance()->getGlobalGain());
-    globalData->setAttribute("globalPan", AppSettings::Instance()->getGlobalPan());
+    if (openBrowser == true)
+        shouldLoad = loadFileChooser.browseForFileToOpen(); //open file browser
     
-    globalData->setAttribute("globalTempo", AppSettings::Instance()->getGlobalTempo());
-    globalData->setAttribute("quantizationValue", AppSettings::Instance()->getQuantizationValue());
-    globalData->setAttribute("beatsPerBar", AppSettings::Instance()->getBeatsPerBar());
-    globalData->setAttribute("autoStartClock", AppSettings::Instance()->getAutoStartClock());
-    
-    //===pad settings (pad number = i)
-    for (int i = 0; i <= 47; i++)
+    if (shouldLoad || openBrowser == false)
     {
-        //create a 'temp' XmlElement to store data for a single pad
-        XmlElement *padData  = new XmlElement ("PAD_DATA_" + String(i));
+        File loadedFile;
         
-        //put data into this the temp XmlElement
-        padData->setAttribute("mode", PAD_SETTINGS->getMode());
-        padData->setAttribute("pressureSensitivityMode", PAD_SETTINGS->getPressureSensitivityMode());
-        padData->setAttribute("exclusiveMode", PAD_SETTINGS->getExclusiveMode());
-        padData->setAttribute("exclusiveGroup", PAD_SETTINGS->getExclusiveGroup());
-        padData->setAttribute("quantizeMode", PAD_SETTINGS->getQuantizeMode());
+        if (openBrowser == true)
+            loadedFile = loadFileChooser.getResult();
+        else
+            loadedFile = fileToOpen;
         
-        //only save whats necessary
-        if (PAD_SETTINGS->getMode() == 1) //midi mode
+        //parse file into xml file
+        ScopedPointer<XmlElement> loadedXml (XmlDocument::parse(loadedFile));
+        
+        if (loadedXml != nullptr && loadedXml->hasTagName("ALPHALIVE_PAD_SETTINGS_VERSION_1"))
         {
-            padData->setAttribute("midiNote", PAD_SETTINGS->getMidiNote());
-            padData->setAttribute("midiVelocity", PAD_SETTINGS->getMidiVelocity());
-            padData->setAttribute("midiChannel", PAD_SETTINGS->getMidiChannel());
-            padData->setAttribute("midiMinPressureRange", PAD_SETTINGS->getMidiMinPressureRange());
-            padData->setAttribute("midiMaxPressureRange", PAD_SETTINGS->getMidiMaxPressureRange());
-            padData->setAttribute("midiPressureMode", PAD_SETTINGS->getMidiPressureMode());
-            padData->setAttribute("midiTriggerMode", PAD_SETTINGS->getMidiTriggerMode());
-            padData->setAttribute("midiIndestructible", PAD_SETTINGS->getMidiIndestructible());
-            padData->setAttribute("midiSticky", PAD_SETTINGS->getMidiSticky());
-            padData->setAttribute("midiPressureStatus", PAD_SETTINGS->getMidiPressureStatus());
-            padData->setAttribute("midiNoteStatus", PAD_SETTINGS->getMidiNoteStatus());
-            padData->setAttribute("midiCcController", PAD_SETTINGS->getMidiCcController());
-        }
-        else if (PAD_SETTINGS->getMode() == 2) //sampler mode
-        {
+            //saveToScene(currentlySelectedScene);
             
-            if (AppSettings::Instance()->getCopyExternalFiles() == true)
-            {
-                //if project currently allows audio files to be copied to project, only save the file name
-                padData->setAttribute("samplerAudioFilePath", PAD_SETTINGS->getSamplerAudioFilePath().getFileName());
-                
-            }
-            else if (AppSettings::Instance()->getCopyExternalFiles() == false)
-            {
-                //else save the full pathname
-                padData->setAttribute("samplerAudioFilePath", PAD_SETTINGS->getSamplerAudioFilePath().getFullPathName());
-            }
-    
-            padData->setAttribute("samplerTriggerMode", PAD_SETTINGS->getSamplerTriggerMode());
-            padData->setAttribute("samplerShouldLoop", PAD_SETTINGS->getSamplerShouldLoop());
-            padData->setAttribute("samplerIndestructible", PAD_SETTINGS->getSamplerIndestructible());
-            padData->setAttribute("samplerShouldFinishLoop", PAD_SETTINGS->getSamplerShouldFinishLoop());
-            padData->setAttribute("samplerSticky", PAD_SETTINGS->getSamplerSticky());
-            padData->setAttribute("samplerEffect", PAD_SETTINGS->getSamplerEffect());
-            padData->setAttribute("samplerPan", PAD_SETTINGS->getSamplerPan());
-            padData->setAttribute("samplerGain", PAD_SETTINGS->getSamplerGain());
+            XmlElement* padData = loadedXml->getChildByName("PAD_DATA");
             
-            if (PAD_SETTINGS->getSamplerEffect() == 1) //Gain and Pan
+            for (int i = 0; i < selectedPads_.size(); i++)
             {
-                padData->setAttribute("samplerFxGainPanGain", PAD_SETTINGS->getSamplerFxGainPanGain());
-                padData->setAttribute("samplerFxGainPanPan", PAD_SETTINGS->getSamplerFxGainPanPan());
-                padData->setAttribute("samplerFxGainPanAlphaTouch", PAD_SETTINGS->getSamplerFxGainPanAlphaTouch());
-                padData->setAttribute("samplerFxGainPanAtReverse", PAD_SETTINGS->getSamplerFxGainPanAtReverse());
-                padData->setAttribute("samplerFxGainPanAtIntensity", PAD_SETTINGS->getSamplerFxGainPanAtIntensity());
-            }
-            else if (PAD_SETTINGS->getSamplerEffect() == 2) //LPF
-            {
-                padData->setAttribute("samplerFxLpfMix", PAD_SETTINGS->getSamplerFxLpfMix());
-                padData->setAttribute("samplerFxLpfFreq", PAD_SETTINGS->getSamplerFxLpfFreq());
-                padData->setAttribute("samplerFxLpfBandwidth", PAD_SETTINGS->getSamplerFxLpfBandwidth());
-                padData->setAttribute("samplerFxLpfAlphaTouch", PAD_SETTINGS->getSamplerFxLpfAlphaTouch());
-                padData->setAttribute("samplerFxLpfAtReverse", PAD_SETTINGS->getSamplerFxLpfAtReverse());
-                padData->setAttribute("samplerFxLpfAtIntensity", PAD_SETTINGS->getSamplerFxLpfAtIntensity());
-            }
-            else if (PAD_SETTINGS->getSamplerEffect() == 3) //HPF
-            {
-                padData->setAttribute("samplerFxHpfMix", PAD_SETTINGS->getSamplerFxHpfMix());
-                padData->setAttribute("samplerFxHpfFreq", PAD_SETTINGS->getSamplerFxHpfFreq());
-                padData->setAttribute("samplerFxHpfBandwidth", PAD_SETTINGS->getSamplerFxHpfBandwidth());
-                padData->setAttribute("samplerFxHpfAlphaTouch", PAD_SETTINGS->getSamplerFxHpfAlphaTouch());
-                padData->setAttribute("samplerFxHpfAtReverse", PAD_SETTINGS->getSamplerFxHpfAtReverse());
-                padData->setAttribute("samplerFxHpfAtIntensity", PAD_SETTINGS->getSamplerFxHpfAtIntensity());
-            }
-            else if (PAD_SETTINGS->getSamplerEffect() == 4) //BPF
-            {
-                padData->setAttribute("samplerFxBpfMix", PAD_SETTINGS->getSamplerFxBpfMix());
-                padData->setAttribute("samplerFxBpfFreq", PAD_SETTINGS->getSamplerFxBpfFreq());
-                padData->setAttribute("samplerFxBpfBandwidth", PAD_SETTINGS->getSamplerFxBpfBandwidth());
-                padData->setAttribute("samplerFxBpfAlphaTouch", PAD_SETTINGS->getSamplerFxBpfAlphaTouch());
-                padData->setAttribute("samplerFxBpfAtReverse", PAD_SETTINGS->getSamplerFxBpfAtReverse());
-                padData->setAttribute("samplerFxBpfAtIntensity", PAD_SETTINGS->getSamplerFxBpfAtIntensity());
-            }
-            else if (PAD_SETTINGS->getSamplerEffect() == 7) //Delay
-            {
-                padData->setAttribute("samplerFxDelayMix", PAD_SETTINGS->getSamplerFxDelayMix());
-                padData->setAttribute("samplerFxDelayTime", PAD_SETTINGS->getSamplerFxDelayTime());
-                padData->setAttribute("samplerFxDelayFeedback", PAD_SETTINGS->getSamplerFxDelayFeedback());
-                padData->setAttribute("samplerFxDelayLpfFreq", PAD_SETTINGS->getSamplerFxDelayLpfFreq());
-                padData->setAttribute("samplerFxDelayHpfFreq", PAD_SETTINGS->getSamplerFxDelayHpfFreq());
-                padData->setAttribute("samplerFxDelaySync", PAD_SETTINGS->getSamplerFxDelaySync());
-                padData->setAttribute("samplerFxDelayTimeMenu", PAD_SETTINGS->getSamplerFxDelayTimeMenu());
-                padData->setAttribute("samplerFxDelayAlphaTouch", PAD_SETTINGS->getSamplerFxDelayAlphaTouch());
-                padData->setAttribute("samplerFxDelayAtReverse", PAD_SETTINGS->getSamplerFxDelayAtReverse());
-                padData->setAttribute("samplerFxDelayAtIntensity", PAD_SETTINGS->getSamplerFxDelayAtIntensity());
-            }
-            else if (PAD_SETTINGS->getSamplerEffect() == 8) //Reverb
-            {
-                padData->setAttribute("samplerFxReverbMix", PAD_SETTINGS->getSamplerFxReverbMix());
-                padData->setAttribute("samplerFxReverbRoomSize", PAD_SETTINGS->getSamplerFxReverbRoomSize());
-                padData->setAttribute("samplerFxReverbDamping", PAD_SETTINGS->getSamplerFxReverbDamping());
-                padData->setAttribute("samplerFxReverbWidth", PAD_SETTINGS->getSamplerFxReverbWidth());
-                padData->setAttribute("samplerFxReverbFreezeMode", PAD_SETTINGS->getSamplerFxReverbFreezeMode());
-                padData->setAttribute("samplerFxReverbAlphaTouch", PAD_SETTINGS->getSamplerFxReverbAlphaTouch());
-                padData->setAttribute("samplerFxReverbAtReverse", PAD_SETTINGS->getSamplerFxReverbAtReverse());
-                padData->setAttribute("samplerFxReverbAtIntensity", PAD_SETTINGS->getSamplerFxReverbAtIntensity());
-            }
-            else if (PAD_SETTINGS->getSamplerEffect() == 9) //Flanger
-            {
-                padData->setAttribute("samplerFxFlangerMix", PAD_SETTINGS->getSamplerFxFlangerMix());
-                padData->setAttribute("samplerFxFlangerRate", PAD_SETTINGS->getSamplerFxFlangerRate());
-                padData->setAttribute("samplerFxFlangerFeedback", PAD_SETTINGS->getSamplerFxFlangerFeedback());
-                padData->setAttribute("samplerFxFlangerIntensity", PAD_SETTINGS->getSamplerFxFlangerIntensity());
-                padData->setAttribute("samplerFxFlangerRateMenu", PAD_SETTINGS->getSamplerFxFlangerRateMenu());
-                padData->setAttribute("samplerFxFlangerSync", PAD_SETTINGS->getSamplerFxFlangerSync());
-                padData->setAttribute("samplerFxFlangerAlphaTouch", PAD_SETTINGS->getSamplerFxFlangerAlphaTouch());
-                padData->setAttribute("samplerFxFlangerAtReverse", PAD_SETTINGS->getSamplerFxFlangerAtReverse());
-                padData->setAttribute("samplerFxFlangerAtIntensity", PAD_SETTINGS->getSamplerFxFlangerAtIntensity());
-            }
-            else if (PAD_SETTINGS->getSamplerEffect() == 10) //Tremolo
-            {
-                padData->setAttribute("samplerFxTremoloDepth", PAD_SETTINGS->getSamplerFxTremoloDepth());
-                padData->setAttribute("samplerFxTremoloRate", PAD_SETTINGS->getSamplerFxTremoloRate());
-                padData->setAttribute("samplerFxTremoloShape", PAD_SETTINGS->getSamplerFxTremoloShape());
-                padData->setAttribute("samplerFxTremoloSync", PAD_SETTINGS->getSamplerFxTremoloSync());
-                padData->setAttribute("samplerFxTremoloRateMenu", PAD_SETTINGS->getSamplerFxTremoloRateMenu());
-                padData->setAttribute("samplerFxTremoloAlphaTouch", PAD_SETTINGS->getSamplerFxTremoloAlphaTouch());
-                padData->setAttribute("samplerFxTremoloAtReverse", PAD_SETTINGS->getSamplerFxTremoloAtReverse());
-                padData->setAttribute("samplerFxTremoloAtIntensity", PAD_SETTINGS->getSamplerFxTremoloAtIntensity());
+                loadPadSettings(selectedPads_[i], padData);
             }
             
-        }
-        else if (PAD_SETTINGS->getMode() == 3) //sequencer mode
-        {
-            padData->setAttribute("sequencerMode", PAD_SETTINGS->getSequencerMode());
-            for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
-            {
-                padData->setAttribute("newSequencerData"+String(seq), PAD_SETTINGS->getSequencerDataString(seq));
-            }
+            loadedXml->removeChildElement (padData, true);
             
-            padData->setAttribute("sequencerNumberOfSequences", PAD_SETTINGS->getSequencerNumberOfSequences());
-            padData->setAttribute("sequencerTriggerMode", PAD_SETTINGS->getSequencerTriggerMode());
-            padData->setAttribute("sequencerShouldLoop", PAD_SETTINGS->getSequencerShouldLoop());
-            padData->setAttribute("sequencerIndestructible", PAD_SETTINGS->getSequencerIndestructible());
-            padData->setAttribute("sequencerShouldFinishLoop", PAD_SETTINGS->getSequencerShouldFinishLoop());
-            padData->setAttribute("sequencerSticky", PAD_SETTINGS->getSequencerSticky());
-            padData->setAttribute("sequencerLength", PAD_SETTINGS->getSequencerLength());
-            padData->setAttribute("sequencerRelativeTempoMode", PAD_SETTINGS->getSequencerRelativeTempoMode());
-            padData->setAttribute("sequencerDynamicMode", PAD_SETTINGS->getSequencerDynamicMode());
+            //update GUI - calls update() in mainComponent
             
-            if (PAD_SETTINGS->getSequencerMode() == 1) //sequencer midi mode
-            {
-                for (int row = 0; row <= NO_OF_ROWS-1; row++)
-                {
-                    padData->setAttribute("sequencerMidiNote"+String(row), PAD_SETTINGS->getSequencerMidiNote(row));
-                }
-                padData->setAttribute("sequencerMidiVelocity", PAD_SETTINGS->getSequencerMidiVelocity());
-                padData->setAttribute("sequencerMidiChannel", PAD_SETTINGS->getSequencerMidiChannel());
-                padData->setAttribute("sequencerMidiNoteLength", PAD_SETTINGS->getSequencerMidiNoteLength());
-                padData->setAttribute("sequencerMidiMinPressureRange", PAD_SETTINGS->getSequencerMidiMinPressureRange());
-                padData->setAttribute("sequencerMidiMaxPressureRange", PAD_SETTINGS->getSequencerMidiMaxPressureRange());
-                padData->setAttribute("sequencerMidiPressureMode", PAD_SETTINGS->getSequencerMidiPressureMode());
-                padData->setAttribute("sequencerMidiPressureStatus", PAD_SETTINGS->getSequencerMidiPressureStatus());
-                padData->setAttribute("sequencerMidiCcController", PAD_SETTINGS->getSequencerMidiCcController());
-
-            }
-            else if (PAD_SETTINGS->getSequencerMode() == 2) //sequencer samples mode
-            {
-                for (int row = 0; row <= NO_OF_ROWS-1; row++)
-                {
-                    if (AppSettings::Instance()->getCopyExternalFiles() == true)
-                    {
-                        //if project currently allows external audio files to be copied to project, only save the file name
-                        padData->setAttribute("sequencerSamplesAudioFilePath"+String(row), PAD_SETTINGS->getSequencerSamplesAudioFilePath(row).getFileName());
-                    }
-                    else
-                    {
-                        //else save the full pathname
-                        padData->setAttribute("sequencerSamplesAudioFilePath"+String(row), PAD_SETTINGS->getSequencerSamplesAudioFilePath(row).getFullPathName());
-                    }
-                }
-                padData->setAttribute("sequencerPan", PAD_SETTINGS->getSequencerPan());
-                padData->setAttribute("sequencerGain", PAD_SETTINGS->getSequencerGain());
-            }
-        }
-        
-        else if (PAD_SETTINGS->getMode() == 4) //controller mode
-        {
-            padData->setAttribute("controllerControl", PAD_SETTINGS->getControllerControl());
-            padData->setAttribute("controllerSceneNumber", PAD_SETTINGS->getControllerPresentNumber());
-            padData->setAttribute("controllerOscIpAddress", PAD_SETTINGS->getControllerOscIpAddress());
-            padData->setAttribute("controllerOscPortNumber", PAD_SETTINGS->getControllerOscPort());
-            padData->setAttribute("controllerMidiProgramChangeNumber", PAD_SETTINGS->getControllerMidiProgramChangeNumber());
-            padData->setAttribute("controllerMidiProgramChangeChannel", PAD_SETTINGS->getControllerMidiProgramChangeChannel());
-        }
-        
-        //add temp xmlElement as a child element of the main scene XmlElement
-        sceneData[sceneNumber]->addChildElement(new XmlElement(*padData));
-        
-        delete padData;
-    }
-    
-    //add globalData as child element.
-    //WHY DO I HAVE TO DO THIS HERE AND NOT BEFORE DOING THE PADDATA STUFF?
-    //caused hours of confusion and crashing if this was done first
-    sceneData[sceneNumber]->addChildElement(new XmlElement(*globalData));
-    
-    delete globalData;
-}
-
-
-
-
-void AppDocumentState::loadFromScene (int sceneNumber)
-{
-    //NEED TO TIDY UP THIS FUNCTION SO THERE'S NO CHECKS TO SEE IF ATTRIBUTES EXIST, AS THEY WON'T BE NEEDED ANYMORE
-    
-    if (sceneData[sceneNumber] != nullptr && sceneData[sceneNumber]->hasTagName("SCENE_"+String(sceneNumber)))
-    {
-        
-        //===global settings===
-        XmlElement *globalData = new XmlElement(*sceneData[sceneNumber]->getChildByName("GLOBAL_DATA"));
-        
-        AppSettings::Instance()->setGlobalGain(globalData->getDoubleAttribute("globalGain"));
-        AppSettings::Instance()->setGlobalPan(globalData->getDoubleAttribute("globalPan"));
-        
-        AppSettings::Instance()->setGlobalTempo(globalData->getDoubleAttribute("globalTempo"));
-        AppSettings::Instance()->setQuantizationValue(globalData->getIntAttribute("quantizationValue"));
-        AppSettings::Instance()->setBeatsPerBar(globalData->getIntAttribute("beatsPerBar"));
-        AppSettings::Instance()->setAutoStartClock(globalData->getIntAttribute("autoStartClock"));
-        
-        delete globalData;
-        
-        //===pad settings (pad number = i)
-        for (int i = 0; i <= 47; i++)
-        {
-            
-            XmlElement *padData = new XmlElement(*sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))); //creates a deep copy of sceneData, not just a copy of the pointer
-            
-            PAD_SETTINGS->setMode(padData->getIntAttribute("mode"));
-            PAD_SETTINGS->setPressureSensitivityMode(padData->getIntAttribute("pressureSensitivityMode"));
-            
-            PAD_SETTINGS->setExclusiveMode(padData->getIntAttribute("exclusiveMode"));
-            PAD_SETTINGS->setExclusiveGroup(padData->getIntAttribute("exclusiveGroup"));
-            PAD_SETTINGS->setQuantizeMode(padData->getIntAttribute("quantizeMode"));
-            
-            //only load needed data to reduce loading times and CPU usage, plus
-            //can not load settings into seq and sampler modes where the pads player objects don't exist (yet)
-            
-            //midi mode
-            if (padData->getIntAttribute("mode") == 1)
-            {
-                PAD_SETTINGS->setMidiNote(padData->getIntAttribute("midiNote"));
-                PAD_SETTINGS->setMidiVelocity(padData->getIntAttribute("midiVelocity"));
-                PAD_SETTINGS->setMidiChannel(padData->getIntAttribute("midiChannel"));
-                PAD_SETTINGS->setMidiMinPressureRange(padData->getIntAttribute("midiMinPressureRange"));
-                PAD_SETTINGS->setMidiMaxPressureRange(padData->getIntAttribute("midiMaxPressureRange"));
-                PAD_SETTINGS->setMidiPressureMode(padData->getIntAttribute("midiPressureMode"));
-                PAD_SETTINGS->setMidiTriggerMode(padData->getIntAttribute("midiTriggerMode"));
-                PAD_SETTINGS->setMidiIndestructible(padData->getIntAttribute("midiIndestructible"));
-                PAD_SETTINGS->setMidiSticky(padData->getIntAttribute("midiSticky"));
-                PAD_SETTINGS->setMidiPressureStatus(padData->getBoolAttribute("midiPressureStatus"));
-                PAD_SETTINGS->setMidiNoteStatus(padData->getBoolAttribute("midiNoteStatus"));
-                PAD_SETTINGS->setMidiCcController(padData->getIntAttribute("midiCcController"));
-            }
-            
-            //sampler mode
-            else if (padData->getIntAttribute("mode") == 2)
-            {
-                File newFile;
-                String newFileString = padData->getStringAttribute("samplerAudioFilePath");
-                
-                if (newFileString != String::empty) //to prevent trying to load in a file if there's nothing to load
-                {
-                    if (File::isAbsolutePath(newFileString) == false)
-                    {
-                        //check if the saved audio file path is just the file name
-                        //if so, get it from the working directory and apply the full pathname to it
-                        newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + newFileString;
-                    }
-                    else if (File::isAbsolutePath(newFileString) == true)
-                    {
-                        //else, it should be the full path name already
-                        newFile = newFileString;
-                    }
-                    
-                    PAD_SETTINGS->setSamplerAudioFilePath(newFile);
-                }
-                else
-                    PAD_SETTINGS->setSamplerAudioFilePath(File::nonexistent);
-                
-                PAD_SETTINGS->setSamplerTriggerMode(padData->getIntAttribute("samplerTriggerMode"));
-                PAD_SETTINGS->setSamplerShouldLoop(padData->getIntAttribute("samplerShouldLoop"));
-                PAD_SETTINGS->setSamplerIndestructible(padData->getIntAttribute("samplerIndestructible"));
-                PAD_SETTINGS->setSamplerShouldFinishLoop(padData->getIntAttribute("samplerShouldFinishLoop"));
-                PAD_SETTINGS->setSamplerSticky(padData->getIntAttribute("samplerSticky"));
-                PAD_SETTINGS->setSamplerEffect(padData->getIntAttribute("samplerEffect"));
-                PAD_SETTINGS->setSamplerPan(padData->getDoubleAttribute("samplerPan"));
-                PAD_SETTINGS->setSamplerGain(padData->getDoubleAttribute("samplerGain"));
-                if (PAD_SETTINGS->getSamplerEffect() == 1) //Gain and Pan
-                {
-                    PAD_SETTINGS->setSamplerFxGainPanGain(padData->getDoubleAttribute("samplerFxGainPanGain"));
-                    PAD_SETTINGS->setSamplerFxGainPanPan(padData->getDoubleAttribute("samplerFxGainPanPan"));
-                    PAD_SETTINGS->setSamplerFxGainPanAlphaTouch(padData->getIntAttribute("samplerFxGainPanAlphaTouch"));
-                    PAD_SETTINGS->setSamplerFxGainPanAtReverse(padData->getIntAttribute("samplerFxGainPanAtReverse"));
-                    PAD_SETTINGS->setSamplerFxGainPanAtIntensity(padData->getDoubleAttribute("samplerFxGainPanAtIntensity"));
-                }
-                else if (PAD_SETTINGS->getSamplerEffect() == 2) //LPF
-                {
-                    PAD_SETTINGS->setSamplerFxLpfMix(padData->getDoubleAttribute("samplerFxLpfMix"));
-                    PAD_SETTINGS->setSamplerFxLpfFreq(padData->getDoubleAttribute("samplerFxLpfFreq"));
-                    PAD_SETTINGS->setSamplerFxLpfBandwidth(padData->getDoubleAttribute("samplerFxLpfBandwidth"));
-                    PAD_SETTINGS->setSamplerFxLpfAlphaTouch(padData->getIntAttribute("samplerFxLpfAlphaTouch"));
-                    PAD_SETTINGS->setSamplerFxLpfAtReverse(padData->getIntAttribute("samplerFxLpfAtReverse"));
-                    PAD_SETTINGS->setSamplerFxLpfAtIntensity(padData->getDoubleAttribute("samplerFxLpfAtIntensity"));
-                        
-                }
-                else if (PAD_SETTINGS->getSamplerEffect() == 3) //HPF
-                {
-                    PAD_SETTINGS->setSamplerFxHpfMix(padData->getDoubleAttribute("samplerFxHpfMix"));
-                    PAD_SETTINGS->setSamplerFxHpfFreq(padData->getDoubleAttribute("samplerFxHpfFreq"));
-                    PAD_SETTINGS->setSamplerFxHpfBandwidth(padData->getDoubleAttribute("samplerFxHpfBandwidth"));
-                    PAD_SETTINGS->setSamplerFxHpfAlphaTouch(padData->getIntAttribute("samplerFxHpfAlphaTouch"));
-                    PAD_SETTINGS->setSamplerFxHpfAtReverse(padData->getIntAttribute("samplerFxHpfAtReverse"));
-                    PAD_SETTINGS->setSamplerFxHpfAtIntensity(padData->getDoubleAttribute("samplerFxHpfAtIntensity"));
-                }
-                else if (PAD_SETTINGS->getSamplerEffect() == 4) //BPF
-                {
-                    PAD_SETTINGS->setSamplerFxBpfMix(padData->getDoubleAttribute("samplerFxBpfMix"));
-                    PAD_SETTINGS->setSamplerFxBpfFreq(padData->getDoubleAttribute("samplerFxBpfFreq"));
-                    PAD_SETTINGS->setSamplerFxBpfBandwidth(padData->getDoubleAttribute("samplerFxBpfBandwidth"));
-                    PAD_SETTINGS->setSamplerFxBpfAlphaTouch(padData->getIntAttribute("samplerFxBpfAlphaTouch"));
-                    PAD_SETTINGS->setSamplerFxBpfAtReverse(padData->getIntAttribute("samplerFxBpfAtReverse"));
-                    PAD_SETTINGS->setSamplerFxBpfAtIntensity(padData->getDoubleAttribute("samplerFxBpfAtIntensity"));
-                }
-                else if (PAD_SETTINGS->getSamplerEffect() == 7) //Delay
-                {
-                    PAD_SETTINGS->setSamplerFxDelayMix(padData->getDoubleAttribute("samplerFxDelayMix"));
-                    PAD_SETTINGS->setSamplerFxDelayTime(padData->getDoubleAttribute("samplerFxDelayTime"));
-                    PAD_SETTINGS->setSamplerFxDelayFeedback(padData->getDoubleAttribute("samplerFxDelayFeedback"));
-                    PAD_SETTINGS->setSamplerFxDelayLpfFreq(padData->getDoubleAttribute("samplerFxDelayLpfFreq"));
-                    PAD_SETTINGS->setSamplerFxDelayHpfFreq(padData->getDoubleAttribute("samplerFxDelayHpfFreq"));
-                    PAD_SETTINGS->setSamplerFxDelaySync(padData->getIntAttribute("samplerFxDelaySync"));
-                    PAD_SETTINGS->setSamplerFxDelayTimeMenu(padData->getIntAttribute("samplerFxDelayTimeMenu"));
-                    PAD_SETTINGS->setSamplerFxDelayAlphaTouch(padData->getIntAttribute("samplerFxDelayAlphaTouch"));
-                    PAD_SETTINGS->setSamplerFxDelayAtReverse(padData->getIntAttribute("samplerFxDelayAtReverse"));
-                    PAD_SETTINGS->setSamplerFxDelayAtIntensity(padData->getDoubleAttribute("samplerFxDelayAtIntensity"));
-                }
-                else if (PAD_SETTINGS->getSamplerEffect() == 8) //Reverb
-                {
-                    PAD_SETTINGS->setSamplerFxReverbMix(padData->getDoubleAttribute("samplerFxReverbMix"));
-                    PAD_SETTINGS->setSamplerFxReverbRoomSize(padData->getDoubleAttribute("samplerFxReverbRoomSize"));
-                    PAD_SETTINGS->setSamplerFxReverbDamping(padData->getDoubleAttribute("samplerFxReverbDamping"));
-                    PAD_SETTINGS->setSamplerFxReverbWidth(padData->getDoubleAttribute("samplerFxReverbWidth"));
-                    PAD_SETTINGS->setSamplerFxReverbFreezeMode(padData->getDoubleAttribute("samplerFxReverbFreezeMode"));
-                    PAD_SETTINGS->setSamplerFxReverbAlphaTouch(padData->getIntAttribute("samplerFxReverbAlphaTouch"));
-                    PAD_SETTINGS->setSamplerFxReverbAtReverse(padData->getIntAttribute("samplerFxReverbAtReverse"));
-                    PAD_SETTINGS->setSamplerFxReverbAtIntensity(padData->getDoubleAttribute("samplerFxReverbAtIntensity"));
-                }
-                else if (PAD_SETTINGS->getSamplerEffect() == 9) //Flanger
-                {
-                    PAD_SETTINGS->setSamplerFxFlangerMix(padData->getDoubleAttribute("samplerFxFlangerMix"));
-                    PAD_SETTINGS->setSamplerFxFlangerRate(padData->getDoubleAttribute("samplerFxFlangerRate"));
-                    PAD_SETTINGS->setSamplerFxFlangerFeedback(padData->getDoubleAttribute("samplerFxFlangerFeedback"));
-                    PAD_SETTINGS->setSamplerFxFlangerIntensity(padData->getDoubleAttribute("samplerFxFlangerIntensity"));
-                    PAD_SETTINGS->setSamplerFxFlangerSync(padData->getIntAttribute("samplerFxFlangerSync"));
-                    PAD_SETTINGS->setSamplerFxFlangerRateMenu(padData->getIntAttribute("samplerFxFlangerRateMenu"));
-                    PAD_SETTINGS->setSamplerFxFlangerAlphaTouch(padData->getIntAttribute("samplerFxFlangerAlphaTouch"));
-                    PAD_SETTINGS->setSamplerFxFlangerAtReverse(padData->getIntAttribute("samplerFxFlangerAtReverse"));
-                    PAD_SETTINGS->setSamplerFxFlangerAtIntensity(padData->getDoubleAttribute("samplerFxFlangerAtIntensity"));
-                }
-                
-                else if (PAD_SETTINGS->getSamplerEffect() == 10) //Tremolo
-                {
-                    PAD_SETTINGS->setSamplerFxTremoloDepth(padData->getDoubleAttribute("samplerFxTremoloDepth"));
-                    PAD_SETTINGS->setSamplerFxTremoloRate(padData->getDoubleAttribute("samplerFxTremoloRate"));
-                    PAD_SETTINGS->setSamplerFxTremoloShape(padData->getIntAttribute("samplerFxTremoloShape"));
-                    PAD_SETTINGS->setSamplerFxTremoloSync(padData->getIntAttribute("samplerFxTremoloSync"));
-                    PAD_SETTINGS->setSamplerFxTremoloRateMenu(padData->getIntAttribute("samplerFxTremoloRateMenu"));
-                    PAD_SETTINGS->setSamplerFxTremoloAlphaTouch(padData->getIntAttribute("samplerFxTremoloAlphaTouch"));
-                    PAD_SETTINGS->setSamplerFxTremoloAtReverse(padData->getIntAttribute("samplerFxTremoloAtReverse"));
-                    PAD_SETTINGS->setSamplerFxTremoloAtIntensity(padData->getDoubleAttribute("samplerFxTremoloAtIntensity"));
-                }
-            }
-            
-            //sequencer mode
-            else if (padData->getIntAttribute("mode") == 3)
-            {
-                PAD_SETTINGS->setSequencerMode(padData->getIntAttribute("sequencerMode"));
-                
-                if (padData->hasAttribute("newSequencerData0") == true) //new seq data format (0-127)
-                    {
-                        for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
-                        {
-                            PAD_SETTINGS->stringToSeqData(padData->getStringAttribute("newSequencerData"+String(seq)), seq);
-                        }
-                    }
-                
-                /*
-                else if (padData->hasAttribute("sequencerData0") == true) //old seq data format (0-1)
-                    {
-                        for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
-                        {
-                            //convert any '1s' in the string to '110'
-                            PAD_SETTINGS->stringToSeqDataFormatConversion(padData->getStringAttribute("sequencerData"+String(seq)), seq);
-                        }
-                    }
-                */
-            
-                    
-                PAD_SETTINGS->setSequencerNumberOfSequences(padData->getIntAttribute("sequencerNumberOfSequences"));
-                PAD_SETTINGS->setSequencerTriggerMode(padData->getIntAttribute("sequencerTriggerMode"));
-                PAD_SETTINGS->setSequencerShouldLoop(padData->getIntAttribute("sequencerShouldLoop"));
-                PAD_SETTINGS->setSequencerIndestructible(padData->getIntAttribute("sequencerIndestructible"));
-                PAD_SETTINGS->setSequencerShouldFinishLoop(padData->getIntAttribute("sequencerShouldFinishLoop"));
-                PAD_SETTINGS->setSequencerSticky(padData->getIntAttribute("sequencerSticky"));
-                PAD_SETTINGS->setSequencerLength(padData->getIntAttribute("sequencerLength"));
-                PAD_SETTINGS->setSequencerRelativeTempoMode(padData->getIntAttribute("sequencerRelativeTempoMode"));
-                PAD_SETTINGS->setSequencerDynamicMode(padData->getIntAttribute("sequencerDynamicMode"));
-                
-                //sequencer midi mode
-                if (padData->getIntAttribute("sequencerMode") == 1)
-                {
-                    for (int row = 0; row <= NO_OF_ROWS-1; row++)
-                    {
-                        PAD_SETTINGS->setSequencerMidiNote(padData->getIntAttribute("sequencerMidiNote"+String(row)), row);
-                    }
-                    PAD_SETTINGS->setSequencerMidiVelocity(padData->getIntAttribute("sequencerMidiVelocity"));
-                    PAD_SETTINGS->setSequencerMidiChannel(padData->getIntAttribute("sequencerMidiChannel"));
-                    PAD_SETTINGS->setSequencerMidiNoteLength(padData->getIntAttribute("sequencerMidiNoteLength"));
-                    PAD_SETTINGS->setSequencerMidiMinPressureRange(padData->getIntAttribute("sequencerMidiMinPressureRange"));
-                    PAD_SETTINGS->setSequencerMidiMaxPressureRange(padData->getIntAttribute("sequencerMidiMaxPressureRange"));
-                    PAD_SETTINGS->setSequencerMidiPressureMode(padData->getIntAttribute("sequencerMidiPressureMode"));
-                    PAD_SETTINGS->setSequencerMidiPressureStatus(padData->getBoolAttribute("sequencerMidiPressureStatus"));
-                    PAD_SETTINGS->setSequencerMidiCcController(padData->getIntAttribute("sequencerMidiCcController"));
-                }
-                
-                //sequencer samples mode
-                else if (padData->getIntAttribute("sequencerMode") == 2)
-                {
-                    for (int row = 0; row <= NO_OF_ROWS-1; row++)
-                    {
-                        File newFile;
-                        String newFileString = padData->getStringAttribute("sequencerSamplesAudioFilePath"+String(row));
-                        
-                        if (newFileString != String::empty) //to prevent trying to load in a file if there's nothing to load
-                        {
-                            if (File::isAbsolutePath(newFileString) == false)
-                            {
-                                //check if the saved audio file path is just the file name
-                                //if so, get it from the working directory and apply the full pathname to it
-                                newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + newFileString;
-                            }
-                            else
-                            {
-                                //else, it should be the full path name already
-                                newFile = newFileString;
-                            }
-                            
-                            PAD_SETTINGS->setSequencerSamplesAudioFilePath(newFile, row);
-                        }
-                        else
-                            PAD_SETTINGS->setSequencerSamplesAudioFilePath(File::nonexistent, row); 
-                    }
-                    
-                    PAD_SETTINGS->setSequencerPan(padData->getDoubleAttribute("sequencerPan"));
-                    PAD_SETTINGS->setSequencerGain(padData->getDoubleAttribute("sequencerGain"));
-                }
-            }
-            
-            //controller mode
-            else if (padData->getIntAttribute("mode") == 4)
-            {
-                PAD_SETTINGS->setControllerControl(padData->getIntAttribute("controllerControl"));
-                PAD_SETTINGS->setControllerSceneNumber(padData->getIntAttribute("controllerSceneNumber"));
-                
-                PAD_SETTINGS->setControllerOscIpAddress(padData->getStringAttribute("controllerOscIpAddress"));
-                PAD_SETTINGS->setControllerOscPort(padData->getIntAttribute("controllerOscPortNumber"));
-                PAD_SETTINGS->setControllerMidiProgramChangeNumber(padData->getIntAttribute("controllerMidiProgramChangeNumber"));
-                PAD_SETTINGS->setControllerMidiProgramChangeChannel(padData->getIntAttribute("controllerMidiProgramChangeChannel"));
-                
-            }
-            
-            delete padData;
+            //SHOULD I CREATE A NEW GUIUPDATEFLAG VALUE THAT ONLY ALLOWS A MINIMUM AMOUNT OF
+            //THE GUI T0 BE UPDATED? HOWEVER THERE WILL PROBABLY BE A DIFFERENCE BETWEEN WHETHER
+            //IF THIS FUNCTION WAS CALLED FROM THE TOOLBOX OR BY MANUALLY LOADING A PADS SETTINGS.
+            guiUpdateFlag = 0;
+            notifyObs();
         }
         
     }
-    
-    //update GUI - calls update() in mainComponent
-    notifyObs();
-    
-    
 }
 
 
-void AppDocumentState::clearScene (int sceneNumber)
-{
-    
-    //reset/clear XmlElement.
-    if (sceneData[sceneNumber] != nullptr) //if there is data in the scene's XmlElement
-    {
-        sceneData[sceneNumber]->deleteAllChildElements();
-    }
-}
+
 
 
 
@@ -1429,7 +1744,7 @@ void AppDocumentState::clearScene (int sceneNumber)
 void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int currentlySelectedPad)
 {
     //navigate to app directory
-    FileChooser saveFileChooser("Create a single sequence file to save...", 
+    FileChooser saveFileChooser(translate("Create a single sequence file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphaseq");
     
@@ -1446,7 +1761,7 @@ void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int current
         //delete the file if it exists &write the new data
         if (savedFile.existsAsFile())
         {
-            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "This File Already Exists!", "Are you sure you want to overwrite this file?");
+            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("This File Already Exists!"), translate("Are you sure you want to overwrite this file?"));
         }
         
         if (overwrite == true)
@@ -1459,28 +1774,42 @@ void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int current
             //get single sequence data string based on currently selected sequencer number slider value
             sequenceDataXml.setAttribute("sequenceData", PAD_SETTINGS_pad->getSequencerDataString(currentlySelectedSeqNumber));
             
-            String xmlDoc = sequenceDataXml.createDocument(String::empty, true);
+            String xmlDoc = sequenceDataXml.createDocument(String::empty);
             savedFile.appendText(xmlDoc);
             
             std::cout << savedFile.getFullPathName() << std::endl;
             
-            AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Single Sequence Saved", "The sequence has been successfully saved to file");
+            //AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Single Sequence Saved", "The sequence has been successfully saved to file");
         }
     }
     
 }
 
 
-void AppDocumentState::loadSequence (int currentlySeletedSeqNumber, Array<int> selectedPads_)
+void AppDocumentState::loadSequence (int currentlySeletedSeqNumber, 
+                                     Array<int> selectedPads_,
+                                     bool openBrowser, 
+                                     File fileToOpen)
 {
     //navigate to app directory
-    FileChooser loadFileChooser("Select a .alphaseq file to load...", 
+    FileChooser loadFileChooser(translate("Select a .alphaseq file to load..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphaseq");
     
-    if (loadFileChooser.browseForFileToOpen())
+    bool shouldLoad;
+    
+    if (openBrowser == true)
+        shouldLoad = loadFileChooser.browseForFileToOpen(); //open file browser
+    
+    if (shouldLoad || openBrowser == false)
     {
-        File loadedFile (loadFileChooser.getResult());
+        //File loadedFile (loadFileChooser.getResult());
+        File loadedFile;
+        
+        if (openBrowser == true)
+            loadedFile = loadFileChooser.getResult();
+        else
+            loadedFile = fileToOpen;
         
         XmlElement* xml = XmlDocument::parse(loadedFile);
         if (xml != nullptr && xml->hasTagName("SEQUENCE_DATA"))
@@ -1498,6 +1827,8 @@ void AppDocumentState::loadSequence (int currentlySeletedSeqNumber, Array<int> s
         delete xml;
         
         //update GUI
+        //SHOULD I CREATE A NEW GUIUPDATEFLAG VALUE THAT ONLY ALLOWS A MINIMUM AMOUNT OF
+        //THE GUI T0 BE UPDATED?
         notifyObs();
     }
 }
@@ -1508,7 +1839,7 @@ void AppDocumentState::loadSequence (int currentlySeletedSeqNumber, Array<int> s
 void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
 {
     //navigate to app directory
-    FileChooser saveFileChooser("Create a sequence set file to save...", 
+    FileChooser saveFileChooser(translate("Create a sequence set file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphaseqset");
     
@@ -1525,7 +1856,7 @@ void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
         //delete the file if it exists &write the new data
         if (savedFile.existsAsFile())
         {
-            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "This File Already Exists!", "Are you sure you want to overwrite this file?");
+            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("This File Already Exists!"), translate("Are you sure you want to overwrite this file?"));
         }
         
         if (overwrite == true)
@@ -1535,18 +1866,17 @@ void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
             
             XmlElement sequenceDataXml("SEQUENCE_DATA");
             
+            sequenceDataXml.setAttribute("sequencerNumberOfSequences", PAD_SETTINGS_pad->getSequencerNumberOfSequences());
+            
             //get all sequence data strings 
             for (int i = 0; i <= NO_OF_SEQS-1; i++)
             {
                 sequenceDataXml.setAttribute("sequenceData"+String(i), PAD_SETTINGS_pad->getSequencerDataString(i));
             }
             
-            String xmlDoc = sequenceDataXml.createDocument(String::empty, true);
+            String xmlDoc = sequenceDataXml.createDocument(String::empty);
             savedFile.appendText(xmlDoc);
             
-            std::cout << savedFile.getFullPathName() << std::endl;
-            
-            AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Sequence Set Saved", "The sequence set has been successfully saved to file");
         }
     }
 }
@@ -1555,20 +1885,29 @@ void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
 
 
 
-void AppDocumentState::loadSequenceSet(Array<int> selectedPads_)
+void AppDocumentState::loadSequenceSet(Array<int> selectedPads_,
+                                       bool openBrowser,
+                                       File fileToOpen)
 {
-    //i haven't updated this function yet to allow for old format seq strings to be correctly converted to the new format.
-    //it's not hard but will it be really needed? -  since i bet of the few ppl who currently use the software don't save
-    //and load individual seq's and seq sets
-    
     //navigate to app directory
-    FileChooser loadFileChooser("Select a .alphaseqset file to load...", 
+    FileChooser loadFileChooser(translate("Select a .alphaseqset file to load..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphaseqset");
     
-    if (loadFileChooser.browseForFileToOpen())
+    bool shouldLoad;
+    
+    if (openBrowser == true)
+        shouldLoad = loadFileChooser.browseForFileToOpen(); //open file browser
+    
+    if (shouldLoad || openBrowser == false)
     {
-        File loadedFile (loadFileChooser.getResult());
+        //File loadedFile (loadFileChooser.getResult());
+        File loadedFile;
+        
+        if (openBrowser == true)
+            loadedFile = loadFileChooser.getResult();
+        else
+            loadedFile = fileToOpen;
         
         XmlElement* xml = XmlDocument::parse(loadedFile);
         if (xml != nullptr && xml->hasTagName("SEQUENCE_DATA"))
@@ -1581,6 +1920,9 @@ void AppDocumentState::loadSequenceSet(Array<int> selectedPads_)
                 {
                     PAD_SETTINGS_pads->stringToSeqData(xml->getStringAttribute("sequenceData"+String(seqNumber)), seqNumber);
                 }
+                
+                if (xml->hasAttribute("sequencerNumberOfSequences"))
+                    PAD_SETTINGS_pads->setSequencerNumberOfSequences(xml->getIntAttribute("sequencerNumberOfSequences"));
             }
             
         }
@@ -1588,19 +1930,449 @@ void AppDocumentState::loadSequenceSet(Array<int> selectedPads_)
         delete xml;
         
         //update GUI
+        //SHOULD I CREATE A NEW GUIUPDATEFLAG VALUE THAT ONLY ALLOWS A MINIMUM AMOUNT OF
+        //THE GUI T0 BE UPDATED? 
         notifyObs();
         
     }
 }
 
 
-void AppDocumentState::removeUneededAudioFiles()
+
+
+
+
+void AppDocumentState::createMidiFile (int currentlySelectedSeqNumber, int currentlySelectedPad, int isSeqSet)
+{
+    //navigate to app directory
+    FileChooser saveFileChooser(translate("Create a .mid file to save..."), 
+                                StoredSettings::getInstance()->appProjectDir, 
+                                "*.mid");
+    
+    if (saveFileChooser.browseForFileToSave(false))
+    {
+        File savedFile (saveFileChooser.getResult()); //get file that the user has 'saved'
+        String stringFile = savedFile.getFullPathName(); //get the filepath name of the file as a string
+        stringFile = stringFile + ".mid"; //append an extension name to the filepath name
+        savedFile = stringFile; //set the file to this name
+        
+        bool overwrite = true; //by default true
+        
+        //delete the file if it exists &write the new data
+        if (savedFile.existsAsFile())
+        {
+            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("This File Already Exists!"), translate("Are you sure you want to overwrite this file?"));
+        }
+        
+        if (overwrite == true)
+        {
+            //on the sequencer grid, a quarter note is 4 columns.
+            //therefore, the setTicksPerQuarterNote value would be equal to the length of two sequence 'beats',
+            //so one beat would equal noOfTicks/4.
+            
+            int noOfTicks = 24;
+            Array <MidiMessage> midiMessage;
+            int noteLength;
+            int rowNoteNumber[NO_OF_ROWS];
+            
+            //set note number data and note length depending on mode
+            if (PAD_SETTINGS_pad->getSequencerMode() == 1) //midi mode
+            {
+                noteLength = PAD_SETTINGS_pad->getSequencerMidiNoteLength();
+                for (int i = 0; i < NO_OF_ROWS; i++)
+                    rowNoteNumber[i] = PAD_SETTINGS_pad->getSequencerMidiNote(i); 
+            }
+            else //samples mode
+            {
+                //default value
+                noteLength = 1;
+                //map GM drum mapping to rowNoteNumber array
+                rowNoteNumber[0] = 35;
+                rowNoteNumber[1] = 36;
+                rowNoteNumber[2] = 37;
+                rowNoteNumber[3] = 38;
+                rowNoteNumber[4] = 40;
+                rowNoteNumber[5] = 41;
+                rowNoteNumber[6] = 42;
+                rowNoteNumber[7] = 45;
+                rowNoteNumber[8] = 46;
+                rowNoteNumber[9] = 48;
+                rowNoteNumber[10] = 49;
+                rowNoteNumber[11] = 51;
+            }
+            
+            
+            if (isSeqSet == false)
+            {
+                //search through sequence data array of current sequence and create midi on/off messages
+                for (int row = 0; row <= NO_OF_ROWS-1; row++)
+                {
+                    if (rowNoteNumber[row] >= 0)
+                    {
+                        for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+                        {
+                            int noteData = PAD_SETTINGS_pad->getSequencerData(currentlySelectedSeqNumber, row, column);
+                            
+                            if (noteData > 0)
+                            {
+                                double noteStart = column * (noOfTicks/4);
+                                double noteEnd = noteStart + (noteLength * (noOfTicks/4));
+                                
+                                //create note on message
+                                //should it export with currently set midi channel?
+                                MidiMessage noteOnMessage(MidiMessage::noteOn(1, rowNoteNumber[row], (uint8)noteData));
+                                noteOnMessage.setTimeStamp(noteStart);
+                                midiMessage.add(noteOnMessage);
+                                
+                                //create note off message
+                                MidiMessage noteOffMessage(MidiMessage::noteOff(1, rowNoteNumber[row]));
+                                noteOffMessage.setTimeStamp(noteEnd);
+                                midiMessage.add(noteOffMessage);
+                            }
+                        }
+                    }
+                }
+            }
+            else if (isSeqSet == true)
+            {
+                int noOfSeqs = PAD_SETTINGS_pad->getSequencerNumberOfSequences();
+                
+                //search through sequence data array of current sequence and create midi on/off messages
+                for (int seq = 0; seq < noOfSeqs; seq++)
+                {
+                    for (int row = 0; row <= NO_OF_ROWS-1; row++)
+                    {
+                        if (rowNoteNumber[row] >= 0)
+                        {
+                            for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+                            {
+                                int noteData = PAD_SETTINGS_pad->getSequencerData(seq, row, column);
+                                
+                                if (noteData > 0)
+                                {
+                                    double noteStart = (column + (seq * 32)) * (noOfTicks/4); //why can't i use NO_OF_COLUMNS here? it creates weird maths problems and causes out of time notes
+                                    double noteEnd = noteStart + (noteLength * (noOfTicks/4));
+                                    
+                                    //create note on message
+                                    //should it export with currently set midi channel?
+                                    MidiMessage noteOnMessage(MidiMessage::noteOn(1, rowNoteNumber[row], (uint8)noteData));
+                                    noteOnMessage.setTimeStamp(noteStart);
+                                    midiMessage.add(noteOnMessage);
+                                    
+                                    //create note off message
+                                    MidiMessage noteOffMessage(MidiMessage::noteOff(1, rowNoteNumber[row]));
+                                    noteOffMessage.setTimeStamp(noteEnd);
+                                    midiMessage.add(noteOffMessage);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            
+            if (midiMessage.size() > 0)
+            {
+                //create midi sequence
+                MidiMessageSequence midiSequence;
+                for (int i = 0; i < midiMessage.size(); i++)
+                {
+                    midiSequence.addEvent(midiMessage[i]); //i think this where the freed pointer problem is being caused! Something to do with midiMessage going out of scope?
+                }
+                
+                //juce doc says you must call the below after adding note on events,
+                //however when I do this it will cut short any notes if a note of the
+                //same number is added before the previous note is finished, which
+                //ideally is not what we want.
+                //midiSequence.updateMatchedPairs();
+                
+                //create midi file and add data
+                MidiFile midiFile;
+                midiFile.addTrack(midiSequence);
+                midiFile.setTicksPerQuarterNote(noOfTicks);
+                
+                if (savedFile.exists())
+                    savedFile.deleteFile();
+                
+                FileOutputStream outputStream(savedFile);
+                midiFile.writeTo(outputStream);
+                
+            }
+            else
+            {
+                AlertWindow::showMessageBox(AlertWindow::InfoIcon, translate("MIDI file not created!"), translate("There is no sequence to create a MIDI file from."));
+            }
+            
+            
+        }
+        
+    }    
+}
+
+
+
+
+
+void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber, 
+                     Array<int> selectedPads_,
+                     int isSeqSet,
+                     bool shouldImportNoteData,                  
+                     bool openBrowser, 
+                     File fileToOpen)
+{
+    //current issues with importing midi files
+    // - If importing a big midi file as a single sequence it will determine which
+    //note numbers will be imported as well as those note numbers events using the entire
+    //midi sequence, even if most of it won't actually be imported. This could result in
+    //no events actually be imported as all the events within the first 32 columns could
+    //be deleted due to being out of the 'first 12 notes' range. Maybe the midi sequence should
+    //be cut to the right length first?
+    
+    
+    //navigate to app directory
+    FileChooser loadFileChooser(translate("Select a .mid file to import..."), 
+                                StoredSettings::getInstance()->appProjectDir, 
+                                "*.mid");
+    
+    bool shouldLoad;
+    
+    if (openBrowser == true)
+        shouldLoad = loadFileChooser.browseForFileToOpen(); //open file browser
+    
+    if (shouldLoad || openBrowser == false)
+    {
+        File loadedFile;
+        
+        if (openBrowser == true)
+            loadedFile = loadFileChooser.getResult();
+        else
+            loadedFile = fileToOpen;
+        
+        //read from file and put data into a MidiFile object
+        FileInputStream inputStream(loadedFile);
+        MidiFile midiFile;
+        midiFile.readFrom(inputStream);
+        
+        int noOfTicks = midiFile.getTimeFormat();
+        
+        if (noOfTicks >= 0) //time format = ticks per quarter note
+        {
+            int trackToImport = 0;
+            if (midiFile.getNumTracks() > 1)
+                trackToImport = 1;
+            
+            std::cout << "Midi file no of tracks: " << midiFile.getNumTracks() << std::endl;
+            
+            //pointer to midiFile content. Will get deleted when midiFile goes out of scope.
+            const MidiMessageSequence *midiSequence (midiFile.getTrack(trackToImport)); 
+            //as the MidiMessageSequence object above is a pointer to the midiFile content 
+            //and needs to be const, we must create a copy of this object to be used
+            //to delete all the non note-on events.
+            //the other way would be to do the following above: 
+            //MidiMessageSequence *newSequence = new MidiMessageSequence(*midiFile.getTrack(0));
+            //to create a deep copy that could be editted (as it won't be const) and then you would
+            //only need the one sequence object. But then you would need
+            //to manually delete the object and possible the eventHolder objects too.
+            MidiMessageSequence newSequence = *midiSequence;
+            
+            if (midiSequence != 0) //if it got a track from midiFile
+            {
+                int noOfEvents = midiSequence->getNumEvents();
+                std::cout << noOfEvents << std::endl;
+                
+                //pointers to midiSequence content. Will get deleted when midiFile goes out of scope.
+                MidiMessageSequence::MidiEventHolder *eventHolder[noOfEvents]; 
+                Array <int> noteNumbers;
+                Array <int> eventsToDelete;
+                
+                //Search through all events, flag any non-note-on events to be deleted,
+                //and add the note numbers of any note-on events to the noteNumbers array.
+                for (int i = 0; i < noOfEvents; i++)
+                {
+                    eventHolder[i] = midiSequence->getEventPointer(i); 
+                    
+                    if (eventHolder[i]->message.isNoteOn() == true)
+                    {
+                        noteNumbers.addIfNotAlreadyThere(eventHolder[i]->message.getNoteNumber());
+                    }
+                    else
+                    {
+                        //can't simply delete the event here as the indexes won't match between 
+                        //the MidiMessageSequence objects once an event has been removed
+                        eventsToDelete.add(i);
+                    }
+                }
+                
+                //delete flagged events
+                for (int i = eventsToDelete.size()-1; i >= 0; i--)
+                    newSequence.deleteEvent(eventsToDelete[i], false);
+                
+                //update noOfEvents
+                noOfEvents = newSequence.getNumEvents();
+                
+                //sort noteNumbers array then only keep the first twelve
+                DefaultElementComparator<int> sorter;
+                noteNumbers.sort (sorter);
+                for (int i = noteNumbers.size()-1; i > 11; i--)
+                    noteNumbers.remove(i);
+                
+                //Pointers to newSequence content. Will get deleted when midiFile goes out of scope.
+                MidiMessageSequence::MidiEventHolder *newEventHolder[noOfEvents]; 
+                eventsToDelete.clear();
+                
+                //Search through all events and flag any events that don't contain a note
+                //number within the noteNumbers array to be deleted
+                for (int i = 0; i < noOfEvents; i++)
+                {
+                    newEventHolder[i] = newSequence.getEventPointer(i);
+                    
+                    int eventNoteNumber = newEventHolder[i]->message.getNoteNumber();
+                    
+                    if (noteNumbers.contains(eventNoteNumber) == false)
+                    {
+                        //can't simply delete the event here as the indexes won't match between 
+                        //the MidiMessageSequence objects once an event has been removed
+                        eventsToDelete.add(i);
+                    }
+                }
+                
+                //delete flagged events
+                for (int i = eventsToDelete.size()-1; i >= 0; i--)
+                    newSequence.deleteEvent(eventsToDelete[i], false);
+                
+                //update noOfEvents
+                noOfEvents = newSequence.getNumEvents();
+                
+                //reset sequencer grid points
+                if (isSeqSet == false)
+                {
+                    for (int i = 0; i < selectedPads_.size(); i++)
+                    {
+                        int padNum = selectedPads_[i];
+                        for (int row = 0; row <= NO_OF_ROWS-1; row++)
+                        {
+                            for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+                                PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, row, column, 0, false);
+                        }
+                    }
+                }
+                else //seq set
+                {
+                    for (int i = 0; i < selectedPads_.size(); i++)
+                    {
+                        int padNum = selectedPads_[i];
+                        for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
+                        {
+                            for (int row = 0; row <= NO_OF_ROWS-1; row++)
+                            {
+                                for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+                                    PAD_SETTINGS_pads->setSequencerData(seq, row, column, 0, false);
+                            }
+                        }
+                    }
+                }
+                
+                //pointers to newSequence content. Will get deleted when midiFile goes out of scope.
+                MidiMessageSequence::MidiEventHolder *newEventHolder2[noOfEvents]; 
+                
+                //apply data from newSequence to sequencerData within PadSettings
+                //search through all the events, get the time stamp, noteNumber index, and velocity
+                //or each event, and apply it to the correct sequencerData index.
+                for (int i = 0; i < noOfEvents; i++)
+                {
+                    newEventHolder2[i] = newSequence.getEventPointer(i);
+                    //event message time stamp is used to work oout the column number
+                    const int noteColumn = roundToInt((newEventHolder2[i]->message.getTimeStamp())/(noOfTicks/4.0));
+                    //event message note number index in the noteNumber array is used to set the row number
+                    const int noteRow = noteNumbers.indexOf(newEventHolder2[i]->message.getNoteNumber());
+                    //event message velocity sets the value of the grid point
+                    const int noteValue = newEventHolder2[i]->message.getVelocity();
+                    
+                    for (int i = 0; i < selectedPads_.size(); i++)
+                    {
+                        int padNum = selectedPads_[i];
+                        
+                        int sequenceLength = PAD_SETTINGS_pads->getSequencerLength();
+                        int seqNumber = noteColumn/sequenceLength;
+                        PAD_SETTINGS_pads->setSequencerNumberOfSequences(seqNumber+1);
+                        
+                        
+                        //single sequence - apply events to just the currently selected sequence
+                        if (isSeqSet == false)
+                        {
+                            if (noteColumn < sequenceLength)
+                            {
+                                PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, noteRow, noteColumn, noteValue, false);
+                            }
+                            //else
+                            //{
+                            //    break;
+                            //}
+                        }
+                        //sequence set - apply to all sequences, splitting the midi sequence after 32 columns each time
+                        else if (isSeqSet == true)
+                        {
+                            if (noteColumn < (sequenceLength * 8)) //why can't I use NO_OF_SEQS? Equals a random number
+                            {
+                                
+                                int newNoteColumn = noteColumn - (sequenceLength * seqNumber);
+                                PAD_SETTINGS_pads->setSequencerData(seqNumber, noteRow, newNoteColumn, noteValue, false);
+                                
+                            }
+                            //else
+                            //{
+                            //    break;
+                            //}
+                        }
+                    }
+                }
+                
+                //convert new sequence data to strings
+                for (int i = 0; i < selectedPads_.size(); i++)
+                {
+                    int padNum = selectedPads_[i];
+                    PAD_SETTINGS_pads->seqDataToString();
+                }
+                
+                //if needed, apply the noteNumbers array to the pads midi note array
+                if (shouldImportNoteData == true)
+                {
+                    for (int i = 0; i < selectedPads_.size(); i++)
+                    {
+                        int padNum = selectedPads_[i];
+                        for(int index = 0; index < noteNumbers.size(); index++)
+                        {
+                            PAD_SETTINGS_pads->setSequencerMidiNote(noteNumbers[index], index);
+                        }
+                    }
+                }
+              
+                
+            }
+        }
+        else //time format = SMPTE
+        {
+            AlertWindow::showMessageBox(AlertWindow::InfoIcon, translate("Cannot Import MIDI File!"), translate("AlphaLive cannot import MIDI files that use the SMPTE time format."));
+        }
+    }
+}
+
+
+
+
+
+void AppDocumentState::removeUneededAudioFiles (bool closingApp)
 {
     
     if (currentProjectFile != File::nonexistent) //if there is currently an open project
     {
+        bool shouldCleanUp = true;
         
-        bool shouldCleanUp = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Clean Up Project", "This command will go through the current project's Audio Files directory and delete any files which aren't currently being used. Over time this will prevent an excessive build-up of redundant data. It was also reset any unused mode settings to default values. Please note that you can not undo this command!");
+        if (!closingApp)
+        {
+            shouldCleanUp = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("Clean Up Project"), translate("This command will go through the current projects Audio Files directory and delete any files which aren't currently being used. Over time this will prevent an excessive build-up of redundant data. It was also reset any unused mode settings to default values. Please note that you can not undo this command!"));
+        }
+        
         if (shouldCleanUp == true)
         {
             //this function must check all the settings of all the sceneData elements,
@@ -1613,7 +2385,8 @@ void AppDocumentState::removeUneededAudioFiles()
             //audio file as a reference to it wouldn't be found in any of the sceneData elements, so when the clean up is complete the audio file would 
             //now be missing.
             //instead of saving, you could load up the scene data for the current scene which would delete the current settings that havent been saved. What would be more natural?
-            saveToScene(currentlySelectedScene);
+            if (!closingApp)
+                saveToScene(currentlySelectedScene);
             
             File tempAudioDirectory = File::getCurrentWorkingDirectory().getParentDirectory().getFullPathName() + File::separatorString + "tempDir";
             tempAudioDirectory.createDirectory();
@@ -1742,32 +2515,37 @@ void AppDocumentState::removeUneededAudioFiles()
             //rename the temp dir (which should hold all the needed audio files) to 'Audio Files' so it can be used as the working dir when the project is next loaded up
             tempAudioDirectory.moveFileTo(audioFileDirectory);
             
-            //set the currentWorkingDirectory
-            audioFileDirectory.setAsCurrentWorkingDirectory();
-            
-            //=====================================================
-            //==============NEW - reset unused mode settings=======
-            //=====================================================
-            /*
-             Here, the settings of the modes that aren't being used for each pad are reset to their default values.
-             */
-            for (int i = 0; i <=47; i++)
+            if (!closingApp)
             {
-                PAD_SETTINGS->resetData(PAD_SETTINGS->getMode());
+                //set the currentWorkingDirectory
+                audioFileDirectory.setAsCurrentWorkingDirectory();
+                
+                //get number of included audio files (for use at close when auto cleaning project)
+                numOfFilesAtStart = File::getCurrentWorkingDirectory().getNumberOfChildFiles(2);
+                
+                // reset unused mode settings
+                
+                for (int i = 0; i <=47; i++)
+                {
+                    PAD_SETTINGS->resetData(PAD_SETTINGS->getMode());
+                }
+                
+                //automatically save the new settings
+                shouldDisplayAlertWindow = false; // << is this needed anymore?
+                saveProject();
+                
+                
+                AlertWindow::showMessageBox(AlertWindow::InfoIcon, translate("Project Cleaned Up!"), translate("All redundant files and settings have been deleted and reset."));
             }
-            //=====================================================
-            
-            //automatically save the new settings
-            shouldDisplayAlertWindow = false;
-            saveProject();
-            
-            AlertWindow::showMessageBox(AlertWindow::InfoIcon, "Project Cleaned Up!", "All redundant files and settings have been deleted and reset.");
         }
     }
     
     else
     {
-        AlertWindow::showMessageBox(AlertWindow::InfoIcon, "No project currently open!", "There is no project open to clean up.");
+        if (!closingApp)
+        {
+            AlertWindow::showMessageBox(AlertWindow::InfoIcon, translate("No project currently open!"), translate("There is no project open to clean up."));
+        }
     }
 }
 
@@ -1963,4 +2741,9 @@ int AppDocumentState::getSceneToUpdate()
 int AppDocumentState::getSceneStatus()
 {
     return sceneStatus;
+}
+
+int AppDocumentState::getNumOfFilesAtStart()
+{
+    return numOfFilesAtStart;
 }

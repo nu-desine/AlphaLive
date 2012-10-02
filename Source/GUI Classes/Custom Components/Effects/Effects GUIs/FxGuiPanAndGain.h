@@ -23,9 +23,8 @@
 #define H_FXGUIGAINANDPAN
 
 #include "../../../../../JuceLibraryCode/JuceHeader.h"
-#include "../../General/AlphaImageKnob.h"
 #include "../../General/AlphaRotarySlider.h"
-#include "../../General/AlphaTextButton.h"
+#include "../../General/ModeButton.h"
 
 class MainComponent;
 
@@ -55,8 +54,9 @@ private:
     AlphaRotarySlider *gainSlider, *panSlider;
     
     ComboBox *alphaTouchMenu;
-    AlphaTextButton *reverseButton;
+    ModeButton *reverseButton;
     AlphaRotarySlider *intensitySlider;
+    Label *parameterHoverLabel;
     
     Array<int> selectedPads;
     

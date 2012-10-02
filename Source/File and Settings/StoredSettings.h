@@ -48,12 +48,8 @@ public:
     int midiNoteDisplayType; // 1 - note number, 2 - note name
     int launchTask; // 1 - Open new project, 2 - open last project
     int killOnClockStop; // 0 - don't kill, 1 - kill
-    int language;
+    int cleanOnClose; //1 - don't clean, 2 - clean
     
-    File libraryDirectory;  //this variable isn't currently changeable or saveable,
-                            //but eventually it probably should be.
-
-
 private:
     ScopedPointer<PropertiesFile> props;
 

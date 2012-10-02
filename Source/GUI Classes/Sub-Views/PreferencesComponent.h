@@ -24,7 +24,7 @@
 #define H_PREFERENCESCOMPONENT
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
-#include "AlphaAudioSettingsComponent.h"
+#include "../Custom Components/General/AlphaAudioSettingsComponent.h"
 #include "../../Functionality Classes/AlphaLiveEngine.h"
 #include "../../File and Settings/StoredSettings.h"
 
@@ -73,15 +73,14 @@ private:
 #ifndef H_GENERALSETTINGSCOMPONENT
 #define H_GENERALSETTINGSCOMPONENT
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "AlphaLiveEngine.h"
+#include "../../../JuceLibraryCode/JuceHeader.h"
+#include "../../Functionality Classes/AlphaLiveEngine.h"
 
 class MainComponent;
 
 class GeneralSettingsComponent :    public Component,
                                     public ComboBox::Listener,
-                                    public Button::Listener,
-                                    public FilenameComponentListener
+                                    public Button::Listener
 {
 public:
     GeneralSettingsComponent(MainComponent &ref, AlphaLiveEngine &ref2);
@@ -92,7 +91,6 @@ public:
     
     void buttonClicked (Button* button);
     void comboBoxChanged (ComboBox *comboBox);
-    void filenameComponentChanged (FilenameComponent* filenameComponent);
     
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);
@@ -104,13 +102,11 @@ private:
     AlphaLiveEngine &alphaLiveEngineRef;
 
     
-    Label *directoryLabel, *midiNoteDisplayTypeLabel, *launchTaskLabel, *languageLabel;
-    Label *killOnClockStopLabel;
-    ComboBox *midiNoteDisplayTypeMenu, *launchTaskMenu, *languageMenu;
-    TextButton *killOnClockStopButton;
-    FilenameComponent *appProjectDirChooser;
-    
-    
+    Label *directoryLabel, *midiNoteDisplayTypeLabel, *launchTaskLabel;
+    Label *killOnClockStopLabel, *cleanOnCloseLabel;
+    ComboBox *midiNoteDisplayTypeMenu, *launchTaskMenu, *appProjectDirChooser;
+    TextButton *killOnClockStopButton, *cleanOnCloseButton;
+
 };
 
 #endif //H_GENERALSETTINGSCOMPONENT

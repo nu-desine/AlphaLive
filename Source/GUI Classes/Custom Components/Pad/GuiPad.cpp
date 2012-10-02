@@ -21,7 +21,6 @@
  */
 
 #include "GuiPad.h"
-#include "../../Binary Data/PadBinaryData.h"
 #include "GuiPadLayout.h"
 #include "../../../File and Settings/AppSettings.h"
 #include "../../AlphaLiveLookandFeel.h"
@@ -164,9 +163,6 @@ void GuiPad::paint (Graphics& g)
     g.drawFittedText(padName, (getWidth()*0.1), 0, (getWidth()*0.8), getHeight(), Justification::centred, 1);
     
     //mode ring
-	
-	
-	
 	//g.setColour(modeColour);
     //	g.drawEllipse(getWidth()*0.03, getHeight()*0.03, getWidth()*0.94, getHeight()*0.94, 2.0f);
 	
@@ -425,10 +421,9 @@ void GuiPad::filesDropped (const StringArray& files, int /*x*/, int /*y*/)
     //file of filepath
     File droppedFile (message);
     
-    //std::cout << droppedFile.getFullPathName() << std::endl;
-    
     //'put' audiofile into pad
     PAD_SETTINGS->setSamplerAudioFilePath(droppedFile);
+    guiPadLayoutRef.getMainComponent().getGuiSamplerMode()->setAudioFileDisplay(droppedFile);
     
 	somethingIsBeingDraggedOver = false;
 	repaint();
@@ -451,8 +446,8 @@ void GuiPad::mouseDown (const MouseEvent &e)
     if (e.mods.isPopupMenu() == true)
     {
         PopupMenu menu;
-        menu.addItem(1, "Copy pad settings...");
-        menu.addItem(2, "Paste pad settings...");
+        menu.addItem(1, translate("Copy pad settings..."));
+        menu.addItem(2, translate("Paste pad settings..."));
         
         const int result = menu.show();
         

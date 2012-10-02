@@ -68,7 +68,7 @@ public:
     //==============================================================================
     bool mightContainSubItems()                 { return isDirectory; }
     String getUniqueName() const                { return file.getFullPathName(); }
-    int getItemHeight() const                   { return 22; }
+    int getItemHeight() const                   { return 16; }
 
     var getDragSourceDescription()              { return owner.getDragAndDropDescription(); }
 

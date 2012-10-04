@@ -44,14 +44,14 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
 	
 	addAndMakeVisible(toneSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	toneSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    toneSlider->setRange(0, 1.0);
+    toneSlider->setRange(0., 1.0);
     toneSlider->setValue(1.0, false);
     toneSlider->addListener(this);
     toneSlider->addMouseListener(this, true);
 	
 	addAndMakeVisible(driveSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
 	driveSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    driveSlider->setRange(0, 1.0);
+    driveSlider->setRange(0., 1.0);
     driveSlider->setValue(1.0, false);
     driveSlider->addListener(this);
     driveSlider->addMouseListener(this, true);
@@ -81,6 +81,8 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
     distortionTypeMenu->addItem("HF1", 4);
     distortionTypeMenu->addItem("HF2", 5);
     distortionTypeMenu->addItem("Digital", 6);
+//	distortionTypeMenu->addItem("Recitify", 7);
+//  distortionTypeMenu->addItem("AddSine", 8);
     distortionTypeMenu->setSelectedId(1, true);
     
     addAndMakeVisible(syncButton = new AlphaTextButton(translate("SYNC")));

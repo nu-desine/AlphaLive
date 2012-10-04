@@ -58,7 +58,7 @@ private:
     
     ComboBox *alphaTouchMenu, *distortionTypeMenu;
 	ModeButton *reverseButton;
-    AlphaTextButton *syncButton;
+    AlphaTextButton *syncButton, *toneSwitchButton;
     AlphaRotarySlider *intensitySlider;
     Label *parameterHoverLabel;
     

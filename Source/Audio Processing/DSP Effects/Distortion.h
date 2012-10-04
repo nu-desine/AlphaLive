@@ -67,7 +67,6 @@ public:
     void setDrive (double value);
     void setMix (double value);
 	void setTone (double value);
-	void setHighFrequencyContent(double value);
 	
 	void setDistortionTypeMenu(int value);
     
@@ -83,11 +82,9 @@ private:
     
     //The filters
     Dsp::Filter *preFilter1;
-	Dsp::Filter *preFilter2;
     Dsp::Filter *postFilter1;
 	Dsp::Filter *postFilter2;
     Dsp::Params paramsPreFilter1;
-	Dsp::Params paramsPreFilter2;
     Dsp::Params paramsPostFilter1;
     Dsp::Params paramsPostFilter2;
 	
@@ -102,14 +99,14 @@ private:
 	double preFilter1Cutoff, preFilter2Cutoff; 
 	double postFilter1Cutoff, postFilter1Bandwidth, postFilter2Cutoff, postFilter2Bandwidth;
 	
-	float *pIn[2], *leftChannel, *rightChannel;
-	
-	float paramsPreFilter[3], paramsPostFilter[3];
+	float *pIn[2], *leftChannel, *rightChannel, dl, dr;
     
     int alphaTouchParam;
     double alphaTouchIntensity;
     bool alphaTouchReverse;
 	int comboBoxID;
+	
+	bool filterBypass;
 	
 	CriticalSection sharedMemory;
     

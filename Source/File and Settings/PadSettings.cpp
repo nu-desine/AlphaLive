@@ -212,9 +212,9 @@ PadSettings::PadSettings(int arrayIndex)
 	padFxDistortionAtIntensity = 1.0;
 	//Bitcrusher
 	padFxBitcrusherInputGain = 0.8;
-	padFxBitcrusherDownsample = 4.;
+	padFxBitcrusherDownsample = 16.;
 	padFxBitcrusherCrush = 8;
-	padFxBitcrusherSmoothing = 1.;
+	padFxBitcrusherSmoothing = 0.9;
 	padFxBitcrusherWetDryMix = 0.7;
 	padFxBitcrusherAlphaTouch = 2;
 	padFxBitcrusherAtReverse = 0;
@@ -2178,6 +2178,11 @@ void PadSettings::setPadFxDistortionAtIntensity (double value)
 void PadSettings::setPadFxDistortionTypeMenu (int value)
 {
     padFxDistortionType = value;
+	
+    if (mode == 2)
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->getDistortion().setDistortionTypeMenu(value);
+    else if (mode == 3)
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getDistortion().setDistortionTypeMenu(value);
 }
 
 double PadSettings::getPadFxDistortionInputGain()

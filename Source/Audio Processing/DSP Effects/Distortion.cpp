@@ -38,24 +38,14 @@ Distortion::Distortion(int padNumber_, float sampleRate_)
     // Q/Bandwidth 
     paramsPreFilter1[2] = 2.0;
 	
-	//===Pre-Filter2===
-    //filter
-    preFilter2 = new Dsp::SmoothedFilterDesign <Dsp::RBJ::Design::LowPass, 2> (1024);
-    // sample rate
-    paramsPreFilter2[0] = sampleRate_;
-    // cutoff frequency
-    paramsPreFilter2[1] = 600.0;
-    // Q/Bandwidth 
-    paramsPreFilter2[2] = 2.0;
-	
     //===Post-Filter===
     //filter
     postFilter1 = new Dsp::SmoothedFilterDesign <Dsp::RBJ::Design::BandPass2, 2> (1024);
     // sample rate
     paramsPostFilter1[0] = sampleRate_;
     // centre frequency
-    paramsPostFilter1[1] = 1000.0;
-    // Q/Bandwidth (static)
+    paramsPostFilter1[1] = (PAD_SETTINGS->getPadFxDistortionTone() * 9000.) + 1.;
+    // Q/Bandwidth
     paramsPostFilter1[2] = 1.0;
     
 	//===Post-Filter===
@@ -64,33 +54,32 @@ Distortion::Distortion(int padNumber_, float sampleRate_)
     // sample rate
     paramsPostFilter2[0] = sampleRate_;
     // centre frequency
-    paramsPostFilter2[1] = 1000.0;
-    // Q/Bandwidth (static)
+    paramsPostFilter2[1] = (PAD_SETTINGS->getPadFxDistortionTone() * 10500.) + 1.;
+    // Q/Bandwidth
     paramsPostFilter2[2] = 1.0;
+	
+	filterBypass = false;
    
+	comboBoxID = PAD_SETTINGS->getPadFxDistortionTypeMenu();
+	
 	//input gain
     inputGain = inputGainPrev = inputGainControl = PAD_SETTINGS->getPadFxDistortionInputGain();
 	
 	//drive value
-	drive = (PAD_SETTINGS->getPadFxDistortionDrive() + 1) * 16;
+	drive = (PAD_SETTINGS->getPadFxDistortionDrive() + 0.1) * 60;
 	
     //wet/dry mix ratio
     wetDryMixPrev = wetDryMix = wetDryMixControl = PAD_SETTINGS->getPadFxDistortionWetDryMix();
-    
-	postFilter1Cutoff = PAD_SETTINGS->getPadFxDistortionTone();
-	postFilter2Cutoff = PAD_SETTINGS->getPadFxDistortionTone();
 	
     alphaTouchParam = PAD_SETTINGS->getPadFxDistortionAlphaTouch();
     alphaTouchReverse = PAD_SETTINGS->getPadFxDistortionAtReverse();
     alphaTouchIntensity = PAD_SETTINGS->getPadFxDistortionAtIntensity();
-	
-	comboBoxID = PAD_SETTINGS->getPadFxDistortionTypeMenu();
+
 }
 
 Distortion::~Distortion()
 {
 	delete preFilter1;
-	delete preFilter2;
     delete postFilter1;
 	delete postFilter2;
 }
@@ -206,9 +195,56 @@ void Distortion::processAudio (const AudioSourceChannelInfo& bufferToFill)
 			*leftChannel = fast_clamp_mul2(*leftChannel , -.5f, .5f);
 			*rightChannel = fast_clamp_mul2( *rightChannel , -.5f, .5f);
 		}
+		/*
+		//ADDSINE
+		if (comboBoxID == 7) 
+		{
+			float amp = drive /16.f;
+			
+			float x;
+			float y;
+			int &i = *(int*)&x;
+			int &j = *(int*)&y;
+			
+			// weird bit-reducer...
+#define BITS2KEEP 18
+			
+			x = *leftChannel; // x should be is in range [-8..8)
+			x += 8 + 4.f; // will make range [8..16) hopefully that's enough headroom
+			i &= ((1<<BITS2KEEP)-1); // keep 18bits
+			i <<= (23-BITS2KEEP); // make mantissa
+			i |= 0x40000000; // make [2..4)
+			x -= 3.f; // make [-1..1)
+			x = fabsf(x)*x - x;
+			
+			*leftChannel = (*leftChannel + x * amp);
+			
+			y = *rightChannel; // x should be is in range [-8..8)
+			y += 8 + 4.f; // will make range [8..16) hopefully that's enough headroom
+			j &= ((1<<BITS2KEEP)-1); // keep 18bits
+			j <<= (23-BITS2KEEP); // make mantissa
+			j |= 0x40000000; // make [2..4)
+			y -= 3.f; // make [-1..1)
+			y = fabsf(y)*y - y;
+			
+			*rightChannel = (*rightChannel + y * amp);
+		}
 		
-		*leftChannel *= 1.5;
-		*rightChannel *= 1.5;
+		//RECTIFY
+		if (comboBoxID == 8) 
+		{
+			// needs highpass to remove dc...
+			*leftChannel = fabsf(*leftChannel * drive );
+			*rightChannel = fabsf(*rightChannel * drive );
+			dl += (*leftChannel - dl) * .001f;
+			dr += (*rightChannel - dr) * .001f;
+			*leftChannel = *leftChannel - dl;
+			*rightChannel = *rightChannel - dr;
+		}
+		 */
+		
+		*leftChannel *= 0.8;
+		*rightChannel *= 0.8;
 		
 		//move to next pair of samples
 		leftChannel++;
@@ -219,15 +255,17 @@ void Distortion::processAudio (const AudioSourceChannelInfo& bufferToFill)
 	wetBufferSplit.copyFrom(0, 0, wetBuffer, 0, 0, wetBuffer.getNumSamples());
 	wetBufferSplit.copyFrom(1, 0, wetBuffer, 1, 0, wetBuffer.getNumSamples());
 	
-	sharedMemory.enter();
-    //===apply post-filter1===
-    postFilter1->setParams(paramsPostFilter1);
-    postFilter1->process(wetBuffer.getNumSamples(), wetBuffer.getArrayOfChannels());
-	
-	//===apply post-filter1===
-    postFilter2->setParams(paramsPostFilter2);
-    postFilter2->process(wetBufferSplit.getNumSamples(), wetBufferSplit.getArrayOfChannels());
-    sharedMemory.exit();
+	if (filterBypass == false) {
+		sharedMemory.enter();
+		//===apply post-filter1===
+		postFilter1->setParams(paramsPostFilter1);
+		postFilter1->process(wetBuffer.getNumSamples(), wetBuffer.getArrayOfChannels());
+		
+		//===apply post-filter2===
+		postFilter2->setParams(paramsPostFilter2);
+		postFilter2->process(wetBufferSplit.getNumSamples(), wetBufferSplit.getArrayOfChannels());
+		sharedMemory.exit();
+	}
 	
 	//mixes the seperate filtered signals
 	wetBuffer.addFrom(0, 0, wetBufferSplit, 0, 0, wetBufferSplit.getNumSamples());
@@ -313,47 +351,44 @@ void Distortion::processAlphaTouch (int pressureValue)
 
 void Distortion::setInputGain (double value)
 {
+	sharedMemory.enter();
 	value = value*value*value;
-	
-    sharedMemory.enter();
+
     inputGain = inputGainControl = value;
     sharedMemory.exit();
-	
-	std::cout << "Inputgain " << value << std::endl;
 }
 
 void Distortion::setDrive(double value)
 {
 	sharedMemory.enter();
     drive = driveControlValue = value;
-	drive = 1.f + (22.f * drive);
+	drive = (drive + 0.1) * 60;
     sharedMemory.exit();
 }
 
 void Distortion::setMix (double value)
 {
+	sharedMemory.enter();
 	value = value*value*value;
 	
-    sharedMemory.enter();
     wetDryMix = wetDryMixPrev = wetDryMixControl = value;
     sharedMemory.exit();
 }
 
 void Distortion::setTone (double value)
 {
+	sharedMemory.enter();
 	value = value*value*value;
 	
-    sharedMemory.enter();
-	paramsPostFilter1[1] = value * 10000 + 50;
-	paramsPostFilter2[2] = value * 10000 + 250;
-    sharedMemory.exit();
-}
+	paramsPostFilter1[1] = (value * 9000.) + 1.;
+	paramsPostFilter2[1] = (value * 10500.) + 1.;
 
-void Distortion::setHighFrequencyContent(double value)
-{
-	value = value*value*value;
-	sharedMemory.enter();
-	paramsPostFilter2[1] = value * 5000 + 1;
+	if (value == 0){
+		filterBypass = true;
+	}
+	else {
+		filterBypass = false;
+	}
 	sharedMemory.exit();
 }
 
@@ -362,8 +397,6 @@ void Distortion::setDistortionTypeMenu(int value)
 	sharedMemory.enter();
 	comboBoxID = value;
 	sharedMemory.exit();
-	
-	std::cout << "Distortiontype " << value << std::endl;
 }
 
 void Distortion::setAlphaTouchParam (int value)
@@ -390,6 +423,6 @@ void Distortion::setAlphaTouchReverse (int value)
 void Distortion::setSampleRate(float value)
 {
     sharedMemory.enter();
-    paramsPreFilter[0] = paramsPostFilter[0] = value;
+    paramsPreFilter1[0] = paramsPostFilter1[0] = paramsPostFilter2[0] = value;
     sharedMemory.exit();
 }

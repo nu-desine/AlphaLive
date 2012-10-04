@@ -42,7 +42,9 @@ Bitcrusher::Bitcrusher(int padNumber_, float sampleRate_)
     inputGain = inputGainPrev = inputGainControl = PAD_SETTINGS->getPadFxBitcrusherInputGain();
 	
 	//crush value
-	crush = (PAD_SETTINGS->getPadFxBitcrusherCrush() + 1) * 16;
+	crush = PAD_SETTINGS->getPadFxBitcrusherCrush();
+	
+	downsample = PAD_SETTINGS->getPadFxBitcrusherDownsample();
 	
     //wet/dry mix ratio
     wetDryMixPrev = wetDryMix = wetDryMixControl = PAD_SETTINGS->getPadFxBitcrusherWetDryMix();

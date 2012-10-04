@@ -51,14 +51,14 @@ GuiBitcrusher::GuiBitcrusher(MainComponent &ref)
 	
 	addAndMakeVisible(crushSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	crushSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    crushSlider->setRange(1, 8, 1);
+    crushSlider->setRange(1, 8, 1.);
     crushSlider->setValue(1.0, false);
     crushSlider->addListener(this);
     crushSlider->addMouseListener(this, true);
 	
 	addAndMakeVisible(downsampleSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
 	downsampleSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    downsampleSlider->setRange(1, 16, 1);
+    downsampleSlider->setRange(1., 16., 1.);
     downsampleSlider->setValue(1.0, false);
     downsampleSlider->addListener(this);
     downsampleSlider->addMouseListener(this, true);

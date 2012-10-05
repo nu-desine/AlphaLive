@@ -422,12 +422,28 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	previousSequenceButton->addMouseListener(this, true);
     
     //record button
-    addAndMakeVisible(recordButton = new TextButton());
-    recordButton->setButtonText("R");
+	
+	DrawablePath rnormal, rdown;
+	
+	Path r;
+	r.addEllipse(0, 0, 2, 2);
+	rnormal.setPath (r);
+	rnormal.setFill (Colours::white);
+	
+	r.clear();
+	r.addEllipse(0, 0, 2, 2);
+	rdown.setPath (r);
+	rdown.setFill (Colours::white);
+	r.clear();
+	
+	
+	recordButton = new DrawableButton ("record", DrawableButton::ImageOnButtonBackground);
+	recordButton->setImages (&rnormal, &rnormal, &rnormal, 0, &rdown, &rdown, &rdown, 0);
     recordButton->setClickingTogglesState(true);	
 	recordButton->addListener(this);
 	recordButton->addMouseListener(this, true);
     recordButton->setColour(TextButton::buttonOnColourId, Colours::red);
+	addAndMakeVisible (recordButton);
     
     //attach this class to the subject class
     modeSequencerRef.attach(this);
@@ -525,7 +541,7 @@ void GuiSequencerMode::resized()
 	audioRowButtons[11]->setBounds(890,590,21, 21);
 	
 	quantiseButton->setBounds(681, 288, 32, 32);
-    recordButton->setBounds(715, 275, 20, 20);
+    recordButton->setBounds(914, 241, 20, 20);
 	modeMidiButton->setBounds(952, 263, 32, 32);
 	modeSamplesButton->setBounds(980, 293, 32, 32);
 	
@@ -577,6 +593,7 @@ void GuiSequencerMode::paint (Graphics& g)
 	g.fillEllipse(678,285, 38, 38);
 	g.fillEllipse(949,260, 38, 38);
 	g.fillEllipse(977,290, 38, 38);
+	g.fillEllipse(910, 237, 28, 28);
 	
 	
 	if(triggerSettingsButton->getToggleStateValue()==true)
@@ -630,6 +647,7 @@ void GuiSequencerMode::paint (Graphics& g)
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(949,260, 38, 38, 1.0);
 	g.drawEllipse(977,290, 38, 38, 1.0);
+	g.drawEllipse(910, 237, 28, 28, 1.0);
 	
 	if(triggerSettingsButton->getToggleStateValue()==true)
 	{
@@ -667,6 +685,7 @@ void GuiSequencerMode::paint (Graphics& g)
 	g.drawEllipse(719,559, 27, 27, 1.0);
 	g.drawEllipse(744,574, 27, 27, 1.0);
 	g.drawEllipse(771,586, 27, 27, 1.0);
+	
 	
 	g.drawEllipse(800,593, 27, 27, 1.0);
 	g.drawEllipse(829,596, 27, 27, 1.0);

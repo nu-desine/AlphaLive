@@ -280,15 +280,11 @@
 							<array>
 								<array>
 									<integer>77</integer>
-									<integer>69</integer>
-									<integer>16</integer>
-									<integer>2</integer>
-									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 956}, {413, 547}}</string>
+							<string>{{0, 0}, {413, 547}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -335,7 +331,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>B91AE73015E6A1AC008DE541</string>
+										<string>B986B8D8161B12C200A17EF5</string>
 										<key>history</key>
 										<array>
 											<string>B9C61BAE15DD4F0C00FE7B43</string>
@@ -397,7 +393,7 @@
 											<string>B91AE72C15E6A1AC008DE541</string>
 											<string>B91AE72D15E6A1AC008DE541</string>
 											<string>B91AE72E15E6A1AC008DE541</string>
-											<string>B91AE72F15E6A1AC008DE541</string>
+											<string>B91AE73015E6A1AC008DE541</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -455,9 +451,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>B91AE73115E6A1AC008DE541</string>
+				<string>B986B8D9161B12C200A17EF5</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>B91AE73215E6A1AC008DE541</string>
+				<string>B986B8DA161B12C200A17EF5</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -595,11 +591,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D57069F1CE1000CFCEE</string>
-		<string>B91AE73315E6A1AC008DE541</string>
-		<string>B91AE73415E6A1AC008DE541</string>
-		<string>1C78EAAD065D492600B07095</string>
-		<string>1CD10A99069EF8BA00B06720</string>
 		<string>B9D3AB0D15DC0E940015E86C</string>
 		<string>/Users/samdavies/Documents/AlphaSphere/Software/Juce/AlphaLive/Builds/MacOSX/AlphaLive.xcodeproj</string>
 	</array>
@@ -681,7 +672,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>B9D3AB0D15DC0E940015E86C</string>
-				<string>B91AE6B615E68683008DE541</string>
+				<string>B986B8DB161B12C200A17EF5</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

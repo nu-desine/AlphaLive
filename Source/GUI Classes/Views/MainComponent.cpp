@@ -321,7 +321,7 @@ void MainComponent::resized()
     
     globalClock->setBounds(479, 0, 266, 144);
     
-    infoTextBox->setBounds(0, getHeight()-30, getWidth(), 30);
+    infoTextBox->setBounds(0, getHeight()-45, getWidth(), 45);
     
     pivotX = guiPadLayout->getX() + (guiPadLayout->getWidth() * 0.5);
 	pivotY = guiPadLayout->getY() + (guiPadLayout->getHeight() * 0.5);

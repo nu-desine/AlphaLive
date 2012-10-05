@@ -120,14 +120,13 @@ private:
     SettingsButton *plusButton, *minusButton;
     GuiSwitch *pressureStatusButton;
     AlphaPopUpButton *popUpButton;
-    DrawableButton *previewButton;
+    DrawableButton *previewButton, *recordButton;
 
     AlphaRotarySlider *numberOfSequencesSlider, *midiPressureMinRangeSlider, *midiPressureMaxRangeSlider, *relativeTempoSlider, *noteLengthSlider, *audioGainSlider, *audioPanSlider, *audioAttackSlider;
     AlphaSlider *ccControllerSlider;
     
     Label *parameterLabel, *currentParameterLabel, *parameterHoverLabel;
     
-    TextButton *recordButton;
      
 };
 

@@ -141,10 +141,22 @@ void GuiFlanger::resized()
     intensitySlider->setBounds(57, 57, 210, 210);
     
     rateMenu->setBounds(119, 22, 87, 20);
-    syncButton->setBounds(130, 235, 32, 32);
+    syncButton->setBounds(121, 235, 32, 32);
+    
+    
 }
 
-
+void GuiFlanger::paint (Graphics& g)
+{
+	
+	g.setColour(Colours::black);
+	g.fillEllipse(118, 232, 38, 38);
+	
+	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.drawEllipse(118, 232, 38, 38, 1.0f);
+	
+	
+}
 
 void GuiFlanger::sliderValueChanged (Slider *slider)
 {

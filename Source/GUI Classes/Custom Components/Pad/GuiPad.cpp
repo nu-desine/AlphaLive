@@ -84,7 +84,7 @@ GuiPad::GuiPad(int padNum, GuiPadLayout &ref)
     //the following alpha values are for a gradient ring colour
     //change to 0.5f for solid colours
 	samplerColour = Colours::orange.withAlpha(0.2f);
-	midiColour = Colours::yellow.withAlpha(0.2f);
+	midiColour = Colours::green.withAlpha(0.2f);
 	sequencerColour = Colours::red.withAlpha(0.2f);
 	controllerColour = Colours::purple.withAlpha(0.2f);
 	
@@ -191,21 +191,21 @@ void GuiPad::paint (Graphics& g)
     if (playingStatus == 1) //playing
     {
         //visually signify that the pad is playing
-        g.setColour(Colours::red.withAlpha(0.7f));
+        g.setColour(Colours::red.withAlpha(0.2f));
         //g.fillEllipse((getWidth()*0.08), (getHeight()*0.08), (getWidth()*0.84), (getHeight()*0.84));
-        g.drawEllipse(getWidth()*0.25, getHeight()*0.25, getWidth()*0.51, getHeight()*0.51, getWidth()/8);
+        g.drawEllipse((getWidth()*0.12), (getHeight()*0.12), (getWidth()*0.76), (getHeight()*0.76), getWidth()/8);
     }
     else if (playingStatus == 2) //waiting to play
     {
         //visually signify that the pad is waiting to play
-        g.setColour(Colours::yellow.withAlpha(0.7f));
-        g.drawEllipse(getWidth()*0.25, getHeight()*0.25, getWidth()*0.51, getHeight()*0.51, getWidth()/8);
+        g.setColour(Colours::yellow.withAlpha(0.2f));
+        g.drawEllipse((getWidth()*0.12), (getHeight()*0.12), (getWidth()*0.76), (getHeight()*0.76), getWidth()/8);
     }
     else if (playingStatus == 3) //waiting to stop
     {
         //visually signify that the pad is waiting to stop
-        g.setColour(Colours::brown.withAlpha(0.7f));
-        g.drawEllipse(getWidth()*0.25, getHeight()*0.25, getWidth()*0.51, getHeight()*0.51, getWidth()/8);
+        g.setColour(Colours::red.withAlpha(0.1f));
+        g.drawEllipse((getWidth()*0.12), (getHeight()*0.12), (getWidth()*0.76), (getHeight()*0.76), getWidth()/8);
     }
 
 

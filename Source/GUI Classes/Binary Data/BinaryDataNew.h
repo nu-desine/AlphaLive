@@ -137,11 +137,23 @@ namespace BinaryDataNew
     extern const char*  savesymbol_png;
     const int           savesymbol_pngSize = 4577;
 
+    extern const char*  sawfallingsymbol_png;
+    const int           sawfallingsymbol_pngSize = 4830;
+
+    extern const char*  sawrisingsymbol_png;
+    const int           sawrisingsymbol_pngSize = 4882;
+
     extern const char*  sequenceicon_png;
     const int           sequenceicon_pngSize = 7192;
 
     extern const char*  sequencersymbol_png;
     const int           sequencersymbol_pngSize = 4458;
+
+    extern const char*  sinesymbol_png;
+    const int           sinesymbol_pngSize = 5563;
+
+    extern const char*  squaresymbol_png;
+    const int           squaresymbol_pngSize = 3397;
 
     extern const char*  standardicon_png;
     const int           standardicon_pngSize = 5287;
@@ -163,6 +175,9 @@ namespace BinaryDataNew
 
     extern const char*  tremoloicon_png;
     const int           tremoloicon_pngSize = 5559;
+
+    extern const char*  trianglesymbol_png;
+    const int           trianglesymbol_pngSize = 5561;
 
     extern const char*  triggericon_png;
     const int           triggericon_pngSize = 7101;

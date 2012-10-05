@@ -29,6 +29,7 @@
 #include "../../../../../JuceLibraryCode/JuceHeader.h"
 #include "../../General/AlphaRotarySlider.h"
 #include "../../General/AlphaTextButton.h"
+#include "../../General/AlphaPopUpButton.h"
 #include "../../General/ModeButton.h"
 
 class MainComponent;
@@ -61,7 +62,8 @@ private:
     
     AlphaRotarySlider *wetMixSlider, *feedbackSlider, *delayTimeSlider, *lpfFrequencySlider, *hpfFrequencySlider;
     
-    ComboBox *alphaTouchMenu, *delayTimeMenu;
+    ComboBox *alphaTouchMenu;
+	AlphaPopUpButton *delayTimeMenu;
     ModeButton *reverseButton;
 	AlphaTextButton *syncButton;
     AlphaRotarySlider *intensitySlider;

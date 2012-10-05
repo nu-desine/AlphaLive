@@ -71,15 +71,16 @@ GuiDelay::GuiDelay(MainComponent &ref)
     
 
     
-    addAndMakeVisible(delayTimeMenu = new ComboBox());
+    addAndMakeVisible(delayTimeMenu = new AlphaPopUpButton());
     delayTimeMenu->addListener(this);
     delayTimeMenu->addMouseListener(this, true);
-    delayTimeMenu->addItem(translate("4 Beats"), 1);
+	delayTimeMenu->setButtonText("1/2");
+   /* delayTimeMenu->addItem(translate("4 Beats"), 1);
     delayTimeMenu->addItem(translate("2 Beats"), 2);
     delayTimeMenu->addItem(translate("1 Beat"), 3);
     delayTimeMenu->addItem(translate("Half Beat"), 4);
     delayTimeMenu->addItem(translate("Quarter Beat"), 5);
-    delayTimeMenu->setSelectedId(4, true);
+    delayTimeMenu->setSelectedId(4, true);*/
     
     addAndMakeVisible(syncButton = new AlphaTextButton(translate("SYNC")));
     syncButton->setClickingTogglesState(true);
@@ -145,7 +146,7 @@ void GuiDelay::resized()
     parameterHoverLabel->setBounds(144, 187, 36, 15);
     intensitySlider->setBounds(47, 47, 230, 230);
     
-    delayTimeMenu->setBounds(119, 22, 87, 20);
+    delayTimeMenu->setBounds(71, 202, 48, 48);
     syncButton->setBounds(121, 235, 32, 32);
     
     
@@ -247,45 +248,6 @@ void GuiDelay::comboBoxChanged (ComboBox *comboBox)
         
     }
     
-    else if (comboBox == delayTimeMenu)
-    {
-        //work out delay time (NOT sample number needed) based on beat length selected and the tempo.
-        float delayTime;
-        tempo = AppSettings::Instance()->getGlobalTempo();
-        
-        switch (delayTimeMenu->getSelectedId())
-        {
-            case 1: // 4 beats
-                delayTime = 240000.0/tempo;
-                break;
-            case 2: // 2 beats
-                delayTime = 120000.0/tempo;
-                break;
-            case 3: // 1 beat
-                delayTime = 60000.0/tempo;
-                break;
-            case 4: //half beat
-                delayTime = 30000.0/tempo;
-                break;
-            case 5: // quarter beat
-                delayTime = 15000.0/tempo;
-                break;
-            default: // 1 beat
-                delayTime = 60000.0/tempo;
-                break;
-        }
-        
-        delayTimeSlider->setValue(delayTime, false);
-        
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setPadFxDelayTime(delayTime);
-            PAD_SETTINGS->setPadFxDelayTimeMenu(delayTimeMenu->getSelectedId());
-        }
-        
-    }
-    
 }
 
 
@@ -318,6 +280,61 @@ void GuiDelay::buttonClicked (Button *button)
             
         
     }
+	else if (button == delayTimeMenu)
+    {
+		
+		PopupMenu menu;
+		menu.addItem(1, translate("4 Beats"));
+		menu.addItem(2, translate("2 Beats"));
+		menu.addItem(3, translate("1 Beat"));
+		menu.addItem(4, translate("Half Beat"));
+		menu.addItem(5, translate("Quarter Beat"));
+		
+        //work out delay time (NOT sample number needed) based on beat length selected and the tempo.
+        float delayTime;
+        tempo = AppSettings::Instance()->getGlobalTempo();
+		
+		const int result = menu.show();
+        
+        switch (result)
+        {
+            case 1: // 4 beats
+                delayTime = 240000.0/tempo;
+				delayTimeMenu->setButtonText("4");
+                break;
+            case 2: // 2 beats
+                delayTime = 120000.0/tempo;
+				delayTimeMenu->setButtonText("2");
+                break;
+            case 3: // 1 beat
+                delayTime = 60000.0/tempo;
+				delayTimeMenu->setButtonText("1");
+                break;
+            case 4: //half beat
+                delayTime = 30000.0/tempo;
+				delayTimeMenu->setButtonText("1/2");
+                break;
+            case 5: // quarter beat
+                delayTime = 15000.0/tempo;
+				delayTimeMenu->setButtonText("1/4");
+                break;
+            default: // 1 beat
+                delayTime = 60000.0/tempo;
+				delayTimeMenu->setButtonText("1");
+                break;
+        }
+        
+        delayTimeSlider->setValue(delayTime, false);
+        
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setPadFxDelayTime(delayTime);
+            PAD_SETTINGS->setPadFxDelayTimeMenu(result);
+        }
+        
+    }
+	
 }
 
 void GuiDelay::setCurrentlySelectedPad (Array<int> selectedPads_)
@@ -337,7 +354,35 @@ void GuiDelay::updateDisplay()
         int padNum = selectedPads[0];
         wetMixSlider->setValue(PAD_SETTINGS->getPadFxDelayMix(), false);
         delayTimeSlider->setValue(PAD_SETTINGS->getPadFxDelayTime(), false);
-        delayTimeMenu->setSelectedId(PAD_SETTINGS->getPadFxDelayTimeMenu(), true);
+		
+		switch (PAD_SETTINGS->getPadFxDelayTimeMenu())
+        {
+            case 1: // 4 beats
+             
+				delayTimeMenu->setButtonText("4");
+                break;
+            case 2: // 2 beats
+               
+				delayTimeMenu->setButtonText("2");
+                break;
+            case 3: // 1 beat
+                
+				delayTimeMenu->setButtonText("1");
+                break;
+            case 4: //half beat
+                
+				delayTimeMenu->setButtonText("1/2");
+                break;
+            case 5: // quarter beat
+                
+				delayTimeMenu->setButtonText("1/4");
+                break;
+            default: // 1 beat
+                
+				delayTimeMenu->setButtonText("1");
+                break;
+        }
+		
         feedbackSlider->setValue(PAD_SETTINGS->getPadFxDelayFeedback(), false);
         lpfFrequencySlider->setValue(PAD_SETTINGS->getPadFxDelayLpfFreq(), false);
         hpfFrequencySlider->setValue(PAD_SETTINGS->getPadFxDelayHpfFreq(), false);
@@ -352,7 +397,7 @@ void GuiDelay::updateDisplay()
     {
         wetMixSlider->setValue(0.7, false);
         delayTimeSlider->setValue(500.0, false);
-        delayTimeMenu->setSelectedId(3, true);
+        delayTimeMenu->setButtonText("1");
         feedbackSlider->setValue(0.5, false);
         lpfFrequencySlider->setValue(5000, false);
         hpfFrequencySlider->setValue(50, false);

@@ -63,10 +63,11 @@ GuiFlanger::GuiFlanger(MainComponent &ref)
     flangerIntensitySlider->addMouseListener(this, true);
     
     
-    addAndMakeVisible(rateMenu = new ComboBox());
+    addAndMakeVisible(rateMenu = new AlphaPopUpButton());
     rateMenu->addListener(this);
     rateMenu->addMouseListener(this, true);
-    rateMenu->addItem(translate("8 Bars"), 1);
+	rateMenu->setButtonText("1");
+    /*rateMenu->addItem(translate("8 Bars"), 1);
     rateMenu->addItem(translate("4 Bars"), 2);
     rateMenu->addItem(translate("2 Bars"), 3);
     rateMenu->addItem(translate("1 Bar"), 4);
@@ -75,7 +76,7 @@ GuiFlanger::GuiFlanger(MainComponent &ref)
     rateMenu->addItem("1/8", 7);
     rateMenu->addItem("1/16", 8);
     rateMenu->addItem("1/32", 9);
-    rateMenu->setSelectedId(4, true);
+    rateMenu->setSelectedId(4, true);*/
     
     addAndMakeVisible(syncButton = new AlphaTextButton(translate("SYNC")));
     syncButton->setClickingTogglesState(true);
@@ -140,7 +141,7 @@ void GuiFlanger::resized()
     parameterHoverLabel->setBounds(144, 187, 36, 15);
     intensitySlider->setBounds(57, 57, 210, 210);
     
-    rateMenu->setBounds(119, 22, 87, 20);
+    rateMenu->setBounds(71, 202, 48, 48);
     syncButton->setBounds(121, 235, 32, 32);
     
     
@@ -234,59 +235,7 @@ void GuiFlanger::comboBoxChanged (ComboBox *comboBox)
         
     }
     
-    else if (comboBox == rateMenu)
-    {
-        //work out LFO rate based on rate selected and the tempo.
-        tempo = AppSettings::Instance()->getGlobalTempo();
-        double bps = tempo/60.0;
-        double lfoRate;
-        
-        switch (rateMenu->getSelectedId())
-        {
-            case 1: // 8 bars
-                lfoRate = bps * 0.03125;
-                break;
-            case 2: // 4 bars
-                lfoRate = bps * 0.0625;
-                break;
-            case 3: // 2 bars
-                lfoRate = bps * 0.125;
-                break;
-            case 4: // 1 bar - 4 beats
-                lfoRate = bps * 0.25;
-                break;
-            case 5: // 1/2 - 2 beats
-                lfoRate = bps * 0.5;
-                break;
-            case 6: // 1/4 - 1 beat
-                lfoRate = bps * 1.0;
-                break;
-            case 7: // 1/8 - half beat
-                lfoRate = bps * 2.0;
-                break;
-            case 8: // 1/16 - quarter beat
-                lfoRate = bps * 4.0;
-                break;
-            case 9: // 1/32 - 8th beat
-                lfoRate = bps * 8.0;
-                break;
-            default: // 1/4 - 1 beat
-                lfoRate = bps * 1.0;
-                break;
-                
-        }
-         
-        
-        rateSlider->setValue(lfoRate, false);
-        
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setPadFxFlangerRate(lfoRate);
-            PAD_SETTINGS->setPadFxFlangerRateMenu(rateMenu->getSelectedId());
-        }
-        
-    }
+    
     
 }
 
@@ -320,6 +269,84 @@ void GuiFlanger::buttonClicked (Button *button)
             rateMenu->setVisible(true);
         
     }
+	
+	else if (button == rateMenu)
+    {
+		PopupMenu menu;
+		
+		menu.addItem(1, translate("8 Bars"));
+		menu.addItem(2, translate("4 Bars"));
+		menu.addItem(3, translate("2 Bars"));
+		menu.addItem(4, translate("1 Bar"));
+		menu.addItem(5, "1/2");
+		menu.addItem(6, "1/4");
+		menu.addItem(7, "1/8");
+		menu.addItem(8, "1/16");
+		menu.addItem(9, "1/32");
+		
+        //work out LFO rate based on rate selected and the tempo.
+        tempo = AppSettings::Instance()->getGlobalTempo();
+        double bps = tempo/60.0;
+        double lfoRate;
+		
+        const int result = menu.show();
+        
+        switch (result)
+        {
+            case 1: // 8 bars
+                lfoRate = bps * 0.03125;
+				rateMenu->setButtonText("8");
+                break;
+            case 2: // 4 bars
+                lfoRate = bps * 0.0625;
+				rateMenu->setButtonText("4");
+                break;
+            case 3: // 2 bars
+                lfoRate = bps * 0.125;
+				rateMenu->setButtonText("2");
+                break;
+            case 4: // 1 bar - 4 beats
+                lfoRate = bps * 0.25;
+				rateMenu->setButtonText("1");
+                break;
+            case 5: // 1/2 - 2 beats
+                lfoRate = bps * 0.5;
+				rateMenu->setButtonText("1/2");
+                break;
+            case 6: // 1/4 - 1 beat
+                lfoRate = bps * 1.0;
+				rateMenu->setButtonText("1/4");
+                break;
+            case 7: // 1/8 - half beat
+                lfoRate = bps * 2.0;
+				rateMenu->setButtonText("1/8");
+                break;
+            case 8: // 1/16 - quarter beat
+                lfoRate = bps * 4.0;
+				rateMenu->setButtonText("1/16");
+                break;
+            case 9: // 1/32 - 8th beat
+                lfoRate = bps * 8.0;
+				rateMenu->setButtonText("1/32");
+                break;
+            default: // 1/4 - 1 beat
+                lfoRate = bps * 1.0;
+				rateMenu->setButtonText("1/4");
+                break;
+                
+        }
+		
+        
+        rateSlider->setValue(lfoRate, false);
+        
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setPadFxFlangerRate(lfoRate);
+            PAD_SETTINGS->setPadFxFlangerRateMenu(result);
+        }
+        
+    }
 }
 
 void GuiFlanger::setCurrentlySelectedPad (Array<int> selectedPads_)
@@ -341,8 +368,53 @@ void GuiFlanger::updateDisplay()
         rateSlider->setValue(PAD_SETTINGS->getPadFxFlangerRate(), false);
         feedbackSlider->setValue(PAD_SETTINGS->getPadFxFlangerFeedback(), false);
         flangerIntensitySlider->setValue(PAD_SETTINGS->getPadFxFlangerIntensity(), false);
-        rateMenu->setSelectedId(PAD_SETTINGS->getPadFxFlangerRateMenu(), true);
+        //rateMenu->setSelectedId(PAD_SETTINGS->getPadFxFlangerRateMenu(), true);
         syncButton->setToggleState(PAD_SETTINGS->getPadFxFlangerSync(), false);
+		
+		switch (PAD_SETTINGS->getPadFxFlangerRateMenu())
+        {
+            case 1: // 8 bars
+                
+				rateMenu->setButtonText("8");
+                break;
+            case 2: // 4 bars
+              
+				rateMenu->setButtonText("4");
+                break;
+            case 3: // 2 bars
+               
+				rateMenu->setButtonText("2");
+                break;
+            case 4: // 1 bar - 4 beats
+               
+				rateMenu->setButtonText("1");
+                break;
+            case 5: // 1/2 - 2 beats
+            
+				rateMenu->setButtonText("1/2");
+                break;
+            case 6: // 1/4 - 1 beat
+              
+				rateMenu->setButtonText("1/4");
+                break;
+            case 7: // 1/8 - half beat
+                
+				rateMenu->setButtonText("1/8");
+                break;
+            case 8: // 1/16 - quarter beat
+              
+				rateMenu->setButtonText("1/16");
+                break;
+            case 9: // 1/32 - 8th beat
+                
+				rateMenu->setButtonText("1/32");
+                break;
+            default: // 1/4 - 1 beat
+               
+				rateMenu->setButtonText("1/4");
+                break;
+                
+        }
         
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxFlangerAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getPadFxFlangerAtReverse(), false);
@@ -355,7 +427,7 @@ void GuiFlanger::updateDisplay()
         rateSlider->setValue(0.25, false);
         feedbackSlider->setValue(0.9, false);
         flangerIntensitySlider->setValue(0.1, false);
-        rateMenu->setSelectedId(3, true); //??????????????????
+        rateMenu->setButtonText("2"); //??????????????????
         syncButton->setToggleState(1, false);
         
         alphaTouchMenu->setSelectedId(1, true);

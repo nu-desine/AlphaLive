@@ -182,18 +182,12 @@ void AlphaLiveEngine::setGuiUpdateFlag (int value)
 }
 
 //emulate a pad press for the pad GUI
-//DO I NEED THIS FUNCTION ANYMORE?
 void AlphaLiveEngine::playPadFromMouse (int pad, int value)
 {
-    //this is the function that is called when a shift-click and/or
-    //shift-drag happens on a pad GUI.
-    
-    //As currently the OSC messages don't match the pad numbers,
-    //before calling oscCallBack to emulate an osc input message being received
-    //the GUI pad numbers need to be mapped so that they match their
-    //physical pads' relevent OSC message pad number.
-    //This can be done by using the Layouts::padArrangementLayout 'in reverse'.
-    //This won't be needed once the OSC numbers match the pad numbers
+    //as current we have a temp pad number reversal layout that is
+    //processed at the beginnning of input data, when emulating a pad
+    //press from the pad layout GUI we must first reverse the pad numbers
+    //so that it will be correct within inputData
     
     for (int arrayIndex = 0; arrayIndex <= sizeof(Layouts::padArrangementLayout); arrayIndex++)
     {
@@ -213,6 +207,9 @@ void AlphaLiveEngine::playPadFromMouse (int pad, int value)
 
 void AlphaLiveEngine::inputData(int pad, int value)
 {
+    //=====TEMPORARY PAD NUMBER REVERSAL======
+    pad = Layouts::padArrangementLayout[pad];
+    
     //At the point the 'value' value is expected to be between 0 and 511.
     //In the older version this was scaled in the serial input class.
     //This range is also scaled in the Pad.cpp class for emulating pad presses.

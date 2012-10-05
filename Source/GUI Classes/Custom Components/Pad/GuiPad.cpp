@@ -487,7 +487,7 @@ void GuiPad::mouseDown (const MouseEvent &e)
         int pressureValue = abs((getHeight()/2) - e.y) * 10 + 1;
         //emulate pad press
         //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, pressureValue);
-        guiPadLayoutRef.getAlphaLiveEngine().inputData(padNumber, pressureValue);
+        guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, pressureValue);
     }
     
 }
@@ -514,7 +514,7 @@ void GuiPad::mouseDrag (const MouseEvent &e)
         {
             //emulate pressure change
             //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, pressureValue);
-            guiPadLayoutRef.getAlphaLiveEngine().inputData(padNumber, pressureValue);
+            guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, pressureValue);
             
             if (pressureValue == 511)
                 shouldIgnoreValues = true;
@@ -534,8 +534,8 @@ void GuiPad::mouseUp (const MouseEvent &e)
         //why can't i just sent a 'pressure value' of 0?
         //for some reason i need to send something before that
         //for most of the triggerModes to work. This should probably be fixed!!
-        guiPadLayoutRef.getAlphaLiveEngine().inputData(padNumber, 1);
-        guiPadLayoutRef.getAlphaLiveEngine().inputData(padNumber, 0);
+        guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 1);
+        guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 0);
         //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 1);
         //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 0);
         

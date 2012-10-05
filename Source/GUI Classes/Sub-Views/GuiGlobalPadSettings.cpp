@@ -64,9 +64,9 @@ GuiGlobalPadSettings::~GuiGlobalPadSettings()
 
 void GuiGlobalPadSettings::resized()
 {
-	exclusiveModeButton->setBounds(802, 379, 42, 42);
-    exclusiveGroupSlider->setBounds(802, 430, 42, 42);
-	pressureSensitivityMenu->setBounds(802, 500, 87, 20);
+	exclusiveModeButton->setBounds(823, 270, 42, 42);
+    exclusiveGroupSlider->setBounds(823, 320, 42, 42);
+	pressureSensitivityMenu->setBounds(802, 550, 87, 20);
 	
 }
 

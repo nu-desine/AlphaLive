@@ -37,6 +37,7 @@ public:
     ~SceneSlot();
     
     void mouseDown (const MouseEvent &e);
+    void mouseUp (const MouseEvent &e);
     void mouseEnter	(const MouseEvent & e);
     void mouseExit	(const MouseEvent & e);
     
@@ -70,7 +71,7 @@ private:
      - 2 = Selected
     */
     int status;
-    bool mouseIsOver;
+    bool mouseIsOver, mouseIsDown;
     
     int slotNumber;
     String slotNumberString;

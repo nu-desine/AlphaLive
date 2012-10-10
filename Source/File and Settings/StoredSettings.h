@@ -49,6 +49,7 @@ public:
     int launchTask; // 1 - Open new project, 2 - open last project
     int killOnClockStop; // 0 - don't kill, 1 - kill
     int cleanOnClose; //1 - don't clean, 2 - clean
+    int autoSaveScenes; //1 - dont auto save, 2 - do auto save
     
 private:
     ScopedPointer<PropertiesFile> props;

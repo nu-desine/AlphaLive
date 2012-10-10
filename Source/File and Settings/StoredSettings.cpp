@@ -54,6 +54,7 @@ void StoredSettings::flush()
         props->setValue ("launchTask", launchTask);
         props->setValue ("killOnClockStop", killOnClockStop);
         props->setValue ("cleanOnClose", cleanOnClose);
+        props->setValue ("autoSaveScenes", autoSaveScenes);
     }
 
     props = nullptr;
@@ -80,6 +81,7 @@ void StoredSettings::flush()
     launchTask = props->getIntValue("launchTask");
     killOnClockStop = props->getIntValue("killOnClockStop");
     cleanOnClose = props->getIntValue("cleanOnClose");
+    autoSaveScenes = props->getIntValue("autoSaveScenes");
     
 
 }
@@ -92,8 +94,8 @@ void StoredSettings::setDefaultValues()
     if (appProjectDir == File::nonexistent)
     {
         //Create the AlphaLive Projects folder 
-        File oldProjectDir = (File::getSpecialLocation(File::userMusicDirectory).getFullPathName())+ "/AlphaLive Projects";
-        File defaultProjectDirectory = (File::getSpecialLocation(File::userDocumentsDirectory).getFullPathName())+ "/AlphaLive Projects";
+        File oldProjectDir = (File::getSpecialLocation(File::userMusicDirectory).getFullPathName()) + File::separatorString + "AlphaLive Projects";
+        File defaultProjectDirectory = (File::getSpecialLocation(File::userDocumentsDirectory).getFullPathName()) + File::separatorString + "AlphaLive Projects";
         
         //UPDATE - CAN NOW PROBABLY REMOVE ALL CODE THAT CHECKS IF THE PROJECT DIR IS IN THE OLD LOCATION
         if (oldProjectDir.exists() == true)
@@ -127,6 +129,9 @@ void StoredSettings::setDefaultValues()
     
     if (cleanOnClose == 0)
         cleanOnClose = 2;
+    
+    if (autoSaveScenes == 0)
+        autoSaveScenes = 2;
     
     flush();
 }

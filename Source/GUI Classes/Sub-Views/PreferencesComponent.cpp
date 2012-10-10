@@ -199,8 +199,6 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     killOnClockStopLabel->setColour(Label::textColourId, Colours::lightgrey);
     
     
-    
-    
     addAndMakeVisible(cleanOnCloseButton = new TextButton());
     cleanOnCloseButton->setClickingTogglesState(true);
     cleanOnCloseButton->setToggleState(StoredSettings::getInstance()->cleanOnClose-1, false);
@@ -215,6 +213,22 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     addAndMakeVisible(cleanOnCloseLabel = new Label());
     cleanOnCloseLabel->setText(translate("Clean Project On Close:"), false);
     cleanOnCloseLabel->setColour(Label::textColourId, Colours::lightgrey);
+    
+    
+    addAndMakeVisible(autoSaveScenesButton = new TextButton());
+    autoSaveScenesButton->setClickingTogglesState(true);
+    autoSaveScenesButton->setToggleState(StoredSettings::getInstance()->autoSaveScenes-1, false);
+    if(autoSaveScenesButton->getToggleStateValue() == true)
+        autoSaveScenesButton->setButtonText(translate("On"));
+    else
+        autoSaveScenesButton->setButtonText(translate("Off")); 
+    
+    autoSaveScenesButton->addListener(this);
+    autoSaveScenesButton->addMouseListener(this, true);
+    
+    addAndMakeVisible(autoSaveScenesLabel = new Label());
+    autoSaveScenesLabel->setText(translate("Auto-save Scenes:"), false);
+    autoSaveScenesLabel->setColour(Label::textColourId, Colours::lightgrey);
     
 
     
@@ -244,6 +258,9 @@ void GeneralSettingsComponent::resized()
     
     cleanOnCloseButton->setBounds(230, 208, 40, 25);
     cleanOnCloseLabel->setBounds(60, 210, 150, 20);
+    
+    autoSaveScenesButton->setBounds(230, 248, 40, 25);
+    autoSaveScenesLabel->setBounds(60, 250, 150, 20);
 }
 
 void GeneralSettingsComponent::paint (Graphics& g)
@@ -282,6 +299,23 @@ void GeneralSettingsComponent::buttonClicked (Button* button)
         else
         {
             StoredSettings::getInstance()->cleanOnClose = 1;
+            button->setButtonText(translate("Off"));
+        }
+        
+        StoredSettings::getInstance()->flush();
+    }
+    
+    else if (button == autoSaveScenesButton)
+    {
+        if(button->getToggleStateValue() == true)
+        {
+            StoredSettings::getInstance()->autoSaveScenes = 2;
+            button->setButtonText(translate("On"));
+        }
+        
+        else
+        {
+            StoredSettings::getInstance()->autoSaveScenes = 1;
             button->setButtonText(translate("Off"));
         }
         
@@ -359,6 +393,10 @@ void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
     else if (cleanOnCloseButton->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("'Cleaning' a project is the process of searching through the projects Audio Files directory and removing any unused audio files. If this option is set to 'on' the project will automatically be cleaned when the application is shut down. This will prevent a build-up of unused data."));
+    }
+    else if (autoSaveScenesButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("By default ('on') when you switch between scenes it will automatically save the recently changed settings to the scene slot locally (not to file). If this option is set to 'off' you will need to shift-click the current scene slot before switching scenes otherwise any changes to the scenes settings will be lost."));
     }
 }
 

@@ -23,19 +23,16 @@
 #include "SceneSlot.h"
 #include "SceneComponent.h"
 #include "../../../File and Settings/AppSettings.h"
+#include "../../../File and Settings/StoredSettings.h"
 #include "../../AlphaLiveLookandFeel.h"
 
 SceneSlot::SceneSlot (int slotNumber_, SceneComponent &ref)
                     :   slotNumber(slotNumber_),
                         sceneComponentRef(ref)
 {
-    //set this component to have keyboard focus
-    //setWantsKeyboardFocus(true);
-    
     status = 0;
-    mouseIsOver = false;
+    mouseIsOver = mouseIsDown = false;
     slotNumberString = String(slotNumber+1);
-    
     somethingIsBeingDraggedOver = false;
 }
 
@@ -51,12 +48,10 @@ void SceneSlot::resized()
 
 void SceneSlot::paint (Graphics &g)
 {
-    //std::cout << "Status = " << status << std::endl;
     
     //set colour/fill
     if (status == 0) //empty
     {
-        //g.setColour(Colours::black);
         ColourGradient seqGradient(Colours::black, (getWidth()*0.5), 0, Colours::darkgrey.withAlpha(0.5f), (getWidth()),(getHeight()), true);
         g.setGradientFill(seqGradient);
     }
@@ -92,29 +87,43 @@ void SceneSlot::paint (Graphics &g)
     {
         //draw a 'highlight' eclipse. Another option would be to draw an image of a downwards arrow signifying 'drop here'?
         g.setColour(Colours::white.withAlpha(0.3f));
-        //g.fillEllipse((getWidth()*0.08), (getHeight()*0.08), (getWidth()*0.84), (getHeight()*0.84));
         g.fillEllipse(0, 0, getWidth(), getHeight());
     }
     
+    
+    //highlight when mouse is down
+    if (mouseIsDown == true)
+    {
+        g.setColour(Colours::white.withAlpha(0.9f));
+        g.fillEllipse(0, 0, getWidth(), getHeight());
+    }
 
 }
 
 
 void SceneSlot::mouseDown (const MouseEvent &e)
 { 
+    mouseIsDown = true;
+    //don't call repaint() here - repaint is called when needed below
     
     /* NEW SCENE IMPLEMENTATION.
      All scenes always contain some data and are all selectable. 
-     Changing scene saves the previous scene first.
-     Shift-click on a scene copies the current scene to the clicked scene.
+     Changing scene saves the previous scene first if this option is not set to off in the prefs.
+     Shift-click on a scene copies/saves the current scene to the clicked scene.
      */
-    
     
     //---handle the GUI and 'status' value-----
     if (status != 2 && e.mods.isShiftDown() == true) //if clicked on an unselected slot while shift is down
     {
         selectSlot(true);
 
+    }
+    else if (status == 2 && e.mods.isShiftDown() == true) //if shift-clicked on the selected slot
+    {
+        //save data to scene slot
+        sceneComponentRef.getAppDocumentState().saveToScene(slotNumber);
+        repaint();
+        
     }
     else if (status != 2 && e.mods.isPopupMenu() == false) //if clicked on an unselected slot but it isn't a 'right click'
     {
@@ -164,6 +173,11 @@ void SceneSlot::mouseDown (const MouseEvent &e)
     
 }
 
+void SceneSlot::mouseUp (const MouseEvent &e)
+{
+    mouseIsDown = false;
+    repaint();
+}
 
 void SceneSlot::mouseEnter	(const MouseEvent & e)
 {
@@ -180,10 +194,15 @@ void SceneSlot::mouseExit	(const MouseEvent & e)
 
 void SceneSlot::selectSlot (bool isShiftDown)
 {
+    //this will only be called when shift-clicking a slot which ISN'T the currently selected one
+    
     setStatus(2); //set as selected
     
-    //save previously selected scene data
-    sceneComponentRef.getAppDocumentState().saveToScene(sceneComponentRef.getSelectedSceneNumber());
+    //if set to do so, save previously selected scene data
+    if (StoredSettings::getInstance()->autoSaveScenes == 2)
+    {
+        sceneComponentRef.getAppDocumentState().saveToScene(sceneComponentRef.getSelectedSceneNumber());
+    }
     
     //search through all the pads of prev scene checking their modes.
     //if all pads are set to off, the slots status will need
@@ -193,6 +212,9 @@ void SceneSlot::selectSlot (bool isShiftDown)
     int prevStatus = 0;
     for (int i = 0; i <= 47; i++)
     {
+        //there's a bug here where if prefs says don't auto save scenes and the scene originally
+        //contained no data and hasn't been saved, the status of the prev scene slot will be set to
+        //1 when it should be set to 0, displaying that it has data when it actually doesn't.
         modeCheck = AppSettings::Instance()->padSettings[i]->getMode();
         if (modeCheck > 0)
         {

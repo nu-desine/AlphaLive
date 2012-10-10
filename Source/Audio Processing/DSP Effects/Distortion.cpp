@@ -44,7 +44,7 @@ Distortion::Distortion(int padNumber_, float sampleRate_)
     // sample rate
     paramsPostFilter1[0] = sampleRate_;
     // Q/Bandwidth
-    paramsPostFilter1[2] = 1.0;
+    paramsPostFilter1[2] = 0.1;
     
 	//===Post-Filter===
     //filter
@@ -52,7 +52,7 @@ Distortion::Distortion(int padNumber_, float sampleRate_)
     // sample rate
     paramsPostFilter2[0] = sampleRate_;
     // Q/Bandwidth
-    paramsPostFilter2[2] = 1.0;
+    paramsPostFilter2[2] = 0.1;
 	
 	//setTone call also sets the bypass
 	setTone(PAD_SETTINGS->getPadFxDistortionTone());
@@ -287,9 +287,6 @@ void Distortion::processAudio (const AudioSourceChannelInfo& bufferToFill)
 
 void Distortion::processAlphaTouch (int pressureValue)
 {
-	if (alphaTouchParam == 3 && bypassFilter == true) {
-		bypassFilter = false;
-	}
     sharedMemory.enter();
     switch (alphaTouchParam) 
     {
@@ -316,19 +313,24 @@ void Distortion::processAlphaTouch (int pressureValue)
             break;
 			
 		case 4: //Tone
-            if (alphaTouchReverse == false){
+			bypassFilter = false;
+			if (alphaTouchReverse == false){
                 paramsPostFilter1[1] = (toneControl + (pressureValue * (((1.0 - toneControl)*alphaTouchIntensity)/511.0)) * 9000);
-				paramsPostFilter2[1] = (toneControl + (pressureValue * (((1.0 - toneControl)*alphaTouchIntensity)/511.0)) * 10500);
+				paramsPostFilter2[1] = (toneControl + (pressureValue * (((1.0 - toneControl)*alphaTouchIntensity)/511.0)) * 11000);
 			}
             else{
                 paramsPostFilter1[1] = (toneControl - (pressureValue * (((1.0 - (1.0 - toneControl))*alphaTouchIntensity)/511.0)) * 9000);
-				paramsPostFilter2[1] = (toneControl - (pressureValue * (((1.0 - (1.0 - toneControl))*alphaTouchIntensity)/511.0)) * 10500); 
+				paramsPostFilter2[1] = (toneControl - (pressureValue * (((1.0 - (1.0 - toneControl))*alphaTouchIntensity)/511.0)) * 11000); 
             }
-			
-			std::cout << paramsPostFilter1[1] << std::endl;
+			if (pressureValue == 0 && toneControl == 0) 
+			{
+				bypassFilter = true;
+			}
+
+			std::cout << paramsPostFilter1[1] << " : " << paramsPostFilter2[1] << std::endl;
             break;
 		
-		case 6: //Mix
+		case 5: //Mix
             if (alphaTouchReverse == false){
                 wetDryMix = wetDryMixControl + (pressureValue * (((1.0-wetDryMixControl)*alphaTouchIntensity)/511.0));
 				wetDryMix * wetDryMix * wetDryMix;
@@ -340,16 +342,11 @@ void Distortion::processAlphaTouch (int pressureValue)
 			
             std::cout << wetDryMix << std::endl;
             break;
-            
+
         default:
             break;
-    }
-	
-	if (toneControl == 0){
-		bypassFilter = true;
-	}
-    sharedMemory.exit();
-     
+    }  
+	sharedMemory.exit();
 }
 
 void Distortion::setInputGain (double value)
@@ -387,7 +384,7 @@ void Distortion::setTone (double value)
 	toneControl = value;
 	
 	paramsPostFilter1[1] = value * 9000. + 1.;
-	paramsPostFilter2[1] = value * 10500. + 1.;
+	paramsPostFilter2[1] = value * 11000. + 1.;
 
 	if (value == 0){
 		bypassFilter = true;

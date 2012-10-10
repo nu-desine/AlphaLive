@@ -277,9 +277,7 @@ void SequencePlayer::processSequence(int padValue)
             }
             else if (shouldLoop == false)
             {
-                //stopThreadAndReset(); //if reaches end of seqs and not set to loop, stop thread
-                //stopThread(timeInterval);
-                triggerModeData.playingStatus = 0;
+                stopThread(timeInterval);
             }
         }
     }
@@ -481,12 +479,11 @@ void SequencePlayer::processSequence(int padValue)
     //that is currently selected (and hence currently displayed)
     if (sequenceNumber != prevSequenceNumber) //so that an update will only be sent of the sequence number has changed!
     {
-        if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
+        if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1
+            && sequenceNumber < numberOfSequences)
         {
             if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
             {
-                
-                
                 broadcaster.sendActionMessage("SEQ DISPLAY");
             }
         }
@@ -703,7 +700,8 @@ void SequencePlayer::run()
                 }
                 
                 //update gui (if this pad's gui is currently being displayed)
-                if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
+                if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1
+                    && sequenceNumber < numberOfSequences)
                 {
                     if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
                         broadcaster.sendActionMessage("SEQ DISPLAY");

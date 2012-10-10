@@ -37,14 +37,12 @@ GuiGainAndPan::GuiGainAndPan(MainComponent &ref)
     addAndMakeVisible(gainSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
 	gainSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     gainSlider->setRange(0.0, 1.0);
-    gainSlider->setValue(0.5, false);
     gainSlider->addListener(this);
     gainSlider->addMouseListener(this, true);
     
     addAndMakeVisible(panSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
 	panSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     panSlider->setRange(0.0, 1.0);
-    panSlider->setValue(0.5, false);
     panSlider->addListener(this);
     panSlider->addMouseListener(this, true);
     

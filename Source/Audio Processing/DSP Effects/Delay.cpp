@@ -204,14 +204,14 @@ void Delay::processAlphaTouch (int pressureValue)
 }
 
 
-void Delay::setWetMix (float value)
+void Delay::setWetMix (double value)
 {
     sharedMemory.enter();
     wetMix = wetMixControlValue = value * value * value;
     sharedMemory.exit();
 }
 
-void Delay::setDelayTime (float value)
+void Delay::setDelayTime (double value)
 {
     sharedMemory.enter();
     delayTime = value;
@@ -220,21 +220,21 @@ void Delay::setDelayTime (float value)
     sharedMemory.exit();
 }
 
-void Delay::setFeedback (float value)
+void Delay::setFeedback (double value)
 {
     sharedMemory.enter();
     feedback = feedbackControlValue = value;
     sharedMemory.exit();
 }
 
-void Delay::setLpfFrequency (float value)
+void Delay::setLpfFrequency (double value)
 {
     sharedMemory.enter();
     paramsLpFilter[1] = lpfFrequencyControlValue = value;
     sharedMemory.exit();
 }
 
-void Delay::setHpfFrequency (float value)
+void Delay::setHpfFrequency (double value)
 {
     sharedMemory.enter();
     paramsHpFilter[1] = hpfFrequencyControlValue = value;
@@ -249,7 +249,7 @@ void Delay::setAlphaTouchParam (int value)
     sharedMemory.exit();
 }
 
-void Delay::setAlphaTouchIntensity (float value)
+void Delay::setAlphaTouchIntensity (double value)
 {
     sharedMemory.enter();
     alphaTouchIntensity = value;

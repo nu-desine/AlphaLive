@@ -46,6 +46,8 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     delay = nullptr;
     flanger = nullptr;
     tremolo = nullptr;
+	distortion = nullptr;
+	bitcrusher = nullptr;
     
     //grab the setting values (so that if this object is deleted and recreated, it will hold the previous settings)
     //do i need to enter shared memory here?
@@ -99,6 +101,8 @@ AudioFilePlayer::~AudioFilePlayer()
     delete reverb;
     delete flanger;
     delete tremolo;
+	delete distortion;
+	delete bitcrusher;
     
     modeSamplerRef.updatePadPlayingStatus(padNumber, 0);
     fileSource.setSource(0);//unload the current file
@@ -306,6 +310,12 @@ void AudioFilePlayer::processAudioFile(int padValue)
             case 4: //BPF
                 bandPassFilter->processAlphaTouch(pressureValue);
                 break;
+			case 5: //Distortion
+				distortion->processAlphaTouch(pressureValue);
+				break;
+			case 6: //Bitcrusher
+				bitcrusher->processAlphaTouch(pressureValue);
+				break;
             case 7: //Delay
                 delay->processAlphaTouch(pressureValue);
                 break;
@@ -593,6 +603,12 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
             case 4: //BPF
                 bandPassFilter->processAudio(bufferToFill);
                 break;
+			case 5: //Distortion
+				distortion->processAudio(bufferToFill);
+				break;
+			case 6: //Bitcrusher
+				bitcrusher->processAudio(bufferToFill);
+				break;
             case 7: //Delay
                 delay->processAudio(bufferToFill);
                 break;
@@ -773,6 +789,12 @@ void AudioFilePlayer::prepareToPlay (int samplesPerBlockExpected,double sampleRa
         case 4:
             bandPassFilter->setSampleRate(sampleRate);
             break;
+		case 5:
+			distortion->setSampleRate(sampleRate);
+			break;
+		case 6:
+			bitcrusher->setSampleRate(sampleRate);
+			break;
         case 7:
             delay->setSampleRate(sampleRate);
             break;
@@ -848,6 +870,13 @@ void AudioFilePlayer::setEffect(int value)
                 delete bandPassFilter;
                 bandPassFilter = nullptr;
                 break;
+			case 5:
+				delete distortion;
+				distortion = nullptr;
+				break;
+			case 6:
+				delete bitcrusher;
+				bitcrusher = nullptr;
             case 7:
                 delete delay;
                 delay = nullptr;
@@ -882,6 +911,12 @@ void AudioFilePlayer::setEffect(int value)
                 break;
             case 4:
                 bandPassFilter = new BandPassFilter (padNumber, sampleRate_);
+                break;
+			case 5:
+                distortion = new Distortion (padNumber, sampleRate_);
+                break;
+			case 6:
+                bitcrusher = new Bitcrusher (padNumber, sampleRate_);
                 break;
             case 7:
                 delay = new Delay (padNumber, sampleRate_);
@@ -1008,3 +1043,12 @@ Tremolo& AudioFilePlayer::getTremolo()
     return *tremolo;
 }
 
+Distortion& AudioFilePlayer::getDistortion()
+{
+	return *distortion;
+}
+
+Bitcrusher& AudioFilePlayer::getBitcrusher()
+{
+	return *bitcrusher;
+}

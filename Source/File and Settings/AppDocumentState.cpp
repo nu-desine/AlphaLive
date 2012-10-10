@@ -229,6 +229,22 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
         padData->setAttribute("padFxBpfAtReverse", PAD_SETTINGS->getPadFxBpfAtReverse());
         padData->setAttribute("padFxBpfAtIntensity", PAD_SETTINGS->getPadFxBpfAtIntensity());
     }
+	else if (effect == 5) //Distortion
+    {
+        padData->setAttribute("padFxDistortionInputGain", PAD_SETTINGS->getPadFxDistortionInputGain());
+        padData->setAttribute("padFxDistortionDrive", PAD_SETTINGS->getPadFxDistortionDrive());
+		padData->setAttribute("padFxDistortionWetDryMix", PAD_SETTINGS->getPadFxDistortionWetDryMix());
+        padData->setAttribute("padFxDistortionTone", PAD_SETTINGS->getPadFxDistortionTone());
+        padData->setAttribute("padFxDistortionTypeMenu", PAD_SETTINGS->getPadFxDistortionTypeMenu());
+    }
+	else if (effect == 6) //Bitcrusher
+    {
+        padData->setAttribute("padFxBitcrusherInputGain", PAD_SETTINGS->getPadFxBitcrusherInputGain());
+		padData->setAttribute("padFxBitcrusherDownsample", PAD_SETTINGS->getPadFxBitcrusherDownsample());
+		padData->setAttribute("padFxBitcrusherCrush", PAD_SETTINGS->getPadFxBitcrusherCrush());
+		padData->setAttribute("padFxBitcrusherSmoothing", PAD_SETTINGS->getPadFxBitcrusherSmoothing());
+		padData->setAttribute("padFxBitcrusherWetDryMix", PAD_SETTINGS->getPadFxBitcrusherWetDryMix());
+    }
     else if (effect == 7) //Delay
     {
         padData->setAttribute("padFxDelayMix", PAD_SETTINGS->getPadFxDelayMix());
@@ -570,7 +586,7 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
             PAD_SETTINGS->setPadFxHpfAtReverse(padData->getIntAttribute("padFxHpfAtReverse"));
             PAD_SETTINGS->setPadFxHpfAtIntensity(padData->getDoubleAttribute("padFxHpfAtIntensity"));
         }
-        else if (effect == 4) //BPF
+		else if (effect == 4) //BPF
         {
             PAD_SETTINGS->setPadFxBpfMix(padData->getDoubleAttribute("padFxBpfMix"));
             PAD_SETTINGS->setPadFxBpfFreq(padData->getDoubleAttribute("padFxBpfFreq"));
@@ -578,6 +594,22 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
             PAD_SETTINGS->setPadFxBpfAlphaTouch(padData->getIntAttribute("padFxBpfAlphaTouch"));
             PAD_SETTINGS->setPadFxBpfAtReverse(padData->getIntAttribute("padFxBpfAtReverse"));
             PAD_SETTINGS->setPadFxBpfAtIntensity(padData->getDoubleAttribute("padFxBpfAtIntensity"));
+        }
+        else if (effect == 5) //Distortion
+        {
+            PAD_SETTINGS->setPadFxDistortionInputGain(padData->getDoubleAttribute("padFxDistortionInputGain"));
+			PAD_SETTINGS->setPadFxDistortionDrive(padData->getDoubleAttribute("padFxDistortionDrive"));
+			PAD_SETTINGS->setPadFxDistortionWetDryMix(padData->getDoubleAttribute("padFxDistortionWetDryMix"));
+			PAD_SETTINGS->setPadFxDistortionTone(padData->getDoubleAttribute("padFxDistortionTone"));
+			PAD_SETTINGS->setPadFxDistortionTypeMenu(padData->getIntAttribute("padFxDistortionTypeMenu"));
+        }
+		else if (effect == 6) //Bitcrusher
+        {
+            PAD_SETTINGS->setPadFxBitcrusherInputGain(padData->getDoubleAttribute("padFxBitcrusherInputGain"));
+			PAD_SETTINGS->setPadFxBitcrusherDownsample(padData->getDoubleAttribute("padFxBitcrusherDownsample"));
+			PAD_SETTINGS->setPadFxBitcrusherCrush(padData->getDoubleAttribute("padFxBitcrusherCrush"));
+			PAD_SETTINGS->setPadFxBitcrusherSmoothing(padData->getDoubleAttribute("padFxBitcrusherSmoothing"));
+			PAD_SETTINGS->setPadFxBitcrusherWetDryMix(padData->getDoubleAttribute("padFxBitcrusherWetDryMix"));
         }
         else if (effect == 7) //Delay
         {

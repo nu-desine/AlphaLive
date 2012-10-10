@@ -41,13 +41,13 @@ public:
     void processAlphaTouch (int pressureValue);
     
     //Functions that set the effect parameters
-    void setFrequency (float value);
-    void setMix (float value);
-    void setBandwidth( float value);
+    void setFrequency (double value);
+    void setMix (double value);
+    void setBandwidth( double value);
     
     //Functions that set the AlphaTouch settings
 	void setAlphaTouchParam (int value);
-    void setAlphaTouchIntensity (float value);
+    void setAlphaTouchIntensity (double value);
     void setAlphaTouchReverse (int value);
     
     void setSampleRate (float value);
@@ -58,12 +58,12 @@ private:
     Dsp::Filter *filter;
     Dsp::Params params;
     
-    float mix, mixPrev, mixControlValue;
-    float frequencyControlValue;
-    float bandwidthControlValue;
+    double mix, mixPrev, mixControlValue;
+    double frequencyControlValue;
+    double bandwidthControlValue;
     
     int alphaTouchParam;
-    float alphaTouchIntensity;
+    double alphaTouchIntensity;
     bool alphaTouchReverse;
     
     CriticalSection sharedMemory;

@@ -37,35 +37,30 @@ GuiDelay::GuiDelay(MainComponent &ref)
     addAndMakeVisible(wetMixSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
 	wetMixSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     wetMixSlider->setRange(0.0, 1.0);
-    wetMixSlider->setValue(0.7, false);
     wetMixSlider->addListener(this);
     wetMixSlider->addMouseListener(this, true);
     
 	addAndMakeVisible(feedbackSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
 	feedbackSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     feedbackSlider->setRange(0, 1.0);
-    feedbackSlider->setValue(0.5, false);
     feedbackSlider->addListener(this);
     feedbackSlider->addMouseListener(this, true);
     
     addAndMakeVisible(delayTimeSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	delayTimeSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     delayTimeSlider->setRange(0.0, 4000.0);
-    delayTimeSlider->setValue(500.0, false);
     delayTimeSlider->addListener(this);
     delayTimeSlider->addMouseListener(this, true);
     
     addAndMakeVisible(lpfFrequencySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
 	lpfFrequencySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     lpfFrequencySlider->setRange(30, 20000, 1);
-    lpfFrequencySlider->setValue(20000, false);
     lpfFrequencySlider->addListener(this);
     lpfFrequencySlider->addMouseListener(this, true);
     
     addAndMakeVisible(hpfFrequencySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
 	hpfFrequencySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     hpfFrequencySlider->setRange(30, 20000, 1);
-    hpfFrequencySlider->setValue(30, false);
     hpfFrequencySlider->addListener(this);
     hpfFrequencySlider->addMouseListener(this, true);
     

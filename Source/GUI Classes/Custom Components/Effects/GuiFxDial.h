@@ -36,6 +36,8 @@
 #include "Effects GUIs/FxGuiReverb.h"
 #include "Effects GUIs/FxGuiFlanger.h"
 #include "Effects GUIs/FxGuiTremolo.h"
+#include "Effects GUIs/FxGuiDistortion.h"
+#include "Effects GUIs/FxGuiBitcrusher.h"
 
 
 class MainComponent;
@@ -75,6 +77,7 @@ private:
     //also theres lots of lists where all the effects need sending the same peice of data, which could be
     //done within a for loop if all the effects were in an array.
     //HANG ON, HOW DO YOU DO AN ARRAY OF DIFFERENT TYPES OF OBJECTS?
+	//union structure with pointer?
     GuiGainAndPan *gainAndPan;
     GuiLowpassFilter *lowpassFilter;
     GuiHighPassFilter *highPassFilter;
@@ -83,6 +86,8 @@ private:
     GuiReverb *reverb;
     GuiFlanger *flanger;
     GuiTremolo *tremolo;
+	GuiDistortion *distortion;
+	GuiBitcrusher *bitcrusher;
     
 	
 	

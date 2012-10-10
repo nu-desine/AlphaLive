@@ -142,21 +142,21 @@ void LowpassFilter::processAlphaTouch (int pressureValue)
 }
 
 
-void LowpassFilter::setMix (float value)
+void LowpassFilter::setMix (double value)
 {
     sharedMemory.enter();
     mix = mixControlValue = value * value * value;
     sharedMemory.exit();
 }
 
-void LowpassFilter::setFrequency (float value)
+void LowpassFilter::setFrequency (double value)
 {
     sharedMemory.enter();
     params[1] = frequencyControlValue = value;
     sharedMemory.exit();
 }
 
-void LowpassFilter::setBandwidth(float value)
+void LowpassFilter::setBandwidth(double value)
 {
     sharedMemory.enter();
     params[2] = bandwidthControlValue = value;
@@ -172,7 +172,7 @@ void LowpassFilter::setAlphaTouchParam (int value)
     sharedMemory.exit();
 }
 
-void LowpassFilter::setAlphaTouchIntensity (float value)
+void LowpassFilter::setAlphaTouchIntensity (double value)
 {
     sharedMemory.enter();
     alphaTouchIntensity = value;

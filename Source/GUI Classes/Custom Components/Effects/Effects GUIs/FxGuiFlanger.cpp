@@ -37,28 +37,24 @@ GuiFlanger::GuiFlanger(MainComponent &ref)
     addAndMakeVisible(mixSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
 	mixSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     mixSlider->setRange(0.0, 1.0);
-    mixSlider->setValue(0.7, false);
     mixSlider->addListener(this);
     mixSlider->addMouseListener(this, true);
     
 	addAndMakeVisible(rateSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
 	rateSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     rateSlider->setRange(0, 20.0);
-    rateSlider->setValue(0.25, false);
     rateSlider->addListener(this);
     rateSlider->addMouseListener(this, true);
     
     addAndMakeVisible(feedbackSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	feedbackSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     feedbackSlider->setRange(0.0, 1.0);
-    feedbackSlider->setValue(0.9, false);
     feedbackSlider->addListener(this);
     feedbackSlider->addMouseListener(this, true);
     
     addAndMakeVisible(flangerIntensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190)); //LFO depth
 	flangerIntensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     flangerIntensitySlider->setRange(0.0, 1.0);
-    flangerIntensitySlider->setValue(0.1, false);
     flangerIntensitySlider->addListener(this);
     flangerIntensitySlider->addMouseListener(this, true);
     

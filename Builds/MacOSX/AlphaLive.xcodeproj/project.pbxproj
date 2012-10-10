@@ -147,6 +147,9 @@
 		E6EC09B71C0B1F698DAE6358 /* juce_graphics.mm in Sources */ = {isa = PBXBuildFile; fileRef = B454477378931B111E88AA41 /* juce_graphics.mm */; };
 		E9D0ABCC8D5EAB5F130FDB01 /* juce_audio_devices.mm in Sources */ = {isa = PBXBuildFile; fileRef = BCB58C70345715DDCC2E3BCD /* juce_audio_devices.mm */; };
 		F60AE45FE96891A1A46D0FA9 /* juce_gui_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = CBC8F1CFB44FA4000ECEEBF9 /* juce_gui_basics.mm */; };
+		FC1622BF161B23B0004FE9E3 /* FxGuiBitcrusher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC1622BE161B23B0004FE9E3 /* FxGuiBitcrusher.cpp */; };
+		FC2A0C931612209100395455 /* FxGuiDistortion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC2A0C921612209100395455 /* FxGuiDistortion.cpp */; };
+		FC2A98A3161A04C00020C16D /* Bitcrusher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC2A98A2161A04C00020C16D /* Bitcrusher.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1215,6 +1218,13 @@
 		FB5E813C74CCE66CAEB7E5B1 /* juce_audio_basics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = juce_audio_basics.mm; path = ../../JuceLibraryCode/modules/juce_audio_basics/juce_audio_basics.mm; sourceTree = SOURCE_ROOT; };
 		FB83D68FBA2CED38E0007816 /* juce_ComponentPeer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_ComponentPeer.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/windows/juce_ComponentPeer.h; sourceTree = SOURCE_ROOT; };
 		FBD18C993874D2290CD9DDDC /* juce_DirectoryIterator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_DirectoryIterator.h; path = ../../JuceLibraryCode/modules/juce_core/files/juce_DirectoryIterator.h; sourceTree = SOURCE_ROOT; };
+		FC1622BD161B23B0004FE9E3 /* FxGuiBitcrusher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FxGuiBitcrusher.h; sourceTree = "<group>"; };
+		FC1622BE161B23B0004FE9E3 /* FxGuiBitcrusher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FxGuiBitcrusher.cpp; sourceTree = "<group>"; };
+		FC2A0C4E1612038A00395455 /* fastmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fastmath.h; sourceTree = "<group>"; };
+		FC2A0C911612209100395455 /* FxGuiDistortion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FxGuiDistortion.h; sourceTree = "<group>"; };
+		FC2A0C921612209100395455 /* FxGuiDistortion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FxGuiDistortion.cpp; sourceTree = "<group>"; };
+		FC2A98A1161A04C00020C16D /* Bitcrusher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bitcrusher.h; sourceTree = "<group>"; };
+		FC2A98A2161A04C00020C16D /* Bitcrusher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bitcrusher.cpp; sourceTree = "<group>"; };
 		FD144911D82A27BA0066C0BD /* juce_MemoryOutputStream.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_MemoryOutputStream.cpp; path = ../../JuceLibraryCode/modules/juce_core/streams/juce_MemoryOutputStream.cpp; sourceTree = SOURCE_ROOT; };
 		FD5C9585E069F4541293F0CF /* juce_data_structures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_data_structures.h; path = ../../JuceLibraryCode/modules/juce_data_structures/juce_data_structures.h; sourceTree = SOURCE_ROOT; };
 		FD7BB1F2BDAB6EF7693D9A73 /* juce_TimeSliceThread.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_TimeSliceThread.cpp; path = ../../JuceLibraryCode/modules/juce_core/threads/juce_TimeSliceThread.cpp; sourceTree = SOURCE_ROOT; };
@@ -1429,6 +1439,8 @@
 				0C78A2C615B467900049C0C8 /* Reverb.h */,
 				0C78A2C715B467900049C0C8 /* Tremolo.cpp */,
 				0C78A2C815B467900049C0C8 /* Tremolo.h */,
+				FC2A98A1161A04C00020C16D /* Bitcrusher.h */,
+				FC2A98A2161A04C00020C16D /* Bitcrusher.cpp */,
 			);
 			path = "DSP Effects";
 			sourceTree = "<group>";
@@ -1615,6 +1627,10 @@
 				0C78A31615B467900049C0C8 /* FxGuiFlanger.cpp */,
 				0C78A32115B467900049C0C8 /* FxGuiTremolo.h */,
 				0C78A32015B467900049C0C8 /* FxGuiTremolo.cpp */,
+				FC2A0C911612209100395455 /* FxGuiDistortion.h */,
+				FC2A0C921612209100395455 /* FxGuiDistortion.cpp */,
+				FC1622BD161B23B0004FE9E3 /* FxGuiBitcrusher.h */,
+				FC1622BE161B23B0004FE9E3 /* FxGuiBitcrusher.cpp */,
 			);
 			path = "Effects GUIs";
 			sourceTree = "<group>";
@@ -1762,6 +1778,7 @@
 		0C78A37D15B467910049C0C8 /* Third Party Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				FC2A0C4E1612038A00395455 /* fastmath.h */,
 				0C78A37E15B467910049C0C8 /* DspFilters */,
 				0C78A3A715B467910049C0C8 /* Juced */,
 				0C78A3A915B467910049C0C8 /* oscpack */,
@@ -3648,6 +3665,9 @@
 				0C9950D715E9169E0060688B /* XmlAttributesListBox.cpp in Sources */,
 				0C8BD8C216075E2F003A1057 /* EliteControlsComponent.cpp in Sources */,
 				0C8BD8C616077158003A1057 /* GuiEliteControlsSettings.cpp in Sources */,
+				FC2A0C931612209100395455 /* FxGuiDistortion.cpp in Sources */,
+				FC2A98A3161A04C00020C16D /* Bitcrusher.cpp in Sources */,
+				FC1622BF161B23B0004FE9E3 /* FxGuiBitcrusher.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

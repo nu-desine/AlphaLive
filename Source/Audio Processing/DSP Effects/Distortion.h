@@ -49,12 +49,13 @@
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
 #include "../../Third Party Libraries/DspFilters/Dsp.h"
+#include "../../Third Party Libraries/fastmath.h"
 
-class DistortionClass
+class Distortion
 {
 public:
-	DistortionClass(int padNumber_, float sampleRate_);
-	~DistortionClass();
+	Distortion(int padNumber_, float sampleRate_);
+	~Distortion();
     
     //Function that processes the audio
     void processAudio (const AudioSourceChannelInfo& bufferToFill);
@@ -62,14 +63,16 @@ public:
     void processAlphaTouch (int pressureValue);
     
     //Functions that set the effect parameters
-    void setMix (float value);
-    void setOverdrive (float value);
-    void setTone1 (float value);
-    void setTone2 (float value);
+    void setInputGain (double value);
+    void setDrive (double value);
+    void setMix (double value);
+	void setTone (double value);
+	
+	void setDistortionTypeMenu(int value);
     
     //Functions that set the AlphaTouch settings
 	void setAlphaTouchParam (int value);
-    void setAlphaTouchIntensity (float value);
+    void setAlphaTouchIntensity (double value);
     void setAlphaTouchReverse (int value);
     
     void setGain (float value);
@@ -78,22 +81,34 @@ public:
 private:
     
     //The filters
-    Dsp::Filter *preFilter;
-    Dsp::Filter *postFilter;
-    Dsp::Params paramsPreFilter;
-    Dsp::Params paramsPostFilter;
-    
-    float mix, mixControl;
-    float frequencyControlPreFilter; //Tone 1
-    float frequencyControlPostFilter; //Tone 2
-    float preGain, preGainControl; //Overdrive
-    float postGain;
+    Dsp::Filter *preFilter1;
+    Dsp::Filter *postFilter1;
+	Dsp::Filter *postFilter2;
+    Dsp::Params paramsPreFilter1;
+    Dsp::Params paramsPostFilter1;
+    Dsp::Params paramsPostFilter2;
+	
+    double wetDryMixControl, wetDryMix, wetDryMixPrev;
+	double drive, driveControlValue;
+    double frequencyControlPreFilter; //Tone 1
+    double frequencyControlPostFilter; //Tone 2
+	double toneControl;
+    double inputGain, inputGainPrev, inputGainControl; //Overdrive
+    double outputGain, outputGainPrev, outputGainControl;
+	
+	double preFilter1Cutoff, preFilter2Cutoff; 
+	double postFilter1Cutoff, postFilter1Bandwidth, postFilter2Cutoff, postFilter2Bandwidth;
+	
+	float *pIn[2], *leftChannel, *rightChannel, dl, dr;
     
     int alphaTouchParam;
-    float alphaTouchIntensity;
+    double alphaTouchIntensity;
     bool alphaTouchReverse;
-    
-    CriticalSection sharedMemory;
+	int comboBoxID;
+	
+	bool bypassFilter;
+	
+	CriticalSection sharedMemory;
     
     int padNumber;
     

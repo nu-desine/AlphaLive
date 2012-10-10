@@ -43,15 +43,15 @@ public:
     void processAlphaTouch (int pressureValue);
     
     //Functions that set the effect parameters
-    void setWetMix (float value);
-    void setDelayTime (float value);
-    void setFeedback (float value);
-    void setLpfFrequency (float value);
-    void setHpfFrequency (float value);
+    void setWetMix (double value);
+    void setDelayTime (double value);
+    void setFeedback (double value);
+    void setLpfFrequency (double value);
+    void setHpfFrequency (double value);
     
     //Functions that set the AlphaTouch settings
 	void setAlphaTouchParam (int value);
-    void setAlphaTouchIntensity (float value);
+    void setAlphaTouchIntensity (double value);
     void setAlphaTouchReverse (int value);
     
     void setSampleRate (float value);
@@ -71,13 +71,13 @@ private:
     Dsp::Params paramsLpFilter;
     Dsp::Params paramsHpFilter;
     
-    float wetMix, wetMixPrev, wetMixControlValue;
-    float lpfFrequencyControlValue, hpfFrequencyControlValue;
-    float feedback, feedbackControlValue;
+    double wetMix, wetMixPrev, wetMixControlValue;
+    double lpfFrequencyControlValue, hpfFrequencyControlValue;
+    double feedback, feedbackControlValue;
     int delaySamples, delaySamplesControlValue;
     
     int alphaTouchParam;
-    float alphaTouchIntensity;
+    double alphaTouchIntensity;
     bool alphaTouchReverse;
     
     CriticalSection sharedMemory;

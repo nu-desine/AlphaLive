@@ -342,6 +342,40 @@ public:
     int getPadFxTremoloAlphaTouch();
     int getPadFxTremoloAtReverse();
     double getPadFxTremoloAtIntensity();
+	//distortion
+	void setPadFxDistortionInputGain (double value);
+	void setPadFxDistortionDrive (double value);
+	void setPadFxDistortionWetDryMix (double value);
+	void setPadFxDistortionTone (double value);
+	void setPadFxDistortionTypeMenu (int value);
+	void setPadFxDistortionAlphaTouch (int value);
+	void setPadFxDistortionAtReverse (int value);
+	void setPadFxDistortionAtIntensity (double value);
+	double getPadFxDistortionInputGain();
+	double getPadFxDistortionDrive();
+	double getPadFxDistortionWetDryMix();
+	double getPadFxDistortionTone();
+	int getPadFxDistortionTypeMenu();
+	int getPadFxDistortionAlphaTouch();
+	int getPadFxDistortionAtReverse();
+	float getPadFxDistortionAtIntensity();
+	//Bitcrusher
+	void setPadFxBitcrusherInputGain (double value);
+	void setPadFxBitcrusherCrush (int value);
+	void setPadFxBitcrusherDownsample(int value);
+	void setPadFxBitcrusherWetDryMix (double value);
+	void setPadFxBitcrusherSmoothing (double value);
+	void setPadFxBitcrusherAlphaTouch (int value);
+	void setPadFxBitcrusherAtReverse (int value);
+	void setPadFxBitcrusherAtIntensity (double value);
+	double getPadFxBitcrusherInputGain();
+	int getPadFxBitcrusherDownsample();
+	int getPadFxBitcrusherCrush();
+	double getPadFxBitcrusherWetDryMix();
+	double getPadFxBitcrusherSmoothing();
+	int getPadFxBitcrusherAlphaTouch();
+	int getPadFxBitcrusherAtReverse();
+	float getPadFxBitcrusherAtIntensity();
     
     //==================================================================
     //==================================================================
@@ -508,6 +542,27 @@ private:
     int padFxTremoloAlphaTouch;
     int padFxTremoloAtReverse;
     float padFxTremoloAtIntensity;
+	
+	//Distortion
+	double padFxDistortionInputGain;
+	double padFxDistortionDrive;
+	double padFxDistortionWetDryMix;
+	double padFxDistortionTone;
+	int padFxDistortionType;
+	int padFxDistortionAlphaTouch;
+	int padFxDistortionAtReverse;
+	int padFxDistortionAtIntensity;
+	
+	//Bitcrusher
+	double padFxBitcrusherInputGain;
+	int padFxBitcrusherCrush;
+	int padFxBitcrusherDownsample;
+	double padFxBitcrusherWetDryMix;
+	double padFxBitcrusherSmoothing;
+	int padFxBitcrusherAlphaTouch;
+	int padFxBitcrusherAtReverse;
+	int padFxBitcrusherAtIntensity;
+	
     
 };
 

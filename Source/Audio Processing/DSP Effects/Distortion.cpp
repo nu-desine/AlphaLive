@@ -63,7 +63,7 @@ Distortion::Distortion(int padNumber_, float sampleRate_)
     inputGain = inputGainPrev = inputGainControl = PAD_SETTINGS->getPadFxDistortionInputGain();
 	
 	//drive value
-	drive = (PAD_SETTINGS->getPadFxDistortionDrive() + 0.1) * 60;
+	drive = driveControlValue = PAD_SETTINGS->getPadFxDistortionDrive();
 	
     //wet/dry mix ratio
     wetDryMixPrev = wetDryMix = wetDryMixControl = PAD_SETTINGS->getPadFxDistortionWetDryMix();
@@ -291,36 +291,41 @@ void Distortion::processAlphaTouch (int pressureValue)
     switch (alphaTouchParam) 
     {
 		case 2: //Input gain
-            if (alphaTouchReverse == false){
+            if (alphaTouchReverse == false)
+            {
                 inputGain = inputGainControl + (pressureValue * (((1.0-inputGainControl)*alphaTouchIntensity)/511.0));
-				inputGain * inputGain * inputGain;
             }
-			else{
+			else
+            {
                 inputGain = inputGainControl - (pressureValue * (((1.0-(1.0 - inputGainControl))*alphaTouchIntensity)/511.0));
-				inputGain * inputGain * inputGain;
 			}
+            
+            inputGain = inputGain * inputGain * inputGain;
             std::cout << inputGain << std::endl;
             break;
 			
 		case 3: //Drive
-            if (alphaTouchReverse == false){
+            if (alphaTouchReverse == false)
+            {
                 drive = driveControlValue + (pressureValue * (((60.0-driveControlValue)*alphaTouchIntensity)/511.0));
 			}
 			else
-                drive = driveControlValue - (pressureValue * (((60.0-(60.0 - driveControlValue))*alphaTouchIntensity)/511.0));
+                drive = driveControlValue - (pressureValue * (((59.9-(60.0 - driveControlValue))*alphaTouchIntensity)/511.0));
             
             std::cout << drive << std::endl;
             break;
 			
 		case 4: //Tone
 			bypassFilter = false;
-			if (alphaTouchReverse == false){
-                paramsPostFilter1[1] = (toneControl + (pressureValue * (((1.0 - toneControl)*alphaTouchIntensity)/511.0)) * 9000);
-				paramsPostFilter2[1] = (toneControl + (pressureValue * (((1.0 - toneControl)*alphaTouchIntensity)/511.0)) * 11000);
+			if (alphaTouchReverse == false)
+            {
+                paramsPostFilter1[1] = 9000 * (toneControl + (pressureValue * (((1.0 - toneControl)*alphaTouchIntensity)/511.0)));
+				paramsPostFilter2[1] = 11000 * (toneControl + (pressureValue * (((1.0 - toneControl)*alphaTouchIntensity)/511.0)));
 			}
-            else{
-                paramsPostFilter1[1] = (toneControl - (pressureValue * (((1.0 - (1.0 - toneControl))*alphaTouchIntensity)/511.0)) * 9000);
-				paramsPostFilter2[1] = (toneControl - (pressureValue * (((1.0 - (1.0 - toneControl))*alphaTouchIntensity)/511.0)) * 11000); 
+            else
+            {
+                paramsPostFilter1[1] = 9000 * (toneControl - (pressureValue * (((0.995 - (1.0 - toneControl))*alphaTouchIntensity)/511.0)));
+				paramsPostFilter2[1] = 11000 * (toneControl - (pressureValue * (((0.995 - (1.0 - toneControl))*alphaTouchIntensity)/511.0))); 
             }
 			if (pressureValue == 0 && toneControl == 0) 
 			{
@@ -331,16 +336,18 @@ void Distortion::processAlphaTouch (int pressureValue)
             break;
 		
 		case 5: //Mix
-            if (alphaTouchReverse == false){
+            if (alphaTouchReverse == false)
+            {
                 wetDryMix = wetDryMixControl + (pressureValue * (((1.0-wetDryMixControl)*alphaTouchIntensity)/511.0));
-				wetDryMix * wetDryMix * wetDryMix;
 			}
-			else{
+			else
+            {
                 wetDryMix = wetDryMixControl - (pressureValue * (((1.0-(1.0-wetDryMixControl))*alphaTouchIntensity)/511.0));
-				wetDryMix * wetDryMix * wetDryMix;
 			}
+            wetDryMix = wetDryMix * wetDryMix * wetDryMix;
 			
             std::cout << wetDryMix << std::endl;
+            
             break;
 
         default:
@@ -362,7 +369,6 @@ void Distortion::setDrive(double value)
 {
 	sharedMemory.enter();
     drive = driveControlValue = value;
-	drive = (drive + 0.1) * 60;
     sharedMemory.exit();
 }
 

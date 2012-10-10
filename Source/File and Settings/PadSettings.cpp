@@ -206,7 +206,7 @@ PadSettings::PadSettings(int arrayIndex)
     padFxTremoloAtIntensity = 1.0;
 	//Distortion
 	padFxDistortionInputGain = 0.8;
-	padFxDistortionDrive = 0.5;
+	padFxDistortionDrive = 50;
 	padFxDistortionTone = 0.;
 	padFxDistortionWetDryMix = 0.5;
 	padFxDistortionType = 1;

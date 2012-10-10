@@ -42,19 +42,17 @@ Bitcrusher::Bitcrusher(int padNumber_, float sampleRate_)
     inputGain = inputGainPrev = inputGainControl = PAD_SETTINGS->getPadFxBitcrusherInputGain();
 	
 	//crush value
-	crush = PAD_SETTINGS->getPadFxBitcrusherCrush();
+	crush = crushControlValue = PAD_SETTINGS->getPadFxBitcrusherCrush();
 	
-	downsample = PAD_SETTINGS->getPadFxBitcrusherDownsample();
+	downsample = downsampleControl = PAD_SETTINGS->getPadFxBitcrusherDownsample();
 	
     //wet/dry mix ratio
     wetDryMixPrev = wetDryMix = wetDryMixControl = PAD_SETTINGS->getPadFxBitcrusherWetDryMix();
     
-	
     alphaTouchParam = PAD_SETTINGS->getPadFxBitcrusherAlphaTouch();
     alphaTouchReverse = PAD_SETTINGS->getPadFxBitcrusherAtReverse();
     alphaTouchIntensity = PAD_SETTINGS->getPadFxBitcrusherAtIntensity();
 
-    downsample = PAD_SETTINGS->getPadFxBitcrusherDownsample();
     sampleL = 0.0;
     sampleR = 0.0;
     counter = downsample;
@@ -166,59 +164,70 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
     switch (alphaTouchParam) 
     {
 		case 2: //Input gain
-            if (alphaTouchReverse == false){
+            if (alphaTouchReverse == false)
+            {
                 inputGain = inputGainControl + (pressureValue * (((1.0-inputGainControl)*alphaTouchIntensity)/511.0));
-				inputGain * inputGain * inputGain;
 			}
-            else{
+            else
+            {
                 inputGain = inputGainControl - (pressureValue * (((1.0-(1.0-inputGainControl))*alphaTouchIntensity)/511.0));
-				inputGain * inputGain * inputGain;
 			}
+            
+            inputGain = inputGain * inputGain * inputGain;
 			
 			std::cout << inputGain << std::endl;
 			break;
 			
 		case 3: //downsample
-            if (alphaTouchReverse == false){
-                downsample = downsampleControl + (pressureValue * (((16 - downsampleControl)*alphaTouchIntensity)/511.0));
+            if (alphaTouchReverse == false)
+            {
+                downsample = roundToInt (downsampleControl + (pressureValue * (((16.0 - downsampleControl)*alphaTouchIntensity)/511.0)));
             }
 			else
-                downsample = downsampleControl - (pressureValue * (((16-(16-downsampleControl))*alphaTouchIntensity)/511.0));
+            {
+                downsample = roundToInt (downsampleControl - (pressureValue * (((15.0-(16.0-downsampleControl))*alphaTouchIntensity)/511.0)));
+            }
             
 			std::cout << downsample << std::endl;
 			break;
 			
         case 4: //crush
-            if (alphaTouchReverse == false){
-                crush = crushControlValue + (pressureValue * (((8 - crushControlValue)*alphaTouchIntensity)/511.0));
+            if (alphaTouchReverse == false)
+            {
+                crush = roundToInt (crushControlValue + (pressureValue * (((8.0 - crushControlValue)*alphaTouchIntensity)/511.0)));
             }
 			else
-                crush = crushControlValue - (pressureValue * (((8 - (8 - crushControlValue))*alphaTouchIntensity)/511.0));
+            {
+                crush = roundToInt (crushControlValue - (pressureValue * (((7.0 - (8.0 - crushControlValue))*alphaTouchIntensity)/511.0)));
+            }
             
 			std::cout << crush << std::endl;
 			
 			break;
 			
 		case 5: //Smoothing
-            if (alphaTouchReverse == false){
-                paramsSmoothingFilter[1] = (smoothingControl + (pressureValue * (((1.0-smoothingControl)*alphaTouchIntensity)/511.0)) * 10000);
+            if (alphaTouchReverse == false)
+            {
+                paramsSmoothingFilter[1] = 10000 * (smoothingControl + (pressureValue * (((1.0-smoothingControl)*alphaTouchIntensity)/511.0)));
             }
 			else
-                paramsSmoothingFilter[1] = (smoothingControl - (pressureValue * (((1.0-(1.0-smoothingControl))*alphaTouchIntensity)/511.0)) * 10000);
+                paramsSmoothingFilter[1] = 10000 * (smoothingControl - (pressureValue * (((0.9-(1.0-smoothingControl))*alphaTouchIntensity)/511.0)));
            
 			std::cout << paramsSmoothingFilter[1] << std::endl;
 			break;
 			
         case 6: //Mix
-            if (alphaTouchReverse == false){
+            if (alphaTouchReverse == false)
+            {
                 wetDryMix = wetDryMixControl + (pressureValue * (((1.0-wetDryMixControl)*alphaTouchIntensity)/511.0));
-				wetDryMix * wetDryMix * wetDryMix;
             }
-			else{
+			else
+            {
                 wetDryMix = wetDryMixControl - (pressureValue * (((1.0-(1.0-wetDryMixControl))*alphaTouchIntensity)/511.0));
-				wetDryMix * wetDryMix * wetDryMix;
 			}
 			
+            wetDryMix = wetDryMix * wetDryMix * wetDryMix;
+            
 			std::cout << wetDryMix << std::endl;
 			break;
 

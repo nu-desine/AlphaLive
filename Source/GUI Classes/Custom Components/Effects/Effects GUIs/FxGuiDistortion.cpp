@@ -49,7 +49,7 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
 	
 	addAndMakeVisible(driveSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
 	driveSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    driveSlider->setRange(0., 1.0);
+    driveSlider->setRange(0.1, 60);
     driveSlider->addListener(this);
     driveSlider->addMouseListener(this, true);
 	

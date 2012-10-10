@@ -355,16 +355,16 @@ public:
 	float getPadFxDistortionAtIntensity();
 	//Bitcrusher
 	void setPadFxBitcrusherInputGain (double value);
-	void setPadFxBitcrusherDownsample(double value);
-	void setPadFxBitcrusherCrush (double value);
+	void setPadFxBitcrusherCrush (int value);
+	void setPadFxBitcrusherDownsample(int value);
 	void setPadFxBitcrusherWetDryMix (double value);
 	void setPadFxBitcrusherSmoothing (double value);
 	void setPadFxBitcrusherAlphaTouch (int value);
 	void setPadFxBitcrusherAtReverse (int value);
 	void setPadFxBitcrusherAtIntensity (double value);
 	double getPadFxBitcrusherInputGain();
-	double getPadFxBitcrusherDownsample();
-	double getPadFxBitcrusherCrush();
+	int getPadFxBitcrusherDownsample();
+	int getPadFxBitcrusherCrush();
 	double getPadFxBitcrusherWetDryMix();
 	double getPadFxBitcrusherSmoothing();
 	int getPadFxBitcrusherAlphaTouch();
@@ -546,8 +546,8 @@ private:
 	
 	//Bitcrusher
 	double padFxBitcrusherInputGain;
-	double padFxBitcrusherDownsample;
-	double padFxBitcrusherCrush;
+	int padFxBitcrusherCrush;
+	int padFxBitcrusherDownsample;
 	double padFxBitcrusherWetDryMix;
 	double padFxBitcrusherSmoothing;
 	int padFxBitcrusherAlphaTouch;

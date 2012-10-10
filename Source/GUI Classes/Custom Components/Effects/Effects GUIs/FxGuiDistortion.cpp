@@ -38,35 +38,30 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
 	addAndMakeVisible(wetDryMixSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
 	wetDryMixSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     wetDryMixSlider->setRange(0, 1.0);
-    wetDryMixSlider->setValue(1.0, false);
     wetDryMixSlider->addListener(this);
     wetDryMixSlider->addMouseListener(this, true);
 	
 	addAndMakeVisible(toneSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	toneSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     toneSlider->setRange(0., 1.0);
-    toneSlider->setValue(1.0, false);
     toneSlider->addListener(this);
     toneSlider->addMouseListener(this, true);
 	
 	addAndMakeVisible(driveSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
 	driveSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     driveSlider->setRange(0., 1.0);
-    driveSlider->setValue(1.0, false);
     driveSlider->addListener(this);
     driveSlider->addMouseListener(this, true);
 	
     addAndMakeVisible(inputGainSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
 	inputGainSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     inputGainSlider->setRange(0.0, 1.0);
-    inputGainSlider->setValue(0.7, false);
     inputGainSlider->addListener(this);
     inputGainSlider->addMouseListener(this, true);
     
     addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 230));
 	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     intensitySlider->setRange(0.0, 1.0);
-    intensitySlider->setValue(0.5, false);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
     intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
@@ -98,7 +93,7 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
     alphaTouchMenu->addItem(translate("Input Gain"), 2);
     alphaTouchMenu->addItem(translate("Drive"), 3);
     alphaTouchMenu->addItem(translate("Tone"), 4);
-	alphaTouchMenu->addItem(translate("Wet/Dry Mix"), 6);
+	alphaTouchMenu->addItem(translate("Wet/Dry Mix"), 5);
     alphaTouchMenu->setSelectedId(1, true);
     
     Image *reverseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::inverticon_png, BinaryDataNew::inverticon_pngSize));

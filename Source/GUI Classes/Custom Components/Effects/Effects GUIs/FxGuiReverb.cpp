@@ -38,28 +38,24 @@ GuiReverb::GuiReverb(MainComponent &ref)
     addAndMakeVisible(mixSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
 	mixSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     mixSlider->setRange(0.0, 1.0);
-    mixSlider->setValue(0.7, false);
     mixSlider->addListener(this);
     mixSlider->addMouseListener(this, true);
     
 	addAndMakeVisible(roomSizeSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
 	roomSizeSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     roomSizeSlider->setRange(0, 1.0);
-    roomSizeSlider->setValue(0.5, false);
     roomSizeSlider->addListener(this);
     roomSizeSlider->addMouseListener(this, true);
     
     addAndMakeVisible(dampingSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	dampingSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     dampingSlider->setRange(0.0, 1.0);
-    dampingSlider->setValue(0.5, false);
     dampingSlider->addListener(this);
     dampingSlider->addMouseListener(this, true);
     
     addAndMakeVisible(widthSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
 	widthSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     widthSlider->setRange(0.0, 1.0);
-    widthSlider->setValue(0.5, false);
     widthSlider->addListener(this);
     widthSlider->addMouseListener(this, true);
     

@@ -106,7 +106,7 @@ private:
     bool alphaTouchReverse;
 	int comboBoxID;
 	
-	bool filterBypass;
+	bool bypassFilter;
 	
 	CriticalSection sharedMemory;
     

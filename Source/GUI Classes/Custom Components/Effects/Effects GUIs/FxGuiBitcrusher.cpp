@@ -38,42 +38,36 @@ GuiBitcrusher::GuiBitcrusher(MainComponent &ref)
 	addAndMakeVisible(wetDryMixSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
 	wetDryMixSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     wetDryMixSlider->setRange(0, 1.0);
-    wetDryMixSlider->setValue(1.0, false);
     wetDryMixSlider->addListener(this);
     wetDryMixSlider->addMouseListener(this, true);
 	
 	addAndMakeVisible(smoothingSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
 	smoothingSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     smoothingSlider->setRange(0, 1.0);
-    smoothingSlider->setValue(1.0, false);
     smoothingSlider->addListener(this);
     smoothingSlider->addMouseListener(this, true);
 	
 	addAndMakeVisible(crushSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	crushSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     crushSlider->setRange(1, 8, 1.);
-    crushSlider->setValue(1.0, false);
     crushSlider->addListener(this);
     crushSlider->addMouseListener(this, true);
 	
 	addAndMakeVisible(downsampleSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
 	downsampleSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    downsampleSlider->setRange(1., 16., 1.);
-    downsampleSlider->setValue(1.0, false);
+    downsampleSlider->setRange(1, 16, 1.);
     downsampleSlider->addListener(this);
     downsampleSlider->addMouseListener(this, true);
 	
     addAndMakeVisible(inputGainSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
 	inputGainSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     inputGainSlider->setRange(0.0, 1.0);
-    inputGainSlider->setValue(0.7, false);
     inputGainSlider->addListener(this);
     inputGainSlider->addMouseListener(this, true);
     
     addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 230));
 	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     intensitySlider->setRange(0.0, 1.0);
-    intensitySlider->setValue(0.5, false);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
     intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
@@ -89,9 +83,9 @@ GuiBitcrusher::GuiBitcrusher(MainComponent &ref)
     alphaTouchMenu->addMouseListener(this, true);
     alphaTouchMenu->addItem(translate("Off"), 1);
     alphaTouchMenu->addItem(translate("Input Gain"), 2);
-    alphaTouchMenu->addItem(translate("Crush"), 3);
-    alphaTouchMenu->addItem(translate("Smoothing"), 4);
-	alphaTouchMenu->addItem(translate("Output Gain"), 5);
+    alphaTouchMenu->addItem(translate("Downsample"), 3);
+	alphaTouchMenu->addItem(translate("Crush"), 4);
+    alphaTouchMenu->addItem(translate("Smoothing"), 5);
 	alphaTouchMenu->addItem(translate("Wet/Dry Mix"), 6);
     alphaTouchMenu->setSelectedId(1, true);
     
@@ -268,8 +262,8 @@ void GuiBitcrusher::updateDisplay()
     else if(MULTI_PADS)
     {
         inputGainSlider->setValue(0.7, true);
-		crushSlider->setValue(16.0, true);
-        crushSlider->setValue(8.0, true);
+		downsampleSlider->setValue(16, true);
+        crushSlider->setValue(8, true);
 		smoothingSlider->setValue(1.0, true);
 		wetDryMixSlider->setValue(1.0, true);
         syncButton->setToggleState(true, true);
@@ -291,7 +285,7 @@ void GuiBitcrusher::mouseEnter (const MouseEvent &e)
 	else if (downsampleSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Downsample Contol. Sets the amount of downsampling effecting the bitcrushing."));
-        parameterHoverLabel->setText(String(crushSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(downsampleSlider->getValue(), 3), false);
     }
     else if (crushSlider->isMouseOver(true))
     {

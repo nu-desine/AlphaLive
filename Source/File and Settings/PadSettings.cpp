@@ -204,18 +204,18 @@ PadSettings::PadSettings(int arrayIndex)
 	//Distortion
 	padFxDistortionInputGain = 0.8;
 	padFxDistortionDrive = 0.5;
-	padFxDistortionTone = 0.2;
-	padFxDistortionWetDryMix = 0.7;
+	padFxDistortionTone = 0.;
+	padFxDistortionWetDryMix = 0.5;
 	padFxDistortionType = 1;
 	padFxDistortionAlphaTouch = 2;
 	padFxDistortionAtReverse = 0;
 	padFxDistortionAtIntensity = 1.0;
 	//Bitcrusher
-	padFxBitcrusherInputGain = 0.8;
-	padFxBitcrusherDownsample = 16.;
-	padFxBitcrusherCrush = 8;
-	padFxBitcrusherSmoothing = 0.9;
-	padFxBitcrusherWetDryMix = 0.7;
+	padFxBitcrusherInputGain = 1;
+	padFxBitcrusherDownsample = 16;
+	padFxBitcrusherCrush = 2;
+	padFxBitcrusherSmoothing = 0.92;
+	padFxBitcrusherWetDryMix = 0.64;
 	padFxBitcrusherAlphaTouch = 2;
 	padFxBitcrusherAtReverse = 0;
 	padFxBitcrusherAtIntensity = 1.0;
@@ -2228,7 +2228,7 @@ void PadSettings::setPadFxBitcrusherInputGain (double value)
     else if (mode == 3)
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBitcrusher().setInputGain(value);
 }
-void PadSettings::setPadFxBitcrusherDownsample (double value)
+void PadSettings::setPadFxBitcrusherDownsample (int value)
 {
     padFxBitcrusherDownsample = value;
     if (mode == 2)
@@ -2236,7 +2236,7 @@ void PadSettings::setPadFxBitcrusherDownsample (double value)
     else if (mode == 3)
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->getBitcrusher().setDownsample(value);
 }
-void PadSettings::setPadFxBitcrusherCrush (double value)
+void PadSettings::setPadFxBitcrusherCrush (int value)
 {
     padFxBitcrusherCrush = value;
     if (mode == 2)
@@ -2289,11 +2289,11 @@ double PadSettings::getPadFxBitcrusherInputGain()
 {
     return padFxBitcrusherInputGain;
 }
-double PadSettings::getPadFxBitcrusherDownsample()
+int PadSettings::getPadFxBitcrusherDownsample()
 {
     return padFxBitcrusherDownsample;
 }
-double PadSettings::getPadFxBitcrusherCrush()
+int PadSettings::getPadFxBitcrusherCrush()
 {
     return padFxBitcrusherCrush;
 }

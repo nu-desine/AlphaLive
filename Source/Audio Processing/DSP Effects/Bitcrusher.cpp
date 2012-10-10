@@ -34,7 +34,7 @@ Bitcrusher::Bitcrusher(int padNumber_, float sampleRate_)
     // sample rate
     paramsSmoothingFilter[0] = sampleRate_;
     // centre frequency
-    paramsSmoothingFilter[1] = 1000.0;
+    paramsSmoothingFilter[1] = PAD_SETTINGS->getPadFxBitcrusherSmoothing() * 10000;
     // Q/Bandwidth (static)
     paramsSmoothingFilter[2] = 2.0;
 	
@@ -128,8 +128,8 @@ void Bitcrusher::processAudio (const AudioSourceChannelInfo& bufferToFill)
 		*leftChannel = float(sL) / 32768.0;
 		*rightChannel = float(sR) / 32768.0;
 		
-		*leftChannel *= 1.2;
-		*rightChannel *= 1.2;
+		*leftChannel *= 0.6;
+		*rightChannel *= 0.6;
 		
 		//move to next pair of samples
 		leftChannel++;
@@ -165,51 +165,63 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
     sharedMemory.enter();
     switch (alphaTouchParam) 
     {
-        case 2: //Mix
-            if (alphaTouchReverse == false)
-                wetDryMix = wetDryMixControl + (pressureValue * (((1.0-wetDryMixControl)*alphaTouchIntensity)/511.0));
-            else
-                wetDryMix = wetDryMixControl - (pressureValue * (((1.0-(1.0-wetDryMixControl))*alphaTouchIntensity)/511.0));
+		case 2: //Input gain
+            if (alphaTouchReverse == false){
+                inputGain = inputGainControl + (pressureValue * (((1.0-inputGainControl)*alphaTouchIntensity)/511.0));
+				inputGain * inputGain * inputGain;
+			}
+            else{
+                inputGain = inputGainControl - (pressureValue * (((1.0-(1.0-inputGainControl))*alphaTouchIntensity)/511.0));
+				inputGain * inputGain * inputGain;
+			}
+			
+			std::cout << inputGain << std::endl;
+			break;
+			
+		case 3: //downsample
+            if (alphaTouchReverse == false){
+                downsample = downsampleControl + (pressureValue * (((16 - downsampleControl)*alphaTouchIntensity)/511.0));
+            }
+			else
+                downsample = downsampleControl - (pressureValue * (((16-(16-downsampleControl))*alphaTouchIntensity)/511.0));
             
-            std::cout << wetDryMix << std::endl;
-            break;
-            
-		case 3: //Smoothing
-            if (alphaTouchReverse == false)
-               paramsSmoothingFilter[1]  = smoothingControl + (pressureValue * (((1.0-smoothingControl)*alphaTouchIntensity)/511.0));
-            else
-                paramsSmoothingFilter[1] = smoothingControl - (pressureValue * (((1.0-(1.0-smoothingControl))*alphaTouchIntensity)/511.0));
-            
-            std::cout << wetDryMix << std::endl;
-            break;
+			std::cout << downsample << std::endl;
+			break;
 			
         case 4: //crush
-            if (alphaTouchReverse == false)
-                crush = crushControlValue + (pressureValue * (((16.0-crushControlValue)*alphaTouchIntensity)/511.0));
-            else
-                crush = crushControlValue - (pressureValue * (((16.0-(16.0 - crushControlValue))*alphaTouchIntensity)/511.0));
+            if (alphaTouchReverse == false){
+                crush = crushControlValue + (pressureValue * (((8 - crushControlValue)*alphaTouchIntensity)/511.0));
+            }
+			else
+                crush = crushControlValue - (pressureValue * (((8 - (8 - crushControlValue))*alphaTouchIntensity)/511.0));
             
-            std::cout << crush << std::endl;
-            break;
+			std::cout << crush << std::endl;
 			
-		case 5: //Input gain
-            if (alphaTouchReverse == false)
-                inputGain = inputGainControl + (pressureValue * (((1.0-inputGainControl)*alphaTouchIntensity)/511.0));
-            else
-                inputGain = inputGainControl - (pressureValue * (((1.0-(1.0 - inputGainControl))*alphaTouchIntensity)/511.0));
-            
-            std::cout << inputGain << std::endl;
-            break;
+			break;
 			
-		case 6: //downsample
-            if (alphaTouchReverse == false)
-                downsample = downsampleControl + (pressureValue * (((1.0-downsampleControl)*alphaTouchIntensity)/511.0));
-            else
-                downsample = downsampleControl - (pressureValue * (((1.0-(1.0 - downsampleControl))*alphaTouchIntensity)/511.0));
-            
-            std::cout << downsample << std::endl;
-            break;
-            
+		case 5: //Smoothing
+            if (alphaTouchReverse == false){
+                paramsSmoothingFilter[1] = (smoothingControl + (pressureValue * (((1.0-smoothingControl)*alphaTouchIntensity)/511.0)) * 10000);
+            }
+			else
+                paramsSmoothingFilter[1] = (smoothingControl - (pressureValue * (((1.0-(1.0-smoothingControl))*alphaTouchIntensity)/511.0)) * 10000);
+           
+			std::cout << paramsSmoothingFilter[1] << std::endl;
+			break;
+			
+        case 6: //Mix
+            if (alphaTouchReverse == false){
+                wetDryMix = wetDryMixControl + (pressureValue * (((1.0-wetDryMixControl)*alphaTouchIntensity)/511.0));
+				wetDryMix * wetDryMix * wetDryMix;
+            }
+			else{
+                wetDryMix = wetDryMixControl - (pressureValue * (((1.0-(1.0-wetDryMixControl))*alphaTouchIntensity)/511.0));
+				wetDryMix * wetDryMix * wetDryMix;
+			}
+			
+			std::cout << wetDryMix << std::endl;
+			break;
+
         default:
             break;
     }
@@ -219,6 +231,7 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
 
 void Bitcrusher::setInputGain (double value)
 {
+	std::cout << value << std::endl;
 	value = value*value*value;
 	
     sharedMemory.enter();
@@ -226,15 +239,19 @@ void Bitcrusher::setInputGain (double value)
     sharedMemory.exit();
 }
 
-void Bitcrusher::setCrush(double value)
+void Bitcrusher::setCrush(int value)
 {
+	std::cout << value << std::endl;
+	
 	sharedMemory.enter();
     crush = crushControlValue = value;
     sharedMemory.exit();
 }
 
-void Bitcrusher::setDownsample(double value)
+void Bitcrusher::setDownsample(int value)
 {
+	std::cout << value << std::endl;
+	
 	sharedMemory.enter();
 	downsample = downsampleControl = value;
 	sharedMemory.exit();
@@ -242,6 +259,7 @@ void Bitcrusher::setDownsample(double value)
 
 void Bitcrusher::setMix (double value)
 {
+	std::cout << value << std::endl;
 	value = value*value*value;
 	
     sharedMemory.enter();
@@ -251,6 +269,7 @@ void Bitcrusher::setMix (double value)
 
 void Bitcrusher::setSmoothing (double value)
 {
+	std::cout << value << std::endl;
 	value = value*value*value;
 	
     sharedMemory.enter();

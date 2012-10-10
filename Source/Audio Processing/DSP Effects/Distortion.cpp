@@ -43,8 +43,6 @@ Distortion::Distortion(int padNumber_, float sampleRate_)
     postFilter1 = new Dsp::SmoothedFilterDesign <Dsp::RBJ::Design::BandPass2, 2> (1024);
     // sample rate
     paramsPostFilter1[0] = sampleRate_;
-    // centre frequency
-    paramsPostFilter1[1] = (PAD_SETTINGS->getPadFxDistortionTone() * 9000.) + 1.;
     // Q/Bandwidth
     paramsPostFilter1[2] = 1.0;
     
@@ -53,12 +51,11 @@ Distortion::Distortion(int padNumber_, float sampleRate_)
     postFilter2 = new Dsp::SmoothedFilterDesign <Dsp::RBJ::Design::BandPass2, 2> (1024);
     // sample rate
     paramsPostFilter2[0] = sampleRate_;
-    // centre frequency
-    paramsPostFilter2[1] = (PAD_SETTINGS->getPadFxDistortionTone() * 10500.) + 1.;
     // Q/Bandwidth
     paramsPostFilter2[2] = 1.0;
 	
-	filterBypass = false;
+	//setTone call also sets the bypass
+	setTone(PAD_SETTINGS->getPadFxDistortionTone());
    
 	comboBoxID = PAD_SETTINGS->getPadFxDistortionTypeMenu();
 	
@@ -243,8 +240,8 @@ void Distortion::processAudio (const AudioSourceChannelInfo& bufferToFill)
 		}
 		 */
 		
-		*leftChannel *= 0.8;
-		*rightChannel *= 0.8;
+		*leftChannel *= 0.3;
+		*rightChannel *= 0.3;
 		
 		//move to next pair of samples
 		leftChannel++;
@@ -255,7 +252,7 @@ void Distortion::processAudio (const AudioSourceChannelInfo& bufferToFill)
 	wetBufferSplit.copyFrom(0, 0, wetBuffer, 0, 0, wetBuffer.getNumSamples());
 	wetBufferSplit.copyFrom(1, 0, wetBuffer, 1, 0, wetBuffer.getNumSamples());
 	
-	if (filterBypass == false) {
+	if (bypassFilter == false) {
 		sharedMemory.enter();
 		//===apply post-filter1===
 		postFilter1->setParams(paramsPostFilter1);
@@ -290,61 +287,67 @@ void Distortion::processAudio (const AudioSourceChannelInfo& bufferToFill)
 
 void Distortion::processAlphaTouch (int pressureValue)
 {
+	if (alphaTouchParam == 3 && bypassFilter == true) {
+		bypassFilter = false;
+	}
     sharedMemory.enter();
     switch (alphaTouchParam) 
     {
-        case 2: //Mix
-            if (alphaTouchReverse == false)
-                wetDryMix = wetDryMixControl + (pressureValue * (((1.0-wetDryMixControl)*alphaTouchIntensity)/511.0));
-            else
-                wetDryMix = wetDryMixControl - (pressureValue * (((1.0-(1.0-wetDryMixControl))*alphaTouchIntensity)/511.0));
-            
-            std::cout << wetDryMix << std::endl;
-            break;
-            
-        case 3: //Tone
+		case 2: //Input gain
             if (alphaTouchReverse == false){
-                postFilter1Cutoff = toneControl + (pressureValue * (((20000.0-toneControl)*alphaTouchIntensity)/511.0));
-				postFilter2Cutoff = toneControl + (pressureValue * (((20000.0-toneControl)*alphaTouchIntensity)/511.0));
-			}
-            else{
-                postFilter1Cutoff = toneControl - (pressureValue * (((19970.0-(20000.0 - toneControl))*alphaTouchIntensity)/511.0)); 
-				postFilter2Cutoff = toneControl - (pressureValue * (((19970.0-(20000.0 - toneControl))*alphaTouchIntensity)/511.0));
+                inputGain = inputGainControl + (pressureValue * (((1.0-inputGainControl)*alphaTouchIntensity)/511.0));
+				inputGain * inputGain * inputGain;
             }
-			
-            std::cout << postFilter1Cutoff << "&" << postFilter2Cutoff << std::endl;
+			else{
+                inputGain = inputGainControl - (pressureValue * (((1.0-(1.0 - inputGainControl))*alphaTouchIntensity)/511.0));
+				inputGain * inputGain * inputGain;
+			}
+            std::cout << inputGain << std::endl;
             break;
-            
-        case 4: //Drive
-            if (alphaTouchReverse == false)
-                drive = driveControlValue + (pressureValue * (((16.0-driveControlValue)*alphaTouchIntensity)/511.0));
-            else
-                drive = driveControlValue - (pressureValue * (((16.0-(16.0 - driveControlValue))*alphaTouchIntensity)/511.0));
+			
+		case 3: //Drive
+            if (alphaTouchReverse == false){
+                drive = driveControlValue + (pressureValue * (((60.0-driveControlValue)*alphaTouchIntensity)/511.0));
+			}
+			else
+                drive = driveControlValue - (pressureValue * (((60.0-(60.0 - driveControlValue))*alphaTouchIntensity)/511.0));
             
             std::cout << drive << std::endl;
             break;
 			
-		case 5: //Input gain
-            if (alphaTouchReverse == false)
-                inputGain = inputGainControl + (pressureValue * (((1.0-inputGainControl)*alphaTouchIntensity)/511.0));
-            else
-                inputGain = inputGainControl - (pressureValue * (((1.0-(1.0 - inputGainControl))*alphaTouchIntensity)/511.0));
-            
-            std::cout << inputGain << std::endl;
-            break;
+		case 4: //Tone
+            if (alphaTouchReverse == false){
+                paramsPostFilter1[1] = (toneControl + (pressureValue * (((1.0 - toneControl)*alphaTouchIntensity)/511.0)) * 9000);
+				paramsPostFilter2[1] = (toneControl + (pressureValue * (((1.0 - toneControl)*alphaTouchIntensity)/511.0)) * 10500);
+			}
+            else{
+                paramsPostFilter1[1] = (toneControl - (pressureValue * (((1.0 - (1.0 - toneControl))*alphaTouchIntensity)/511.0)) * 9000);
+				paramsPostFilter2[1] = (toneControl - (pressureValue * (((1.0 - (1.0 - toneControl))*alphaTouchIntensity)/511.0)) * 10500); 
+            }
 			
-		case 6: //Output gain
-            if (alphaTouchReverse == false)
-                outputGain = outputGainControl + (pressureValue * (((1.0-outputGainControl)*alphaTouchIntensity)/511.0));
-            else
-                outputGain = outputGainControl - (pressureValue * (((1.0-(16.0 - outputGainControl))*alphaTouchIntensity)/511.0));
-            
-            std::cout << outputGain << std::endl;
+			std::cout << paramsPostFilter1[1] << std::endl;
+            break;
+		
+		case 6: //Mix
+            if (alphaTouchReverse == false){
+                wetDryMix = wetDryMixControl + (pressureValue * (((1.0-wetDryMixControl)*alphaTouchIntensity)/511.0));
+				wetDryMix * wetDryMix * wetDryMix;
+			}
+			else{
+                wetDryMix = wetDryMixControl - (pressureValue * (((1.0-(1.0-wetDryMixControl))*alphaTouchIntensity)/511.0));
+				wetDryMix * wetDryMix * wetDryMix;
+			}
+			
+            std::cout << wetDryMix << std::endl;
             break;
             
         default:
             break;
     }
+	
+	if (toneControl == 0){
+		bypassFilter = true;
+	}
     sharedMemory.exit();
      
 }
@@ -377,17 +380,20 @@ void Distortion::setMix (double value)
 
 void Distortion::setTone (double value)
 {
+	std::cout << value << "\n";
 	sharedMemory.enter();
 	value = value*value*value;
 	
-	paramsPostFilter1[1] = (value * 9000.) + 1.;
-	paramsPostFilter2[1] = (value * 10500.) + 1.;
+	toneControl = value;
+	
+	paramsPostFilter1[1] = value * 9000. + 1.;
+	paramsPostFilter2[1] = value * 10500. + 1.;
 
 	if (value == 0){
-		filterBypass = true;
+		bypassFilter = true;
 	}
 	else {
-		filterBypass = false;
+		bypassFilter = false;
 	}
 	sharedMemory.exit();
 }

@@ -63,8 +63,8 @@ public:
     
     //Functions that set the effect parameters
     void setInputGain (double value);
-    void setCrush (double value);
-	void setDownsample(double value);
+    void setCrush (int value);
+	void setDownsample(int value);
     void setMix (double value);
 	void setSmoothing (double value);
     
@@ -86,7 +86,7 @@ private:
 	int downsample, downsampleControl, counter;
 	
     double wetDryMixControl, wetDryMix, wetDryMixPrev;
-	double crush, crushControlValue;
+	int crush, crushControlValue;
 	double smoothingControl;
     double inputGain, inputGainPrev, inputGainControl;
 	

@@ -43,12 +43,13 @@ GuiLowpassFilter::GuiLowpassFilter(MainComponent &ref)
 	addAndMakeVisible(frequencySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
 	frequencySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     frequencySlider->setRange(30, 20000, 1);
+    frequencySlider->setSkewFactor(0.35);
     frequencySlider->addListener(this);
     frequencySlider->addMouseListener(this, true);
     
     addAndMakeVisible(bandwidthSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	bandwidthSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    bandwidthSlider->setRange(0.0, 100.0);
+    bandwidthSlider->setRange(1.0, 100.0);
     bandwidthSlider->addListener(this);
     bandwidthSlider->addMouseListener(this, true);
     

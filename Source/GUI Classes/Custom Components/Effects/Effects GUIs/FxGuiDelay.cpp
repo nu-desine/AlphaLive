@@ -55,12 +55,14 @@ GuiDelay::GuiDelay(MainComponent &ref)
     addAndMakeVisible(lpfFrequencySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
 	lpfFrequencySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     lpfFrequencySlider->setRange(30, 20000, 1);
+    lpfFrequencySlider->setSkewFactor(0.35);
     lpfFrequencySlider->addListener(this);
     lpfFrequencySlider->addMouseListener(this, true);
     
     addAndMakeVisible(hpfFrequencySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
 	hpfFrequencySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     hpfFrequencySlider->setRange(30, 20000, 1);
+    hpfFrequencySlider->setSkewFactor(0.35);
     hpfFrequencySlider->addListener(this);
     hpfFrequencySlider->addMouseListener(this, true);
     

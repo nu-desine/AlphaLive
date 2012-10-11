@@ -384,13 +384,13 @@ void Distortion::setMix (double value)
 void Distortion::setTone (double value)
 {
 	std::cout << value << "\n";
-	sharedMemory.enter();
+    
+    sharedMemory.enter();
 	value = value*value*value;
-	
 	toneControl = value;
 	
-	paramsPostFilter1[1] = value * 9000. + 1.;
-	paramsPostFilter2[1] = value * 11000. + 1.;
+	paramsPostFilter1[1] = value * 9000.0 + 1.0;
+	paramsPostFilter2[1] = value * 11000.0 + 1.0;
 
 	if (value == 0){
 		bypassFilter = true;

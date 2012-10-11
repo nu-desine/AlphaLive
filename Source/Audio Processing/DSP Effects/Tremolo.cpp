@@ -102,10 +102,11 @@ void Tremolo::processAlphaTouch (int pressureValue)
             
         case 4: //shape
             if (alphaTouchReverse == false)
-                shape = shapeControlValue + (pressureValue * (((5-shapeControlValue)*alphaTouchIntensity)/511.0));
+                shape = roundToInt (shapeControlValue + (pressureValue * (((5.0-shapeControlValue)*alphaTouchIntensity)/511.0)));
             else
-                shape = shapeControlValue - (pressureValue * (((5-(5-shapeControlValue))*alphaTouchIntensity)/511.0)); 
-            //the above equation isn't right. are any of the invert ones right??!!
+                shape = roundToInt (shapeControlValue - (pressureValue * (((4.0-(5.0-shapeControlValue))*alphaTouchIntensity)/511.0))); 
+            
+            //the above quations don't seem to work. why?
             
             std::cout << shape << std::endl;
             break;

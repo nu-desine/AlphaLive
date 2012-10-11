@@ -43,7 +43,7 @@ GuiBitcrusher::GuiBitcrusher(MainComponent &ref)
 	
 	addAndMakeVisible(smoothingSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
 	smoothingSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    smoothingSlider->setRange(0.1, 1.0);
+    smoothingSlider->setRange(0.01, 1.0);
     smoothingSlider->addListener(this);
     smoothingSlider->addMouseListener(this, true);
 	

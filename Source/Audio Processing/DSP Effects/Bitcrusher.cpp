@@ -37,6 +37,8 @@ Bitcrusher::Bitcrusher(int padNumber_, float sampleRate_)
     paramsSmoothingFilter[1] = PAD_SETTINGS->getPadFxBitcrusherSmoothing() * 10000;
     // Q/Bandwidth (static)
     paramsSmoothingFilter[2] = 2.0;
+    
+    smoothingControl = PAD_SETTINGS->getPadFxBitcrusherSmoothing();
 	
 	//input gain
     inputGain = inputGainPrev = inputGainControl = PAD_SETTINGS->getPadFxBitcrusherInputGain();
@@ -211,7 +213,7 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
                 paramsSmoothingFilter[1] = 10000 * (smoothingControl + (pressureValue * (((1.0-smoothingControl)*alphaTouchIntensity)/511.0)));
             }
 			else
-                paramsSmoothingFilter[1] = 10000 * (smoothingControl - (pressureValue * (((0.9-(1.0-smoothingControl))*alphaTouchIntensity)/511.0)));
+                paramsSmoothingFilter[1] = 10000 * (smoothingControl - (pressureValue * (((0.99-(1.0-smoothingControl))*alphaTouchIntensity)/511.0)));
            
 			std::cout << paramsSmoothingFilter[1] << std::endl;
 			break;
@@ -241,9 +243,9 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
 void Bitcrusher::setInputGain (double value)
 {
 	std::cout << value << std::endl;
-	value = value*value*value;
 	
     sharedMemory.enter();
+    value = value*value*value;
     inputGain = inputGainControl = value;
     sharedMemory.exit();
 }
@@ -269,21 +271,21 @@ void Bitcrusher::setDownsample(int value)
 void Bitcrusher::setMix (double value)
 {
 	std::cout << value << std::endl;
-	value = value*value*value;
 	
     sharedMemory.enter();
+    value = value*value*value;
     wetDryMix = wetDryMixPrev = wetDryMixControl = value;
     sharedMemory.exit();
 }
 
 void Bitcrusher::setSmoothing (double value)
 {
-	std::cout << value << std::endl;
-	value = value*value*value;
-	
     sharedMemory.enter();
 	paramsSmoothingFilter[1] = value * 10000;
+    smoothingControl = value;
+    std::cout << value << " " << paramsSmoothingFilter[1] << std::endl;
     sharedMemory.exit();
+    
 }
 
 void Bitcrusher::setAlphaTouchParam (int value)

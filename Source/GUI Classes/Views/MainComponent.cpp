@@ -243,7 +243,7 @@ alphaLiveEngineRef(ref),
     infoTextBox->setColour(TextEditor::backgroundColourId, Colours::black.withAlpha(1.0f));
     infoTextBox->setColour(TextEditor::outlineColourId, Colours::transparentBlack);
     infoTextBox->setCaretVisible(false);
-    Font infoFont(11, Font::plain);
+    Font infoFont(infoBoxTextSize, Font::plain);
     infoTextBox->setFont(infoFont);
     infoTextBox->addMouseListener(this, true);
     infoTextBox->setPopupMenuEnabled(false);
@@ -1212,6 +1212,7 @@ void MainComponent::setLocalisation()
 {
     
     static String countryCode = SystemStats::getDisplayLanguage();
+    infoBoxTextSize = 12;
     
     //countryCode will equal ISO 639-1 or ISO 639-2 codes as listed here:
     //http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
@@ -1232,6 +1233,7 @@ void MainComponent::setLocalisation()
         trans = new LocalisedStrings (transFile);
         LocalisedStrings::setCurrentMappings(trans);
         alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
+        infoBoxTextSize = 13.5;
         
     }
     else //english

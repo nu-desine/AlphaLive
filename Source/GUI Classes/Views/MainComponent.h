@@ -191,6 +191,7 @@ private:
     ProjectSettingsComponent *projectSettingsComponent;
     
     String infoBoxText;
+    float infoBoxTextSize;
     
     //==============================================================================
 };

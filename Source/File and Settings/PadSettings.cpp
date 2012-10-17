@@ -128,6 +128,8 @@ PadSettings::PadSettings(int arrayIndex)
     sequencerGain = 1.0;
     sequencerSamplesAttackTime = 0;
     
+    sequencerRecordEnabled = false;
+    
     //controller mode
     controllerControl = 1;
     controllerSceneNumber = 1;
@@ -356,6 +358,8 @@ void PadSettings::resetData (int whatToReset)
         setSequencerPan (0.5);
         setSequencerGain (1.0);
         setSequencerSamplesAttackTime (0);
+        
+        setSequencerRecordEnabled(false);
     }
     
     if (whatToReset != 4)

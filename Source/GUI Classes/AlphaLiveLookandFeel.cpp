@@ -624,13 +624,15 @@ void AlphaLiveLookandFeel::drawPopupMenuBackground (Graphics& g, int width, int 
     //for (int i = 0; i < height; i += 3)
         //g.fillRect (0, i, width, 1);
     
-    g.setColour (background.overlaidWith (Colour (AlphaColours::verydarkgrey_).withAlpha(0.8f)));
+	//overlays colour/shape
+    g.setColour (background.overlaidWith (Colour (AlphaColours::nearlyblack_).withAlpha(1.0f)));
     g.fillRect (0, 0, width, height);
     
-    #if ! JUCE_MAC
-    g.setColour (findColour (PopupMenu::textColourId).withAlpha (0.6f));
-    g.drawRect (0, 0, width, height);
-    #endif
+    //#if ! JUCE_MAC
+	//draws a border
+    //g.setColour (findColour (PopupMenu::textColourId).withAlpha (0.2f));
+    //g.drawRect (0, 0, width, height);
+    //#endif
 }
 
 /*
@@ -772,6 +774,41 @@ void AlphaLiveLookandFeel::drawPopupMenuItem (Graphics& g,
 int AlphaLiveLookandFeel::getDefaultScrollbarWidth()
 {
     return 10;
+}
+
+int AlphaLiveLookandFeel::getDefaultMenuBarHeight()
+{
+    return 20; //or 19, as the menu bar font is equal to 'height * 0.7' = 13.3, which is approx equal to what I have set the popup menu font to be
+}
+
+void AlphaLiveLookandFeel::drawMenuBarBackground (Graphics& g, int width, int height,
+                                         bool, MenuBarComponent& menuBar)
+{
+	ColourGradient barGradient(Colours::darkgrey, 0, 0, Colours::black, 0, /*(height/6)*5*/height, false);
+    g.setGradientFill(barGradient);
+	//g.setColour (Colours::grey);
+    g.fillRect (0, 0, width, height);
+
+	/*
+    const Colour baseColour (LookAndFeelHelpers::createBaseColour (menuBar.findColour (AlphaColours::verydarkgrey_), false, false, false));
+
+    if (menuBar.isEnabled())
+    {
+		
+        drawShinyButtonShape (g,
+                              -4.0f, 0.0f,
+                              width + 8.0f, (float) height,
+                              0.0f,
+                              baseColour,
+                              0.4f,
+                              true, true, true, true);
+		
+    }
+    else
+    {
+        g.fillAll (baseColour);
+    }
+	*/
 }
 
 

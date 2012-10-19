@@ -38,7 +38,7 @@ AppDocumentState::AppDocumentState()
 												"alphalive", 
 												"AlphaLive Project File", 
 												File::getSpecialLocation(File::currentExecutableFile), 
-												0, //document icon seems to be auto-generated in VS using the app icon... or not? 
+												106, //This is the document_icon file ID that can be found by going to File->Opem->File->.exe
 												true);
 	#endif
 

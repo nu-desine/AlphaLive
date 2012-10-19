@@ -1866,8 +1866,8 @@
     <None Include="..\..\JuceLibraryCode\modules\juce_gui_extra\juce_module_info" />
     <None Include="..\..\JuceLibraryCode\modules\juce_opengl\juce_module_info" />
     <None Include="..\..\JuceLibraryCode\modules\juce_video\juce_module_info" />
+    <None Include="document_icon.ico" />
     <None Include="icon.ico" />
-    <None Include="icon1.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include=".\resources.rc" />

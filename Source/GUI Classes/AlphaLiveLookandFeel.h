@@ -105,7 +105,10 @@ public:
 	
     */
     
-	int getDefaultScrollbarWidth(); //<-- why is this not working properly for the fileListComponent? need to scroll it first to adjust the size. Think its working now.
+	int getDefaultScrollbarWidth(); 
+
+	int getDefaultMenuBarHeight();
+	void drawMenuBarBackground (Graphics& g, int width, int height, bool, MenuBarComponent& menuBar);
                                     
    	
 private:

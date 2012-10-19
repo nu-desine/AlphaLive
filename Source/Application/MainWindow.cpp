@@ -66,8 +66,8 @@ MainAppWindow::MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2, MenuB
     centreWithSize (1024, 685);
     #endif
     #if ! JUCE_MAC
-    //add 23 to the height to accomadate the menu bar
-    centreWithSize (1024, 708);
+    //add default menu bar height the height to accomadate the menu bar in the overal window
+	centreWithSize (1024, 685 + LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight());
     #endif
     
     // Register all the app commands..

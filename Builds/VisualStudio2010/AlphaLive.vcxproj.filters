@@ -3542,8 +3542,8 @@
     <None Include="..\..\JuceLibraryCode\modules\juce_video\juce_module_info">
       <Filter>Juce Modules\juce_video</Filter>
     </None>
-    <None Include="icon1.ico" />
     <None Include="icon.ico" />
+    <None Include="document_icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include=".\resources.rc">

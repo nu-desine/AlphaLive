@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="AlphaLive">
@@ -7,6 +6,108 @@
     </Filter>
     <Filter Include="AlphaLive\Source">
       <UniqueIdentifier>{506FF42D-A2F4-031B-74CE-A179E59445BD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Application">
+      <UniqueIdentifier>{07E22873-D3EC-297C-ABB1-F0E7F2FACF86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Audio Processing">
+      <UniqueIdentifier>{A7A68B8E-00B2-C502-0591-46C64945B037}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Audio Processing\DSP Effects">
+      <UniqueIdentifier>{2A3DA68F-989F-AB45-F703-DC77B3C123AC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\File and Settings">
+      <UniqueIdentifier>{BBE6FB53-DE0E-938C-2606-7F5D5870A08C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Functionality Classes">
+      <UniqueIdentifier>{AC0C7E11-7637-C516-6D86-957990BDF574}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Functionality Classes\Controller Mode">
+      <UniqueIdentifier>{70BF1D7E-3664-C5CC-F4ED-3FE9997BEEF9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Functionality Classes\MIDI Mode">
+      <UniqueIdentifier>{06EE3D03-11E2-D624-66FF-6FF9488DD0FF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Functionality Classes\Other">
+      <UniqueIdentifier>{2E89159D-EACD-3CDE-F070-50F038D3A508}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Functionality Classes\Sampler Mode">
+      <UniqueIdentifier>{73A7DAB8-9FD1-9ADF-2CDD-B60BDA422303}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Functionality Classes\Sequencer Mode">
+      <UniqueIdentifier>{7DA9BB94-8E17-20D8-9EE5-64321F2E3B6B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes">
+      <UniqueIdentifier>{BDD3BFE8-1B29-22F5-CCC9-CE932C14A833}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes\Binary Data">
+      <UniqueIdentifier>{E605F97F-E5B5-8D64-196F-BCAE93A60D3B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes\Custom Components">
+      <UniqueIdentifier>{FD69144F-9401-594E-5EB6-9A30402149D1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes\Custom Components\Circle Piano">
+      <UniqueIdentifier>{82665A4F-45AC-BD07-0507-9641899D5B40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes\Custom Components\Circle Waveform">
+      <UniqueIdentifier>{7A6D3EB8-5DFF-4B4F-5739-10378E91C776}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes\Custom Components\Effects">
+      <UniqueIdentifier>{5F5ED15D-CFBA-0336-324F-A8170825D6B7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs">
+      <UniqueIdentifier>{F06D6BD4-186D-B5AB-AD2B-5417AAC7C09B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes\Custom Components\General">
+      <UniqueIdentifier>{690505D6-5260-ABC7-F4B7-AB400EE334C4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes\Custom Components\Graphics">
+      <UniqueIdentifier>{AFF17C29-2E7A-7939-E22E-442C282AA263}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes\Custom Components\Pad">
+      <UniqueIdentifier>{E33A41E0-7D50-BE16-A8AE-7F8A43169E86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes\Custom Components\Scene">
+      <UniqueIdentifier>{A0074F7F-D938-6189-1F4C-FA5230A72303}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes\Custom Components\Sequencer">
+      <UniqueIdentifier>{7F6ECF76-C4A1-89FA-B7D3-15102E8BC1ED}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes\Custom Components\Toolbox">
+      <UniqueIdentifier>{5B866709-86C0-D262-A08A-40AF76207D28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes\Initial Loading Window">
+      <UniqueIdentifier>{DD2B6AF6-C870-3F09-7FBD-4277CC489AB4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes\Sub-Views">
+      <UniqueIdentifier>{B4EA71AD-821E-B279-D2E8-97BA6375972F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\GUI Classes\Views">
+      <UniqueIdentifier>{EB56C236-3584-F7E0-E9BF-63A151B0CC8C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\My IO Classes">
+      <UniqueIdentifier>{C4D080C4-4408-51EB-B0FB-C7E232362B86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Third Party Libraries">
+      <UniqueIdentifier>{9B09C372-683B-11C2-AF63-19BD13D4ACE9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Third Party Libraries\DspFilters">
+      <UniqueIdentifier>{F62A3658-F2E6-4E1E-1955-5CE71A1D45A1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Third Party Libraries\Juced">
+      <UniqueIdentifier>{8BDCF792-86F6-ADA0-F32F-1AE8B5E64825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Third Party Libraries\oscpack">
+      <UniqueIdentifier>{C8007EC2-9A41-3050-382A-31DF72D05824}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Third Party Libraries\oscpack\ip">
+      <UniqueIdentifier>{3A16AF8E-4D50-73DA-734A-07FD45F4A58F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Third Party Libraries\oscpack\ip\posix">
+      <UniqueIdentifier>{7A0A74C4-1E74-E6C9-D80C-97CE5A30A6BB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AlphaLive\Source\Third Party Libraries\oscpack\osc">
+      <UniqueIdentifier>{EDA7145D-EFD4-EE59-49EA-56AFDD69E389}</UniqueIdentifier>
     </Filter>
     <Filter Include="Juce Modules">
       <UniqueIdentifier>{422C46B7-0467-2DB0-BF3C-16DFCAFD69AC}</UniqueIdentifier>
@@ -307,6 +408,345 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\Application\AbstractSubjectAndObserver.cpp">
+      <Filter>AlphaLive\Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Application\Main.cpp">
+      <Filter>AlphaLive\Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Application\MainMenuModel.cpp">
+      <Filter>AlphaLive\Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Application\MainWindow.cpp">
+      <Filter>AlphaLive\Source\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Audio Processing\DSP Effects\BandPassFilter.cpp">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Audio Processing\DSP Effects\Bitcrusher.cpp">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Audio Processing\DSP Effects\Delay.cpp">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Audio Processing\DSP Effects\Distortion.cpp">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Audio Processing\DSP Effects\Flanger.cpp">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Audio Processing\DSP Effects\GainAndPan.cpp">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Audio Processing\DSP Effects\HighPassFilter.cpp">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Audio Processing\DSP Effects\LowpassFilter.cpp">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Audio Processing\DSP Effects\Reverb.cpp">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Audio Processing\DSP Effects\Tremolo.cpp">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Audio Processing\Oscillator.cpp">
+      <Filter>AlphaLive\Source\Audio Processing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\File and Settings\AppDocumentState.cpp">
+      <Filter>AlphaLive\Source\File and Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\File and Settings\AppSettings.cpp">
+      <Filter>AlphaLive\Source\File and Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\File and Settings\PadSettings.cpp">
+      <Filter>AlphaLive\Source\File and Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\File and Settings\StoredSettings.cpp">
+      <Filter>AlphaLive\Source\File and Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Functionality Classes\AlphaLiveEngine.cpp">
+      <Filter>AlphaLive\Source\Functionality Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Functionality Classes\Controller Mode\ModeController.cpp">
+      <Filter>AlphaLive\Source\Functionality Classes\Controller Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Functionality Classes\GlobalClock.cpp">
+      <Filter>AlphaLive\Source\Functionality Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Functionality Classes\MIDI Mode\ModeMidi.cpp">
+      <Filter>AlphaLive\Source\Functionality Classes\MIDI Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Functionality Classes\Other\LayoutsAndScales.cpp">
+      <Filter>AlphaLive\Source\Functionality Classes\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Functionality Classes\Other\PlayStates.cpp">
+      <Filter>AlphaLive\Source\Functionality Classes\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Functionality Classes\Other\TriggerModes.cpp">
+      <Filter>AlphaLive\Source\Functionality Classes\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Functionality Classes\Sampler Mode\AudioFilePlayer.cpp">
+      <Filter>AlphaLive\Source\Functionality Classes\Sampler Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Functionality Classes\Sampler Mode\ModeSampler.cpp">
+      <Filter>AlphaLive\Source\Functionality Classes\Sampler Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Functionality Classes\Sequencer Mode\ModeSequencer.cpp">
+      <Filter>AlphaLive\Source\Functionality Classes\Sequencer Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Functionality Classes\Sequencer Mode\SequenceAudioFilePlayer.cpp">
+      <Filter>AlphaLive\Source\Functionality Classes\Sequencer Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Functionality Classes\Sequencer Mode\SequencePlayer.cpp">
+      <Filter>AlphaLive\Source\Functionality Classes\Sequencer Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\AlphaLiveLookandFeel.cpp">
+      <Filter>AlphaLive\Source\GUI Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\BinaryDataNew.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Binary Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Circle Piano\GuiKeys.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Circle Piano</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Circle Piano\GuiPiano.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Circle Piano</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Circle Waveform\CircleWaveform.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Circle Waveform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Circle Waveform\CircleWaveformCache.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Circle Waveform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Circle Waveform\DemoThumbnailComp.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Circle Waveform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiBandPassFilter.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiBitcrusher.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiDelay.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiDistortion.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiFlanger.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiHighPassFilter.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiLowPassFilter.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiPanAndGain.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiReverb.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiTremolo.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\GuiFxDial.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaAudioSettingsComponent.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaPopUpButton.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaRotarySlider.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaSlider.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaTextButton.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\FileDropButton.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\GuiSwitch.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\ImageSlider.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\ModeButton.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\SettingsButton.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\SettingsButtonImage.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Graphics\GuiCircleBackground.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Pad\GuiPad.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Pad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Pad\GuiPadLayout.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Pad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Pad\GuiPadRow.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Pad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Scene\SceneComponent.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Scene\SceneSlot.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Sequencer\SequencerGrid.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Sequencer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Sequencer\SequencerGridEndBlock.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Sequencer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Sequencer\SequencerGridPlayHead.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Sequencer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Sequencer\SequencerGridPoint.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Sequencer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Toolbox\AlphaListBoxModel.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Toolbox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Toolbox\Toolbox.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Toolbox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Toolbox\XmlAttributesListBox.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Toolbox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Initial Loading Window\LoadingComponent.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Initial Loading Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Initial Loading Window\LoadingWindow.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Initial Loading Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Sub-Views\AboutComponent.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Sub-Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Sub-Views\EliteControlsComponent.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Sub-Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Sub-Views\GuiEliteControlsSettings.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Sub-Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Sub-Views\GuiGlobalClock.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Sub-Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Sub-Views\GuiGlobalPadSettings.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Sub-Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Sub-Views\PreferencesComponent.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Sub-Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Sub-Views\ProjectSettingsComponent.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Sub-Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Views\GuiControllerMode.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Views\GuiMidiMode.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Views\GuiSamplerMode.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Views\GuiSequencerMode.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Views\MainComponent.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Views</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\My IO Classes\OscInput.cpp">
+      <Filter>AlphaLive\Source\My IO Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\My IO Classes\OscOutput.cpp">
+      <Filter>AlphaLive\Source\My IO Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\Bessel.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\Biquad.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\Butterworth.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\Cascade.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\ChebyshevI.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\ChebyshevII.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\Custom.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\Design.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\Documentation.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\Elliptic.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\Filter.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\Legendre.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\Param.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\PoleFilter.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\RBJ.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\RootFinder.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\State.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\oscpack\ip\IpEndpointName.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\oscpack\ip\posix\NetworkingUtils.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\ip\posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\oscpack\ip\posix\UdpSocket.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\ip\posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\oscpack\osc\OscOutboundPacketStream.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\oscpack\osc\OscPrintReceivedElements.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\oscpack\osc\OscReceivedElements.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\oscpack\osc\OscTypes.cpp">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\osc</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_audio_basics\buffers\juce_AudioDataConverters.cpp">
       <Filter>Juce Modules\juce_audio_basics\buffers</Filter>
     </ClCompile>
@@ -403,12 +843,6 @@
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_audio_devices\native\juce_linux_Midi.cpp">
       <Filter>Juce Modules\juce_audio_devices\native</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_audio_devices\native\juce_mac_AudioCDBurner.mm">
-      <Filter>Juce Modules\juce_audio_devices\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_audio_devices\native\juce_mac_AudioCDReader.mm">
-      <Filter>Juce Modules\juce_audio_devices\native</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_audio_devices\native\juce_mac_CoreAudio.cpp">
       <Filter>Juce Modules\juce_audio_devices\native</Filter>
     </ClCompile>
@@ -499,9 +933,6 @@
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_audio_processors\format\juce_AudioPluginFormatManager.cpp">
       <Filter>Juce Modules\juce_audio_processors\format</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_audio_processors\format_types\juce_AudioUnitPluginFormat.mm">
-      <Filter>Juce Modules\juce_audio_processors\format_types</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_audio_processors\format_types\juce_VSTPluginFormat.cpp">
       <Filter>Juce Modules\juce_audio_processors\format_types</Filter>
     </ClCompile>
@@ -548,6 +979,9 @@
       <Filter>Juce Modules\juce_core\text</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_core\text\juce_StringPool.cpp">
+      <Filter>Juce Modules\juce_core\text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_core\text\juce_TextDiff.cpp">
       <Filter>Juce Modules\juce_core\text</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_core\maths\juce_BigInteger.cpp">
@@ -715,21 +1149,6 @@
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_core\native\juce_linux_Threads.cpp">
       <Filter>Juce Modules\juce_core\native</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_core\native\juce_mac_Files.mm">
-      <Filter>Juce Modules\juce_core\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_core\native\juce_mac_Network.mm">
-      <Filter>Juce Modules\juce_core\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_core\native\juce_mac_Strings.mm">
-      <Filter>Juce Modules\juce_core\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_core\native\juce_mac_SystemStats.mm">
-      <Filter>Juce Modules\juce_core\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_core\native\juce_mac_Threads.mm">
-      <Filter>Juce Modules\juce_core\native</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_core\native\juce_posix_NamedPipe.cpp">
       <Filter>Juce Modules\juce_core\native</Filter>
     </ClCompile>
@@ -814,13 +1233,7 @@
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_events\native\juce_android_Messaging.cpp">
       <Filter>Juce Modules\juce_events\native</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_events\native\juce_ios_MessageManager.mm">
-      <Filter>Juce Modules\juce_events\native</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_events\native\juce_linux_Messaging.cpp">
-      <Filter>Juce Modules\juce_events\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_events\native\juce_mac_MessageManager.mm">
       <Filter>Juce Modules\juce_events\native</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_events\native\juce_win32_Messaging.cpp">
@@ -923,12 +1336,6 @@
       <Filter>Juce Modules\juce_graphics\native</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_graphics\native\juce_linux_Fonts.cpp">
-      <Filter>Juce Modules\juce_graphics\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_graphics\native\juce_mac_CoreGraphicsContext.mm">
-      <Filter>Juce Modules\juce_graphics\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_graphics\native\juce_mac_Fonts.mm">
       <Filter>Juce Modules\juce_graphics\native</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_graphics\native\juce_win32_Direct2DGraphicsContext.cpp">
@@ -1073,6 +1480,9 @@
       <Filter>Juce Modules\juce_gui_basics\layout</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_basics\layout\juce_ComponentMovementWatcher.cpp">
+      <Filter>Juce Modules\juce_gui_basics\layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_basics\layout\juce_ConcertinaPanel.cpp">
       <Filter>Juce Modules\juce_gui_basics\layout</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_basics\layout\juce_GroupComponent.cpp">
@@ -1270,12 +1680,6 @@
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_basics\native\juce_android_Windowing.cpp">
       <Filter>Juce Modules\juce_gui_basics\native</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_basics\native\juce_ios_UIViewComponentPeer.mm">
-      <Filter>Juce Modules\juce_gui_basics\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_basics\native\juce_ios_Windowing.mm">
-      <Filter>Juce Modules\juce_gui_basics\native</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_basics\native\juce_linux_Clipboard.cpp">
       <Filter>Juce Modules\juce_gui_basics\native</Filter>
     </ClCompile>
@@ -1283,21 +1687,6 @@
       <Filter>Juce Modules\juce_gui_basics\native</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_basics\native\juce_linux_Windowing.cpp">
-      <Filter>Juce Modules\juce_gui_basics\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_basics\native\juce_mac_FileChooser.mm">
-      <Filter>Juce Modules\juce_gui_basics\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_basics\native\juce_mac_MainMenu.mm">
-      <Filter>Juce Modules\juce_gui_basics\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_basics\native\juce_mac_MouseCursor.mm">
-      <Filter>Juce Modules\juce_gui_basics\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_basics\native\juce_mac_NSViewComponentPeer.mm">
-      <Filter>Juce Modules\juce_gui_basics\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_basics\native\juce_mac_Windowing.mm">
       <Filter>Juce Modules\juce_gui_basics\native</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_basics\native\juce_win32_DragAndDrop.cpp">
@@ -1348,22 +1737,10 @@
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_extra\native\juce_android_WebBrowserComponent.cpp">
       <Filter>Juce Modules\juce_gui_extra\native</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_extra\native\juce_ios_UIViewComponent.mm">
-      <Filter>Juce Modules\juce_gui_extra\native</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_extra\native\juce_linux_SystemTrayIcon.cpp">
       <Filter>Juce Modules\juce_gui_extra\native</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_extra\native\juce_linux_WebBrowserComponent.cpp">
-      <Filter>Juce Modules\juce_gui_extra\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_extra\native\juce_mac_AppleRemote.mm">
-      <Filter>Juce Modules\juce_gui_extra\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_extra\native\juce_mac_NSViewComponent.mm">
-      <Filter>Juce Modules\juce_gui_extra\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_extra\native\juce_mac_WebBrowserComponent.mm">
       <Filter>Juce Modules\juce_gui_extra\native</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_extra\native\juce_win32_ActiveXComponent.cpp">
@@ -1400,12 +1777,6 @@
       <Filter>Juce Modules\juce_opengl\opengl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_video\native\juce_android_CameraDevice.cpp">
-      <Filter>Juce Modules\juce_video\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_video\native\juce_mac_CameraDevice.mm">
-      <Filter>Juce Modules\juce_video\native</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\modules\juce_video\native\juce_mac_QuickTimeMovieComponent.mm">
       <Filter>Juce Modules\juce_video\native</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_video\native\juce_win32_CameraDevice.cpp">
@@ -1461,6 +1832,405 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\Application\AbstractSubjectAndObserver.h">
+      <Filter>AlphaLive\Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Application\CommandIDs.h">
+      <Filter>AlphaLive\Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Application\Common.h">
+      <Filter>AlphaLive\Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Application\CommonInfoBoxText.h">
+      <Filter>AlphaLive\Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Application\MainMenuModel.h">
+      <Filter>AlphaLive\Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Application\MainWindow.h">
+      <Filter>AlphaLive\Source\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio Processing\DSP Effects\BandPassFilter.h">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio Processing\DSP Effects\Bitcrusher.h">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio Processing\DSP Effects\Delay.h">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio Processing\DSP Effects\Distortion.h">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio Processing\DSP Effects\Flanger.h">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio Processing\DSP Effects\GainAndPan.h">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio Processing\DSP Effects\HighPassFilter.h">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio Processing\DSP Effects\LowpassFilter.h">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio Processing\DSP Effects\Reverb.h">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio Processing\DSP Effects\Tremolo.h">
+      <Filter>AlphaLive\Source\Audio Processing\DSP Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio Processing\Oscillator.h">
+      <Filter>AlphaLive\Source\Audio Processing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Audio Processing\PanControl.h">
+      <Filter>AlphaLive\Source\Audio Processing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\File and Settings\AppDocumentState.h">
+      <Filter>AlphaLive\Source\File and Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\File and Settings\AppSettings.h">
+      <Filter>AlphaLive\Source\File and Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\File and Settings\FirmwareStruct.h">
+      <Filter>AlphaLive\Source\File and Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\File and Settings\PadSettings.h">
+      <Filter>AlphaLive\Source\File and Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\File and Settings\StoredSettings.h">
+      <Filter>AlphaLive\Source\File and Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Functionality Classes\AlphaLiveEngine.h">
+      <Filter>AlphaLive\Source\Functionality Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Functionality Classes\Controller Mode\ModeController.h">
+      <Filter>AlphaLive\Source\Functionality Classes\Controller Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Functionality Classes\GlobalClock.h">
+      <Filter>AlphaLive\Source\Functionality Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Functionality Classes\MIDI Mode\ModeMidi.h">
+      <Filter>AlphaLive\Source\Functionality Classes\MIDI Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Functionality Classes\Other\PlayStates.h">
+      <Filter>AlphaLive\Source\Functionality Classes\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Functionality Classes\Other\TriggerModes.h">
+      <Filter>AlphaLive\Source\Functionality Classes\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Functionality Classes\Sampler Mode\AudioFilePlayer.h">
+      <Filter>AlphaLive\Source\Functionality Classes\Sampler Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Functionality Classes\Sampler Mode\ModeSampler.h">
+      <Filter>AlphaLive\Source\Functionality Classes\Sampler Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Functionality Classes\Sequencer Mode\ModeSequencer.h">
+      <Filter>AlphaLive\Source\Functionality Classes\Sequencer Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Functionality Classes\Sequencer Mode\SequenceAudioFilePlayer.h">
+      <Filter>AlphaLive\Source\Functionality Classes\Sequencer Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Functionality Classes\Sequencer Mode\SequencePlayer.h">
+      <Filter>AlphaLive\Source\Functionality Classes\Sequencer Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Functionality Classes\Sequencer Mode\SequencerValues.h">
+      <Filter>AlphaLive\Source\Functionality Classes\Sequencer Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\AlphaLiveLookandFeel.h">
+      <Filter>AlphaLive\Source\GUI Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\BinaryDataNew.h">
+      <Filter>AlphaLive\Source\GUI Classes\Binary Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Circle Piano\GuiKeys.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Circle Piano</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Circle Piano\GuiPiano.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Circle Piano</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Circle Waveform\CircleWaveform.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Circle Waveform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Circle Waveform\CircleWaveformCache.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Circle Waveform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Circle Waveform\DemoThumbnailComp.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Circle Waveform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiBandPassFilter.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiBitcrusher.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiDelay.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiDistortion.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiFlanger.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiHighPassFilter.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiLowPassFilter.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiPanAndGain.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiReverb.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiTremolo.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects\Effects GUIs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\GuiFxDial.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaAudioSettingsComponent.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaPopUpButton.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaRotarySlider.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaSlider.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaTextButton.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\FileDropButton.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\GuiSwitch.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\ImageSlider.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\ModeButton.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\SettingsButton.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\SettingsButtonImage.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Graphics\GuiCircleBackground.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Pad\GuiPad.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Pad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Pad\GuiPadLayout.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Pad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Pad\GuiPadRow.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Pad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Scene\SceneComponent.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Scene\SceneSlot.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Scene\SceneValues.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Sequencer\SequencerGrid.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Sequencer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Sequencer\SequencerGridEndBlock.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Sequencer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Sequencer\SequencerGridPlayHead.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Sequencer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Sequencer\SequencerGridPoint.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Sequencer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Toolbox\AlphaListBoxModel.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Toolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Toolbox\Toolbox.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Toolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Toolbox\XmlAttributesListBox.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\Toolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Initial Loading Window\LoadingComponent.h">
+      <Filter>AlphaLive\Source\GUI Classes\Initial Loading Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Initial Loading Window\LoadingWindow.h">
+      <Filter>AlphaLive\Source\GUI Classes\Initial Loading Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Sub-Views\AboutComponent.h">
+      <Filter>AlphaLive\Source\GUI Classes\Sub-Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Sub-Views\EliteControlsComponent.h">
+      <Filter>AlphaLive\Source\GUI Classes\Sub-Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Sub-Views\GuiEliteControlsSettings.h">
+      <Filter>AlphaLive\Source\GUI Classes\Sub-Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Sub-Views\GuiGlobalClock.h">
+      <Filter>AlphaLive\Source\GUI Classes\Sub-Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Sub-Views\GuiGlobalPadSettings.h">
+      <Filter>AlphaLive\Source\GUI Classes\Sub-Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Sub-Views\PreferencesComponent.h">
+      <Filter>AlphaLive\Source\GUI Classes\Sub-Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Sub-Views\ProjectSettingsComponent.h">
+      <Filter>AlphaLive\Source\GUI Classes\Sub-Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Views\GlobalValues.h">
+      <Filter>AlphaLive\Source\GUI Classes\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Views\GuiControllerMode.h">
+      <Filter>AlphaLive\Source\GUI Classes\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Views\GuiMidiMode.h">
+      <Filter>AlphaLive\Source\GUI Classes\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Views\GuiSamplerMode.h">
+      <Filter>AlphaLive\Source\GUI Classes\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Views\GuiSequencerMode.h">
+      <Filter>AlphaLive\Source\GUI Classes\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Views\MainComponent.h">
+      <Filter>AlphaLive\Source\GUI Classes\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\My IO Classes\OscInput.h">
+      <Filter>AlphaLive\Source\My IO Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\My IO Classes\OscOutput.h">
+      <Filter>AlphaLive\Source\My IO Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Bessel.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Biquad.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Butterworth.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Cascade.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\ChebyshevI.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\ChebyshevII.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Common.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Custom.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Design.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Dsp.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Elliptic.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Filter.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Layout.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Legendre.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\MathSupplement.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Params.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\PoleFilter.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\RBJ.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\RootFinder.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\SmoothedFilter.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\State.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Types.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Utilities.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\DspFilters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\fastmath.h">
+      <Filter>AlphaLive\Source\Third Party Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\Juced\jucetice_CircularBuffer.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\Juced</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\oscpack\ip\IpEndpointName.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\oscpack\ip\NetworkingUtils.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\oscpack\ip\PacketListener.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\oscpack\ip\TimerListener.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\oscpack\ip\UdpSocket.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\oscpack\osc\MessageMappingOscPacketListener.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\oscpack\osc\OscException.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\oscpack\osc\OscHostEndianness.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\oscpack\osc\OscOutboundPacketStream.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\oscpack\osc\OscPacketListener.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\oscpack\osc\OscPrintReceivedElements.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\oscpack\osc\OscReceivedElements.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\oscpack\osc\OscTypes.h">
+      <Filter>AlphaLive\Source\Third Party Libraries\oscpack\osc</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\modules\juce_audio_basics\buffers\juce_AudioDataConverters.h">
       <Filter>Juce Modules\juce_audio_basics\buffers</Filter>
     </ClInclude>
@@ -1720,6 +2490,9 @@
       <Filter>Juce Modules\juce_core\text</Filter>
     </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\modules\juce_core\text\juce_StringPool.h">
+      <Filter>Juce Modules\juce_core\text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\modules\juce_core\text\juce_TextDiff.h">
       <Filter>Juce Modules\juce_core\text</Filter>
     </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\modules\juce_core\maths\juce_BigInteger.h">
@@ -2373,6 +3146,9 @@
     <ClInclude Include="..\..\JuceLibraryCode\modules\juce_gui_basics\layout\juce_ComponentMovementWatcher.h">
       <Filter>Juce Modules\juce_gui_basics\layout</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\modules\juce_gui_basics\layout\juce_ConcertinaPanel.h">
+      <Filter>Juce Modules\juce_gui_basics\layout</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\modules\juce_gui_basics\layout\juce_GroupComponent.h">
       <Filter>Juce Modules\juce_gui_basics\layout</Filter>
     </ClInclude>
@@ -2589,6 +3365,9 @@
     <ClInclude Include="..\..\JuceLibraryCode\modules\juce_gui_extra\code_editor\juce_CPlusPlusCodeTokeniser.h">
       <Filter>Juce Modules\juce_gui_extra\code_editor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\modules\juce_gui_extra\code_editor\juce_CPlusPlusCodeTokeniserFunctions.h">
+      <Filter>Juce Modules\juce_gui_extra\code_editor</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\modules\juce_gui_extra\documents\juce_FileBasedDocument.h">
       <Filter>Juce Modules\juce_gui_extra\documents</Filter>
     </ClInclude>
@@ -2718,6 +3497,7 @@
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h">
       <Filter>Juce Library Code</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\JuceLibraryCode\modules\juce_audio_basics\juce_module_info">
@@ -2762,6 +3542,8 @@
     <None Include="..\..\JuceLibraryCode\modules\juce_video\juce_module_info">
       <Filter>Juce Modules\juce_video</Filter>
     </None>
+    <None Include="icon1.ico" />
+    <None Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include=".\resources.rc">

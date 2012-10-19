@@ -32,6 +32,16 @@
 
 AppDocumentState::AppDocumentState()
 {
+	#if JUCE_WINDOWS
+	//set windows file association
+	WindowsRegistry::registerFileAssociation(	".alphalive", 
+												"alphalive", 
+												"AlphaLive Project File", 
+												File::getSpecialLocation(File::currentExecutableFile), 
+												0, //document icon seems to be auto-generated in VS using the app icon... or not? 
+												true);
+	#endif
+
     for (int i = 0; i <= NO_OF_SCENES-1; i++)
     {
         sceneData.insert(i, new XmlElement("SCENE_" + String(i)));
@@ -2164,6 +2174,7 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                      bool openBrowser, 
                      File fileToOpen)
 {
+	
     //current issues with importing midi files
     // - If importing a big midi file as a single sequence it will determine which
     //note numbers will be imported as well as those note numbers events using the entire
@@ -2399,6 +2410,7 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
             AlertWindow::showMessageBox(AlertWindow::InfoIcon, translate("Cannot Import MIDI File!"), translate("AlphaLive cannot import MIDI files that use the SMPTE time format."));
         }
     }
+	
 }
 
 

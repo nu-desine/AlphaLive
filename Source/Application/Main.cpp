@@ -110,14 +110,28 @@ public:
         //delete loading window now as everything will be loaded at this point
         loadingWindow = 0;
         
-        if (StoredSettings::getInstance()->launchTask == 2)
+		//open any requested files/projects
+		
+		//If the app has been lauched by opening a .alphalive file,
+		//get the file path and opent he file.
+		//On Mac this seems to be handled within anotherInstanceStarted() only,
+		//so this won't currently work on mac here which can cause bugs
+
+		File selectedFile(commandLine.unquoted());
+        //check to see if the clicked file is a .alphalive file
+        if (selectedFile.getFileExtension() == ".alphalive")
+        {
+            //load selected file
+            appDocumentState->loadProject(false, selectedFile);   
+        }
+		//#endif
+        else if (StoredSettings::getInstance()->launchTask == 2)
         {
             //Open the last project...
             if (StoredSettings::getInstance()->recentFiles.getFile(0) != File::nonexistent)
                 appDocumentState->loadProject(false, StoredSettings::getInstance()->recentFiles.getFile(0));
         }
         
-    
     }
 
     

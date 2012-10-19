@@ -3,7 +3,445 @@
 <JUCERPROJECT id="F22pMI" name="AlphaLive" projectType="guiapp" version="1.0.0"
               jucerVersion="3.0.0" companyName="nu desine" bundleIdentifier="com.nu_desine.AlphaLive">
   <MAINGROUP id="Xse6xB" name="AlphaLive">
-    <GROUP id="{D96C7CCD-D014-601C-6DD6-17BA600E9A71}" name="Source"/>
+    <GROUP id="{D96C7CCD-D014-601C-6DD6-17BA600E9A71}" name="Source">
+      <GROUP id="{D8514422-A9A0-21E1-7B65-ED53B5B2A34D}" name="Application">
+        <FILE id="V36YoV" name="AbstractSubjectAndObserver.cpp" compile="1"
+              resource="0" file="Source/Application/AbstractSubjectAndObserver.cpp"/>
+        <FILE id="yHXB5i" name="AbstractSubjectAndObserver.h" compile="0" resource="0"
+              file="Source/Application/AbstractSubjectAndObserver.h"/>
+        <FILE id="Mw69Z6" name="CommandIDs.h" compile="0" resource="0" file="Source/Application/CommandIDs.h"/>
+        <FILE id="g7jlT8" name="Common.h" compile="0" resource="0" file="Source/Application/Common.h"/>
+        <FILE id="zsWnCC" name="CommonInfoBoxText.h" compile="0" resource="0"
+              file="Source/Application/CommonInfoBoxText.h"/>
+        <FILE id="TaIWeu" name="Main.cpp" compile="1" resource="0" file="Source/Application/Main.cpp"/>
+        <FILE id="yRRjGt" name="MainMenuModel.cpp" compile="1" resource="0"
+              file="Source/Application/MainMenuModel.cpp"/>
+        <FILE id="DdWjHb" name="MainMenuModel.h" compile="0" resource="0" file="Source/Application/MainMenuModel.h"/>
+        <FILE id="nNky9C" name="MainWindow.cpp" compile="1" resource="0" file="Source/Application/MainWindow.cpp"/>
+        <FILE id="PWISa9" name="MainWindow.h" compile="0" resource="0" file="Source/Application/MainWindow.h"/>
+      </GROUP>
+      <GROUP id="{6EA6C936-F388-F665-379F-D0B52E758F4F}" name="Audio Processing">
+        <GROUP id="{0AF17225-D403-F28B-CD4C-3E11177B07C1}" name="DSP Effects">
+          <FILE id="nhK8vz" name="BandPassFilter.cpp" compile="1" resource="0"
+                file="Source/Audio Processing/DSP Effects/BandPassFilter.cpp"/>
+          <FILE id="kvzI6R" name="BandPassFilter.h" compile="0" resource="0"
+                file="Source/Audio Processing/DSP Effects/BandPassFilter.h"/>
+          <FILE id="z1HAsL" name="Bitcrusher.cpp" compile="1" resource="0" file="Source/Audio Processing/DSP Effects/Bitcrusher.cpp"/>
+          <FILE id="xdDVmq" name="Bitcrusher.h" compile="0" resource="0" file="Source/Audio Processing/DSP Effects/Bitcrusher.h"/>
+          <FILE id="hzQvRs" name="Delay.cpp" compile="1" resource="0" file="Source/Audio Processing/DSP Effects/Delay.cpp"/>
+          <FILE id="s78Qh4" name="Delay.h" compile="0" resource="0" file="Source/Audio Processing/DSP Effects/Delay.h"/>
+          <FILE id="DBjzM1" name="Distortion.cpp" compile="1" resource="0" file="Source/Audio Processing/DSP Effects/Distortion.cpp"/>
+          <FILE id="lJbf2D" name="Distortion.h" compile="0" resource="0" file="Source/Audio Processing/DSP Effects/Distortion.h"/>
+          <FILE id="rHiSRt" name="Flanger.cpp" compile="1" resource="0" file="Source/Audio Processing/DSP Effects/Flanger.cpp"/>
+          <FILE id="mdUR7E" name="Flanger.h" compile="0" resource="0" file="Source/Audio Processing/DSP Effects/Flanger.h"/>
+          <FILE id="QBeBIM" name="GainAndPan.cpp" compile="1" resource="0" file="Source/Audio Processing/DSP Effects/GainAndPan.cpp"/>
+          <FILE id="dt6mvf" name="GainAndPan.h" compile="0" resource="0" file="Source/Audio Processing/DSP Effects/GainAndPan.h"/>
+          <FILE id="lx29ZY" name="HighPassFilter.cpp" compile="1" resource="0"
+                file="Source/Audio Processing/DSP Effects/HighPassFilter.cpp"/>
+          <FILE id="iRhkXc" name="HighPassFilter.h" compile="0" resource="0"
+                file="Source/Audio Processing/DSP Effects/HighPassFilter.h"/>
+          <FILE id="rMD99A" name="LowpassFilter.cpp" compile="1" resource="0"
+                file="Source/Audio Processing/DSP Effects/LowpassFilter.cpp"/>
+          <FILE id="QJFj11" name="LowpassFilter.h" compile="0" resource="0" file="Source/Audio Processing/DSP Effects/LowpassFilter.h"/>
+          <FILE id="nwKFw7" name="Reverb.cpp" compile="1" resource="0" file="Source/Audio Processing/DSP Effects/Reverb.cpp"/>
+          <FILE id="FEvxp5" name="Reverb.h" compile="0" resource="0" file="Source/Audio Processing/DSP Effects/Reverb.h"/>
+          <FILE id="QZIRv7" name="Tremolo.cpp" compile="1" resource="0" file="Source/Audio Processing/DSP Effects/Tremolo.cpp"/>
+          <FILE id="OjFf3m" name="Tremolo.h" compile="0" resource="0" file="Source/Audio Processing/DSP Effects/Tremolo.h"/>
+        </GROUP>
+        <FILE id="CReMXM" name="Oscillator.cpp" compile="1" resource="0" file="Source/Audio Processing/Oscillator.cpp"/>
+        <FILE id="rIdBbD" name="Oscillator.h" compile="0" resource="0" file="Source/Audio Processing/Oscillator.h"/>
+        <FILE id="PZ4Ij9" name="PanControl.h" compile="0" resource="0" file="Source/Audio Processing/PanControl.h"/>
+      </GROUP>
+      <GROUP id="{180B2AC5-DE6A-9402-2D4C-BDA47E326449}" name="File and Settings">
+        <FILE id="Rabke5" name="AppDocumentState.cpp" compile="1" resource="0"
+              file="Source/File and Settings/AppDocumentState.cpp"/>
+        <FILE id="eb7RXh" name="AppDocumentState.h" compile="0" resource="0"
+              file="Source/File and Settings/AppDocumentState.h"/>
+        <FILE id="zGrej0" name="AppSettings.cpp" compile="1" resource="0" file="Source/File and Settings/AppSettings.cpp"/>
+        <FILE id="W5rxLo" name="AppSettings.h" compile="0" resource="0" file="Source/File and Settings/AppSettings.h"/>
+        <FILE id="X8WZfj" name="FirmwareStruct.h" compile="0" resource="0"
+              file="Source/File and Settings/FirmwareStruct.h"/>
+        <FILE id="UzIIfz" name="PadSettings.cpp" compile="1" resource="0" file="Source/File and Settings/PadSettings.cpp"/>
+        <FILE id="Fc25ZL" name="PadSettings.h" compile="0" resource="0" file="Source/File and Settings/PadSettings.h"/>
+        <FILE id="rmPrqS" name="StoredSettings.cpp" compile="1" resource="0"
+              file="Source/File and Settings/StoredSettings.cpp"/>
+        <FILE id="MmYVXB" name="StoredSettings.h" compile="0" resource="0"
+              file="Source/File and Settings/StoredSettings.h"/>
+      </GROUP>
+      <GROUP id="{5A03F557-31AA-3D6F-E074-758982BA6E75}" name="Functionality Classes">
+        <FILE id="EUZwgP" name="AlphaLiveEngine.cpp" compile="1" resource="0"
+              file="Source/Functionality Classes/AlphaLiveEngine.cpp"/>
+        <FILE id="ivWvUG" name="AlphaLiveEngine.h" compile="0" resource="0"
+              file="Source/Functionality Classes/AlphaLiveEngine.h"/>
+        <GROUP id="{8500554D-4585-6833-11DB-AD743EFA1C26}" name="Controller Mode">
+          <FILE id="KZR6zf" name="ModeController.cpp" compile="1" resource="0"
+                file="Source/Functionality Classes/Controller Mode/ModeController.cpp"/>
+          <FILE id="X3DKTo" name="ModeController.h" compile="0" resource="0"
+                file="Source/Functionality Classes/Controller Mode/ModeController.h"/>
+        </GROUP>
+        <FILE id="F7mqNR" name="GlobalClock.cpp" compile="1" resource="0" file="Source/Functionality Classes/GlobalClock.cpp"/>
+        <FILE id="MJFQLq" name="GlobalClock.h" compile="0" resource="0" file="Source/Functionality Classes/GlobalClock.h"/>
+        <GROUP id="{8600A829-9AB5-197C-9AF7-0032F72479C4}" name="MIDI Mode">
+          <FILE id="XRJDfY" name="ModeMidi.cpp" compile="1" resource="0" file="Source/Functionality Classes/MIDI Mode/ModeMidi.cpp"/>
+          <FILE id="LE1rGQ" name="ModeMidi.h" compile="0" resource="0" file="Source/Functionality Classes/MIDI Mode/ModeMidi.h"/>
+        </GROUP>
+        <GROUP id="{6D05445E-6ACB-7E04-850D-719C51EFE73B}" name="Other">
+          <FILE id="oCutrm" name="LayoutsAndScales.cpp" compile="1" resource="0"
+                file="Source/Functionality Classes/Other/LayoutsAndScales.cpp"/>
+          <FILE id="AGJPr5" name="PlayStates.cpp" compile="1" resource="0" file="Source/Functionality Classes/Other/PlayStates.cpp"/>
+          <FILE id="sjQUxi" name="PlayStates.h" compile="0" resource="0" file="Source/Functionality Classes/Other/PlayStates.h"/>
+          <FILE id="B7Dwfq" name="TriggerModes.cpp" compile="1" resource="0"
+                file="Source/Functionality Classes/Other/TriggerModes.cpp"/>
+          <FILE id="bSMrP2" name="TriggerModes.h" compile="0" resource="0" file="Source/Functionality Classes/Other/TriggerModes.h"/>
+        </GROUP>
+        <GROUP id="{DBC4EC51-9F84-2AC1-B8DC-43065C6BC2FC}" name="Sampler Mode">
+          <FILE id="WsH3K3" name="AudioFilePlayer.cpp" compile="1" resource="0"
+                file="Source/Functionality Classes/Sampler Mode/AudioFilePlayer.cpp"/>
+          <FILE id="tpVdbe" name="AudioFilePlayer.h" compile="0" resource="0"
+                file="Source/Functionality Classes/Sampler Mode/AudioFilePlayer.h"/>
+          <FILE id="DVXdV6" name="ModeSampler.cpp" compile="1" resource="0" file="Source/Functionality Classes/Sampler Mode/ModeSampler.cpp"/>
+          <FILE id="tso6pV" name="ModeSampler.h" compile="0" resource="0" file="Source/Functionality Classes/Sampler Mode/ModeSampler.h"/>
+        </GROUP>
+        <GROUP id="{558CEBCB-7375-91B4-7332-580A4958AFE2}" name="Sequencer Mode">
+          <FILE id="A0129v" name="ModeSequencer.cpp" compile="1" resource="0"
+                file="Source/Functionality Classes/Sequencer Mode/ModeSequencer.cpp"/>
+          <FILE id="eu726z" name="ModeSequencer.h" compile="0" resource="0" file="Source/Functionality Classes/Sequencer Mode/ModeSequencer.h"/>
+          <FILE id="FR4IQs" name="SequenceAudioFilePlayer.cpp" compile="1" resource="0"
+                file="Source/Functionality Classes/Sequencer Mode/SequenceAudioFilePlayer.cpp"/>
+          <FILE id="PvWoat" name="SequenceAudioFilePlayer.h" compile="0" resource="0"
+                file="Source/Functionality Classes/Sequencer Mode/SequenceAudioFilePlayer.h"/>
+          <FILE id="JBZTmY" name="SequencePlayer.cpp" compile="1" resource="0"
+                file="Source/Functionality Classes/Sequencer Mode/SequencePlayer.cpp"/>
+          <FILE id="TCpYAT" name="SequencePlayer.h" compile="0" resource="0"
+                file="Source/Functionality Classes/Sequencer Mode/SequencePlayer.h"/>
+          <FILE id="ArFzlm" name="SequencerValues.h" compile="0" resource="0"
+                file="Source/Functionality Classes/Sequencer Mode/SequencerValues.h"/>
+        </GROUP>
+      </GROUP>
+      <GROUP id="{F07D869A-2875-BAF2-D8C0-ACE195128F72}" name="GUI Classes">
+        <FILE id="w0eSTy" name="AlphaLiveLookandFeel.cpp" compile="1" resource="0"
+              file="Source/GUI Classes/AlphaLiveLookandFeel.cpp"/>
+        <FILE id="NUr3ss" name="AlphaLiveLookandFeel.h" compile="0" resource="0"
+              file="Source/GUI Classes/AlphaLiveLookandFeel.h"/>
+        <GROUP id="{0D9C21B8-6791-84EB-9AB2-7A81A95F671B}" name="Binary Data">
+          <FILE id="gByEzc" name="BinaryDataNew.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Binary Data/BinaryDataNew.cpp"/>
+          <FILE id="RCtwmk" name="BinaryDataNew.h" compile="0" resource="0" file="Source/GUI Classes/Binary Data/BinaryDataNew.h"/>
+        </GROUP>
+        <GROUP id="{0199B216-9B08-4289-F248-B65B7D0992BC}" name="Custom Components">
+          <GROUP id="{8ED4B1FD-FB9C-335C-FDFB-6846591669D7}" name="Circle Piano">
+            <FILE id="faYZdl" name="GuiKeys.cpp" compile="1" resource="0" file="Source/GUI Classes/Custom Components/Circle Piano/GuiKeys.cpp"/>
+            <FILE id="zcCAUp" name="GuiKeys.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/Circle Piano/GuiKeys.h"/>
+            <FILE id="kJxfFZ" name="GuiPiano.cpp" compile="1" resource="0" file="Source/GUI Classes/Custom Components/Circle Piano/GuiPiano.cpp"/>
+            <FILE id="i81gmd" name="GuiPiano.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/Circle Piano/GuiPiano.h"/>
+          </GROUP>
+          <GROUP id="{87C1EA8F-53D2-95F3-1961-AC08EFA5A23D}" name="Circle Waveform">
+            <FILE id="lDC8F3" name="CircleWaveform.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/Circle Waveform/CircleWaveform.cpp"/>
+            <FILE id="lqV6LI" name="CircleWaveform.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/Circle Waveform/CircleWaveform.h"/>
+            <FILE id="gyK9o4" name="CircleWaveformCache.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/Circle Waveform/CircleWaveformCache.cpp"/>
+            <FILE id="PDpqTL" name="CircleWaveformCache.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/Circle Waveform/CircleWaveformCache.h"/>
+            <FILE id="T04gQQ" name="DemoThumbnailComp.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/Circle Waveform/DemoThumbnailComp.cpp"/>
+            <FILE id="tuvDY2" name="DemoThumbnailComp.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/Circle Waveform/DemoThumbnailComp.h"/>
+          </GROUP>
+          <GROUP id="{C3E020BE-EF37-0AD8-4967-9E213D76B571}" name="Effects">
+            <GROUP id="{565D9F96-4E2C-8C3B-591E-8F9B6DAAC1BC}" name="Effects GUIs">
+              <FILE id="ksNX4A" name="FxGuiBandPassFilter.cpp" compile="1" resource="0"
+                    file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiBandPassFilter.cpp"/>
+              <FILE id="PKU4Gq" name="FxGuiBandPassFilter.h" compile="0" resource="0"
+                    file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiBandPassFilter.h"/>
+              <FILE id="j4ibGu" name="FxGuiBitcrusher.cpp" compile="1" resource="0"
+                    file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiBitcrusher.cpp"/>
+              <FILE id="fgAYCN" name="FxGuiBitcrusher.h" compile="0" resource="0"
+                    file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiBitcrusher.h"/>
+              <FILE id="FGOVEU" name="FxGuiDelay.cpp" compile="1" resource="0" file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiDelay.cpp"/>
+              <FILE id="MqIEqs" name="FxGuiDelay.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiDelay.h"/>
+              <FILE id="aFBc8H" name="FxGuiDistortion.cpp" compile="1" resource="0"
+                    file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiDistortion.cpp"/>
+              <FILE id="kItQ6Z" name="FxGuiDistortion.h" compile="0" resource="0"
+                    file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiDistortion.h"/>
+              <FILE id="JkswhQ" name="FxGuiFlanger.cpp" compile="1" resource="0"
+                    file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiFlanger.cpp"/>
+              <FILE id="zDuk8T" name="FxGuiFlanger.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiFlanger.h"/>
+              <FILE id="FKgoYI" name="FxGuiHighPassFilter.cpp" compile="1" resource="0"
+                    file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiHighPassFilter.cpp"/>
+              <FILE id="V0m3fi" name="FxGuiHighPassFilter.h" compile="0" resource="0"
+                    file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiHighPassFilter.h"/>
+              <FILE id="zVgWsm" name="FxGuiLowPassFilter.cpp" compile="1" resource="0"
+                    file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiLowPassFilter.cpp"/>
+              <FILE id="wHQcOZ" name="FxGuiLowPassFilter.h" compile="0" resource="0"
+                    file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiLowPassFilter.h"/>
+              <FILE id="mKNMpM" name="FxGuiPanAndGain.cpp" compile="1" resource="0"
+                    file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiPanAndGain.cpp"/>
+              <FILE id="iDYtWn" name="FxGuiPanAndGain.h" compile="0" resource="0"
+                    file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiPanAndGain.h"/>
+              <FILE id="sXiKrT" name="FxGuiReverb.cpp" compile="1" resource="0" file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiReverb.cpp"/>
+              <FILE id="ZRDxqL" name="FxGuiReverb.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiReverb.h"/>
+              <FILE id="KuerQp" name="FxGuiTremolo.cpp" compile="1" resource="0"
+                    file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiTremolo.cpp"/>
+              <FILE id="wnI5q4" name="FxGuiTremolo.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiTremolo.h"/>
+            </GROUP>
+            <FILE id="AR4nYP" name="GuiFxDial.cpp" compile="1" resource="0" file="Source/GUI Classes/Custom Components/Effects/GuiFxDial.cpp"/>
+            <FILE id="dnDYas" name="GuiFxDial.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/Effects/GuiFxDial.h"/>
+          </GROUP>
+          <GROUP id="{1B6AE6A5-CB5D-3D29-11D8-6EE905090F43}" name="General">
+            <FILE id="Kdmg6I" name="AlphaAudioSettingsComponent.cpp" compile="1"
+                  resource="0" file="Source/GUI Classes/Custom Components/General/AlphaAudioSettingsComponent.cpp"/>
+            <FILE id="wLtiNh" name="AlphaAudioSettingsComponent.h" compile="0"
+                  resource="0" file="Source/GUI Classes/Custom Components/General/AlphaAudioSettingsComponent.h"/>
+            <FILE id="UUprvL" name="AlphaPopUpButton.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/General/AlphaPopUpButton.cpp"/>
+            <FILE id="RJZUU3" name="AlphaPopUpButton.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/General/AlphaPopUpButton.h"/>
+            <FILE id="dZsd0c" name="AlphaRotarySlider.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/General/AlphaRotarySlider.cpp"/>
+            <FILE id="UVqhS0" name="AlphaRotarySlider.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/General/AlphaRotarySlider.h"/>
+            <FILE id="rcgVTA" name="AlphaSlider.cpp" compile="1" resource="0" file="Source/GUI Classes/Custom Components/General/AlphaSlider.cpp"/>
+            <FILE id="qOsjJS" name="AlphaSlider.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/General/AlphaSlider.h"/>
+            <FILE id="Nj5Uko" name="AlphaTextButton.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/General/AlphaTextButton.cpp"/>
+            <FILE id="gUF3DQ" name="AlphaTextButton.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/General/AlphaTextButton.h"/>
+            <FILE id="LDfGe7" name="FileDropButton.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/General/FileDropButton.cpp"/>
+            <FILE id="RLhdge" name="FileDropButton.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/General/FileDropButton.h"/>
+            <FILE id="RZuRRb" name="GuiSwitch.cpp" compile="1" resource="0" file="Source/GUI Classes/Custom Components/General/GuiSwitch.cpp"/>
+            <FILE id="ys0amA" name="GuiSwitch.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/General/GuiSwitch.h"/>
+            <FILE id="YYDrZA" name="ImageSlider.cpp" compile="1" resource="0" file="Source/GUI Classes/Custom Components/General/ImageSlider.cpp"/>
+            <FILE id="Af8gJf" name="ImageSlider.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/General/ImageSlider.h"/>
+            <FILE id="M19hgy" name="ModeButton.cpp" compile="1" resource="0" file="Source/GUI Classes/Custom Components/General/ModeButton.cpp"/>
+            <FILE id="RRkPDS" name="ModeButton.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/General/ModeButton.h"/>
+            <FILE id="jkagM3" name="SettingsButton.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/General/SettingsButton.cpp"/>
+            <FILE id="iHUbhF" name="SettingsButton.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/General/SettingsButton.h"/>
+            <FILE id="UYrUnp" name="SettingsButtonImage.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/General/SettingsButtonImage.cpp"/>
+            <FILE id="niplUV" name="SettingsButtonImage.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/General/SettingsButtonImage.h"/>
+          </GROUP>
+          <GROUP id="{E7F5AFC7-6F52-B9C5-90ED-E9391A96F286}" name="Graphics">
+            <FILE id="LZdrn8" name="GuiCircleBackground.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/Graphics/GuiCircleBackground.cpp"/>
+            <FILE id="mTUtVM" name="GuiCircleBackground.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/Graphics/GuiCircleBackground.h"/>
+          </GROUP>
+          <GROUP id="{714F4247-3434-165E-6E72-BCA19AD675E4}" name="Pad">
+            <FILE id="Gc4aES" name="GuiPad.cpp" compile="1" resource="0" file="Source/GUI Classes/Custom Components/Pad/GuiPad.cpp"/>
+            <FILE id="bkymEm" name="GuiPad.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/Pad/GuiPad.h"/>
+            <FILE id="Ls7qLp" name="GuiPadLayout.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/Pad/GuiPadLayout.cpp"/>
+            <FILE id="a8uVkd" name="GuiPadLayout.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/Pad/GuiPadLayout.h"/>
+            <FILE id="PiCKMc" name="GuiPadRow.cpp" compile="1" resource="0" file="Source/GUI Classes/Custom Components/Pad/GuiPadRow.cpp"/>
+            <FILE id="wHcUes" name="GuiPadRow.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/Pad/GuiPadRow.h"/>
+          </GROUP>
+          <GROUP id="{445D7B41-DC64-2463-9EF9-EC91745FFCAF}" name="Scene">
+            <FILE id="hJqfb7" name="SceneComponent.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/Scene/SceneComponent.cpp"/>
+            <FILE id="TcXj4l" name="SceneComponent.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/Scene/SceneComponent.h"/>
+            <FILE id="kpyw2A" name="SceneSlot.cpp" compile="1" resource="0" file="Source/GUI Classes/Custom Components/Scene/SceneSlot.cpp"/>
+            <FILE id="inmJ7M" name="SceneSlot.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/Scene/SceneSlot.h"/>
+            <FILE id="z8kpqo" name="SceneValues.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/Scene/SceneValues.h"/>
+          </GROUP>
+          <GROUP id="{B9502731-D93A-CD4A-EE36-AA3FDB1CADF0}" name="Sequencer">
+            <FILE id="FQoKVR" name="SequencerGrid.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/Sequencer/SequencerGrid.cpp"/>
+            <FILE id="NV5Otc" name="SequencerGrid.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/Sequencer/SequencerGrid.h"/>
+            <FILE id="BbScJh" name="SequencerGridEndBlock.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/Sequencer/SequencerGridEndBlock.cpp"/>
+            <FILE id="FJ6Edm" name="SequencerGridEndBlock.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/Sequencer/SequencerGridEndBlock.h"/>
+            <FILE id="fWpdf9" name="SequencerGridPlayHead.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/Sequencer/SequencerGridPlayHead.cpp"/>
+            <FILE id="KFarh9" name="SequencerGridPlayHead.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/Sequencer/SequencerGridPlayHead.h"/>
+            <FILE id="FtO34m" name="SequencerGridPoint.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/Sequencer/SequencerGridPoint.cpp"/>
+            <FILE id="tra0OG" name="SequencerGridPoint.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/Sequencer/SequencerGridPoint.h"/>
+          </GROUP>
+          <GROUP id="{36D6494D-947B-B7BF-7D45-0EB9F1095FA8}" name="Toolbox">
+            <FILE id="GliIwW" name="AlphaListBoxModel.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/Toolbox/AlphaListBoxModel.cpp"/>
+            <FILE id="LMNJwU" name="AlphaListBoxModel.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/Toolbox/AlphaListBoxModel.h"/>
+            <FILE id="i4EiZl" name="Toolbox.cpp" compile="1" resource="0" file="Source/GUI Classes/Custom Components/Toolbox/Toolbox.cpp"/>
+            <FILE id="sBZTFY" name="Toolbox.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/Toolbox/Toolbox.h"/>
+            <FILE id="cJ1ld5" name="XmlAttributesListBox.cpp" compile="1" resource="0"
+                  file="Source/GUI Classes/Custom Components/Toolbox/XmlAttributesListBox.cpp"/>
+            <FILE id="XO90Pf" name="XmlAttributesListBox.h" compile="0" resource="0"
+                  file="Source/GUI Classes/Custom Components/Toolbox/XmlAttributesListBox.h"/>
+          </GROUP>
+        </GROUP>
+        <GROUP id="{5F5196A5-404A-2765-7621-7C1CFC01345F}" name="Initial Loading Window">
+          <FILE id="WFn6JT" name="LoadingComponent.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Initial Loading Window/LoadingComponent.cpp"/>
+          <FILE id="w1JdeW" name="LoadingComponent.h" compile="0" resource="0"
+                file="Source/GUI Classes/Initial Loading Window/LoadingComponent.h"/>
+          <FILE id="AW981E" name="LoadingWindow.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Initial Loading Window/LoadingWindow.cpp"/>
+          <FILE id="xSQzP1" name="LoadingWindow.h" compile="0" resource="0" file="Source/GUI Classes/Initial Loading Window/LoadingWindow.h"/>
+        </GROUP>
+        <GROUP id="{E99AC558-2556-2849-8D08-08AC14BB6C61}" name="Sub-Views">
+          <FILE id="zwnqdC" name="AboutComponent.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Sub-Views/AboutComponent.cpp"/>
+          <FILE id="Dm9oKK" name="AboutComponent.h" compile="0" resource="0"
+                file="Source/GUI Classes/Sub-Views/AboutComponent.h"/>
+          <FILE id="DndMPk" name="EliteControlsComponent.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Sub-Views/EliteControlsComponent.cpp"/>
+          <FILE id="oWuqRO" name="EliteControlsComponent.h" compile="0" resource="0"
+                file="Source/GUI Classes/Sub-Views/EliteControlsComponent.h"/>
+          <FILE id="SpK5vn" name="GuiEliteControlsSettings.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Sub-Views/GuiEliteControlsSettings.cpp"/>
+          <FILE id="XgyxQG" name="GuiEliteControlsSettings.h" compile="0" resource="0"
+                file="Source/GUI Classes/Sub-Views/GuiEliteControlsSettings.h"/>
+          <FILE id="BN02T3" name="GuiGlobalClock.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Sub-Views/GuiGlobalClock.cpp"/>
+          <FILE id="LSMxA2" name="GuiGlobalClock.h" compile="0" resource="0"
+                file="Source/GUI Classes/Sub-Views/GuiGlobalClock.h"/>
+          <FILE id="GsoOQr" name="GuiGlobalPadSettings.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Sub-Views/GuiGlobalPadSettings.cpp"/>
+          <FILE id="ULq6tv" name="GuiGlobalPadSettings.h" compile="0" resource="0"
+                file="Source/GUI Classes/Sub-Views/GuiGlobalPadSettings.h"/>
+          <FILE id="MgMkgf" name="PreferencesComponent.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Sub-Views/PreferencesComponent.cpp"/>
+          <FILE id="LPfySN" name="PreferencesComponent.h" compile="0" resource="0"
+                file="Source/GUI Classes/Sub-Views/PreferencesComponent.h"/>
+          <FILE id="u06RZ2" name="ProjectSettingsComponent.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Sub-Views/ProjectSettingsComponent.cpp"/>
+          <FILE id="CMBRsM" name="ProjectSettingsComponent.h" compile="0" resource="0"
+                file="Source/GUI Classes/Sub-Views/ProjectSettingsComponent.h"/>
+        </GROUP>
+        <GROUP id="{CF5779F1-4A40-A694-E569-DED47D9219B7}" name="Views">
+          <FILE id="JOl6P9" name="GlobalValues.h" compile="0" resource="0" file="Source/GUI Classes/Views/GlobalValues.h"/>
+          <FILE id="Hb5vTr" name="GuiControllerMode.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Views/GuiControllerMode.cpp"/>
+          <FILE id="PfLDb6" name="GuiControllerMode.h" compile="0" resource="0"
+                file="Source/GUI Classes/Views/GuiControllerMode.h"/>
+          <FILE id="Bp9NWa" name="GuiMidiMode.cpp" compile="1" resource="0" file="Source/GUI Classes/Views/GuiMidiMode.cpp"/>
+          <FILE id="Ra19XH" name="GuiMidiMode.h" compile="0" resource="0" file="Source/GUI Classes/Views/GuiMidiMode.h"/>
+          <FILE id="h9sz4F" name="GuiSamplerMode.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Views/GuiSamplerMode.cpp"/>
+          <FILE id="Bq64tZ" name="GuiSamplerMode.h" compile="0" resource="0"
+                file="Source/GUI Classes/Views/GuiSamplerMode.h"/>
+          <FILE id="ON5Ya0" name="GuiSequencerMode.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Views/GuiSequencerMode.cpp"/>
+          <FILE id="KlzR0T" name="GuiSequencerMode.h" compile="0" resource="0"
+                file="Source/GUI Classes/Views/GuiSequencerMode.h"/>
+          <FILE id="eT5wZt" name="MainComponent.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Views/MainComponent.cpp"/>
+          <FILE id="l6iYtf" name="MainComponent.h" compile="0" resource="0" file="Source/GUI Classes/Views/MainComponent.h"/>
+        </GROUP>
+      </GROUP>
+      <GROUP id="{54E46B95-FBF5-94F3-52A6-91B447E02CCE}" name="My IO Classes">
+        <FILE id="c1lrG5" name="OscInput.cpp" compile="1" resource="0" file="Source/My IO Classes/OscInput.cpp"/>
+        <FILE id="Tj90U3" name="OscInput.h" compile="0" resource="0" file="Source/My IO Classes/OscInput.h"/>
+        <FILE id="b3B6Dg" name="OscOutput.cpp" compile="1" resource="0" file="Source/My IO Classes/OscOutput.cpp"/>
+        <FILE id="n9mx21" name="OscOutput.h" compile="0" resource="0" file="Source/My IO Classes/OscOutput.h"/>
+      </GROUP>
+      <GROUP id="{C367D9DC-FF57-76D7-2D11-0440D684A2B6}" name="Third Party Libraries">
+        <GROUP id="{384C5A0A-1063-E0DC-7C98-4A58BCA69B18}" name="DspFilters">
+          <FILE id="DirWtZ" name="Bessel.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/Bessel.cpp"/>
+          <FILE id="JqiCxc" name="Bessel.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Bessel.h"/>
+          <FILE id="xMxxnb" name="Biquad.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/Biquad.cpp"/>
+          <FILE id="bsQXf4" name="Biquad.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Biquad.h"/>
+          <FILE id="SEKpwP" name="Butterworth.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/Butterworth.cpp"/>
+          <FILE id="jT6SVi" name="Butterworth.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Butterworth.h"/>
+          <FILE id="XDcUnG" name="Cascade.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/Cascade.cpp"/>
+          <FILE id="OWlHRQ" name="Cascade.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Cascade.h"/>
+          <FILE id="XPzD2p" name="ChebyshevI.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/ChebyshevI.cpp"/>
+          <FILE id="ZGUv5b" name="ChebyshevI.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/ChebyshevI.h"/>
+          <FILE id="TXCx3k" name="ChebyshevII.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/ChebyshevII.cpp"/>
+          <FILE id="mnvXlU" name="ChebyshevII.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/ChebyshevII.h"/>
+          <FILE id="UNRKWH" name="Common.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Common.h"/>
+          <FILE id="aVO5gt" name="Custom.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/Custom.cpp"/>
+          <FILE id="NcsuE9" name="Custom.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Custom.h"/>
+          <FILE id="W7DKnq" name="Design.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/Design.cpp"/>
+          <FILE id="aABoCq" name="Design.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Design.h"/>
+          <FILE id="Y1m8kt" name="Documentation.cpp" compile="1" resource="0"
+                file="Source/Third Party Libraries/DspFilters/Documentation.cpp"/>
+          <FILE id="kpiWqS" name="Dsp.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Dsp.h"/>
+          <FILE id="S7n3uX" name="Elliptic.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/Elliptic.cpp"/>
+          <FILE id="PeZqJn" name="Elliptic.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Elliptic.h"/>
+          <FILE id="WfH4R4" name="Filter.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/Filter.cpp"/>
+          <FILE id="V67RzP" name="Filter.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Filter.h"/>
+          <FILE id="zBgNHu" name="Layout.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Layout.h"/>
+          <FILE id="Vonqna" name="Legendre.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/Legendre.cpp"/>
+          <FILE id="Jie0Dx" name="Legendre.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Legendre.h"/>
+          <FILE id="lAMzaM" name="MathSupplement.h" compile="0" resource="0"
+                file="Source/Third Party Libraries/DspFilters/MathSupplement.h"/>
+          <FILE id="gAgnM3" name="Param.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/Param.cpp"/>
+          <FILE id="UsP1rl" name="Params.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Params.h"/>
+          <FILE id="NTd2Fc" name="PoleFilter.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/PoleFilter.cpp"/>
+          <FILE id="V9NQm8" name="PoleFilter.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/PoleFilter.h"/>
+          <FILE id="j8FF88" name="RBJ.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/RBJ.cpp"/>
+          <FILE id="eQDNtA" name="RBJ.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/RBJ.h"/>
+          <FILE id="TBzcDg" name="RootFinder.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/RootFinder.cpp"/>
+          <FILE id="o1v65N" name="RootFinder.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/RootFinder.h"/>
+          <FILE id="v3rgkZ" name="SmoothedFilter.h" compile="0" resource="0"
+                file="Source/Third Party Libraries/DspFilters/SmoothedFilter.h"/>
+          <FILE id="SXk97o" name="State.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/State.cpp"/>
+          <FILE id="B4436m" name="State.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/State.h"/>
+          <FILE id="MuNP4r" name="Types.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Types.h"/>
+          <FILE id="XSjA3U" name="Utilities.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Utilities.h"/>
+        </GROUP>
+        <FILE id="odUaWu" name="fastmath.h" compile="0" resource="0" file="Source/Third Party Libraries/fastmath.h"/>
+        <GROUP id="{DA6989C0-A752-709B-9323-BC8F023DDDBB}" name="Juced">
+          <FILE id="LN7PSQ" name="jucetice_CircularBuffer.h" compile="0" resource="0"
+                file="Source/Third Party Libraries/Juced/jucetice_CircularBuffer.h"/>
+        </GROUP>
+        <GROUP id="{B8AE33A5-7BE3-8FD8-2D3E-4EE5E712510E}" name="oscpack">
+          <GROUP id="{96502E80-F6C2-EDDD-C7AC-6D2D39C8CC48}" name="ip">
+            <FILE id="Pu5ngE" name="IpEndpointName.cpp" compile="1" resource="0"
+                  file="Source/Third Party Libraries/oscpack/ip/IpEndpointName.cpp"/>
+            <FILE id="jrfEzj" name="IpEndpointName.h" compile="0" resource="0"
+                  file="Source/Third Party Libraries/oscpack/ip/IpEndpointName.h"/>
+            <FILE id="qNp9Zq" name="NetworkingUtils.h" compile="0" resource="0"
+                  file="Source/Third Party Libraries/oscpack/ip/NetworkingUtils.h"/>
+            <FILE id="dUeNTW" name="PacketListener.h" compile="0" resource="0"
+                  file="Source/Third Party Libraries/oscpack/ip/PacketListener.h"/>
+            <GROUP id="{2F09AF8C-4C29-8A0B-5C9B-B4335C087E75}" name="posix">
+              <FILE id="dSaoOI" name="NetworkingUtils.cpp" compile="1" resource="0"
+                    file="Source/Third Party Libraries/oscpack/ip/posix/NetworkingUtils.cpp"/>
+              <FILE id="DSuZN6" name="UdpSocket.cpp" compile="1" resource="0" file="Source/Third Party Libraries/oscpack/ip/posix/UdpSocket.cpp"/>
+            </GROUP>
+            <FILE id="VsMFaC" name="TimerListener.h" compile="0" resource="0" file="Source/Third Party Libraries/oscpack/ip/TimerListener.h"/>
+            <FILE id="gqih1k" name="UdpSocket.h" compile="0" resource="0" file="Source/Third Party Libraries/oscpack/ip/UdpSocket.h"/>
+          </GROUP>
+          <GROUP id="{742637C8-D662-967C-2926-04E872CD6F77}" name="osc">
+            <FILE id="FeBDGP" name="MessageMappingOscPacketListener.h" compile="0"
+                  resource="0" file="Source/Third Party Libraries/oscpack/osc/MessageMappingOscPacketListener.h"/>
+            <FILE id="S3RsFl" name="OscException.h" compile="0" resource="0" file="Source/Third Party Libraries/oscpack/osc/OscException.h"/>
+            <FILE id="YXryzt" name="OscHostEndianness.h" compile="0" resource="0"
+                  file="Source/Third Party Libraries/oscpack/osc/OscHostEndianness.h"/>
+            <FILE id="W4GTS2" name="OscOutboundPacketStream.cpp" compile="1" resource="0"
+                  file="Source/Third Party Libraries/oscpack/osc/OscOutboundPacketStream.cpp"/>
+            <FILE id="K3JKXb" name="OscOutboundPacketStream.h" compile="0" resource="0"
+                  file="Source/Third Party Libraries/oscpack/osc/OscOutboundPacketStream.h"/>
+            <FILE id="bB0IB6" name="OscPacketListener.h" compile="0" resource="0"
+                  file="Source/Third Party Libraries/oscpack/osc/OscPacketListener.h"/>
+            <FILE id="NDAy5T" name="OscPrintReceivedElements.cpp" compile="1" resource="0"
+                  file="Source/Third Party Libraries/oscpack/osc/OscPrintReceivedElements.cpp"/>
+            <FILE id="VJpvte" name="OscPrintReceivedElements.h" compile="0" resource="0"
+                  file="Source/Third Party Libraries/oscpack/osc/OscPrintReceivedElements.h"/>
+            <FILE id="VWJFZ4" name="OscReceivedElements.cpp" compile="1" resource="0"
+                  file="Source/Third Party Libraries/oscpack/osc/OscReceivedElements.cpp"/>
+            <FILE id="aRj4fJ" name="OscReceivedElements.h" compile="0" resource="0"
+                  file="Source/Third Party Libraries/oscpack/osc/OscReceivedElements.h"/>
+            <FILE id="c793A8" name="OscTypes.cpp" compile="1" resource="0" file="Source/Third Party Libraries/oscpack/osc/OscTypes.cpp"/>
+            <FILE id="IUJs0r" name="OscTypes.h" compile="0" resource="0" file="Source/Third Party Libraries/oscpack/osc/OscTypes.h"/>
+          </GROUP>
+        </GROUP>
+      </GROUP>
+    </GROUP>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_core" showAllCode="1" useLocalCopy="1"/>
@@ -23,7 +461,7 @@
     <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="1"/>
   </MODULES>
   <EXPORTFORMATS>
-    <XCODE_MAC targetFolder="Builds/MacOSX" juceFolder="../../../Development/libs/juce_2.0/modules"
+    <XCODE_MAC targetFolder="Builds/MacOSX" juceFolder="../../../Development/libs/JUCE/modules"
                documentExtensions="alphalive">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="AlphaLive"
@@ -32,7 +470,7 @@
                        osxSDK="default" osxCompatibility="default" osxArchitecture="default"/>
       </CONFIGURATIONS>
     </XCODE_MAC>
-    <VS2010 targetFolder="Builds/VisualStudio2010" libraryType="1" juceFolder="../../../Development/libs/juce_2.0/modules">
+    <VS2010 targetFolder="Builds/VisualStudio2010" libraryType="1" juceFolder="..\..\Documents\GitHub\JUCE\modules">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
                        isDebug="1" optimisation="1" targetName="AlphaLive"/>

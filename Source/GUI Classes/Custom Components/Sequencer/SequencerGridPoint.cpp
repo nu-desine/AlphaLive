@@ -61,7 +61,13 @@ void SequencerGridPoint::paint (Graphics &g)
          //g.fillEllipse((getWidth()*0.05), (getHeight()*0.05), (getWidth()*0.9), (getHeight()*0.9));
          //g.setColour(Colours::black); //on*/
 		
-		g.setColour(AlphaColours::blue.withAlpha(float(status*(1.0/127.0))));
+        float alphaValue = float(status*(1.0/127.0));
+        if (alphaValue < 0)
+            alphaValue = 0;
+        else if (alphaValue > 1.0)
+            alphaValue = 1;
+        
+		g.setColour(AlphaColours::blue.withAlpha(alphaValue));
     }
 	
     

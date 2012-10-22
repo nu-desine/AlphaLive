@@ -2212,6 +2212,7 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
         
         if (noOfTicks >= 0) //time format = ticks per quarter note
         {
+            //get the correct MIDI track based on number of tracks
             int trackToImport = 0;
             if (midiFile.getNumTracks() > 1)
                 trackToImport = 1;
@@ -2224,10 +2225,10 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
             //and needs to be const, we must create a copy of this object to be used
             //to delete all the non note-on events.
             //the other way would be to do the following above: 
-            //MidiMessageSequence *newSequence = new MidiMessageSequence(*midiFile.getTrack(0));
+            //MidiMessageSequence *newSequence = new MidiMessageSequence(*midiFile.getTrack(trackToImport));
             //to create a deep copy that could be editted (as it won't be const) and then you would
             //only need the one sequence object. But then you would need
-            //to manually delete the object and possible the eventHolder objects too.
+            //to manually delete the object.
             MidiMessageSequence newSequence = *midiSequence;
             
             if (midiSequence != 0) //if it got a track from midiFile
@@ -2235,174 +2236,167 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
                 int noOfEvents = midiSequence->getNumEvents();
                 std::cout << noOfEvents << std::endl;
                 
-                //pointers to midiSequence content. Will get deleted when midiFile goes out of scope.
-                MidiMessageSequence::MidiEventHolder *eventHolder[noOfEvents]; 
-                Array <int> noteNumbers;
-                Array <int> eventsToDelete;
-                
-                //Search through all events, flag any non-note-on events to be deleted,
-                //and add the note numbers of any note-on events to the noteNumbers array.
-                for (int i = 0; i < noOfEvents; i++)
+                if (noOfEvents > 0)
                 {
-                    eventHolder[i] = midiSequence->getEventPointer(i); 
+                    //pointers to midiSequence content. Clear array but don't delete containing objects when finshed
+                    OwnedArray <MidiMessageSequence::MidiEventHolder> eventHolder;
+                    Array <int> noteNumbers;
+                    Array <int> eventsToDelete;
                     
-                    if (eventHolder[i]->message.isNoteOn() == true)
+                    //Search through all events, flag any non-note-on events to be deleted,
+                    //and add the note numbers of any note-on events to the noteNumbers array.
+                    for (int i = 0; i < noOfEvents; i++)
                     {
-                        noteNumbers.addIfNotAlreadyThere(eventHolder[i]->message.getNoteNumber());
-                    }
-                    else
-                    {
-                        //can't simply delete the event here as the indexes won't match between 
-                        //the MidiMessageSequence objects once an event has been removed
-                        eventsToDelete.add(i);
-                    }
-                }
-                
-                //delete flagged events
-                for (int i = eventsToDelete.size()-1; i >= 0; i--)
-                    newSequence.deleteEvent(eventsToDelete[i], false);
-                
-                //update noOfEvents
-                noOfEvents = newSequence.getNumEvents();
-                
-                //sort noteNumbers array then only keep the first twelve
-                DefaultElementComparator<int> sorter;
-                noteNumbers.sort (sorter);
-                for (int i = noteNumbers.size()-1; i > 11; i--)
-                    noteNumbers.remove(i);
-                
-                //Pointers to newSequence content. Will get deleted when midiFile goes out of scope.
-                MidiMessageSequence::MidiEventHolder *newEventHolder[noOfEvents]; 
-                eventsToDelete.clear();
-                
-                //Search through all events and flag any events that don't contain a note
-                //number within the noteNumbers array to be deleted
-                for (int i = 0; i < noOfEvents; i++)
-                {
-                    newEventHolder[i] = newSequence.getEventPointer(i);
-                    
-                    int eventNoteNumber = newEventHolder[i]->message.getNoteNumber();
-                    
-                    if (noteNumbers.contains(eventNoteNumber) == false)
-                    {
-                        //can't simply delete the event here as the indexes won't match between 
-                        //the MidiMessageSequence objects once an event has been removed
-                        eventsToDelete.add(i);
-                    }
-                }
-                
-                //delete flagged events
-                for (int i = eventsToDelete.size()-1; i >= 0; i--)
-                    newSequence.deleteEvent(eventsToDelete[i], false);
-                
-                //update noOfEvents
-                noOfEvents = newSequence.getNumEvents();
-                
-                //reset sequencer grid points
-                if (isSeqSet == false)
-                {
-                    for (int i = 0; i < selectedPads_.size(); i++)
-                    {
-                        int padNum = selectedPads_[i];
-                        for (int row = 0; row <= NO_OF_ROWS-1; row++)
+                        eventHolder.insert (i, midiSequence->getEventPointer(i)); 
+                        
+                        if (eventHolder[i]->message.isNoteOn() == true)
                         {
-                            for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
-                                PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, row, column, 0, false);
+                            noteNumbers.addIfNotAlreadyThere(eventHolder[i]->message.getNoteNumber());
+                        }
+                        else
+                        {
+                            //can't simply delete the event here as the indexes won't match between 
+                            //the MidiMessageSequence objects once an event has been removed
+                            eventsToDelete.add(i);
                         }
                     }
-                }
-                else //seq set
-                {
-                    for (int i = 0; i < selectedPads_.size(); i++)
+                    
+                    //delete flagged events
+                    for (int i = eventsToDelete.size()-1; i >= 0; i--)
+                        newSequence.deleteEvent(eventsToDelete[i], false);
+                    
+                    //update noOfEvents
+                    noOfEvents = newSequence.getNumEvents();
+                    
+                    //sort noteNumbers array then only keep the first twelve
+                    DefaultElementComparator<int> sorter;
+                    noteNumbers.sort (sorter);
+                    for (int i = noteNumbers.size()-1; i > 11; i--)
+                        noteNumbers.remove(i);
+                    
+                    eventHolder.clear(false);
+                    eventsToDelete.clear();
+                    
+                    //Search through all events and flag any events that don't contain a note
+                    //number within the noteNumbers array to be deleted
+                    for (int i = 0; i < noOfEvents; i++)
                     {
-                        int padNum = selectedPads_[i];
-                        for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
+                        eventHolder.insert (i, newSequence.getEventPointer(i));
+                        
+                        int eventNoteNumber = eventHolder[i]->message.getNoteNumber();
+                        
+                        if (noteNumbers.contains(eventNoteNumber) == false)
                         {
+                            //can't simply delete the event here as the indexes won't match between 
+                            //the MidiMessageSequence objects once an event has been removed
+                            eventsToDelete.add(i);
+                        }
+                    }
+                    
+                    //delete flagged events
+                    for (int i = eventsToDelete.size()-1; i >= 0; i--)
+                        newSequence.deleteEvent(eventsToDelete[i], false);
+                    
+                    //update noOfEvents
+                    noOfEvents = newSequence.getNumEvents();
+                    
+                    //reset sequencer grid points
+                    if (isSeqSet == false)
+                    {
+                        for (int i = 0; i < selectedPads_.size(); i++)
+                        {
+                            int padNum = selectedPads_[i];
                             for (int row = 0; row <= NO_OF_ROWS-1; row++)
                             {
                                 for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
-                                    PAD_SETTINGS_pads->setSequencerData(seq, row, column, 0, false);
+                                    PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, row, column, 0, false);
                             }
                         }
                     }
-                }
-                
-                //pointers to newSequence content. Will get deleted when midiFile goes out of scope.
-                MidiMessageSequence::MidiEventHolder *newEventHolder2[noOfEvents]; 
-                
-                //apply data from newSequence to sequencerData within PadSettings
-                //search through all the events, get the time stamp, noteNumber index, and velocity
-                //or each event, and apply it to the correct sequencerData index.
-                for (int i = 0; i < noOfEvents; i++)
-                {
-                    newEventHolder2[i] = newSequence.getEventPointer(i);
-                    //event message time stamp is used to work oout the column number
-                    const int noteColumn = roundToInt((newEventHolder2[i]->message.getTimeStamp())/(noOfTicks/4.0));
-                    //event message note number index in the noteNumber array is used to set the row number
-                    const int noteRow = noteNumbers.indexOf(newEventHolder2[i]->message.getNoteNumber());
-                    //event message velocity sets the value of the grid point
-                    const int noteValue = newEventHolder2[i]->message.getVelocity();
+                    else //seq set
+                    {
+                        for (int i = 0; i < selectedPads_.size(); i++)
+                        {
+                            int padNum = selectedPads_[i];
+                            for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
+                            {
+                                for (int row = 0; row <= NO_OF_ROWS-1; row++)
+                                {
+                                    for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+                                        PAD_SETTINGS_pads->setSequencerData(seq, row, column, 0, false);
+                                }
+                            }
+                        }
+                    }
                     
+                    eventHolder.clear(false);
+                    
+                    //apply data from newSequence to sequencerData within PadSettings
+                    //search through all the events, get the time stamp, noteNumber index, and velocity
+                    //or each event, and apply it to the correct sequencerData index.
+                    for (int i = 0; i < noOfEvents; i++)
+                    {
+                        eventHolder.insert (i, newSequence.getEventPointer(i));
+                        //event message time stamp is used to work oout the column number
+                        const int noteColumn = roundToInt((eventHolder[i]->message.getTimeStamp())/(noOfTicks/4.0));
+                        //event message note number index in the noteNumber array is used to set the row number
+                        const int noteRow = noteNumbers.indexOf(eventHolder[i]->message.getNoteNumber());
+                        //event message velocity sets the value of the grid point
+                        const int noteValue = eventHolder[i]->message.getVelocity();
+                        
+                        for (int i = 0; i < selectedPads_.size(); i++)
+                        {
+                            int padNum = selectedPads_[i];
+                            
+                            int sequenceLength = PAD_SETTINGS_pads->getSequencerLength();
+                            int seqNumber = noteColumn/sequenceLength;
+                            
+                            //single sequence - apply events to just the currently selected sequence
+                            if (isSeqSet == false)
+                            {
+                                if (noteColumn < sequenceLength)
+                                {
+                                    PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, noteRow, noteColumn, noteValue, false);
+                                }
+                            }
+                            //sequence set - apply to all sequences, splitting the midi sequence after 32 columns each time
+                            else if (isSeqSet == true)
+                            {
+                                if (noteColumn < (sequenceLength * 8)) //why can't I use NO_OF_SEQS? Equals a random number
+                                {
+                                    int newNoteColumn = noteColumn - (sequenceLength * seqNumber);
+                                    PAD_SETTINGS_pads->setSequencerData(seqNumber, noteRow, newNoteColumn, noteValue, false);
+                                    
+                                    //where can i set this so it isn't called mutiple times? Current way is lazy...
+                                    PAD_SETTINGS_pads->setSequencerNumberOfSequences(seqNumber+1);
+                                    //std::cout << "Number of seqs: " << seqNumber+1 << std::endl;
+                                }
+                            }
+                        }
+                    }
+                    
+                    eventHolder.clear(false);
+                    
+                    //convert new sequence data to strings
                     for (int i = 0; i < selectedPads_.size(); i++)
                     {
                         int padNum = selectedPads_[i];
-                        
-                        int sequenceLength = PAD_SETTINGS_pads->getSequencerLength();
-                        int seqNumber = noteColumn/sequenceLength;
-                        PAD_SETTINGS_pads->setSequencerNumberOfSequences(seqNumber+1);
-                        
-                        
-                        //single sequence - apply events to just the currently selected sequence
-                        if (isSeqSet == false)
-                        {
-                            if (noteColumn < sequenceLength)
-                            {
-                                PAD_SETTINGS_pads->setSequencerData(currentlySelectedSeqNumber, noteRow, noteColumn, noteValue, false);
-                            }
-                            //else
-                            //{
-                            //    break;
-                            //}
-                        }
-                        //sequence set - apply to all sequences, splitting the midi sequence after 32 columns each time
-                        else if (isSeqSet == true)
-                        {
-                            if (noteColumn < (sequenceLength * 8)) //why can't I use NO_OF_SEQS? Equals a random number
-                            {
-                                
-                                int newNoteColumn = noteColumn - (sequenceLength * seqNumber);
-                                PAD_SETTINGS_pads->setSequencerData(seqNumber, noteRow, newNoteColumn, noteValue, false);
-                                
-                            }
-                            //else
-                            //{
-                            //    break;
-                            //}
-                        }
+                        PAD_SETTINGS_pads->seqDataToString();
                     }
-                }
-                
-                //convert new sequence data to strings
-                for (int i = 0; i < selectedPads_.size(); i++)
-                {
-                    int padNum = selectedPads_[i];
-                    PAD_SETTINGS_pads->seqDataToString();
-                }
-                
-                //if needed, apply the noteNumbers array to the pads midi note array
-                if (shouldImportNoteData == true)
-                {
-                    for (int i = 0; i < selectedPads_.size(); i++)
+                    
+                    //if needed, apply the noteNumbers array to the pads midi note array
+                    if (shouldImportNoteData == true)
                     {
-                        int padNum = selectedPads_[i];
-                        for(int index = 0; index < noteNumbers.size(); index++)
+                        for (int i = 0; i < selectedPads_.size(); i++)
                         {
-                            PAD_SETTINGS_pads->setSequencerMidiNote(noteNumbers[index], index);
+                            int padNum = selectedPads_[i];
+                            for(int index = 0; index < noteNumbers.size(); index++)
+                            {
+                                PAD_SETTINGS_pads->setSequencerMidiNote(noteNumbers[index], index);
+                            }
                         }
                     }
                 }
-              
-                
             }
         }
         else //time format = SMPTE

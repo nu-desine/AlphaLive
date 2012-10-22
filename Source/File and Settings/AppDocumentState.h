@@ -115,6 +115,8 @@ public:
     void loadSequenceSet (Array<int> selectedPads_, 
                           bool openBrowser = true, 
                           File fileToOpen = File::nonexistent);
+	
+	void saveEffect (int currentlySelectedPad);
     
     void createMidiFile (int currentlySelectedSeqNumber, 
                          int currentlySelectedPad,

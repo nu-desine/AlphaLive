@@ -2132,7 +2132,7 @@ void AppDocumentState::saveEffect (int currentlySelectedPad)
 			}
 			
 			//create xmlelement to be saved
-            XmlElement *toBeSaved = new XmlElement("ALPHALIVE_SCENE_VERSION_1");
+            XmlElement *toBeSaved = new XmlElement("ALPHALIVE_PAD_SETTINGS_VERSION_1");
             
 			toBeSaved->addChildElement(new XmlElement (*effectDataXml));
 			

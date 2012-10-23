@@ -216,48 +216,7 @@
 		</dict>
 	</array>
 	<key>OpenEditors</key>
-	<array>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>FC7470C71635A4D700BB6A0F</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>AppDocumentState.cpp</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>FC7470C81635A4D700BB6A0F</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>AppDocumentState.cpp</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>FC7470DE1635A60D00BB6A0F</string>
-						<key>history</key>
-						<array>
-							<string>FC7470C01635A4A500BB6A0F</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {825, 781}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>15 56 825 822 0 0 1440 878 </string>
-			</dict>
-		</dict>
-	</array>
+	<array/>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -349,7 +308,7 @@
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 107}, {241, 764}}</string>
+							<string>{{0, 35}, {241, 764}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -368,7 +327,7 @@
 							<real>241</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>13 55 1228 823 0 0 1440 878 </string>
+						<string>68 55 1228 823 0 0 1440 878 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -398,7 +357,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>FC7470DD1635A60D00BB6A0F</string>
+										<string>FC7470F91636D26200BB6A0F</string>
 										<key>history</key>
 										<array>
 											<string>FCDCD139160C94CD00E0612A</string>
@@ -479,15 +438,18 @@
 											<string>FC7470881635943300BB6A0F</string>
 											<string>FC7470891635943300BB6A0F</string>
 											<string>FC74708A1635943300BB6A0F</string>
-											<string>FC74708B1635943300BB6A0F</string>
 											<string>FC747093163596A900BB6A0F</string>
 											<string>FC747094163596A900BB6A0F</string>
-											<string>FC747096163596A900BB6A0F</string>
 											<string>FC7470C41635A4D700BB6A0F</string>
 											<string>FC7470CD1635A51500BB6A0F</string>
 											<string>FC7470D41635A5DE00BB6A0F</string>
 											<string>FC7470D51635A5DE00BB6A0F</string>
-											<string>FC7470D61635A5DE00BB6A0F</string>
+											<string>FC7470F01636D26200BB6A0F</string>
+											<string>FC7470F21636D26200BB6A0F</string>
+											<string>FC7470F41636D26200BB6A0F</string>
+											<string>FC7470F61636D26200BB6A0F</string>
+											<string>FC7470F71636D26200BB6A0F</string>
+											<string>FC7470F81636D26200BB6A0F</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -501,7 +463,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {965, 777}}</string>
 								<key>RubberWindowFrame</key>
-								<string>13 55 1228 823 0 0 1440 878 </string>
+								<string>68 55 1228 823 0 0 1440 878 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -521,7 +483,7 @@
 								<key>Frame</key>
 								<string>{{0, 782}, {965, 0}}</string>
 								<key>RubberWindowFrame</key>
-								<string>13 55 1228 823 0 0 1440 878 </string>
+								<string>68 55 1228 823 0 0 1440 878 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -668,7 +630,7 @@
 	<key>StatusbarIsVisible</key>
 	<true/>
 	<key>TimeStamp</key>
-	<real>372614669.428069</real>
+	<real>372691554.91510701</real>
 	<key>ToolbarConfigUserDefaultsMinorVersion</key>
 	<string>2</string>
 	<key>ToolbarDisplayMode</key>
@@ -685,16 +647,16 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>FC7470FA1636D26200BB6A0F</string>
 		<string>FC7470A0163596A900BB6A0F</string>
 		<string>FC7470A1163596A900BB6A0F</string>
 		<string>1CD10A99069EF8BA00B06720</string>
-		<string>FC7470C71635A4D700BB6A0F</string>
 		<string>FCDCD115160C8B2F00E0612A</string>
-		<string>1C78EAAD065D492600B07095</string>
 		<string>/Users/felixgodden/Programming/nu-desine/alphalive 2/Builds/MacOSX/AlphaLive.xcodeproj</string>
+		<string>1C78EAAD065D492600B07095</string>
 	</array>
 	<key>WindowString</key>
-	<string>13 55 1228 823 0 0 1440 878 </string>
+	<string>68 55 1228 823 0 0 1440 878 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>

@@ -447,3 +447,33 @@ void GuiFxDial::mouseExit (const MouseEvent &e)
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty); 
 }
+
+void GuiFxDial::mouseDown(const MouseEvent &e)
+{
+	
+	if (e.mods.isPopupMenu() == true)
+    {
+		PopupMenu menu;
+		
+		if (selectedPads.size() == 1) 
+		{
+			menu.addItem(1, translate("Export Effect Settings..."));
+		}
+		else {
+			menu.addItem(1, translate("Export Effect Settings..."), false);
+		}
+        
+        const int result = menu.show();
+        
+        if (result == 0)
+        {
+            // user dismissed the menu without picking anything
+        }
+        
+        else if (result == 1)
+        {
+            mainComponentRef.getAppDocumentStateRef().saveEffect(selectedPads[0]);
+        }
+    }
+
+}

@@ -1992,7 +1992,174 @@ void AppDocumentState::loadSequenceSet(Array<int> selectedPads_,
 }
 
 
-
+void AppDocumentState::saveEffect (int currentlySelectedPad)
+{
+    //navigate to app directory
+    FileChooser saveFileChooser(translate("Create an effect file to save..."), 
+                                StoredSettings::getInstance()->appProjectDir, 
+                                "*.alphapad");
+    
+    if (saveFileChooser.browseForFileToSave(false))
+    {
+        //Surely there's a easier way to do the following code? FileBasedDocument
+        File savedFile (saveFileChooser.getResult()); //get file that the user has 'saved'
+        String stringFile = savedFile.getFullPathName(); //get the filepath name of the file as a string
+        stringFile = stringFile + ".alphapad"; //append an extension name to the filepath name
+        savedFile = stringFile; //set the file to this name
+        
+        bool overwrite = true; //by default true
+		
+		int effect = 0;
+		int modeCheck = PAD_SETTINGS_pad->getMode();
+        
+        //delete the file if it exists &write the new data
+        if (savedFile.existsAsFile())
+        {
+            overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("This File Already Exists!"), translate("Are you sure you want to overwrite this file?"));
+        }
+        
+        if (overwrite == true)
+        {
+            savedFile.deleteFile();
+            savedFile.create(); //create the file
+            
+            XmlElement *effectDataXml = new XmlElement("PAD_DATA");
+			
+			if (modeCheck == 2) 
+			{
+				effect = PAD_SETTINGS_pad->getSamplerEffect();
+			}
+			else if (modeCheck == 3)
+			{
+				effect = PAD_SETTINGS_pad->getSequencerEffect();
+			}
+			
+			effectDataXml->setAttribute("effect", effect);
+			
+			if (effect == 1) //Gain and Pan
+			{
+				effectDataXml->setAttribute("padFxGainPanGain", PAD_SETTINGS_pad->getPadFxGainPanGain());
+				effectDataXml->setAttribute("padFxGainPanPan", PAD_SETTINGS_pad->getPadFxGainPanPan());
+				effectDataXml->setAttribute("padFxGainPanAlphaTouch", PAD_SETTINGS_pad->getPadFxGainPanAlphaTouch());
+				effectDataXml->setAttribute("padFxGainPanAtReverse", PAD_SETTINGS_pad->getPadFxGainPanAtReverse());
+				effectDataXml->setAttribute("padFxGainPanAtIntensity", PAD_SETTINGS_pad->getPadFxGainPanAtIntensity());
+			}
+			else if (effect == 2) //LPF
+			{
+				effectDataXml->setAttribute("padFxLpfMix", PAD_SETTINGS_pad->getPadFxLpfMix());
+				effectDataXml->setAttribute("padFxLpfFreq", PAD_SETTINGS_pad->getPadFxLpfFreq());
+				effectDataXml->setAttribute("padFxLpfBandwidth", PAD_SETTINGS_pad->getPadFxLpfBandwidth());
+				effectDataXml->setAttribute("padFxLpfAlphaTouch", PAD_SETTINGS_pad->getPadFxLpfAlphaTouch());
+				effectDataXml->setAttribute("padFxLpfAtReverse", PAD_SETTINGS_pad->getPadFxLpfAtReverse());
+				effectDataXml->setAttribute("padFxLpfAtIntensity", PAD_SETTINGS_pad->getPadFxLpfAtIntensity());
+			}
+			else if (effect == 3) //HPF
+			{
+				effectDataXml->setAttribute("padFxHpfMix", PAD_SETTINGS_pad->getPadFxHpfMix());
+				effectDataXml->setAttribute("padFxHpfFreq", PAD_SETTINGS_pad->getPadFxHpfFreq());
+				effectDataXml->setAttribute("padFxHpfBandwidth", PAD_SETTINGS_pad->getPadFxHpfBandwidth());
+				effectDataXml->setAttribute("padFxHpfAlphaTouch", PAD_SETTINGS_pad->getPadFxHpfAlphaTouch());
+				effectDataXml->setAttribute("padFxHpfAtReverse", PAD_SETTINGS_pad->getPadFxHpfAtReverse());
+				effectDataXml->setAttribute("padFxHpfAtIntensity", PAD_SETTINGS_pad->getPadFxHpfAtIntensity());
+			}
+			else if (effect == 4) //BPF
+			{
+				effectDataXml->setAttribute("padFxBpfMix", PAD_SETTINGS_pad->getPadFxBpfMix());
+				effectDataXml->setAttribute("padFxBpfFreq", PAD_SETTINGS_pad->getPadFxBpfFreq());
+				effectDataXml->setAttribute("padFxBpfBandwidth", PAD_SETTINGS_pad->getPadFxBpfBandwidth());
+				effectDataXml->setAttribute("padFxBpfAlphaTouch", PAD_SETTINGS_pad->getPadFxBpfAlphaTouch());
+				effectDataXml->setAttribute("padFxBpfAtReverse", PAD_SETTINGS_pad->getPadFxBpfAtReverse());
+				effectDataXml->setAttribute("padFxBpfAtIntensity", PAD_SETTINGS_pad->getPadFxBpfAtIntensity());
+			}
+			else if (effect == 5) //Distortion
+			{
+				effectDataXml->setAttribute("padFxDistortionInputGain", PAD_SETTINGS_pad->getPadFxDistortionInputGain());
+				effectDataXml->setAttribute("padFxDistortionDrive", PAD_SETTINGS_pad->getPadFxDistortionDrive());
+				effectDataXml->setAttribute("padFxDistortionWetDryMix", PAD_SETTINGS_pad->getPadFxDistortionWetDryMix());
+				effectDataXml->setAttribute("padFxDistortionTone", PAD_SETTINGS_pad->getPadFxDistortionTone());
+				effectDataXml->setAttribute("padFxDistortionTypeMenu", PAD_SETTINGS_pad->getPadFxDistortionTypeMenu());
+				effectDataXml->setAttribute("padFxDistortionAlphaTouch", PAD_SETTINGS_pad->getPadFxDistortionAlphaTouch());
+				effectDataXml->setAttribute("padFxDistortionAtReverse", PAD_SETTINGS_pad->getPadFxDistortionAtReverse());
+				effectDataXml->setAttribute("padFxDistortionAtIntensity", PAD_SETTINGS_pad->getPadFxDistortionAtIntensity());
+			}
+			else if (effect == 6) //Bitcrusher
+			{
+				effectDataXml->setAttribute("padFxBitcrusherInputGain", PAD_SETTINGS_pad->getPadFxBitcrusherInputGain());
+				effectDataXml->setAttribute("padFxBitcrusherDownsample", PAD_SETTINGS_pad->getPadFxBitcrusherDownsample());
+				effectDataXml->setAttribute("padFxBitcrusherCrush", PAD_SETTINGS_pad->getPadFxBitcrusherCrush());
+				effectDataXml->setAttribute("padFxBitcrusherSmoothing", PAD_SETTINGS_pad->getPadFxBitcrusherSmoothing());
+				effectDataXml->setAttribute("padFxBitcrusherWetDryMix", PAD_SETTINGS_pad->getPadFxBitcrusherWetDryMix());
+				effectDataXml->setAttribute("padFxBitcrusherAlphaTouch", PAD_SETTINGS_pad->getPadFxBitcrusherAlphaTouch());
+				effectDataXml->setAttribute("padFxBitcrusherAtReverse", PAD_SETTINGS_pad->getPadFxBitcrusherAtReverse());
+				effectDataXml->setAttribute("padFxBitcrusherAtIntensity", PAD_SETTINGS_pad->getPadFxBitcrusherAtIntensity());
+			}
+			else if (effect == 7) //Delay
+			{
+				effectDataXml->setAttribute("padFxDelayMix", PAD_SETTINGS_pad->getPadFxDelayMix());
+				effectDataXml->setAttribute("padFxDelayTime", PAD_SETTINGS_pad->getPadFxDelayTime());
+				effectDataXml->setAttribute("padFxDelayFeedback", PAD_SETTINGS_pad->getPadFxDelayFeedback());
+				effectDataXml->setAttribute("padFxDelayLpfFreq", PAD_SETTINGS_pad->getPadFxDelayLpfFreq());
+				effectDataXml->setAttribute("padFxDelayHpfFreq", PAD_SETTINGS_pad->getPadFxDelayHpfFreq());
+				effectDataXml->setAttribute("padFxDelaySync", PAD_SETTINGS_pad->getPadFxDelaySync());
+				effectDataXml->setAttribute("padFxDelayTimeMenu", PAD_SETTINGS_pad->getPadFxDelayTimeMenu());
+				effectDataXml->setAttribute("padFxDelayAlphaTouch", PAD_SETTINGS_pad->getPadFxDelayAlphaTouch());
+				effectDataXml->setAttribute("padFxDelayAtReverse", PAD_SETTINGS_pad->getPadFxDelayAtReverse());
+				effectDataXml->setAttribute("padFxDelayAtIntensity", PAD_SETTINGS_pad->getPadFxDelayAtIntensity());
+			}
+			else if (effect == 8) //Reverb
+			{
+				effectDataXml->setAttribute("padFxReverbMix", PAD_SETTINGS_pad->getPadFxReverbMix());
+				effectDataXml->setAttribute("padFxReverbRoomSize", PAD_SETTINGS_pad->getPadFxReverbRoomSize());
+				effectDataXml->setAttribute("padFxReverbDamping", PAD_SETTINGS_pad->getPadFxReverbDamping());
+				effectDataXml->setAttribute("padFxReverbWidth", PAD_SETTINGS_pad->getPadFxReverbWidth());
+				effectDataXml->setAttribute("padFxReverbFreezeMode", PAD_SETTINGS_pad->getPadFxReverbFreezeMode());
+				effectDataXml->setAttribute("padFxReverbAlphaTouch", PAD_SETTINGS_pad->getPadFxReverbAlphaTouch());
+				effectDataXml->setAttribute("padFxReverbAtReverse", PAD_SETTINGS_pad->getPadFxReverbAtReverse());
+				effectDataXml->setAttribute("padFxReverbAtIntensity", PAD_SETTINGS_pad->getPadFxReverbAtIntensity());
+			}
+			else if (effect == 9) //Flanger
+			{
+				effectDataXml->setAttribute("padFxFlangerMix", PAD_SETTINGS_pad->getPadFxFlangerMix());
+				effectDataXml->setAttribute("padFxFlangerRate", PAD_SETTINGS_pad->getPadFxFlangerRate());
+				effectDataXml->setAttribute("padFxFlangerFeedback", PAD_SETTINGS_pad->getPadFxFlangerFeedback());
+				effectDataXml->setAttribute("padFxFlangerIntensity", PAD_SETTINGS_pad->getPadFxFlangerIntensity());
+				effectDataXml->setAttribute("padFxFlangerRateMenu", PAD_SETTINGS_pad->getPadFxFlangerRateMenu());
+				effectDataXml->setAttribute("padFxFlangerSync", PAD_SETTINGS_pad->getPadFxFlangerSync());
+				effectDataXml->setAttribute("padFxFlangerAlphaTouch", PAD_SETTINGS_pad->getPadFxFlangerAlphaTouch());
+				effectDataXml->setAttribute("padFxFlangerAtReverse", PAD_SETTINGS_pad->getPadFxFlangerAtReverse());
+				effectDataXml->setAttribute("padFxFlangerAtIntensity", PAD_SETTINGS_pad->getPadFxFlangerAtIntensity());
+			}
+			else if (effect == 10) //Tremolo
+			{
+				effectDataXml->setAttribute("padFxTremoloDepth", PAD_SETTINGS_pad->getPadFxTremoloDepth());
+				effectDataXml->setAttribute("padFxTremoloRate", PAD_SETTINGS_pad->getPadFxTremoloRate());
+				effectDataXml->setAttribute("padFxTremoloShape", PAD_SETTINGS_pad->getPadFxTremoloShape());
+				effectDataXml->setAttribute("padFxTremoloSync", PAD_SETTINGS_pad->getPadFxTremoloSync());
+				effectDataXml->setAttribute("padFxTremoloRateMenu", PAD_SETTINGS_pad->getPadFxTremoloRateMenu());
+				effectDataXml->setAttribute("padFxTremoloAlphaTouch", PAD_SETTINGS_pad->getPadFxTremoloAlphaTouch());
+				effectDataXml->setAttribute("padFxTremoloAtReverse", PAD_SETTINGS_pad->getPadFxTremoloAtReverse());
+				effectDataXml->setAttribute("padFxTremoloAtIntensity", PAD_SETTINGS_pad->getPadFxTremoloAtIntensity());
+			}
+			
+			//create xmlelement to be saved
+            XmlElement *toBeSaved = new XmlElement("ALPHALIVE_PAD_SETTINGS_VERSION_1");
+            
+			toBeSaved->addChildElement(new XmlElement (*effectDataXml));
+			
+            //save to file
+            String xmlDoc = toBeSaved->createDocument(String::empty, false);
+            savedFile.appendText(xmlDoc);
+            
+            delete toBeSaved;
+			delete effectDataXml;
+            
+            std::cout << savedFile.getFullPathName() << std::endl;
+            
+            //AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Effect Saved", "The effect has been successfully saved to file");
+        }
+    }
+    
+}
 
 
 

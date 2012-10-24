@@ -34,6 +34,7 @@
  translate("Hide Other")
  translate("Show All")
  translate("Quit AlphaLive")
+ translate("Quit")
  */
 
 

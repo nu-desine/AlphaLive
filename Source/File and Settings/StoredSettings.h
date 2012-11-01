@@ -50,6 +50,7 @@ public:
     int killOnClockStop; // 0 - don't kill, 1 - kill
     int cleanOnClose; //1 - don't clean, 2 - clean
     int autoSaveScenes; //1 - dont auto save, 2 - do auto save
+    String audioSettings; //this will hold the XML element created using createStateXml()
     
 private:
     ScopedPointer<PropertiesFile> props;

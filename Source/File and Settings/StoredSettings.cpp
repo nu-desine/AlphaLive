@@ -50,6 +50,7 @@ void StoredSettings::flush()
     {
         props->setValue ("recentFiles", recentFiles.toString());
         props->setValue ("appProjectDir", appProjectDir.getFullPathName());
+        props->setValue ("audioSettings", audioSettings);
         props->setValue ("midiNoteDisplayType", midiNoteDisplayType);
         props->setValue ("launchTask", launchTask);
         props->setValue ("killOnClockStop", killOnClockStop);
@@ -77,12 +78,12 @@ void StoredSettings::flush()
     recentFiles.setMaxNumberOfItems(20);
     
     appProjectDir = props->getValue ("appProjectDir");
+    audioSettings = props->getValue ("audioSettings");
     midiNoteDisplayType = props->getIntValue("midiNoteDisplayType");
     launchTask = props->getIntValue("launchTask");
     killOnClockStop = props->getIntValue("killOnClockStop");
     cleanOnClose = props->getIntValue("cleanOnClose");
     autoSaveScenes = props->getIntValue("autoSaveScenes");
-    
 
 }
 

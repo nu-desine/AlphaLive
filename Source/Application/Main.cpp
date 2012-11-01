@@ -144,8 +144,6 @@ public:
         menuModel = nullptr;
         delete menuModel;
         
-        StoredSettings::deleteInstance();
-        
         //delete temp file
         File::getSpecialLocation(File::tempDirectory).deleteRecursively();
         
@@ -158,6 +156,8 @@ public:
         delete alphaLiveEngine;
         
         commandManager = nullptr;
+        
+        StoredSettings::deleteInstance();
     }
 
     //==============================================================================

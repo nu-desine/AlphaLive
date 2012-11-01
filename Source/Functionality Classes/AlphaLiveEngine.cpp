@@ -23,6 +23,7 @@
 #include "AlphaLiveEngine.h"
 #include "../File and Settings/AppSettings.h"
 #include "Other/LayoutsAndScales.cpp"
+#include "../File and Settings/StoredSettings.h"
 
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[recievedPad]
@@ -45,11 +46,12 @@ AlphaLiveEngine::AlphaLiveEngine()
     playingStatus = 0;
     
     //==========================================================================
-    // initialise the device manager with no settings so that it picks a
-	// default device to use.
+    // initialise the device manager
+    XmlElement *audioSettingsXml = XmlDocument::parse(StoredSettings::getInstance()->audioSettings);
+    
 	const String error (audioDeviceManager.initialise (0, /* number of input channels */
 													   2, /* number of output channels */
-													   0, /* no XML settings.. */
+													   audioSettingsXml, /* XML settings from prefs*/
 													   true  /* select default device on failure */));
 	if (error.isNotEmpty())
 	{
@@ -59,6 +61,7 @@ AlphaLiveEngine::AlphaLiveEngine()
 	}
     
     audioDeviceManager.addAudioCallback (this);
+    delete audioSettingsXml;
     
     
     //SET UP MIDI OUTPUT
@@ -130,6 +133,16 @@ AlphaLiveEngine::AlphaLiveEngine()
 
 AlphaLiveEngine::~AlphaLiveEngine()
 {
+    //save audio output settings to prefs
+    XmlElement *audioSettingsXml = audioDeviceManager.createStateXml();
+    if (audioSettingsXml != nullptr)
+    {
+        String audioSettingsString = audioSettingsXml->createDocument(String::empty, true, false);
+        StoredSettings::getInstance()->audioSettings = audioSettingsString;
+        StoredSettings::getInstance()->flush();
+    }
+    delete audioSettingsXml;
+
     audioMixer.removeAllInputs();
 	audioPlayer.setSource(NULL);
 

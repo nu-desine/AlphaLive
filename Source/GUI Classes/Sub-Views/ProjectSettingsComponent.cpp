@@ -34,13 +34,15 @@ ProjectSettingsComponent::ProjectSettingsComponent(MainComponent &ref, AlphaLive
                                                                     alphaLiveEngineRef(ref2),
                                                                     appDocumentStateRef(ref3)
 {
-    globalOscComponent = new GlobalOscComponent(mainComponentRef, alphaLiveEngineRef);
+    //temporarily hide global osc feature/settings
+    //globalOscComponent = new GlobalOscComponent(mainComponentRef, alphaLiveEngineRef);
     generalSettingsComponent = new GeneralProjSettingsComponent(mainComponentRef, appDocumentStateRef);
     
     //create tabbed component and add tabs/child components
     addAndMakeVisible(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
     tabbedComponent->addTab(translate("General Settings"), Colours::darkgrey, generalSettingsComponent, true);
-    tabbedComponent->addTab(translate("Global OSC Settings"), Colours::darkgrey, globalOscComponent, true);
+    //temporarily hide global osc feature/settings
+    //tabbedComponent->addTab(translate("Global OSC Settings"), Colours::darkgrey, globalOscComponent, true);
     
     addAndMakeVisible(closeButton = new TextButton());
     closeButton->setButtonText(translate("Close"));

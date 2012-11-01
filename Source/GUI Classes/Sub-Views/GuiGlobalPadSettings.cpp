@@ -53,7 +53,12 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
     exclusiveGroupSlider->addListener(this);
     exclusiveGroupSlider->setValue(1, false);
     exclusiveGroupSlider->addMouseListener(this, true);
-    exclusiveGroupSlider->setVisible(false);
+    
+    addAndMakeVisible(velocitySlider = new AlphaSlider());
+    velocitySlider->setRange(0, 127, 1);
+    velocitySlider->addListener(this);
+    velocitySlider->setValue(110, false);
+    velocitySlider->addMouseListener(this, true);
     
     addAndMakeVisible(pressureSensitivityMenu = new ComboBox());
     pressureSensitivityMenu->addListener(this);
@@ -73,9 +78,11 @@ GuiGlobalPadSettings::~GuiGlobalPadSettings()
 
 void GuiGlobalPadSettings::resized()
 {
-    quantiseButton->setBounds(828, 270, 32, 32);
+    quantiseButton->setBounds(828, 270, 32, 32); //should this be in the same position as the other quantise buttons to prevent confusion?
 	exclusiveModeButton->setBounds(823, 320, 42, 42);
     exclusiveGroupSlider->setBounds(823, 370, 42, 42);
+    
+    velocitySlider->setBounds(823, 500, 42, 42);
 	pressureSensitivityMenu->setBounds(802, 550, 87, 20);
 	
 }
@@ -129,6 +136,14 @@ void GuiGlobalPadSettings::sliderValueChanged (Slider* slider)
             PAD_SETTINGS->setExclusiveGroup(slider->getValue());
         }
     }
+    else if (slider == velocitySlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setVelocity(slider->getValue());
+        }
+    }
 }
 
 void GuiGlobalPadSettings::comboBoxChanged (ComboBox* comboBox)
@@ -153,6 +168,7 @@ void GuiGlobalPadSettings::updateDisplay()
         exclusiveModeButton->setToggleState(PAD_SETTINGS->getExclusiveMode(), false);
         exclusiveGroupSlider->setComponentValue(PAD_SETTINGS->getExclusiveGroup());
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
+        velocitySlider->setComponentValue(PAD_SETTINGS->getVelocity());
         
     }
     else if(MULTI_PADS)
@@ -216,6 +232,19 @@ void GuiGlobalPadSettings::updateDisplay()
                 pressureSensitivityMenu->setSelectedId(pressureSensitivity_, true);
         }
         
+        //==================================================================================================
+        int velocity_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getVelocity();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getVelocity() != velocity_)
+            {
+                velocitySlider->setComponentValue(-999);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                velocitySlider->setComponentValue(velocity_);
+        }
         
     }
     
@@ -241,9 +270,13 @@ void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText(translate("Pressure Curve Menu. Use this menu to select the curve for the pressure mapping."));
     }
-    if (quantiseButton->isMouseOver(true))
+    else if (quantiseButton->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::quantizeButton));
+    }
+    else if (velocitySlider->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Static Velocity Selector. Sets and displays the static velocity for a MIDI note or sample."));
     }
 }
 

@@ -84,12 +84,12 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
     padData->setAttribute("exclusiveMode", PAD_SETTINGS->getExclusiveMode());
     padData->setAttribute("exclusiveGroup", PAD_SETTINGS->getExclusiveGroup());
     padData->setAttribute("quantizeMode", PAD_SETTINGS->getQuantizeMode());
+    padData->setAttribute("velocity", PAD_SETTINGS->getVelocity());
     
     //only save whats necessary
     if (PAD_SETTINGS->getMode() == 1) //midi mode
     {
         padData->setAttribute("midiNote", PAD_SETTINGS->getMidiNote());
-        padData->setAttribute("midiVelocity", PAD_SETTINGS->getMidiVelocity());
         padData->setAttribute("midiChannel", PAD_SETTINGS->getMidiChannel());
         padData->setAttribute("midiMinPressureRange", PAD_SETTINGS->getMidiMinPressureRange());
         padData->setAttribute("midiMaxPressureRange", PAD_SETTINGS->getMidiMaxPressureRange());
@@ -331,6 +331,8 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
         PAD_SETTINGS->setExclusiveGroup(padData->getIntAttribute("exclusiveGroup"));
     if (padData->hasAttribute("quantizeMode"))
         PAD_SETTINGS->setQuantizeMode(padData->getIntAttribute("quantizeMode"));
+    if (padData->hasAttribute("velocity"))
+        PAD_SETTINGS->setVelocity(padData->getIntAttribute("velocity"));
     
     //only load needed data to reduce loading times and CPU usage, plus
     //can not load settings into seq and sampler modes where the pads player objects don't exist (yet)
@@ -340,8 +342,6 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
     {
         if (padData->hasAttribute("midiNote"))
             PAD_SETTINGS->setMidiNote(padData->getIntAttribute("midiNote"));
-        if (padData->hasAttribute("midiVelocity"))
-            PAD_SETTINGS->setMidiVelocity(padData->getIntAttribute("midiVelocity"));
         if (padData->hasAttribute("midiChannel"))
             PAD_SETTINGS->setMidiChannel(padData->getIntAttribute("midiChannel"));
         if (padData->hasAttribute("midiMinPressureRange"))

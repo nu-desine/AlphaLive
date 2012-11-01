@@ -43,10 +43,10 @@ PadSettings::PadSettings(int arrayIndex)
     exclusiveMode = 0;
     exclusiveGroup = 1;
     quantizeMode = 0; //unquantized
+    velocity = 110;
     
     //midi mode
     midiNote = 60;
-    midiVelocity = 110;
     midiChannel = 1;
     midiMinPressureRange = 0;
     midiMaxPressureRange = 127;
@@ -279,12 +279,12 @@ void PadSettings::resetData (int whatToReset)
         setExclusiveMode(0);
         setExclusiveGroup(1);
         setQuantizeMode(0);
+        setVelocity(110);
     }
     
     if (whatToReset != 1)
     {
         setMidiNote(60);
-        setMidiVelocity(110);
         setMidiChannel(1);
         setMidiMinPressureRange(0);
         setMidiMaxPressureRange(127);
@@ -466,6 +466,18 @@ void PadSettings::setQuantizeMode (int value)
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setQuantizeMode(value);
     }
 }
+void PadSettings::setVelocity(int value)
+{
+    velocity = value;
+    alphaLiveEngineRef->getModeMidi()->setVelocity(value, padNumber);
+    
+    /*
+    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setVelocity(value);
+    }
+     */
+}
 
 
 #pragma mark Global accessor functions
@@ -491,6 +503,11 @@ int PadSettings::getQuantizeMode()
 {
     return quantizeMode;
 }
+int PadSettings::getVelocity()
+{
+    return velocity;
+}
+
 
 #pragma mark MIDI mode mutator functions
 //==================================================================
@@ -512,11 +529,7 @@ void PadSettings::setMidiNote(int value)
     
     alphaLiveEngineRef->getModeMidi()->setNote(midiNote, padNumber);
 }
-void PadSettings::setMidiVelocity(int value)
-{
-    midiVelocity = value;
-    alphaLiveEngineRef->getModeMidi()->setVelocity(value, padNumber);
-}
+
 void PadSettings::setMidiChannel(int value)
 {
     midiChannel = value;
@@ -573,10 +586,6 @@ void PadSettings::setMidiCcController (int value)
 int PadSettings::getMidiNote()
 {
     return midiNote;
-}
-int PadSettings::getMidiVelocity()
-{
-    return midiVelocity;
 }
 int PadSettings::getMidiChannel()
 {

@@ -64,17 +64,18 @@ public:
     void setExclusiveMode (int value);
     void setExclusiveGroup (int value);
     void setQuantizeMode (int value);
+    void setVelocity (int value);
 
     int getMode();
     int getPressureSensitivityMode();
     int getExclusiveMode();
     int getExclusiveGroup();
     int getQuantizeMode();
+    int getVelocity();
     
     //==================================================================
     //MIDI mode
     void setMidiNote (int value);
-    void setMidiVelocity (int value);
     void setMidiChannel (int value);
     void setMidiMinPressureRange (int value);
     void setMidiMaxPressureRange (int value);
@@ -87,7 +88,6 @@ public:
     void setMidiCcController (int value);
     
     int getMidiNote();
-    int getMidiVelocity();
     int getMidiChannel();
     int getMidiMinPressureRange();
     int getMidiMaxPressureRange();
@@ -393,11 +393,11 @@ private:
     int exclusiveMode;
     int exclusiveGroup;
     int quantizeMode;
+    int velocity;
     
     //==================================================================
     //MIDI mode
     int midiNote;
-    int midiVelocity;
     int midiChannel;
     int midiMinPressureRange;
     int midiMaxPressureRange;

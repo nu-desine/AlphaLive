@@ -36,7 +36,7 @@ ModeMidi::ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref)
         
         channel[i] = PAD_SETTINGS_i->getMidiChannel();
         note[i] = PAD_SETTINGS_i->getMidiNote();
-        velocity[i] = PAD_SETTINGS_i->getMidiVelocity();
+        velocity[i] = PAD_SETTINGS_i->getVelocity();
         minRange[i] = PAD_SETTINGS_i->getMidiMinPressureRange();
         maxRange[i] = PAD_SETTINGS_i->getMidiMaxPressureRange();
         controllerNumber[i] = PAD_SETTINGS_i->getMidiCcController();
@@ -535,7 +535,7 @@ void ModeMidi::setPadData (int padNumber)
 {
     setChannel (PAD_SETTINGS->getMidiChannel(), padNumber);
     setNote (PAD_SETTINGS->getMidiNote(), padNumber);
-    setVelocity (PAD_SETTINGS->getMidiVelocity(), padNumber);
+    setVelocity (PAD_SETTINGS->getVelocity(), padNumber);
     setMinRange (PAD_SETTINGS->getMidiMinPressureRange(), padNumber);
     setMaxRange (PAD_SETTINGS->getMidiMaxPressureRange(), padNumber);
     setControllerNumber (PAD_SETTINGS->getMidiCcController(), padNumber);

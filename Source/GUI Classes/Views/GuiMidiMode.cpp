@@ -381,17 +381,6 @@ void GuiMidiMode::comboBoxChanged (ComboBox* comboBox)
 
 void GuiMidiMode::sliderValueChanged (Slider* slider)
 {
-    /*
-    //velocity slider
-    if (slider == velocitySlider->sliderComponent())
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setMidiVelocity(velocitySlider->sliderComponent()->getValue());
-        }
-    }
-     */
 
     //min pressure range slider
     if (slider == pressureMinRangeSlider)
@@ -566,7 +555,6 @@ void GuiMidiMode::updateDisplay()
         //set the stored values on the GUI components
         //Don't broadcast any changes to the component Listeners. Only want to update the GUI here
         
-        //velocitySlider->sliderComponent()->setValue(PAD_SETTINGS->getMidiVelocity(), true);
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         channelButtons[PAD_SETTINGS->getMidiChannel()-1]->setToggleState(true, false);
         pressureMinRangeSlider->setValue(PAD_SETTINGS->getMidiMinPressureRange(), false);
@@ -585,7 +573,6 @@ void GuiMidiMode::updateDisplay()
     else if(MULTI_PADS)
     {
         /*
-        //velocitySlider->sliderComponent()->setValue(110, true);
         quantiseButton->setToggleState(false, false);
         channelButtons[0]->setToggleState(true, false);
         pressureMinRangeSlider->setValue(0);

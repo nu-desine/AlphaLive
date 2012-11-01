@@ -24,6 +24,8 @@
 #include "GuiGlobalPadSettings.h"
 #include "../../File and Settings/AppSettings.h"
 #include "../Views/MainComponent.h"
+#include "../Binary Data/BinaryDataNew.h"
+#include "../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
@@ -33,6 +35,13 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
 : mainComponentRef(ref)
 
 {
+	Image *quantiseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::quantiseicon_png, BinaryDataNew::quantiseicon_pngSize));
+	addAndMakeVisible(quantiseButton = new ModeButton(quantiseIcon));
+	quantiseButton->setClickingTogglesState(true);
+	quantiseButton->setToggleState(false, false);	
+	quantiseButton->addListener(this);
+	quantiseButton->addMouseListener(this, true);
+    
 	addAndMakeVisible(exclusiveModeButton = new TextButton("Exc Mode"));
     exclusiveModeButton->addListener(this);
     exclusiveModeButton->addMouseListener(this, true);
@@ -49,9 +58,9 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
     addAndMakeVisible(pressureSensitivityMenu = new ComboBox());
     pressureSensitivityMenu->addListener(this);
     pressureSensitivityMenu->addMouseListener(this, true);
-    pressureSensitivityMenu->addItem(translate("Non-Sensitive"), 1);
-    pressureSensitivityMenu->addItem(translate("Standard"), 2);
-    pressureSensitivityMenu->addItem(translate("Sensitive"), 3);
+    pressureSensitivityMenu->addItem(translate("Exponential"), 1);
+    pressureSensitivityMenu->addItem(translate("Linear"), 2);
+    pressureSensitivityMenu->addItem(translate("Logarithmic"), 3);
     pressureSensitivityMenu->setSelectedId(2);
 	
 }
@@ -64,8 +73,9 @@ GuiGlobalPadSettings::~GuiGlobalPadSettings()
 
 void GuiGlobalPadSettings::resized()
 {
-	exclusiveModeButton->setBounds(823, 270, 42, 42);
-    exclusiveGroupSlider->setBounds(823, 320, 42, 42);
+    quantiseButton->setBounds(828, 270, 32, 32);
+	exclusiveModeButton->setBounds(823, 320, 42, 42);
+    exclusiveGroupSlider->setBounds(823, 370, 42, 42);
 	pressureSensitivityMenu->setBounds(802, 550, 87, 20);
 	
 }
@@ -97,6 +107,16 @@ void GuiGlobalPadSettings::buttonClicked (Button* button)
         else
             exclusiveGroupSlider->setVisible(false); 
     }
+    
+    else if(button == quantiseButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setQuantizeMode(button->getToggleState());
+        }
+    }
+        
 }
 
 void GuiGlobalPadSettings::sliderValueChanged (Slider* slider)
@@ -132,16 +152,28 @@ void GuiGlobalPadSettings::updateDisplay()
         pressureSensitivityMenu->setSelectedId(PAD_SETTINGS->getPressureSensitivityMode(), true);
         exclusiveModeButton->setToggleState(PAD_SETTINGS->getExclusiveMode(), false);
         exclusiveGroupSlider->setComponentValue(PAD_SETTINGS->getExclusiveGroup());
+        quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         
     }
     else if(MULTI_PADS)
     {
-        /*
-        pressureSensitivityMenu->setSelectedId(2, true);
-        exclusiveModeButton->setToggleState(false, false);
-        exclusiveGroupSlider->setComponentValue(1);
-         */
         
+        //==================================================================================================
+        int quantiseMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getQuantizeMode();
+        //loop through all selected pads expect for the first one
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            //if setting of this pad does NOT match setting of last pad, set default and break
+            if (PAD_SETTINGS->getQuantizeMode() != quantiseMode_)
+            {
+                quantiseButton->setToggleState(0, false);
+                break;
+            }
+            //if this is the last 'natural' iteraction, displayed the setting that matches all the pads
+            if (i == selectedPads.size()-1)
+                quantiseButton->setToggleState(quantiseMode_, false);
+        }
         //==================================================================================================
         int exclusiveMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getExclusiveMode();
         for (int i = 1; i < selectedPads.size(); i++)
@@ -207,7 +239,11 @@ void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
     }
     else if (pressureSensitivityMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Pressure Curve Menu. Use this menu to select the curve for the pressure."));
+        mainComponentRef.setInfoTextBoxText(translate("Pressure Curve Menu. Use this menu to select the curve for the pressure mapping."));
+    }
+    if (quantiseButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::quantizeButton));
     }
 }
 

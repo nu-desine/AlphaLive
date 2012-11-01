@@ -72,7 +72,7 @@ private:
     MainComponent &mainComponentRef;
     
 	//GUI Components
-    ModeButton *triggerSettingsButton, *pressureSettingsButton, *quantiseButton; //should the quantize button be global now? think so :)
+    ModeButton *triggerSettingsButton, *pressureSettingsButton, *quantiseButton; //quantize button is in global settings too
     AlphaRotarySlider *pressureMinRangeSlider, *pressureMaxRangeSlider;
 	AlphaSlider *ccControllerSlider;
     ModeButton *indestructibleButton, *stickyButton;

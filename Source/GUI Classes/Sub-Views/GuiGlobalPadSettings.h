@@ -26,6 +26,7 @@
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
 #include "../Custom Components/General/AlphaSlider.h"
+#include "../Custom Components/General/ModeButton.h"
 
 class MainComponent;
 
@@ -62,6 +63,7 @@ class GuiGlobalPadSettings :    public Component,
     TextButton *exclusiveModeButton;
     AlphaSlider *exclusiveGroupSlider;
     ComboBox *pressureSensitivityMenu;
+    ModeButton *quantiseButton;
 	
 };
 

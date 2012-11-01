@@ -921,13 +921,22 @@ void MainComponent::setGlobalPadSettingsDisplay()
                 noModeSelected = 1;
             
             else if (modeMidiButton->getToggleState()==true)
+            {
+                guiMidiMode->updateDisplay(); //incase the quantise state has been changed
                 guiMidiMode->setVisible(true);
+            }
             
             else if (modeSamplerButton->getToggleState()==true)
+            {
+                guiSamplerMode->updateDisplay(); //incase the quantise state has been changed
                 guiSamplerMode->setVisible(true);
+            }
             
             else if (modeSequencerButton->getToggleState()==true)
+            {
+                guiSequencerMode->updateDisplay(); //incase the quantise state has been changed
                 guiSequencerMode->setVisible(true);
+            }
             
             else if (modeControllerButton->getToggleState()==true)
                 guiControllerMode->setVisible(true);
@@ -1323,8 +1332,8 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
 	}
     else if(commandID == CommandIDs::DisableHelpBox)
 	{
-		result.setInfo (translate("Disable Help Box"),
-						"Disables the help box to reduce CPU usage.",
+		result.setInfo (translate("Disable Info Box"),
+						"Disables the info box to reduce CPU usage.",
 						CommandCategories::OptionCommands, 0);
         result.setTicked(! isInfoBoxEnabled);
 	}

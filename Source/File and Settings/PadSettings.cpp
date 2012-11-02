@@ -208,13 +208,13 @@ PadSettings::PadSettings(int arrayIndex)
     padFxTremoloAtReverse = 1;
     padFxTremoloAtIntensity = 1.0;
 	//Distortion
-	padFxDistortionInputGain = 0.8;
+	padFxDistortionInputGain = 1.0;
 	padFxDistortionDrive = 50;
-	padFxDistortionTone = 0.;
+	padFxDistortionTone = 0.8;
 	padFxDistortionWetDryMix = 0.5;
 	padFxDistortionType = 1;
-	padFxDistortionAlphaTouch = 2;
-	padFxDistortionAtReverse = 0;
+	padFxDistortionAlphaTouch = 3;
+	padFxDistortionAtReverse = 1;
 	padFxDistortionAtIntensity = 1.0;
 	//Bitcrusher
 	padFxBitcrusherInputGain = 1;

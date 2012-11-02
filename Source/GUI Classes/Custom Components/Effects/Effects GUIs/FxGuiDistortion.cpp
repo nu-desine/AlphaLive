@@ -41,30 +41,31 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
     wetDryMixSlider->addListener(this);
     wetDryMixSlider->addMouseListener(this, true);
 	
-	addAndMakeVisible(toneSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
+	addAndMakeVisible(toneSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
 	toneSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     toneSlider->setRange(0., 1.0);
     toneSlider->addListener(this);
     toneSlider->addMouseListener(this, true);
 	
-	addAndMakeVisible(driveSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
+	addAndMakeVisible(driveSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	driveSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     driveSlider->setRange(0.1, 60);
     driveSlider->addListener(this);
     driveSlider->addMouseListener(this, true);
-	
-    addAndMakeVisible(inputGainSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
-	inputGainSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    inputGainSlider->setRange(0.0, 1.0);
-    inputGainSlider->addListener(this);
-    inputGainSlider->addMouseListener(this, true);
     
-    addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 230));
+    addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
 	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     intensitySlider->setRange(0.0, 1.0);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
     intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
+    
+    //below is temporily hidden in resized()!
+    addAndMakeVisible(inputGainSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
+	inputGainSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
+    inputGainSlider->setRange(0.0, 1.0);
+    inputGainSlider->addListener(this);
+    inputGainSlider->addMouseListener(this, true);
     
     /*
     addAndMakeVisible(distortionTypeMenu = new ComboBox());
@@ -96,7 +97,7 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
     alphaTouchMenu->addListener(this);
     alphaTouchMenu->addMouseListener(this, true);
     alphaTouchMenu->addItem(translate("Off"), 1);
-    alphaTouchMenu->addItem(translate("Input Gain"), 2);
+    //alphaTouchMenu->addItem(translate("Input Gain"), 2);
     alphaTouchMenu->addItem(translate("Drive"), 3);
     alphaTouchMenu->addItem(translate("Tone"), 4);
 	alphaTouchMenu->addItem(translate("Wet/Dry Mix"), 5);
@@ -128,11 +129,10 @@ GuiDistortion::~GuiDistortion()
 void GuiDistortion::resized()
 {
 	wetDryMixSlider->setBounds(97, 97, 130, 130);
-    toneSlider->setBounds(77, 77, 170, 170);
-	driveSlider->setBounds(67, 67, 190, 190);
-	inputGainSlider->setBounds(57, 57, 210, 210);
-	
-    intensitySlider->setBounds(47, 47, 230, 230);
+    toneSlider->setBounds(87, 87, 150, 150);
+	driveSlider->setBounds(77, 77, 170, 170);
+    intensitySlider->setBounds(67, 67, 190, 190);
+    //inputGainSlider->setBounds(57, 57, 210, 210);
     
     alphaTouchMenu->setBounds(119, 202, 87, 15);
     reverseButton->setBounds(211,211, 32, 32);

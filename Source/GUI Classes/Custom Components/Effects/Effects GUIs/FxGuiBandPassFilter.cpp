@@ -58,7 +58,7 @@ GuiBandPassFilter::GuiBandPassFilter(MainComponent &ref)
     alphaTouchMenu->addMouseListener(this, true);
     alphaTouchMenu->addItem(translate("Off"), 1);
     alphaTouchMenu->addItem(translate("Mix"), 2);
-    alphaTouchMenu->addItem(translate("Cut-Off Frequency"), 3);
+    alphaTouchMenu->addItem(translate("Centre Frequency"), 3);
     alphaTouchMenu->addItem(translate("Bandwidth/Resonance"), 4);
     alphaTouchMenu->setSelectedId(1, true);
     

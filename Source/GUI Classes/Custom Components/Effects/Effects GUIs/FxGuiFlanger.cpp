@@ -423,10 +423,10 @@ void GuiFlanger::updateDisplay()
         rateSlider->setValue(0.25, false);
         feedbackSlider->setValue(0.9, false);
         flangerIntensitySlider->setValue(0.1, false);
-        rateMenu->setButtonText("2"); //??????????????????
+        rateMenu->setButtonText("-");
         syncButton->setToggleState(1, false);
         
-        alphaTouchMenu->setSelectedId(1, true);
+        alphaTouchMenu->setSelectedId(0, true);
         reverseButton->setToggleState(0, false);
         intensitySlider->setValue(1.0, false);
     }

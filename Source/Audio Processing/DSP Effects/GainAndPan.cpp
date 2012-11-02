@@ -36,7 +36,7 @@ GainAndPan::GainAndPan(int padNumber_, float sampleRate_)
     alphaTouchReverse = PAD_SETTINGS->getPadFxGainPanAtReverse();
     alphaTouchIntensity = PAD_SETTINGS->getPadFxGainPanAtIntensity();
     
-    sampleRate = 44100;
+    sampleRate = sampleRate_;
     
 }
 

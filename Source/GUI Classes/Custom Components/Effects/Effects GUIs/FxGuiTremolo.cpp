@@ -355,7 +355,7 @@ void GuiTremolo::buttonClicked (Button *button)
         }
         
     }
-	for (int waveform = 0; waveform < 4; waveform++)
+	for (int waveform = 0; waveform < 5; waveform++)
     {
         if (button == shapeMenuButtons[waveform])
         {
@@ -440,12 +440,14 @@ void GuiTremolo::updateDisplay()
     {
         depthSlider->setValue(0.7, false);
         rateSlider->setValue(5.0, false);
-        rateMenu->setButtonText("1/4");
+        rateMenu->setButtonText("-");
         syncButton->setToggleState(true, false);
         //shapeMenu->setSelectedId(2, true);
-		shapeMenuButtons[0]->setToggleState(true, false);
         
-        alphaTouchMenu->setSelectedId(1, true);
+        for (int j = 0; j < 5; j++)
+            shapeMenuButtons[j]->setToggleState(false, false);
+        
+        alphaTouchMenu->setSelectedId(0, true);
         reverseButton->setToggleState(0, false);
         intensitySlider->setValue(1.0, false);
     }

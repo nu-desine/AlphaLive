@@ -215,7 +215,7 @@ void GuiLowpassFilter::updateDisplay()
         mixSlider->setValue(1.0, false);
         frequencySlider->setValue(1000, false);
         bandwidthSlider->setValue(5.0, false);
-        alphaTouchMenu->setSelectedId(1, true);
+        alphaTouchMenu->setSelectedId(0, true);
         reverseButton->setToggleState(0, false);
         intensitySlider->setValue(1.0, false);
     }

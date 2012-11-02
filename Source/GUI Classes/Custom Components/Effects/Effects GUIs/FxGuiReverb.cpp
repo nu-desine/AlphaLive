@@ -235,7 +235,7 @@ void GuiReverb::updateDisplay()
         dampingSlider->setValue(0.5, false);
         widthSlider->setValue(0.5, false);
         
-        alphaTouchMenu->setSelectedId(1, true);
+        alphaTouchMenu->setSelectedId(0, true);
         reverseButton->setToggleState(0, false);
         intensitySlider->setValue(1.0, false);
     }

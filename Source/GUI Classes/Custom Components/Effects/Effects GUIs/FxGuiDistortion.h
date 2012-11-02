@@ -27,6 +27,7 @@
 #include "../../General/AlphaRotarySlider.h"
 #include "../../General/AlphaTextButton.h"
 #include "../../General/ModeButton.h"
+#include "../../General/AlphaPopUpButton.h"
 
 class MainComponent;
 
@@ -49,6 +50,8 @@ public:
     
     void setCurrentlySelectedPad (Array<int> selectedPads);
     void updateDisplay();
+    
+    void setDistortionTypeMenu (int selectedItem);
 
     
 private:
@@ -56,11 +59,12 @@ private:
     
     AlphaRotarySlider *inputGainSlider, *driveSlider, *toneSlider, *wetDryMixSlider;
     
-    ComboBox *alphaTouchMenu, *distortionTypeMenu;
+    ComboBox *alphaTouchMenu;
 	ModeButton *reverseButton;
     AlphaTextButton *syncButton, *toneSwitchButton;
     AlphaRotarySlider *intensitySlider;
     Label *parameterHoverLabel;
+    AlphaPopUpButton *distortionTypeMenu;
     
     Array<int> selectedPads;
     

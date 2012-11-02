@@ -293,46 +293,52 @@ void GuiDelay::buttonClicked (Button *button)
 		
 		const int result = menu.show();
         
-        switch (result)
+        if (result != 0) //if the user selects something
         {
-            case 1: // 4 beats
-                delayTime = 240000.0/tempo;
-				delayTimeMenu->setButtonText("4");
-                break;
-            case 2: // 2 beats
-                delayTime = 120000.0/tempo;
-				delayTimeMenu->setButtonText("2");
-                break;
-            case 3: // 1 beat
-                delayTime = 60000.0/tempo;
-				delayTimeMenu->setButtonText("1");
-                break;
-            case 4: //half beat
-                delayTime = 30000.0/tempo;
-				delayTimeMenu->setButtonText("1/2");
-                break;
-            case 5: // quarter beat
-                delayTime = 15000.0/tempo;
-				delayTimeMenu->setButtonText("1/4");
-                break;
-            default: // 1 beat
-                delayTime = 60000.0/tempo;
-				delayTimeMenu->setButtonText("1");
-                break;
-        }
-        
-        delayTimeSlider->setValue(delayTime, false);
-        
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setPadFxDelayTime(delayTime);
-            PAD_SETTINGS->setPadFxDelayTimeMenu(result);
+            switch (result)
+            {
+                    //should the actual delay time be worked out on the other side or within pad settings?
+                    //this will help fix the bug where a default 
+                case 1: // 4 beats
+                    delayTime = 240000.0/tempo;
+                    delayTimeMenu->setButtonText("4");
+                    break;
+                case 2: // 2 beats
+                    delayTime = 120000.0/tempo;
+                    delayTimeMenu->setButtonText("2");
+                    break;
+                case 3: // 1 beat
+                    delayTime = 60000.0/tempo;
+                    delayTimeMenu->setButtonText("1");
+                    break;
+                case 4: //half beat
+                    delayTime = 30000.0/tempo;
+                    delayTimeMenu->setButtonText("1/2");
+                    break;
+                case 5: // quarter beat
+                    delayTime = 15000.0/tempo;
+                    delayTimeMenu->setButtonText("1/4");
+                    break;
+                default: // 1 beat
+                    delayTime = 60000.0/tempo;
+                    delayTimeMenu->setButtonText("1");
+                    break;
+            }
+            
+            delayTimeSlider->setValue(delayTime, false);
+            
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setPadFxDelayTime(delayTime);
+                PAD_SETTINGS->setPadFxDelayTimeMenu(result);
+            }
         }
         
     }
 	
 }
+
 
 void GuiDelay::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
@@ -394,13 +400,13 @@ void GuiDelay::updateDisplay()
     {
         wetMixSlider->setValue(0.7, false);
         delayTimeSlider->setValue(500.0, false);
-        delayTimeMenu->setButtonText("1");
+        delayTimeMenu->setButtonText("-");
         feedbackSlider->setValue(0.5, false);
         lpfFrequencySlider->setValue(5000, false);
         hpfFrequencySlider->setValue(50, false);
         syncButton->setToggleState(1, false);
         
-        alphaTouchMenu->setSelectedId(1, true);
+        alphaTouchMenu->setSelectedId(0, true);
         reverseButton->setToggleState(0, false);
         intensitySlider->setValue(1.0, false);
     }

@@ -261,14 +261,14 @@ void GuiBitcrusher::updateDisplay()
     
     else if(MULTI_PADS)
     {
-        inputGainSlider->setValue(0.7, true);
-		downsampleSlider->setValue(16, true);
-        crushSlider->setValue(8, true);
-		smoothingSlider->setValue(1.0, true);
-		wetDryMixSlider->setValue(1.0, true);
-        syncButton->setToggleState(true, true);
+        inputGainSlider->setValue(0.7, false);
+		downsampleSlider->setValue(16, false);
+        crushSlider->setValue(8, false);
+		smoothingSlider->setValue(1.0, false);
+		wetDryMixSlider->setValue(1.0, false);
+        syncButton->setToggleState(true, false);
         
-        alphaTouchMenu->setSelectedId(1, true);
+        alphaTouchMenu->setSelectedId(0, true);
         reverseButton->setToggleState(0, false);
         intensitySlider->setValue(1.0, false);
     }

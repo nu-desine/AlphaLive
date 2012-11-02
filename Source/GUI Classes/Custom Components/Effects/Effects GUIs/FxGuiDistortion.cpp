@@ -66,7 +66,7 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
     intensitySlider->addMouseListener(this, true);
     intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
     
-    
+    /*
     addAndMakeVisible(distortionTypeMenu = new ComboBox());
     distortionTypeMenu->addListener(this);
     distortionTypeMenu->addMouseListener(this, true);
@@ -79,6 +79,12 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
 //	distortionTypeMenu->addItem("Recitify", 7);
 //  distortionTypeMenu->addItem("AddSine", 8);
     distortionTypeMenu->setSelectedId(1, true);
+     */
+    
+    addAndMakeVisible(distortionTypeMenu = new AlphaPopUpButton());
+    distortionTypeMenu->addListener(this);
+    distortionTypeMenu->addMouseListener(this, true);
+    distortionTypeMenu->setButtonText("Soft");
     
     addAndMakeVisible(syncButton = new AlphaTextButton(translate("SYNC")));
     syncButton->setClickingTogglesState(true);
@@ -132,7 +138,8 @@ void GuiDistortion::resized()
     reverseButton->setBounds(211,211, 32, 32);
     parameterHoverLabel->setBounds(144, 187, 36, 15);
 	
-	distortionTypeMenu->setBounds(119, 22, 87, 20);
+	//distortionTypeMenu->setBounds(119, 22, 87, 20);
+    distortionTypeMenu->setBounds(71, 202, 48, 48);
     
 }
 
@@ -216,6 +223,7 @@ void GuiDistortion::comboBoxChanged (ComboBox *comboBox)
         
     }
     
+    /*
     else if (comboBox == distortionTypeMenu)
     {
         for (int i = 0; i < selectedPads.size(); i++)
@@ -225,6 +233,7 @@ void GuiDistortion::comboBoxChanged (ComboBox *comboBox)
         }
         
     }
+     */
     
 }
 
@@ -241,12 +250,70 @@ void GuiDistortion::buttonClicked (Button *button)
         
     }
     
+    else if (button == distortionTypeMenu)
+    {
+		
+		PopupMenu menu;
+        menu.addItem(1, "Soft");
+        menu.addItem(2, "Hard");
+        menu.addItem(3, "HF0");
+        menu.addItem(4, "HF1");
+        menu.addItem(5, "HF2");
+        menu.addItem(6, "Digital");
+        //menu.addItem("Recitify", 7);
+        //menu.addItem("AddSine", 8);
+		
+		const int result = menu.show();
+        
+        if (result != 0) //if the user selects something
+        {
+            setDistortionTypeMenu(result);
+            
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setPadFxDistortionTypeMenu(result);
+            }
+        }
+    }
+    
 }
 
 void GuiDistortion::setCurrentlySelectedPad (Array<int> selectedPads_)
 {
     selectedPads = selectedPads_;
 }
+
+
+void GuiDistortion::setDistortionTypeMenu (int selectedItem)
+{
+    switch (selectedItem)
+    {
+        case 1:
+            distortionTypeMenu->setButtonText("Soft");
+            break;
+        case 2:
+            distortionTypeMenu->setButtonText("Hard");
+            break;
+        case 3:
+            distortionTypeMenu->setButtonText("HF0");
+            break;
+        case 4:
+            distortionTypeMenu->setButtonText("HF1");
+            break;
+        case 5:
+            distortionTypeMenu->setButtonText("HF2");
+            break;
+        case 6:
+            distortionTypeMenu->setButtonText("Digital");
+            break;
+        default:
+            distortionTypeMenu->setButtonText("Soft");
+            break;
+            
+    }
+}
+
 
 void GuiDistortion::updateDisplay()
 {
@@ -260,7 +327,7 @@ void GuiDistortion::updateDisplay()
         driveSlider->setValue(PAD_SETTINGS->getPadFxDistortionDrive(), false);
 		toneSlider->setValue(PAD_SETTINGS->getPadFxDistortionTone(), false);
 		wetDryMixSlider->setValue(PAD_SETTINGS->getPadFxDistortionWetDryMix(), false);
-        distortionTypeMenu->setSelectedId(PAD_SETTINGS->getPadFxDistortionTypeMenu(), true);
+        setDistortionTypeMenu(PAD_SETTINGS->getPadFxDistortionTypeMenu());
         
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxDistortionAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getPadFxDistortionAtReverse(), false);
@@ -269,14 +336,14 @@ void GuiDistortion::updateDisplay()
     
     else if(MULTI_PADS)
     {
-        inputGainSlider->setValue(0.7, true);
-        driveSlider->setValue(1.0, true);
-		toneSlider->setValue(1.0, true);
-		wetDryMixSlider->setValue(1.0, true);
-        distortionTypeMenu->setSelectedId(3, true);
-        syncButton->setToggleState(true, true);
+        inputGainSlider->setValue(0.7, false);
+        driveSlider->setValue(1.0, false);
+		toneSlider->setValue(1.0, false);
+		wetDryMixSlider->setValue(1.0, false);
+        distortionTypeMenu->setButtonText("-");
+        syncButton->setToggleState(true, false);
         
-        alphaTouchMenu->setSelectedId(1, true);
+        alphaTouchMenu->setSelectedId(0, true);
         reverseButton->setToggleState(0, false);
         intensitySlider->setValue(1.0, false);
     }

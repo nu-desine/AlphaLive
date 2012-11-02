@@ -84,6 +84,7 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
     padData->setAttribute("exclusiveMode", PAD_SETTINGS->getExclusiveMode());
     padData->setAttribute("exclusiveGroup", PAD_SETTINGS->getExclusiveGroup());
     padData->setAttribute("quantizeMode", PAD_SETTINGS->getQuantizeMode());
+    padData->setAttribute("velocityCurve", PAD_SETTINGS->getVelocityCurve());
     padData->setAttribute("velocity", PAD_SETTINGS->getVelocity());
     
     //only save whats necessary
@@ -331,6 +332,8 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
         PAD_SETTINGS->setExclusiveGroup(padData->getIntAttribute("exclusiveGroup"));
     if (padData->hasAttribute("quantizeMode"))
         PAD_SETTINGS->setQuantizeMode(padData->getIntAttribute("quantizeMode"));
+    if (padData->hasAttribute("velocityCurve"))
+        PAD_SETTINGS->setVelocityCurve(padData->getIntAttribute("velocityCurve"));
     if (padData->hasAttribute("velocity"))
         PAD_SETTINGS->setVelocity(padData->getIntAttribute("velocity"));
     

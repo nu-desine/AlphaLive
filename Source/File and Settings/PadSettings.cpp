@@ -39,10 +39,11 @@ PadSettings::PadSettings(int arrayIndex)
     
     //------------default values--------------
     mode = 0; //or should default mode be midi (1) ?
-    pressureSensitivityMode = 2; //standard
+    pressureSensitivityMode = 2; //Linear
     exclusiveMode = 0;
     exclusiveGroup = 1;
     quantizeMode = 0; //unquantized
+    velocityCurve = 2; //Linear
     velocity = 110;
     
     //midi mode
@@ -279,6 +280,7 @@ void PadSettings::resetData (int whatToReset)
         setExclusiveMode(0);
         setExclusiveGroup(1);
         setQuantizeMode(0);
+        setVelocityCurve(2);
         setVelocity(110);
     }
     
@@ -466,6 +468,12 @@ void PadSettings::setQuantizeMode (int value)
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setQuantizeMode(value);
     }
 }
+
+void PadSettings::setVelocityCurve (int value)
+{
+    velocityCurve = value;
+}
+
 void PadSettings::setVelocity(int value)
 {
     velocity = value;
@@ -506,6 +514,10 @@ int PadSettings::getQuantizeMode()
 int PadSettings::getVelocity()
 {
     return velocity;
+}
+int PadSettings::getVelocityCurve()
+{
+    return velocityCurve;
 }
 
 

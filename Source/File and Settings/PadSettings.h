@@ -64,6 +64,7 @@ public:
     void setExclusiveMode (int value);
     void setExclusiveGroup (int value);
     void setQuantizeMode (int value);
+    void setVelocityCurve (int value);
     void setVelocity (int value);
 
     int getMode();
@@ -71,6 +72,7 @@ public:
     int getExclusiveMode();
     int getExclusiveGroup();
     int getQuantizeMode();
+    int getVelocityCurve();
     int getVelocity();
     
     //==================================================================
@@ -393,6 +395,7 @@ private:
     int exclusiveMode;
     int exclusiveGroup;
     int quantizeMode;
+    int velocityCurve;
     int velocity;
     
     //==================================================================

@@ -62,7 +62,7 @@ class GuiGlobalPadSettings :    public Component,
     
     TextButton *exclusiveModeButton;
     AlphaSlider *exclusiveGroupSlider, *velocitySlider;
-    ComboBox *pressureSensitivityMenu;
+    ComboBox *pressureSensitivityMenu, *velocityCurveMenu;
     ModeButton *quantiseButton;
 	
 };

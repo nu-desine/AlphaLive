@@ -80,7 +80,7 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
     
     //put data into this the temp XmlElement
     padData->setAttribute("mode", PAD_SETTINGS->getMode());
-    padData->setAttribute("pressureSensitivityMode", PAD_SETTINGS->getPressureSensitivityMode());
+    padData->setAttribute("pressureCurve", PAD_SETTINGS->getPressureCurve());
     padData->setAttribute("exclusiveMode", PAD_SETTINGS->getExclusiveMode());
     padData->setAttribute("exclusiveGroup", PAD_SETTINGS->getExclusiveGroup());
     padData->setAttribute("quantizeMode", PAD_SETTINGS->getQuantizeMode());
@@ -323,8 +323,11 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
     
     if (padData->hasAttribute("mode")) //WHICH IT SHOULD ALWAYS HAVE!
         PAD_SETTINGS->setMode(padData->getIntAttribute("mode"));
-    if (padData->hasAttribute("pressureSensitivityMode"))
-        PAD_SETTINGS->setPressureSensitivityMode(padData->getIntAttribute("pressureSensitivityMode"));
+    
+    if (padData->hasAttribute("pressureSensitivityMode")) //old attribute name
+        PAD_SETTINGS->setPressureCurve(padData->getIntAttribute("pressureSensitivityMode"));
+    else if(padData->hasAttribute("pressureCurve")) //new attribute name
+        PAD_SETTINGS->setPressureCurve(padData->getIntAttribute("pressureCurve"));
     
     if (padData->hasAttribute("exclusiveMode"))
         PAD_SETTINGS->setExclusiveMode(padData->getIntAttribute("exclusiveMode"));

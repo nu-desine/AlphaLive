@@ -60,7 +60,7 @@ public:
     //==================================================================
     //Global
     void setMode (int value);
-    void setPressureSensitivityMode (int value);
+    void setPressureCurve (int value);
     void setExclusiveMode (int value);
     void setExclusiveGroup (int value);
     void setQuantizeMode (int value);
@@ -68,7 +68,7 @@ public:
     void setVelocity (int value);
 
     int getMode();
-    int getPressureSensitivityMode();
+    int getPressureCurve();
     int getExclusiveMode();
     int getExclusiveGroup();
     int getQuantizeMode();
@@ -391,7 +391,7 @@ private:
     //==================================================================
     //Global
     int mode; // 0 = off, 1 = midi, 2 = sampler, 3 = sequencer, 4 = controller
-    int pressureSensitivityMode;
+    int pressureCurve;
     int exclusiveMode;
     int exclusiveGroup;
     int quantizeMode;

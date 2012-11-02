@@ -39,7 +39,7 @@ PadSettings::PadSettings(int arrayIndex)
     
     //------------default values--------------
     mode = 0; //or should default mode be midi (1) ?
-    pressureSensitivityMode = 2; //Linear
+    pressureCurve = 2; //Linear
     exclusiveMode = 0;
     exclusiveGroup = 1;
     quantizeMode = 0; //unquantized
@@ -276,7 +276,7 @@ void PadSettings::resetData (int whatToReset)
     if (whatToReset == 0)
     {
         setMode(0);
-        setPressureSensitivityMode(2);
+        setPressureCurve(2);
         setExclusiveMode(0);
         setExclusiveGroup(1);
         setQuantizeMode(0);
@@ -438,9 +438,9 @@ void PadSettings::setMode(int value)
 }
 
 
-void PadSettings::setPressureSensitivityMode (int value)
+void PadSettings::setPressureCurve (int value)
 {
-    pressureSensitivityMode = value;
+    pressureCurve = value;
 }
 
 void PadSettings::setExclusiveMode (int value)
@@ -495,9 +495,9 @@ int PadSettings::getMode()
     return mode;
 }
 
-int PadSettings::getPressureSensitivityMode()
+int PadSettings::getPressureCurve()
 {
-    return pressureSensitivityMode;
+    return pressureCurve;
 }
 int PadSettings::getExclusiveMode()
 {

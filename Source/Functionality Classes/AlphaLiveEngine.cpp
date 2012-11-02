@@ -243,7 +243,7 @@ void AlphaLiveEngine::inputData(int pad, int value)
     
     
     //determine pressure mapping/sensitivity
-    if (PAD_SETTINGS->getPressureSensitivityMode() == 1)
+    if (PAD_SETTINGS->getPressureCurve() == 1)
         {
             //non-sensitive - exponential mapping of pressure
             recievedValue = exp((float)recievedValue/511)-1;
@@ -253,7 +253,7 @@ void AlphaLiveEngine::inputData(int pad, int value)
             if (recievedValue > 0 && recievedValue < 1) //value 1 = 0.6, which is rounded to 0
                 recievedValue = 1;
         }
-    else if (PAD_SETTINGS->getPressureSensitivityMode() == 3)
+    else if (PAD_SETTINGS->getPressureCurve() == 3)
     {
         //sensitive - logarithmic mapping of pressure
         recievedValue = log(recievedValue+1);
@@ -262,7 +262,7 @@ void AlphaLiveEngine::inputData(int pad, int value)
             recievedValue = 511;
     }
     
-    //else, pressureSensitivityMode == 2 which is a linear mapping of pressure
+    //else, pressureCurve == 2 which is a linear mapping of pressure
 
     
     //==========================================================================

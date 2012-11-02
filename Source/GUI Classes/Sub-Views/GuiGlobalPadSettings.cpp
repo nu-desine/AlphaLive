@@ -60,13 +60,13 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
     velocitySlider->setValue(110, false);
     velocitySlider->addMouseListener(this, true);
     
-    addAndMakeVisible(pressureSensitivityMenu = new ComboBox());
-    pressureSensitivityMenu->addListener(this);
-    pressureSensitivityMenu->addMouseListener(this, true);
-    pressureSensitivityMenu->addItem(translate("Exponential"), 1);
-    pressureSensitivityMenu->addItem(translate("Linear"), 2);
-    pressureSensitivityMenu->addItem(translate("Logarithmic"), 3);
-    pressureSensitivityMenu->setSelectedId(2);
+    addAndMakeVisible(pressureCurveMenu = new ComboBox());
+    pressureCurveMenu->addListener(this);
+    pressureCurveMenu->addMouseListener(this, true);
+    pressureCurveMenu->addItem(translate("Exponential"), 1);
+    pressureCurveMenu->addItem(translate("Linear"), 2);
+    pressureCurveMenu->addItem(translate("Logarithmic"), 3);
+    pressureCurveMenu->setSelectedId(2);
     
     addAndMakeVisible(velocityCurveMenu = new ComboBox());
     velocityCurveMenu->addListener(this);
@@ -94,7 +94,7 @@ void GuiGlobalPadSettings::resized()
     //put the below line in once hardware velocity curves have been implemented
     //velocityCurveMenu->setBounds(802, 450, 87, 20);
     velocitySlider->setBounds(823, 480, 42, 42);
-	pressureSensitivityMenu->setBounds(802, 550, 87, 20);
+	pressureCurveMenu->setBounds(802, 550, 87, 20);
 	
 }
 
@@ -159,12 +159,12 @@ void GuiGlobalPadSettings::sliderValueChanged (Slider* slider)
 
 void GuiGlobalPadSettings::comboBoxChanged (ComboBox* comboBox)
 {
-    if (comboBox == pressureSensitivityMenu)
+    if (comboBox == pressureCurveMenu)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setPressureSensitivityMode(pressureSensitivityMenu->getSelectedId());
+            PAD_SETTINGS->setPressureCurve(pressureCurveMenu->getSelectedId());
         }
     }
     else if (comboBox == velocityCurveMenu)
@@ -191,7 +191,7 @@ void GuiGlobalPadSettings::updateDisplay()
     {
         int padNum = selectedPads[0];
         
-        pressureSensitivityMenu->setSelectedId(PAD_SETTINGS->getPressureSensitivityMode(), true);
+        pressureCurveMenu->setSelectedId(PAD_SETTINGS->getPressureCurve(), true);
         exclusiveModeButton->setToggleState(PAD_SETTINGS->getExclusiveMode(), false);
         exclusiveGroupSlider->setComponentValue(PAD_SETTINGS->getExclusiveGroup());
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
@@ -247,17 +247,17 @@ void GuiGlobalPadSettings::updateDisplay()
         }
         
         //==================================================================================================
-        int pressureSensitivity_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getPressureSensitivityMode();
+        int pressureCurve_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getPressureCurve();
         for (int i = 1; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            if (PAD_SETTINGS->getPressureSensitivityMode() != pressureSensitivity_)
+            if (PAD_SETTINGS->getPressureCurve() != pressureCurve_)
             {
-                pressureSensitivityMenu->setSelectedId(0, true);
+                pressureCurveMenu->setSelectedId(0, true);
                 break;
             }
             if (i == selectedPads.size()-1)
-                pressureSensitivityMenu->setSelectedId(pressureSensitivity_, true);
+                pressureCurveMenu->setSelectedId(pressureCurve_, true);
         }
         
         //==================================================================================================
@@ -316,7 +316,7 @@ void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
         mainComponentRef.setInfoTextBoxText(translate("Exclusive Group Selector. Sets and displays the exclusive group number for the selected pads."));
         
     }
-    else if (pressureSensitivityMenu->isMouseOver(true))
+    else if (pressureCurveMenu->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Pressure Curve Menu. Use this menu to select the curve for the pressure mapping for the selected pads."));
     }

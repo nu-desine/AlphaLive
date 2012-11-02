@@ -469,7 +469,7 @@ void GuiFlanger::mouseEnter (const MouseEvent &e)
     }
     else if (feedbackSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Feedback Selector. Sets the flanger feedback for the selected pad/pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Feedback Selector. Sets the flanger feedback for the selected pads."));
         parameterHoverLabel->setText(String(feedbackSlider->getValue(), 3), false);
     }
     else if (flangerIntensitySlider->isMouseOver(true))

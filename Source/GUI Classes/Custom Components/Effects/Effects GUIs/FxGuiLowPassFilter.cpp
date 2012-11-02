@@ -226,17 +226,17 @@ void GuiLowpassFilter::mouseEnter (const MouseEvent &e)
 {
     if (mixSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Low-Pass Filter Mix Control. Sets the wet/dry ratio for Low-pass filter for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Low-Pass Filter Mix Control. Sets the wet/dry ratio for the Low-pass filter for the selected pads."));
         parameterHoverLabel->setText(String(mixSlider->getValue(), 3), false);
     }
     else if (frequencySlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Low-Pass Filter Cut-Off Frequency Control. Sets the cut-off frequency for Low-Pass filter for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Low-Pass Filter Cut-Off Frequency Control. Sets the cut-off frequency for the Low-Pass filter for the selected pads."));
         parameterHoverLabel->setText(String(frequencySlider->getValue(), 0), false);
     }
     else if (bandwidthSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Low-Pass Filter Bandwidth Control. Sets the bandwidth for Low-Pass filter for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Low-Pass Filter Bandwidth Control. Sets the bandwidth for the Low-Pass filter for the selected pads."));
         parameterHoverLabel->setText(String(bandwidthSlider->getValue(), 2), false);
     }
     

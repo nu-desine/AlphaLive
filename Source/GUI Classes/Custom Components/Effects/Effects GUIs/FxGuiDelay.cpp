@@ -449,7 +449,7 @@ void GuiDelay::mouseEnter (const MouseEvent &e)
     }
     else if (feedbackSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Delay Feedback Control. Sets the feedback level for the selected pad/pads. Please note that high values can create a delay that will get louder and never die out."));
+        mainComponentRef.setInfoTextBoxText(translate("Delay Feedback Control. Sets the feedback level for the selected pads. Please note that high values can create a delay that will get louder and never die out."));
         parameterHoverLabel->setText(String(feedbackSlider->getValue(), 3), false);
     }
     else if (lpfFrequencySlider->isMouseOver(true))

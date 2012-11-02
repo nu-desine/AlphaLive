@@ -223,17 +223,17 @@ void GuiBandPassFilter::mouseEnter (const MouseEvent &e)
 {
     if (mixSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Band-Pass Filter Mix Control. Sets the wet/dry ratio for Band-Pass filter for the selected pad/pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Band-Pass Filter Mix Control. Sets the wet/dry ratio for the Band-Pass filter for the selected pads."));
         parameterHoverLabel->setText(String(mixSlider->getValue(), 3), false);
     }
     else if (frequencySlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Band-Pass Filter Centre Frequency Control. Sets the centre frequency for Band-Pass filter for the selected pad/pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Band-Pass Filter Centre Frequency Control. Sets the centre frequency for the Band-Pass filter for the selected pads."));
         parameterHoverLabel->setText(String(frequencySlider->getValue(), 0), false);
     }
     else if (bandwidthSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Band-Pass Filter Bandwidth Control. Sets the bandwidth for Band-Pass filter for the selected pad/pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Band-Pass Filter Bandwidth Control. Sets the bandwidth for the Band-Pass filter for the selected pads."));
         parameterHoverLabel->setText(String(bandwidthSlider->getValue(), 2), false);
     }
     

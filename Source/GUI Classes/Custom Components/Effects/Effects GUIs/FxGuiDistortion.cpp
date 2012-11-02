@@ -359,22 +359,22 @@ void GuiDistortion::mouseEnter (const MouseEvent &e)
     }
     else if (driveSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Drive Contol. Sets the amount of drive effecting the distorted signal."));
+        mainComponentRef.setInfoTextBoxText(translate("Drive Control. Sets the amount of drive/distortion for the selected pads."));
         parameterHoverLabel->setText(String(driveSlider->getValue(), 3), false);
     }
 	else if (toneSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Tone Control. Sets the tone of the effected signal."));
+        mainComponentRef.setInfoTextBoxText(translate("Tone Control. Sets the distortion tone/filtering for the selected pads. Set this control to 0 to bypass the filter."));
         parameterHoverLabel->setText(String(toneSlider->getValue(), 3), false);
     }
 	else if (wetDryMixSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix Control. Sets the balance of distorted signal to clean signal."));
+        mainComponentRef.setInfoTextBoxText(translate("Mix Control. Sets the wet/dry ratio for the distortion effect for the selected pads."));
         parameterHoverLabel->setText(String(wetDryMixSlider->getValue(), 3), false);
     }
     else if (distortionTypeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Distortion Type Menu. Sets the type current type of distortion."));
+        mainComponentRef.setInfoTextBoxText(translate("Distortion Type Menu. Sets the type of distortion for the selected pads."));
     }
 
     else if (alphaTouchMenu->isMouseOver(true))

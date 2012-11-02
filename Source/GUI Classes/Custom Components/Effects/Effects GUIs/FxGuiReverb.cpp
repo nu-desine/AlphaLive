@@ -257,12 +257,12 @@ void GuiReverb::mouseEnter (const MouseEvent &e)
     }
     else if (dampingSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Reverb Damping Control. Sets the reverb damping level for the selected pad/pads. A larger damping value create a more subtle reverberation tail."));
+        mainComponentRef.setInfoTextBoxText(translate("Reverb Damping Control. Sets the reverb damping level for the selected pads. A larger damping value create a more subtle reverberation tail."));
         parameterHoverLabel->setText(String(dampingSlider->getValue(), 3), false);
     }
     else if (widthSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Reverb Width Control. Sets the reverb width for the selected pad/pads. A larger width will create a wider reverb sound in the stereo spread."));
+        mainComponentRef.setInfoTextBoxText(translate("Reverb Width Control. Sets the reverb width for the selected pads. A larger width will create a wider reverb sound in the stereo spread."));
         parameterHoverLabel->setText(String(widthSlider->getValue(), 3), false);
     }
         

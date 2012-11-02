@@ -279,27 +279,27 @@ void GuiBitcrusher::mouseEnter (const MouseEvent &e)
 {
     if (inputGainSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Input Gain Control. Sets the gain of the signal to be bitcrushed."));
+        mainComponentRef.setInfoTextBoxText(translate("Input Gain Control. Sets the gain of the signal to be bitcrushed for the selected pads."));
         parameterHoverLabel->setText(String(inputGainSlider->getValue(), 3), false);
     }
 	else if (downsampleSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Downsample Contol. Sets the amount of downsampling effecting the bitcrushing."));
+        mainComponentRef.setInfoTextBoxText(translate("Downsample Control. Sets the amount of bitcrusher downsampling for the selected pads. A higher downsampling value reduces the quality of the sound, creating a Lo-Fi distorted sound."));
         parameterHoverLabel->setText(String(downsampleSlider->getValue(), 3), false);
     }
     else if (crushSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Crush Contol. Sets the amount of bitcrushing effecting the signal."));
+        mainComponentRef.setInfoTextBoxText(translate("Crush Control. Sets the amount of bitcrusher distortion for the selected pads."));
         parameterHoverLabel->setText(String(crushSlider->getValue(), 3), false);
     }
 	else if (smoothingSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Smoothing Control. Sets the Smoothing of the effected signal."));
+        mainComponentRef.setInfoTextBoxText(translate("Smoothing Control. Sets the bitcrusher tone/filtering for the selected pads."));
         parameterHoverLabel->setText(String(smoothingSlider->getValue(), 3), false);
     }
 	else if (wetDryMixSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix Control. Sets the balance of distorted signal to clean signal."));
+        mainComponentRef.setInfoTextBoxText(translate("Mix Control. Sets the wet/dry ratio for the bitcrusher effect for the selected pads."));
         parameterHoverLabel->setText(String(wetDryMixSlider->getValue(), 3), false);
     }
 	

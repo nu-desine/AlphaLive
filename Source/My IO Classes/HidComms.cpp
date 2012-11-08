@@ -93,7 +93,7 @@ HidComms::HidComms() : Thread("HidThread")
         
         
         // Set the hid_read() function to be blocking.
-        hid_set_nonblocking(handle, 0);
+        hid_set_nonblocking(handle, 1);
         
         memset(buf,0,sizeof(buf));
         
@@ -104,7 +104,7 @@ HidComms::HidComms() : Thread("HidThread")
 
 HidComms::~HidComms()
 {
-    stopThread(10);
+    stopThread(100);
     
     hid_close(handle);
     // Free static HIDAPI objects. 
@@ -123,20 +123,27 @@ void HidComms::run()
     {
         res = hid_read(handle, buf, sizeof(buf));
         if (res == 0)
-            printf("waiting...\n");
+            //printf("no report...\n");
         if (res < 0)
             printf("Unable to read()\n");
         if (res > 0)
         {
-            //for (int i = 0; i < res; i++)
-                //printf("%02hhx ", buf[i]);
-            //printf("\n");
+            for (int i = 0; i < res; i++)
+                printf("%02hhx ", buf[i]);
+            printf("\n");
             
             //encode the recieved report here based on the report ID,
             //and pass in the correct values to hidInputCallback()
             
             hidInputCallback(0, 0, 0);
         }
+        
+        //what should the following sleep value be
+        #ifdef WIN32
+        Sleep(5);
+        #else
+        usleep(5*1000);
+        #endif
     }
 }
 

@@ -46,15 +46,12 @@ HidComms::HidComms() : Thread("HidThread")
     //handle = hid_open(0x1d50, 0x6021, NULL); // << AlphaSphere HID device
     //handle = hid_open(0x1d50, 0x6041, NULL); // << AlphaSphere bootloader HID device 
     
-    bool hasOpenedDevice = true;
-    
     if (!handle) 
     {
         printf("unable to open device\n");
-        hasOpenedDevice = false;
     }
     
-    if (hasOpenedDevice == true)
+    else
     {
         // Read the Manufacturer String
         wstr[0] = 0x0000;
@@ -146,11 +143,14 @@ void HidComms::run()
 //should i be passing in a pointer here instead of an array?
 void HidComms::sendControlReport (unsigned char bytesToSend[])
 {
-    std::cout << "writing to device " << std::endl;
-    printf("%02hhx ", bytesToSend[0]);
-    printf("%02hhx ", bytesToSend[1]);
-    printf("%02hhx ", bytesToSend[2]);
-    printf("%02hhx ", bytesToSend[3]);
-    printf("\n");
-    hid_write(handle, bytesToSend, sizeof(bytesToSend));
+    if (handle)
+    {
+        std::cout << "writing to device " << std::endl;
+        printf("%02hhx ", bytesToSend[0]);
+        printf("%02hhx ", bytesToSend[1]);
+        printf("%02hhx ", bytesToSend[2]);
+        printf("%02hhx ", bytesToSend[3]);
+        printf("\n");
+        hid_write(handle, bytesToSend, sizeof(bytesToSend));
+    }
 }

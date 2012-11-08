@@ -556,10 +556,10 @@ void GuiSequencerMode::resized()
 	triggerModeButtons[4]->setBounds(728, 305, 234, 234);
 	triggerModeButtons[5]->setBounds(728, 305, 234, 234);
 	
-	loopButton->setBounds(894, 472,32, 32);
+	finishLoopButton->setBounds(894, 472,32, 32);
 	indestructibleButton->setBounds(853, 496,32, 32);
 	stickyButton->setBounds(853, 496,32, 32);
-	finishLoopButton->setBounds(918, 431,32, 32);
+	loopButton->setBounds(918, 431,32, 32);
 	
 	linkButton->setBounds(803,268, 32, 32);
 	

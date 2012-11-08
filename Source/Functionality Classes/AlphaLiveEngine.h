@@ -83,9 +83,9 @@
 #include "GlobalClock.h"
 #include "../Audio Processing/PanControl.h"
 
-class AlphaLiveEngine :  public Subject, //so this class can notify observers
-                    public AudioIODeviceCallback, //so this class handles the audio output
-                    public AsyncUpdater
+class AlphaLiveEngine :     public Subject, //so this class can notify observers
+                            public AudioIODeviceCallback, //so this class handles the audio output
+                            public AsyncUpdater
 {
 public:
     AlphaLiveEngine();

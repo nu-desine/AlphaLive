@@ -73,7 +73,7 @@
 #define H_ALPHALIVEENGINE
 
 #include "../../JuceLibraryCode/JuceHeader.h"
-#include "../My IO Classes/OscInput.h"
+#include "../My IO Classes/HidComms.h"
 #include "MIDI Mode/ModeMidi.h"
 #include "Sampler Mode/ModeSampler.h"
 #include "Sequencer Mode/ModeSequencer.h"
@@ -85,11 +85,14 @@
 
 class AlphaLiveEngine :     public Subject, //so this class can notify observers
                             public AudioIODeviceCallback, //so this class handles the audio output
-                            public AsyncUpdater
+                            public AsyncUpdater,
+                            public HidComms
 {
 public:
     AlphaLiveEngine();
     ~AlphaLiveEngine();
+    
+    void hidInputCallback (int pad, int value, int velocity);
     
     void inputData (int pad, int value);
     void handleAsyncUpdate();

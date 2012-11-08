@@ -638,7 +638,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
 		
         globalSettingsButton->setToggleState(false, false);
         setGlobalPadSettingsDisplay();
-        
+        //i think the below if statement should be outside and above of its parent if statement.
         if (eliteControlSelected == 1)
         {
             //This is done here instead of within setEliteControlsSettingsDisplay()

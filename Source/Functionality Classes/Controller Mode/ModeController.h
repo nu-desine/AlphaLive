@@ -27,12 +27,14 @@
 #include "../../Application/AbstractSubjectAndObserver.h"
 #include "../../My IO Classes/OscOutput.h"
 
+class AlphaLiveEngine;
+
 class ModeController :  public Subject, //so this class can be observed by the scene component
                         public AsyncUpdater
 {
 
 public:
-    ModeController();
+    ModeController(MidiOutput &midiOutput, AlphaLiveEngine &ref);
     ~ModeController();
     
     void setMidiOutputDevice (MidiOutput &midiOutput);
@@ -57,6 +59,7 @@ private:
     
     OscOutput oscOutput;
     MidiOutput *midiOutputDevice;
+    AlphaLiveEngine &alphaLiveEngineRef;
     
 };
 

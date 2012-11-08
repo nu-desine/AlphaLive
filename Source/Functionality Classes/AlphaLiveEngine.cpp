@@ -108,8 +108,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     modeMidi = new ModeMidi(*midiOutputDevice, *this);
     modeSampler = new ModeSampler(*this);
     modeSequencer = new ModeSequencer(*midiOutputDevice, *this);
-    modeController = new ModeController();
-    modeController->setMidiOutputDevice(*midiOutputDevice);
+    modeController = new ModeController(*midiOutputDevice, *this);
     
     //global clock stuff
     globalClock = new GlobalClock(*this);
@@ -317,6 +316,11 @@ void AlphaLiveEngine::inputData(int pad, int value)
     
 }
 
+void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
+{
+    //std::cout << "recieved data!\n";
+    
+}
 
 void AlphaLiveEngine::handleExclusiveMode (int padNum)
 {

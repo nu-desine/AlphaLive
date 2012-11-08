@@ -121,6 +121,8 @@
 		0C9950D415E909870060688B /* AlphaListBoxModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C9950D215E909870060688B /* AlphaListBoxModel.cpp */; };
 		0C9950D715E9169E0060688B /* XmlAttributesListBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C9950D515E9169D0060688B /* XmlAttributesListBox.cpp */; };
 		0CA0A4FA15B97E8C001362B3 /* TriggerModes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CA0A4F815B97E8C001362B3 /* TriggerModes.cpp */; };
+		0CFEF744164BEA7C00B1DF17 /* HidComms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CFEF742164BEA7C00B1DF17 /* HidComms.cpp */; };
+		0CFEF748164BF1C700B1DF17 /* hid.c in Sources */ = {isa = PBXBuildFile; fileRef = 0CFEF746164BF1C700B1DF17 /* hid.c */; };
 		25CABBE894F6F3FE24224C5B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97FE2821188200B689631086 /* QuartzCore.framework */; };
 		2E4F3ED4068A7F5AC3B49264 /* juce_audio_utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = AE8AA00C09CDA8BD939E2BC5 /* juce_audio_utils.mm */; };
 		31C8BDBDE9A06BAAFAD3D687 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8357D7499044959526A92B1 /* CoreAudio.framework */; };
@@ -452,6 +454,10 @@
 		0CA92FACC9C857515F5DC895 /* juce_Colours.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Colours.h; path = ../../JuceLibraryCode/modules/juce_graphics/colour/juce_Colours.h; sourceTree = SOURCE_ROOT; };
 		0CABB5C615E267EF00F27184 /* FirmwareStruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirmwareStruct.h; sourceTree = "<group>"; };
 		0CE4BE3A15D056EE00B444EE /* jap_trans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = jap_trans; sourceTree = "<group>"; };
+		0CFEF742164BEA7C00B1DF17 /* HidComms.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HidComms.cpp; sourceTree = "<group>"; };
+		0CFEF743164BEA7C00B1DF17 /* HidComms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HidComms.h; sourceTree = "<group>"; };
+		0CFEF746164BF1C700B1DF17 /* hid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = hid.c; path = HIDAPI/hid.c; sourceTree = "<group>"; };
+		0CFEF747164BF1C700B1DF17 /* hidapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hidapi.h; path = HIDAPI/hidapi.h; sourceTree = "<group>"; };
 		0D5838014A4AB76B63EC13C4 /* juce_FileTreeComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_FileTreeComponent.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/filebrowser/juce_FileTreeComponent.cpp; sourceTree = SOURCE_ROOT; };
 		0D683EFC0C730B43D4BA49E6 /* juce_OggVorbisAudioFormat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_OggVorbisAudioFormat.cpp; path = ../../JuceLibraryCode/modules/juce_audio_formats/codecs/juce_OggVorbisAudioFormat.cpp; sourceTree = SOURCE_ROOT; };
 		0E5EF0D36E7C57B3C30B8832 /* juce_BufferingAudioSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_BufferingAudioSource.h; path = ../../JuceLibraryCode/modules/juce_audio_basics/sources/juce_BufferingAudioSource.h; sourceTree = SOURCE_ROOT; };
@@ -1770,6 +1776,8 @@
 				0C78A37715B467910049C0C8 /* OscInput.cpp */,
 				0C78A37A15B467910049C0C8 /* OscOutput.h */,
 				0C78A37915B467910049C0C8 /* OscOutput.cpp */,
+				0CFEF743164BEA7C00B1DF17 /* HidComms.h */,
+				0CFEF742164BEA7C00B1DF17 /* HidComms.cpp */,
 			);
 			name = "My IO Classes";
 			path = "../../Source/My IO Classes";
@@ -1778,6 +1786,7 @@
 		0C78A37D15B467910049C0C8 /* Third Party Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				0CFEF745164BF1B400B1DF17 /* HIDAPI */,
 				FC2A0C4E1612038A00395455 /* fastmath.h */,
 				0C78A37E15B467910049C0C8 /* DspFilters */,
 				0C78A3A715B467910049C0C8 /* Juced */,
@@ -1924,6 +1933,15 @@
 			);
 			name = "Translation files";
 			path = "../../Translation files";
+			sourceTree = "<group>";
+		};
+		0CFEF745164BF1B400B1DF17 /* HIDAPI */ = {
+			isa = PBXGroup;
+			children = (
+				0CFEF747164BF1C700B1DF17 /* hidapi.h */,
+				0CFEF746164BF1C700B1DF17 /* hid.c */,
+			);
+			name = HIDAPI;
 			sourceTree = "<group>";
 		};
 		0D9180AE1B7C81E23FFF9505 /* messages */ = {
@@ -3668,6 +3686,8 @@
 				FC2A0C931612209100395455 /* FxGuiDistortion.cpp in Sources */,
 				FC2A98A3161A04C00020C16D /* Bitcrusher.cpp in Sources */,
 				FC1622BF161B23B0004FE9E3 /* FxGuiBitcrusher.cpp in Sources */,
+				0CFEF744164BEA7C00B1DF17 /* HidComms.cpp in Sources */,
+				0CFEF748164BF1C700B1DF17 /* hid.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

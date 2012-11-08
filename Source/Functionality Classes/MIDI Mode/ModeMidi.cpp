@@ -430,6 +430,24 @@ void ModeMidi::sendPressureData (int padNumber)
 //Output the MIDI messages
 void ModeMidi::sendMidiMessage(MidiMessage midiMessage)
 {
+    unsigned char dataToSend[4];
+    memset(dataToSend,0,sizeof(dataToSend));
+    
+    uint8 *rawMidiMessage = midiMessage.getRawData();
+    
+    //std::cout << "raw midi message " << std::endl;
+    //printf("%02hhx ", rawMidiMessage[0]);
+    //printf("%02hhx ", rawMidiMessage[1]);
+    //printf("%02hhx ", rawMidiMessage[2]);
+    //printf("\n");
+    
+    dataToSend[0] = 0x06; //MIDI out HID report ID
+    dataToSend[1] = rawMidiMessage[0]; //midi status byte
+    dataToSend[2] = rawMidiMessage[1]; //midi data byte 1
+    dataToSend[3] = rawMidiMessage[2]; //midi data byte 2
+    
+    alphaLiveEngineRef.sendControlReport(dataToSend);
+    
     if(midiOutputDevice)
 		midiOutputDevice->sendBlockOfMessages(MidiBuffer(midiMessage), Time::getMillisecondCounter(), 44100);
 	else

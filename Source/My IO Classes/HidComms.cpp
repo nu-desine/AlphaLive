@@ -161,7 +161,7 @@ void HidComms::run()
         
         //what should the following sleep value be
         #ifdef WIN32
-        Sleep(5);
+        sleep(5);
         #else
         usleep(5*1000);
         #endif

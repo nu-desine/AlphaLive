@@ -102,18 +102,18 @@ void GainAndPan::processAlphaTouch (int pressureValue)
     {
         case 2: //Gain
             if (alphaTouchReverse == false)
-                gain = gainControl + (pressureValue * (((1.0-gainControl)*alphaTouchIntensity)/511.0));
+                gain = gainControl + (pressureValue * (((1.0-gainControl)*alphaTouchIntensity)/MAX_PRESSURE));
             else
-                gain = gainControl - (pressureValue * (((1.0-(1.0-gainControl))*alphaTouchIntensity)/511.0));
+                gain = gainControl - (pressureValue * (((1.0-(1.0-gainControl))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << gain << std::endl;
             break;
             
         case 3: //Pan
             if (alphaTouchReverse == false)
-                pan = panControl + (pressureValue * (((1.0-panControl)*alphaTouchIntensity)/511.0));
+                pan = panControl + (pressureValue * (((1.0-panControl)*alphaTouchIntensity)/MAX_PRESSURE));
             else
-                pan = panControl - (pressureValue * (((1.0-(1.0-panControl))*alphaTouchIntensity)/511.0));
+                pan = panControl - (pressureValue * (((1.0-(1.0-panControl))*alphaTouchIntensity)/MAX_PRESSURE));
             
             break;
             

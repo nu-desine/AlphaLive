@@ -102,36 +102,36 @@ void ReverbClass::processAlphaTouch (int pressureValue)
     {
         case 2: //Mix
             if (alphaTouchReverse == false)
-                mix = mixControlValue + (pressureValue * (((1.0-mixControlValue)*alphaTouchIntensity)/511.0));
+                mix = mixControlValue + (pressureValue * (((1.0-mixControlValue)*alphaTouchIntensity)/MAX_PRESSURE));
             else
-                mix = mixControlValue - (pressureValue * (((1.0-(1.0-mixControlValue))*alphaTouchIntensity)/511.0));
+                mix = mixControlValue - (pressureValue * (((1.0-(1.0-mixControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << mix << std::endl;
             break;
             
         case 3: //Room Size
             if (alphaTouchReverse == false)
-                params.roomSize = roomSizeControl + (pressureValue * (((1.0-roomSizeControl)*alphaTouchIntensity)/511.0));
+                params.roomSize = roomSizeControl + (pressureValue * (((1.0-roomSizeControl)*alphaTouchIntensity)/MAX_PRESSURE));
             else
-                params.roomSize = roomSizeControl - (pressureValue * (((1.0-(1.0-roomSizeControl))*alphaTouchIntensity)/511.0));
+                params.roomSize = roomSizeControl - (pressureValue * (((1.0-(1.0-roomSizeControl))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << params.roomSize << std::endl;
             break;
             
         case 4: //Damping
             if (alphaTouchReverse == false)
-                params.damping = dampingControl + (pressureValue * (((1.0-dampingControl)*alphaTouchIntensity)/511.0));
+                params.damping = dampingControl + (pressureValue * (((1.0-dampingControl)*alphaTouchIntensity)/MAX_PRESSURE));
             else
-                params.damping = dampingControl - (pressureValue * (((1.0-(1.0-dampingControl))*alphaTouchIntensity)/511.0));
+                params.damping = dampingControl - (pressureValue * (((1.0-(1.0-dampingControl))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << params.damping << std::endl;
             break;
             
         case 5: //Width
             if (alphaTouchReverse == false)
-                params.width = widthControl + (pressureValue * (((1.0-widthControl)*alphaTouchIntensity)/511.0));
+                params.width = widthControl + (pressureValue * (((1.0-widthControl)*alphaTouchIntensity)/MAX_PRESSURE));
             else
-                params.width = widthControl - (pressureValue * (((1.0-(1.0-widthControl))*alphaTouchIntensity)/511.0));
+                params.width = widthControl - (pressureValue * (((1.0-(1.0-widthControl))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << params.width << std::endl;
             break;

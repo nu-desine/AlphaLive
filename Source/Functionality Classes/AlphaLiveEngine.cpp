@@ -203,7 +203,7 @@ void AlphaLiveEngine::inputData(int pad, int value)
     //=====TEMPORARY PAD NUMBER REVERSAL======
     pad = Layouts::padArrangementLayout[pad];
     
-    //At the point the 'value' value is expected to be between 0 and 511.
+    //At the point the 'value' value is expected to be between 0 and MAX_PRESSURE.
     //In the older version this was scaled in the serial input class.
     //This range is also scaled in the Pad.cpp class for emulating pad presses.
     
@@ -226,10 +226,10 @@ void AlphaLiveEngine::inputData(int pad, int value)
     if (PAD_SETTINGS->getPressureCurve() == 1)
         {
             //non-sensitive - exponential mapping of pressure
-            recievedValue = exp((float)recievedValue/511)-1;
-            recievedValue = recievedValue * (511.0/1.71828);
-            if (recievedValue > 511)
-                recievedValue = 511;
+            recievedValue = exp((float)recievedValue/MAX_PRESSURE)-1;
+            recievedValue = recievedValue * (MAX_PRESSURE/1.71828);
+            if (recievedValue > MAX_PRESSURE)
+                recievedValue = MAX_PRESSURE;
             if (recievedValue > 0 && recievedValue < 1) //value 1 = 0.6, which is rounded to 0
                 recievedValue = 1;
         }
@@ -237,9 +237,9 @@ void AlphaLiveEngine::inputData(int pad, int value)
     {
         //sensitive - logarithmic mapping of pressure
         recievedValue = log(recievedValue+1);
-        recievedValue = recievedValue * (511.0/6.23832);
-        if (recievedValue > 511)
-            recievedValue = 511;
+        recievedValue = recievedValue * (MAX_PRESSURE/6.23832);
+        if (recievedValue > MAX_PRESSURE)
+            recievedValue = MAX_PRESSURE;
     }
     
     //else, pressureCurve == 2 which is a linear mapping of pressure
@@ -288,7 +288,7 @@ void AlphaLiveEngine::inputData(int pad, int value)
     //OSC OUTPUT MODE STUFF
     
     //scale the range back down to 0-127
-    int recievedValue2 = recievedValue * (127.0/511.0);
+    int recievedValue2 = recievedValue * (127.0/MAX_PRESSURE);
     
     if (isDualOutputMode == true)
     {

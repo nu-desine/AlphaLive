@@ -222,8 +222,8 @@ void GuiPad::setGradient (int oscValue)
     //updating everytime there is an OSC message would be too CPU extensive and would create series of commands the GUI couldn't keep up with
     if (currentTime >= (lastTime + UPDATE_TIME)) 
     {
-        gradientInnerColourAlpha = oscValue * (1.0/float(511.0));
-        gradientOuterColourAlpha = 1 - (oscValue * (1.0/float(511.0)));
+        gradientInnerColourAlpha = oscValue * (1.0/float(MAX_PRESSURE));
+        gradientOuterColourAlpha = 1 - (oscValue * (1.0/float(MAX_PRESSURE)));
         
         //repaint to re-apply gradientChange
         repaint();
@@ -242,7 +242,7 @@ void GuiPad::setGradient (int oscValue)
     
     //following if statement needed as using a timer above means that
     //the pad isn't likely to be set to 0 when depressed
-    if (oscValue == 511)
+    if (oscValue == MAX_PRESSURE)
     {
         gradientInnerColourAlpha = 1;
         gradientOuterColourAlpha = 0;
@@ -505,8 +505,8 @@ void GuiPad::mouseDrag (const MouseEvent &e)
         
         int pressureValue = abs((getHeight()/2) - e.y) * 10 + 1;
         
-        if (pressureValue > 511)
-            pressureValue = 511;
+        if (pressureValue > MAX_PRESSURE)
+            pressureValue = MAX_PRESSURE;
         else
             shouldIgnoreValues = false;
         
@@ -516,7 +516,7 @@ void GuiPad::mouseDrag (const MouseEvent &e)
             //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, pressureValue);
             guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, pressureValue);
             
-            if (pressureValue == 511)
+            if (pressureValue == MAX_PRESSURE)
                 shouldIgnoreValues = true;
         }
     }

@@ -22,6 +22,8 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+#define MAX_PRESSURE 511.0
+
 #define MIDI_OUT_REPORT_ID 0x06
 
 //To allow ASIO on the windows build, put the ASIO SDK into Source/Third Party Libraries, and put

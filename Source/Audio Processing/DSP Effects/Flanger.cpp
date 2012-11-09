@@ -117,9 +117,9 @@ void Flanger::processAlphaTouch (int pressureValue)
     {
         case 2: //Mix
             if (alphaTouchReverse == false)
-                mix = mixControlValue + (pressureValue * (((1.0-mixControlValue)*alphaTouchIntensity)/511.0));
+                mix = mixControlValue + (pressureValue * (((1.0-mixControlValue)*alphaTouchIntensity)/MAX_PRESSURE));
             else
-                mix = mixControlValue - (pressureValue * (((1.0-(1.0-mixControlValue))*alphaTouchIntensity)/511.0));
+                mix = mixControlValue - (pressureValue * (((1.0-(1.0-mixControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << mix << std::endl;
             break;
@@ -127,27 +127,27 @@ void Flanger::processAlphaTouch (int pressureValue)
         case 3: //rate
             
             if (alphaTouchReverse == false)
-                rate = rateControlValue + (pressureValue * (((20.0-rateControlValue)*alphaTouchIntensity)/511.0)); 
+                rate = rateControlValue + (pressureValue * (((20.0-rateControlValue)*alphaTouchIntensity)/MAX_PRESSURE)); 
             else
-                rate = rateControlValue - (pressureValue * (((20.0-(20.0-rateControlValue))*alphaTouchIntensity)/511.0));
+                rate = rateControlValue - (pressureValue * (((20.0-(20.0-rateControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << rate << std::endl;
             break;
             
         case 4: //feedback
             if (alphaTouchReverse == false)
-                feedback = feedbackControlValue + (pressureValue * (((1.0-feedbackControlValue)*alphaTouchIntensity)/511.0));
+                feedback = feedbackControlValue + (pressureValue * (((1.0-feedbackControlValue)*alphaTouchIntensity)/MAX_PRESSURE));
             else
-                feedback = feedbackControlValue - (pressureValue * (((1.0-(1.0-feedbackControlValue))*alphaTouchIntensity)/511.0));
+                feedback = feedbackControlValue - (pressureValue * (((1.0-(1.0-feedbackControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << feedback << std::endl;
             break;
             
         case 5: //intensity
             if (alphaTouchReverse == false)
-                intensity = intensityControlValue + (pressureValue * (((1.0-intensityControlValue)*alphaTouchIntensity)/511.0));
+                intensity = intensityControlValue + (pressureValue * (((1.0-intensityControlValue)*alphaTouchIntensity)/MAX_PRESSURE));
             else
-                intensity = intensityControlValue - (pressureValue * (((1.0-(1.0-intensityControlValue))*alphaTouchIntensity)/511.0));
+                intensity = intensityControlValue - (pressureValue * (((1.0-(1.0-intensityControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << intensity << std::endl;
             break;

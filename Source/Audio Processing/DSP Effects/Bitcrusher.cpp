@@ -168,11 +168,11 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
 		case 2: //Input gain
             if (alphaTouchReverse == false)
             {
-                inputGain = inputGainControl + (pressureValue * (((1.0-inputGainControl)*alphaTouchIntensity)/511.0));
+                inputGain = inputGainControl + (pressureValue * (((1.0-inputGainControl)*alphaTouchIntensity)/MAX_PRESSURE));
 			}
             else
             {
-                inputGain = inputGainControl - (pressureValue * (((1.0-(1.0-inputGainControl))*alphaTouchIntensity)/511.0));
+                inputGain = inputGainControl - (pressureValue * (((1.0-(1.0-inputGainControl))*alphaTouchIntensity)/MAX_PRESSURE));
 			}
             
             inputGain = inputGain * inputGain * inputGain;
@@ -183,11 +183,11 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
 		case 3: //downsample
             if (alphaTouchReverse == false)
             {
-                downsample = roundToInt (downsampleControl + (pressureValue * (((16.0 - downsampleControl)*alphaTouchIntensity)/511.0)));
+                downsample = roundToInt (downsampleControl + (pressureValue * (((16.0 - downsampleControl)*alphaTouchIntensity)/MAX_PRESSURE)));
             }
 			else
             {
-                downsample = roundToInt (downsampleControl - (pressureValue * (((15.0-(16.0-downsampleControl))*alphaTouchIntensity)/511.0)));
+                downsample = roundToInt (downsampleControl - (pressureValue * (((15.0-(16.0-downsampleControl))*alphaTouchIntensity)/MAX_PRESSURE)));
             }
             
 			std::cout << downsample << std::endl;
@@ -196,11 +196,11 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
         case 4: //crush
             if (alphaTouchReverse == false)
             {
-                crush = roundToInt (crushControlValue + (pressureValue * (((8.0 - crushControlValue)*alphaTouchIntensity)/511.0)));
+                crush = roundToInt (crushControlValue + (pressureValue * (((8.0 - crushControlValue)*alphaTouchIntensity)/MAX_PRESSURE)));
             }
 			else
             {
-                crush = roundToInt (crushControlValue - (pressureValue * (((7.0 - (8.0 - crushControlValue))*alphaTouchIntensity)/511.0)));
+                crush = roundToInt (crushControlValue - (pressureValue * (((7.0 - (8.0 - crushControlValue))*alphaTouchIntensity)/MAX_PRESSURE)));
             }
             
 			std::cout << crush << std::endl;
@@ -210,10 +210,10 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
 		case 5: //Smoothing
             if (alphaTouchReverse == false)
             {
-                paramsSmoothingFilter[1] = 10000 * (smoothingControl + (pressureValue * (((1.0-smoothingControl)*alphaTouchIntensity)/511.0)));
+                paramsSmoothingFilter[1] = 10000 * (smoothingControl + (pressureValue * (((1.0-smoothingControl)*alphaTouchIntensity)/MAX_PRESSURE)));
             }
 			else
-                paramsSmoothingFilter[1] = 10000 * (smoothingControl - (pressureValue * (((0.99-(1.0-smoothingControl))*alphaTouchIntensity)/511.0)));
+                paramsSmoothingFilter[1] = 10000 * (smoothingControl - (pressureValue * (((0.99-(1.0-smoothingControl))*alphaTouchIntensity)/MAX_PRESSURE)));
            
 			std::cout << paramsSmoothingFilter[1] << std::endl;
 			break;
@@ -221,11 +221,11 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
         case 6: //Mix
             if (alphaTouchReverse == false)
             {
-                wetDryMix = wetDryMixControl + (pressureValue * (((1.0-wetDryMixControl)*alphaTouchIntensity)/511.0));
+                wetDryMix = wetDryMixControl + (pressureValue * (((1.0-wetDryMixControl)*alphaTouchIntensity)/MAX_PRESSURE));
             }
 			else
             {
-                wetDryMix = wetDryMixControl - (pressureValue * (((1.0-(1.0-wetDryMixControl))*alphaTouchIntensity)/511.0));
+                wetDryMix = wetDryMixControl - (pressureValue * (((1.0-(1.0-wetDryMixControl))*alphaTouchIntensity)/MAX_PRESSURE));
 			}
 			
             wetDryMix = wetDryMix * wetDryMix * wetDryMix;

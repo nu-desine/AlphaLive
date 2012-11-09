@@ -364,12 +364,12 @@ void SequencePlayer::processSequence(int padValue)
     
     if (mode == 1) //midi
     {
-        //scale 0-511 to 0-127
+        //scale 0-MAX_PRESSURE to 0-127
         //as the value will be scaled down and into an int, padValue could be rounded down to 0 even when it isn't quite 0
         //therefore we must make sure that it is atleast at the value of 1 untill it is actually set to 0,
         //so it doesn't mess up how the sticky feature is handled
         
-        float padValueFloat = padValue * (127.0 / 511.0);
+        float padValueFloat = padValue * (127.0 / MAX_PRESSURE);
         
         if (padValueFloat > 0 && padValueFloat < 1)
             padValue = 1;
@@ -457,7 +457,7 @@ void SequencePlayer::processSequence(int padValue)
     {
         if (triggerModeData.ignorePressure == false) //ignore for certain triggerModes
         {
-            //scale 0-511/0-127 to 0-numberOfSequences
+            //scale 0-MAX_PRESSURE/0-127 to 0-numberOfSequences
             
             //current problem with sequencer mode which will mean sticky mode might not function properly!!! - 
             //a pressure value of 0 is sequence number 1, whereas in other modes a pressure value of 0 is 'off'
@@ -474,9 +474,9 @@ void SequencePlayer::processSequence(int padValue)
                 if (sequenceNumber > numberOfSequences-1)
                     sequenceNumber  = numberOfSequences-1;
             }
-            if (mode == 2) //audio, scale from 511
+            if (mode == 2) //audio, scale from MAX_PRESSURE
             {
-                sequenceNumber = pressureValue * (numberOfSequences/511.0);
+                sequenceNumber = pressureValue * (numberOfSequences/MAX_PRESSURE);
                 if (sequenceNumber > numberOfSequences-1)
                     sequenceNumber  = numberOfSequences-1;
             }
@@ -859,7 +859,7 @@ void SequencePlayer::triggerMidiNoteOffMessage (int rowNumber)
 void SequencePlayer::sendMidiPressureData()
 {
     //scale 0-127 to midiMinPressure-midiMaxPressure
-    //this has to be done here and not above with the 511 to 127 scaling,
+    //this has to be done here and not above with the MAX_PRESSURE to 127 scaling,
     //as the minRange could be set higher than the maxRange, which would mean
     //the sticky feature wouldn't work how it's meant to. 
     //Also we need to use a new variable here to covert the midi data,

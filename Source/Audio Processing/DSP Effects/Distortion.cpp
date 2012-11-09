@@ -293,11 +293,11 @@ void Distortion::processAlphaTouch (int pressureValue)
 		case 2: //Input gain
             if (alphaTouchReverse == false)
             {
-                inputGain = inputGainControl + (pressureValue * (((1.0-inputGainControl)*alphaTouchIntensity)/511.0));
+                inputGain = inputGainControl + (pressureValue * (((1.0-inputGainControl)*alphaTouchIntensity)/MAX_PRESSURE));
             }
 			else
             {
-                inputGain = inputGainControl - (pressureValue * (((1.0-(1.0 - inputGainControl))*alphaTouchIntensity)/511.0));
+                inputGain = inputGainControl - (pressureValue * (((1.0-(1.0 - inputGainControl))*alphaTouchIntensity)/MAX_PRESSURE));
 			}
             
             inputGain = inputGain * inputGain * inputGain;
@@ -307,10 +307,10 @@ void Distortion::processAlphaTouch (int pressureValue)
 		case 3: //Drive
             if (alphaTouchReverse == false)
             {
-                drive = driveControlValue + (pressureValue * (((60.0-driveControlValue)*alphaTouchIntensity)/511.0));
+                drive = driveControlValue + (pressureValue * (((60.0-driveControlValue)*alphaTouchIntensity)/MAX_PRESSURE));
 			}
 			else
-                drive = driveControlValue - (pressureValue * (((59.9-(60.0 - driveControlValue))*alphaTouchIntensity)/511.0));
+                drive = driveControlValue - (pressureValue * (((59.9-(60.0 - driveControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << drive << std::endl;
             break;
@@ -319,13 +319,13 @@ void Distortion::processAlphaTouch (int pressureValue)
 			bypassFilter = false;
 			if (alphaTouchReverse == false)
             {
-                paramsPostFilter1[1] = 9000 * (toneControl + (pressureValue * (((1.0 - toneControl)*alphaTouchIntensity)/511.0)));
-				paramsPostFilter2[1] = 11000 * (toneControl + (pressureValue * (((1.0 - toneControl)*alphaTouchIntensity)/511.0)));
+                paramsPostFilter1[1] = 9000 * (toneControl + (pressureValue * (((1.0 - toneControl)*alphaTouchIntensity)/MAX_PRESSURE)));
+				paramsPostFilter2[1] = 11000 * (toneControl + (pressureValue * (((1.0 - toneControl)*alphaTouchIntensity)/MAX_PRESSURE)));
 			}
             else
             {
-                paramsPostFilter1[1] = 9000 * (toneControl - (pressureValue * (((0.995 - (1.0 - toneControl))*alphaTouchIntensity)/511.0)));
-				paramsPostFilter2[1] = 11000 * (toneControl - (pressureValue * (((0.995 - (1.0 - toneControl))*alphaTouchIntensity)/511.0))); 
+                paramsPostFilter1[1] = 9000 * (toneControl - (pressureValue * (((0.995 - (1.0 - toneControl))*alphaTouchIntensity)/MAX_PRESSURE)));
+				paramsPostFilter2[1] = 11000 * (toneControl - (pressureValue * (((0.995 - (1.0 - toneControl))*alphaTouchIntensity)/MAX_PRESSURE))); 
             }
 			if (pressureValue == 0 && toneControl == 0) 
 			{
@@ -338,11 +338,11 @@ void Distortion::processAlphaTouch (int pressureValue)
 		case 5: //Mix
             if (alphaTouchReverse == false)
             {
-                wetDryMix = wetDryMixControl + (pressureValue * (((1.0-wetDryMixControl)*alphaTouchIntensity)/511.0));
+                wetDryMix = wetDryMixControl + (pressureValue * (((1.0-wetDryMixControl)*alphaTouchIntensity)/MAX_PRESSURE));
 			}
 			else
             {
-                wetDryMix = wetDryMixControl - (pressureValue * (((1.0-(1.0-wetDryMixControl))*alphaTouchIntensity)/511.0));
+                wetDryMix = wetDryMixControl - (pressureValue * (((1.0-(1.0-wetDryMixControl))*alphaTouchIntensity)/MAX_PRESSURE));
 			}
             wetDryMix = wetDryMix * wetDryMix * wetDryMix;
 			

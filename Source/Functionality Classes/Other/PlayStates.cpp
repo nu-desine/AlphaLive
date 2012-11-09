@@ -334,11 +334,11 @@ PlayStateData PlayStates::latchMaxLatch (int padValue)
         pressCount = 1;
         maxPressCount = 0;
     }
-    else if(padValue == 511 && maxPressCount == 0)
+    else if(padValue == MAX_PRESSURE && maxPressCount == 0)
     {
         maxPressCount = 1;
     }
-    else if(padValue == 511 && maxPressCount == 1)
+    else if(padValue == MAX_PRESSURE && maxPressCount == 1)
     {
         maxPressCount = 0;
     }
@@ -388,7 +388,7 @@ PlayStateData PlayStates::latchPressLatch (int padValue)
         pressCount = 1;
         maxPressCount = 1;
     }
-    else if(padValue == 511 && maxPressCount == 1)
+    else if(padValue == MAX_PRESSURE && maxPressCount == 1)
     {
         maxPressCount = 0;
     }
@@ -441,7 +441,7 @@ PlayStateData PlayStates::triggerLooped (int padValue)
         rePressCount = 0;
         
     }
-    else if(padValue == 511)
+    else if(padValue == MAX_PRESSURE)
     {
         maxPressCount = 0;
     }
@@ -518,7 +518,7 @@ PlayStateData PlayStates::cycleLooped (int padValue)
         playStateData.moveToNextSeq = true;
         rePressCount = 1;
     }
-    else if(padValue == 511)
+    else if(padValue == MAX_PRESSURE)
     {
         maxPressCount = 0;
     }
@@ -572,7 +572,7 @@ PlayStateData PlayStates::cycleLinear (int padValue)
         playStateData.moveToNextSeq = true;
         rePressCount = 1;
     }
-    else if(padValue == 511)
+    else if(padValue == MAX_PRESSURE)
     {
         maxPressCount = 0;
     }
@@ -839,7 +839,7 @@ PlayStateData PlayStates::cycleLinearNonDestructive (int padValue)
         rePressCount = 1;
     }
     /*
-    else if(padValue == 511)
+    else if(padValue == MAX_PRESSURE)
     {
         maxPressCount = 0;
     }

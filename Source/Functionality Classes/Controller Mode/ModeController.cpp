@@ -63,7 +63,7 @@ void ModeController::getOscData(int pad, int value)
         //should i bet getting the ip addresses and port numbers for each pad beforehand (is it to cpu heavy accessing PadSettings everytime there is an incoming message?)?
         
         //scale the range back down to 0-127
-        padValue = padValue * (127.0/511.0);
+        padValue = padValue * (127.0/MAX_PRESSURE);
         
         oscOutput.transmitThruMessage(padNumber+1, padValue, PAD_SETTINGS->getControllerOscIpAddress(), PAD_SETTINGS->getControllerOscPort());
     }

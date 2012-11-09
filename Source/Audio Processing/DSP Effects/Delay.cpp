@@ -153,9 +153,9 @@ void Delay::processAlphaTouch (int pressureValue)
     {
         case 2: //Wet Mix
             if (alphaTouchReverse == false)
-                wetMix = wetMixControlValue + (pressureValue * (((1.0-wetMixControlValue)*alphaTouchIntensity)/511.0));
+                wetMix = wetMixControlValue + (pressureValue * (((1.0-wetMixControlValue)*alphaTouchIntensity)/MAX_PRESSURE));
             else
-                wetMix = wetMixControlValue - (pressureValue * (((1.0-(1.0-wetMixControlValue))*alphaTouchIntensity)/511.0));
+                wetMix = wetMixControlValue - (pressureValue * (((1.0-(1.0-wetMixControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << wetMix << std::endl;
             break;
@@ -163,36 +163,36 @@ void Delay::processAlphaTouch (int pressureValue)
         case 3: //delay time/samples
             
             if (alphaTouchReverse == false)
-                delaySamples = delaySamplesControlValue + (pressureValue * (((maxSamplesRange-delaySamplesControlValue)*alphaTouchIntensity)/511.0)); 
+                delaySamples = delaySamplesControlValue + (pressureValue * (((maxSamplesRange-delaySamplesControlValue)*alphaTouchIntensity)/MAX_PRESSURE)); 
             else
-                delaySamples = delaySamplesControlValue - (pressureValue * (((maxSamplesRange-(maxSamplesRange-delaySamplesControlValue))*alphaTouchIntensity)/511.0));
+                delaySamples = delaySamplesControlValue - (pressureValue * (((maxSamplesRange-(maxSamplesRange-delaySamplesControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << delaySamples << std::endl;
             break;
             
         case 4: //Feedback
             if (alphaTouchReverse == false)
-                feedback = feedbackControlValue + (pressureValue * (((1.0-feedbackControlValue)*alphaTouchIntensity)/511.0));
+                feedback = feedbackControlValue + (pressureValue * (((1.0-feedbackControlValue)*alphaTouchIntensity)/MAX_PRESSURE));
             else
-                feedback = feedbackControlValue - (pressureValue * (((1.0-(1.0-feedbackControlValue))*alphaTouchIntensity)/511.0));
+                feedback = feedbackControlValue - (pressureValue * (((1.0-(1.0-feedbackControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << feedback << std::endl;
             break;
             
         case 5: //LPF Frequency
             if (alphaTouchReverse == false)
-                paramsLpFilter[1] = lpfFrequencyControlValue + (pressureValue * (((20000.0-lpfFrequencyControlValue)*alphaTouchIntensity)/511.0));
+                paramsLpFilter[1] = lpfFrequencyControlValue + (pressureValue * (((20000.0-lpfFrequencyControlValue)*alphaTouchIntensity)/MAX_PRESSURE));
             else
-                paramsLpFilter[1] = lpfFrequencyControlValue - (pressureValue * (((19970.0-(20000.0 - lpfFrequencyControlValue))*alphaTouchIntensity)/511.0)); 
+                paramsLpFilter[1] = lpfFrequencyControlValue - (pressureValue * (((19970.0-(20000.0 - lpfFrequencyControlValue))*alphaTouchIntensity)/MAX_PRESSURE)); 
             
             std::cout << paramsLpFilter[1] << std::endl;
             break;
             
         case 6: //HPF Frequency
             if (alphaTouchReverse == false)
-                paramsHpFilter[1] = hpfFrequencyControlValue + (pressureValue * (((20000.0-hpfFrequencyControlValue)*alphaTouchIntensity)/511.0));
+                paramsHpFilter[1] = hpfFrequencyControlValue + (pressureValue * (((20000.0-hpfFrequencyControlValue)*alphaTouchIntensity)/MAX_PRESSURE));
             else
-                paramsHpFilter[1] = hpfFrequencyControlValue - (pressureValue * (((19970.0-(20000.0 - hpfFrequencyControlValue))*alphaTouchIntensity)/511.0));
+                paramsHpFilter[1] = hpfFrequencyControlValue - (pressureValue * (((19970.0-(20000.0 - hpfFrequencyControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << paramsHpFilter[1] << std::endl;
             break;

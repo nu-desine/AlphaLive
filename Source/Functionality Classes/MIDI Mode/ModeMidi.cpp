@@ -201,12 +201,12 @@ void ModeMidi::convertToMidi(int padNumber, int padValue)
     // Pressure stuff
     //==========================================================================================
     
-    //scale 0-511 to 0-127
+    //scale 0-MAX_PRESSURE to 0-127
     //as the value will be scaled down and into an int, padValue could be rounded down to 0 even when it isn't quite 0
     //therefore we must make sure that it is atleast at the value of 1 untill it is actually set to 0,
     //so it doesn't mess up how the sticky feature is handled
 
-    float padValueFloat = padValue * (127.0 / 511.0);
+    float padValueFloat = padValue * (127.0 / MAX_PRESSURE);
     
     if (padValueFloat > 0 && padValueFloat < 1)
         padValue = 1;
@@ -369,7 +369,7 @@ void ModeMidi::noteOff (int padNumber)
 void ModeMidi::sendPressureData (int padNumber)
 {
     //scale 0-127 to minPressure-maxPressure
-    //this has to be done here and not above with the 511 to 127 scaling,
+    //this has to be done here and not above with the MAX_PRESSURE to 127 scaling,
     //as the minRange could be set higher than the maxRange, which would mean
     //the sticky feature wouldn't work how it's meant to. 
     //Also we need to use a new variable here to covert the midi data,

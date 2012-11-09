@@ -165,7 +165,7 @@ TriggerModeData TriggerModes::latch (int padValue)
         pressCount = 1;
         maxPressCount = 1;
     }
-    else if(padValue == 511 && maxPressCount == 1)
+    else if(padValue == MAX_PRESSURE && maxPressCount == 1)
     {
         maxPressCount = 0;
     }
@@ -207,11 +207,11 @@ TriggerModeData TriggerModes::latchMax (int padValue)
         pressCount = 1;
         maxPressCount = 0;
     }
-    else if(padValue == 511 && maxPressCount == 0)
+    else if(padValue == MAX_PRESSURE && maxPressCount == 0)
     {
         maxPressCount = 1;
     }
-    else if(padValue == 511 && maxPressCount == 1)
+    else if(padValue == MAX_PRESSURE && maxPressCount == 1)
     {
         maxPressCount = 0;
     }
@@ -260,7 +260,7 @@ TriggerModeData TriggerModes::trigger (int padValue)
         rePressCount = 0;
         
     }
-    else if(padValue == 511)
+    else if(padValue == MAX_PRESSURE)
     {
         maxPressCount = 0;
     }
@@ -316,7 +316,7 @@ TriggerModeData TriggerModes::cycle (int padValue)
         triggerModeData.moveToNextSeq = true;
         rePressCount = 1;
     }
-    else if(padValue == 511)
+    else if(padValue == MAX_PRESSURE)
     {
         maxPressCount = 0;
     }

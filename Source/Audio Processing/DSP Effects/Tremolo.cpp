@@ -83,9 +83,9 @@ void Tremolo::processAlphaTouch (int pressureValue)
     {
         case 2: //Depth
             if (alphaTouchReverse == false)
-                depth = depthControlValue + (pressureValue * (((1.0-depthControlValue)*alphaTouchIntensity)/511.0));
+                depth = depthControlValue + (pressureValue * (((1.0-depthControlValue)*alphaTouchIntensity)/MAX_PRESSURE));
             else
-                depth = depthControlValue - (pressureValue * (((1.0-(1.0-depthControlValue))*alphaTouchIntensity)/511.0));
+                depth = depthControlValue - (pressureValue * (((1.0-(1.0-depthControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << depth << std::endl;
             break;
@@ -93,18 +93,18 @@ void Tremolo::processAlphaTouch (int pressureValue)
         case 3: //rate
             
             if (alphaTouchReverse == false)
-                rate = rateControlValue + (pressureValue * (((50.0-rateControlValue)*alphaTouchIntensity)/511.0)); 
+                rate = rateControlValue + (pressureValue * (((50.0-rateControlValue)*alphaTouchIntensity)/MAX_PRESSURE)); 
             else
-                rate = rateControlValue - (pressureValue * (((50.0-(50.0-rateControlValue))*alphaTouchIntensity)/511.0));
+                rate = rateControlValue - (pressureValue * (((50.0-(50.0-rateControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
             std::cout << rate << std::endl;
             break;
             
         case 4: //shape
             if (alphaTouchReverse == false)
-                shape = roundToInt (shapeControlValue + (pressureValue * (((5.0-shapeControlValue)*alphaTouchIntensity)/511.0)));
+                shape = roundToInt (shapeControlValue + (pressureValue * (((5.0-shapeControlValue)*alphaTouchIntensity)/MAX_PRESSURE)));
             else
-                shape = roundToInt (shapeControlValue - (pressureValue * (((4.0-(5.0-shapeControlValue))*alphaTouchIntensity)/511.0))); 
+                shape = roundToInt (shapeControlValue - (pressureValue * (((4.0-(5.0-shapeControlValue))*alphaTouchIntensity)/MAX_PRESSURE))); 
             
             //the above quations don't seem to work. why?
             

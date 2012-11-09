@@ -64,46 +64,30 @@ AlphaLiveEngine::AlphaLiveEngine()
     delete audioSettingsXml;
     
     
-    //SET UP MIDI OUTPUT
-    
-    #if JUCE_MAC || JUCE_LINUX
-    //==========================================================================
-    //Create new virtual MIDI device
-    midiOutputDevice = MidiOutput::createNewDevice("AlphaLive");
-    
-    if(midiOutputDevice)
+    //SET UP MIDI OUTPUT if not connected to the HID device
+    if (hasOpenedHidDevice() == false)
     {
-        midiOutputDevice->startBackgroundThread();
+        #if JUCE_MAC || JUCE_LINUX
+        //==========================================================================
+        //Create new virtual MIDI device
+        midiOutputDevice = MidiOutput::createNewDevice("AlphaLive");
+        
+        if(midiOutputDevice)
+            midiOutputDevice->startBackgroundThread();
+        else
+            std::cout << "Failed to create a virtual MIDI device!" << std::endl;
+        
+        //==========================================================================
+        #endif //JUCE_MAC || JUCE_LINUX
+        
+        #if JUCE_WINDOWS
+        //==========================================================================
+        //connect to a MIDI device
+        midiOutputDevice = NULL;
+        #endif //JUCE_WINDOWS
     }
     else
-    {
-        std::cout << "Failed to create a virtual MIDI device!" << std::endl;
-    }
-    //==========================================================================
-    #endif //JUCE_MAC || JUCE_LINUX
-     
-     
-     
-    
-    #if JUCE_WINDOWS
-    //==========================================================================
-    //connect to a MIDI device
-    midiOutputDevice = NULL;
-    
-    /*
-    //connect to a default MIDI device?
-    StringArray devices = MidiOutput::getDevices();
-    audioDeviceManager.setDefaultMidiOutput(devices[0]);
-    midiOutputDevice = MidiOutput::openDevice(MidiOutput::getDefaultDeviceIndex());
-    
-    if(midiOutputDevice)
-        midiOutputDevice->startBackgroundThread();
-    else
-        std::cout << "Failed to connect to a MIDI device!" << std::endl;
-     */
-    
-    //==========================================================================
-    #endif //JUCE_WINDOWS
+        midiOutputDevice = NULL;
 
     modeMidi = new ModeMidi(*midiOutputDevice, *this);
     modeSampler = new ModeSampler(*this);
@@ -118,12 +102,9 @@ AlphaLiveEngine::AlphaLiveEngine()
     audioMixer.addInputSource(globalClock, false); //add as inputsource to audioMixer
     audioPlayer.setSource(&audioMixer);
     
-    
     isDualOutputMode = false;
     oscIpAddress = "127.0.0.1";
     oscPortNumber = 5004;
-    
-    
     
     for (int i = 0; i <= 23; i++)
         currentExclusivePad[i] = 100; //'100' here is used to signify an 'empty/NULL' value

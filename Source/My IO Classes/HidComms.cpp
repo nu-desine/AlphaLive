@@ -49,10 +49,13 @@ HidComms::HidComms() : Thread("HidThread")
     if (!handle) 
     {
         printf("unable to open device\n");
+        hasOpenedDevice = false;
     }
     
     else
     {
+        hasOpenedDevice = true;
+        
         // Read the Manufacturer String
         wstr[0] = 0x0000;
         res = hid_get_manufacturer_string(handle, wstr, MAX_STR);
@@ -148,7 +151,7 @@ void HidComms::run()
 }
 
 //should i be passing in a pointer here instead of an array?
-void HidComms::sendControlReport (unsigned char bytesToSend[])
+void HidComms::sendHidControlReport (unsigned char bytesToSend[])
 {
     if (handle)
     {
@@ -160,4 +163,9 @@ void HidComms::sendControlReport (unsigned char bytesToSend[])
         printf("\n");
         hid_write(handle, bytesToSend, sizeof(bytesToSend));
     }
+}
+
+bool HidComms::hasOpenedHidDevice()
+{
+    return hasOpenedDevice;
 }

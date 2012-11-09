@@ -35,7 +35,9 @@ public:
     void run();
     virtual void hidInputCallback (int pad, int value, int velocity) = 0;
     
-    void sendControlReport (unsigned char bytesToSend[]);
+    void sendHidControlReport (unsigned char bytesToSend[]);
+    
+    bool hasOpenedHidDevice();
     
 private:
     int res;
@@ -43,6 +45,8 @@ private:
     wchar_t wstr[MAX_STR];
     
     hid_device *handle;
+    
+    bool hasOpenedDevice;
     
 };
 

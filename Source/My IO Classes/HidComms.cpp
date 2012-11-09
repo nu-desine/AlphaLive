@@ -139,7 +139,10 @@ void HidComms::run()
             
             if (buf[0] == 0x01) //pad data report
             {
-              hidInputCallback(buf[1], buf[2]/* + buf[3]? */, buf[4]);  
+                unsigned short int pressure = 0;
+                pressure = buf[2] + (buf[3]<<8);
+                
+                hidInputCallback(buf[1], pressure, buf[4]);  
             }
             else if (buf[0] == 0x02) //elite button report
             {

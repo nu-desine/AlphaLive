@@ -93,8 +93,6 @@ public:
     ~AlphaLiveEngine();
     
     void hidInputCallback (int pad, int value, int velocity);
-    
-    void inputData (int pad, int value);
     void handleAsyncUpdate();
     int getRecievedPad();
     int getRecievedValue();

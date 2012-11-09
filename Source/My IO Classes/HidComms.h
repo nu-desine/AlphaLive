@@ -41,7 +41,7 @@ public:
     
 private:
     int res;
-    unsigned char buf[256];
+    unsigned char buf[10]; //how big should this be?
     wchar_t wstr[MAX_STR];
     
     hid_device *handle;

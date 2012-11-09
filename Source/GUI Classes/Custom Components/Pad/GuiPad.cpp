@@ -486,7 +486,7 @@ void GuiPad::mouseDown (const MouseEvent &e)
         //be 0 (no pressure).
         int pressureValue = abs((getHeight()/2) - e.y) * 10 + 1;
         //emulate pad press
-        //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, pressureValue);
+        //guiPadLayoutRef.getAlphaLiveEngine().hidInputCallback(padNumber, pressureValue, 110);
         guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, pressureValue);
     }
     
@@ -513,7 +513,7 @@ void GuiPad::mouseDrag (const MouseEvent &e)
         if (shouldIgnoreValues == false)
         {
             //emulate pressure change
-            //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, pressureValue);
+            //guiPadLayoutRef.getAlphaLiveEngine().hidInputCallback(padNumber, pressureValue, 110);
             guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, pressureValue);
             
             if (pressureValue == MAX_PRESSURE)
@@ -536,8 +536,8 @@ void GuiPad::mouseUp (const MouseEvent &e)
         //for most of the triggerModes to work. This should probably be fixed!!
         guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 1);
         guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 0);
-        //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 1);
-        //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 0);
+        //guiPadLayoutRef.getAlphaLiveEngine().hidInputCallback(padNumber, 1, 110);
+        //guiPadLayoutRef.getAlphaLiveEngine().hidInputCallback(padNumber, 0, 110);
         
         isMouseInPlayMode = false;
     }

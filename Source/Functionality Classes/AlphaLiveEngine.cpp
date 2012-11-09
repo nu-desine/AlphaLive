@@ -180,7 +180,7 @@ void AlphaLiveEngine::playPadFromMouse (int pad, int value)
     //as current we have a temp pad number reversal layout that is
     //processed at the beginnning of input data, when emulating a pad
     //press from the pad layout GUI we must first reverse the pad numbers
-    //so that it will be correct within inputData
+    //so that it will be correct within hidInputCallback
     
     for (int arrayIndex = 0; arrayIndex <= sizeof(Layouts::padArrangementLayout); arrayIndex++)
     {
@@ -194,36 +194,39 @@ void AlphaLiveEngine::playPadFromMouse (int pad, int value)
         }
     }
     
-    //mimic an OSC message being recieved.
-    inputData(pad, value);
+    //mimic input data being recieved from the hardware.
+    hidInputCallback(pad, value, 110); //what should the velocity value be here?
 }
 
-void AlphaLiveEngine::inputData(int pad, int value)
-{
-    //=====TEMPORARY PAD NUMBER REVERSAL======
-    pad = Layouts::padArrangementLayout[pad];
-    
-    //At the point the 'value' value is expected to be between 0 and MAX_PRESSURE.
-    //In the older version this was scaled in the serial input class.
-    //This range is also scaled in the Pad.cpp class for emulating pad presses.
-    
-    //if the incoming data is too fast for asyncUpdater to handle and has caused a pending update,
-    //and the stored pad value of the pending update is 0, force a GUI update.
-    //This will occasionally be needed to reset a pad's GUI back to 'off' when mutiple pads
-    //are simultaneously being pressed.
-    if (isUpdatePending() == true && pendingUpdatePadValue == 0) 
-    {
-        const MessageManagerLock mmLock; //lock event thread so it is safe to make calls in the message thread
-        guiUpdateFlag = 0;
-        handleUpdateNowIfNeeded(); //force GUI to be updated now
-    }
 
-    recievedPad = pad;
-    recievedValue = value;
-    
-    
-    //determine pressure mapping/sensitivity
-    if (PAD_SETTINGS->getPressureCurve() == 1)
+void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
+{
+    if (pad < 48) //an actual pad as opposed to an elite control
+    {
+        //=====TEMPORARY PAD NUMBER REVERSAL======
+        pad = Layouts::padArrangementLayout[pad];
+        
+        //At the point the 'value' value is expected to be between 0 and MAX_PRESSURE.
+        //In the older version this was scaled in the serial input class.
+        //This range is also scaled in the Pad.cpp class for emulating pad presses.
+        
+        //if the incoming data is too fast for asyncUpdater to handle and has caused a pending update,
+        //and the stored pad value of the pending update is 0, force a GUI update.
+        //This will occasionally be needed to reset a pad's GUI back to 'off' when mutiple pads
+        //are simultaneously being pressed.
+        if (isUpdatePending() == true && pendingUpdatePadValue == 0) 
+        {
+            const MessageManagerLock mmLock; //lock event thread so it is safe to make calls in the message thread
+            guiUpdateFlag = 0;
+            handleUpdateNowIfNeeded(); //force GUI to be updated now
+        }
+        
+        recievedPad = pad;
+        recievedValue = value;
+        
+        
+        //determine pressure mapping/sensitivity
+        if (PAD_SETTINGS->getPressureCurve() == 1)
         {
             //non-sensitive - exponential mapping of pressure
             recievedValue = exp((float)recievedValue/MAX_PRESSURE)-1;
@@ -233,74 +236,71 @@ void AlphaLiveEngine::inputData(int pad, int value)
             if (recievedValue > 0 && recievedValue < 1) //value 1 = 0.6, which is rounded to 0
                 recievedValue = 1;
         }
-    else if (PAD_SETTINGS->getPressureCurve() == 3)
-    {
-        //sensitive - logarithmic mapping of pressure
-        recievedValue = log(recievedValue+1);
-        recievedValue = recievedValue * (MAX_PRESSURE/6.23832);
-        if (recievedValue > MAX_PRESSURE)
-            recievedValue = MAX_PRESSURE;
+        else if (PAD_SETTINGS->getPressureCurve() == 3)
+        {
+            //sensitive - logarithmic mapping of pressure
+            recievedValue = log(recievedValue+1);
+            recievedValue = recievedValue * (MAX_PRESSURE/6.23832);
+            if (recievedValue > MAX_PRESSURE)
+                recievedValue = MAX_PRESSURE;
+        }
+        //else, pressureCurve == 2 which is a linear mapping of pressure
+        
+        
+        //==========================================================================
+        //route message to midi mode
+        if (PAD_SETTINGS->getMode() == 1) //if the pressed pad is set to Midi mode
+        {
+            modeMidi->convertToMidi(recievedPad, recievedValue);
+        }
+        //==========================================================================
+        
+        //route message to sampler mode
+        if (PAD_SETTINGS->getMode() == 2) //if the pressed pad is set to Sampler mode
+        {
+            modeSampler->getOscData(recievedPad, recievedValue);
+        }
+        //==========================================================================
+        
+        //route message to sequencer mode
+        if (PAD_SETTINGS->getMode() == 3) //if the pressed pad is set to Sequencer mode
+        {
+            modeSequencer->getOscData(recievedPad, recievedValue);
+        }
+        //==========================================================================
+        
+        //route message to controller mode
+        if (PAD_SETTINGS->getMode() == 4) //if the pressed pad is set to Controller mode
+        {
+            modeController->getOscData(recievedPad, recievedValue);
+        }
+        //==========================================================================
+        
+        
+        //update GUI asyncronously
+        guiUpdateFlag = 0;
+        triggerAsyncUpdate();
+        
+        //store the pad pressure value 
+        if (isUpdatePending() == true)
+            pendingUpdatePadValue = recievedValue;
+        
+        
+        //=========================================================================
+        //OSC OUTPUT MODE STUFF
+        
+        //scale the range back down to 0-127
+        int recievedValue2 = recievedValue * (127.0/MAX_PRESSURE);
+        
+        if (isDualOutputMode == true)
+        {
+            oscOutput.transmitThruMessage(recievedPad+1, recievedValue2, oscIpAddress, oscPortNumber);
+        }
     }
-    
-    //else, pressureCurve == 2 which is a linear mapping of pressure
-
-    
-    //==========================================================================
-    //route message to midi mode
-    if (PAD_SETTINGS->getMode() == 1) //if the pressed pad is set to Midi mode
+    else 
     {
-        modeMidi->convertToMidi(recievedPad, recievedValue);
+        //an elite control has been pressed. Do your thang!
     }
-    //==========================================================================
-    
-    //route message to sampler mode
-    if (PAD_SETTINGS->getMode() == 2) //if the pressed pad is set to Sampler mode
-    {
-        modeSampler->getOscData(recievedPad, recievedValue);
-    }
-    //==========================================================================
-    
-    //route message to sequencer mode
-    if (PAD_SETTINGS->getMode() == 3) //if the pressed pad is set to Sequencer mode
-    {
-        modeSequencer->getOscData(recievedPad, recievedValue);
-    }
-    //==========================================================================
-    
-    //route message to controller mode
-    if (PAD_SETTINGS->getMode() == 4) //if the pressed pad is set to Controller mode
-    {
-        modeController->getOscData(recievedPad, recievedValue);
-    }
-    //==========================================================================
-
-    
-    //update GUI asyncronously
-    guiUpdateFlag = 0;
-    triggerAsyncUpdate();
-    
-    //store the pad pressure value 
-    if (isUpdatePending() == true)
-        pendingUpdatePadValue = recievedValue;
-    
-    
-    //=========================================================================
-    //OSC OUTPUT MODE STUFF
-    
-    //scale the range back down to 0-127
-    int recievedValue2 = recievedValue * (127.0/MAX_PRESSURE);
-    
-    if (isDualOutputMode == true)
-    {
-        oscOutput.transmitThruMessage(recievedPad+1, recievedValue2, oscIpAddress, oscPortNumber);
-    }
-    
-}
-
-void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
-{
-    //std::cout << "recieved data!\n";
-    
 }
 
 void AlphaLiveEngine::handleExclusiveMode (int padNum)

@@ -135,10 +135,25 @@ void HidComms::run()
                 printf("%02hhx ", buf[i]);
             printf("\n");
             
-            //encode the recieved report here based on the report ID,
-            //and pass in the correct values to hidInputCallback()
+            //encode the recieved report here based on the report ID
             
-            hidInputCallback(0, 0, 0);
+            if (buf[0] == 0x01) //pad data report
+            {
+              hidInputCallback(buf[1], buf[2]/* + buf[3]? */, buf[4]);  
+            }
+            else if (buf[0] == 0x02) //elite button report
+            {
+                //set 'pad' value to be 102-105 to represent the elite buttons
+                hidInputCallback(buf[1]+102, buf[2], 0);
+            }
+            else if (buf[0] == 0x03) //elite dial
+            {
+                //set 'pad' value to be 100-101 to represent the elite dials
+                hidInputCallback(buf[1]+100, buf[2], 0);
+            }
+            
+            memset(buf,0,sizeof(buf));
+            
         }
         
         //what should the following sleep value be

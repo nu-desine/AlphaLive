@@ -33,7 +33,7 @@
 //======================================================================================================
 
 
-#if OS_MAC || OS_LINUX
+#if OS_MAC
 
 /* See Apple Technical Note TN2187 for details on IOHidManager. */
 
@@ -1197,18 +1197,21 @@ typedef LONG NTSTATUS;
 #define _wcsdup wcsdup
 #endif
 
-//#define HIDAPI_USE_DDK
+//use the WDK
+#define HIDAPI_USE_DDK //uncommented by Liam Lacey
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 #include <setupapi.h>
-	//Link with Setupapi.lib
-#pragma comment (lib, "setupapi.lib")
+//Link with Setupapi.lib
+#pragma comment (lib, "setupapi.lib") //added by Liam Lacey
     
 #include <winioctl.h>
 #ifdef HIDAPI_USE_DDK
-#include <hidsdi.h>
+	#include <api/hidsdi.h> //modified by Liam Lacey
+	//Link with hid.lib
+	#pragma comment (lib, "hid.lib") //added by Liam Lacey
 #endif
     
 	// Copied from inc/ddk/hidclass.h, part of the Windows DDK.

@@ -232,7 +232,6 @@
 		0C52F2B215D6BF4D00E76547 /* GuiGlobalPadSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiGlobalPadSettings.cpp; sourceTree = "<group>"; };
 		0C52F2B315D6BF4E00E76547 /* GuiGlobalPadSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiGlobalPadSettings.h; sourceTree = "<group>"; };
 		0C669E7C15E6974B003B83C1 /* CommonInfoBoxText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonInfoBoxText.h; sourceTree = "<group>"; };
-		0C68958415D123AA00848D62 /* ger_trans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ger_trans; sourceTree = "<group>"; };
 		0C78A2AC15B467900049C0C8 /* AbstractSubjectAndObserver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractSubjectAndObserver.cpp; sourceTree = "<group>"; };
 		0C78A2AD15B467900049C0C8 /* AbstractSubjectAndObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractSubjectAndObserver.h; sourceTree = "<group>"; };
 		0C78A2AE15B467900049C0C8 /* CommandIDs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandIDs.h; sourceTree = "<group>"; };
@@ -453,7 +452,6 @@
 		0CA0A4F915B97E8C001362B3 /* TriggerModes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriggerModes.h; sourceTree = "<group>"; };
 		0CA92FACC9C857515F5DC895 /* juce_Colours.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Colours.h; path = ../../JuceLibraryCode/modules/juce_graphics/colour/juce_Colours.h; sourceTree = SOURCE_ROOT; };
 		0CABB5C615E267EF00F27184 /* FirmwareStruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirmwareStruct.h; sourceTree = "<group>"; };
-		0CE4BE3A15D056EE00B444EE /* jap_trans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = jap_trans; sourceTree = "<group>"; };
 		0CFEF742164BEA7C00B1DF17 /* HidComms.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HidComms.cpp; sourceTree = "<group>"; };
 		0CFEF743164BEA7C00B1DF17 /* HidComms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HidComms.h; sourceTree = "<group>"; };
 		0CFEF746164BF1C700B1DF17 /* hid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = hid.c; path = HIDAPI/hid.c; sourceTree = "<group>"; };
@@ -1925,16 +1923,6 @@
 			path = Toolbox;
 			sourceTree = "<group>";
 		};
-		0CE4BE3915D056EE00B444EE /* Translation files */ = {
-			isa = PBXGroup;
-			children = (
-				0CE4BE3A15D056EE00B444EE /* jap_trans */,
-				0C68958415D123AA00848D62 /* ger_trans */,
-			);
-			name = "Translation files";
-			path = "../../Translation files";
-			sourceTree = "<group>";
-		};
 		0CFEF745164BF1B400B1DF17 /* HIDAPI */ = {
 			isa = PBXGroup;
 			children = (
@@ -3061,7 +3049,6 @@
 				1AC53D384541E9928C012897 /* Juce Modules */,
 				DCA3EA8A1A8E8E9060589C1E /* Juce Library Code */,
 				0C9950CA15E902C30060688B /* Other Files */,
-				0CE4BE3915D056EE00B444EE /* Translation files */,
 				90004462C48C6E13E0AFD50B /* Resources */,
 				81B322E1A4AEBC13016E085C /* Frameworks */,
 				3D0502C56FF54B447448721B /* Products */,

@@ -161,7 +161,7 @@ void HidComms::run()
         
         //what should the following sleep value be
         #ifdef WIN32
-        sleep(5);
+        sleep(5); //should this actually be Sleep() which need a windows library defined? See hidtest.
         #else
         usleep(5*1000);
         #endif
@@ -179,7 +179,7 @@ void HidComms::sendHidControlReport (unsigned char bytesToSend[])
         printf("%02hhx ", bytesToSend[2]);
         printf("%02hhx ", bytesToSend[3]);
         printf("\n");
-        hid_write(handle, bytesToSend, sizeof(bytesToSend));
+        std::cout << hid_write(handle, bytesToSend, sizeof(bytesToSend)) << std::endl;
     }
 }
 

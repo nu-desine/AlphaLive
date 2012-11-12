@@ -1230,7 +1230,7 @@ void MainComponent::setLocalisation()
     
     if (countryCode == "de" || countryCode == "deu") //german
     {
-        File transFile(appDir + "Application Data/ger_trans");
+        File transFile(appDir + "Application Data/de_trans");
         trans = new LocalisedStrings (transFile);
         LocalisedStrings::setCurrentMappings(trans);
         
@@ -1238,7 +1238,7 @@ void MainComponent::setLocalisation()
     }
     else if (countryCode == "ja" || countryCode == "jpn") //japanese
     {
-        File transFile (appDir + "Application Data/jap_trans");
+        File transFile (appDir + "Application Data/ja_trans");
         trans = new LocalisedStrings (transFile);
         LocalisedStrings::setCurrentMappings(trans);
         alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));

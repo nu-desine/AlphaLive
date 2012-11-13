@@ -169,7 +169,7 @@ void HidComms::run()
 }
 
 //should i be passing in a pointer here instead of an array?
-void HidComms::sendHidControlReport (unsigned char bytesToSend[])
+void HidComms::sendHidControlReport (uint8 *bytesToSend)
 {
     if (handle)
     {
@@ -178,8 +178,9 @@ void HidComms::sendHidControlReport (unsigned char bytesToSend[])
         printf("%02hhx ", bytesToSend[1]);
         printf("%02hhx ", bytesToSend[2]);
         printf("%02hhx ", bytesToSend[3]);
+        printf("%02hhx ", bytesToSend[4]);
         printf("\n");
-        std::cout << hid_write(handle, bytesToSend, sizeof(bytesToSend)) << std::endl;
+        std::cout << hid_write(handle, bytesToSend, sizeof(bytesToSend)+1) << std::endl;
     }
 }
 

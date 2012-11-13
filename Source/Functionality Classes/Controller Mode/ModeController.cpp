@@ -114,7 +114,7 @@ void ModeController::sendMidiMessage(MidiMessage midiMessage)
 {
     if (alphaLiveEngineRef.hasOpenedHidDevice() == true)
     {
-        unsigned char dataToSend[4];
+        uint8 *dataToSend;
         memset(dataToSend,0,sizeof(dataToSend));
         
         uint8 *rawMidiMessage = midiMessage.getRawData();
@@ -125,10 +125,12 @@ void ModeController::sendMidiMessage(MidiMessage midiMessage)
         //printf("%02hhx ", rawMidiMessage[2]);
         //printf("\n");
         
-        dataToSend[0] = MIDI_OUT_REPORT_ID;
-        dataToSend[1] = rawMidiMessage[0]; //midi status byte
-        dataToSend[2] = rawMidiMessage[1]; //midi data byte 1
-        dataToSend[3] = rawMidiMessage[2]; //midi data byte 2
+        dataToSend[0] = 0x00;   //if no reportID's are defined in the descriptor,
+                                //must send 0x00. First byte MUST be the report ID.
+        dataToSend[1] = MIDI_OUT_REPORT_ID;
+        dataToSend[2] = rawMidiMessage[0]; //midi status byte
+        dataToSend[3] = rawMidiMessage[1]; //midi data byte 1
+        dataToSend[4] = rawMidiMessage[2]; //midi data byte 2
         
         alphaLiveEngineRef.sendHidControlReport(dataToSend);
     }

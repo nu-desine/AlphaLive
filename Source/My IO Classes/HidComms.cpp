@@ -42,8 +42,8 @@ HidComms::HidComms() : Thread("HidThread")
     
     // Open the device using the VID, PID,
     // and optionally the Serial number.
-    handle = hid_open(0x3eb, 0x204f, NULL); // << LUFA demo HID device
-    //handle = hid_open(0x1d50, 0x6021, NULL); // << AlphaSphere HID device
+    //handle = hid_open(0x3eb, 0x204f, NULL); // << LUFA demo HID device
+    handle = hid_open(0x1d50, 0x6021, NULL); // << AlphaSphere HID device
     //handle = hid_open(0x1d50, 0x6041, NULL); // << AlphaSphere bootloader HID device 
     
     if (!handle) 

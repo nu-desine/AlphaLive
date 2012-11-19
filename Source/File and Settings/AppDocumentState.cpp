@@ -738,10 +738,12 @@ void AppDocumentState::saveToScene (int sceneNumber)
     //==========elite dials=============
     for (int i = 0; i < 2; i++)
     {
+        globalData->setAttribute("eliteDialPrevValue" + String(i), AppSettings::Instance()->getEliteDialPrevValue(i));
         globalData->setAttribute("eliteDialControl" + String(i), AppSettings::Instance()->getEliteDialControl(i));
         
         if (AppSettings::Instance()->getEliteDialControl(i) == 4) //midi cc
         {
+            globalData->setAttribute("eliteDialMidiControllerType" + String(i), AppSettings::Instance()->getEliteDialMidiControllerType(i));
             globalData->setAttribute("eliteDialMidiCcNumber" + String(i), AppSettings::Instance()->getEliteDialMidiCcNumber(i));
             globalData->setAttribute("eliteDialMidiChannel" + String(i), AppSettings::Instance()->getEliteDialMidiChannel(i));
             globalData->setAttribute("eliteDialMidiMinRange" + String(i), AppSettings::Instance()->getEliteDialMidiMinRange(i));
@@ -826,10 +828,12 @@ void AppDocumentState::loadFromScene (int sceneNumber)
         //==========elite dials=============
         for (int i = 0; i < 2; i++)
         {
+            AppSettings::Instance()->setEliteDialPrevValue(globalData->getDoubleAttribute("eliteDialPrevValue" + String(i)), i);
             AppSettings::Instance()->setEliteDialControl(globalData->getIntAttribute("eliteDialControl" + String(i)), i);
             
             if (AppSettings::Instance()->getEliteDialControl(i) == 4) //midi cc
             {
+                AppSettings::Instance()->setEliteDialMidiControllerType(globalData->getIntAttribute("eliteDialMidiControllerType" + String(i)), i);
                 AppSettings::Instance()->setEliteDialMidiCcNumber(globalData->getIntAttribute("eliteDialMidiCcNumber" + String(i)), i);
                 AppSettings::Instance()->setEliteDialMidiChannel(globalData->getIntAttribute("eliteDialMidiChannel" + String(i)), i);
                 AppSettings::Instance()->setEliteDialMidiMinRange(globalData->getIntAttribute("eliteDialMidiMinRange" + String(i)), i);

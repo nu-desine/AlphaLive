@@ -63,6 +63,8 @@ AppSettings::AppSettings()
     
     for (int i = 0; i < 2; i++)
     {
+        eliteDial[i].prevValue = 0.0;
+        eliteDial[i].midiControllerType = 0;
         eliteDial[i].midiCcNumber = 12;
         eliteDial[i].midiChannel = 1;
         eliteDial[i].midiMinRange = 0;
@@ -136,6 +138,8 @@ void AppSettings::resetData()
     eliteButton[2].control = 3;
     for (int i = 0; i < 2; i++)
     {
+        eliteDial[i].prevValue = 0.0;
+        eliteDial[i].midiControllerType = 0;
         eliteDial[i].midiCcNumber = 12;
         eliteDial[i].midiChannel = 1;
         eliteDial[i].midiMinRange = 0;
@@ -305,11 +309,19 @@ bool AppSettings::getCopyExternalFiles()
 
 
 //Elite controls stuff
+void AppSettings::setEliteDialPrevValue(double value, int dialNumber)
+{
+    eliteDial[dialNumber].prevValue = value;
+}
 void AppSettings::setEliteDialControl(int value, int dialNumber)
 {
     eliteDial[dialNumber].control = value;
 }
 
+void AppSettings::setEliteDialMidiControllerType(int value, int dialNumber)
+{
+    eliteDial[dialNumber].midiControllerType = value;
+}
 void AppSettings::setEliteDialMidiCcNumber(int value, int dialNumber)
 {
     eliteDial[dialNumber].midiCcNumber = value;
@@ -344,11 +356,19 @@ void AppSettings::setEliteDialOscMaxRange(double value, int dialNumber)
 }
 
 
+double AppSettings::getEliteDialPrevValue (int dialNumber)
+{
+    return eliteDial[dialNumber].prevValue;
+}
 int AppSettings::getEliteDialControl (int dialNumber)
 {
     return eliteDial[dialNumber].control;
 }
 
+int AppSettings::getEliteDialMidiControllerType(int dialNumber)
+{
+    return eliteDial[dialNumber].midiControllerType;
+}
 int AppSettings::getEliteDialMidiCcNumber(int dialNumber)
 {
     return eliteDial[dialNumber].midiCcNumber;

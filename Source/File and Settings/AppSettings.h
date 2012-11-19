@@ -27,8 +27,10 @@
 
 struct EliteDialData 
 {
+    double prevValue;
     int control;
     
+    int midiControllerType; //0 = absolute, 1 = relative
     int midiCcNumber;
     int midiChannel;
     int midiMinRange;
@@ -126,7 +128,9 @@ public:
     bool getCopyExternalFiles();
     
     //Elite Controls Stuff
+    void setEliteDialPrevValue(double value, int dialNumber);
     void setEliteDialControl(int value, int dialNumber);
+    void setEliteDialMidiControllerType(int value, int dialNumber);
     void setEliteDialMidiCcNumber(int value, int dialNumber);
     void setEliteDialMidiChannel(int value, int dialNumber);
     void setEliteDialMidiMinRange(int value, int dialNumber);
@@ -136,7 +140,9 @@ public:
     void setEliteDialOscMinRange(double value, int dialNumber);
     void setEliteDialOscMaxRange(double value, int dialNumber);
     
+    double getEliteDialPrevValue(int dialNumber);
     int getEliteDialControl(int dialNumber);
+    int getEliteDialMidiControllerType(int dialNumber);
     int getEliteDialMidiCcNumber(int dialNumber);
     int getEliteDialMidiChannel(int dialNumber);
     int getEliteDialMidiMinRange(int dialNumber);

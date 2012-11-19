@@ -90,7 +90,7 @@ AudioFilePlayer* ModeSampler::getAudioFilePlayerInstance (int padNumber)
 
 //this function is called in AlphaLiveEngine whenever an OSC message is recieved
 //who's pad is set to Sampler mode
-void ModeSampler::getOscData(int padNumber, int padValue)
+void ModeSampler::getInputData(int padNumber, int padValue)
 {
     
     //process the audio file

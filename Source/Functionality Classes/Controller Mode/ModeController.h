@@ -40,7 +40,7 @@ public:
     void setMidiOutputDevice (MidiOutput &midiOutput);
     void sendMidiMessage(MidiMessage midiMessage);
     
-    void getOscData(int pad, int value);
+    void getInputData(int pad, int value);
     
     void changeScene();
     

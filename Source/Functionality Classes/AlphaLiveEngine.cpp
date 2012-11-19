@@ -93,6 +93,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     modeSampler = new ModeSampler(*this);
     modeSequencer = new ModeSequencer(*midiOutputDevice, *this);
     modeController = new ModeController(*midiOutputDevice, *this);
+    eliteControls = new EliteControls(*midiOutputDevice, *this);
     
     //global clock stuff
     globalClock = new GlobalClock(*this);
@@ -138,6 +139,7 @@ AlphaLiveEngine::~AlphaLiveEngine()
     delete modeSampler;
     delete modeSequencer;
     delete modeController;
+    delete eliteControls;
     
     delete globalClock;
 
@@ -251,28 +253,28 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         //route message to midi mode
         if (PAD_SETTINGS->getMode() == 1) //if the pressed pad is set to Midi mode
         {
-            modeMidi->convertToMidi(recievedPad, recievedValue);
+            modeMidi->getInputData(recievedPad, recievedValue);
         }
         //==========================================================================
         
         //route message to sampler mode
         if (PAD_SETTINGS->getMode() == 2) //if the pressed pad is set to Sampler mode
         {
-            modeSampler->getOscData(recievedPad, recievedValue);
+            modeSampler->getInputData(recievedPad, recievedValue);
         }
         //==========================================================================
         
         //route message to sequencer mode
         if (PAD_SETTINGS->getMode() == 3) //if the pressed pad is set to Sequencer mode
         {
-            modeSequencer->getOscData(recievedPad, recievedValue);
+            modeSequencer->getInputData(recievedPad, recievedValue);
         }
         //==========================================================================
         
         //route message to controller mode
         if (PAD_SETTINGS->getMode() == 4) //if the pressed pad is set to Controller mode
         {
-            modeController->getOscData(recievedPad, recievedValue);
+            modeController->getInputData(recievedPad, recievedValue);
         }
         //==========================================================================
         
@@ -300,6 +302,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
     else 
     {
         //an elite control has been pressed. Do your thang!
+        eliteControls->getInputData(pad, value);
     }
 }
 
@@ -616,6 +619,7 @@ void AlphaLiveEngine::setMidiOutputDevice (int deviceIndex)
     modeMidi->setMidiOutputDevice(*midiOutputDevice);
     modeSequencer->setMidiOutputDevice(*midiOutputDevice);
     modeController->setMidiOutputDevice(*midiOutputDevice);
+    eliteControls->setMidiOutputDevice(*midiOutputDevice);
     
     
 }

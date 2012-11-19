@@ -64,7 +64,7 @@ ModeSequencer::~ModeSequencer()
 
 //this function is called in AlphaLiveEngine whenever an OSC message is recieved
 //who's pad is set to Sequencer mode
-void ModeSequencer::getOscData(int padNumber, int padValue)
+void ModeSequencer::getInputData(int padNumber, int padValue)
 {
     //process the sequence
     //should i put this in an if statement to make sure the this index of padSequencer actually exists?

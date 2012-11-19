@@ -35,7 +35,7 @@ public:
     ModeSequencer(MidiOutput &midiOutput, AlphaLiveEngine &ref);
     ~ModeSequencer();
     
-    void getOscData(int padNumber, int padValue);
+    void getInputData(int padNumber, int padValue);
     
     void createSequencePlayer (int padNumber);
     void deleteSequencePlayer (int padNumber);

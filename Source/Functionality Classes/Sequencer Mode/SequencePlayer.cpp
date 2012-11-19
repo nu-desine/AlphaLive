@@ -919,7 +919,7 @@ void SequencePlayer::sendMidiMessage(MidiMessage midiMessage)
         
         dataToSend[0] = 0x00;   //if no reportID's are defined in the descriptor,
         //must send 0x00. First byte MUST be the report ID.
-        dataToSend[1] = MIDI_OUT_REPORT_ID;
+        dataToSend[1] = MIDI_OUT_COMMAND_ID;
         dataToSend[2] = rawMidiMessage[0]; //midi status byte
         dataToSend[3] = rawMidiMessage[1]; //midi data byte 1
         dataToSend[4] = rawMidiMessage[2]; //midi data byte 2

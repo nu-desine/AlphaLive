@@ -41,7 +41,7 @@ public:
     void createAudioFilePlayer (int padNumber);
     void deleteAudioFilePlayer (int padNumber);
     
-    void getOscData(int padNumber, int padValue);
+    void getInputData(int padNumber, int padValue);
     
     //used by PadSettings to access the AudioFilePlayer instances
     AudioFilePlayer* getAudioFilePlayerInstance (int padNumber);

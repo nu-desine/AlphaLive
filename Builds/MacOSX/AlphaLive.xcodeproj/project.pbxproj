@@ -114,6 +114,7 @@
 		0C78A43115B467910049C0C8 /* OscReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A3BD15B467910049C0C8 /* OscReceivedElements.cpp */; };
 		0C78A43215B467910049C0C8 /* OscTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A3BF15B467910049C0C8 /* OscTypes.cpp */; };
 		0C85C32515E526140043797E /* SettingsButtonImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C85C32315E526140043797E /* SettingsButtonImage.cpp */; };
+		0C8AA2A9165A5ADA00546CED /* EliteControls.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C8AA2A7165A5ADA00546CED /* EliteControls.cpp */; };
 		0C8BD8C216075E2F003A1057 /* EliteControlsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C8BD8C016075E2F003A1057 /* EliteControlsComponent.cpp */; };
 		0C8BD8C616077158003A1057 /* GuiEliteControlsSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C8BD8C416077158003A1057 /* GuiEliteControlsSettings.cpp */; };
 		0C9950CC15E902C30060688B /* scales.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0C9950CB15E902C30060688B /* scales.xml */; };
@@ -437,6 +438,8 @@
 		0C78A3C015B467910049C0C8 /* OscTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscTypes.h; sourceTree = "<group>"; };
 		0C85C32315E526140043797E /* SettingsButtonImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SettingsButtonImage.cpp; sourceTree = "<group>"; };
 		0C85C32415E526140043797E /* SettingsButtonImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsButtonImage.h; sourceTree = "<group>"; };
+		0C8AA2A7165A5ADA00546CED /* EliteControls.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EliteControls.cpp; sourceTree = "<group>"; };
+		0C8AA2A8165A5ADA00546CED /* EliteControls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EliteControls.h; sourceTree = "<group>"; };
 		0C8BD8C016075E2F003A1057 /* EliteControlsComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EliteControlsComponent.cpp; sourceTree = "<group>"; };
 		0C8BD8C116075E2F003A1057 /* EliteControlsComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EliteControlsComponent.h; sourceTree = "<group>"; };
 		0C8BD8C416077158003A1057 /* GuiEliteControlsSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiEliteControlsSettings.cpp; sourceTree = "<group>"; };
@@ -1473,6 +1476,8 @@
 				0C78A2DE15B467900049C0C8 /* AlphaLiveEngine.cpp */,
 				0C78A2DA15B467900049C0C8 /* GlobalClock.h */,
 				0C78A2D915B467900049C0C8 /* GlobalClock.cpp */,
+				0C8AA2A8165A5ADA00546CED /* EliteControls.h */,
+				0C8AA2A7165A5ADA00546CED /* EliteControls.cpp */,
 				0C78A2DB15B467900049C0C8 /* MIDI Mode */,
 				0C78A2E415B467900049C0C8 /* Sampler Mode */,
 				0C78A2E915B467900049C0C8 /* Sequencer Mode */,
@@ -3675,6 +3680,7 @@
 				FC1622BF161B23B0004FE9E3 /* FxGuiBitcrusher.cpp in Sources */,
 				0CFEF744164BEA7C00B1DF17 /* HidComms.cpp in Sources */,
 				0CFEF748164BF1C700B1DF17 /* hid.c in Sources */,
+				0C8AA2A9165A5ADA00546CED /* EliteControls.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

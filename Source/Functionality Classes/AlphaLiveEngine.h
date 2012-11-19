@@ -82,6 +82,7 @@
 #include "../My IO Classes/OscOutput.h"
 #include "GlobalClock.h"
 #include "../Audio Processing/PanControl.h"
+#include "EliteControls.h"
 
 class AlphaLiveEngine :     public Subject, //so this class can notify observers
                             public AudioIODeviceCallback, //so this class handles the audio output
@@ -149,6 +150,7 @@ private:
     ModeSampler *modeSampler;
     ModeSequencer *modeSequencer;
     ModeController *modeController;
+    EliteControls *eliteControls;
     
     int recievedPad;
     float recievedValue;

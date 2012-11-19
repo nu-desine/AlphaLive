@@ -35,7 +35,7 @@ public:
     ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref);
     ~ModeMidi();
     
-    void convertToMidi(int padNumber, int padValue);
+    void getInputData(int padNumber, int padValue);
     void sendMidiMessage(MidiMessage midiMessage);
     
     void noteOn (int padNumber);

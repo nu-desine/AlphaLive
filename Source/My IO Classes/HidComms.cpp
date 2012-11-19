@@ -145,6 +145,10 @@ void HidComms::run()
                 
                 hidInputCallback(buf[1], pressure, buf[4]);  
             }
+            
+            //The elite dials and buttons could probably use a the same
+            //command ID now we're not using such a specific report descriptor.
+            
             else if (buf[0] == 0x02) //elite button report
             {
                 //set 'pad' value to be 102-105 to represent the elite buttons

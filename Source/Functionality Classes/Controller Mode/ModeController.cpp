@@ -65,7 +65,7 @@ void ModeController::getInputData(int pad, int value)
         //scale the range back down to 0-127
         padValue = padValue * (127.0/MAX_PRESSURE);
         
-        oscOutput.transmitThruMessage(padNumber+1, padValue, PAD_SETTINGS->getControllerOscIpAddress(), PAD_SETTINGS->getControllerOscPort());
+        oscOutput.transmitOutputMessage(padNumber+1, padValue, PAD_SETTINGS->getControllerOscIpAddress(), PAD_SETTINGS->getControllerOscPort());
     }
     
     else if (PAD_SETTINGS->getControllerControl() == 2) //MIDI program change

@@ -35,7 +35,7 @@ OscOutput::~OscOutput()
 }
 
 //what stuff within here could become member variables?
-void OscOutput::transmitThruMessage(int padNumber, int padValue, String address, int port)
+void OscOutput::transmitOutputMessage(int padNumber, int padValue, String address, int port)
 {
     const char* ipAddress = address.toUTF8();
 

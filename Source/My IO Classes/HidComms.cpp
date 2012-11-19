@@ -151,7 +151,7 @@ void HidComms::run()
             
             else if (buf[0] == 0x02) //elite button report
             {
-                //set 'pad' value to be 102-105 to represent the elite buttons
+                //set 'pad' value to be 102-104 to represent the elite buttons
                 hidInputCallback(buf[1]+102, buf[2], 0);
             }
             else if (buf[0] == 0x03) //elite dial

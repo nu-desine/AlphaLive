@@ -27,6 +27,7 @@
 #include "../My IO Classes/OscOutput.h"
 
 class AlphaLiveEngine;
+class AppSettings;
 
 class EliteControls
 {
@@ -40,7 +41,7 @@ public:
     void getInputData(int control, int value);
     
 private:
-    int eliteControlNumber;
+    int eliteDialNumber, eliteButtonNumber;
     int eliteControlValue;
     
     OscOutput oscOutput;

@@ -37,6 +37,115 @@ EliteControls::~EliteControls()
 
 void EliteControls::getInputData(int control, int value)
 {
+    //here, control values of 100-101 are for the dials,
+    //and control values of 102-104 are for the buttons.
+    //However, within AppSettings the dial data is in an array of 0-1
+    //and the button data is in an array of 0-2.
+    
+    eliteControlValue = value;
+    
+    //dials
+    if (control == 100 || control == 101)
+    {
+        eliteDialNumber = control - 100;
+        int controlType = AppSettings::Instance()->getEliteDialControl(eliteDialNumber);
+        
+        //global gain
+        if (controlType == 1)
+        {
+            
+        }
+        
+        //global pan
+        else if (controlType == 2)
+        {
+            
+        }
+        
+        //scene switcher
+        else if (controlType == 3)
+        {
+            
+        }
+        
+        //MIDI CC
+        else if (controlType == 4)
+        {
+            
+        }
+        
+        //OSC
+        else if (controlType == 5)
+        {
+            
+        }
+            
+    }
+    
+    //buttons
+    else if (control >= 102 && control <= 104)
+    {
+        eliteButtonNumber = control - 102;
+        int controlType = AppSettings::Instance()->getEliteButtonControl(eliteButtonNumber);
+        
+        //start/stop clock
+        if (controlType == 1)
+        {
+            if (eliteControlValue == 1)
+            {
+                alphaLiveEngineRef.sendEliteControlCommand(2);
+            }
+        }
+        
+        //scene switcher
+        else if (controlType == 2)
+        {
+            //how should i do this? similar to how modeController does it?
+        }
+        
+        //save
+        else if (controlType == 3)
+        {
+            if (eliteControlValue == 1)
+            {
+                alphaLiveEngineRef.sendEliteControlCommand(3);
+            }
+        }
+        
+        //MIDI CC
+        else if (controlType == 4)
+        {
+            MidiMessage message;
+            int channel = AppSettings::Instance()->getEliteButtonMidiChannel(eliteButtonNumber);
+            int controllerNumber = AppSettings::Instance()->getEliteButtonMidiCcNumber(eliteButtonNumber);
+            int ccValue = 0;
+            
+            if (eliteControlValue == 0)
+                ccValue = AppSettings::Instance()->getEliteButtonMidiOffNumber(eliteButtonNumber);
+            else if (eliteControlValue == 1)
+                ccValue = AppSettings::Instance()->getEliteButtonMidiOnNumber(eliteButtonNumber);
+            
+            message = MidiMessage::controllerEvent(channel, controllerNumber, ccValue);
+            sendMidiMessage(message);
+            
+        }
+        
+        //OSC
+        else if (controlType == 5)
+        {
+            String ipAddress = AppSettings::Instance()->getEliteButtonOscIpAddress(eliteButtonNumber);
+            int portNumber = AppSettings::Instance()->getEliteButtonOscPortNumber(eliteButtonNumber);
+            int oscValue = 0;
+            
+            if (eliteControlValue == 0)
+                oscValue = AppSettings::Instance()->getEliteButtonOscOffNumber(eliteButtonNumber);
+            else if (eliteControlValue == 1)
+                oscValue = AppSettings::Instance()->getEliteButtonOscOnNumber(eliteButtonNumber);
+            
+            
+            oscOutput.transmitOutputMessage(control+1, oscValue, ipAddress, portNumber);
+        }
+    }
     
 }
 

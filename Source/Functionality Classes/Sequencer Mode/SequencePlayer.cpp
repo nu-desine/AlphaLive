@@ -907,8 +907,7 @@ void SequencePlayer::sendMidiMessage(MidiMessage midiMessage)
 {
     if (modeSequencerRef.getAlphaLiveEngineRef().hasOpenedHidDevice() == true)
     {
-        uint8 *dataToSend;
-        memset(dataToSend,0,sizeof(dataToSend));
+        unsigned char dataToSend[5];
         
         uint8 *rawMidiMessage = midiMessage.getRawData();
         

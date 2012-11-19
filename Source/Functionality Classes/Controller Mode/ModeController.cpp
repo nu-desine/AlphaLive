@@ -114,8 +114,7 @@ void ModeController::sendMidiMessage(MidiMessage midiMessage)
 {
     if (alphaLiveEngineRef.hasOpenedHidDevice() == true)
     {
-        uint8 *dataToSend;
-        memset(dataToSend,0,sizeof(dataToSend));
+        unsigned char dataToSend[5];
         
         uint8 *rawMidiMessage = midiMessage.getRawData();
         

@@ -48,6 +48,10 @@ private:
     
     bool hasOpenedDevice;
     
+    CriticalSection sharedMemory;
+    
+    unsigned char dataToSend[5];
+    bool sendOutputReport;
 };
 
 

@@ -23,6 +23,7 @@
 
 HidComms::HidComms() : Thread("HidThread")
 {
+    sendOutputReport = false;
     struct hid_device_info *devs, *cur_dev;
     
     devs = hid_enumerate(0x0, 0x0);
@@ -95,7 +96,7 @@ HidComms::HidComms() : Thread("HidThread")
         
         
         
-        // Set the hid_read() function to be blocking.
+        // Set the hid_read() function to be non-blocking.
         hid_set_nonblocking(handle, 1);
         
         memset(buf,0,sizeof(buf));
@@ -131,11 +132,11 @@ void HidComms::run()
             printf("Unable to read()\n");
         if (res > 0)
         {
-            for (int i = 0; i < res; i++)
-                printf("%02hhx ", buf[i]);
-            printf("\n");
+//            for (int i = 0; i < res; i++)
+//                printf("%02hhx ", buf[i]);
+//            printf("\n");
             
-            //encode the recieved report here based on the report ID
+            //encode the recieved command byte here based on the report ID
             
             if (buf[0] == 0x01) //pad data report
             {
@@ -155,9 +156,32 @@ void HidComms::run()
                 hidInputCallback(buf[1]+100, buf[2], 0);
             }
             
+            else if (buf[0] == 0x07) //test
+            {
+                for (int i = 0; i < res; i++)
+                    printf("%02hhx ", buf[i]);
+                printf("\n");
+            }
+            
             memset(buf,0,sizeof(buf));
             
         }
+        
+        
+//        if (handle && sendOutputReport == true)
+//        {
+//            std::cout << "writing to device: ";
+//            printf("%02hhx ", dataToSend[0]);
+//            printf("%02hhx ", dataToSend[1]);
+//            printf("%02hhx ", dataToSend[2]);
+//            printf("%02hhx ", dataToSend[3]);
+//            printf("%02hhx ", dataToSend[4]);
+//            printf("\n");
+//            std::cout << hid_write(handle, dataToSend, 6) << std::endl;
+//            
+//            sendOutputReport = false;
+//            //dataToSend = nullptr;
+//        }
         
         //what should the following sleep value be
         #ifdef WIN32
@@ -171,16 +195,35 @@ void HidComms::run()
 //should i be passing in a pointer here instead of an array?
 void HidComms::sendHidControlReport (uint8 *bytesToSend)
 {
+//    sharedMemory.enter();
+//    dataToSend[0] = bytesToSend[0];
+//    dataToSend[1] = bytesToSend[1];
+//    dataToSend[2] = bytesToSend[2];
+//    dataToSend[3] = bytesToSend[3];
+//    dataToSend[4] = bytesToSend[4];
+//    std::cout << "writing to device: ";
+//    printf("%02hhx ", dataToSend[0]);
+//    printf("%02hhx ", dataToSend[1]);
+//    printf("%02hhx ", dataToSend[2]);
+//    printf("%02hhx ", dataToSend[3]);
+//    printf("%02hhx ", dataToSend[4]);
+//    printf("\n");
+//
+//    //can ++the unit8 here in a for loop to apply values
+//    sendOutputReport = true;
+//    sharedMemory.exit();
+    
+    
     if (handle)
     {
-        std::cout << "writing to device " << std::endl;
+        std::cout << "writing to device: ";
         printf("%02hhx ", bytesToSend[0]);
         printf("%02hhx ", bytesToSend[1]);
         printf("%02hhx ", bytesToSend[2]);
         printf("%02hhx ", bytesToSend[3]);
         printf("%02hhx ", bytesToSend[4]);
         printf("\n");
-        std::cout << hid_write(handle, bytesToSend, sizeof(bytesToSend)+1) << std::endl;
+        std::cout << hid_write(handle, bytesToSend, 6) << std::endl;
     }
 }
 

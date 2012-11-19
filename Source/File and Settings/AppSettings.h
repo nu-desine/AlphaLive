@@ -40,6 +40,7 @@ struct EliteDialData
     String oscIpAddress;
     double oscMinRange;
     double oscMaxRange;
+    double oscStepValue;
     
 };
 
@@ -139,6 +140,7 @@ public:
     void setEliteDialOscIpAddress(String value, int dialNumber);
     void setEliteDialOscMinRange(double value, int dialNumber);
     void setEliteDialOscMaxRange(double value, int dialNumber);
+    void setEliteDialOscStepValue(double value, int dialNumber);
     
     double getEliteDialPrevValue(int dialNumber);
     int getEliteDialControl(int dialNumber);
@@ -151,6 +153,7 @@ public:
     String getEliteDialOscIpAddress(int dialNumber);
     double getEliteDialOscMinRange(int dialNumber);
     double getEliteDialOscMaxRange(int dialNumber);
+    double getEliteDialOscStepValue(int dialNumber);
     
     void setEliteButtonControl(int value, int buttonNumber);
     void setEliteButtonSceneNumber(int value, int buttonNumber);

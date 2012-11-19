@@ -755,6 +755,7 @@ void AppDocumentState::saveToScene (int sceneNumber)
             globalData->setAttribute("eliteDialOscMinRange" + String(i), AppSettings::Instance()->getEliteDialOscMinRange(i));
             globalData->setAttribute("eliteDialOscMaxRange" + String(i), AppSettings::Instance()->getEliteDialOscMaxRange(i));
             globalData->setAttribute("eliteDialOscIpAddress" + String(i), AppSettings::Instance()->getEliteDialOscIpAddress(i));
+            globalData->setAttribute("eliteDialOscStepValue" + String(i), AppSettings::Instance()->getEliteDialOscStepValue(i));
         }
     }
     //==========elite buttons=============
@@ -845,6 +846,7 @@ void AppDocumentState::loadFromScene (int sceneNumber)
                 AppSettings::Instance()->setEliteDialOscMinRange(globalData->getDoubleAttribute("eliteDialOscMinRange" + String(i)), i);
                 AppSettings::Instance()->setEliteDialOscMaxRange(globalData->getDoubleAttribute("eliteDialOscMaxRange" + String(i)), i);
                 AppSettings::Instance()->setEliteDialOscIpAddress(globalData->getStringAttribute("eliteDialOscIpAddress" + String(i)), i);
+                AppSettings::Instance()->setEliteDialOscStepValue(globalData->getDoubleAttribute("eliteDialOscStepValue" + String(i)), i);
             }
         }
         //==========elite buttons=============

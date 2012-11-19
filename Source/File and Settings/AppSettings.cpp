@@ -73,6 +73,7 @@ AppSettings::AppSettings()
         eliteDial[i].oscMinRange = 0;
         eliteDial[i].oscMaxRange = 511;
         eliteDial[i].oscIpAddress = "127.0.0.1";
+        eliteDial[i].oscStepValue = 1.0;
     }
     for (int i = 0; i < 3; i++)
     {
@@ -148,6 +149,7 @@ void AppSettings::resetData()
         eliteDial[i].oscMinRange = 0;
         eliteDial[i].oscMaxRange = 511;
         eliteDial[i].oscIpAddress = "127.0.0.1";
+        eliteDial[i].oscStepValue = 1.0;
     }
     for (int i = 0; i < 3; i++)
     {
@@ -354,6 +356,10 @@ void AppSettings::setEliteDialOscMaxRange(double value, int dialNumber)
 {
     eliteDial[dialNumber].oscMaxRange = value;
 }
+void AppSettings::setEliteDialOscStepValue(double value, int dialNumber)
+{
+    eliteDial[dialNumber].oscStepValue = value;
+}
 
 
 double AppSettings::getEliteDialPrevValue (int dialNumber)
@@ -401,7 +407,10 @@ double AppSettings::getEliteDialOscMaxRange(int dialNumber)
 {
     return eliteDial[dialNumber].oscMaxRange;
 }
-
+double AppSettings::getEliteDialOscStepValue(int dialNumber)
+{
+    return eliteDial[dialNumber].oscStepValue;
+}
 
 void AppSettings::setEliteButtonControl(int value, int buttonNumber)
 {

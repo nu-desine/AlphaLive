@@ -71,16 +71,100 @@ void EliteControls::getInputData(int control, int value)
         //MIDI CC
         else if (controlType == 4)
         {
+            MidiMessage message;
+            int controllerType = AppSettings::Instance()->getEliteDialMidiControllerType(eliteDialNumber);
+            int channel = AppSettings::Instance()->getEliteDialMidiChannel(eliteDialNumber);
+            int controllerNumber = AppSettings::Instance()->getEliteDialMidiCcNumber(eliteDialNumber);
+            int ccValue = 0;
+            
+            //absolute controller type
+            if (controllerType == 0)
+            {
+                int prevValue = AppSettings::Instance()->getEliteDialPrevValue(eliteDialNumber);
+                int minValue = AppSettings::Instance()->getEliteDialMidiMinRange(eliteDialNumber);
+                int maxValue = AppSettings::Instance()->getEliteDialMidiMaxRange(eliteDialNumber);
+                
+                //incremented value
+                if (eliteControlValue >= 1 && eliteControlValue <= 63)
+                    ccValue = prevValue + eliteControlValue;
+                //decremented value
+                else if (eliteControlValue >= 64 && eliteControlValue <= 127)
+                    ccValue = prevValue - (128 - eliteControlValue);
+                
+                //if produced CC value is in range, send the midi message
+                if (ccValue >= minValue && ccValue <= maxValue)
+                {
+                    message = MidiMessage::controllerEvent(channel, controllerNumber, ccValue);
+                    sendMidiMessage(message);
+                }
+                //else, dont send the midi message and set the CC value to the min or max value
+                else
+                {
+                    if (ccValue > maxValue)
+                        ccValue = maxValue;
+                    else if (ccValue < minValue)
+                        ccValue = minValue;
+                }
+                
+            }
+            //relative controller type
+            else if (controllerType == 1)
+            {
+                //min and max value sliders not needed within the gui here. Changed that!
+                ccValue = eliteControlValue;
+                
+                message = MidiMessage::controllerEvent(channel, controllerNumber, ccValue);
+                sendMidiMessage(message);
+            }
             
         }
         
         //OSC
         else if (controlType == 5)
         {
+            //Similar to the absolute controller with the MIDI mode above, however there
+            //is a user-defined incremation/decremation value that is also based on the speed of dial turn.
             
+            String ipAddress = AppSettings::Instance()->getEliteDialOscIpAddress(eliteDialNumber);
+            int portNumber = AppSettings::Instance()->getEliteDialOscPortNumber(eliteDialNumber);
+            double minValue = AppSettings::Instance()->getEliteDialOscMinRange(eliteDialNumber);
+            double maxValue = AppSettings::Instance()->getEliteDialOscMaxRange(eliteDialNumber);
+            double prevValue = AppSettings::Instance()->getEliteDialPrevValue(eliteDialNumber);
+            double oscValue = 0;
+            
+            //incremented value
+            if (eliteControlValue >= 1 && eliteControlValue <= 63)
+            {
+                //incremation value should be prevValue + (oscStepValue * eliteControlValue- maxValue [range of minValue to maxValue])
+                //oscValue = prevValue + eliteControlValue;
+            }
+            //decremented value
+            else if (eliteControlValue >= 64 && eliteControlValue <= 127)
+            {
+                oscValue = prevValue - (128 - eliteControlValue);
+            }
+            
+            //if produced OSC value is in range, send the OSC message
+            if (oscValue >= minValue && oscValue <= maxValue)
+            {
+                oscOutput.transmitOutputMessage(control+1, oscValue, ipAddress, portNumber);
+            }
+            //else, dont send the OSC message and set the OSC value to the min or max value
+            else
+            {
+                if (oscValue > maxValue)
+                    oscValue = maxValue;
+                else if (oscValue < minValue)
+                    oscValue = minValue;
+            }
         }
             
     }
+    
+    
+    
+    
+    
     
     //buttons
     else if (control >= 102 && control <= 104)
@@ -135,7 +219,7 @@ void EliteControls::getInputData(int control, int value)
         {
             String ipAddress = AppSettings::Instance()->getEliteButtonOscIpAddress(eliteButtonNumber);
             int portNumber = AppSettings::Instance()->getEliteButtonOscPortNumber(eliteButtonNumber);
-            int oscValue = 0;
+            double oscValue = 0;
             
             if (eliteControlValue == 0)
                 oscValue = AppSettings::Instance()->getEliteButtonOscOffNumber(eliteButtonNumber);

@@ -33,7 +33,7 @@ class AlphaPopUpImageButton :	public TextButton
 {
 public:
 	
-	AlphaPopUpImageButton();
+	AlphaPopUpImageButton(Image *image);
 	~AlphaPopUpImageButton();
 	
 	void resized();

@@ -23,12 +23,12 @@
 #include "AlphaPopUpImageButton.h"
 #include "../../AlphaLiveLookandFeel.h"
 
-AlphaPopUpImageButton::AlphaPopUpImageButton()
+AlphaPopUpImageButton::AlphaPopUpImageButton(Image *image)
 
 {
 	
 	setClickingTogglesState(false);
-	theImage = new Image();
+	theImage = new Image(*image);
 	
  	
 }
@@ -156,8 +156,8 @@ void AlphaPopUpImageButton::clicked()
 
 void AlphaPopUpImageButton::setImage(Image *_theImage)
 {
-	
-	theImage = _theImage;
+	delete theImage;
+	theImage = new Image(*_theImage);
 	repaint();
 	
 }

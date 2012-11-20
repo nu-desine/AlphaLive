@@ -51,8 +51,8 @@ public:
 private:
     
     MainComponent &mainComponentRef;
-    ScopedPointer <ModeButton> dial1Button, dial2Button;
-	ScopedPointer <AlphaSquareButton> button1Button, button2Button, button3Button;
+    ModeButton *dial1Button, *dial2Button;
+	AlphaSquareButton *button1Button, *button2Button, *button3Button;
 	
 };
 

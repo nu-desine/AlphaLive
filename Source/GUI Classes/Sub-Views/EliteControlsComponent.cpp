@@ -97,7 +97,7 @@ EliteControlsComponent::EliteControlsComponent(MainComponent &ref)
 
 EliteControlsComponent::~EliteControlsComponent()
 {
-
+    deleteAllChildren();
 }
 
 void EliteControlsComponent::resized()

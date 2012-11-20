@@ -62,15 +62,14 @@ class GuiGlobalPadSettings :    public Component,
     Array <int> selectedPads;
     MainComponent &mainComponentRef;
     
-    ScopedPointer <ModeButton> exclusiveModeButton;
-    ScopedPointer <AlphaSlider> exclusiveGroupSlider;
-	ScopedPointer <AlphaRotarySlider> velocitySlider;
-    //ScopedPointer <ComboBox> pressureCurveMenu, velocityCurveMenu;
-	ScopedPointer <AlphaPopUpImageButton> pressureCurveButton, velocityCurveButton;
-    ScopedPointer <ModeButton> quantiseButton;
-	ScopedPointer <Label> parameterHoverLabel;
+    ModeButton *exclusiveModeButton;
+    AlphaSlider *exclusiveGroupSlider;
+    AlphaRotarySlider *velocitySlider;
+	AlphaPopUpImageButton *pressureCurveButton, *velocityCurveButton;
+    ModeButton *quantiseButton;
+	Label *parameterHoverLabel;
 	Image *expoImage, *linearImage, *logImage, *staticImage;
-	ScopedPointer <PopupMenu> pressureCurveMenu, velocityCurveMenu;
+	PopupMenu *pressureCurveMenu, *velocityCurveMenu;
 	
 };
 

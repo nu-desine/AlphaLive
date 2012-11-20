@@ -88,15 +88,13 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
     velocityCurveMenu->addItem(4, translate("Static"));
     
 	
-	addAndMakeVisible(velocityCurveButton = new AlphaPopUpImageButton());
+	addAndMakeVisible(velocityCurveButton = new AlphaPopUpImageButton(linearImage));
     velocityCurveButton->addListener(this);
     velocityCurveButton->addMouseListener(this, true);
-	velocityCurveButton->setImage(linearImage);
 		
-	addAndMakeVisible(pressureCurveButton = new AlphaPopUpImageButton());
+	addAndMakeVisible(pressureCurveButton = new AlphaPopUpImageButton(linearImage));
     pressureCurveButton->addListener(this);
     pressureCurveButton->addMouseListener(this, true);
-	pressureCurveButton->setImage(linearImage);
 	
 	//---------------parameter label -------------------------------------
     addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
@@ -109,7 +107,12 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
 
 GuiGlobalPadSettings::~GuiGlobalPadSettings()
 {
-	
+    delete expoImage;
+    delete linearImage;
+    delete logImage;
+    delete staticImage;
+	delete pressureCurveMenu;
+    delete velocityCurveMenu;
 	deleteAllChildren();
 }
 

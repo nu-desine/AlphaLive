@@ -14,9 +14,32 @@
 #define TWOPI (2.0 * M_PI)
 
 Oscillator::Oscillator (double sampleRate)
-                    :  sampRate(sampleRate)
+:			
+	sampRate(sampleRate),
+	squareBuffer(1, 4000)
 {
+	audioFile = ("/Users/felixgodden/Programming/nu-desine/alphalive 2/Source/SquareCycle.wav");
     currentPhase = 0.0; 
+	currentSample = 0.0;
+	stepSize = 0;
+	squareBuffer.clear();
+	
+	sharedMemory.enter();
+	AudioFormatManager formatManager;
+	
+    formatManager.registerBasicFormats();
+
+    AudioFormatReader *reader = formatManager.createReaderFor(audioFile);
+	
+	std::cout << "In constructor" << formatManager.createReaderFor(audioFile) << std::endl;
+	
+	reader->read(&squareBuffer, 0, reader->lengthInSamples, 0, true, false);
+	
+	numSamples = reader->lengthInSamples;
+	
+	std::cout << "In constructor" << *squareBuffer.getSampleData(0, 777) << std::endl;
+	
+	sharedMemory.exit();
 }
 
 Oscillator::~Oscillator()
@@ -25,9 +48,10 @@ Oscillator::~Oscillator()
 }
 
 double Oscillator::process (double frequency, int waveShape)
-{
-    double output;
-    
+{    
+	sharedMemory.enter();
+	
+	double output;
     switch (waveShape)
     {
         case 1:
@@ -51,16 +75,33 @@ double Oscillator::process (double frequency, int waveShape)
             
     }
     
-    increment = frequency * (TWOPI / sampRate);
-    currentPhase += increment;
-    
-    if (currentPhase >= TWOPI)
-        currentPhase -= TWOPI;
-    if (currentPhase < 0.0)
-        currentPhase += TWOPI;
-    
+	if (waveShape == 1 || waveShape == 3 || waveShape == 4 || waveShape == 5) 
+	{
+		increment = frequency * (TWOPI / sampRate);
+		currentPhase += increment;
+		
+		if (currentPhase >= TWOPI)
+			currentPhase -= TWOPI;
+		if (currentPhase < 0.0)
+			currentPhase += TWOPI;
+	}
+	if (waveShape == 2) 
+	{
+		stepSize = numSamples * (frequency / sampRate);
+		currentSample += stepSize;
+		
+		//std::cout << "In process current sample: " <<  << std::endl;
+		
+		if (currentSample >= numSamples)
+			currentSample -= numSamples;
+		if (currentSample < 0.0)
+			currentSample += numSamples;
+		
+	}
+	
     return output;
     
+	sharedMemory.exit();
     //A digital wave signal is in the range of +1 to -1.
     //To creating an LFO using this class, the ouput must be scaled and offset
     //afterwards into the desired range.
@@ -84,13 +125,12 @@ double Oscillator::processSin()
 
 double Oscillator::processSqr()
 {
-    double output;
-    
-    if (currentPhase <= M_PI)
-        output = 1.0;
-    else
-        output = -1.0;
-    
+	double output;
+	sharedMemory.enter();
+	output = *squareBuffer.getSampleData(0, currentSample);
+    sharedMemory.exit();
+	
+	//std::cout << "In Square current sample:  " << currentSample << "   This is output: " << output << std::endl;
     return output;
 }
 

@@ -91,20 +91,24 @@ void EliteControls::getInputData(int control, int value)
                 else if (eliteControlValue >= 64 && eliteControlValue <= 127)
                     ccValue = prevValue - (128 - eliteControlValue);
                 
-                //if produced CC value is in range, send the midi message
-                if (ccValue >= minValue && ccValue <= maxValue)
-                {
-                    message = MidiMessage::controllerEvent(channel, controllerNumber, ccValue);
-                    sendMidiMessage(message);
-                }
-                //else, dont send the midi message and set the CC value to the min or max value
-                else
+                //if produced CC value is out of range, set in range
+                if (!(ccValue >= minValue && ccValue <= maxValue))
                 {
                     if (ccValue > maxValue)
                         ccValue = maxValue;
                     else if (ccValue < minValue)
                         ccValue = minValue;
                 }
+                
+                //if new CC value is different from the previous CC value, send the MIDI message
+                if (ccValue != prevValue)
+                {
+                    message = MidiMessage::controllerEvent(channel, controllerNumber, ccValue);
+                    sendMidiMessage(message);
+                }
+                
+                //update prevValue
+                AppSettings::Instance()->setEliteDialPrevValue(ccValue, eliteDialNumber);
                 
             }
             //relative controller type
@@ -130,33 +134,62 @@ void EliteControls::getInputData(int control, int value)
             double minValue = AppSettings::Instance()->getEliteDialOscMinRange(eliteDialNumber);
             double maxValue = AppSettings::Instance()->getEliteDialOscMaxRange(eliteDialNumber);
             double prevValue = AppSettings::Instance()->getEliteDialPrevValue(eliteDialNumber);
+            double oscStepValue = AppSettings::Instance()->getEliteDialOscStepValue(eliteDialNumber);
             double oscValue = 0;
             
             //incremented value
             if (eliteControlValue >= 1 && eliteControlValue <= 63)
             {
-                //incremation value should be prevValue + (oscStepValue * eliteControlValue- maxValue [range of minValue to maxValue])
-                //oscValue = prevValue + eliteControlValue;
+                double incremValue;
+                
+                if (eliteControlValue == 1)
+                {
+                    incremValue = oscStepValue;
+                }
+                else
+                {
+                    //is this right? What if the step value is quite big?
+                    incremValue = oscStepValue * (eliteControlValue * (((maxValue-minValue)/2) / (63 - 1)));
+                }
+                
+                oscValue = prevValue + incremValue;
+                
             }
             //decremented value
             else if (eliteControlValue >= 64 && eliteControlValue <= 127)
             {
-                oscValue = prevValue - (128 - eliteControlValue);
+                double decremValue;
+                
+                if (eliteControlValue == 127)
+                {
+                    decremValue = oscStepValue;
+                }
+                else
+                {
+                    //is this right? What if the step value is quite big?
+                    decremValue = oscStepValue * ((128-eliteControlValue) * (((maxValue-minValue)/2) / (63 - 1)));
+                }
+                
+                oscValue = prevValue - decremValue;
             }
             
-            //if produced OSC value is in range, send the OSC message
-            if (oscValue >= minValue && oscValue <= maxValue)
-            {
-                oscOutput.transmitOutputMessage(control+1, oscValue, ipAddress, portNumber);
-            }
-            //else, dont send the OSC message and set the OSC value to the min or max value
-            else
+            //if produced OSC value is out of range, set in range
+            if (!(oscValue >= minValue && oscValue <= maxValue))
             {
                 if (oscValue > maxValue)
                     oscValue = maxValue;
                 else if (oscValue < minValue)
                     oscValue = minValue;
             }
+            
+            //if new OSC value is different from the previous OSC value, send the OSC message
+            if (oscValue != prevValue)
+            {
+                oscOutput.transmitOutputMessage(control+1, oscValue, ipAddress, portNumber);
+            }
+            
+            //update prevValue
+            AppSettings::Instance()->setEliteDialPrevValue(oscValue, eliteDialNumber);
         }
             
     }

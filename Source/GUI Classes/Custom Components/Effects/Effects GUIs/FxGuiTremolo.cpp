@@ -69,7 +69,8 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     //what about other values, such as the d's and t's in Logic's tremolo?
     rateMenu->setSelectedId(3, true);*/
     
-    addAndMakeVisible(syncButton = new AlphaTextButton(translate("SYNC")));
+    Image *syncImage = new Image(ImageCache::getFromMemory(BinaryDataNew::syncicon_png, BinaryDataNew::syncicon_pngSize));
+    addAndMakeVisible(syncButton = new ModeButton(syncImage));
     syncButton->setClickingTogglesState(true);
     syncButton->setToggleState(1, false);
     syncButton->addListener(this);

@@ -35,6 +35,11 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
 : mainComponentRef(ref)
 
 {
+	expoImage = new Image(ImageCache::getFromMemory(BinaryDataNew::expoicon_png, BinaryDataNew::expoicon_pngSize));
+	linearImage = new Image(ImageCache::getFromMemory(BinaryDataNew::linearicon_png, BinaryDataNew::linearicon_pngSize));
+	logImage = new Image(ImageCache::getFromMemory(BinaryDataNew::logicon_png, BinaryDataNew::logicon_pngSize));
+	staticImage = new Image(ImageCache::getFromMemory(BinaryDataNew::staticicon_png, BinaryDataNew::staticicon_pngSize));
+
 	Image *quantiseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::quantiseicon_png, BinaryDataNew::quantiseicon_pngSize));
 	addAndMakeVisible(quantiseButton = new ModeButton(quantiseIcon));
 	quantiseButton->setClickingTogglesState(true);
@@ -42,7 +47,8 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
 	quantiseButton->addListener(this);
 	quantiseButton->addMouseListener(this, true);
     
-	addAndMakeVisible(exclusiveModeButton = new TextButton("Exc Mode"));
+	Image *exclusiveImage = new Image(ImageCache::getFromMemory(BinaryDataNew::exclusiveicon_png, BinaryDataNew::exclusiveicon_pngSize));
+	addAndMakeVisible(exclusiveModeButton = new ModeButton(exclusiveImage));
     exclusiveModeButton->addListener(this);
     exclusiveModeButton->addMouseListener(this, true);
     exclusiveModeButton->setClickingTogglesState(true);
@@ -54,28 +60,50 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
     exclusiveGroupSlider->setValue(1, false);
     exclusiveGroupSlider->addMouseListener(this, true);
     
+	/*
     addAndMakeVisible(velocitySlider = new AlphaSlider());
+    velocitySlider->setRange(0, 127, 1);
+    velocitySlider->addListener(this);
+    velocitySlider->setValue(110, false);
+    velocitySlider->addMouseListener(this, true);*/
+	
+	addChildComponent(velocitySlider = new AlphaRotarySlider((220 * (M_PI / 180)), (500 * (M_PI / 180)), 120));
+	velocitySlider->setRotaryParameters((220 * (M_PI / 180)), (500 * (M_PI / 180)),true);
     velocitySlider->setRange(0, 127, 1);
     velocitySlider->addListener(this);
     velocitySlider->setValue(110, false);
     velocitySlider->addMouseListener(this, true);
     
-    addAndMakeVisible(pressureCurveMenu = new ComboBox());
-    pressureCurveMenu->addListener(this);
-    pressureCurveMenu->addMouseListener(this, true);
-    pressureCurveMenu->addItem(translate("Exponential"), 1);
-    pressureCurveMenu->addItem(translate("Linear"), 2);
-    pressureCurveMenu->addItem(translate("Logarithmic"), 3);
-    pressureCurveMenu->setSelectedId(2);
+	
+    pressureCurveMenu = new PopupMenu();
+	pressureCurveMenu->addItem(1, translate("Exponential"));
+	pressureCurveMenu->addItem(2, translate("Linear"));
+	pressureCurveMenu->addItem(3, translate("Logarithmic"));
     
-    addAndMakeVisible(velocityCurveMenu = new ComboBox());
-    velocityCurveMenu->addListener(this);
-    velocityCurveMenu->addMouseListener(this, true);
-    velocityCurveMenu->addItem(translate("Exponential"), 1);
-    velocityCurveMenu->addItem(translate("Linear"), 2);
-    velocityCurveMenu->addItem(translate("Logarithmic"), 3);
-    velocityCurveMenu->addItem(translate("Static"), 4);
-    velocityCurveMenu->setSelectedId(2);
+    
+    velocityCurveMenu = new PopupMenu();
+    velocityCurveMenu->addItem(1, translate("Exponential"));
+	velocityCurveMenu->addItem(2, translate("Linear"));
+	velocityCurveMenu->addItem(3, translate("Logarithmic"));
+    velocityCurveMenu->addItem(4, translate("Static"));
+    
+	
+	addAndMakeVisible(velocityCurveButton = new AlphaPopUpImageButton());
+    velocityCurveButton->addListener(this);
+    velocityCurveButton->addMouseListener(this, true);
+	velocityCurveButton->setImage(linearImage);
+		
+	addAndMakeVisible(pressureCurveButton = new AlphaPopUpImageButton());
+    pressureCurveButton->addListener(this);
+    pressureCurveButton->addMouseListener(this, true);
+	pressureCurveButton->setImage(linearImage);
+	
+	//---------------parameter label -------------------------------------
+    addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
+    parameterHoverLabel->setJustificationType(Justification::centred);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
+    parameterHoverLabel->setFont(Font(9));
+    parameterHoverLabel->addMouseListener(this, true);
 	
 }
 
@@ -87,19 +115,51 @@ GuiGlobalPadSettings::~GuiGlobalPadSettings()
 
 void GuiGlobalPadSettings::resized()
 {
-    quantiseButton->setBounds(828, 270, 32, 32); //should this be in the same position as the other quantise buttons to prevent confusion?
-	exclusiveModeButton->setBounds(823, 320, 42, 42);
-    exclusiveGroupSlider->setBounds(823, 370, 42, 42);
+    quantiseButton->setBounds(681, 288,32, 32); 
+	
+	exclusiveModeButton->setBounds(823, 275, 42, 42);
+	velocityCurveButton->setBounds(924 , 456,58,58);
+	pressureCurveButton->setBounds(706 , 456,58,58);
+	
+    exclusiveGroupSlider->setBounds(816, 393, 58, 58);
+	
     
     //put the below line in once hardware velocity curves have been implemented
     //velocityCurveMenu->setBounds(802, 450, 87, 20);
-    velocitySlider->setBounds(823, 480, 42, 42);
-	pressureCurveMenu->setBounds(802, 550, 87, 20);
+    velocitySlider->setBounds(785, 362, 120, 120);
+	//pressureCurveMenu->setBounds(802, 550, 87, 20);
+	
+	 parameterHoverLabel->setBounds(825, 468, 40, 10);
 	
 }
 
 void GuiGlobalPadSettings::paint (Graphics& g)
 {
+	
+	ColourGradient fillGradient(AlphaColours::nearlyblack,845 , 461, Colours::black, 845 , 383, false);
+	g.setGradientFill(fillGradient);
+	
+	g.fillEllipse(802, 379, 86, 86);
+	
+	g.setColour(Colours::grey.withAlpha(0.3f));
+	
+	Path trianglePath;
+	trianglePath.addTriangle(844, 288, 963, 493, 726, 493);
+	g.strokePath(trianglePath, PathStrokeType(1.0f));
+	
+	g.setColour(Colours::black);
+	
+	g.fillEllipse(678,285, 38, 38);
+	//g.fillEllipse(820, 272, 48, 48);
+	g.fillEllipse(815, 267, 58, 58);
+	//g.fillEllipse(816, 393, 58, 58);
+	
+	g.setColour(Colours::grey.withAlpha(0.3f));
+	
+	g.drawEllipse(678,285, 38, 38, 1.0);
+	g.drawEllipse(820, 272, 48, 48, 1.0f);
+	
+	
 	
 	
 }
@@ -134,6 +194,93 @@ void GuiGlobalPadSettings::buttonClicked (Button* button)
             PAD_SETTINGS->setQuantizeMode(button->getToggleState());
         }
     }
+	
+	else if(button == velocityCurveButton)
+	{
+	
+		const int result = velocityCurveMenu->show();
+        
+        if (result != 0) //if the user selects something
+        {
+            switch (result)
+            {
+                   
+                case 1: // Exponential
+                    
+                    velocityCurveButton->setImage(expoImage);
+                    break;
+                case 2: // Linear
+                    
+                    velocityCurveButton->setImage(linearImage);
+                    break;
+                case 3: // Logarithmic
+                    
+                    velocityCurveButton->setImage(logImage);
+                    break;
+                case 4: // Static
+                    
+                    velocityCurveButton->setImage(staticImage);
+                    break;
+				default: // Linear
+                    
+                    velocityCurveButton->setImage(linearImage);
+                    break;
+            }
+            
+            
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+				PAD_SETTINGS->setVelocityCurve(result);
+            }
+			
+			if (result == 4) //static velocity 
+				velocitySlider->setVisible(true);
+			else
+				velocitySlider->setVisible(false);
+        }
+		
+	}
+	
+	else if(button == pressureCurveButton)
+	{
+		
+		const int result = pressureCurveMenu->show();
+        
+        if (result != 0) //if the user selects something
+        {
+            switch (result)
+            {
+					
+				case 1: // Exponential
+                    
+                    pressureCurveButton->setImage(expoImage);
+                    break;
+                case 2: // Linear
+                    
+                    pressureCurveButton->setImage(linearImage);
+                    break;
+                case 3: // Logarithmic
+                    
+                    pressureCurveButton->setImage(logImage);
+                    break;
+				default: // Linear
+                    
+                     pressureCurveButton->setImage(linearImage);
+                    break;
+            }
+            
+            
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+				PAD_SETTINGS->setPressureCurve(result);
+            }
+			
+			
+        }
+		
+	}
         
 }
 
@@ -153,13 +300,14 @@ void GuiGlobalPadSettings::sliderValueChanged (Slider* slider)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setVelocity(slider->getValue());
+			parameterHoverLabel->setText(String(slider->getValue()), false);
         }
     }
 }
 
 void GuiGlobalPadSettings::comboBoxChanged (ComboBox* comboBox)
 {
-    if (comboBox == pressureCurveMenu)
+    /*if (comboBox == pressureCurveMenu)
     {
         for (int i = 0; i < selectedPads.size(); i++)
         {
@@ -176,13 +324,14 @@ void GuiGlobalPadSettings::comboBoxChanged (ComboBox* comboBox)
         }
         
         //put the below code in once hardware velocity curves have been implemented
-        /*
+        
         if (comboBox->getSelectedId() == 4) //static velocity 
             velocitySlider->setVisible(true);
         else
             velocitySlider->setVisible(false);
-         */
+         
     }
+	 */
 }
 
 void GuiGlobalPadSettings::updateDisplay()
@@ -191,12 +340,62 @@ void GuiGlobalPadSettings::updateDisplay()
     {
         int padNum = selectedPads[0];
         
-        pressureCurveMenu->setSelectedId(PAD_SETTINGS->getPressureCurve(), true);
+        //pressureCurveMenu->setSelectedId(PAD_SETTINGS->getPressureCurve(), true);
         exclusiveModeButton->setToggleState(PAD_SETTINGS->getExclusiveMode(), false);
         exclusiveGroupSlider->setComponentValue(PAD_SETTINGS->getExclusiveGroup());
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
-        velocityCurveMenu->setSelectedId(PAD_SETTINGS->getVelocityCurve(), true);
-        velocitySlider->setComponentValue(PAD_SETTINGS->getVelocity());
+        //velocityCurveMenu->setSelectedId(PAD_SETTINGS->getVelocityCurve(), true);
+        velocitySlider->setValue(PAD_SETTINGS->getVelocity());
+		parameterHoverLabel->setText(String(PAD_SETTINGS->getVelocity()), false);
+		
+		
+		switch (PAD_SETTINGS->getPressureCurve())
+		{
+				
+			case 1: // Exponential
+				
+				pressureCurveButton->setImage(expoImage);
+				break;
+			case 2: // Linear
+				
+				pressureCurveButton->setImage(linearImage);
+				break;
+			case 3: // Logarithmic
+				
+				pressureCurveButton->setImage(logImage);
+				break;
+			default: // Linear
+				
+				pressureCurveButton->setImage(linearImage);
+				break;
+		}
+		
+		
+		switch (PAD_SETTINGS->getVelocityCurve())
+		{
+				
+			case 1: // Exponential
+				
+				velocityCurveButton->setImage(expoImage);
+				break;
+			case 2: // Linear
+				
+				velocityCurveButton->setImage(linearImage);
+				break;
+			case 3: // Logarithmic
+				
+				velocityCurveButton->setImage(logImage);
+				break;
+			case 4: // Static
+				
+				velocityCurveButton->setImage(staticImage);
+				break;
+			default: // Linear
+				
+				velocityCurveButton->setImage(linearImage);
+				break;
+		}
+		
         
     }
     else if(MULTI_PADS)
@@ -247,7 +446,7 @@ void GuiGlobalPadSettings::updateDisplay()
         }
         
         //==================================================================================================
-        int pressureCurve_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getPressureCurve();
+        /*int pressureCurve_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getPressureCurve();
         for (int i = 1; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
@@ -271,8 +470,8 @@ void GuiGlobalPadSettings::updateDisplay()
                 break;
             }
             if (i == selectedPads.size()-1)
-                velocityCurveMenu->setSelectedId(velocityCurve_, true);
-        }
+				velocityCurveMenu->setSelectedId(velocityCurve_, true);
+        }*/
         
         //==================================================================================================
         int velocity_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getVelocity();
@@ -281,11 +480,12 @@ void GuiGlobalPadSettings::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getVelocity() != velocity_)
             {
-                velocitySlider->setComponentValue(-999);
+                velocitySlider->setValue(-999);
                 break;
             }
             if (i == selectedPads.size()-1)
-                velocitySlider->setComponentValue(velocity_);
+                velocitySlider->setValue(velocity_);
+			parameterHoverLabel->setText(String(velocity_), false);
         }
         
     }
@@ -316,7 +516,7 @@ void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
         mainComponentRef.setInfoTextBoxText(translate("Exclusive Group Selector. Sets and displays the exclusive group number for the selected pads."));
         
     }
-    else if (pressureCurveMenu->isMouseOver(true))
+    else if (pressureCurveButton->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Pressure Curve Menu. Use this menu to select the curve for the pressure mapping for the selected pads."));
     }
@@ -324,13 +524,15 @@ void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::quantizeButton));
     }
-    else if (velocityCurveMenu->isMouseOver(true))
+    else if (velocityCurveButton->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Velocity Curve Menu. Use this menu to select the curve for the velocity mapping for the selected pads. If 'Static' is selected a seperate control will be displayed to set the static velocity value."));
     }
     else if (velocitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Static Velocity Selector. Sets and displays the static velocity for a MIDI note or sample."));
+		parameterHoverLabel->setText(String(velocitySlider->getValue()), false);
+		parameterHoverLabel->setVisible(true);
     }
 }
 
@@ -338,5 +540,11 @@ void GuiGlobalPadSettings::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
+	
+	if(e.eventComponent == velocitySlider)
+	{
+        parameterHoverLabel->setText(String::empty, false);
+		parameterHoverLabel->setVisible(false);
+	}
 }
 

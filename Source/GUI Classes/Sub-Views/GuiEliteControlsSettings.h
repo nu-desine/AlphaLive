@@ -25,6 +25,10 @@
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
 #include "../Custom Components/General/AlphaSlider.h"
+#include "../Custom Components/General/AlphaTextButton.h"
+#include "../Custom Components/General/AlphaRotarySlider.h"
+#include "../Custom Components/General/GuiSwitch.h"
+#include "../Custom Components/Graphics/GuiCircleBackground.h"
 
 class MainComponent;
 
@@ -57,15 +61,24 @@ private:
     
     int currentlySelectedControl;
     MainComponent &mainComponentRef;
+	
+	ScopedPointer <GuiCircleBackground> notSelected;
+	ScopedPointer <GuiSwitch> statusButton;
+	ScopedPointer <Label> parameterHoverLabel;
+	
+	OwnedArray<AlphaTextButton> dialMidiChannel;
+	OwnedArray<AlphaTextButton> buttonMidiChannel;
     
     ScopedPointer <ComboBox> dialsMenu, buttonsMenu;
+	
+	ScopedPointer<AlphaTextButton> dialControllerType;
     
-    ScopedPointer <AlphaSlider> dialMidiCcNumber, dialMidiChannel, dialMidiMinRange, dialMidiMaxRange;
-    ScopedPointer <AlphaSlider> dialOscPortNumber, dialOscMinRange, dialOscMaxRange;
+    ScopedPointer <AlphaSlider> dialOscPortNumber, dialMidiCcNumber;
+	ScopedPointer <AlphaRotarySlider> dialMidiMinRange, dialMidiMaxRange, dialOscMinRange, dialOscMaxRange, dialOscStepSlider;
     ScopedPointer <Label> dialOscIpAddressEditor;
     
-    ScopedPointer <AlphaSlider> buttonSceneNumber, buttonMidiCcNumber, buttonMidiChannel, buttonMidiOffNumber, buttonMidiOnNumber;
-    ScopedPointer <AlphaSlider> buttonOscPortNumber, buttonOscOffNumber, buttonOscOnNumber;
+    ScopedPointer <AlphaSlider> buttonSceneNumber, buttonMidiCcNumber, buttonOscPortNumber; 
+	ScopedPointer <AlphaRotarySlider> buttonMidiOffNumber, buttonMidiOnNumber, buttonOscOffNumber, buttonOscOnNumber;
     ScopedPointer <Label> buttonOscIpAddressEditor;
 	
 };

@@ -136,6 +136,8 @@
 		A487784232A03C957AD95E9E /* juce_core.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7DB2F915B83B185748A6D232 /* juce_core.mm */; };
 		AD1B7AB2CF30FED145FDAF6E /* juce_events.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9D83A9D048D3C4B324C2183B /* juce_events.mm */; };
 		B833A4900694C5248CE155C4 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B0711F13B4343AC13C8E66E /* OpenGL.framework */; };
+		B9277294164C274B00B6FC1A /* AlphaSquareButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9277293164C274B00B6FC1A /* AlphaSquareButton.cpp */; };
+		B9ADC67E16554B5800ABA894 /* AlphaPopUpImageButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9ADC67D16554B5800ABA894 /* AlphaPopUpImageButton.cpp */; };
 		C639BA23C8C1C7582FACAB75 /* juce_audio_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB5E813C74CCE66CAEB7E5B1 /* juce_audio_basics.mm */; };
 		CBC91F7970BEE3004596A9D7 /* juce_cryptography.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65CFEDEE871328C5B048CB79 /* juce_cryptography.mm */; };
 		CF2035DB786742F7DCCA085B /* juce_data_structures.mm in Sources */ = {isa = PBXBuildFile; fileRef = 917E421414537A1FFB513BAC /* juce_data_structures.mm */; };
@@ -998,7 +1000,11 @@
 		B89B436E2105E04183C2712C /* juce_SelectedItemSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_SelectedItemSet.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/mouse/juce_SelectedItemSet.h; sourceTree = SOURCE_ROOT; };
 		B8AB98CEA12E5B1C05266B02 /* juce_ComponentDragger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_ComponentDragger.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/mouse/juce_ComponentDragger.cpp; sourceTree = SOURCE_ROOT; };
 		B8EF44B9097B17D89A49AB43 /* juce_OldSchoolLookAndFeel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_OldSchoolLookAndFeel.cpp; path = ../../JuceLibraryCode/modules/juce_gui_extra/lookandfeel/juce_OldSchoolLookAndFeel.cpp; sourceTree = SOURCE_ROOT; };
+		B9277292164C274B00B6FC1A /* AlphaSquareButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlphaSquareButton.h; sourceTree = "<group>"; };
+		B9277293164C274B00B6FC1A /* AlphaSquareButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlphaSquareButton.cpp; sourceTree = "<group>"; };
 		B9A0575587AE7E089DC99D7B /* juce_android_WebBrowserComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_android_WebBrowserComponent.cpp; path = ../../JuceLibraryCode/modules/juce_gui_extra/native/juce_android_WebBrowserComponent.cpp; sourceTree = SOURCE_ROOT; };
+		B9ADC67C16554B5800ABA894 /* AlphaPopUpImageButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlphaPopUpImageButton.h; sourceTree = "<group>"; };
+		B9ADC67D16554B5800ABA894 /* AlphaPopUpImageButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlphaPopUpImageButton.cpp; sourceTree = "<group>"; };
 		B9E3BD00F2B15EBCBC805A1F /* juce_TableListBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_TableListBox.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/widgets/juce_TableListBox.h; sourceTree = SOURCE_ROOT; };
 		BA0AE1072B330AA7098C9098 /* juce_Expression.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_Expression.cpp; path = ../../JuceLibraryCode/modules/juce_core/maths/juce_Expression.cpp; sourceTree = SOURCE_ROOT; };
 		BA9A6B2E943B6DF9C957E982 /* juce_MidiOutput.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_MidiOutput.cpp; path = ../../JuceLibraryCode/modules/juce_audio_devices/midi_io/juce_MidiOutput.cpp; sourceTree = SOURCE_ROOT; };
@@ -1650,6 +1656,8 @@
 				0C78A33115B467900049C0C8 /* ModeButton.cpp */,
 				0C52F28815D6914600E76547 /* AlphaPopUpButton.h */,
 				0C52F28715D6914600E76547 /* AlphaPopUpButton.cpp */,
+				B9ADC67C16554B5800ABA894 /* AlphaPopUpImageButton.h */,
+				B9ADC67D16554B5800ABA894 /* AlphaPopUpImageButton.cpp */,
 				0C52F28A15D6914600E76547 /* AlphaRotarySlider.h */,
 				0C52F28915D6914600E76547 /* AlphaRotarySlider.cpp */,
 				0C52F29215D6939B00E76547 /* AlphaTextButton.h */,
@@ -1660,6 +1668,8 @@
 				0C85C32315E526140043797E /* SettingsButtonImage.cpp */,
 				0C1A3C4E15E50D65004306A3 /* FileDropButton.h */,
 				0C1A3C4D15E50D65004306A3 /* FileDropButton.cpp */,
+				B9277292164C274B00B6FC1A /* AlphaSquareButton.h */,
+				B9277293164C274B00B6FC1A /* AlphaSquareButton.cpp */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -3668,6 +3678,8 @@
 				FC2A0C931612209100395455 /* FxGuiDistortion.cpp in Sources */,
 				FC2A98A3161A04C00020C16D /* Bitcrusher.cpp in Sources */,
 				FC1622BF161B23B0004FE9E3 /* FxGuiBitcrusher.cpp in Sources */,
+				B9277294164C274B00B6FC1A /* AlphaSquareButton.cpp in Sources */,
+				B9ADC67E16554B5800ABA894 /* AlphaPopUpImageButton.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

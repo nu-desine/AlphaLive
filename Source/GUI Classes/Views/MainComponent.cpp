@@ -224,8 +224,9 @@ alphaLiveEngineRef(ref),
     toolbox->addMouseListener(this, true);
     
     //elite controls display
-    addAndMakeVisible(eliteControls = new EliteControlsComponent(*this));
+    addChildComponent(eliteControls = new EliteControlsComponent(*this));
     eliteControls->addMouseListener(this, true);
+	eliteControls->setInterceptsMouseClicks(false, true);
     
     
     //pop up views
@@ -262,6 +263,7 @@ alphaLiveEngineRef(ref),
     modeSequencerButton->setVisible(false);
     modeControllerButton->setVisible(false);
     globalSettingsButton->setVisible(false);
+	eliteControls->setVisible(true);
     toolbox->setVisible(false); //or maybe it links to projects directory?
     midiPiano->setActive(false);
     
@@ -292,7 +294,7 @@ void MainComponent::resized()
     guiControllerMode->setBounds(0, 0, getWidth(), getHeight());
 	guiGlobalPadSettings->setBounds(0, 0, getWidth(), getHeight());
 	
-    //eliteControls->setBounds(50, 530, 100, 100);
+    eliteControls->setBounds(0, 0, getWidth(), getHeight());
     eliteControlsSettings->setBounds(0, 0, getWidth(), getHeight());
     
 	midiPiano->setBounds(0, 0, 660, 685);
@@ -646,6 +648,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
             //whilst an elite control display is currently in view
             eliteControlsSettings->setDisplay(selectedEliteControl);
             eliteControlsSettings->setVisible(true);
+			//eliteControls->turnOffButtons();
         }
         
         //repaint(); //this is called in setGlobalPadSettingsDisplay() above
@@ -663,6 +666,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
 		globalSettingsButton->setVisible(true);
         toolbox->setVisible(true); //or maybe it links to projects directory?
         eliteControlsSettings->setVisible(false);
+		eliteControls->turnOffButtons();
 		repaint();
     }
     

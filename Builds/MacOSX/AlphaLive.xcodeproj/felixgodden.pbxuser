@@ -218,9 +218,9 @@
 	};
 	0C78A2C915B467900049C0C8 /* Oscillator.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {690, 2249}}";
-			sepNavSelRange = "{886, 0}";
-			sepNavVisRange = "{15, 1207}";
+			sepNavIntBoundsRect = "{{0, 0}, {838, 2249}}";
+			sepNavSelRange = "{428, 0}";
+			sepNavVisRange = "{82, 1230}";
 			sepNavWindowFrame = "{{15, 0}, {708, 876}}";
 		};
 	};
@@ -741,6 +741,17 @@
 			FCB51CF7165BC0E400F6440B /* PBXTextBookmark */ = FCB51CF7165BC0E400F6440B /* PBXTextBookmark */;
 			FCB51CF8165BC0E400F6440B /* PBXTextBookmark */ = FCB51CF8165BC0E400F6440B /* PBXTextBookmark */;
 			FCB51CFE165BC16500F6440B /* PBXTextBookmark */ = FCB51CFE165BC16500F6440B /* PBXTextBookmark */;
+			FCB51D02165BC99F00F6440B /* PBXTextBookmark */ = FCB51D02165BC99F00F6440B /* PBXTextBookmark */;
+			FCB51D06165BCE6600F6440B /* PBXTextBookmark */ = FCB51D06165BCE6600F6440B /* PBXTextBookmark */;
+			FCB51D0A165BD37B00F6440B /* PBXTextBookmark */ = FCB51D0A165BD37B00F6440B /* PBXTextBookmark */;
+			FCB51D0C165BD3AE00F6440B /* PBXTextBookmark */ = FCB51D0C165BD3AE00F6440B /* PBXTextBookmark */;
+			FCB51D0F165BD3BD00F6440B /* PBXTextBookmark */ = FCB51D0F165BD3BD00F6440B /* PBXTextBookmark */;
+			FCB51D13165BD3F500F6440B /* PBXTextBookmark */ = FCB51D13165BD3F500F6440B /* PBXTextBookmark */;
+			FCB51D17165BD40500F6440B /* PBXTextBookmark */ = FCB51D17165BD40500F6440B /* PBXTextBookmark */;
+			FCB51D1B165BD6F600F6440B /* PBXTextBookmark */ = FCB51D1B165BD6F600F6440B /* PBXTextBookmark */;
+			FCB51D21165BD7C300F6440B /* PBXTextBookmark */ = FCB51D21165BD7C300F6440B /* PBXTextBookmark */;
+			FCB51D25165BD81000F6440B /* PBXTextBookmark */ = FCB51D25165BD81000F6440B /* PBXTextBookmark */;
+			FCB51D29165BD86A00F6440B /* PBXTextBookmark */ = FCB51D29165BD86A00F6440B /* PBXTextBookmark */;
 			FCCB38A6165A9D9E00A5F1EA = FCCB38A6165A9D9E00A5F1EA /* PBXTextBookmark */;
 			FCCB38E0165AA3EC00A5F1EA = FCCB38E0165AA3EC00A5F1EA /* PBXTextBookmark */;
 			FCCB38FE165AE33A00A5F1EA = FCCB38FE165AE33A00A5F1EA /* PBXTextBookmark */;
@@ -779,9 +790,9 @@
 	};
 	25795CA80C429935ABCF758C /* juce_AudioFormatReader.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1006, 4719}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1021, 4641}}";
 			sepNavSelRange = "{4027, 0}";
-			sepNavVisRange = "{3156, 1968}";
+			sepNavVisRange = "{3589, 918}";
 		};
 	};
 	390D2A237D1AE3FC00266174 /* juce_HeapBlock.h */ = {
@@ -975,11 +986,11 @@
 		delayBeforeContinue = 0;
 		fileReference = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		functionName = "Oscillator::process (double frequency, int waveShape)";
-		hitCount = 0;
+		hitCount = 1;
 		ignoreCount = 0;
 		lineNumber = 90;
 		location = AlphaLive;
-		modificationTime = 375112035.743162;
+		modificationTime = 375116827.92226;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -997,7 +1008,7 @@
 		ignoreCount = 0;
 		lineNumber = 91;
 		location = AlphaLive;
-		modificationTime = 375112035.760644;
+		modificationTime = 375116804.258692;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1011,11 +1022,11 @@
 		delayBeforeContinue = 0;
 		fileReference = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		functionName = "Oscillator::processSqr()";
-		hitCount = 0;
+		hitCount = 1;
 		ignoreCount = 0;
 		lineNumber = 130;
 		location = AlphaLive;
-		modificationTime = 375112035.799973;
+		modificationTime = 375116825.990879;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1029,11 +1040,11 @@
 		delayBeforeContinue = 0;
 		fileReference = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		functionName = "Oscillator::Oscillator (double sampleRate)";
-		hitCount = 0;
+		hitCount = 1;
 		ignoreCount = 0;
 		lineNumber = 34;
 		location = AlphaLive;
-		modificationTime = 375112035.820087;
+		modificationTime = 375116818.268133;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1047,11 +1058,11 @@
 		delayBeforeContinue = 0;
 		fileReference = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		functionName = "Oscillator::Oscillator (double sampleRate)";
-		hitCount = 0;
+		hitCount = 1;
 		ignoreCount = 0;
 		lineNumber = 38;
 		location = AlphaLive;
-		modificationTime = 375112035.865194;
+		modificationTime = 375116820.464302;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1065,11 +1076,11 @@
 		delayBeforeContinue = 0;
 		fileReference = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		functionName = "Oscillator::Oscillator (double sampleRate)";
-		hitCount = 0;
+		hitCount = 1;
 		ignoreCount = 0;
 		lineNumber = 40;
 		location = AlphaLive;
-		modificationTime = 375112035.894348;
+		modificationTime = 375116821.189281;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1151,7 +1162,7 @@
 		ignoreCount = 0;
 		lineNumber = 328;
 		location = AlphaLive;
-		modificationTime = 375112035.340247;
+		modificationTime = 375116803.813883;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1169,7 +1180,7 @@
 		ignoreCount = 0;
 		lineNumber = 317;
 		location = AlphaLive;
-		modificationTime = 375112035.359377;
+		modificationTime = 375116803.830933;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1187,7 +1198,7 @@
 		ignoreCount = 0;
 		lineNumber = 318;
 		location = AlphaLive;
-		modificationTime = 375112035.398672;
+		modificationTime = 375116803.87827;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1205,7 +1216,7 @@
 		ignoreCount = 0;
 		lineNumber = 319;
 		location = AlphaLive;
-		modificationTime = 375112035.415321;
+		modificationTime = 375116803.895513;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1223,7 +1234,7 @@
 		ignoreCount = 0;
 		lineNumber = 323;
 		location = AlphaLive;
-		modificationTime = 375112035.457919;
+		modificationTime = 375116803.93427;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1241,7 +1252,7 @@
 		ignoreCount = 0;
 		lineNumber = 322;
 		location = AlphaLive;
-		modificationTime = 375112035.476005;
+		modificationTime = 375116803.98186;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1259,7 +1270,7 @@
 		ignoreCount = 0;
 		lineNumber = 316;
 		location = AlphaLive;
-		modificationTime = 375112035.517709;
+		modificationTime = 375116804.011642;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1277,7 +1288,7 @@
 		ignoreCount = 0;
 		lineNumber = 294;
 		location = AlphaLive;
-		modificationTime = 375112035.535105;
+		modificationTime = 375116804.052073;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1295,7 +1306,7 @@
 		ignoreCount = 0;
 		lineNumber = 295;
 		location = AlphaLive;
-		modificationTime = 375112035.577622;
+		modificationTime = 375116804.069908;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1313,7 +1324,7 @@
 		ignoreCount = 0;
 		lineNumber = 296;
 		location = AlphaLive;
-		modificationTime = 375112035.595225;
+		modificationTime = 375116804.108405;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1331,7 +1342,7 @@
 		ignoreCount = 0;
 		lineNumber = 298;
 		location = AlphaLive;
-		modificationTime = 375112035.635408;
+		modificationTime = 375116804.125538;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1349,7 +1360,7 @@
 		ignoreCount = 0;
 		lineNumber = 299;
 		location = AlphaLive;
-		modificationTime = 375112035.653133;
+		modificationTime = 375116804.165941;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1367,7 +1378,7 @@
 		ignoreCount = 0;
 		lineNumber = 300;
 		location = AlphaLive;
-		modificationTime = 375112035.692957;
+		modificationTime = 375116804.198204;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1416,7 +1427,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 24";
 		rLen = 0;
-		rLoc = 474;
+		rLoc = 497;
 		rType = 0;
 		vrLen = 1176;
 		vrLoc = 112;
@@ -1426,7 +1437,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 19";
 		rLen = 0;
-		rLoc = 315;
+		rLoc = 316;
 		rType = 0;
 		vrLen = 1230;
 		vrLoc = 112;
@@ -1446,7 +1457,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 33";
 		rLen = 0;
-		rLoc = 713;
+		rLoc = 733;
 		rType = 0;
 		vrLen = 1263;
 		vrLoc = 116;
@@ -1456,7 +1467,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 33";
 		rLen = 0;
-		rLoc = 753;
+		rLoc = 773;
 		rType = 0;
 		vrLen = 1256;
 		vrLoc = 140;
@@ -1466,7 +1477,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 21";
 		rLen = 0;
-		rLoc = 409;
+		rLoc = 432;
 		rType = 0;
 		vrLen = 1294;
 		vrLoc = 116;
@@ -1486,7 +1497,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 31";
 		rLen = 0;
-		rLoc = 666;
+		rLoc = 686;
 		rType = 0;
 		vrLen = 1244;
 		vrLoc = 0;
@@ -1496,7 +1507,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 36";
 		rLen = 0;
-		rLoc = 845;
+		rLoc = 865;
 		rType = 0;
 		vrLen = 1185;
 		vrLoc = 0;
@@ -1506,7 +1517,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 36";
 		rLen = 0;
-		rLoc = 845;
+		rLoc = 865;
 		rType = 0;
 		vrLen = 1189;
 		vrLoc = 0;
@@ -1516,7 +1527,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 34";
 		rLen = 0;
-		rLoc = 769;
+		rLoc = 789;
 		rType = 0;
 		vrLen = 1185;
 		vrLoc = 0;
@@ -1526,7 +1537,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 34";
 		rLen = 0;
-		rLoc = 769;
+		rLoc = 789;
 		rType = 0;
 		vrLen = 1185;
 		vrLoc = 0;
@@ -1536,7 +1547,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 38";
 		rLen = 0;
-		rLoc = 886;
+		rLoc = 906;
 		rType = 0;
 		vrLen = 1278;
 		vrLoc = 82;
@@ -1546,7 +1557,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 31";
 		rLen = 0;
-		rLoc = 607;
+		rLoc = 627;
 		rType = 0;
 		vrLen = 1352;
 		vrLoc = 154;
@@ -1556,7 +1567,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 25";
 		rLen = 0;
-		rLoc = 497;
+		rLoc = 520;
 		rType = 0;
 		vrLen = 1352;
 		vrLoc = 154;
@@ -1566,7 +1577,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 25";
 		rLen = 0;
-		rLoc = 497;
+		rLoc = 520;
 		rType = 0;
 		vrLen = 1297;
 		vrLoc = 154;
@@ -1585,7 +1596,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 33";
 		rLen = 0;
-		rLoc = 679;
+		rLoc = 699;
 		rType = 0;
 		vrLen = 325;
 		vrLoc = 558;
@@ -1595,7 +1606,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 32";
 		rLen = 0;
-		rLoc = 601;
+		rLoc = 621;
 		rType = 0;
 		vrLen = 1342;
 		vrLoc = 154;
@@ -1615,7 +1626,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 32";
 		rLen = 0;
-		rLoc = 601;
+		rLoc = 621;
 		rType = 0;
 		vrLen = 1342;
 		vrLoc = 154;
@@ -1625,7 +1636,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 29";
 		rLen = 0;
-		rLoc = 601;
+		rLoc = 621;
 		rType = 0;
 		vrLen = 1224;
 		vrLoc = 15;
@@ -1635,10 +1646,120 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 39";
 		rLen = 0;
-		rLoc = 886;
+		rLoc = 906;
 		rType = 0;
 		vrLen = 1207;
 		vrLoc = 15;
+	};
+	FCB51D02165BC99F00F6440B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
+		name = "Oscillator.cpp: 38";
+		rLen = 0;
+		rLoc = 904;
+		rType = 0;
+		vrLen = 1171;
+		vrLoc = 0;
+	};
+	FCB51D06165BCE6600F6440B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
+		name = "Oscillator.cpp: 38";
+		rLen = 0;
+		rLoc = 904;
+		rType = 0;
+		vrLen = 1171;
+		vrLoc = 0;
+	};
+	FCB51D0A165BD37B00F6440B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
+		name = "Oscillator.cpp: 21";
+		rLen = 0;
+		rLoc = 428;
+		rType = 0;
+		vrLen = 1174;
+		vrLoc = 0;
+	};
+	FCB51D0C165BD3AE00F6440B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
+		name = "Oscillator.cpp: 34";
+		rLen = 0;
+		rLoc = 699;
+		rType = 0;
+		vrLen = 139;
+		vrLoc = 466;
+	};
+	FCB51D0F165BD3BD00F6440B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
+		name = "Oscillator.cpp: 19";
+		rLen = 0;
+		rLoc = 316;
+		rType = 0;
+		vrLen = 1175;
+		vrLoc = 0;
+	};
+	FCB51D13165BD3F500F6440B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
+		name = "Oscillator.cpp: 19";
+		rLen = 0;
+		rLoc = 316;
+		rType = 0;
+		vrLen = 1175;
+		vrLoc = 0;
+	};
+	FCB51D17165BD40500F6440B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
+		name = "Oscillator.cpp: 19";
+		rLen = 0;
+		rLoc = 316;
+		rType = 0;
+		vrLen = 1175;
+		vrLoc = 0;
+	};
+	FCB51D1B165BD6F600F6440B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
+		name = "Oscillator.cpp: 21";
+		rLen = 0;
+		rLoc = 428;
+		rType = 0;
+		vrLen = 1219;
+		vrLoc = 82;
+	};
+	FCB51D21165BD7C300F6440B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
+		name = "Oscillator.cpp: 21";
+		rLen = 0;
+		rLoc = 428;
+		rType = 0;
+		vrLen = 1226;
+		vrLoc = 82;
+	};
+	FCB51D25165BD81000F6440B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
+		name = "Oscillator.cpp: 21";
+		rLen = 0;
+		rLoc = 428;
+		rType = 0;
+		vrLen = 1227;
+		vrLoc = 82;
+	};
+	FCB51D29165BD86A00F6440B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
+		name = "Oscillator.cpp: 21";
+		rLen = 0;
+		rLoc = 428;
+		rType = 0;
+		vrLen = 1230;
+		vrLoc = 82;
 	};
 	FCCB3894165A9AA100A5F1EA /* Oscillator.cpp:38 */ = {
 		isa = PBXFileBreakpoint;
@@ -1654,7 +1775,7 @@
 		ignoreCount = 0;
 		lineNumber = 38;
 		location = AlphaLive;
-		modificationTime = 375112035.937885;
+		modificationTime = 375116804.478491;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1668,11 +1789,11 @@
 		delayBeforeContinue = 0;
 		fileReference = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		functionName = "Oscillator::Oscillator (double sampleRate)";
-		hitCount = 0;
+		hitCount = 1;
 		ignoreCount = 0;
 		lineNumber = 30;
 		location = AlphaLive;
-		modificationTime = 375112035.969924;
+		modificationTime = 375116814.536539;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1686,11 +1807,11 @@
 		delayBeforeContinue = 0;
 		fileReference = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		functionName = "Oscillator::Oscillator (double sampleRate)";
-		hitCount = 0;
+		hitCount = 1;
 		ignoreCount = 0;
 		lineNumber = 36;
 		location = AlphaLive;
-		modificationTime = 375112036.039493;
+		modificationTime = 375116818.602818;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
@@ -1729,7 +1850,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 29";
 		rLen = 0;
-		rLoc = 560;
+		rLoc = 583;
 		rType = 0;
 		vrLen = 1161;
 		vrLoc = 3;
@@ -1785,7 +1906,7 @@
 		argumentStrings = (
 		);
 		autoAttachOnCrash = 1;
-		breakpointsEnabled = 1;
+		breakpointsEnabled = 0;
 		configStateDict = {
 		};
 		customDataFormattersEnabled = 1;

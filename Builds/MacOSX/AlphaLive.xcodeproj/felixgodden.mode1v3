@@ -325,7 +325,7 @@
 							<real>295</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>9 55 1068 823 0 0 1440 878 </string>
+						<string>34 55 1068 823 0 0 1440 878 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -355,7 +355,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>FCB51CFE165BC16500F6440B</string>
+										<string>FCB51D29165BD86A00F6440B</string>
 										<key>history</key>
 										<array>
 											<string>FC0BCA3D165544BA000686F4</string>
@@ -385,7 +385,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {751, 777}}</string>
 								<key>RubberWindowFrame</key>
-								<string>9 55 1068 823 0 0 1440 878 </string>
+								<string>34 55 1068 823 0 0 1440 878 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -405,7 +405,7 @@
 								<key>Frame</key>
 								<string>{{0, 782}, {751, 0}}</string>
 								<key>RubberWindowFrame</key>
-								<string>9 55 1068 823 0 0 1440 878 </string>
+								<string>34 55 1068 823 0 0 1440 878 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -552,7 +552,7 @@
 	<key>StatusbarIsVisible</key>
 	<true/>
 	<key>TimeStamp</key>
-	<real>375112037.19352001</real>
+	<real>375117930.82396197</real>
 	<key>ToolbarConfigUserDefaultsMinorVersion</key>
 	<string>2</string>
 	<key>ToolbarDisplayMode</key>
@@ -569,7 +569,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>FCB51CFF165BC16500F6440B</string>
+		<string>FCB51D2A165BD86A00F6440B</string>
 		<string>FCB51C90165BAA9200F6440B</string>
 		<string>FCB51C91165BAA9200F6440B</string>
 		<string>1CD10A99069EF8BA00B06720</string>
@@ -578,7 +578,7 @@
 		<string>1C78EAAD065D492600B07095</string>
 	</array>
 	<key>WindowString</key>
-	<string>9 55 1068 823 0 0 1440 878 </string>
+	<string>34 55 1068 823 0 0 1440 878 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -753,10 +753,10 @@
 									<key>Frame</key>
 									<string>{{433, 0}, {649, 363}}</string>
 									<key>RubberWindowFrame</key>
-									<string>39 165 1082 713 0 0 1440 878 </string>
+									<string>23 165 1082 713 0 0 1440 878 </string>
 								</dict>
 								<key>RubberWindowFrame</key>
-								<string>39 165 1082 713 0 0 1440 878 </string>
+								<string>23 165 1082 713 0 0 1440 878 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXDebugSessionModule</string>
@@ -790,7 +790,7 @@
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
 			<key>WindowString</key>
-			<string>39 165 1082 713 0 0 1440 878 </string>
+			<string>23 165 1082 713 0 0 1440 878 </string>
 			<key>WindowToolGUID</key>
 			<string>1CD10A99069EF8BA00B06720</string>
 			<key>WindowToolIsVisible</key>

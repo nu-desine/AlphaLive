@@ -16,9 +16,9 @@
 Oscillator::Oscillator (double sampleRate)
 :			
 	sampRate(sampleRate),
-	squareBuffer(1, 4000)
+	squareBuffer(1, 20400)
 {
-	audioFile = ("/Users/felixgodden/Programming/nu-desine/alphalive 2/Source/SquareCycle.wav");
+	audioFile = ("/Users/felixgodden/Programming/nu-desine/alphalive 2/Source/SquareWaveRoundedFINALSHORTESTest.wav");
     currentPhase = 0.0; 
 	currentSample = 0.0;
 	stepSize = 0;
@@ -27,7 +27,7 @@ Oscillator::Oscillator (double sampleRate)
 	sharedMemory.enter();
 	AudioFormatManager formatManager;
 	
-    formatManager.registerBasicFormats();
+	formatManager.registerBasicFormats();
 
     AudioFormatReader *reader = formatManager.createReaderFor(audioFile);
 	

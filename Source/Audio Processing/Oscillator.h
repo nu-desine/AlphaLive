@@ -53,7 +53,7 @@ private:
 	AudioSampleBuffer squareBuffer;
 	
 	//buffer file source
-	File audioFile;
+	File squareWaveFile;
     
 };
 

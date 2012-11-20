@@ -218,17 +218,17 @@
 	};
 	0C78A2C915B467900049C0C8 /* Oscillator.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {838, 2249}}";
-			sepNavSelRange = "{428, 0}";
-			sepNavVisRange = "{82, 1230}";
+			sepNavIntBoundsRect = "{{0, 0}, {873, 2262}}";
+			sepNavSelRange = "{317, 0}";
+			sepNavVisRange = "{141, 1307}";
 			sepNavWindowFrame = "{{15, 0}, {708, 876}}";
 		};
 	};
 	0C78A2CA15B467900049C0C8 /* Oscillator.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {646, 780}}";
-			sepNavSelRange = "{1320, 0}";
-			sepNavVisRange = "{27, 1415}";
+			sepNavIntBoundsRect = "{{0, 0}, {737, 780}}";
+			sepNavSelRange = "{1392, 0}";
+			sepNavVisRange = "{13, 1456}";
 			sepNavWindowFrame = "{{15, 0}, {708, 876}}";
 		};
 	};
@@ -644,15 +644,15 @@
 			FC771C0616259DB6004284C9 /* Distortion.cpp:298 */,
 			FC771C0816259DB6004284C9 /* Distortion.cpp:299 */,
 			FC771C0A16259DB7004284C9 /* Distortion.cpp:300 */,
-			FC0BCA4C165546A6000686F4 /* Oscillator.cpp:90 */,
-			FC0BCA4E165546A7000686F4 /* Oscillator.cpp:91 */,
-			FC0BCA56165546B5000686F4 /* Oscillator.cpp:130 */,
-			FC0BCAE5165559C9000686F4 /* Oscillator.cpp:34 */,
-			FC0BCAE9165559CC000686F4 /* Oscillator.cpp:38 */,
-			FC0BCAED165559CE000686F4 /* Oscillator.cpp:40 */,
-			FCCB3894165A9AA100A5F1EA /* Oscillator.cpp:38 */,
-			FCCB3899165A9AAA00A5F1EA /* Oscillator.cpp:30 */,
-			FCCB38A4165A9D9400A5F1EA /* Oscillator.cpp:36 */,
+			FC0BCA4C165546A6000686F4 /* Oscillator.cpp:84 */,
+			FC0BCA4E165546A7000686F4 /* Oscillator.cpp:85 */,
+			FC0BCA56165546B5000686F4 /* Oscillator.cpp:124 */,
+			FC0BCAE5165559C9000686F4 /* Oscillator.cpp:31 */,
+			FC0BCAE9165559CC000686F4 /* Oscillator.cpp:34 */,
+			FC0BCAED165559CE000686F4 /* Oscillator.cpp:34 */,
+			FCCB3894165A9AA100A5F1EA /* Oscillator.cpp:34 */,
+			FCCB3899165A9AAA00A5F1EA /* Oscillator.cpp:29 */,
+			FCCB38A4165A9D9400A5F1EA /* Oscillator.cpp:32 */,
 		);
 		codeSenseManager = FCDCD118160C8B2F00E0612A /* Code sense */;
 		executables = (
@@ -688,7 +688,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					512,
+					559,
 					20,
 					48,
 					43,
@@ -752,6 +752,9 @@
 			FCB51D21165BD7C300F6440B /* PBXTextBookmark */ = FCB51D21165BD7C300F6440B /* PBXTextBookmark */;
 			FCB51D25165BD81000F6440B /* PBXTextBookmark */ = FCB51D25165BD81000F6440B /* PBXTextBookmark */;
 			FCB51D29165BD86A00F6440B /* PBXTextBookmark */ = FCB51D29165BD86A00F6440B /* PBXTextBookmark */;
+			FCB51D2F165BDBD800F6440B /* PBXTextBookmark */ = FCB51D2F165BDBD800F6440B /* PBXTextBookmark */;
+			FCB51D30165BDBD800F6440B /* PBXTextBookmark */ = FCB51D30165BDBD800F6440B /* PBXTextBookmark */;
+			FCB51D31165BDBD800F6440B /* PBXTextBookmark */ = FCB51D31165BDBD800F6440B /* PBXTextBookmark */;
 			FCCB38A6165A9D9E00A5F1EA = FCCB38A6165A9D9E00A5F1EA /* PBXTextBookmark */;
 			FCCB38E0165AA3EC00A5F1EA = FCCB38E0165AA3EC00A5F1EA /* PBXTextBookmark */;
 			FCCB38FE165AE33A00A5F1EA = FCCB38FE165AE33A00A5F1EA /* PBXTextBookmark */;
@@ -976,7 +979,7 @@
 		vrLen = 2045;
 		vrLoc = 282;
 	};
-	FC0BCA4C165546A6000686F4 /* Oscillator.cpp:90 */ = {
+	FC0BCA4C165546A6000686F4 /* Oscillator.cpp:84 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -988,13 +991,13 @@
 		functionName = "Oscillator::process (double frequency, int waveShape)";
 		hitCount = 1;
 		ignoreCount = 0;
-		lineNumber = 90;
+		lineNumber = 84;
 		location = AlphaLive;
 		modificationTime = 375116827.92226;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
-	FC0BCA4E165546A7000686F4 /* Oscillator.cpp:91 */ = {
+	FC0BCA4E165546A7000686F4 /* Oscillator.cpp:85 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -1006,13 +1009,13 @@
 		functionName = "Oscillator::process (double frequency, int waveShape)";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 91;
+		lineNumber = 85;
 		location = AlphaLive;
 		modificationTime = 375116804.258692;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
-	FC0BCA56165546B5000686F4 /* Oscillator.cpp:130 */ = {
+	FC0BCA56165546B5000686F4 /* Oscillator.cpp:124 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -1024,13 +1027,31 @@
 		functionName = "Oscillator::processSqr()";
 		hitCount = 1;
 		ignoreCount = 0;
-		lineNumber = 130;
+		lineNumber = 124;
 		location = AlphaLive;
 		modificationTime = 375116825.990879;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
-	FC0BCAE5165559C9000686F4 /* Oscillator.cpp:34 */ = {
+	FC0BCAE5165559C9000686F4 /* Oscillator.cpp:31 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
+		functionName = "Oscillator::Oscillator (double sampleRate)";
+		hitCount = 1;
+		ignoreCount = 0;
+		lineNumber = 31;
+		location = AlphaLive;
+		modificationTime = 375116818.268133;
+		originalNumberOfMultipleMatches = 1;
+		state = 1;
+	};
+	FC0BCAE9165559CC000686F4 /* Oscillator.cpp:34 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -1044,29 +1065,11 @@
 		ignoreCount = 0;
 		lineNumber = 34;
 		location = AlphaLive;
-		modificationTime = 375116818.268133;
-		originalNumberOfMultipleMatches = 1;
-		state = 1;
-	};
-	FC0BCAE9165559CC000686F4 /* Oscillator.cpp:38 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		breakpointStyle = 0;
-		continueAfterActions = 0;
-		countType = 0;
-		delayBeforeContinue = 0;
-		fileReference = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
-		functionName = "Oscillator::Oscillator (double sampleRate)";
-		hitCount = 1;
-		ignoreCount = 0;
-		lineNumber = 38;
-		location = AlphaLive;
 		modificationTime = 375116820.464302;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
-	FC0BCAED165559CE000686F4 /* Oscillator.cpp:40 */ = {
+	FC0BCAED165559CE000686F4 /* Oscillator.cpp:34 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -1078,7 +1081,7 @@
 		functionName = "Oscillator::Oscillator (double sampleRate)";
 		hitCount = 1;
 		ignoreCount = 0;
-		lineNumber = 40;
+		lineNumber = 34;
 		location = AlphaLive;
 		modificationTime = 375116821.189281;
 		originalNumberOfMultipleMatches = 1;
@@ -1427,7 +1430,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 24";
 		rLen = 0;
-		rLoc = 497;
+		rLoc = 502;
 		rType = 0;
 		vrLen = 1176;
 		vrLoc = 112;
@@ -1457,7 +1460,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 33";
 		rLen = 0;
-		rLoc = 733;
+		rLoc = 705;
 		rType = 0;
 		vrLen = 1263;
 		vrLoc = 116;
@@ -1467,7 +1470,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 33";
 		rLen = 0;
-		rLoc = 773;
+		rLoc = 705;
 		rType = 0;
 		vrLen = 1256;
 		vrLoc = 140;
@@ -1477,7 +1480,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 21";
 		rLen = 0;
-		rLoc = 432;
+		rLoc = 437;
 		rType = 0;
 		vrLen = 1294;
 		vrLoc = 116;
@@ -1497,7 +1500,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 31";
 		rLen = 0;
-		rLoc = 686;
+		rLoc = 703;
 		rType = 0;
 		vrLen = 1244;
 		vrLoc = 0;
@@ -1507,7 +1510,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 36";
 		rLen = 0;
-		rLoc = 865;
+		rLoc = 781;
 		rType = 0;
 		vrLen = 1185;
 		vrLoc = 0;
@@ -1517,7 +1520,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 36";
 		rLen = 0;
-		rLoc = 865;
+		rLoc = 781;
 		rType = 0;
 		vrLen = 1189;
 		vrLoc = 0;
@@ -1527,7 +1530,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 34";
 		rLen = 0;
-		rLoc = 789;
+		rLoc = 705;
 		rType = 0;
 		vrLen = 1185;
 		vrLoc = 0;
@@ -1537,7 +1540,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 34";
 		rLen = 0;
-		rLoc = 789;
+		rLoc = 705;
 		rType = 0;
 		vrLen = 1185;
 		vrLoc = 0;
@@ -1547,7 +1550,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 38";
 		rLen = 0;
-		rLoc = 906;
+		rLoc = 819;
 		rType = 0;
 		vrLen = 1278;
 		vrLoc = 82;
@@ -1557,7 +1560,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 31";
 		rLen = 0;
-		rLoc = 627;
+		rLoc = 631;
 		rType = 0;
 		vrLen = 1352;
 		vrLoc = 154;
@@ -1567,7 +1570,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 25";
 		rLen = 0;
-		rLoc = 520;
+		rLoc = 525;
 		rType = 0;
 		vrLen = 1352;
 		vrLoc = 154;
@@ -1577,7 +1580,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 25";
 		rLen = 0;
-		rLoc = 520;
+		rLoc = 525;
 		rType = 0;
 		vrLen = 1297;
 		vrLoc = 154;
@@ -1588,7 +1591,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		fallbackIsa = XCBuildMessageTextBookmark;
 		rLen = 1;
-		rLoc = 33;
+		rLoc = 30;
 		rType = 1;
 	};
 	FCB51CEF165BC08B00F6440B /* PBXTextBookmark */ = {
@@ -1596,7 +1599,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 33";
 		rLen = 0;
-		rLoc = 699;
+		rLoc = 705;
 		rType = 0;
 		vrLen = 325;
 		vrLoc = 558;
@@ -1606,7 +1609,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 32";
 		rLen = 0;
-		rLoc = 621;
+		rLoc = 624;
 		rType = 0;
 		vrLen = 1342;
 		vrLoc = 154;
@@ -1626,7 +1629,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 32";
 		rLen = 0;
-		rLoc = 621;
+		rLoc = 624;
 		rType = 0;
 		vrLen = 1342;
 		vrLoc = 154;
@@ -1636,7 +1639,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 29";
 		rLen = 0;
-		rLoc = 621;
+		rLoc = 624;
 		rType = 0;
 		vrLen = 1224;
 		vrLoc = 15;
@@ -1646,7 +1649,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 39";
 		rLen = 0;
-		rLoc = 906;
+		rLoc = 819;
 		rType = 0;
 		vrLen = 1207;
 		vrLoc = 15;
@@ -1656,7 +1659,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 38";
 		rLen = 0;
-		rLoc = 904;
+		rLoc = 819;
 		rType = 0;
 		vrLen = 1171;
 		vrLoc = 0;
@@ -1666,7 +1669,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 38";
 		rLen = 0;
-		rLoc = 904;
+		rLoc = 819;
 		rType = 0;
 		vrLen = 1171;
 		vrLoc = 0;
@@ -1676,7 +1679,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 21";
 		rLen = 0;
-		rLoc = 428;
+		rLoc = 433;
 		rType = 0;
 		vrLen = 1174;
 		vrLoc = 0;
@@ -1686,7 +1689,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 34";
 		rLen = 0;
-		rLoc = 699;
+		rLoc = 705;
 		rType = 0;
 		vrLen = 139;
 		vrLoc = 466;
@@ -1726,7 +1729,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 21";
 		rLen = 0;
-		rLoc = 428;
+		rLoc = 433;
 		rType = 0;
 		vrLen = 1219;
 		vrLoc = 82;
@@ -1736,7 +1739,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 21";
 		rLen = 0;
-		rLoc = 428;
+		rLoc = 433;
 		rType = 0;
 		vrLen = 1226;
 		vrLoc = 82;
@@ -1746,7 +1749,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 21";
 		rLen = 0;
-		rLoc = 428;
+		rLoc = 433;
 		rType = 0;
 		vrLen = 1227;
 		vrLoc = 82;
@@ -1756,12 +1759,42 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 21";
 		rLen = 0;
-		rLoc = 428;
+		rLoc = 433;
 		rType = 0;
 		vrLen = 1230;
 		vrLoc = 82;
 	};
-	FCCB3894165A9AA100A5F1EA /* Oscillator.cpp:38 */ = {
+	FCB51D2F165BDBD800F6440B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0C78A2CA15B467900049C0C8 /* Oscillator.h */;
+		name = "Oscillator.h: 53";
+		rLen = 0;
+		rLoc = 1392;
+		rType = 0;
+		vrLen = 1456;
+		vrLoc = 13;
+	};
+	FCB51D30165BDBD800F6440B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
+		name = "Oscillator.cpp: 19";
+		rLen = 0;
+		rLoc = 317;
+		rType = 0;
+		vrLen = 1307;
+		vrLoc = 141;
+	};
+	FCB51D31165BDBD800F6440B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
+		name = "Oscillator.cpp: 19";
+		rLen = 0;
+		rLoc = 317;
+		rType = 0;
+		vrLen = 1307;
+		vrLoc = 141;
+	};
+	FCCB3894165A9AA100A5F1EA /* Oscillator.cpp:34 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -1773,13 +1806,13 @@
 		functionName = "Oscillator::Oscillator (double sampleRate)";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 38;
+		lineNumber = 34;
 		location = AlphaLive;
 		modificationTime = 375116804.478491;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
-	FCCB3899165A9AAA00A5F1EA /* Oscillator.cpp:30 */ = {
+	FCCB3899165A9AAA00A5F1EA /* Oscillator.cpp:29 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -1791,13 +1824,13 @@
 		functionName = "Oscillator::Oscillator (double sampleRate)";
 		hitCount = 1;
 		ignoreCount = 0;
-		lineNumber = 30;
+		lineNumber = 29;
 		location = AlphaLive;
 		modificationTime = 375116814.536539;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 	};
-	FCCB38A4165A9D9400A5F1EA /* Oscillator.cpp:36 */ = {
+	FCCB38A4165A9D9400A5F1EA /* Oscillator.cpp:32 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -1809,7 +1842,7 @@
 		functionName = "Oscillator::Oscillator (double sampleRate)";
 		hitCount = 1;
 		ignoreCount = 0;
-		lineNumber = 36;
+		lineNumber = 32;
 		location = AlphaLive;
 		modificationTime = 375116818.602818;
 		originalNumberOfMultipleMatches = 1;
@@ -1850,7 +1883,7 @@
 		fRef = 0C78A2C915B467900049C0C8 /* Oscillator.cpp */;
 		name = "Oscillator.cpp: 29";
 		rLen = 0;
-		rLoc = 583;
+		rLoc = 586;
 		rType = 0;
 		vrLen = 1161;
 		vrLoc = 3;

@@ -248,6 +248,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -306,7 +308,7 @@
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 460}, {295, 764}}</string>
+							<string>{{0, 459}, {295, 764}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -325,7 +327,7 @@
 							<real>295</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>34 55 1068 823 0 0 1440 878 </string>
+						<string>34 55 1115 823 0 0 1440 878 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -336,8 +338,6 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -355,7 +355,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>FCB51D29165BD86A00F6440B</string>
+										<string>FCB51D31165BDBD800F6440B</string>
 										<key>history</key>
 										<array>
 											<string>FC0BCA3D165544BA000686F4</string>
@@ -364,14 +364,14 @@
 											<string>FC0BCA481655468C000686F4</string>
 											<string>FC0BCB1116555CF4000686F4</string>
 											<string>FCCB38E0165AA3EC00A5F1EA</string>
-											<string>FCCB38FE165AE33A00A5F1EA</string>
 											<string>FCCB3900165AE33A00A5F1EA</string>
 											<string>FCCB3901165AE33A00A5F1EA</string>
 											<string>FCB51C85165BAA9200F6440B</string>
 											<string>FCB51C86165BAA9200F6440B</string>
 											<string>FCB51CC0165BB70F00F6440B</string>
 											<string>FCB51CF6165BC0E400F6440B</string>
-											<string>FCB51CF7165BC0E400F6440B</string>
+											<string>FCB51D2F165BDBD800F6440B</string>
+											<string>FCB51D30165BDBD800F6440B</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -383,9 +383,9 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {751, 777}}</string>
+								<string>{{0, 0}, {798, 777}}</string>
 								<key>RubberWindowFrame</key>
-								<string>34 55 1068 823 0 0 1440 878 </string>
+								<string>34 55 1115 823 0 0 1440 878 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -403,9 +403,9 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 782}, {751, 0}}</string>
+								<string>{{0, 782}, {798, 0}}</string>
 								<key>RubberWindowFrame</key>
-								<string>34 55 1068 823 0 0 1440 878 </string>
+								<string>34 55 1115 823 0 0 1440 878 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -414,7 +414,7 @@
 						</dict>
 					</array>
 					<key>Proportion</key>
-					<string>751pt</string>
+					<string>798pt</string>
 				</dict>
 			</array>
 			<key>Name</key>
@@ -552,7 +552,7 @@
 	<key>StatusbarIsVisible</key>
 	<true/>
 	<key>TimeStamp</key>
-	<real>375117930.82396197</real>
+	<real>375118808.63117898</real>
 	<key>ToolbarConfigUserDefaultsMinorVersion</key>
 	<string>2</string>
 	<key>ToolbarDisplayMode</key>
@@ -569,16 +569,15 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>FCB51D2A165BD86A00F6440B</string>
 		<string>FCB51C90165BAA9200F6440B</string>
 		<string>FCB51C91165BAA9200F6440B</string>
 		<string>1CD10A99069EF8BA00B06720</string>
+		<string>1C78EAAD065D492600B07095</string>
 		<string>/Users/felixgodden/Programming/nu-desine/alphalive 2/Builds/MacOSX/AlphaLive.xcodeproj</string>
 		<string>FCDCD115160C8B2F00E0612A</string>
-		<string>1C78EAAD065D492600B07095</string>
 	</array>
 	<key>WindowString</key>
-	<string>34 55 1068 823 0 0 1440 878 </string>
+	<string>34 55 1115 823 0 0 1440 878 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>

@@ -18,7 +18,7 @@ Oscillator::Oscillator (double sampleRate)
 	sampRate(sampleRate),
 	squareBuffer(1, 20400)
 {
-	audioFile = ("/Users/felixgodden/Programming/nu-desine/alphalive 2/Source/SquareWaveRoundedFINALSHORTESTest.wav");
+	squareWaveFile = ("/Users/felixgodden/Programming/nu-desine/alphalive 2/Source/SquareWaveRoundedFINALSHORTESTest.wav");
     currentPhase = 0.0; 
 	currentSample = 0.0;
 	stepSize = 0;
@@ -26,18 +26,12 @@ Oscillator::Oscillator (double sampleRate)
 	
 	sharedMemory.enter();
 	AudioFormatManager formatManager;
-	
 	formatManager.registerBasicFormats();
-
-    AudioFormatReader *reader = formatManager.createReaderFor(audioFile);
 	
-	std::cout << "In constructor" << formatManager.createReaderFor(audioFile) << std::endl;
-	
+    AudioFormatReader *reader = formatManager.createReaderFor(squareWaveFile);
 	reader->read(&squareBuffer, 0, reader->lengthInSamples, 0, true, false);
 	
 	numSamples = reader->lengthInSamples;
-	
-	std::cout << "In constructor" << *squareBuffer.getSampleData(0, 777) << std::endl;
 	
 	sharedMemory.exit();
 }
@@ -85,7 +79,7 @@ double Oscillator::process (double frequency, int waveShape)
 		if (currentPhase < 0.0)
 			currentPhase += TWOPI;
 	}
-	if (waveShape == 2) 
+	if (waveShape == 2 || waveShape == 4 || waveShape == 5) 
 	{
 		stepSize = numSamples * (frequency / sampRate);
 		currentSample += stepSize;

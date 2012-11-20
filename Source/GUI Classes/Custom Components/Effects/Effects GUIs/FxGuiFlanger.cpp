@@ -74,7 +74,8 @@ GuiFlanger::GuiFlanger(MainComponent &ref)
     rateMenu->addItem("1/32", 9);
     rateMenu->setSelectedId(4, true);*/
     
-    addAndMakeVisible(syncButton = new AlphaTextButton(translate("SYNC")));
+    Image *syncImage = new Image(ImageCache::getFromMemory(BinaryDataNew::syncicon_png, BinaryDataNew::syncicon_pngSize));
+    addAndMakeVisible(syncButton = new ModeButton(syncImage));
     syncButton->setClickingTogglesState(true);
     syncButton->setToggleState(1, false);
     syncButton->addListener(this);

@@ -79,7 +79,8 @@ GuiDelay::GuiDelay(MainComponent &ref)
     delayTimeMenu->addItem(translate("Quarter Beat"), 5);
     delayTimeMenu->setSelectedId(4, true);*/
     
-    addAndMakeVisible(syncButton = new AlphaTextButton(translate("SYNC")));
+	Image *syncImage = new Image(ImageCache::getFromMemory(BinaryDataNew::syncicon_png, BinaryDataNew::syncicon_pngSize));
+    addAndMakeVisible(syncButton = new ModeButton(syncImage));
     syncButton->setClickingTogglesState(true);
     syncButton->setToggleState(1, false);
     syncButton->addListener(this);

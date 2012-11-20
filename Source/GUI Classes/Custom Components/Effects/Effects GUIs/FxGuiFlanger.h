@@ -62,8 +62,7 @@ private:
     
     ComboBox *alphaTouchMenu;
 	AlphaPopUpButton *rateMenu;
-	ModeButton *reverseButton;
-    AlphaTextButton *syncButton;
+	ScopedPointer <ModeButton> reverseButton, syncButton;
     AlphaRotarySlider *intensitySlider;
     Label *parameterHoverLabel;
     

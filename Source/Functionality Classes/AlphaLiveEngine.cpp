@@ -24,6 +24,7 @@
 #include "../File and Settings/AppSettings.h"
 #include "Other/LayoutsAndScales.cpp"
 #include "../File and Settings/StoredSettings.h"
+#include "../GUI Classes/Views/MainComponent.h"
 
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[recievedPad]
@@ -93,7 +94,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     modeSampler = new ModeSampler(*this);
     modeSequencer = new ModeSequencer(*midiOutputDevice, *this);
     modeController = new ModeController(*midiOutputDevice, *this);
-    //eliteControls = new EliteControls(*midiOutputDevice, *this);
+    eliteControls = new EliteControls(*midiOutputDevice, *this);
     
     //global clock stuff
     globalClock = new GlobalClock(*this);
@@ -139,7 +140,7 @@ AlphaLiveEngine::~AlphaLiveEngine()
     delete modeSampler;
     delete modeSequencer;
     delete modeController;
-    //delete eliteControls;
+    delete eliteControls;
     
     delete globalClock;
 
@@ -302,7 +303,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
     else 
     {
         //an elite control has been pressed. Do your thang!
-        //eliteControls->getInputData(pad, value);
+        eliteControls->getInputData(pad, value);
     }
 }
 
@@ -619,7 +620,7 @@ void AlphaLiveEngine::setMidiOutputDevice (int deviceIndex)
     modeMidi->setMidiOutputDevice(*midiOutputDevice);
     modeSequencer->setMidiOutputDevice(*midiOutputDevice);
     modeController->setMidiOutputDevice(*midiOutputDevice);
-    //eliteControls->setMidiOutputDevice(*midiOutputDevice);
+    eliteControls->setMidiOutputDevice(*midiOutputDevice);
     
     
 }
@@ -641,19 +642,13 @@ GlobalClock* AlphaLiveEngine::getGlobalClock()
     return globalClock;
 }
 
-
-void AlphaLiveEngine::sendEliteControlCommand(int command)
+MainComponent* AlphaLiveEngine::getMainComponent()
 {
-    //this function is called from EliteControls and triggers some commands
-    //within mainComponent via guiPadLayout. 
-    //I'm aware this is a very hacky way to communicated with mainComponent
-    //though it is the only communication path avaialable through this badly
-    //structured application!
-    
-    //command:
-    // 2 = trigger start/stop clock command within mainComponent
-    // 3 = trigger save command within AppDocumentState via mainComponent
-    
-    guiUpdateFlag = command;
-    notifyObs();
+    return mainComponent;
+}
+
+void AlphaLiveEngine::setMainComponent(MainComponent *mainComponent_)
+{
+    mainComponent = mainComponent_;
+    eliteControls->setMainComponent(mainComponent_);
 }

@@ -23,6 +23,7 @@
 
 HidComms::HidComms() : Thread("HidThread")
 {
+    appHasInitialised = false;
     sendOutputReport = false;
     struct hid_device_info *devs, *cur_dev;
     
@@ -94,12 +95,13 @@ HidComms::HidComms() : Thread("HidThread")
         }
         printf("Indexed String 1: %ls\n", wstr);
         
-        
-        
         // Set the hid_read() function to be non-blocking.
         hid_set_nonblocking(handle, 1);
-        
         memset(buf,0,sizeof(buf));
+        
+        //Here (possibly somewhere else?) we will need to send a report to request a report back
+        //to find out what AlphaSphere model is plugged in. AlphaLive will then use the information
+        //to initialise the correct GUI.
         
         startThread();
         
@@ -137,34 +139,36 @@ void HidComms::run()
 //            printf("\n");
             
             //encode the recieved command byte here based on the report ID
-            
-            if (buf[0] == 0x01) //pad data report
+            if (appHasInitialised == true)
             {
-                unsigned short int pressure = 0;
-                pressure = buf[2] + (buf[3]<<8);
+                if (buf[0] == 0x01) //pad data report
+                {
+                    unsigned short int pressure = 0;
+                    pressure = buf[2] + (buf[3]<<8);
+                    
+                    hidInputCallback(buf[1], pressure, buf[4]);  
+                }
                 
-                hidInputCallback(buf[1], pressure, buf[4]);  
-            }
-            
-            //The elite dials and buttons could probably use a the same
-            //command ID now we're not using such a specific report descriptor.
-            
-            else if (buf[0] == 0x02) //elite button report
-            {
-                //set 'pad' value to be 102-104 to represent the elite buttons
-                hidInputCallback(buf[1]+102, buf[2], 0);
-            }
-            else if (buf[0] == 0x03) //elite dial
-            {
-                //set 'pad' value to be 100-101 to represent the elite dials
-                hidInputCallback(buf[1]+100, buf[2], 0);
-            }
-            
-            else if (buf[0] == 0x07) //test
-            {
-                for (int i = 0; i < res; i++)
-                    printf("%02hhx ", buf[i]);
-                printf("\n");
+                //The elite dials and buttons could probably use a the same
+                //command ID now we're not using such a specific report descriptor.
+                
+                else if (buf[0] == 0x02) //elite button report
+                {
+                    //set 'pad' value to be 102-104 to represent the elite buttons
+                    hidInputCallback(buf[1]+102, buf[2], 0);
+                }
+                else if (buf[0] == 0x03) //elite dial
+                {
+                    //set 'pad' value to be 100-101 to represent the elite dials
+                    hidInputCallback(buf[1]+100, buf[2], 0);
+                }
+                
+                else if (buf[0] == 0x07) //test
+                {
+                    for (int i = 0; i < res; i++)
+                        printf("%02hhx ", buf[i]);
+                    printf("\n");
+                }
             }
             
             memset(buf,0,sizeof(buf));
@@ -234,4 +238,9 @@ void HidComms::sendHidControlReport (uint8 *bytesToSend)
 bool HidComms::hasOpenedHidDevice()
 {
     return hasOpenedDevice;
+}
+
+void HidComms::setAppHasInitialised()
+{
+    appHasInitialised = true;
 }

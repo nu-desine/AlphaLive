@@ -22,6 +22,8 @@
 
 #include "EliteControls.h"
 #include "../File and Settings/AppSettings.h"
+#include "../Application/CommandIDs.h"
+#include "../GUI Classes/Views/MainComponent.h"
 
 EliteControls::EliteControls(MidiOutput &midiOutput, AlphaLiveEngine &ref)
                             :   midiOutputDevice(&midiOutput),
@@ -33,6 +35,11 @@ EliteControls::EliteControls(MidiOutput &midiOutput, AlphaLiveEngine &ref)
 EliteControls::~EliteControls()
 {
     
+}
+
+void EliteControls::setMainComponent(MainComponent *mainComponent_)
+{
+    mainComponent = mainComponent_;
 }
 
 void EliteControls::getInputData(int control, int value)
@@ -53,13 +60,13 @@ void EliteControls::getInputData(int control, int value)
         //global gain
         if (controlType == 1)
         {
-            
+            mainComponent->sendEliteDialCommand (1, eliteControlValue);
         }
         
         //global pan
         else if (controlType == 2)
         {
-            
+            mainComponent->sendEliteDialCommand (2, eliteControlValue);
         }
         
         //scene switcher
@@ -210,7 +217,7 @@ void EliteControls::getInputData(int control, int value)
         {
             if (eliteControlValue == 1)
             {
-                alphaLiveEngineRef.sendEliteControlCommand(2);
+                mainComponent->perform(CommandIDs::StartStopClock);
             }
         }
         
@@ -225,7 +232,7 @@ void EliteControls::getInputData(int control, int value)
         {
             if (eliteControlValue == 1)
             {
-                alphaLiveEngineRef.sendEliteControlCommand(3);
+                mainComponent->getAppDocumentStateRef().saveProject();
             }
         }
         

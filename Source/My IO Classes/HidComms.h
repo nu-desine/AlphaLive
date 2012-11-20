@@ -38,6 +38,7 @@ public:
     void sendHidControlReport (uint8 *bytesToSend);
     
     bool hasOpenedHidDevice();
+    void setAppHasInitialised();
     
 private:
     int res;
@@ -52,6 +53,8 @@ private:
     
     unsigned char dataToSend[5];
     bool sendOutputReport;
+    
+    bool appHasInitialised;
 };
 
 

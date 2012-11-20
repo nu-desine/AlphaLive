@@ -22,7 +22,6 @@
 
 #include "GuiPadLayout.h"
 //#include "../../Views/MainComponent.h"
-#include "../../../Application/CommandIDs.h"
 
 GuiPadLayout::GuiPadLayout(AlphaLiveEngine &subject, MainComponent &ref)
                             :   Component ("GuiPadLayout"),
@@ -296,19 +295,6 @@ bool GuiPadLayout::update(const Subject& theChangedSubject)
             //However is strange how this doesn't apply when using alt-click to emulate mouse clicks!!
 
         }
-        
-        else if (mSubject.getGuiUpdateFlag() == 2)  //trigger start/stop clock command within mainComponent.
-                                                    //hacky I know, but is a quick fix!
-        {
-            mainComponentRef.perform(CommandIDs::StartStopClock);
-        }
-        
-        else if (mSubject.getGuiUpdateFlag() == 3)  //trigger 'save' command within AppDocumentState.
-                                                    //hacky I know, but is a quick fix!
-        {
-            mainComponentRef.getAppDocumentStateRef().saveProject();
-        }
-        
     }
     
     return true;

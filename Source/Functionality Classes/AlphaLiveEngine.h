@@ -82,7 +82,9 @@
 #include "../My IO Classes/OscOutput.h"
 #include "GlobalClock.h"
 #include "../Audio Processing/PanControl.h"
-//#include "EliteControls.h"
+#include "EliteControls.h"
+
+class MainComponent;
 
 class AlphaLiveEngine :     public Subject, //so this class can notify observers
                             public AudioIODeviceCallback, //so this class handles the audio output
@@ -98,6 +100,9 @@ public:
     int getRecievedPad();
     int getRecievedValue();
     void playPadFromMouse (int pad, int value);
+    
+    MainComponent* getMainComponent();
+    void setMainComponent(MainComponent *mainComponent_);
     
     AudioDeviceManager& getAudioDeviceManager();
     ModeMidi* getModeMidi(); //used by PadSettings to access the settings accessors
@@ -143,8 +148,6 @@ public:
     
     void setRecordingSequencerPadsState (int padNum, int state);
     Array<int> getRecordingPads();
-    
-    void sendEliteControlCommand(int command);
         
 private:
     
@@ -152,7 +155,7 @@ private:
     ModeSampler *modeSampler;
     ModeSequencer *modeSequencer;
     ModeController *modeController;
-    //EliteControls *eliteControls;
+    EliteControls *eliteControls;
     
     int recievedPad;
     float recievedValue;
@@ -175,8 +178,6 @@ private:
     //guiUpdateFlag is accessed by the observer class (GuiPadLayout) so it knows what part of the GUI it should be updating.
     // 0 = pad gradient/pressure (default)
     // 1 = pad playing status signifier
-    // 2 = trigger start/stop clock command within mainComponent (hacky I know!)
-    // 3 = trigger save command within AppDocumentState via mainComponent (hacky I know!)
     int guiUpdateFlag;
     
     int padNumberForPlayingStatus;
@@ -198,6 +199,8 @@ private:
     //index 2 = group 3 etc...). This will allow pads to be easily found and turned off when a new pad
     //of that group is triggered
     int currentExclusivePad[23];
+    
+    MainComponent *mainComponent;
     
 };
 

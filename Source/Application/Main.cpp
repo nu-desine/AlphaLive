@@ -132,6 +132,8 @@ public:
                 appDocumentState->loadProject(false, StoredSettings::getInstance()->recentFiles.getFile(0));
         }
         
+        //Tell the HidComms class that it can start recieving and processing pad and elite control reports.
+        alphaLiveEngine->setAppHasInitialised();
     }
 
     

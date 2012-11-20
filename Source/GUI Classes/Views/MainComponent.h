@@ -121,6 +121,8 @@ public:
     
     void setLocalisation();
     
+    void sendEliteDialCommand (int command, int eliteControlValue);
+    
     
 private:
     //==============================================================================

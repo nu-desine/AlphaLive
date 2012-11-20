@@ -28,6 +28,7 @@
 
 class AlphaLiveEngine;
 class AppSettings;
+class MainComponent;
 
 class EliteControls
 {
@@ -35,12 +36,17 @@ public:
     EliteControls(MidiOutput &midiOutput, AlphaLiveEngine &ref);
     ~EliteControls();
     
+    void setMainComponent(MainComponent *mainComponent_);
+    
     void setMidiOutputDevice (MidiOutput &midiOutput);
     void sendMidiMessage(MidiMessage midiMessage);
     
     void getInputData(int control, int value);
     
 private:
+    
+    MainComponent *mainComponent;
+    
     int eliteDialNumber, eliteButtonNumber;
     int eliteControlValue;
     

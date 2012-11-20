@@ -38,7 +38,7 @@
 //==============================================================================
 MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, DocumentWindow* owner_)
                         :   Thread("Info Box Updater"),
-alphaLiveEngineRef(ref),
+                            alphaLiveEngineRef(ref),
                             appDocumentStateRef(ref2),
                             owner(owner_)
                             
@@ -53,6 +53,9 @@ alphaLiveEngineRef(ref),
     
     //attach this class to the subject class
     appDocumentStateRef.attach(this);
+    
+    //allow AlphaLive Engine to communicate with this class (used by the elite controls)
+    alphaLiveEngineRef.setMainComponent(this);
     
     //Look-and-feel stuff
     LookAndFeel::setDefaultLookAndFeel (&alphaLiveLookAndFeel);
@@ -1255,6 +1258,62 @@ void MainComponent::setLocalisation()
     //commandManager->commandStatusChanged();
     //owner->repaint();
      
+}
+
+
+void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
+{
+    //command signifies which control within this class needs changing
+    //eliteControlValue is the value sent by the elite dial  
+    
+    //===get slider depending on command value===
+    Slider *sliderToChange = nullptr;
+    
+    //global gain
+    if (command == 1)
+        sliderToChange = gainSlider;
+    //global pan
+    else if (command == 2)
+        sliderToChange = panSlider;
+    
+    
+    //===process slider value===
+    if (sliderToChange != nullptr)
+    {
+        double newVal = 0;
+        double currentVal = sliderToChange->getValue();
+        double maxValue = sliderToChange->getMaximum();
+        double minValue = sliderToChange->getMinimum();
+        double incremValue = 0.01; //is this value suitable?
+        
+        //incremented value
+        if (eliteControlValue >= 1 && eliteControlValue <= 63)
+            newVal = currentVal + (eliteControlValue * incremValue); //too simple?
+        //decremented value
+        else if (eliteControlValue >= 64 && eliteControlValue <= 127)
+            newVal = currentVal - ((128 - eliteControlValue) * incremValue); //too simple?
+        
+        //if produced value is out of range, set in range
+        if (!(newVal >= minValue && newVal <= maxValue))
+        {
+            if (newVal > maxValue)
+                newVal = maxValue;
+            else if (newVal < minValue)
+                newVal = minValue;
+        }
+        
+        //if new value is different from the previous value, change the slider value
+        if (newVal != currentVal)
+        {
+            //should I be locking the message thread like I'm currently doing?
+            //or could this cause delays/lagging, in which case I should use an aSyncUpdater?
+            const MessageManagerLock mmLock;
+            
+            sliderToChange->setValue(newVal, true);
+            std::cout << "New Slider Value: " << newVal << std::endl;
+        }
+    }
+    
 }
 
 

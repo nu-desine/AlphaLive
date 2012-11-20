@@ -98,12 +98,16 @@ void ModeController::getInputData(int pad, int value)
 //called when pad is set to the scene switcher control
 void ModeController::changeScene()
 {
+    //instead of using Subject/Observer method here to communicate with SceneComponent,
+    //now it would be better to pass in a pointer to MainComponent from AlphaLiveEngine
+    //and access SceneComponent that way like recently implemented for the Elite Controls.
+    //This would make the Subject/Observer here redundant so I can remove it.
+    
     if (prevPadValue[padNumber] == 0 && padValue > 0)
     {
         triggerAsyncUpdate();
         //if there is a 'two clicks' error... it's probably being caused here!
         //how can i fix this?
-        
     }
 
 }

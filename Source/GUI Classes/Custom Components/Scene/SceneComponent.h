@@ -59,6 +59,8 @@ public:
     
     SceneSlot* getSelectedSceneSlot();
     
+    void selectSlot (int slotNumber);
+    
 private:
     
     SceneSlot *slot[NO_OF_SCENES];

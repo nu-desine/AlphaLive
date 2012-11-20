@@ -72,7 +72,12 @@ void EliteControls::getInputData(int control, int value)
         //scene switcher
         else if (controlType == 3)
         {
-            
+            //move to next scene slot
+            if (eliteControlValue >= 1 && eliteControlValue <= 63)
+                mainComponent->getSceneComponent()->selectSlot(-1);
+            //move to previous scene slot
+            else if (eliteControlValue >= 64 && eliteControlValue <= 127)
+                mainComponent->getSceneComponent()->selectSlot(-2);
         }
         
         //MIDI CC
@@ -224,7 +229,10 @@ void EliteControls::getInputData(int control, int value)
         //scene switcher
         else if (controlType == 2)
         {
-            //how should i do this? similar to how modeController does it?
+            if (eliteControlValue == 1)
+            {
+                mainComponent->getSceneComponent()->selectSlot(AppSettings::Instance()->getEliteButtonSceneNumber(eliteButtonNumber) -1 );
+            }
         }
         
         //save
@@ -268,6 +276,15 @@ void EliteControls::getInputData(int control, int value)
             
             
             oscOutput.transmitOutputMessage(control+1, oscValue, ipAddress, portNumber);
+        }
+        
+        //Killswitch
+        else if (controlType == 6)
+        {
+            if (eliteControlValue == 1)
+            {
+                mainComponent->perform(CommandIDs::KillSwitch);
+            }
         }
     }
     

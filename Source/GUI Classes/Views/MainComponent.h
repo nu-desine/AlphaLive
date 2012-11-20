@@ -107,6 +107,7 @@ public:
     GuiSequencerMode* getGuiSequencerMode();
     GuiPiano* getGuiPiano();
     Toolbox* getToolbox();
+    SceneComponent* getSceneComponent();
 	
     //==============================================================================
     //application command target stuff

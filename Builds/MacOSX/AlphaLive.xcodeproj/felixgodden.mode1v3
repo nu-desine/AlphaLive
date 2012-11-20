@@ -308,7 +308,7 @@
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 459}, {295, 764}}</string>
+							<string>{{0, 0}, {295, 764}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -355,7 +355,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>FCB51D31165BDBD800F6440B</string>
+										<string>FC227254165BF711002BF7D6</string>
 										<key>history</key>
 										<array>
 											<string>FC0BCA3D165544BA000686F4</string>
@@ -371,7 +371,7 @@
 											<string>FCB51CC0165BB70F00F6440B</string>
 											<string>FCB51CF6165BC0E400F6440B</string>
 											<string>FCB51D2F165BDBD800F6440B</string>
-											<string>FCB51D30165BDBD800F6440B</string>
+											<string>FCB51D32165BDFC500F6440B</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -429,9 +429,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>FCB51C80165BA9E400F6440B</string>
+				<string>FC227249165BF5BD002BF7D6</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>FCB51C81165BA9E400F6440B</string>
+				<string>FC22724A165BF5BD002BF7D6</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -552,7 +552,7 @@
 	<key>StatusbarIsVisible</key>
 	<true/>
 	<key>TimeStamp</key>
-	<real>375118808.63117898</real>
+	<real>375125777.41610801</real>
 	<key>ToolbarConfigUserDefaultsMinorVersion</key>
 	<string>2</string>
 	<key>ToolbarDisplayMode</key>
@@ -569,10 +569,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>FCB51C90165BAA9200F6440B</string>
-		<string>FCB51C91165BAA9200F6440B</string>
 		<string>1CD10A99069EF8BA00B06720</string>
-		<string>1C78EAAD065D492600B07095</string>
 		<string>/Users/felixgodden/Programming/nu-desine/alphalive 2/Builds/MacOSX/AlphaLive.xcodeproj</string>
 		<string>FCDCD115160C8B2F00E0612A</string>
 	</array>
@@ -598,7 +595,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>Oscillator.cpp</string>
+								<string></string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -656,7 +653,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>FCDCD115160C8B2F00E0612A</string>
-				<string>FCB51C82165BA9E400F6440B</string>
+				<string>FC22724B165BF5BD002BF7D6</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -778,13 +775,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>FCB51C89165BAA9200F6440B</string>
+				<string>FC22724C165BF5BD002BF7D6</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>FCB51C8A165BAA9200F6440B</string>
-				<string>FCB51C8B165BAA9200F6440B</string>
-				<string>FCB51C8C165BAA9200F6440B</string>
-				<string>FCB51C8D165BAA9200F6440B</string>
-				<string>FCB51C8E165BAA9200F6440B</string>
+				<string>FC22724D165BF5BD002BF7D6</string>
+				<string>FC22724E165BF5BD002BF7D6</string>
+				<string>FC22724F165BF5BD002BF7D6</string>
+				<string>FC227250165BF5BD002BF7D6</string>
+				<string>FC227251165BF5BD002BF7D6</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>

@@ -100,7 +100,7 @@ namespace CommonInfoBoxText
     
     static String eliteMidiCcNumber (translate("MIDI CC Selector. Sets and displays the MIDI CC number for the selected elite control."));
     
-    static String eliteMidiChannel (translate("MIDI Channel Selector. Sets and displays the MIDI channel number for the selected elite control."));
+    static String eliteMidiChannel (translate("MIDI Channel Buttons. Sets and displays the MIDI channel for the selected elite control. Click this button to set the selected control to channel"));
     
     static String eliteOscPortNumber (translate("OSC Port Number Selector. Sets and displays the UDP/TCP port number that you want the selected elite control to send OSC messages over."));
     

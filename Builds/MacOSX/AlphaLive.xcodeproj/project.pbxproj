@@ -1484,8 +1484,8 @@
 				0C78A2DE15B467900049C0C8 /* AlphaLiveEngine.cpp */,
 				0C78A2DA15B467900049C0C8 /* GlobalClock.h */,
 				0C78A2D915B467900049C0C8 /* GlobalClock.cpp */,
-				0CF1D842165C0346001E9C2E /* EliteControls.cpp */,
 				0CF1D843165C0346001E9C2E /* EliteControls.h */,
+				0CF1D842165C0346001E9C2E /* EliteControls.cpp */,
 				0C78A2DB15B467900049C0C8 /* MIDI Mode */,
 				0C78A2E415B467900049C0C8 /* Sampler Mode */,
 				0C78A2E915B467900049C0C8 /* Sequencer Mode */,
@@ -1791,8 +1791,8 @@
 				0C78A37715B467910049C0C8 /* OscInput.cpp */,
 				0C78A37A15B467910049C0C8 /* OscOutput.h */,
 				0C78A37915B467910049C0C8 /* OscOutput.cpp */,
-				0CF1D83B165C0317001E9C2E /* HidComms.cpp */,
 				0CF1D83C165C0317001E9C2E /* HidComms.h */,
+				0CF1D83B165C0317001E9C2E /* HidComms.cpp */,
 			);
 			name = "My IO Classes";
 			path = "../../Source/My IO Classes";

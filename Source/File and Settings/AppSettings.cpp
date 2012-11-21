@@ -63,6 +63,7 @@ AppSettings::AppSettings()
     
     for (int i = 0; i < 2; i++)
     {
+        eliteDial[i].status = 1;
         eliteDial[i].prevValue = 0.0;
         eliteDial[i].midiControllerType = 0;
         eliteDial[i].midiCcNumber = 12;
@@ -77,6 +78,7 @@ AppSettings::AppSettings()
     }
     for (int i = 0; i < 3; i++)
     {
+        eliteButton[i].status = 1;
         eliteButton[i].sceneNumber = 2;
         eliteButton[i].midiCcNumber = 13;
         eliteButton[i].midiChannel = 1;
@@ -139,6 +141,7 @@ void AppSettings::resetData()
     eliteButton[2].control = 3;
     for (int i = 0; i < 2; i++)
     {
+        eliteDial[i].status = 1;
         eliteDial[i].prevValue = 0.0;
         eliteDial[i].midiControllerType = 0;
         eliteDial[i].midiCcNumber = 12;
@@ -153,6 +156,7 @@ void AppSettings::resetData()
     }
     for (int i = 0; i < 3; i++)
     {
+        eliteButton[i].status = 1;
         eliteButton[i].sceneNumber = 2;
         eliteButton[i].midiCcNumber = 13;
         eliteButton[i].midiChannel = 1;
@@ -319,6 +323,10 @@ void AppSettings::setEliteDialControl(int value, int dialNumber)
 {
     eliteDial[dialNumber].control = value;
 }
+void AppSettings::setEliteDialStatus(int value, int dialNumber)
+{
+    eliteDial[dialNumber].status = value;
+}
 
 void AppSettings::setEliteDialMidiControllerType(int value, int dialNumber)
 {
@@ -370,6 +378,10 @@ int AppSettings::getEliteDialControl (int dialNumber)
 {
     return eliteDial[dialNumber].control;
 }
+int AppSettings::getEliteDialStatus(int dialNumber)
+{
+    return eliteDial[dialNumber].status;
+}
 
 int AppSettings::getEliteDialMidiControllerType(int dialNumber)
 {
@@ -416,6 +428,10 @@ void AppSettings::setEliteButtonControl(int value, int buttonNumber)
 {
     eliteButton[buttonNumber].control = value;
 }
+void AppSettings::setEliteButtonStatus(int value, int buttonNumber)
+{
+    eliteButton[buttonNumber].status = value;
+}
 
 void AppSettings::setEliteButtonSceneNumber(int value, int buttonNumber)
 {
@@ -457,6 +473,10 @@ void AppSettings::setEliteButtonOscOnNumber(double value, int buttonNumber)
 int AppSettings::getEliteButtonControl (int buttonNumber)
 {
     return eliteButton[buttonNumber].control;
+}
+int AppSettings::getEliteButtonStatus(int buttonNumber)
+{
+    return eliteButton[buttonNumber].status;
 }
 int AppSettings::getEliteButtonSceneNumber(int buttonNumber)
 {

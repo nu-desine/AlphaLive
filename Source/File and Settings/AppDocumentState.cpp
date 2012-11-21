@@ -740,6 +740,7 @@ void AppDocumentState::saveToScene (int sceneNumber)
     {
         globalData->setAttribute("eliteDialPrevValue" + String(i), AppSettings::Instance()->getEliteDialPrevValue(i));
         globalData->setAttribute("eliteDialControl" + String(i), AppSettings::Instance()->getEliteDialControl(i));
+        globalData->setAttribute("eliteDialStatus" + String(i), AppSettings::Instance()->getEliteDialStatus(i));
         
         if (AppSettings::Instance()->getEliteDialControl(i) == 4) //midi cc
         {
@@ -762,6 +763,7 @@ void AppDocumentState::saveToScene (int sceneNumber)
     for (int i = 0; i < 3; i++)
     {
         globalData->setAttribute("eliteButtonControl" + String(i), AppSettings::Instance()->getEliteButtonControl(i));
+        globalData->setAttribute("eliteButtonStatus" + String(i), AppSettings::Instance()->getEliteButtonStatus(i));
         
         if (AppSettings::Instance()->getEliteButtonControl(i) == 2) //scene switcher
         {
@@ -831,6 +833,7 @@ void AppDocumentState::loadFromScene (int sceneNumber)
         {
             AppSettings::Instance()->setEliteDialPrevValue(globalData->getDoubleAttribute("eliteDialPrevValue" + String(i)), i);
             AppSettings::Instance()->setEliteDialControl(globalData->getIntAttribute("eliteDialControl" + String(i)), i);
+            AppSettings::Instance()->setEliteDialStatus(globalData->getIntAttribute("eliteDialStatus" + String(i)), i);
             
             if (AppSettings::Instance()->getEliteDialControl(i) == 4) //midi cc
             {
@@ -853,6 +856,7 @@ void AppDocumentState::loadFromScene (int sceneNumber)
         for (int i = 0; i < 3; i++)
         {
             AppSettings::Instance()->setEliteButtonControl(globalData->getIntAttribute("eliteButtonControl" + String(i)), i);
+            AppSettings::Instance()->setEliteButtonStatus(globalData->getIntAttribute("eliteButtonStatus" + String(i)), i);
             
             if (AppSettings::Instance()->getEliteButtonControl(i) == 2) //scene switcher
             {

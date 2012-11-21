@@ -55,155 +55,158 @@ void EliteControls::getInputData(int control, int value)
     if (control == 100 || control == 101)
     {
         eliteDialNumber = control - 100;
-        int controlType = AppSettings::Instance()->getEliteDialControl(eliteDialNumber);
         
-        //global gain
-        if (controlType == 1)
+        if (AppSettings::Instance()->getEliteDialStatus(eliteDialNumber) == 1)
         {
-            mainComponent->sendEliteDialCommand (1, eliteControlValue);
-        }
-        
-        //global pan
-        else if (controlType == 2)
-        {
-            mainComponent->sendEliteDialCommand (2, eliteControlValue);
-        }
-        
-        //scene switcher
-        else if (controlType == 3)
-        {
-            //move to next scene slot
-            if (eliteControlValue >= 1 && eliteControlValue <= 63)
-                mainComponent->getSceneComponent()->selectSlot(-1);
-            //move to previous scene slot
-            else if (eliteControlValue >= 64 && eliteControlValue <= 127)
-                mainComponent->getSceneComponent()->selectSlot(-2);
-        }
-        
-        //MIDI CC
-        else if (controlType == 4)
-        {
-            MidiMessage message;
-            int controllerType = AppSettings::Instance()->getEliteDialMidiControllerType(eliteDialNumber);
-            int channel = AppSettings::Instance()->getEliteDialMidiChannel(eliteDialNumber);
-            int controllerNumber = AppSettings::Instance()->getEliteDialMidiCcNumber(eliteDialNumber);
-            int ccValue = 0;
+            int controlType = AppSettings::Instance()->getEliteDialControl(eliteDialNumber);
             
-            //absolute controller type
-            if (controllerType == 0)
+            //global gain
+            if (controlType == 1)
             {
-                int prevValue = AppSettings::Instance()->getEliteDialPrevValue(eliteDialNumber);
-                int minValue = AppSettings::Instance()->getEliteDialMidiMinRange(eliteDialNumber);
-                int maxValue = AppSettings::Instance()->getEliteDialMidiMaxRange(eliteDialNumber);
-                
-                //incremented value
+                mainComponent->sendEliteDialCommand (1, eliteControlValue);
+            }
+            
+            //global pan
+            else if (controlType == 2)
+            {
+                mainComponent->sendEliteDialCommand (2, eliteControlValue);
+            }
+            
+            //scene switcher
+            else if (controlType == 3)
+            {
+                //move to next scene slot
                 if (eliteControlValue >= 1 && eliteControlValue <= 63)
-                    ccValue = prevValue + eliteControlValue;
-                //decremented value
+                    mainComponent->getSceneComponent()->selectSlot(-1);
+                //move to previous scene slot
                 else if (eliteControlValue >= 64 && eliteControlValue <= 127)
-                    ccValue = prevValue - (128 - eliteControlValue);
+                    mainComponent->getSceneComponent()->selectSlot(-2);
+            }
+            
+            //MIDI CC
+            else if (controlType == 4)
+            {
+                MidiMessage message;
+                int controllerType = AppSettings::Instance()->getEliteDialMidiControllerType(eliteDialNumber);
+                int channel = AppSettings::Instance()->getEliteDialMidiChannel(eliteDialNumber);
+                int controllerNumber = AppSettings::Instance()->getEliteDialMidiCcNumber(eliteDialNumber);
+                int ccValue = 0;
                 
-                //if produced CC value is out of range, set in range
-                if (!(ccValue >= minValue && ccValue <= maxValue))
+                //absolute controller type
+                if (controllerType == 0)
                 {
-                    if (ccValue > maxValue)
-                        ccValue = maxValue;
-                    else if (ccValue < minValue)
-                        ccValue = minValue;
+                    int prevValue = AppSettings::Instance()->getEliteDialPrevValue(eliteDialNumber);
+                    int minValue = AppSettings::Instance()->getEliteDialMidiMinRange(eliteDialNumber);
+                    int maxValue = AppSettings::Instance()->getEliteDialMidiMaxRange(eliteDialNumber);
+                    
+                    //incremented value
+                    if (eliteControlValue >= 1 && eliteControlValue <= 63)
+                        ccValue = prevValue + eliteControlValue;
+                    //decremented value
+                    else if (eliteControlValue >= 64 && eliteControlValue <= 127)
+                        ccValue = prevValue - (128 - eliteControlValue);
+                    
+                    //if produced CC value is out of range, set in range
+                    if (!(ccValue >= minValue && ccValue <= maxValue))
+                    {
+                        if (ccValue > maxValue)
+                            ccValue = maxValue;
+                        else if (ccValue < minValue)
+                            ccValue = minValue;
+                    }
+                    
+                    //if new CC value is different from the previous CC value, send the MIDI message
+                    if (ccValue != prevValue)
+                    {
+                        message = MidiMessage::controllerEvent(channel, controllerNumber, ccValue);
+                        sendMidiMessage(message);
+                    }
+                    
+                    //update prevValue
+                    AppSettings::Instance()->setEliteDialPrevValue(ccValue, eliteDialNumber);
+                    
                 }
-                
-                //if new CC value is different from the previous CC value, send the MIDI message
-                if (ccValue != prevValue)
+                //relative controller type
+                else if (controllerType == 1)
                 {
+                    //min and max value sliders not needed within the gui here. Changed that!
+                    ccValue = eliteControlValue;
+                    
                     message = MidiMessage::controllerEvent(channel, controllerNumber, ccValue);
                     sendMidiMessage(message);
                 }
                 
+            }
+            
+            //OSC
+            else if (controlType == 5)
+            {
+                //Similar to the absolute controller with the MIDI mode above, however there
+                //is a user-defined incremation/decremation value that is also based on the speed of dial turn.
+                
+                String ipAddress = AppSettings::Instance()->getEliteDialOscIpAddress(eliteDialNumber);
+                int portNumber = AppSettings::Instance()->getEliteDialOscPortNumber(eliteDialNumber);
+                double minValue = AppSettings::Instance()->getEliteDialOscMinRange(eliteDialNumber);
+                double maxValue = AppSettings::Instance()->getEliteDialOscMaxRange(eliteDialNumber);
+                double prevValue = AppSettings::Instance()->getEliteDialPrevValue(eliteDialNumber);
+                double oscStepValue = AppSettings::Instance()->getEliteDialOscStepValue(eliteDialNumber);
+                double oscValue = 0;
+                
+                //incremented value
+                if (eliteControlValue >= 1 && eliteControlValue <= 63)
+                {
+                    double incremValue;
+                    
+                    if (eliteControlValue == 1)
+                    {
+                        incremValue = oscStepValue;
+                    }
+                    else
+                    {
+                        //is this right? What if the step value is quite big?
+                        incremValue = oscStepValue * (eliteControlValue * (((maxValue-minValue)/2) / (63 - 1)));
+                    }
+                    
+                    oscValue = prevValue + incremValue;
+                    
+                }
+                //decremented value
+                else if (eliteControlValue >= 64 && eliteControlValue <= 127)
+                {
+                    double decremValue;
+                    
+                    if (eliteControlValue == 127)
+                    {
+                        decremValue = oscStepValue;
+                    }
+                    else
+                    {
+                        //is this right? What if the step value is quite big?
+                        decremValue = oscStepValue * ((128-eliteControlValue) * (((maxValue-minValue)/2) / (63 - 1)));
+                    }
+                    
+                    oscValue = prevValue - decremValue;
+                }
+                
+                //if produced OSC value is out of range, set in range
+                if (!(oscValue >= minValue && oscValue <= maxValue))
+                {
+                    if (oscValue > maxValue)
+                        oscValue = maxValue;
+                    else if (oscValue < minValue)
+                        oscValue = minValue;
+                }
+                
+                //if new OSC value is different from the previous OSC value, send the OSC message
+                if (oscValue != prevValue)
+                {
+                    oscOutput.transmitOutputMessage(control+1, oscValue, ipAddress, portNumber);
+                }
+                
                 //update prevValue
-                AppSettings::Instance()->setEliteDialPrevValue(ccValue, eliteDialNumber);
-                
+                AppSettings::Instance()->setEliteDialPrevValue(oscValue, eliteDialNumber);
             }
-            //relative controller type
-            else if (controllerType == 1)
-            {
-                //min and max value sliders not needed within the gui here. Changed that!
-                ccValue = eliteControlValue;
-                
-                message = MidiMessage::controllerEvent(channel, controllerNumber, ccValue);
-                sendMidiMessage(message);
-            }
-            
-        }
-        
-        //OSC
-        else if (controlType == 5)
-        {
-            //Similar to the absolute controller with the MIDI mode above, however there
-            //is a user-defined incremation/decremation value that is also based on the speed of dial turn.
-            
-            String ipAddress = AppSettings::Instance()->getEliteDialOscIpAddress(eliteDialNumber);
-            int portNumber = AppSettings::Instance()->getEliteDialOscPortNumber(eliteDialNumber);
-            double minValue = AppSettings::Instance()->getEliteDialOscMinRange(eliteDialNumber);
-            double maxValue = AppSettings::Instance()->getEliteDialOscMaxRange(eliteDialNumber);
-            double prevValue = AppSettings::Instance()->getEliteDialPrevValue(eliteDialNumber);
-            double oscStepValue = AppSettings::Instance()->getEliteDialOscStepValue(eliteDialNumber);
-            double oscValue = 0;
-            
-            //incremented value
-            if (eliteControlValue >= 1 && eliteControlValue <= 63)
-            {
-                double incremValue;
-                
-                if (eliteControlValue == 1)
-                {
-                    incremValue = oscStepValue;
-                }
-                else
-                {
-                    //is this right? What if the step value is quite big?
-                    incremValue = oscStepValue * (eliteControlValue * (((maxValue-minValue)/2) / (63 - 1)));
-                }
-                
-                oscValue = prevValue + incremValue;
-                
-            }
-            //decremented value
-            else if (eliteControlValue >= 64 && eliteControlValue <= 127)
-            {
-                double decremValue;
-                
-                if (eliteControlValue == 127)
-                {
-                    decremValue = oscStepValue;
-                }
-                else
-                {
-                    //is this right? What if the step value is quite big?
-                    decremValue = oscStepValue * ((128-eliteControlValue) * (((maxValue-minValue)/2) / (63 - 1)));
-                }
-                
-                oscValue = prevValue - decremValue;
-            }
-            
-            //if produced OSC value is out of range, set in range
-            if (!(oscValue >= minValue && oscValue <= maxValue))
-            {
-                if (oscValue > maxValue)
-                    oscValue = maxValue;
-                else if (oscValue < minValue)
-                    oscValue = minValue;
-            }
-            
-            //if new OSC value is different from the previous OSC value, send the OSC message
-            if (oscValue != prevValue)
-            {
-                oscOutput.transmitOutputMessage(control+1, oscValue, ipAddress, portNumber);
-            }
-            
-            //update prevValue
-            AppSettings::Instance()->setEliteDialPrevValue(oscValue, eliteDialNumber);
-        }
-            
+        }    
     }
     
     
@@ -215,75 +218,79 @@ void EliteControls::getInputData(int control, int value)
     else if (control >= 102 && control <= 104)
     {
         eliteButtonNumber = control - 102;
-        int controlType = AppSettings::Instance()->getEliteButtonControl(eliteButtonNumber);
         
-        //start/stop clock
-        if (controlType == 1)
+        if (AppSettings::Instance()->getEliteButtonStatus(eliteButtonNumber) == 1)
         {
-            if (eliteControlValue == 1)
+            int controlType = AppSettings::Instance()->getEliteButtonControl(eliteButtonNumber);
+            
+            //start/stop clock
+            if (controlType == 1)
             {
-                mainComponent->perform(CommandIDs::StartStopClock);
+                if (eliteControlValue == 1)
+                {
+                    mainComponent->perform(CommandIDs::StartStopClock);
+                }
             }
-        }
-        
-        //scene switcher
-        else if (controlType == 2)
-        {
-            if (eliteControlValue == 1)
+            
+            //scene switcher
+            else if (controlType == 2)
             {
-                mainComponent->getSceneComponent()->selectSlot(AppSettings::Instance()->getEliteButtonSceneNumber(eliteButtonNumber) -1 );
+                if (eliteControlValue == 1)
+                {
+                    mainComponent->getSceneComponent()->selectSlot(AppSettings::Instance()->getEliteButtonSceneNumber(eliteButtonNumber) -1 );
+                }
             }
-        }
-        
-        //save
-        else if (controlType == 3)
-        {
-            if (eliteControlValue == 1)
+            
+            //save
+            else if (controlType == 3)
             {
-                mainComponent->getAppDocumentStateRef().saveProject();
+                if (eliteControlValue == 1)
+                {
+                    mainComponent->getAppDocumentStateRef().saveProject();
+                }
             }
-        }
-        
-        //MIDI CC
-        else if (controlType == 4)
-        {
-            MidiMessage message;
-            int channel = AppSettings::Instance()->getEliteButtonMidiChannel(eliteButtonNumber);
-            int controllerNumber = AppSettings::Instance()->getEliteButtonMidiCcNumber(eliteButtonNumber);
-            int ccValue = 0;
             
-            if (eliteControlValue == 0)
-                ccValue = AppSettings::Instance()->getEliteButtonMidiOffNumber(eliteButtonNumber);
-            else if (eliteControlValue == 1)
-                ccValue = AppSettings::Instance()->getEliteButtonMidiOnNumber(eliteButtonNumber);
-            
-            message = MidiMessage::controllerEvent(channel, controllerNumber, ccValue);
-            sendMidiMessage(message);
-            
-        }
-        
-        //OSC
-        else if (controlType == 5)
-        {
-            String ipAddress = AppSettings::Instance()->getEliteButtonOscIpAddress(eliteButtonNumber);
-            int portNumber = AppSettings::Instance()->getEliteButtonOscPortNumber(eliteButtonNumber);
-            double oscValue = 0;
-            
-            if (eliteControlValue == 0)
-                oscValue = AppSettings::Instance()->getEliteButtonOscOffNumber(eliteButtonNumber);
-            else if (eliteControlValue == 1)
-                oscValue = AppSettings::Instance()->getEliteButtonOscOnNumber(eliteButtonNumber);
-            
-            
-            oscOutput.transmitOutputMessage(control+1, oscValue, ipAddress, portNumber);
-        }
-        
-        //Killswitch
-        else if (controlType == 6)
-        {
-            if (eliteControlValue == 1)
+            //MIDI CC
+            else if (controlType == 4)
             {
-                mainComponent->perform(CommandIDs::KillSwitch);
+                MidiMessage message;
+                int channel = AppSettings::Instance()->getEliteButtonMidiChannel(eliteButtonNumber);
+                int controllerNumber = AppSettings::Instance()->getEliteButtonMidiCcNumber(eliteButtonNumber);
+                int ccValue = 0;
+                
+                if (eliteControlValue == 0)
+                    ccValue = AppSettings::Instance()->getEliteButtonMidiOffNumber(eliteButtonNumber);
+                else if (eliteControlValue == 1)
+                    ccValue = AppSettings::Instance()->getEliteButtonMidiOnNumber(eliteButtonNumber);
+                
+                message = MidiMessage::controllerEvent(channel, controllerNumber, ccValue);
+                sendMidiMessage(message);
+                
+            }
+            
+            //OSC
+            else if (controlType == 5)
+            {
+                String ipAddress = AppSettings::Instance()->getEliteButtonOscIpAddress(eliteButtonNumber);
+                int portNumber = AppSettings::Instance()->getEliteButtonOscPortNumber(eliteButtonNumber);
+                double oscValue = 0;
+                
+                if (eliteControlValue == 0)
+                    oscValue = AppSettings::Instance()->getEliteButtonOscOffNumber(eliteButtonNumber);
+                else if (eliteControlValue == 1)
+                    oscValue = AppSettings::Instance()->getEliteButtonOscOnNumber(eliteButtonNumber);
+                
+                
+                oscOutput.transmitOutputMessage(control+1, oscValue, ipAddress, portNumber);
+            }
+            
+            //Killswitch
+            else if (controlType == 6)
+            {
+                if (eliteControlValue == 1)
+                {
+                    mainComponent->perform(CommandIDs::KillSwitch);
+                }
             }
         }
     }

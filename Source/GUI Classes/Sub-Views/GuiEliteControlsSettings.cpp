@@ -46,6 +46,7 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     
     addChildComponent(buttonsMenu = new ComboBox());
     buttonsMenu->addItem(translate("Start/Stop Clock"), 1);
+    buttonsMenu->addItem(translate("Killswitch"), 6);
     buttonsMenu->addItem(translate("Scene Switcher"), 2);
     buttonsMenu->addItem(translate("Save"), 3);
     buttonsMenu->addItem(translate("MIDI CC"), 4);
@@ -74,7 +75,6 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
 		dialMidiChannel[i]->setRadioGroupId (12);
 		dialMidiChannel[i]->addListener(this);
         dialMidiChannel[i]->addMouseListener(this, true);
-		dialMidiChannel[i]->setOpaque(false);
 		addChildComponent(dialMidiChannel[i]);
 	}
     
@@ -83,12 +83,12 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     dialMidiMinRange->addListener(this);
     dialMidiMinRange->addMouseListener(this, true);*/
 	
-	addChildComponent(dialControllerType = new AlphaTextButton());
-	dialControllerType->setButtonText("ABSOLUTE");
-	dialControllerType->setClickingTogglesState(true);
-	dialControllerType->setToggleState(false, false);	
-	dialControllerType->addListener(this);
-	dialControllerType->addMouseListener(this, true);
+	addChildComponent(dialMidiControllerType = new AlphaTextButton());
+	dialMidiControllerType->setButtonText("ABSOLUTE");
+	dialMidiControllerType->setClickingTogglesState(true);
+	dialMidiControllerType->setToggleState(false, false);	
+	dialMidiControllerType->addListener(this);
+	dialMidiControllerType->addMouseListener(this, true);
 	
 	addChildComponent(dialMidiMinRange = new AlphaRotarySlider((210 * (M_PI / 180)), (470 * (M_PI / 180)), 230));
 	dialMidiMinRange->setRotaryParameters((210 * (M_PI / 180)), (470 * (M_PI / 180)),true);
@@ -141,7 +141,7 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
 	
 	addChildComponent(dialOscStepSlider = new AlphaRotarySlider((210 * (M_PI / 180)), (470 * (M_PI / 180)), 250));
 	dialOscStepSlider->setRotaryParameters((210 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    dialOscStepSlider->setRange(0, 4096, 0.01);
+    dialOscStepSlider->setRange(0.01, 2048, 0.01);
     dialOscStepSlider->addListener(this);
     dialOscStepSlider->addMouseListener(this, true);
     
@@ -177,7 +177,6 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
 		buttonMidiChannel[i]->setRadioGroupId (13);
 		buttonMidiChannel[i]->addListener(this);
         buttonMidiChannel[i]->addMouseListener(this, true);
-		buttonMidiChannel[i]->setOpaque(false);
 		addChildComponent(buttonMidiChannel[i]);
 	}
     
@@ -276,6 +275,7 @@ void GuiEliteControlsSettings::resized()
     //dialMidiChannel->setBounds((797-29)+100, 330, 58, 58);
     dialMidiMinRange->setBounds(683 + 47,261 + 47, 230, 230);
     dialMidiMaxRange->setBounds(683 + 57,261 + 57, 210, 210);
+    dialMidiControllerType->setBounds(824, 261, 42, 42);
 	
 	dialMidiChannel[0]->setBounds(649,439,21, 21);
 	dialMidiChannel[1]->setBounds(656,467,21, 21);
@@ -320,7 +320,6 @@ void GuiEliteControlsSettings::resized()
     buttonSceneNumber->setBounds(816, 490, 58, 58);
     
     buttonMidiCcNumber->setBounds(816, 490, 58, 58);
-	dialControllerType->setBounds(789, 221,42, 42);
     //buttonMidiChannel->setBounds((797-29)+100, 330, 58, 58);
     buttonMidiOffNumber->setBounds(683 + 47,261 + 47, 230, 230);
     buttonMidiOnNumber->setBounds(683 + 57,261 + 57, 210, 210);
@@ -331,10 +330,8 @@ void GuiEliteControlsSettings::resized()
     buttonOscIpAddressEditor->setBounds(797, 555, 100, 15);
 	
 	notSelected->setBounds(0, 0, getWidth(), getHeight());
-	
     statusButton->setBounds(816, 393, 58, 58);
-	
-	 parameterHoverLabel->setBounds(825, 450, 40, 10);
+    parameterHoverLabel->setBounds(825, 450, 40, 10);
 	
 }
 
@@ -353,54 +350,50 @@ void GuiEliteControlsSettings::paint (Graphics& g)
 	
 	if(dialMidiChannel[0]->isVisible() || buttonMidiChannel[0]->isVisible())
 	{	
-	
-	g.fillEllipse(646,436, 27, 27);
-	g.fillEllipse(653,464, 27, 27);
-	g.fillEllipse(664,492, 27, 27);
-	g.fillEllipse(679,517, 27, 27);
-	g.fillEllipse(697,539, 27, 27);
-	g.fillEllipse(719,559, 27, 27);
-	g.fillEllipse(744,574, 27, 27);
-	g.fillEllipse(771,586, 27, 27);
-	
-	g.fillEllipse(800,593, 27, 27);
-	g.fillEllipse(829,596, 27, 27);
-	g.fillEllipse(858,594, 27, 27);
-	g.fillEllipse(887,587, 27, 27);
-	g.fillEllipse(914,576, 27, 27);
-	g.fillEllipse(939,561, 27, 27);
-	g.fillEllipse(962,542, 27, 27);
-	g.fillEllipse(981,520, 27, 27);
-	
-	g.setColour(Colours::grey.withAlpha(0.3f));
-	
-	g.drawEllipse(646,436, 27, 27, 1.0);
-	g.drawEllipse(653,464, 27, 27, 1.0);
-	g.drawEllipse(664,492, 27, 27, 1.0);
-	g.drawEllipse(679,517, 27, 27, 1.0);
-	g.drawEllipse(697,539, 27, 27, 1.0);
-	g.drawEllipse(719,559, 27, 27, 1.0);
-	g.drawEllipse(744,574, 27, 27, 1.0);
-	g.drawEllipse(771,586, 27, 27, 1.0);
-	
-	g.drawEllipse(800,593, 27, 27, 1.0);
-	g.drawEllipse(829,596, 27, 27, 1.0);
-	g.drawEllipse(858,594, 27, 27, 1.0);
-	g.drawEllipse(887,587, 27, 27, 1.0);
-	g.drawEllipse(914,576, 27, 27, 1.0);
-	g.drawEllipse(939,561, 27, 27, 1.0);
-	g.drawEllipse(962,542, 27, 27, 1.0);
-	g.drawEllipse(981,520, 27, 27, 1.0);
-		
+        g.fillEllipse(646,436, 27, 27);
+        g.fillEllipse(653,464, 27, 27);
+        g.fillEllipse(664,492, 27, 27);
+        g.fillEllipse(679,517, 27, 27);
+        g.fillEllipse(697,539, 27, 27);
+        g.fillEllipse(719,559, 27, 27);
+        g.fillEllipse(744,574, 27, 27);
+        g.fillEllipse(771,586, 27, 27);
+        
+        g.fillEllipse(800,593, 27, 27);
+        g.fillEllipse(829,596, 27, 27);
+        g.fillEllipse(858,594, 27, 27);
+        g.fillEllipse(887,587, 27, 27);
+        g.fillEllipse(914,576, 27, 27);
+        g.fillEllipse(939,561, 27, 27);
+        g.fillEllipse(962,542, 27, 27);
+        g.fillEllipse(981,520, 27, 27);
+        
+        g.setColour(Colours::grey.withAlpha(0.3f));
+        
+        g.drawEllipse(646,436, 27, 27, 1.0);
+        g.drawEllipse(653,464, 27, 27, 1.0);
+        g.drawEllipse(664,492, 27, 27, 1.0);
+        g.drawEllipse(679,517, 27, 27, 1.0);
+        g.drawEllipse(697,539, 27, 27, 1.0);
+        g.drawEllipse(719,559, 27, 27, 1.0);
+        g.drawEllipse(744,574, 27, 27, 1.0);
+        g.drawEllipse(771,586, 27, 27, 1.0);
+        
+        g.drawEllipse(800,593, 27, 27, 1.0);
+        g.drawEllipse(829,596, 27, 27, 1.0);
+        g.drawEllipse(858,594, 27, 27, 1.0);
+        g.drawEllipse(887,587, 27, 27, 1.0);
+        g.drawEllipse(914,576, 27, 27, 1.0);
+        g.drawEllipse(939,561, 27, 27, 1.0);
+        g.drawEllipse(962,542, 27, 27, 1.0);
+        g.drawEllipse(981,520, 27, 27, 1.0);
 	}
 	
-	if(dialMidiChannel[0]->isVisible())
-	{
-		
-		g.setColour(Colours::black);
-		
-		g.fillEllipse(786,218, 48, 48);
-	}
+//	if(dialMidiChannel[0]->isVisible())
+//	{
+//		g.setColour(Colours::black);
+//		g.fillEllipse(786,218, 48, 48);
+//	}
     
 }
 
@@ -410,20 +403,29 @@ void GuiEliteControlsSettings::buttonClicked (Button* button)
 	
 	if(button == statusButton)
     {
-       
+        if (currentlySelectedControl == 1 || currentlySelectedControl == 2) //dials
+        {
+            AppSettings::Instance()->setEliteDialStatus(button->getToggleState(), DIAL_NO);
+        }
+        else if (currentlySelectedControl >= 3 && currentlySelectedControl <= 5) //buttons
+        {
+            AppSettings::Instance()->setEliteButtonStatus(button->getToggleState(), BUTTON_NO);
+        }
+        
         if(statusButton->getToggleStateValue()==true)
             notSelected->setVisible(false);
         else
             notSelected->setVisible(true);
         
     }
-	else if(button == dialControllerType)
+	else if(button == dialMidiControllerType)
 	{
-		
-		if(dialControllerType->getToggleStateValue()==true)
-			dialControllerType->setButtonText("RELATIVE");
+		AppSettings::Instance()->setEliteDialMidiControllerType(button->getToggleState(), DIAL_NO);
+        
+		if(dialMidiControllerType->getToggleStateValue()==true)
+			dialMidiControllerType->setButtonText("RELATIVE");
 		else 
-			dialControllerType->setButtonText("ABSOLUTE");
+			dialMidiControllerType->setButtonText("ABSOLUTE");
 		
 
 		
@@ -480,15 +482,19 @@ void GuiEliteControlsSettings::sliderValueChanged (Slider* slider)
 	{
         AppSettings::Instance()->setEliteDialOscMinRange(slider->getValue(), DIAL_NO);
 		parameterHoverLabel->setText(String(slider->getValue()), false);
+        
+        setDialOscStepValueSliderRange(DIAL_NO);
 	}
     else if (slider == dialOscMaxRange)
 	{
         AppSettings::Instance()->setEliteDialOscMaxRange(slider->getValue(), DIAL_NO);
 		parameterHoverLabel->setText(String(slider->getValue()), false);
+        
+        setDialOscStepValueSliderRange(DIAL_NO);
     }
 	else if (slider == dialOscStepSlider)
 	{
-        //AppSettings::Instance()->setEliteDialOscMaxRange(slider->getValue(), DIAL_NO);
+        AppSettings::Instance()->setEliteDialOscStepValue(slider->getValue(), DIAL_NO);
 		parameterHoverLabel->setText(String(slider->getValue()), false);
     }
     else if (slider == buttonSceneNumber)
@@ -540,7 +546,7 @@ void GuiEliteControlsSettings::comboBoxChanged (ComboBox* comboBox)
         //dialMidiChannel->setVisible(false);
         dialMidiMinRange->setVisible(false);
         dialMidiMaxRange->setVisible(false);
-		dialControllerType->setVisible(false);
+		dialMidiControllerType->setVisible(false);
         dialOscPortNumber->setVisible(false);
         dialOscMinRange->setVisible(false);
         dialOscMaxRange->setVisible(false);
@@ -579,7 +585,7 @@ void GuiEliteControlsSettings::comboBoxChanged (ComboBox* comboBox)
                    // dialMidiChannel->setVisible(true);
                     dialMidiMinRange->setVisible(true);
                     dialMidiMaxRange->setVisible(true);
-					dialControllerType->setVisible(true);
+					dialMidiControllerType->setVisible(true);
 					
 					for (int chan = 0; chan < 16; chan++)
 					{
@@ -635,11 +641,32 @@ void GuiEliteControlsSettings::comboBoxChanged (ComboBox* comboBox)
                     break;
             }
         }
-  
-        
         repaint();
     }
 	
+}
+
+
+void GuiEliteControlsSettings::setDialOscStepValueSliderRange (int dialNumber)
+{
+    //called any time the dialOscMinRange or dialOscMaxRange slider values are changed
+    //and updates the dialOscStepSlider range.
+    //It also sets an new dialOscStepValue if it is now out of range.
+    
+    //this is causing some GUI lagging on the corresponding sliders. Why?
+    
+    double minRange = AppSettings::Instance()->getEliteDialOscMinRange(dialNumber);
+    double maxRange = AppSettings::Instance()->getEliteDialOscMaxRange(dialNumber);
+    double range = fabs(maxRange-minRange);
+    
+    dialOscStepSlider->setRange(0.01, range/2.0, 0.01);
+    
+    double currentStepValue = AppSettings::Instance()->getEliteDialOscStepValue(dialNumber);
+    if (currentStepValue > range/2.0)
+    {
+        dialOscStepSlider->setValue(range/2.0);
+        AppSettings::Instance()->setEliteDialOscStepValue(range/2.0, dialNumber);
+    }
 }
 
 void GuiEliteControlsSettings::setDisplay (int controlNumber)
@@ -648,13 +675,14 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
     currentlySelectedControl = controlNumber;
     
     //Hide all components
+    notSelected->setVisible(false);
     dialsMenu->setVisible(false);
     buttonsMenu->setVisible(false);
     dialMidiCcNumber->setVisible(false);
     //dialMidiChannel->setVisible(false);
     dialMidiMinRange->setVisible(false);
     dialMidiMaxRange->setVisible(false);
-	dialControllerType->setVisible(false);
+	dialMidiControllerType->setVisible(false);
     dialOscPortNumber->setVisible(false);
     dialOscMinRange->setVisible(false);
     dialOscMaxRange->setVisible(false);
@@ -684,35 +712,32 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
     //Set what component should be displayed and their values
     if (controlNumber == 1 || controlNumber == 2)
     {
+        
+        statusButton->setToggleState(AppSettings::Instance()->getEliteDialStatus(DIAL_NO), false);
         dialsMenu->setSelectedId(AppSettings::Instance()->getEliteDialControl(DIAL_NO), true);
         dialMidiCcNumber->setComponentValue(AppSettings::Instance()->getEliteDialMidiCcNumber(DIAL_NO));
         //dialMidiChannel->setComponentValue(AppSettings::Instance()->getEliteDialMidiChannel(DIAL_NO));
         dialMidiMinRange->setValue(AppSettings::Instance()->getEliteDialMidiMinRange(DIAL_NO));
         dialMidiMaxRange->setValue(AppSettings::Instance()->getEliteDialMidiMaxRange(DIAL_NO));
-		//dialControllerType->setValue(AppSettings::Instance()->getEliteDialMidiMaxRange(DIAL_NO));
+		dialMidiControllerType->setToggleState(AppSettings::Instance()->getEliteDialMidiControllerType(DIAL_NO), false);
         dialOscPortNumber->setComponentValue(AppSettings::Instance()->getEliteDialOscPortNumber(DIAL_NO));
         dialOscMinRange->setValue(AppSettings::Instance()->getEliteDialOscMinRange(DIAL_NO));
         dialOscMaxRange->setValue(AppSettings::Instance()->getEliteDialOscMaxRange(DIAL_NO));
-		//dialOscStepSlider->setValue(AppSettings::Instance()->getEliteDialOscMaxRange(DIAL_NO));
+        setDialOscStepValueSliderRange(DIAL_NO);
+		dialOscStepSlider->setValue(AppSettings::Instance()->getEliteDialOscStepValue(DIAL_NO));
         dialOscIpAddressEditor->setText(AppSettings::Instance()->getEliteDialOscIpAddress(DIAL_NO), false);
 		
+        if (statusButton->getToggleState() == false)
+            notSelected->setVisible(true);
         
-		if(dialControllerType->getToggleStateValue()==true)
-			dialControllerType->setButtonText("RELATIVE");
+		if(dialMidiControllerType->getToggleStateValue()==true)
+			dialMidiControllerType->setButtonText("RELATIVE");
 		else 
-			dialControllerType->setButtonText("ABSOLUTE");
+			dialMidiControllerType->setButtonText("ABSOLUTE");
 		
 		int channel_ = AppSettings::Instance()->getEliteDialMidiChannel(DIAL_NO);
-        
-            
-		for (int i = 0; i <16; i++)
-		{
-			dialMidiChannel[i]->setToggleState(0, false);
-		}
-            
 		dialMidiChannel[channel_-1]->setToggleState(true, false);
-        
-		
+    
         dialsMenu->setVisible(true);
         
         if (dialsMenu->getSelectedId() == 4)
@@ -721,15 +746,9 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
             //dialMidiChannel->setVisible(true);
             dialMidiMinRange->setVisible(true);
             dialMidiMaxRange->setVisible(true);
-			dialControllerType->setVisible(true);
-			
-			
+			dialMidiControllerType->setVisible(true);
 			for (int chan = 0; chan < 16; chan++)
-			{
 				dialMidiChannel[chan]->setVisible(true);
-				
-			}
-			
 			
         }
         else if (dialsMenu->getSelectedId() == 5)
@@ -739,12 +758,12 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
             dialOscMaxRange->setVisible(true);
 			dialOscStepSlider->setVisible(true);
             dialOscIpAddressEditor->setVisible(true);
-			
         }
         
     }
     else if (controlNumber == 3 || controlNumber == 4 || controlNumber == 5)
     {
+        statusButton->setToggleState(AppSettings::Instance()->getEliteButtonStatus(BUTTON_NO), false);
         buttonsMenu->setSelectedId(AppSettings::Instance()->getEliteButtonControl(BUTTON_NO), true);
         buttonSceneNumber->setComponentValue(AppSettings::Instance()->getEliteButtonSceneNumber(BUTTON_NO));
         buttonMidiCcNumber->setComponentValue(AppSettings::Instance()->getEliteButtonMidiCcNumber(BUTTON_NO));
@@ -756,16 +775,15 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
         buttonOscOnNumber->setValue(AppSettings::Instance()->getEliteButtonOscOnNumber(BUTTON_NO));
         buttonOscIpAddressEditor->setText(AppSettings::Instance()->getEliteButtonOscIpAddress(BUTTON_NO), false);
 
-		int channel_ = AppSettings::Instance()->getEliteButtonMidiChannel(BUTTON_NO);
+        if (statusButton->getToggleState() == false)
+            notSelected->setVisible(true);
         
-		
+		int channel_ = AppSettings::Instance()->getEliteButtonMidiChannel(BUTTON_NO);
 		for (int i = 0; i <16; i++)
-		{
 			buttonMidiChannel[i]->setToggleState(0, false);
-		}
 		
 		buttonMidiChannel[channel_-1]->setToggleState(true, false);
-		
+    
         buttonsMenu->setVisible(true);
         
         if (buttonsMenu->getSelectedId() == 2)
@@ -778,14 +796,8 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
             //buttonMidiChannel->setVisible(true);
             buttonMidiOffNumber->setVisible(true);
             buttonMidiOnNumber->setVisible(true);
-			
-			
-			
 			for (int chan = 0; chan < 16; chan++)
-			{
 				buttonMidiChannel[chan]->setVisible(true);
-			}
-			
 			
         }
         else if (buttonsMenu->getSelectedId() == 5)
@@ -847,9 +859,9 @@ void GuiEliteControlsSettings::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText(translate("Maximum MIDI Range Selector. Along with the Minimum Range Selector it sets and displays the MIDI CC data range for the selected elite control."));
     }
-	else if (dialControllerType->isMouseOver(true))
+	else if (dialMidiControllerType->isMouseOver(true))
     {
-        //mainComponentRef.setInfoTextBoxText(translate("Maximum MIDI Range Selector. Along with the Minimum Range Selector it sets and displays the MIDI CC data range for the selected elite control."));
+        mainComponentRef.setInfoTextBoxText(translate("MIDI Controller Type Selector. MIDI dials can be set to be either Absolute controllers or Relative controllers. Absolute dials will send an actual CC value, whereas Relative controllers can be used to tell its software control to increment or decrement from its current position by a certain value."));
     }
     else if (dialOscPortNumber->isMouseOver(true))
     {
@@ -865,7 +877,7 @@ void GuiEliteControlsSettings::mouseEnter (const MouseEvent &e)
     }
 	else if (dialOscStepSlider->isMouseOver(true))
     {
-        //mainComponentRef.setInfoTextBoxText(translate("Maximum OSC Range Selector. Along with the Minimum Range Selector it sets and displays the OSC data range for the selected elite control."));
+        mainComponentRef.setInfoTextBoxText(translate("OSC Step Amount Selector. Sets and displays how much the OSC value is changed by when the selected elite dial is turned. This value can be no larger than half of the dials OSC range."));
     }
     else if (dialOscIpAddressEditor->isMouseOver(true))
     {
@@ -907,6 +919,10 @@ void GuiEliteControlsSettings::mouseEnter (const MouseEvent &e)
     else if (buttonOscIpAddressEditor->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::eliteOscIpAddress));
+    }
+    else if (statusButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Elite Control Status Button. Set this button to 'off' to disable the selected elite control."));
     }
     
 	if (dialMidiMinRange->isMouseOver(true))

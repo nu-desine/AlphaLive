@@ -56,6 +56,8 @@ public:
 	
 	void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);
+    
+    void setDialOscStepValueSliderRange (int dialNumber);
 	
 private:
     
@@ -71,7 +73,7 @@ private:
     
     ScopedPointer <ComboBox> dialsMenu, buttonsMenu;
 	
-	ScopedPointer<AlphaTextButton> dialControllerType;
+	ScopedPointer<AlphaTextButton> dialMidiControllerType;
     
     ScopedPointer <AlphaSlider> dialOscPortNumber, dialMidiCcNumber;
 	ScopedPointer <AlphaRotarySlider> dialMidiMinRange, dialMidiMaxRange, dialOscMinRange, dialOscMaxRange, dialOscStepSlider;

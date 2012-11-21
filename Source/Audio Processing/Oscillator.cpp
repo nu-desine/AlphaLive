@@ -16,13 +16,20 @@
 Oscillator::Oscillator (double sampleRate)
 :			
 	sampRate(sampleRate),
-	squareBuffer(1, 20400)
+	squareBuffer(1, 20062),
+	sawBuffer(1, 43966),
+	sawDownBuffer(1, 47855)
 {
 	squareWaveFile = ("/Users/felixgodden/Programming/nu-desine/alphalive 2/Source/SquareWaveRoundedFINALSHORTESTest.wav");
-    currentPhase = 0.0; 
+    sawWaveFile = ("/Users/felixgodden/Programming/nu-desine/alphalive 2/Source/SawWaveFinal4.wav");
+	sawDownWaveFile = ("/Users/felixgodden/Programming/nu-desine/alphalive 2/Source/SawDownWaveFinal2.wav");
+
+	currentPhase = 0.0; 
 	currentSample = 0.0;
 	stepSize = 0;
 	squareBuffer.clear();
+	sawBuffer.clear();
+	sawDownBuffer.clear();
 	
 	sharedMemory.enter();
 	AudioFormatManager formatManager;
@@ -30,6 +37,12 @@ Oscillator::Oscillator (double sampleRate)
 	
     AudioFormatReader *reader = formatManager.createReaderFor(squareWaveFile);
 	reader->read(&squareBuffer, 0, reader->lengthInSamples, 0, true, false);
+	
+	reader = formatManager.createReaderFor(sawWaveFile);
+	reader->read(&sawBuffer, 0, reader->lengthInSamples, 0, true, false);
+	
+	reader = formatManager.createReaderFor(sawDownWaveFile);
+	reader->read(&sawDownBuffer, 0, reader->lengthInSamples, 0, true, false);
 	
 	numSamples = reader->lengthInSamples;
 	
@@ -53,15 +66,18 @@ double Oscillator::process (double frequency, int waveShape)
             break;
         case 2:
             output = processSqr();
+			numSamples = squareBuffer.getNumSamples();
             break;
         case 3:
             output = processTri();
             break;
         case 4:
             output = processSawUp();
+			numSamples = sawBuffer.getNumSamples();
             break;
         case 5:
             output = processSawDown();
+			numSamples = sawDownBuffer.getNumSamples();
             break;
         default:
             output = processSin();
@@ -69,7 +85,7 @@ double Oscillator::process (double frequency, int waveShape)
             
     }
     
-	if (waveShape == 1 || waveShape == 3 || waveShape == 4 || waveShape == 5) 
+	if (waveShape == 1 || waveShape == 3) 
 	{
 		increment = frequency * (TWOPI / sampRate);
 		currentPhase += increment;
@@ -120,11 +136,11 @@ double Oscillator::processSin()
 double Oscillator::processSqr()
 {
 	double output;
+	
 	sharedMemory.enter();
 	output = *squareBuffer.getSampleData(0, currentSample);
     sharedMemory.exit();
-	
-	//std::cout << "In Square current sample:  " << currentSample << "   This is output: " << output << std::endl;
+
     return output;
 }
 
@@ -145,7 +161,11 @@ double Oscillator::processSawUp()
 {
     double output;
     
-    output = (2.0 * (currentPhase * (1.0 / TWOPI))) - 1.0;
+    //output = (2.0 * (currentPhase * (1.0 / TWOPI))) - 1.0;
+	
+	sharedMemory.enter();
+	output = *sawBuffer.getSampleData(0, currentSample);
+    sharedMemory.exit();
     
     return output;
 }
@@ -154,7 +174,11 @@ double Oscillator::processSawDown()
 {
     double output;
     
-    output = 1.0 - 2.0 * (currentPhase * (1.0 / TWOPI)); 
+    //output = 1.0 - 2.0 * (currentPhase * (1.0 / TWOPI)); 
+	
+	sharedMemory.enter();
+	output = *sawDownBuffer.getSampleData(0, currentSample);
+    sharedMemory.exit();
     
     return output;
 }

@@ -48,12 +48,13 @@ private:
     
     double currentPhase, increment, sampRate;
 	
-	double numSamples, stepSize, currentSample;
+	double numSamples, numSamplesProcess, stepSize, currentSample;
 	
-	AudioSampleBuffer squareBuffer;
+	AudioSampleBuffer squareBuffer, sawBuffer, sawDownBuffer;
+	AudioFormatReader *reader;
 	
 	//buffer file source
-	File squareWaveFile;
+	File squareWaveFile, sawWaveFile, sawDownWaveFile;
     
 };
 

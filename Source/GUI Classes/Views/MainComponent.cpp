@@ -157,6 +157,14 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //scene component
     addAndMakeVisible(sceneComponent = new SceneComponent(appDocumentStateRef, *alphaLiveEngineRef.getModeController())); //pass in appDocumentStateRef so that appDocumentStateRef function calls can be made within sceneComponent
     sceneComponent->addMouseListener(this, true);
+	
+	//create pan slider
+    addAndMakeVisible(panSlider = new AlphaRotarySlider((225 * (M_PI / 180)), (495 * (M_PI / 180)), 65));
+	panSlider->setRotaryParameters((225 * (M_PI / 180)), (495 * (M_PI / 180)),true);
+    panSlider->setRange(0.0, 1.0);
+    panSlider->addListener(this);
+    panSlider->setValue(0.5, false);
+    panSlider->addMouseListener(this, false);
     
     //create gain slider
     //addAndMakeVisible(gainSlider = new AlphaRotarySlider((225 * (M_PI / 180)), (530 * (M_PI / 180)), 81));
@@ -167,14 +175,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     gainSlider->addListener(this);
 	gainSlider->setValue(1.0, false);
     gainSlider->addMouseListener(this, true);
-	
-	//create pan slider
-    addAndMakeVisible(panSlider = new AlphaRotarySlider((225 * (M_PI / 180)), (495 * (M_PI / 180)), 65));
-	panSlider->setRotaryParameters((225 * (M_PI / 180)), (495 * (M_PI / 180)),true);
-    panSlider->setRange(0.0, 1.0);
-    panSlider->addListener(this);
-    panSlider->setValue(0.5, false);
-    panSlider->addMouseListener(this, false);
     
     //gain and pan label
     addAndMakeVisible(gainPanValueLabel = new Label("value label", String::empty));

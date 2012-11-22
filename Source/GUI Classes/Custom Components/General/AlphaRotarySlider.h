@@ -28,20 +28,28 @@
 
 #include "../../../../JuceLibraryCode/JuceHeader.h"
 
-class AlphaRotarySlider : public Slider
-
+class AlphaRotarySlider :   public Slider,
+                            public Label::Listener,
+                            public KeyListener
 
 {
 public:
     AlphaRotarySlider(const float startAngleRadians,
 					  const float endAngleRadians, const float _theWidth);
     ~AlphaRotarySlider();
-	bool hitTest (int x, int y);
+	
+    void labelTextChanged (Label* labelThatHasChanged);	
+    bool hitTest (int x, int y);
+    
+    void mouseDown(const MouseEvent &e);
+    bool keyPressed (const KeyPress &key, Component *originatingComponent);
 	
 private:
 	
 	Path hitPath;
 	float rotaryStart, rotaryEnd, theWidth;
+    
+    Label *textBox;
 	
 
 };

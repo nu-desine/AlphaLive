@@ -163,7 +163,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	panSlider->setRotaryParameters((225 * (M_PI / 180)), (495 * (M_PI / 180)),true);
     panSlider->setRange(0.0, 1.0);
     panSlider->addListener(this);
-    panSlider->setValue(0.5, false);
+    panSlider->setValue(0.5, dontSendNotification);
     panSlider->addMouseListener(this, false);
     
     //create gain slider
@@ -173,7 +173,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	gainSlider->setRotaryParameters((225 * (M_PI / 180)), (495 * (M_PI / 180)),true);
     gainSlider->setRange(0.0, 2.0);
     gainSlider->addListener(this);
-	gainSlider->setValue(1.0, false);
+	gainSlider->setValue(1.0, dontSendNotification);
     gainSlider->addMouseListener(this, true);
     
     //gain and pan label
@@ -430,8 +430,8 @@ bool MainComponent::update(const Subject& theChangedSubject)
             //update GUI things (GUI of global settings) which aren't updated by setCurrentlySelectedPad
             //these things could be put in setCurrentlySelectedPad but they'll be updated everytime a pad is selected which would be inefficent
             //there is still some inefficiency in that these things will be updated everytime a sequence is loaded... sort this out?!!
-            gainSlider->setValue(AppSettings::Instance()->getGlobalGain(), false); 
-            panSlider->setValue(AppSettings::Instance()->getGlobalPan(), false);
+            gainSlider->setValue(AppSettings::Instance()->getGlobalGain(), dontSendNotification); 
+            panSlider->setValue(AppSettings::Instance()->getGlobalPan(), dontSendNotification);
             
             //set the mode colour ring of each pad
             for (int i = 0; i <= 47; i++)
@@ -1318,7 +1318,7 @@ void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
             //or could this cause delays/lagging, in which case I should use an aSyncUpdater?
             const MessageManagerLock mmLock;
             
-            sliderToChange->setValue(newVal, true);
+            sliderToChange->setValue(newVal, dontSendNotification);
             std::cout << "New Slider Value: " << newVal << std::endl;
         }
     }

@@ -129,7 +129,7 @@ void AlphaSlider::labelTextChanged (Label* labelThatHasChanged)
 
 {
 	
-	setValue(sliderValueLabel->getText().getFloatValue(), true, true);
+	setValue(sliderValueLabel->getText().getFloatValue(), sendNotification);
 	
 	arrowDownColour = Colours::grey.withAlpha(0.3f);
 	arrowUpColour = Colours::grey.withAlpha(0.3f);
@@ -142,7 +142,7 @@ void AlphaSlider::setComponentValue (double value)
 {
     if (value != -999)
     {
-        setValue(value, false);
+        setValue(value, dontSendNotification);
         
         //the below alg. needs changing as what if we want to display things to 2 decimal places? Though will that currently fit?
         if (getInterval() >= 1)

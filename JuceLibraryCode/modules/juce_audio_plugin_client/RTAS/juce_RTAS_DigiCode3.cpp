@@ -70,39 +70,3 @@
  #endif
 
 #endif
-
-
-//==============================================================================
-#if _MSC_VER
- #if ! JucePlugin_Build_RTAS
-  #include <windows.h>
- #endif
-
- #if JucePlugin_Build_VST
-  extern void __stdcall DllMainVST (HINSTANCE, DWORD);
- #endif
-
- #if JucePlugin_Build_AAX
-  extern void __stdcall DllMainAAX (HINSTANCE, DWORD);
- #endif
-
-  extern "C" BOOL WINAPI DllMain (HINSTANCE instance, DWORD reason, LPVOID reserved)
-  {
-      (void) reserved;
-
-     #if JucePlugin_Build_VST
-      DllMainVST (instance, reason);
-     #endif
-
-     #if JucePlugin_Build_AAX
-      DllMainAAX (instance, reason);
-     #endif
-
-     #if JucePlugin_Build_RTAS
-      if (GetModuleHandleA ("DAE.DLL") != 0)
-         return DllMainRTAS (instance, reason, reserved);
-     #endif
-
-      return TRUE;
-  }
-#endif

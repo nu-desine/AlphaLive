@@ -23,48 +23,37 @@
   ==============================================================================
 */
 
-TextButton::TextButton (const String& name, const String& toolTip)
-    : Button (name)
+#if _MSC_VER
+#include <windows.h>
+
+// Your project must contain an AppConfig.h file with your project-specific settings in it,
+// and your header search path must make it accessible to the module's files.
+#include "AppConfig.h"
+
+#include "../utility/juce_CheckSettingMacros.h"
+#include "juce_IncludeModuleHeaders.h"
+
+#if JucePlugin_Build_RTAS
+ extern "C" BOOL WINAPI DllMainRTAS (HINSTANCE, DWORD, LPVOID);
+#endif
+
+extern "C" BOOL WINAPI DllMain (HINSTANCE instance, DWORD reason, LPVOID reserved)
 {
-    setTooltip (toolTip);
+    if (reason == DLL_PROCESS_ATTACH)
+        Process::setCurrentModuleInstanceHandle (instance);
+
+   #if JucePlugin_Build_RTAS
+    if (GetModuleHandleA ("DAE.DLL") != 0)
+    {
+       #if JucePlugin_Build_AAX
+        if (! File::getSpecialLocation (File::currentExecutableFile).hasFileExtension ("aaxplugin"))
+       #endif
+            return DllMainRTAS (instance, reason, reserved);
+    }
+   #endif
+
+    (void) reserved;
+    return TRUE;
 }
 
-TextButton::~TextButton()
-{
-}
-
-void TextButton::paintButton (Graphics& g,
-                              bool isMouseOverButton,
-                              bool isButtonDown)
-{
-    LookAndFeel& lf = getLookAndFeel();
-
-    lf.drawButtonBackground (g, *this,
-                             findColour (getToggleState() ? buttonOnColourId
-                                                          : buttonColourId),
-                             isMouseOverButton,
-                             isButtonDown);
-
-    lf.drawButtonText (g, *this,
-                       isMouseOverButton,
-                       isButtonDown);
-}
-
-void TextButton::colourChanged()
-{
-    repaint();
-}
-
-Font TextButton::getFont()
-{
-    return Font (jmin (15.0f, getHeight() * 0.6f));
-}
-
-void TextButton::changeWidthToFitText (const int newHeight)
-{
-    if (newHeight >= 0)
-        setSize (jmax (1, getWidth()), newHeight);
-
-    setSize (getFont().getStringWidth (getButtonText()) + getHeight(),
-             getHeight());
-}
+#endif

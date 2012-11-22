@@ -248,29 +248,29 @@ void GuiBitcrusher::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        inputGainSlider->setValue(PAD_SETTINGS->getPadFxBitcrusherInputGain(), false);
-		downsampleSlider->setValue(PAD_SETTINGS->getPadFxBitcrusherDownsample(), false);
-        crushSlider->setValue(PAD_SETTINGS->getPadFxBitcrusherCrush(), false);
-		smoothingSlider->setValue(PAD_SETTINGS->getPadFxBitcrusherSmoothing(), false);
-		wetDryMixSlider->setValue(PAD_SETTINGS->getPadFxBitcrusherWetDryMix(), false);
+        inputGainSlider->setValue(PAD_SETTINGS->getPadFxBitcrusherInputGain(), dontSendNotification);
+		downsampleSlider->setValue(PAD_SETTINGS->getPadFxBitcrusherDownsample(), dontSendNotification);
+        crushSlider->setValue(PAD_SETTINGS->getPadFxBitcrusherCrush(), dontSendNotification);
+		smoothingSlider->setValue(PAD_SETTINGS->getPadFxBitcrusherSmoothing(), dontSendNotification);
+		wetDryMixSlider->setValue(PAD_SETTINGS->getPadFxBitcrusherWetDryMix(), dontSendNotification);
         
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxBitcrusherAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getPadFxBitcrusherAtReverse(), false);
-        intensitySlider->setValue(PAD_SETTINGS->getPadFxBitcrusherAtIntensity(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getPadFxBitcrusherAtIntensity(), dontSendNotification);
     }
     
     else if(MULTI_PADS)
     {
-        inputGainSlider->setValue(0.7, false);
-		downsampleSlider->setValue(16, false);
-        crushSlider->setValue(8, false);
-		smoothingSlider->setValue(1.0, false);
-		wetDryMixSlider->setValue(1.0, false);
+        inputGainSlider->setValue(0.7, dontSendNotification);
+		downsampleSlider->setValue(16, dontSendNotification);
+        crushSlider->setValue(8, dontSendNotification);
+		smoothingSlider->setValue(1.0, dontSendNotification);
+		wetDryMixSlider->setValue(1.0, dontSendNotification);
         syncButton->setToggleState(true, false);
         
         alphaTouchMenu->setSelectedId(0, true);
         reverseButton->setToggleState(0, false);
-        intensitySlider->setValue(1.0, false);
+        intensitySlider->setValue(1.0, dontSendNotification);
     }
     
 }

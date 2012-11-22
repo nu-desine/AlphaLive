@@ -57,7 +57,7 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
     addChildComponent(exclusiveGroupSlider = new AlphaSlider());
     exclusiveGroupSlider->setRange(1, 24, 1);
     exclusiveGroupSlider->addListener(this);
-    exclusiveGroupSlider->setValue(1, false);
+    exclusiveGroupSlider->setValue(1, dontSendNotification);
     exclusiveGroupSlider->addMouseListener(this, true);
     
 	/*
@@ -71,7 +71,7 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
 	velocitySlider->setRotaryParameters((220 * (M_PI / 180)), (500 * (M_PI / 180)),true);
     velocitySlider->setRange(0, 127, 1);
     velocitySlider->addListener(this);
-    velocitySlider->setValue(110, false);
+    velocitySlider->setValue(110, dontSendNotification);
     velocitySlider->addMouseListener(this, true);
     
 	

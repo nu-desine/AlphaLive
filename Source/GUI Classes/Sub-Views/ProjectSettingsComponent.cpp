@@ -163,7 +163,7 @@ GlobalOscComponent::GlobalOscComponent(MainComponent &ref, AlphaLiveEngine &ref2
     addChildComponent(oscPortNumberSlider = new AlphaSlider());
     oscPortNumberSlider->setRange(0, 65535, 1);
     oscPortNumberSlider->addListener(this);
-    oscPortNumberSlider->setValue(5004, false);
+    oscPortNumberSlider->setValue(5004, dontSendNotification);
     oscPortNumberSlider->addMouseListener(this, true);
     
     

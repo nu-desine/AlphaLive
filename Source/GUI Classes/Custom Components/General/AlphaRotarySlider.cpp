@@ -56,7 +56,7 @@ void AlphaRotarySlider::labelTextChanged (Label* labelThatHasChanged)
 {
     if (labelThatHasChanged == textBox)
     {
-        
+        this->grabKeyboardFocus();
         keyPressed(KeyPress(KeyPress::returnKey), this);
     }
 }
@@ -79,7 +79,7 @@ void AlphaRotarySlider::mouseDown(const MouseEvent &e)
         textBox->setBounds(e.x, e.y, 50, 20);
         textBox->setText(String(this->getValue()), false);
         textBox->showEditor();
-        //textBox->getCurrentTextEditor ()->setInputRestrictions(0, "1234567890.");
+        textBox->getCurrentTextEditor()->setInputRestrictions(0, "1234567890.");
         textBox->setVisible(true);
         
         grabKeyboardFocus();

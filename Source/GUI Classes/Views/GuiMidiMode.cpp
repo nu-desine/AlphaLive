@@ -174,7 +174,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
 	pressureMinRangeSlider->setRotaryParameters((90 * (M_PI / 180)), (315 * (M_PI / 180)),true);
     pressureMinRangeSlider->setRange(0, 127, 1);
     pressureMinRangeSlider->addListener(this);
-    pressureMinRangeSlider->setValue(0, false);
+    pressureMinRangeSlider->setValue(0, dontSendNotification);
     pressureMinRangeSlider->addMouseListener(this, true);
     
     
@@ -183,7 +183,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
 	pressureMaxRangeSlider->setRotaryParameters((90 * (M_PI / 180)), (315 * (M_PI / 180)),true);
     pressureMaxRangeSlider->setRange(0, 127, 1);
     pressureMaxRangeSlider->addListener(this);
-    pressureMaxRangeSlider->setValue(127, false);
+    pressureMaxRangeSlider->setValue(127, dontSendNotification);
     pressureMaxRangeSlider->addMouseListener(this, true);
     
 	Image *destructIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::indestructableicon_png, BinaryDataNew::indestructableicon_pngSize));
@@ -557,8 +557,8 @@ void GuiMidiMode::updateDisplay()
         
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         channelButtons[PAD_SETTINGS->getMidiChannel()-1]->setToggleState(true, false);
-        pressureMinRangeSlider->setValue(PAD_SETTINGS->getMidiMinPressureRange(), false);
-        pressureMaxRangeSlider->setValue(PAD_SETTINGS->getMidiMaxPressureRange(), false);
+        pressureMinRangeSlider->setValue(PAD_SETTINGS->getMidiMinPressureRange(), dontSendNotification);
+        pressureMaxRangeSlider->setValue(PAD_SETTINGS->getMidiMaxPressureRange(), dontSendNotification);
         pressureModeButtons[PAD_SETTINGS->getMidiPressureMode()-1]->setToggleState(true, false);
         triggerModeButtons[PAD_SETTINGS->getMidiTriggerMode()-1]->setToggleState(true, false);
         ccControllerSlider->setComponentValue(PAD_SETTINGS->getMidiCcController());
@@ -654,11 +654,11 @@ void GuiMidiMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getMidiMinPressureRange() != pressureMinRange_)
             {
-                pressureMinRangeSlider->setValue(0, false);
+                pressureMinRangeSlider->setValue(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-               pressureMinRangeSlider->setValue(pressureMinRange_, false);
+               pressureMinRangeSlider->setValue(pressureMinRange_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -668,11 +668,11 @@ void GuiMidiMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getMidiMaxPressureRange() != pressureMaxRange_)
             {
-                pressureMaxRangeSlider->setValue(127, false);
+                pressureMaxRangeSlider->setValue(127, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                pressureMaxRangeSlider->setValue(pressureMaxRange_, false);
+                pressureMaxRangeSlider->setValue(pressureMaxRange_, dontSendNotification);
         }
         
         //==================================================================================================

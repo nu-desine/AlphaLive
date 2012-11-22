@@ -101,7 +101,7 @@ GuiFlanger::GuiFlanger(MainComponent &ref)
     addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
 	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     intensitySlider->setRange(0.0, 1.0);
-    intensitySlider->setValue(1.0, false);
+    intensitySlider->setValue(1.0, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
     intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
@@ -334,7 +334,7 @@ void GuiFlanger::buttonClicked (Button *button)
         }
 		
         
-        rateSlider->setValue(lfoRate, false);
+        rateSlider->setValue(lfoRate, dontSendNotification);
         
         for (int i = 0; i < selectedPads.size(); i++)
         {
@@ -361,10 +361,10 @@ void GuiFlanger::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        mixSlider->setValue(PAD_SETTINGS->getPadFxFlangerMix(), false);
-        rateSlider->setValue(PAD_SETTINGS->getPadFxFlangerRate(), false);
-        feedbackSlider->setValue(PAD_SETTINGS->getPadFxFlangerFeedback(), false);
-        flangerIntensitySlider->setValue(PAD_SETTINGS->getPadFxFlangerIntensity(), false);
+        mixSlider->setValue(PAD_SETTINGS->getPadFxFlangerMix(), dontSendNotification);
+        rateSlider->setValue(PAD_SETTINGS->getPadFxFlangerRate(), dontSendNotification);
+        feedbackSlider->setValue(PAD_SETTINGS->getPadFxFlangerFeedback(), dontSendNotification);
+        flangerIntensitySlider->setValue(PAD_SETTINGS->getPadFxFlangerIntensity(), dontSendNotification);
         //rateMenu->setSelectedId(PAD_SETTINGS->getPadFxFlangerRateMenu(), true);
         syncButton->setToggleState(PAD_SETTINGS->getPadFxFlangerSync(), false);
 		
@@ -415,21 +415,21 @@ void GuiFlanger::updateDisplay()
         
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxFlangerAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getPadFxFlangerAtReverse(), false);
-        intensitySlider->setValue(PAD_SETTINGS->getPadFxFlangerAtIntensity(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getPadFxFlangerAtIntensity(), dontSendNotification);
     }
     
     else if(MULTI_PADS)
     {
-        mixSlider->setValue(0.7, false);
-        rateSlider->setValue(0.25, false);
-        feedbackSlider->setValue(0.9, false);
-        flangerIntensitySlider->setValue(0.1, false);
+        mixSlider->setValue(0.7, dontSendNotification);
+        rateSlider->setValue(0.25, dontSendNotification);
+        feedbackSlider->setValue(0.9, dontSendNotification);
+        flangerIntensitySlider->setValue(0.1, dontSendNotification);
         rateMenu->setButtonText("-");
         syncButton->setToggleState(1, false);
         
         alphaTouchMenu->setSelectedId(0, true);
         reverseButton->setToggleState(0, false);
-        intensitySlider->setValue(1.0, false);
+        intensitySlider->setValue(1.0, dontSendNotification);
     }
     
     

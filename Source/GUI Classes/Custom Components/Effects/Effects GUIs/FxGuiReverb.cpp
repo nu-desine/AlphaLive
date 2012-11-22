@@ -80,7 +80,7 @@ GuiReverb::GuiReverb(MainComponent &ref)
     addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
 	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     intensitySlider->setRange(0.0, 1.0);
-    intensitySlider->setValue(1.0, false);
+    intensitySlider->setValue(1.0, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
     intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
@@ -218,26 +218,26 @@ void GuiReverb::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        mixSlider->setValue(PAD_SETTINGS->getPadFxReverbMix(), false);
-        roomSizeSlider->setValue(PAD_SETTINGS->getPadFxReverbRoomSize(), false);
-        dampingSlider->setValue(PAD_SETTINGS->getPadFxReverbDamping(), false);
-        widthSlider->setValue(PAD_SETTINGS->getPadFxReverbWidth(), false);
+        mixSlider->setValue(PAD_SETTINGS->getPadFxReverbMix(), dontSendNotification);
+        roomSizeSlider->setValue(PAD_SETTINGS->getPadFxReverbRoomSize(), dontSendNotification);
+        dampingSlider->setValue(PAD_SETTINGS->getPadFxReverbDamping(), dontSendNotification);
+        widthSlider->setValue(PAD_SETTINGS->getPadFxReverbWidth(), dontSendNotification);
         
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxReverbAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getPadFxReverbAtReverse(), false);
-        intensitySlider->setValue(PAD_SETTINGS->getPadFxReverbAtIntensity(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getPadFxReverbAtIntensity(), dontSendNotification);
     }
     
     else if(MULTI_PADS)
     {
-        mixSlider->setValue(0.7, false);
-        roomSizeSlider->setValue(0.5, false);
-        dampingSlider->setValue(0.5, false);
-        widthSlider->setValue(0.5, false);
+        mixSlider->setValue(0.7, dontSendNotification);
+        roomSizeSlider->setValue(0.5, dontSendNotification);
+        dampingSlider->setValue(0.5, dontSendNotification);
+        widthSlider->setValue(0.5, dontSendNotification);
         
         alphaTouchMenu->setSelectedId(0, true);
         reverseButton->setToggleState(0, false);
-        intensitySlider->setValue(1.0, false);
+        intensitySlider->setValue(1.0, dontSendNotification);
     }
     
     

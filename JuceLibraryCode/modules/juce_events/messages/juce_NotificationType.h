@@ -23,48 +23,21 @@
   ==============================================================================
 */
 
-TextButton::TextButton (const String& name, const String& toolTip)
-    : Button (name)
+#ifndef __JUCE_NOTIFICATIONTYPE_JUCEHEADER__
+#define __JUCE_NOTIFICATIONTYPE_JUCEHEADER__
+
+//==============================================================================
+/**
+    These enums are used in various classes to indicate whether a notification
+    event should be sent out.
+*/
+enum NotificationType
 {
-    setTooltip (toolTip);
-}
+    dontSendNotification = 0,   /**< No notification message should be sent. */
+    sendNotification = 1,       /**< Requests a notification message, either synchronous or not. */
+    sendNotificationSync,       /**< Requests a synchronous notification. */
+    sendNotificationAsync,      /**< Requests a asynchronous notification. */
+};
 
-TextButton::~TextButton()
-{
-}
 
-void TextButton::paintButton (Graphics& g,
-                              bool isMouseOverButton,
-                              bool isButtonDown)
-{
-    LookAndFeel& lf = getLookAndFeel();
-
-    lf.drawButtonBackground (g, *this,
-                             findColour (getToggleState() ? buttonOnColourId
-                                                          : buttonColourId),
-                             isMouseOverButton,
-                             isButtonDown);
-
-    lf.drawButtonText (g, *this,
-                       isMouseOverButton,
-                       isButtonDown);
-}
-
-void TextButton::colourChanged()
-{
-    repaint();
-}
-
-Font TextButton::getFont()
-{
-    return Font (jmin (15.0f, getHeight() * 0.6f));
-}
-
-void TextButton::changeWidthToFitText (const int newHeight)
-{
-    if (newHeight >= 0)
-        setSize (jmax (1, getWidth()), newHeight);
-
-    setSize (getFont().getStringWidth (getButtonText()) + getHeight(),
-             getHeight());
-}
+#endif   // __JUCE_NOTIFICATIONTYPE_JUCEHEADER__

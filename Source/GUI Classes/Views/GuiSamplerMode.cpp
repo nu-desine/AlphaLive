@@ -97,7 +97,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	gainSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
 	gainSlider->setRange(0.0, 2.0, 0.01);
     gainSlider->addListener(this);
-    gainSlider->setValue(1.0, false);
+    gainSlider->setValue(1.0, dontSendNotification);
     gainSlider->addMouseListener(this, true);
 	
 	//--------------- pan slider -------------------
@@ -105,7 +105,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	panSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
 	panSlider->setRange(0.0, 1.0, 0.01);
     panSlider->addListener(this);
-    panSlider->setValue(0.5, false);
+    panSlider->setValue(0.5, dontSendNotification);
     panSlider->addMouseListener(this, true);
     
     //--------------- attack slider -------------------
@@ -114,7 +114,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	attackSlider->setRange(0.0, 20.0, 0.01);
     attackSlider->setSkewFactor(0.4);
     attackSlider->addListener(this);
-    attackSlider->setValue(0.01, false);
+    attackSlider->setValue(0.01, dontSendNotification);
     attackSlider->addMouseListener(this, true);
     
     //--------------- release slider -------------------
@@ -123,7 +123,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	releaseSlider->setRange(0.0, 20.0, 0.01);
     releaseSlider->setSkewFactor(0.4);
     releaseSlider->addListener(this);
-    releaseSlider->setValue(0.01, false);
+    releaseSlider->setValue(0.01, dontSendNotification);
     releaseSlider->addMouseListener(this, true);
     
     //---------------------- plus and minus buttons ------------------
@@ -629,10 +629,10 @@ void GuiSamplerMode::updateDisplay()
 		File audioFile(PAD_SETTINGS->getSamplerAudioFilePath());
 		waveform->setFile (audioFile);
 		
-        gainSlider->setValue(PAD_SETTINGS->getSamplerGain(), false);
-        panSlider->setValue(PAD_SETTINGS->getSamplerPan(), false);
-        attackSlider->setValue(PAD_SETTINGS->getSamplerAttackTime(), false);
-        releaseSlider->setValue(PAD_SETTINGS->getSamplerReleaseTime(), false);
+        gainSlider->setValue(PAD_SETTINGS->getSamplerGain(), dontSendNotification);
+        panSlider->setValue(PAD_SETTINGS->getSamplerPan(), dontSendNotification);
+        attackSlider->setValue(PAD_SETTINGS->getSamplerAttackTime(), dontSendNotification);
+        releaseSlider->setValue(PAD_SETTINGS->getSamplerReleaseTime(), dontSendNotification);
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         triggerModeButtons[PAD_SETTINGS->getSamplerTriggerMode()-1]->setToggleState(true, false);
         loopButton->setToggleState(PAD_SETTINGS->getSamplerShouldLoop(), false);
@@ -774,11 +774,11 @@ void GuiSamplerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSamplerGain() != gain_)
             {
-                gainSlider->setValue(1.0, false);
+                gainSlider->setValue(1.0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                gainSlider->setValue(gain_, false);
+                gainSlider->setValue(gain_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -788,11 +788,11 @@ void GuiSamplerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSamplerPan() != pan_)
             {
-                panSlider->setValue(0.5, false);
+                panSlider->setValue(0.5, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                panSlider->setValue(pan_, false);
+                panSlider->setValue(pan_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -802,11 +802,11 @@ void GuiSamplerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSamplerAttackTime() != attack_)
             {
-                attackSlider->setValue(0.01, false);
+                attackSlider->setValue(0.01, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                attackSlider->setValue(attack_, false);
+                attackSlider->setValue(attack_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -816,11 +816,11 @@ void GuiSamplerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSamplerReleaseTime() != release_)
             {
-                releaseSlider->setValue(0.01, false);
+                releaseSlider->setValue(0.01, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                releaseSlider->setValue(release_, false);
+                releaseSlider->setValue(release_, dontSendNotification);
         }
         
         //==================================================================================================

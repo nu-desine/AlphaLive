@@ -66,7 +66,7 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
     addAndMakeVisible(sceneNumberSlider = new AlphaSlider());
     sceneNumberSlider->setRange(1, NO_OF_SCENES, 1);
     sceneNumberSlider->addListener(this);
-    sceneNumberSlider->setValue(1, false);
+    sceneNumberSlider->setValue(1, dontSendNotification);
     sceneNumberSlider->addMouseListener(this, true);
     sceneNumberSlider->setVisible(false);
     
@@ -84,12 +84,12 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
     addChildComponent(oscPortNumberSlider = new AlphaSlider());
     oscPortNumberSlider->setRange(0, 65535, 1);
     oscPortNumberSlider->addListener(this);
-    oscPortNumberSlider->setValue(5004, false);
+    oscPortNumberSlider->setValue(5004, dontSendNotification);
     oscPortNumberSlider->addMouseListener(this, true);
     
     addChildComponent(midiProgramChangeNumberSlider = new AlphaSlider());
     midiProgramChangeNumberSlider->setRange(0, 127, 1);
-    midiProgramChangeNumberSlider->setValue(1, false);
+    midiProgramChangeNumberSlider->setValue(1, dontSendNotification);
     midiProgramChangeNumberSlider->addListener(this);
     midiProgramChangeNumberSlider->addMouseListener(this, true);
     midiProgramChangeNumberSlider->setVisible(false);

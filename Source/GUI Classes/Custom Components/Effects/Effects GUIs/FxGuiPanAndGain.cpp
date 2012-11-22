@@ -63,7 +63,7 @@ GuiGainAndPan::GuiGainAndPan(MainComponent &ref)
     addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     intensitySlider->setRange(0.0, 1.0);
-    intensitySlider->setValue(1.0, false);
+    intensitySlider->setValue(1.0, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
     intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
@@ -179,21 +179,21 @@ void GuiGainAndPan::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        gainSlider->setValue(PAD_SETTINGS->getPadFxGainPanGain(), false);
-        panSlider->setValue(PAD_SETTINGS->getPadFxGainPanPan(), false);
+        gainSlider->setValue(PAD_SETTINGS->getPadFxGainPanGain(), dontSendNotification);
+        panSlider->setValue(PAD_SETTINGS->getPadFxGainPanPan(), dontSendNotification);
         
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxGainPanAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getPadFxGainPanAtReverse(), false);
-        intensitySlider->setValue(PAD_SETTINGS->getPadFxGainPanAtIntensity(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getPadFxGainPanAtIntensity(), dontSendNotification);
     }
     
     else if(MULTI_PADS)
     {
-        gainSlider->setValue(0.5, false);
-        panSlider->setValue(0.5, false);
+        gainSlider->setValue(0.5, dontSendNotification);
+        panSlider->setValue(0.5, dontSendNotification);
         alphaTouchMenu->setSelectedId(0, true);
         reverseButton->setToggleState(0, false);
-        intensitySlider->setValue(1.0, false);
+        intensitySlider->setValue(1.0, dontSendNotification);
     }
     
 }

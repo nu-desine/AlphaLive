@@ -27,29 +27,34 @@
 #define H_ALPHAROTARYSLIDER
 
 #include "../../../../JuceLibraryCode/JuceHeader.h"
+#include "../../AlphaLiveLookandFeel.h"
 
 class AlphaRotarySlider :   public Slider,
-                            public Label::Listener,
-                            public KeyListener
+                            public KeyListener,
+                            public TextEditor::Listener
 
 {
 public:
     AlphaRotarySlider(const float startAngleRadians,
 					  const float endAngleRadians, const float _theWidth);
     ~AlphaRotarySlider();
-	
-    void labelTextChanged (Label* labelThatHasChanged);	
+		
+    void textEditorFocusLost (TextEditor &textEditor);
+    void textEditorReturnKeyPressed (TextEditor &textEditor);
+    
     bool hitTest (int x, int y);
     
     void mouseDown(const MouseEvent &e);
     bool keyPressed (const KeyPress &key, Component *originatingComponent);
+    
+    void hideTextBox();
 	
 private:
 	
 	Path hitPath;
 	float rotaryStart, rotaryEnd, theWidth;
     
-    Label *textBox;
+    TextEditor *textBox;
 	
 
 };

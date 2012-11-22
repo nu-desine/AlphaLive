@@ -33,12 +33,12 @@ AlphaRotarySlider::AlphaRotarySlider(const float startAngleRadians,
 	theWidth = _theWidth;
 	hitPath.addPieSegment (0, 0, theWidth, theWidth, rotaryStart, rotaryEnd, ((1 - 0.2) + (0.2 * (theWidth * 0.5) * 0.003)));
     
-    addChildComponent (textBox = new Label());
-    textBox->setColour(Label::textColourId, Colours::grey);
-    textBox->setColour(Label::backgroundColourId, Colours::lightgrey);
+    addChildComponent (textBox = new TextEditor());
+    textBox->setColour(TextEditor::textColourId, Colours::darkgrey);
+    textBox->setColour(TextEditor::backgroundColourId, Colours::lightgrey);
+    textBox->setColour(TextEditor::focusedOutlineColourId, AlphaColours::nearlyblack);
     textBox->setOpaque(true);
-    textBox->setJustificationType(Justification::centred);
-    textBox->setEditable(true);
+    textBox->setSelectAllWhenFocused (true);
     textBox->addListener(this);
     
     //set this component to listen to itself
@@ -52,12 +52,21 @@ AlphaRotarySlider::~AlphaRotarySlider()
 }
 
 
-void AlphaRotarySlider::labelTextChanged (Label* labelThatHasChanged)
+void AlphaRotarySlider::textEditorReturnKeyPressed (TextEditor &textEditor)
 {
-    if (labelThatHasChanged == textBox)
+    if (&textEditor == textBox)
     {
-        this->grabKeyboardFocus();
-        keyPressed(KeyPress(KeyPress::returnKey), this);
+        this->setValue(textBox->getText().getDoubleValue(), sendNotification);
+        hideTextBox();
+    }
+    
+}
+
+void AlphaRotarySlider::textEditorFocusLost (TextEditor &textEditor)
+{
+    if (&textEditor == textBox)
+    {
+        hideTextBox();
     }
 }
 					
@@ -69,25 +78,40 @@ bool AlphaRotarySlider::hitTest (int x, int y)
 void AlphaRotarySlider::mouseDown(const MouseEvent &e)
 {
 	
+    //if right click, display text box
 	if (e.mods.isPopupMenu() == true)
     {
-        std::cout << "popping" << std::endl;
-        
         hitPath.clear();
         hitPath.addRectangle(0, 0, getWidth(), getHeight());
         
-        textBox->setBounds(e.x, e.y, 50, 20);
+        //set bounds of text box so it doesn't go out of bounds of the overall component
+        int xPos = e.x;
+        int yPos = e.y;
+        int width = 50;
+        int height = 20;
+        
+        if (xPos + width > getWidth())
+            xPos = getWidth() - width;
+        if (yPos + height > getHeight())
+            yPos = getHeight() - height;
+            
+        textBox->setBounds(xPos, yPos, width, height);
+        
         textBox->setText(String(this->getValue()), false);
-        textBox->showEditor();
-        textBox->getCurrentTextEditor()->setInputRestrictions(0, "1234567890.");
+        textBox->setInputRestrictions(0, "1234567890.-");
         textBox->setVisible(true);
         
-        grabKeyboardFocus();
+        //set this whole component to the front so that the text box will be in full view.
+        //Also this call with give the component and the text box keyboard focus that will
+        //subsequently highlight the text box text.
+        this->toFront(true);
     }
+    //if regular click and the text box is currently visible, hide the text box
     else if (e.mods.isLeftButtonDown() && textBox->isVisible() == true)
     {
-        keyPressed(KeyPress(KeyPress::returnKey), this);
+        hideTextBox();
     }
+    //else, send mouse command to the Slider aspect of this component
     else
     {
         Slider::mouseDown(e);
@@ -96,26 +120,25 @@ void AlphaRotarySlider::mouseDown(const MouseEvent &e)
 
 bool AlphaRotarySlider::keyPressed (const KeyPress &key, Component *originatingComponent)
 {
-    std::cout << "keypressed!" << std::endl;
-    
-    
     if (key == KeyPress::returnKey)
     {
-        std::cout << "return key pressed" << std::endl;
-        if (textBox->isVisible() == true)
-        {
-            textBox->setVisible(false);
-            
-            hitPath.clear();
-            hitPath.addPieSegment (0, 0, theWidth, theWidth, rotaryStart, rotaryEnd, ((1 - 0.2) + (0.2 * (theWidth * 0.5) * 0.003)));
-            
-            return true;
-        }
-        else
-            return false;
-        
+        hideTextBox();
+        return true;
     }
     else
         return false; //incase the keypress is a shortcut that the parent needs to react to.
     
 }
+
+
+void AlphaRotarySlider::hideTextBox()
+{
+    if (textBox->isVisible() == true)
+    {
+        textBox->setVisible(false);
+        
+        hitPath.clear();
+        hitPath.addPieSegment (0, 0, theWidth, theWidth, rotaryStart, rotaryEnd, ((1 - 0.2) + (0.2 * (theWidth * 0.5) * 0.003)));
+    }
+}
+

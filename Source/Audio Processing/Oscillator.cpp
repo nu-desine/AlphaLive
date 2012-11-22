@@ -16,9 +16,9 @@
 Oscillator::Oscillator (double sampleRate)
 :			
 	sampRate(sampleRate),
-	squareBuffer(1, 20062),
-	sawBuffer(1, 43966),
-	sawDownBuffer(1, 47855)
+	squareBuffer(1, 20400),
+	sawBuffer(1, 44000),
+	sawDownBuffer(1, 48000)
 {
 	squareWaveFile = ("/Users/felixgodden/Programming/nu-desine/alphalive 2/Source/SquareWaveRoundedFINALSHORTESTest.wav");
     sawWaveFile = ("/Users/felixgodden/Programming/nu-desine/alphalive 2/Source/SawWaveFinal4.wav");
@@ -66,18 +66,15 @@ double Oscillator::process (double frequency, int waveShape)
             break;
         case 2:
             output = processSqr();
-			numSamples = squareBuffer.getNumSamples();
             break;
         case 3:
             output = processTri();
             break;
         case 4:
             output = processSawUp();
-			numSamples = sawBuffer.getNumSamples();
             break;
         case 5:
             output = processSawDown();
-			numSamples = sawDownBuffer.getNumSamples();
             break;
         default:
             output = processSin();

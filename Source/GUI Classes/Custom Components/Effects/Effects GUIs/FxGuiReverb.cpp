@@ -247,22 +247,22 @@ void GuiReverb::mouseEnter (const MouseEvent &e)
 {
     if (mixSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Reverb Mix Control. Sets the wet/dry ratio for reverb level for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix. Sets the Wet/Dry mix of the reverb level on the selected pads."));
         parameterHoverLabel->setText(String(mixSlider->getValue(), 3), false);
     }
     else if (roomSizeSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Reverb Room Size Control. Sets the reverb room size for the selected pads. A larger room size will create a longer reverberation time."));
+        mainComponentRef.setInfoTextBoxText(translate("Room Size. Sets the reverb room size of the selected pads. A larger room size will result in a longer reverberation time."));
         parameterHoverLabel->setText(String(roomSizeSlider->getValue(), 3), false);
     }
     else if (dampingSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Reverb Damping Control. Sets the reverb damping level for the selected pads. A larger damping value create a more subtle reverberation tail."));
+        mainComponentRef.setInfoTextBoxText(translate("Damping. Sets the reverb damping level of the selected pads. A larger damping value result in a more subtle reverberation tail."));
         parameterHoverLabel->setText(String(dampingSlider->getValue(), 3), false);
     }
     else if (widthSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Reverb Width Control. Sets the reverb width for the selected pads. A larger width will create a wider reverb sound in the stereo spread."));
+        mainComponentRef.setInfoTextBoxText(translate("Width. Sets the reverb width of the selected pads. A larger width will result in a wider reverb sound in the stereo spread."));
         parameterHoverLabel->setText(String(widthSlider->getValue(), 3), false);
     }
         

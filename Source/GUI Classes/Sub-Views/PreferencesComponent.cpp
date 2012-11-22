@@ -117,7 +117,7 @@ void PreferencesComponent::mouseEnter (const MouseEvent &e)
     }
     else if (audioAndMidiSettingsComponent->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Audio Output Settings. Sets and displays the global audio output settings of AlphaLive. Output device, sample rate, and audio buffer size can be set along with a button that allows a test signal to be played."));
+        mainComponentRef.setInfoTextBoxText (translate("Audio Output Settings. Displays and allows you to set the global audio output channels of AlphaLive. Output device, sample rate, and audio buffer size can be set from here. The 'test' button can be used to test the channel that audio being sent from."));
     }
 }
 
@@ -385,27 +385,27 @@ void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
     
     if (appProjectDirChooser->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("AlphaLive Projects Directory Chooser. This control allows you to change the location of the applications projects folder. The previous folder and its contents will be moved to the new location."));
+        mainComponentRef.setInfoTextBoxText(translate("AlphaLive Projects Directory selector. This allows you to change the location of the Alphalive's projects folder. The current folder and its contents will be moved to the new location."));
     }
     else if (midiNoteDisplayTypeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("MIDI note display type selector. Use this menu to configure how MIDI notes are displayed within the application."));
+        mainComponentRef.setInfoTextBoxText(translate("MIDI note display type selector. This menu is used to configure how MIDI notes are displayed within the application."));
     }
     else if (launchTaskMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Application Launch Task selector. Use this menu to configure what happens when the application is launched."));
+        mainComponentRef.setInfoTextBoxText(translate("Application Launch Task selector. This menu is used to configure what happens when the application is launched."));
     }
     else if (killOnClockStopButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("If this option is set to 'on' any playing pads will be stopped when the clock is stopped."));
+        mainComponentRef.setInfoTextBoxText(translate("When set to 'on' this option forces any playing pads to be stopped when the clock is stopped."));
     }
     else if (cleanOnCloseButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("'Cleaning' a project is the process of searching through the projects Audio Files directory and removing any unused audio files. If this option is set to 'on' the project will automatically be cleaned when the application is shut down. This will prevent a build-up of unused data."));
+        mainComponentRef.setInfoTextBoxText(translate("'Cleaning' a project is the process of searching through the projects Audio Files directory and removing any unused audio files. When set to 'on' the project will automatically be cleaned when the application is shut down. This will prevent a build-up of unused data."));
     }
     else if (autoSaveScenesButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("By default ('on') when you switch between scenes it will automatically save the recently changed settings to the scene slot locally (not to file). If this option is set to 'off' you will need to shift-click the current scene slot before switching scenes otherwise any changes to the scenes settings will be lost."));
+        mainComponentRef.setInfoTextBoxText(translate("By default ('on'). When you switch between scenes it will automatically save the recently changed settings to the scene slot locally (not to the save file). When set to 'off' you will need to save the current scene slot to prevent changes to the scene being lost. Save a scene using shift-click."));
     }
 }
 

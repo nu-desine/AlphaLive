@@ -472,41 +472,41 @@ void GuiTremolo::mouseEnter (const MouseEvent &e)
 {
     if (depthSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Depth/Mix Control. Sets the depth/mix of the LFO for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Depth/Mix. Sets the depth/mix of the LFO on the selected pads."));
         parameterHoverLabel->setText(String(depthSlider->getValue(), 3), false);
     }
     else if (rateSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("LFO Rate Control. Sets the rate in Hz for the selected pads. If you would like to set the rate based on the tempo, click on the 'Sync' button."));
+        mainComponentRef.setInfoTextBoxText(translate("LFO Rate. Sets the rate in Hz for the selected pads. To set the rate based on the tempo, click on the 'Sync' button."));
         parameterHoverLabel->setText(String(rateSlider->getValue(), 3), false);
     }
     else if (rateMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("LFO Rate Menu. Sets the LFO rate for the selected pads. If you would like to set the rate in Hz, click on the 'Sync' button."));
+        mainComponentRef.setInfoTextBoxText(translate("LFO Rate Menu. Sets the LFO rate of the selected pads. To set the rate in Hz, click on the 'Sync' button."));
     }
     else if (syncButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Tempo Sync Button. Turn this button on to sync the LFO to the tempo, else you can set the LFO is Hz."));
+        mainComponentRef.setInfoTextBoxText(translate("Tempo Sync. When on the LFO will sync to the tempo. When off the LFO rate is set in Hz."));
     }
     else if (shapeMenuButtons[0]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Sine wave. Sets the LFO wave shape for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Sine wave. Sets the LFO wave shape of the selected pads."));
     }
 	else if (shapeMenuButtons[1]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Square wave. Sets the LFO wave shape for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Square wave. Sets the LFO wave shape of the selected pads."));
     }
 	else if (shapeMenuButtons[2]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Triangle wave. Sets the LFO wave shape for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Triangle wave. Sets the LFO wave shape of the selected pads."));
     }
 	else if (shapeMenuButtons[3]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Sawtooth Rising wave. Sets the LFO wave shape for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Sawtooth Rising wave. Sets the LFO wave shape of the selected pads."));
     }
 	else if (shapeMenuButtons[4]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Sawtooth Falling wave. Sets the LFO wave shape for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Sawtooth Falling wave. Sets the LFO wave shape of the selected pads."));
     }
     else if (alphaTouchMenu->isMouseOver(true))
     {

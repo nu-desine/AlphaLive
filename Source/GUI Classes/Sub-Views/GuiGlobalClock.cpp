@@ -322,47 +322,47 @@ void GuiGlobalClock::mouseEnter (const MouseEvent &e)
 {
     if (tempoSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Global Tempo Selector. Sets and displays the tempo that controls the playback speed of the global clock and any sequences."));
+        mainComponentRef.setInfoTextBoxText (translate("Global Tempo Selector. Sets the tempo the global clock and any sequences."));
     }
     
     else if (transportButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Clock Start/Stop Button. Use this button to manually start and stop the global clock."));
+        mainComponentRef.setInfoTextBoxText (translate("Clock Start/Stop. This button is used to manually start and stop the global clock."));
     }
     
      else if (autoStartSwitch->isMouseOver(true))
      {
-     mainComponentRef.setInfoTextBoxText (translate("Clock Auto-Start Switch. When turned on the clock will automatically start the first time a note, loop or sequence is played, else the clock will need to be manually started using the Start/Stop button."));
+     mainComponentRef.setInfoTextBoxText (translate("Clock Auto-Start Switch. When enabled the clock will a start automatically when a note, loop or sequence is played. If this is off the clock will need to be started manually using the Start/Stop button."));
      }
      else if (metronomeButton->isMouseOver(true))
      {
-         mainComponentRef.setInfoTextBoxText (translate("Metronome Button. When turned on an audible click track will be played when the clock is running."));
+         mainComponentRef.setInfoTextBoxText (translate("Metronome. When on a click track will be played when in time with the global clock."));
      }
     
     else if (quantizationValueButtons[0]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Quarter Beat Quantization Value.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
+        mainComponentRef.setInfoTextBoxText (translate("Quarter Beat Quantization.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
     }
     
     else if (quantizationValueButtons[1]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Half Beat Quantization Value.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
+        mainComponentRef.setInfoTextBoxText (translate("Half Beat Quantization.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
     }
     else if (quantizationValueButtons[2]->isMouseOver(true))
     {
-       mainComponentRef.setInfoTextBoxText (translate("One Beat Quantization Value.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
+       mainComponentRef.setInfoTextBoxText (translate("One Beat Quantization.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
     }
     else if (quantizationValueButtons[3]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("One Bar Quantization Value.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
+        mainComponentRef.setInfoTextBoxText (translate("One Bar Quantization.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
     }
     else if (quantizationValueButtons[4]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Two Bars Quantization Value.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
+        mainComponentRef.setInfoTextBoxText (translate("Two Bars Quantization.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
     }
     else if (quantizationValueButtons[5]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Four Bars Quantization Value.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
+        mainComponentRef.setInfoTextBoxText (translate("Four Bars Quantization.") + " " + translate(CommonInfoBoxText::quantizationValueButtons));
     }
     
     for (int i = 0; i < 6; i++)

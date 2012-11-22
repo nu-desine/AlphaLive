@@ -106,7 +106,7 @@ void Tremolo::processAlphaTouch (int pressureValue)
             else
                 shape = roundToInt (shapeControlValue - (pressureValue * (((4.0-(5.0-shapeControlValue))*alphaTouchIntensity)/MAX_PRESSURE))); 
             
-            //the above quations don't seem to work. why?
+            //the above equations don't seem to work. why?
             
             std::cout << shape << std::endl;
             break;

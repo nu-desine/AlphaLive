@@ -451,30 +451,30 @@ void GuiFlanger::mouseEnter (const MouseEvent &e)
 {
     if (mixSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Mix Control. Sets the mix of the Flanger effect for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix. Sets the Wet/Dry mix of the Flanger effect for the selected pads."));
         parameterHoverLabel->setText(String(mixSlider->getValue(), 3), false);
     }
     else if (rateSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("LFO Rate Control. Sets the rate in Hz for the selected pads. If you would like to set the rate based on the tempo, click on the 'Sync' button."));
+        mainComponentRef.setInfoTextBoxText(translate("LFO Rate. Sets the rate in Hz for the selected pads. To set the rate based on the tempo, click on the 'Sync' button."));
         parameterHoverLabel->setText(String(rateSlider->getValue(), 3), false);
     }
     else if (rateMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("LFO Rate Menu. Sets the LFO rate for the selected pads. If you would like to set the rate in Hz, click on the 'Sync' button."));
+        mainComponentRef.setInfoTextBoxText(translate("LFO Rate Menu. Sets the LFO rate of the selected pads. To set the rate in Hz, click on the 'Sync' button."));
     }
     else if (syncButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Tempo Sync Button. Turn this button on to sync the LFO to the tempo, else you can set the LFO is Hz."));
+        mainComponentRef.setInfoTextBoxText(translate("Tempo Sync. When on the LFO will sync to the tempo. When off the LFO rate is set in Hz."));
     }
     else if (feedbackSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Feedback Selector. Sets the flanger feedback for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Feedback Selector. Sets the flanger feedback on the selected pads."));
         parameterHoverLabel->setText(String(feedbackSlider->getValue(), 3), false);
     }
     else if (flangerIntensitySlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Flanger Intensity Selector. Sets the intensity of the effect for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Flanger Intensity Selector. Sets the intensity of the effect on the selected pads."));
         parameterHoverLabel->setText(String(flangerIntensitySlider->getValue(), 3), false);
     }
     else if (alphaTouchMenu->isMouseOver(true))

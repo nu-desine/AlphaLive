@@ -202,12 +202,12 @@ void GuiGainAndPan::mouseEnter (const MouseEvent &e)
 {
     if (gainSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Gain Control. Sets the gain for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Gain. Sets the gain for the selected pads."));
         parameterHoverLabel->setText(String(gainSlider->getValue(), 3), false);
     }
     else if (panSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Pan Control. Sets the pan level for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Pan. Sets the pan level for the selected pads."));
         parameterHoverLabel->setText(String(panSlider->getValue(), 3), false);
     }
     

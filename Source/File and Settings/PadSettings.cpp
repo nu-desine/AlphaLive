@@ -44,7 +44,7 @@ PadSettings::PadSettings(int arrayIndex)
     exclusiveGroup = 1;
     quantizeMode = 0; //unquantized
     velocityCurve = 2; //Linear
-    velocity = 110;
+    velocity = 100;
     
     //midi mode
     midiNote = 60;

@@ -991,30 +991,30 @@ void GuiSamplerMode::mouseEnter (const MouseEvent &e)
     }
     else if (attackSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Attack Time Selector. Sets and displays the audio sample attack time in seconds for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Attack Time. Set the audio sample attack time in seconds for selected pads."));
     }
     else if (releaseSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Release Time Selector. Sets and displays the audio sample release time in seconds for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Release Time. Set the audio sample release time in seconds for selected pads."));
     }
     
     if (fileChooser->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Audio File Selector. Sets and displays the filepath name of the audio file for the selected pads. Use the '+' button to open a File Browser Window, or use the drop-down menu to select from recently selected files, as well as view the currently selected file."));
+        mainComponentRef.setInfoTextBoxText(translate("Audio File Selector. Set the filepath name of the audio file for selected pads. Click the '+' button to open a File Browser Window, or use the drop-down menu to select from recently used files."));
     }
     
     else if (panSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Pan Control. Sets and displays the stereo positioning of the audio signal for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Pan. Set the stereo positioning of the audio signal for selected pads."));
     }
     else if (gainSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Gain Control. Sets an displays the gain of the audio signal for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Gain. Sets the gain of the audio signal for the selected pads."));
     }
     
     if (plusButton->isMouseOver(true) || minusButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Use this pair of buttons to switch between a set of rotary controls above."));
+        mainComponentRef.setInfoTextBoxText(translate("Use these buttons to switch between a set of rotary controls above."));
     }
     
     //else if (fxDial->isMouseOver(true))

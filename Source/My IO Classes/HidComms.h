@@ -32,6 +32,8 @@ public:
     HidComms();
     virtual ~HidComms();
     
+    void connectToDevice();
+    
     void run();
     virtual void hidInputCallback (int pad, int value, int velocity) = 0;
     

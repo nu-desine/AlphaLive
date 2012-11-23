@@ -41,7 +41,7 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
     addAndMakeVisible(tempoSlider = new AlphaSlider());
     tempoSlider->setRange(60.0, 360.0, 0.1);
     tempoSlider->addListener(this);
-    tempoSlider->setComponentValue(120.0);
+    tempoSlider->setValue(120.0);
     tempoSlider->addMouseListener(this, true);
 	
 	//beats per bar buttons
@@ -305,7 +305,7 @@ void GuiGlobalClock::triggerTransportButton()
 
 void GuiGlobalClock::updateDisplay()
 {
-    tempoSlider->setComponentValue(AppSettings::Instance()->getGlobalTempo());
+    tempoSlider->setValue(AppSettings::Instance()->getGlobalTempo());
 	
     beatsPerBarButtons[AppSettings::Instance()->getBeatsPerBar()-2]->setToggleState(true, false);
     quantizationValueButtons[6-AppSettings::Instance()->getQuantizationValue()]->setToggleState(true, false);

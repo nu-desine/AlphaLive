@@ -198,7 +198,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     ccControllerSlider->setRange(0, 127, 1);
     ccControllerSlider->addListener(this);
     ccControllerSlider->addMouseListener(this, true);
-    ccControllerSlider->setComponentValue(-999);
+    ccControllerSlider->setValue(-999);
     
     //------------------Pressure minimum range slider------------------------------
     addChildComponent(midiPressureMinRangeSlider = new AlphaRotarySlider((90 * (M_PI / 180)), (315 * (M_PI / 180)), 290));
@@ -1807,7 +1807,7 @@ void GuiSequencerMode::updateDisplay()
         triggerModeButtons[PAD_SETTINGS->getSequencerTriggerMode()-1]->setToggleState(true, false);
         midiPressureModeButtons[PAD_SETTINGS->getSequencerMidiPressureMode()-1]->setToggleState(true, false);
         midiChannelButtons[PAD_SETTINGS->getSequencerMidiChannel()-1]->setToggleState(true, false);
-        ccControllerSlider->setComponentValue(PAD_SETTINGS->getSequencerMidiCcController());
+        ccControllerSlider->setValue(PAD_SETTINGS->getSequencerMidiCcController());
         loopButton->setToggleState(PAD_SETTINGS->getSequencerShouldLoop(), false);
         indestructibleButton->setToggleState(PAD_SETTINGS->getSequencerIndestructible(), false);
         finishLoopButton->setToggleState(PAD_SETTINGS->getSequencerShouldFinishLoop(), false);
@@ -2058,11 +2058,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerMidiCcController() != ccNumber_)
             {
-                ccControllerSlider->setComponentValue(-999);
+                ccControllerSlider->setValue(-999);
                 break;
             }
             if (i == selectedPads.size()-1)
-                ccControllerSlider->setComponentValue(ccNumber_);
+                ccControllerSlider->setValue(ccNumber_);
         }
         
         //==================================================================================================

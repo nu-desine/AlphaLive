@@ -345,7 +345,7 @@ void GuiGlobalPadSettings::updateDisplay()
         
         //pressureCurveMenu->setSelectedId(PAD_SETTINGS->getPressureCurve(), true);
         exclusiveModeButton->setToggleState(PAD_SETTINGS->getExclusiveMode(), false);
-        exclusiveGroupSlider->setComponentValue(PAD_SETTINGS->getExclusiveGroup());
+        exclusiveGroupSlider->setValue(PAD_SETTINGS->getExclusiveGroup());
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         //velocityCurveMenu->setSelectedId(PAD_SETTINGS->getVelocityCurve(), true);
         velocitySlider->setValue(PAD_SETTINGS->getVelocity());
@@ -441,11 +441,11 @@ void GuiGlobalPadSettings::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getExclusiveGroup() != exclusiveGroup_)
             {
-                exclusiveGroupSlider->setComponentValue(-999);
+                exclusiveGroupSlider->setValue(-999);
                 break;
             }
             if (i == selectedPads.size()-1)
-                exclusiveGroupSlider->setComponentValue(exclusiveGroup_);
+                exclusiveGroupSlider->setValue(exclusiveGroup_);
         }
         
         //==================================================================================================

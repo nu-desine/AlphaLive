@@ -715,12 +715,12 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
         
         statusButton->setToggleState(AppSettings::Instance()->getEliteDialStatus(DIAL_NO), false);
         dialsMenu->setSelectedId(AppSettings::Instance()->getEliteDialControl(DIAL_NO), true);
-        dialMidiCcNumber->setComponentValue(AppSettings::Instance()->getEliteDialMidiCcNumber(DIAL_NO));
-        //dialMidiChannel->setComponentValue(AppSettings::Instance()->getEliteDialMidiChannel(DIAL_NO));
+        dialMidiCcNumber->setValue(AppSettings::Instance()->getEliteDialMidiCcNumber(DIAL_NO));
+        //dialMidiChannel->setValue(AppSettings::Instance()->getEliteDialMidiChannel(DIAL_NO));
         dialMidiMinRange->setValue(AppSettings::Instance()->getEliteDialMidiMinRange(DIAL_NO));
         dialMidiMaxRange->setValue(AppSettings::Instance()->getEliteDialMidiMaxRange(DIAL_NO));
 		dialMidiControllerType->setToggleState(AppSettings::Instance()->getEliteDialMidiControllerType(DIAL_NO), false);
-        dialOscPortNumber->setComponentValue(AppSettings::Instance()->getEliteDialOscPortNumber(DIAL_NO));
+        dialOscPortNumber->setValue(AppSettings::Instance()->getEliteDialOscPortNumber(DIAL_NO));
         dialOscMinRange->setValue(AppSettings::Instance()->getEliteDialOscMinRange(DIAL_NO));
         dialOscMaxRange->setValue(AppSettings::Instance()->getEliteDialOscMaxRange(DIAL_NO));
         setDialOscStepValueSliderRange(DIAL_NO);
@@ -765,12 +765,12 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
     {
         statusButton->setToggleState(AppSettings::Instance()->getEliteButtonStatus(BUTTON_NO), false);
         buttonsMenu->setSelectedId(AppSettings::Instance()->getEliteButtonControl(BUTTON_NO), true);
-        buttonSceneNumber->setComponentValue(AppSettings::Instance()->getEliteButtonSceneNumber(BUTTON_NO));
-        buttonMidiCcNumber->setComponentValue(AppSettings::Instance()->getEliteButtonMidiCcNumber(BUTTON_NO));
-        //buttonMidiChannel->setComponentValue(AppSettings::Instance()->getEliteButtonMidiChannel(BUTTON_NO));
+        buttonSceneNumber->setValue(AppSettings::Instance()->getEliteButtonSceneNumber(BUTTON_NO));
+        buttonMidiCcNumber->setValue(AppSettings::Instance()->getEliteButtonMidiCcNumber(BUTTON_NO));
+        //buttonMidiChannel->setValue(AppSettings::Instance()->getEliteButtonMidiChannel(BUTTON_NO));
         buttonMidiOffNumber->setValue(AppSettings::Instance()->getEliteButtonMidiOffNumber(BUTTON_NO));
         buttonMidiOnNumber->setValue(AppSettings::Instance()->getEliteButtonMidiOnNumber(BUTTON_NO));
-        buttonOscPortNumber->setComponentValue(AppSettings::Instance()->getEliteButtonOscPortNumber(BUTTON_NO));
+        buttonOscPortNumber->setValue(AppSettings::Instance()->getEliteButtonOscPortNumber(BUTTON_NO));
         buttonOscOffNumber->setValue(AppSettings::Instance()->getEliteButtonOscOffNumber(BUTTON_NO));
         buttonOscOnNumber->setValue(AppSettings::Instance()->getEliteButtonOscOnNumber(BUTTON_NO));
         buttonOscIpAddressEditor->setText(AppSettings::Instance()->getEliteButtonOscIpAddress(BUTTON_NO), false);

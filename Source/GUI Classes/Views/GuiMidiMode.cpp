@@ -206,7 +206,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     ccControllerSlider->setRange(0, 127, 1);
     ccControllerSlider->addListener(this);
     ccControllerSlider->addMouseListener(this, true);
-    ccControllerSlider->setComponentValue(-999);
+    ccControllerSlider->setValue(-999);
     
 
     //---------------status off bg-------------------------------------
@@ -561,7 +561,7 @@ void GuiMidiMode::updateDisplay()
         pressureMaxRangeSlider->setValue(PAD_SETTINGS->getMidiMaxPressureRange(), dontSendNotification);
         pressureModeButtons[PAD_SETTINGS->getMidiPressureMode()-1]->setToggleState(true, false);
         triggerModeButtons[PAD_SETTINGS->getMidiTriggerMode()-1]->setToggleState(true, false);
-        ccControllerSlider->setComponentValue(PAD_SETTINGS->getMidiCcController());
+        ccControllerSlider->setValue(PAD_SETTINGS->getMidiCcController());
         indestructibleButton->setToggleState(PAD_SETTINGS->getMidiIndestructible(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getMidiSticky(), false);
         
@@ -581,7 +581,7 @@ void GuiMidiMode::updateDisplay()
         triggerModeButtons[0]->setToggleState(true, false); // '' ''
         indestructibleButton->setToggleState(0, false);
         stickyButton->setToggleState(0, false);
-        ccControllerSlider->setComponentValue(12);
+        ccControllerSlider->setValue(12);
         pressureStatusButton->setToggleState(true, false);
         noteStatusButton->setToggleState(true, false);
          */
@@ -682,11 +682,11 @@ void GuiMidiMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getMidiCcController() != ccNumber_)
             {
-                ccControllerSlider->setComponentValue(-999);
+                ccControllerSlider->setValue(-999);
                 break;
             }
             if (i == selectedPads.size()-1)
-                ccControllerSlider->setComponentValue(ccNumber_);
+                ccControllerSlider->setValue(ccNumber_);
         }
         
         //==================================================================================================

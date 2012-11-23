@@ -184,8 +184,6 @@ void SceneComponent::selectSlot (int slotNumber)
 
 bool SceneComponent::keyPressed (const KeyPress &key, Component *originatingComponent)
 {
-    std::cout << "key press" << std::endl;
-    
     if (key == KeyPress::downKey || key == KeyPress::rightKey)
     {
         selectSlot(-1);
@@ -198,7 +196,6 @@ bool SceneComponent::keyPressed (const KeyPress &key, Component *originatingComp
     }
     else
         return false; //incase the keypress is a shortcut that the parent needs to react to.
-    
 }
 
 /*

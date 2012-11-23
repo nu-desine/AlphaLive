@@ -585,6 +585,12 @@ void AlphaLiveEngine::audioDeviceStopped()
 	audioPlayer.audioDeviceStopped();
 }
 
+void AlphaLiveEngine::setMidiOutStatus()
+{
+  
+    
+}
+
 void AlphaLiveEngine::setMidiOutputDevice (int deviceIndex)
 {
     if (deviceIndex >= 0)
@@ -616,7 +622,7 @@ void AlphaLiveEngine::setMidiOutputDevice (int deviceIndex)
         midiOutputDevice = NULL;
     }
     
-    //set the MidiOutput objects in modeMidi and ModeSequencer
+    //set the MidiOutput objects in the child classes
     modeMidi->setMidiOutputDevice(*midiOutputDevice);
     modeSequencer->setMidiOutputDevice(*midiOutputDevice);
     modeController->setMidiOutputDevice(*midiOutputDevice);

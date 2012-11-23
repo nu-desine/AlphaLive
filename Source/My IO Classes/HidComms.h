@@ -37,6 +37,8 @@ public:
     void run();
     virtual void hidInputCallback (int pad, int value, int velocity) = 0;
     
+    virtual void setMidiOutStatus() = 0;
+    
     void sendHidControlReport (uint8 *bytesToSend);
     
     bool hasOpenedHidDevice();

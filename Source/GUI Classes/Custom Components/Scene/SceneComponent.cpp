@@ -44,6 +44,10 @@ SceneComponent::SceneComponent(AppDocumentState &ref, ModeController &ref2)
     
     selectedSceneNumber = 0;
     slot[0]->setStatus(2);
+    
+    //set this component to listen to itself
+    addKeyListener(this);
+    setWantsKeyboardFocus(true);
 }
 
 SceneComponent::~SceneComponent()
@@ -148,6 +152,7 @@ bool SceneComponent::update(const Subject& theChangedSubject)
 
 void SceneComponent::selectSlot (int slotNumber)
 {
+    
     //load up slot data 
     //slotClicked(slot[sceneNumber]);
     
@@ -177,6 +182,24 @@ void SceneComponent::selectSlot (int slotNumber)
     slot[slotNumber]->selectSlot();
 }
 
+bool SceneComponent::keyPressed (const KeyPress &key, Component *originatingComponent)
+{
+    std::cout << "key press" << std::endl;
+    
+    if (key == KeyPress::downKey || key == KeyPress::rightKey)
+    {
+        selectSlot(-1);
+        return true;
+    }
+    else if (key == KeyPress::upKey || key == KeyPress::leftKey)
+    {
+        selectSlot(-2);
+        return true;
+    }
+    else
+        return false; //incase the keypress is a shortcut that the parent needs to react to.
+    
+}
 
 /*
 void SceneComponent::setCurrentlySelectedPad (Array<int> selectedPads_)

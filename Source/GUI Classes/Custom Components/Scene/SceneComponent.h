@@ -30,7 +30,8 @@
 #include "../../../Functionality Classes/Controller Mode/ModeController.h"
 #include "../../../Application/AbstractSubjectAndObserver.h"
 
-class SceneComponent : public Component,
+class SceneComponent :  public Component,
+                        public KeyListener,
                         public Observer //so this class can observe ModeController
 {
 public:
@@ -60,6 +61,8 @@ public:
     SceneSlot* getSelectedSceneSlot();
     
     void selectSlot (int slotNumber);
+    
+    bool keyPressed (const KeyPress &key, Component *originatingComponent);
     
 private:
     

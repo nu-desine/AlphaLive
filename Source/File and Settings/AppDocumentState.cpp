@@ -2208,7 +2208,7 @@ void AppDocumentState::createMidiFile (int currentlySelectedSeqNumber, int curre
             //so one beat would equal noOfTicks/4.
             
             int noOfTicks = 24;
-            Array <MidiMessage> midiMessage;
+            MidiMessageSequence midiSequence;
             int noteLength;
             int rowNoteNumber[NO_OF_ROWS];
             
@@ -2259,12 +2259,18 @@ void AppDocumentState::createMidiFile (int currentlySelectedSeqNumber, int curre
                                 //should it export with currently set midi channel?
                                 MidiMessage noteOnMessage(MidiMessage::noteOn(1, rowNoteNumber[row], (uint8)noteData));
                                 noteOnMessage.setTimeStamp(noteStart);
-                                midiMessage.add(noteOnMessage);
+                                midiSequence.addEvent(noteOnMessage);
                                 
                                 //create note off message
                                 MidiMessage noteOffMessage(MidiMessage::noteOff(1, rowNoteNumber[row]));
                                 noteOffMessage.setTimeStamp(noteEnd);
-                                midiMessage.add(noteOffMessage);
+                                midiSequence.addEvent(noteOffMessage);
+                                
+                                //juce doc says you must call the below after adding note on events,
+                                //however when I do this it will cut short any notes if a note of the
+                                //same number is added before the previous note is finished, which
+                                //ideally is not what we want.
+                                //midiSequence.updateMatchedPairs();
                             }
                         }
                     }
@@ -2294,12 +2300,18 @@ void AppDocumentState::createMidiFile (int currentlySelectedSeqNumber, int curre
                                     //should it export with currently set midi channel?
                                     MidiMessage noteOnMessage(MidiMessage::noteOn(1, rowNoteNumber[row], (uint8)noteData));
                                     noteOnMessage.setTimeStamp(noteStart);
-                                    midiMessage.add(noteOnMessage);
+                                    midiSequence.addEvent(noteOnMessage);
                                     
                                     //create note off message
                                     MidiMessage noteOffMessage(MidiMessage::noteOff(1, rowNoteNumber[row]));
                                     noteOffMessage.setTimeStamp(noteEnd);
-                                    midiMessage.add(noteOffMessage);
+                                    midiSequence.addEvent(noteOffMessage);
+                                    
+                                    //juce doc says you must call the below after adding note on events,
+                                    //however when I do this it will cut short any notes if a note of the
+                                    //same number is added before the previous note is finished, which
+                                    //ideally is not what we want.
+                                    //midiSequence.updateMatchedPairs();
                                 }
                             }
                         }
@@ -2308,21 +2320,8 @@ void AppDocumentState::createMidiFile (int currentlySelectedSeqNumber, int curre
             }
             
             
-            if (midiMessage.size() > 0)
+            if (midiSequence.getNumEvents > 0)
             {
-                //create midi sequence
-                MidiMessageSequence midiSequence;
-                for (int i = 0; i < midiMessage.size(); i++)
-                {
-                    midiSequence.addEvent(midiMessage[i]); //i think this where the freed pointer problem is being caused! Something to do with midiMessage going out of scope?
-                }
-                
-                //juce doc says you must call the below after adding note on events,
-                //however when I do this it will cut short any notes if a note of the
-                //same number is added before the previous note is finished, which
-                //ideally is not what we want.
-                //midiSequence.updateMatchedPairs();
-                
                 //create midi file and add data
                 MidiFile midiFile;
                 midiFile.addTrack(midiSequence);

@@ -216,15 +216,10 @@ bool GuiGlobalClock::update(const Subject& theChangedSubject)
         //if beat indicator needs updating
         if (mainComponentRef.getAlphaLiveEngineRef().getGlobalClock()->getGuiUpdateFlag() == 1)
         {
-            //update the beat label number
-            //beatNumberLabel->setText(String(mainComponentRef.getOscRoutingRef().getGlobalClock()->getBeatNumber()), true);
             int beat = mainComponentRef.getAlphaLiveEngineRef().getGlobalClock()->getBeatNumber();
-            //update the bar label number
-            //barNumberLabel->setText(String(mainComponentRef.getOscRoutingRef().getGlobalClock()->getBarNumber()), true);
             int bar = mainComponentRef.getAlphaLiveEngineRef().getGlobalClock()->getBarNumber();
-			
 			currentBeatNumber = (bar * beat) + (beat -1);
-			
+        
             repaint(606-OFFSET_X, 6, 131, 131);
         }
         //if transport button needs updating

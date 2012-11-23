@@ -96,7 +96,7 @@ public:
     ~AlphaLiveEngine();
     
     void hidInputCallback (int pad, int value, int velocity);
-    void setMidiOutStatus();
+    void removeMidiOut();
     
     void handleAsyncUpdate();
     int getRecievedPad();

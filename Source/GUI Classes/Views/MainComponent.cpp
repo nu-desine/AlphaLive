@@ -1326,6 +1326,18 @@ void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
 }
 
 
+void MainComponent::editInterfaceFromDeviceConnectivity (int command)
+{
+    //This function will be used to change the appearence of the interface
+    //when a HID device is connected on runtime.
+    
+    //remove midi output selector from preferences view
+    if (command == 1)
+    {
+        preferencesComponent->removeMidiOutputSelector();
+    }
+}
+
 //=========================command manager stuff=================================
 ApplicationCommandTarget* MainComponent::getNextCommandTarget()
 {

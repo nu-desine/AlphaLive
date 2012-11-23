@@ -124,6 +124,8 @@ public:
     
     void sendEliteDialCommand (int command, int eliteControlValue);
     
+    void editInterfaceFromDeviceConnectivity (int command);
+    
     
 private:
     //==============================================================================

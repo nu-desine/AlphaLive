@@ -50,6 +50,8 @@ public:
     
     bool keyPressed (const KeyPress &key, Component *originatingComponent);
     
+    void removeMidiOutputSelector();
+    
 private:
     MainComponent &mainComponentRef;
     AlphaLiveEngine &alphaLiveEngineRef;

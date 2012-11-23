@@ -25,12 +25,9 @@ HidComms::HidComms() : Thread("HidThread")
 {
     appHasInitialised = false;
     sendOutputReport = false;
+    midiOutExists = hidDeviceExists =  false;
     
     connectToDevice();
-    
-    //Here (possibly somewhere else?) we will need to send a report to request a report back
-    //to find out what AlphaSphere model is plugged in. AlphaLive will then use the information
-    //to initialise the correct GUI.
     
     startThread();
         
@@ -41,7 +38,6 @@ HidComms::~HidComms()
     stopThread(1500);
     
     hid_close(handle);
-    // Free static HIDAPI objects. 
     hid_exit();
 }
 
@@ -70,7 +66,7 @@ void HidComms::run()
                 //if this statement is entered does it always means that
                 //the device has been disconnected?
                 handle = nullptr;
-                hasOpenedDevice = false;
+                hidDeviceExists = false;
             }
             
             if (res > 0)
@@ -132,7 +128,7 @@ void HidComms::run()
             //            //dataToSend = nullptr;
             //        }
             
-            //what should the following sleep value be
+            //what should the following sleep value be?
             #ifdef WIN32
             sleep(5); //should this actually be Sleep() which need a windows library defined? See hidtest.
             #else
@@ -144,7 +140,7 @@ void HidComms::run()
         else
         {
             //std::cout << "no device connected" << std::endl;
-            //what should the following sleep value be
+            //what should the following sleep value be?
             #ifdef WIN32
             sleep(1000); //should this actually be Sleep() which need a windows library defined? See hidtest.
             #else
@@ -221,27 +217,52 @@ void HidComms::connectToDevice()
     handle = hid_open(0x1d50, 0x6021, NULL); // << AlphaSphere HID device
     //handle = hid_open(0x1d50, 0x6041, NULL); // << AlphaSphere bootloader HID device 
     
+    //device not found
     if (!handle) 
     {
         //printf("unable to open device\n");
-        hasOpenedDevice = false;
+        
+        if (appHasInitialised == false)
+        {
+            // if appliication is currently initialising, flag that
+            // the midi output stuff will exist. Setup of midi output
+            // stuff cannot be called from here as at this point the
+            // AlphaLiveEngine won't exist.
+            
+            midiOutExists = true;
+        }
+        
+        hidDeviceExists = false;
     }
     
+    //device found
     else
     {
-        hasOpenedDevice = true;
+        if (midiOutExists == true)
+        {
+            //if the midi output stuff currently exists, which would have been caused
+            //by the application initialising without the hid device connected,
+            //remove it.
+            removeMidiOut();
+            midiOutExists = false;
+        }
+        
+        hidDeviceExists = true;
         
         // Set the hid_read() function to be non-blocking.
         hid_set_nonblocking(handle, 1);
         memset(buf,0,sizeof(buf));
+        
+        //Here (possibly somewhere else?) we will need to send a report to request a report back
+        //to find out what AlphaSphere model is plugged in. AlphaLive will then use the information
+        //to initialise/change the GUI.
     }
-    
 }
 
 
 bool HidComms::hasOpenedHidDevice()
 {
-    return hasOpenedDevice;
+    return hidDeviceExists;
 }
 
 void HidComms::setAppHasInitialised()

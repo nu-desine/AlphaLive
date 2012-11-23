@@ -585,9 +585,25 @@ void AlphaLiveEngine::audioDeviceStopped()
 	audioPlayer.audioDeviceStopped();
 }
 
-void AlphaLiveEngine::setMidiOutStatus()
+void AlphaLiveEngine::removeMidiOut()
 {
-  
+    std::cout << "removing midi output stuff" << std::endl;
+    
+    //if currently connected to a midiOutputDevice (either the virtual port on mac/linux
+    //or a hardware port on Windows) delete/dissconnected it.
+    if (midiOutputDevice)
+    {
+        midiOutputDevice->stopBackgroundThread();
+        delete midiOutputDevice;
+        
+        midiOutputDevice = NULL;
+    }
+    
+    #if JUCE_WINDOWS
+    //remove MIDI output selector from the preferences view
+    mainComponent->editInterfaceFromDeviceConnectivity(1);
+    
+    #endif //JUCE_WINDOWS
     
 }
 

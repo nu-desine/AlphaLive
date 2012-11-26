@@ -608,9 +608,9 @@ bool GuiPadLayout::keyPressed (const KeyPress &key, Component *originatingCompon
         currentPad = selectedPads[0];
     }
     else
-        currentPad = 0;
+        currentPad = -1;
     
-    if (key == KeyPress::downKey || key == KeyPress::rightKey)
+    if (key == KeyPress::upKey || key == KeyPress::leftKey)
     {
         int nextPad = currentPad+1;
         if (nextPad > 47)
@@ -619,7 +619,7 @@ bool GuiPadLayout::keyPressed (const KeyPress &key, Component *originatingCompon
         pads[nextPad]->getButton()->triggerClick();
         return true;
     }
-    else if (key == KeyPress::upKey || key == KeyPress::leftKey)
+    else if (key == KeyPress::downKey || key == KeyPress::rightKey)
     {
         int nextPad = currentPad-1;
         if (nextPad < 0)

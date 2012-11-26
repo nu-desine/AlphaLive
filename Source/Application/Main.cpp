@@ -348,3 +348,59 @@ private:
 //==============================================================================
 // This macro generates the main() routine that starts the app.
 START_JUCE_APPLICATION(AlphaSoftApplication)
+
+
+/*
+ Firmware updater feature.
+ Below is a basic example of the code needed to apply a firmware update to the alphasphere.
+ It creates a ChildProcess object that runs the bootloader command line app, passing in the
+ mmcu type and hex file destiination as parameters. It then returns the output as a String (though this
+ doesn't seem to be working yet). There is also some error handling.
+ 
+ Things to think about:
+ - How does the user actually trigger this code? Two options:
+    - The user selects an option in the menu bar called 'update firmware' that pops up a message
+    telling them to close the message, unplug the sphere and reconnect it with the reset button held. The bootloader
+    VID and PID will then be recognised alerting AlphaLive that an firmware update should be done, pops up a message
+    asking if the user wants to is sure they want to update the firmware, and then runs the below code.
+    - The same as above, however when the user selects the update firmware option it sends a HID report
+    to the device telling it to switch to bootloader mode. Would probably be good to have a 'are you sure?'
+    message before it sends the HID report.
+ - Error handling and feedback - make sure all possible errors can be caught and displayed.
+ - Where in the AlphaLive code should this be placed?
+ 
+ */
+
+//ChildProcess bootloader;
+//
+//StringArray arguments;
+//String outputReport;
+//File bootloaderFile("/Users/Liam/Desktop/AlphaSphere Software Dev/Test projects/bootTest/Builds/MacOSX/build/Release/bootTest");
+//String mmcuString("-mmcu=atmega32u4");
+//File hexFile("/Users/Liam/Desktop/AlphaSphere Software Dev/HID projects/LUFA projects/HID_MIDI/GenericHID.hex");
+//
+//if (bootloaderFile.exists() == true && hexFile.exists() == true)
+//{
+//    arguments.add(bootloaderFile.getFullPathName());
+//    arguments.add(mmcuString);
+//    arguments.add(hexFile.getFullPathName());
+//    
+//    bootloader.start(arguments);
+//    
+//    String bootloaderReport =  bootloader.readAllProcessOutput();
+//    
+//    std::cout << "..." << bootloaderReport << "..." << std::endl;
+//    if (bootloaderReport.contains("Unable to open device"))
+//    {
+//        AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Cannot Find Device!"), translate("The AlphaSphere does not appear to be connected to the computer. Please connect it and try again."));
+//    }
+//    else if (bootloaderReport.isEmpty())
+//    {
+//        AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Firmware Updated!"), translate("The AlphaSphere firmware has been successfully updated."));
+//    }
+//    
+//}
+//else
+//{
+//        AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Missing Files!"), translate("One or more of the files needed to update the firmware are missing. Please consult the reference manual."));
+//}

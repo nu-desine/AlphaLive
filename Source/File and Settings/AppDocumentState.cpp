@@ -2320,7 +2320,7 @@ void AppDocumentState::createMidiFile (int currentlySelectedSeqNumber, int curre
             }
             
             
-            if (midiSequence.getNumEvents > 0)
+            if (midiSequence.getNumEvents() > 0)
             {
                 //create midi file and add data
                 MidiFile midiFile;

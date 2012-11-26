@@ -354,8 +354,8 @@ START_JUCE_APPLICATION(AlphaSoftApplication)
  Firmware updater feature.
  Below is a basic example of the code needed to apply a firmware update to the alphasphere.
  It creates a ChildProcess object that runs the bootloader command line app, passing in the
- mmcu type and hex file destiination as parameters. It then returns the output as a String (though this
- doesn't seem to be working yet). There is also some error handling.
+ mmcu type and hex file destiination as parameters. It then returns the output as a String. 
+ There is also some error handling.
  
  Things to think about:
  - How does the user actually trigger this code? Two options:

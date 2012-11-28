@@ -117,6 +117,8 @@ public:
                           File fileToOpen = File::nonexistent);
 	
 	void saveEffect (int currentlySelectedPad);
+	
+	void saveDrumBankAs (int currentlySelectedPad);
     
     void createMidiFile (int currentlySelectedSeqNumber, 
                          int currentlySelectedPad,

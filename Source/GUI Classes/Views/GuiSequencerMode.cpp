@@ -1254,6 +1254,21 @@ void GuiSequencerMode::buttonClicked (Button* button)
             menu.addItem(10, translate(translate("Export sequence set as MIDI file...")));
         }
         menu.addSeparator();
+		
+		if (modeSamplesButton->getToggleState() == true) 
+		{
+				if (SINGLE_PAD) 
+				{
+					menu.addItem(15, translate("Export Drum Bank As..."));
+				}
+				else 
+				{
+					menu.addItem(15, translate("Export Drum Bank As..."), false);
+				}
+		}
+		
+		menu.addSeparator();
+		
 		menu.addItem(5, translate(translate("Clear...")));
 		menu.addItem(6, translate(translate("Clear all...")));
         
@@ -1378,7 +1393,10 @@ void GuiSequencerMode::buttonClicked (Button* button)
             //setCurrentSequenceNumber();
             updateDisplay();
         }
-        
+		else if (result == 15)//export and save drum banks
+		{
+			mainComponentRef.getAppDocumentStateRef().saveDrumBankAs(selectedPads[0]);
+		}
         
 	}
     
@@ -2360,8 +2378,12 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     
     if (modeMidiButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Sequencer MIDI Mode. Click to set selected pads to MIDI sequencer mode. This mode allows sequences of MIDI messages to be programmed into the AlphaSphere device. This will also display MIDI settings controls for seleceted pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Sequencer MIDI Mode. Click to set selected pads to MIDI sequencer mode. This mode allows sequences of MIDI messages to be programmed into the AlphaSphere device. This will also display MIDI settings controls for selected pads."));
     }
+	if (modeSamplesButton->isMouseOver(true))
+	{
+		mainComponentRef.setInfoTextBoxText(translate("Sequencer Sampler Mode. Click to set selected pads to sample sequencer mode. This mode allows sequences using audio samples to be programmed into the AlphaSphere device. This will also display sampler settings controls for selected pads."));
+	}
     
     else if (sequencerGrid->isMouseOver(true))
     {
@@ -2584,3 +2606,4 @@ void GuiSequencerMode::mouseExit (const MouseEvent &e)
     if (e.eventComponent == audioAttackSlider)
 		setParameterLabelText(String::empty);
 }
+

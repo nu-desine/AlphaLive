@@ -39,6 +39,7 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
 	linearImage = new Image(ImageCache::getFromMemory(BinaryDataNew::linearicon_png, BinaryDataNew::linearicon_pngSize));
 	logImage = new Image(ImageCache::getFromMemory(BinaryDataNew::logicon_png, BinaryDataNew::logicon_pngSize));
 	staticImage = new Image(ImageCache::getFromMemory(BinaryDataNew::staticicon_png, BinaryDataNew::staticicon_pngSize));
+    emptyImage = new Image();
 
 	Image *quantiseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::quantiseicon_png, BinaryDataNew::quantiseicon_pngSize));
 	addAndMakeVisible(quantiseButton = new ModeButton(quantiseIcon));
@@ -111,6 +112,7 @@ GuiGlobalPadSettings::~GuiGlobalPadSettings()
     delete linearImage;
     delete logImage;
     delete staticImage;
+    delete emptyImage;
 	delete pressureCurveMenu;
     delete velocityCurveMenu;
 	deleteAllChildren();
@@ -126,11 +128,7 @@ void GuiGlobalPadSettings::resized()
 	
     exclusiveGroupSlider->setBounds(816, 393, 58, 58);
 	
-    
-    //put the below line in once hardware velocity curves have been implemented
-    //velocityCurveMenu->setBounds(802, 450, 87, 20);
     velocitySlider->setBounds(785, 362, 120, 120);
-	//pressureCurveMenu->setBounds(802, 550, 87, 20);
 	
 	 parameterHoverLabel->setBounds(825, 468, 40, 10);
 	
@@ -230,6 +228,7 @@ void GuiGlobalPadSettings::buttonClicked (Button* button)
                     break;
             }
             
+            velocityCurveValue = result;
             
             for (int i = 0; i < selectedPads.size(); i++)
             {
@@ -273,6 +272,7 @@ void GuiGlobalPadSettings::buttonClicked (Button* button)
                     break;
             }
             
+            pressureCurveValue = result;
             
             for (int i = 0; i < selectedPads.size(); i++)
             {
@@ -310,31 +310,7 @@ void GuiGlobalPadSettings::sliderValueChanged (Slider* slider)
 
 void GuiGlobalPadSettings::comboBoxChanged (ComboBox* comboBox)
 {
-    /*if (comboBox == pressureCurveMenu)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setPressureCurve(pressureCurveMenu->getSelectedId());
-        }
-    }
-    else if (comboBox == velocityCurveMenu)
-    {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setVelocityCurve(comboBox->getSelectedId());
-        }
-        
-        //put the below code in once hardware velocity curves have been implemented
-        
-        if (comboBox->getSelectedId() == 4) //static velocity 
-            velocitySlider->setVisible(true);
-        else
-            velocitySlider->setVisible(false);
-         
-    }
-	 */
+
 }
 
 void GuiGlobalPadSettings::updateDisplay()
@@ -342,64 +318,14 @@ void GuiGlobalPadSettings::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        
-        //pressureCurveMenu->setSelectedId(PAD_SETTINGS->getPressureCurve(), true);
         exclusiveModeButton->setToggleState(PAD_SETTINGS->getExclusiveMode(), false);
         exclusiveGroupSlider->setValue(PAD_SETTINGS->getExclusiveGroup());
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
-        //velocityCurveMenu->setSelectedId(PAD_SETTINGS->getVelocityCurve(), true);
         velocitySlider->setValue(PAD_SETTINGS->getStaticVelocity());
 		parameterHoverLabel->setText(String(PAD_SETTINGS->getStaticVelocity()), false);
-		
-		
-		switch (PAD_SETTINGS->getPressureCurve())
-		{
-				
-			case 1: // Exponential
-				
-				pressureCurveButton->setImage(expoImage);
-				break;
-			case 2: // Linear
-				
-				pressureCurveButton->setImage(linearImage);
-				break;
-			case 3: // Logarithmic
-				
-				pressureCurveButton->setImage(logImage);
-				break;
-			default: // Linear
-				
-				pressureCurveButton->setImage(linearImage);
-				break;
-		}
-		
-		
-		switch (PAD_SETTINGS->getVelocityCurve())
-		{
-				
-			case 1: // Exponential
-				
-				velocityCurveButton->setImage(expoImage);
-				break;
-			case 2: // Linear
-				
-				velocityCurveButton->setImage(linearImage);
-				break;
-			case 3: // Logarithmic
-				
-				velocityCurveButton->setImage(logImage);
-				break;
-			case 4: // Static
-				
-				velocityCurveButton->setImage(staticImage);
-				break;
-			default: // Linear
-				
-				velocityCurveButton->setImage(linearImage);
-				break;
-		}
-		
-        
+		pressureCurveValue = PAD_SETTINGS->getPressureCurve();
+        velocityCurveValue = PAD_SETTINGS->getVelocityCurve();
+      
     }
     else if(MULTI_PADS)
     {
@@ -449,17 +375,17 @@ void GuiGlobalPadSettings::updateDisplay()
         }
         
         //==================================================================================================
-        /*int pressureCurve_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getPressureCurve();
+        int pressureCurve_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getPressureCurve();
         for (int i = 1; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getPressureCurve() != pressureCurve_)
             {
-                pressureCurveMenu->setSelectedId(0, true);
+                pressureCurveValue = 0;
                 break;
             }
             if (i == selectedPads.size()-1)
-                pressureCurveMenu->setSelectedId(pressureCurve_, true);
+                pressureCurveValue = pressureCurve_;
         }
         
         //==================================================================================================
@@ -469,12 +395,12 @@ void GuiGlobalPadSettings::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getVelocityCurve() != velocityCurve_)
             {
-                velocityCurveMenu->setSelectedId(0, true);
+                velocityCurveValue = 0;
                 break;
             }
             if (i == selectedPads.size()-1)
-				velocityCurveMenu->setSelectedId(velocityCurve_, true);
-        }*/
+				velocityCurveValue = velocityCurve_;
+        }
         
         //==================================================================================================
         int velocity_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getStaticVelocity();
@@ -498,13 +424,70 @@ void GuiGlobalPadSettings::updateDisplay()
     else
         exclusiveGroupSlider->setVisible(false);
     
+    
+    
+    switch (pressureCurveValue)
+    {
+        case 0: // Empty
+            
+            pressureCurveButton->setImage(emptyImage);
+            break;
+            
+        case 1: // Exponential
+            
+            pressureCurveButton->setImage(expoImage);
+            break;
+        case 2: // Linear
+            
+            pressureCurveButton->setImage(linearImage);
+            break;
+        case 3: // Logarithmic
+            
+            pressureCurveButton->setImage(logImage);
+            break;
+        default: // Linear
+            
+            pressureCurveButton->setImage(linearImage);
+            break;
+    }
+    
+    
+    switch (velocityCurveValue)
+    {
+        case 0: // Empty
+            
+            velocityCurveButton->setImage(emptyImage);
+            break;
+            
+        case 1: // Exponential
+            
+            velocityCurveButton->setImage(expoImage);
+            break;
+        case 2: // Linear
+            
+            velocityCurveButton->setImage(linearImage);
+            break;
+        case 3: // Logarithmic
+            
+            velocityCurveButton->setImage(logImage);
+            break;
+        case 4: // Static
+            
+            velocityCurveButton->setImage(staticImage);
+            break;
+        default: // Linear
+            
+            velocityCurveButton->setImage(linearImage);
+            break;
+    }
+    
+    
+    
     //put the below code in once hardware velocity curves have been implemented
-    /*
-    if (velocityCurveMenu->getSelectedId() == 4) //static velocity 
+    if (velocityCurveValue == 4) //static velocity 
         velocitySlider->setVisible(true);
     else
         velocitySlider->setVisible(false);
-     */
 }
 
 

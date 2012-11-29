@@ -68,8 +68,9 @@ class GuiGlobalPadSettings :    public Component,
 	AlphaPopUpImageButton *pressureCurveButton, *velocityCurveButton;
     ModeButton *quantiseButton;
 	Label *parameterHoverLabel;
-	Image *expoImage, *linearImage, *logImage, *staticImage;
+	Image *expoImage, *linearImage, *logImage, *staticImage, *emptyImage;
 	PopupMenu *pressureCurveMenu, *velocityCurveMenu;
+    int pressureCurveValue, velocityCurveValue;
 	
 };
 

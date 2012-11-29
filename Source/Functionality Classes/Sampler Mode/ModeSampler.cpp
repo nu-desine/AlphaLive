@@ -88,15 +88,15 @@ AudioFilePlayer* ModeSampler::getAudioFilePlayerInstance (int padNumber)
 }
 
 
-//this function is called in AlphaLiveEngine whenever an OSC message is recieved
+//this function is called in AlphaLiveEngine whenever input data is recieved
 //who's pad is set to Sampler mode
-void ModeSampler::getInputData(int padNumber, int padValue)
+void ModeSampler::getInputData(int padNumber, int padValue, int padVelocity)
 {
     
     //process the audio file
     //should i put this in an if statement to make sure the this index of padSequencer actually exists?
     //it should always do, but might be safe to play safe.
-    padSampler[padNumber]->processAudioFile(padValue);
+    padSampler[padNumber]->processAudioFile(padValue, padVelocity);
     
     //if the incoming message is a 'press'
     if (prevPadValue[padNumber] == 0)

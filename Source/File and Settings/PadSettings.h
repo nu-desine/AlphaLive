@@ -65,7 +65,7 @@ public:
     void setExclusiveGroup (int value);
     void setQuantizeMode (int value);
     void setVelocityCurve (int value);
-    void setVelocity (int value);
+    void setStaticVelocity (int value);
 
     int getMode();
     int getPressureCurve();
@@ -73,7 +73,7 @@ public:
     int getExclusiveGroup();
     int getQuantizeMode();
     int getVelocityCurve();
-    int getVelocity();
+    int getStaticVelocity();
     
     //==================================================================
     //MIDI mode
@@ -143,7 +143,6 @@ public:
     void setSequencerDynamicMode (int value);
     
     void setSequencerMidiNote (int value, int arrayIndex);
-    void setSequencerMidiVelocity (int value); //NO LONGER NEED THIS
     void setSequencerMidiChannel (int value);
     void setSequencerMidiNoteLength (int value);
     void setSequencerMidiMinPressureRange (int value);
@@ -171,7 +170,6 @@ public:
     int getSequencerDynamicMode();
     
     int getSequencerMidiNote(int arrayIndex);
-    int getSequencerMidiVelocity(); //NO LONGER NEED THIS
     int getSequencerMidiChannel();
     int getSequencerMidiNoteLength();
     int getSequencerMidiMinPressureRange();
@@ -396,7 +394,7 @@ private:
     int exclusiveGroup;
     int quantizeMode;
     int velocityCurve;
-    int velocity;
+    int staticVelocity;
     
     //==================================================================
     //MIDI mode
@@ -441,7 +439,6 @@ private:
     int sequencerDynamicMode;
     
     int sequencerMidiNote[NO_OF_ROWS]; //assuming there are 12 rows to a sequencer
-    int sequencerMidiVelocity; //NO LONGER NEED THIS
     int sequencerMidiChannel;
     int sequencerMidiNoteLength;
     int sequencerMidiMinPressureRange;

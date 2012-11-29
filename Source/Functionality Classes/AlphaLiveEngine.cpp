@@ -226,6 +226,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         
         recievedPad = pad;
         recievedValue = value;
+        recievedVelocity = velocity;
         
         
         //determine pressure mapping/sensitivity
@@ -254,14 +255,14 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         //route message to midi mode
         if (PAD_SETTINGS->getMode() == 1) //if the pressed pad is set to Midi mode
         {
-            modeMidi->getInputData(recievedPad, recievedValue);
+            modeMidi->getInputData(recievedPad, recievedValue, recievedVelocity);
         }
         //==========================================================================
         
         //route message to sampler mode
         if (PAD_SETTINGS->getMode() == 2) //if the pressed pad is set to Sampler mode
         {
-            modeSampler->getInputData(recievedPad, recievedValue);
+            modeSampler->getInputData(recievedPad, recievedValue, recievedVelocity);
         }
         //==========================================================================
         
@@ -275,7 +276,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         //route message to controller mode
         if (PAD_SETTINGS->getMode() == 4) //if the pressed pad is set to Controller mode
         {
-            modeController->getInputData(recievedPad, recievedValue);
+            modeController->getInputData(recievedPad, recievedValue, recievedVelocity);
         }
         //==========================================================================
         

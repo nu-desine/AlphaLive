@@ -302,7 +302,7 @@ void GuiGlobalPadSettings::sliderValueChanged (Slider* slider)
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            PAD_SETTINGS->setVelocity(slider->getValue());
+            PAD_SETTINGS->setStaticVelocity(slider->getValue());
 			parameterHoverLabel->setText(String(slider->getValue()), false);
         }
     }
@@ -348,8 +348,8 @@ void GuiGlobalPadSettings::updateDisplay()
         exclusiveGroupSlider->setValue(PAD_SETTINGS->getExclusiveGroup());
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         //velocityCurveMenu->setSelectedId(PAD_SETTINGS->getVelocityCurve(), true);
-        velocitySlider->setValue(PAD_SETTINGS->getVelocity());
-		parameterHoverLabel->setText(String(PAD_SETTINGS->getVelocity()), false);
+        velocitySlider->setValue(PAD_SETTINGS->getStaticVelocity());
+		parameterHoverLabel->setText(String(PAD_SETTINGS->getStaticVelocity()), false);
 		
 		
 		switch (PAD_SETTINGS->getPressureCurve())
@@ -477,11 +477,11 @@ void GuiGlobalPadSettings::updateDisplay()
         }*/
         
         //==================================================================================================
-        int velocity_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getVelocity();
+        int velocity_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getStaticVelocity();
         for (int i = 1; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            if (PAD_SETTINGS->getVelocity() != velocity_)
+            if (PAD_SETTINGS->getStaticVelocity() != velocity_)
             {
                 velocitySlider->setValue(-999);
                 break;

@@ -44,7 +44,7 @@ PadSettings::PadSettings(int arrayIndex)
     exclusiveGroup = 1;
     quantizeMode = 0; //unquantized
     velocityCurve = 2; //Linear
-    velocity = 110;
+    staticVelocity = 110;
     
     //midi mode
     midiNote = 60;
@@ -110,7 +110,6 @@ PadSettings::PadSettings(int arrayIndex)
         num ++;
     }
     
-    sequencerMidiVelocity = 110;
     sequencerMidiChannel = 1;
     sequencerMidiNoteLength = 4;
     sequencerMidiMinPressureRange = 0;
@@ -281,7 +280,7 @@ void PadSettings::resetData (int whatToReset)
         setExclusiveGroup(1);
         setQuantizeMode(0);
         setVelocityCurve(2);
-        setVelocity(110);
+        setStaticVelocity(110);
     }
     
     if (whatToReset != 1)
@@ -343,7 +342,6 @@ void PadSettings::resetData (int whatToReset)
             setSequencerMidiNote (num, i);
             num ++;
         }
-        setSequencerMidiVelocity (110);
         setSequencerMidiChannel (1);
         setSequencerMidiNoteLength (4);
         setSequencerMidiMinPressureRange (0);
@@ -474,17 +472,9 @@ void PadSettings::setVelocityCurve (int value)
     velocityCurve = value;
 }
 
-void PadSettings::setVelocity(int value)
+void PadSettings::setStaticVelocity(int value)
 {
-    velocity = value;
-    alphaLiveEngineRef->getModeMidi()->setVelocity(value, padNumber);
-    
-    /*
-    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
-    {
-        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setVelocity(value);
-    }
-     */
+    staticVelocity = value;
 }
 
 
@@ -511,9 +501,9 @@ int PadSettings::getQuantizeMode()
 {
     return quantizeMode;
 }
-int PadSettings::getVelocity()
+int PadSettings::getStaticVelocity()
 {
-    return velocity;
+    return staticVelocity;
 }
 int PadSettings::getVelocityCurve()
 {
@@ -1098,14 +1088,6 @@ void PadSettings::setSequencerMidiNote(int value, int rowNumber)
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMidiNote(rowNumber, value);
     }
 }
-void PadSettings::setSequencerMidiVelocity(int value)
-{
-    sequencerMidiVelocity = value;
-    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
-    {
-        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMidiVelocity(value);
-    }
-}
 void PadSettings::setSequencerMidiChannel(int value)
 {
     sequencerMidiChannel = value;
@@ -1349,10 +1331,6 @@ int PadSettings::getSequencerDynamicMode()
 int PadSettings::getSequencerMidiNote(int rowNumber)
 {
     return sequencerMidiNote[rowNumber];
-}
-int PadSettings::getSequencerMidiVelocity()
-{
-    return sequencerMidiVelocity;
 }
 int PadSettings::getSequencerMidiChannel()
 {

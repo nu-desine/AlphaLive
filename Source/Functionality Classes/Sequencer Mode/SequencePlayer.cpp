@@ -68,7 +68,6 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     dynamicMode = PAD_SETTINGS->getSequencerDynamicMode();
     
     midiChannel = PAD_SETTINGS->getSequencerMidiChannel();
-    midiVelocity = PAD_SETTINGS->getSequencerMidiVelocity();
     midiNoteLength  = PAD_SETTINGS->getSequencerMidiNoteLength();
     midiMinRange = PAD_SETTINGS->getSequencerMidiMinPressureRange();
     midiMaxRange = PAD_SETTINGS->getSequencerMidiMaxPressureRange();
@@ -1368,11 +1367,6 @@ void SequencePlayer::setMidiChannel (int value)
     }
     
     midiChannel = value;
-}
-
-void SequencePlayer::setMidiVelocity (int value)
-{
-    midiVelocity = value;
 }
 void SequencePlayer::setMidiNoteLength (int value)
 {

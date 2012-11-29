@@ -85,7 +85,7 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
     padData->setAttribute("exclusiveGroup", PAD_SETTINGS->getExclusiveGroup());
     padData->setAttribute("quantizeMode", PAD_SETTINGS->getQuantizeMode());
     padData->setAttribute("velocityCurve", PAD_SETTINGS->getVelocityCurve());
-    padData->setAttribute("velocity", PAD_SETTINGS->getVelocity());
+    padData->setAttribute("velocity", PAD_SETTINGS->getStaticVelocity());
     
     //only save whats necessary
     if (PAD_SETTINGS->getMode() == 1) //midi mode
@@ -153,7 +153,6 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
             {
                 padData->setAttribute("sequencerMidiNote"+String(row), PAD_SETTINGS->getSequencerMidiNote(row));
             }
-            padData->setAttribute("sequencerMidiVelocity", PAD_SETTINGS->getSequencerMidiVelocity());
             padData->setAttribute("sequencerMidiChannel", PAD_SETTINGS->getSequencerMidiChannel());
             padData->setAttribute("sequencerMidiNoteLength", PAD_SETTINGS->getSequencerMidiNoteLength());
             padData->setAttribute("sequencerMidiMinPressureRange", PAD_SETTINGS->getSequencerMidiMinPressureRange());
@@ -338,7 +337,7 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
     if (padData->hasAttribute("velocityCurve"))
         PAD_SETTINGS->setVelocityCurve(padData->getIntAttribute("velocityCurve"));
     if (padData->hasAttribute("velocity"))
-        PAD_SETTINGS->setVelocity(padData->getIntAttribute("velocity"));
+        PAD_SETTINGS->setStaticVelocity(padData->getIntAttribute("velocity"));
     
     //only load needed data to reduce loading times and CPU usage, plus
     //can not load settings into seq and sampler modes where the pads player objects don't exist (yet)
@@ -479,8 +478,6 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
                     PAD_SETTINGS->setSequencerMidiNote(padData->getIntAttribute("sequencerMidiNote"+String(row)), row);
             }
             
-            if (padData->hasAttribute("sequencerMidiVelocity"))
-                PAD_SETTINGS->setSequencerMidiVelocity(padData->getIntAttribute("sequencerMidiVelocity"));
             if (padData->hasAttribute("sequencerMidiChannel"))
                 PAD_SETTINGS->setSequencerMidiChannel(padData->getIntAttribute("sequencerMidiChannel"));
             if (padData->hasAttribute("sequencerMidiNoteLength"))

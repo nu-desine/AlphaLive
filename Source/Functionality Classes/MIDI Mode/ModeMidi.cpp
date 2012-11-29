@@ -36,7 +36,7 @@ ModeMidi::ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref)
         
         channel[i] = PAD_SETTINGS_i->getMidiChannel();
         note[i] = PAD_SETTINGS_i->getMidiNote();
-        velocity[i] = PAD_SETTINGS_i->getVelocity();
+        velocity[i] = PAD_SETTINGS_i->getStaticVelocity();
         minRange[i] = PAD_SETTINGS_i->getMidiMinPressureRange();
         maxRange[i] = PAD_SETTINGS_i->getMidiMaxPressureRange();
         controllerNumber[i] = PAD_SETTINGS_i->getMidiCcController();
@@ -70,7 +70,7 @@ ModeMidi::~ModeMidi()
 
 }
 
-void ModeMidi::getInputData(int padNumber, int padValue)
+void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
 {
     //this if statement will be true when a pad is first pressed after it was previously turned off
     //via an 'exclusive group' situation. It is needed so that the pad can be reset correctly.
@@ -133,7 +133,23 @@ void ModeMidi::getInputData(int padNumber, int padValue)
     //==========================================================================================
     // Start/stop stuff
     //==========================================================================================
-
+    
+    //set velocity value...
+    if (triggerModeData[padNumber].playingStatus == 1) //play
+    {
+        //should I be using local variables below instead of accessing PAD_SETTINGS each time?
+        //Though as I'm only doing this if statement when the pad is first pressed it probably
+        //won't be too CPU extensive here.
+        if (PAD_SETTINGS->getVelocityCurve() == 4)
+        {
+            //static velocity
+            velocity[padNumber] = PAD_SETTINGS->getStaticVelocity();
+        }
+        else
+            velocity[padNumber] = padVelocity;
+    }
+    
+    
     
     if (noteStatus[padNumber] == true) //if pad note status is 'on'
     {
@@ -258,7 +274,6 @@ void ModeMidi::noteOn (int padNumber)
         sendMidiMessage(message);
         isCurrentlyPlaying[padNumber] = false;
     }
-    
     
     MidiMessage message = MidiMessage::noteOn(channel[padNumber], note[padNumber], (uint8)velocity[padNumber]);
     sendMidiMessage(message);
@@ -558,7 +573,6 @@ void ModeMidi::setPadData (int padNumber)
 {
     setChannel (PAD_SETTINGS->getMidiChannel(), padNumber);
     setNote (PAD_SETTINGS->getMidiNote(), padNumber);
-    setVelocity (PAD_SETTINGS->getVelocity(), padNumber);
     setMinRange (PAD_SETTINGS->getMidiMinPressureRange(), padNumber);
     setMaxRange (PAD_SETTINGS->getMidiMaxPressureRange(), padNumber);
     setControllerNumber (PAD_SETTINGS->getMidiCcController(), padNumber);
@@ -597,11 +611,6 @@ void ModeMidi::setNote (int value, int pad)
     }
     
     note[pad] = value;
-}
-
-void ModeMidi::setVelocity (int value, int pad)
-{
-    velocity[pad] = value;
 }
 
 void ModeMidi::setMinRange (int value, int pad)

@@ -45,7 +45,7 @@ ModeController::~ModeController()
 
 //this function is called from AlphaLiveEngine whenever an OSC message is recieved
 //who's pad is set to Controller mode
-void ModeController::getInputData(int pad, int value)
+void ModeController::getInputData(int pad, int value, int velocity)
 {
     padNumber = pad;
     padValue = value;
@@ -56,10 +56,6 @@ void ModeController::getInputData(int pad, int value)
     }
     else if (PAD_SETTINGS->getControllerControl() == 4) //osc controller
     {
-        //would be nice if this option wasn't in the controller mode and was in the OSC routing class, as there is a very slight delay. would it make a noticeable difference?
-        //or is the delay down to the code in the OscOutput class?
-        //actually, is there a delay compared to the reaction in other modes???
-        
         //should i bet getting the ip addresses and port numbers for each pad beforehand (is it to cpu heavy accessing PadSettings everytime there is an incoming message?)?
         
         //scale the range back down to 0-127

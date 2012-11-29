@@ -161,6 +161,7 @@ private:
     
     int recievedPad;
     float recievedValue;
+    float recievedVelocity;
     
     //midi output device
     MidiOutput *midiOutputDevice; //is this actually needed?

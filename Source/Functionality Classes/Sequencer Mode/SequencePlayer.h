@@ -96,7 +96,6 @@ public:
     
     void setMidiNote (int row, int value);
     void setMidiChannel (int value);
-    void setMidiVelocity (int value); //NO LONGER NEED THIS
     void setMidiNoteLength (int value);
     void setMidiMinRange (int value);
     void setMidiMaxRange (int value);
@@ -198,7 +197,6 @@ private:
     
     int midiNote[NO_OF_ROWS];
     int midiChannel;
-    int midiVelocity; //NO LONGER NEED THIS
     int midiNoteLength;
     int midiMinRange;
     int midiMaxRange;

@@ -80,10 +80,23 @@ void HidComms::run()
                 {
                     if (buf[0] == 0x01) //pad data report
                     {
-                        unsigned short int pressure = 0;
-                        pressure = buf[2] + (buf[3]<<8);
+//                        unsigned short int pressure = 0;
+//                        pressure = buf[2] + (buf[3]<<8);
+//                        
+//                        hidInputCallback(buf[1], pressure, buf[4]);
                         
-                        hidInputCallback(buf[1], pressure, buf[4]);  
+                        
+                        for (int i = 0; i < 48; i++)
+                        {
+                            unsigned short int padNum = buf[1+(i*4)];
+                            unsigned short int pressure = buf[2+(i*4)] + (buf[3+(i*4)]<<8);
+                            unsigned short int padVelocity = buf[4+(i*4)];
+                            
+                            //need to check here if the previous pressure value of said pad
+                            //and only call the below line if the pressure has changed
+                            hidInputCallback(padNum, pressure, padVelocity);
+                        }
+                        
                     }
                     
                     //The elite dials and buttons could probably use a the same

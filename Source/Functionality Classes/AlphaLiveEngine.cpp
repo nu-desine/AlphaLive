@@ -229,10 +229,10 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         recievedVelocity = velocity;
         
         
-        //determine pressure mapping/sensitivity
+        //===determine pressure curve===
         if (PAD_SETTINGS->getPressureCurve() == 1)
         {
-            //non-sensitive - exponential mapping of pressure
+            //exponential mapping of pressure
             recievedValue = exp((float)recievedValue/MAX_PRESSURE)-1;
             recievedValue = recievedValue * (MAX_PRESSURE/1.71828);
             if (recievedValue > MAX_PRESSURE)
@@ -242,13 +242,36 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         }
         else if (PAD_SETTINGS->getPressureCurve() == 3)
         {
-            //sensitive - logarithmic mapping of pressure
+            //logarithmic mapping of pressure
             recievedValue = log(recievedValue+1);
             recievedValue = recievedValue * (MAX_PRESSURE/6.23832);
             if (recievedValue > MAX_PRESSURE)
                 recievedValue = MAX_PRESSURE;
         }
         //else, pressureCurve == 2 which is a linear mapping of pressure
+        
+        
+        //===determine velocity curve===
+        if (PAD_SETTINGS->getVelocityCurve() == 1)
+        {
+            //exponential mapping of velocity
+            recievedVelocity = exp((float)recievedVelocity/127.0)-1;
+            recievedVelocity = recievedVelocity * (127.0/1.71828);
+            if (recievedVelocity > 127.0)
+                recievedVelocity = 127.0;
+            if (recievedVelocity > 0 && recievedVelocity < 1) //value 1 = 0.6, which is rounded to 0
+                recievedVelocity = 1;
+        }
+        else if (PAD_SETTINGS->getVelocityCurve() == 3)
+        {
+            //logarithmic mapping of velocity
+            recievedVelocity = log(recievedVelocity+1);
+            recievedVelocity = recievedVelocity * (127.0/6.23832);
+            if (recievedVelocity > 127.0)
+                recievedVelocity = 127.0;
+        }
+        //else, velocityCurve == 2 which is a linear mapping of velocity,
+        //or 4 which is a static velocity.
         
         
         //==========================================================================

@@ -234,12 +234,17 @@ void GuiGlobalPadSettings::buttonClicked (Button* button)
             {
                 int padNum = selectedPads[i];
 				PAD_SETTINGS->setVelocityCurve(result);
+                
             }
+            
+            if (result == 4 
+                && (AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 1
+                || AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 4))
+                velocitySlider->setVisible(true);
+            else
+                velocitySlider->setVisible(false);
 			
-			if (result == 4) //static velocity 
-				velocitySlider->setVisible(true);
-			else
-				velocitySlider->setVisible(false);
+			
         }
 		
 	}
@@ -325,6 +330,18 @@ void GuiGlobalPadSettings::updateDisplay()
 		parameterHoverLabel->setText(String(PAD_SETTINGS->getStaticVelocity()), false);
 		pressureCurveValue = PAD_SETTINGS->getPressureCurve();
         velocityCurveValue = PAD_SETTINGS->getVelocityCurve();
+        
+        //if sequencer mode, dissable velocity curve menu as this would cause confusion
+        if (PAD_SETTINGS->getMode() == 3)
+        {
+            velocityCurveButton->setEnabled(false);
+            velocityCurveButton->setAlpha(0.3);
+        }
+        else
+        {
+            velocityCurveButton->setEnabled(true);
+            velocityCurveButton->setAlpha(1.0);
+        }
       
     }
     else if(MULTI_PADS)
@@ -482,12 +499,17 @@ void GuiGlobalPadSettings::updateDisplay()
     }
     
     
-    
-    //put the below code in once hardware velocity curves have been implemented
-    if (velocityCurveValue == 4) //static velocity 
+    //static velocity and in MIDI mode or controller mode
+    if (velocityCurveValue == 4 
+        && (AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 1
+        || AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 4))
+    {
         velocitySlider->setVisible(true);
+    }
     else
+    {
         velocitySlider->setVisible(false);
+    }
 }
 
 

@@ -250,7 +250,8 @@ public:
             CommandIDs::Open,
             CommandIDs::Save,
             CommandIDs::SaveAs,
-            CommandIDs::CleanUpProject
+            CommandIDs::CleanUpProject,
+            CommandIDs::updateFirmware
         };
         
         commands.addArray (ids, numElementsInArray (ids));
@@ -300,6 +301,12 @@ public:
                             "Removes any unused audio files from the projects 'Audio Files' directory.",
                             CommandCategories::FileCommands, 0);
         }
+        else if (commandID == CommandIDs::updateFirmware)
+        {
+            result.setInfo (translate("Update Firmware..."),
+                            "Updates the firmware on the AlphaSphere device.",
+                            CommandCategories::FileCommands, 0);
+        }
     }
     
     bool perform (const InvocationInfo& info)
@@ -328,6 +335,76 @@ public:
             appDocumentState->removeUneededAudioFiles(false);
         }
         
+        else if(info.commandID == CommandIDs::updateFirmware)
+        {
+            /*
+             Firmware updater feature.
+             Below is the code needed to apply a firmware update to the AlphaSphere.
+             It creates a ChildProcess object that runs the bootloader command line app, passing in the
+             mmcu type and hex file destination as parameters. It then returns the output as a String.
+             The bootloader app and hex file should exist in the Application Data directory.
+             
+             For now this code is just lauched from a menu bar item and expects the user to manually put the
+             device into bootloader mode by pressing the reset button.
+             
+             Eventually firmware updating should be applied using the following method:
+             - The hex file should be numbered to signify the firware version (e.g. SphereWare_1_0.hex, SphereWare_1_1.hex).
+             - When the sphere is connected to AlphaLive it sends a report stating its current firmware version.
+             - If the included hex file has a greater number than the current firmware version, it pops up
+             an alert window telling the user that there is a new firmware version available and asks if they want to update
+             it (stressing that they should as otherwise it could limit the softwares functionality - Maybe the user shouldn't
+             have an option to not update it?). 
+             - The software sends a HID report to the device to change it to the bootloader, an installs the new firmware.
+             - The device will then automatically be reconnected and the user can rock out the new firmware. Boo ya. 
+             
+             Things to consider:
+             - Error handling and feedback - make sure all possible errors can be caught and displayed.
+             - Where in the AlphaLive code should this be placed when the above method is implemented? 
+             
+             */
+            
+            ChildProcess bootloader;
+            
+            StringArray arguments;
+            String appDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString);
+            
+            File bootloaderFile(appDir + "Application Data" + File::separatorString + "firmwareUpdater");
+            
+            String mmcuString("-mmcu=atmega32u4");
+            
+            //Get the hexFile. If we start numbering it we will have to find the file differently. 
+            File hexFile(appDir + "Application Data" + File::separatorString + "SphereWare.hex");
+            
+            if (bootloaderFile.exists() == true && hexFile.exists() == true)
+            {
+                arguments.add(bootloaderFile.getFullPathName());
+                arguments.add(mmcuString);
+                arguments.add(hexFile.getFullPathName());
+                
+                //Send HID report here to change the device to the bootloader.
+                //For now, just reconnect the device with the reset button held as per usual
+                
+                bootloader.start(arguments);
+                
+                String bootloaderReport =  bootloader.readAllProcessOutput();
+                
+                std::cout << "..." << bootloaderReport << "..." << std::endl;
+                if (bootloaderReport.contains("Unable to open device"))
+                {
+                    AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Cannot Find Device!"), translate("The AlphaSphere does not appear to be connected to the computer. Please connect it and try again."));
+                }
+                else if (bootloaderReport.isEmpty())
+                {
+                    AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Firmware Updated!"), translate("The AlphaSphere firmware has been successfully updated."));
+                }
+                
+            }
+            else
+            {
+                AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Missing Files!"), translate("One or more of the files needed to update the firmware are missing. Please consult the FAQ of the reference manual."));
+            }
+        }
+        
         return true;
     }
     
@@ -349,58 +426,3 @@ private:
 // This macro generates the main() routine that starts the app.
 START_JUCE_APPLICATION(AlphaSoftApplication)
 
-
-/*
- Firmware updater feature.
- Below is a basic example of the code needed to apply a firmware update to the alphasphere.
- It creates a ChildProcess object that runs the bootloader command line app, passing in the
- mmcu type and hex file destiination as parameters. It then returns the output as a String. 
- There is also some error handling.
- 
- Things to think about:
- - How does the user actually trigger this code? Two options:
-    - The user selects an option in the menu bar called 'update firmware' that pops up a message
-    telling them to close the message, unplug the sphere and reconnect it with the reset button held. The bootloader
-    VID and PID will then be recognised alerting AlphaLive that an firmware update should be done, pops up a message
-    asking if the user wants to is sure they want to update the firmware, and then runs the below code.
-    - The same as above, however when the user selects the update firmware option it sends a HID report
-    to the device telling it to switch to bootloader mode. Would probably be good to have a 'are you sure?'
-    message before it sends the HID report.
- - Error handling and feedback - make sure all possible errors can be caught and displayed.
- - Where in the AlphaLive code should this be placed?
- 
- */
-
-//ChildProcess bootloader;
-//
-//StringArray arguments;
-//String outputReport;
-//File bootloaderFile("/Users/Liam/Desktop/AlphaSphere Software Dev/Test projects/bootTest/Builds/MacOSX/build/Release/bootTest");
-//String mmcuString("-mmcu=atmega32u4");
-//File hexFile("/Users/Liam/Desktop/AlphaSphere Software Dev/HID projects/LUFA projects/HID_MIDI/GenericHID.hex");
-//
-//if (bootloaderFile.exists() == true && hexFile.exists() == true)
-//{
-//    arguments.add(bootloaderFile.getFullPathName());
-//    arguments.add(mmcuString);
-//    arguments.add(hexFile.getFullPathName());
-//    
-//    bootloader.start(arguments);
-//    
-//    String bootloaderReport =  bootloader.readAllProcessOutput();
-//    
-//    std::cout << "..." << bootloaderReport << "..." << std::endl;
-//    if (bootloaderReport.contains("Unable to open device"))
-//    {
-//        AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Cannot Find Device!"), translate("The AlphaSphere does not appear to be connected to the computer. Please connect it and try again."));
-//    }
-//    else if (bootloaderReport.isEmpty())
-//    {
-//        AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Firmware Updated!"), translate("The AlphaSphere firmware has been successfully updated."));
-//    }
-//    
-//}
-//else
-//{
-//        AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Missing Files!"), translate("One or more of the files needed to update the firmware are missing. Please consult the reference manual."));
-//}

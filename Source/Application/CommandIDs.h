@@ -47,11 +47,11 @@ namespace CommandIDs
     static const int StartStopClock         = 0x20011;
     static const int KillSwitch             = 0x20012;
     
+    static const int updateFirmware         = 0x20018;
+    
     //possible future commands
     
     static const int Documentation          = 0x20013;
-    
-    static const int EditOrPlayMode         = 0x20018;
     
     
 }

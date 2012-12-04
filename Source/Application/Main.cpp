@@ -360,6 +360,8 @@ public:
              Things to consider:
              - Error handling and feedback - make sure all possible errors can be caught and displayed.
              - Where in the AlphaLive code should this be placed when the above method is implemented? 
+             - What about if we introduce different firmware versions for different types of foam? We would
+             then need an option somewhere for the user to change the firmware, probably within Preferences. 
              
              */
             

@@ -113,9 +113,11 @@ void PreferencesComponent::removeMidiOutputSelector()
 {
     #if JUCE_WINDOWS
     delete audioAndMidiSettingsComponent;
+    tabbedComponent->removeTab(0);
     
     //don't display the option to set a MIDI ouput device
     audioAndMidiSettingsComponent = new AlphaAudioSettingsComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, false, false, true, false, alphaLiveEngineRef);
+    tabbedComponent->addTab(translate("Audio Output Settings"), Colours::darkgrey, audioAndMidiSettingsComponent, true);
     
     #endif //JUCE_WINDOWS
 }

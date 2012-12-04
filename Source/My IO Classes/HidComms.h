@@ -72,9 +72,7 @@ private:
     
     CriticalSection sharedMemory;
     
-    unsigned char dataToSend[5];
     bool sendOutputReport;
-    
     bool appHasInitialised;
 };
 

@@ -125,22 +125,6 @@ void HidComms::run()
                 
             }
             
-            
-            //        if (handle && sendOutputReport == true)
-            //        {
-            //            std::cout << "writing to device: ";
-            //            printf("%02hhx ", dataToSend[0]);
-            //            printf("%02hhx ", dataToSend[1]);
-            //            printf("%02hhx ", dataToSend[2]);
-            //            printf("%02hhx ", dataToSend[3]);
-            //            printf("%02hhx ", dataToSend[4]);
-            //            printf("\n");
-            //            std::cout << hid_write(handle, dataToSend, 6) << std::endl;
-            //            
-            //            sendOutputReport = false;
-            //            //dataToSend = nullptr;
-            //        }
-            
             //what should the following sleep value be?
             #ifdef WIN32
             sleep(5); //should this actually be Sleep() which need a windows library defined? See hidtest.
@@ -171,35 +155,17 @@ void HidComms::run()
 //should i be passing in a pointer here instead of an array?
 void HidComms::sendHidControlReport (uint8 *bytesToSend)
 {
-//    sharedMemory.enter();
-//    dataToSend[0] = bytesToSend[0];
-//    dataToSend[1] = bytesToSend[1];
-//    dataToSend[2] = bytesToSend[2];
-//    dataToSend[3] = bytesToSend[3];
-//    dataToSend[4] = bytesToSend[4];
-//    std::cout << "writing to device: ";
-//    printf("%02hhx ", dataToSend[0]);
-//    printf("%02hhx ", dataToSend[1]);
-//    printf("%02hhx ", dataToSend[2]);
-//    printf("%02hhx ", dataToSend[3]);
-//    printf("%02hhx ", dataToSend[4]);
-//    printf("\n");
-//
-//    //can ++the unit8 here in a for loop to apply values
-//    sendOutputReport = true;
-//    sharedMemory.exit();
-    
-    
+
     if (handle)
     {
-        std::cout << "writing to device: ";
-        printf("%02hhx ", bytesToSend[0]);
-        printf("%02hhx ", bytesToSend[1]);
-        printf("%02hhx ", bytesToSend[2]);
-        printf("%02hhx ", bytesToSend[3]);
-        printf("%02hhx ", bytesToSend[4]);
-        printf("\n");
-        std::cout << hid_write(handle, bytesToSend, 6) << std::endl;
+//        std::cout << "writing to device: ";
+//        printf("%02hhx ", bytesToSend[0]);
+//        printf("%02hhx ", bytesToSend[1]);
+//        printf("%02hhx ", bytesToSend[2]);
+//        printf("%02hhx ", bytesToSend[3]);
+//        printf("%02hhx ", bytesToSend[4]);
+//        printf("\n");
+        hid_write(handle, bytesToSend, 9);
     }
 }
 

@@ -1162,7 +1162,7 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     }
     else if (gainSlider->isMouseOver(true)==true)
     {
-        setInfoTextBoxText (translate("Global Gain. Controls Alphalive's master gain."));
+        setInfoTextBoxText (translate("Global Gain. Controls AlphaLive's master gain."));
     }
     else if (panSlider->isMouseOver(true)==true)
     {
@@ -1197,7 +1197,7 @@ void MainComponent::mouseEnter (const MouseEvent &e)
         
         if (PAD_SETTINGS->getMode() == 1) //midi mode
         {
-            setInfoTextBoxText (translate("MIDI Note Selector. Use the piano keyboard to select the MIDI notes of the selected pads. Click to select a single note for all selected pads, or cmd-click (Mac) or ctrl-click (Windows) to select multiple notes to apply to the selected pads. When selecting multiple notes, the order the notes are selected will be the order they are applied to the pads. Alt-click transpose a set of notes."));
+            setInfoTextBoxText (translate("MIDI Note Selector. Use this piano to select the MIDI notes of the selected pads. Use a regular click to select a single note for all selected pads, or cmd-click (Mac) or ctrl-click (Windows) to select multiple notes to apply to a set of pads. When selecting multiple notes, the order of selected notes will be applied to the pads in the order they were selected. Alt-click to transpose a set of notes."));
         }
         else if (PAD_SETTINGS->getMode() == 3) //sequencer mode
         {

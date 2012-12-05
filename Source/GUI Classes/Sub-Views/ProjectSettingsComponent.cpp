@@ -277,7 +277,7 @@ GeneralProjSettingsComponent::GeneralProjSettingsComponent(MainComponent &ref, A
     copyExternalFilesSwitch->addMouseListener(this, true);
     
     addAndMakeVisible(copyExternalFilesLabel = new Label());
-    copyExternalFilesLabel->setText("Copy External Files:", false);
+    copyExternalFilesLabel->setText(translate("Copy External Files:"), false);
     copyExternalFilesLabel->setColour(Label::textColourId, Colours::lightgrey);
     
 }

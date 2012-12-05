@@ -2378,11 +2378,11 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     
     if (modeMidiButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Sequencer MIDI Mode. Click to set selected pads to MIDI sequencer mode. This mode allows sequences of MIDI messages to be programmed into the AlphaSphere device. This will also display MIDI settings controls for selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Sequencer MIDI Mode. Click to set the selected pads to MIDI sequencer mode. This mode allows sequences of MIDI messages to be recorded, programmed and edited. This will also display the MIDI settings controls for the selected pads."));
     }
 	if (modeSamplesButton->isMouseOver(true))
 	{
-		mainComponentRef.setInfoTextBoxText(translate("Sequencer Sampler Mode. Click to set selected pads to sample sequencer mode. This mode allows sequences using audio samples to be programmed into the AlphaSphere device. This will also display sampler settings controls for selected pads."));
+		mainComponentRef.setInfoTextBoxText(translate("Sequencer Sampler Mode. Click to set the selected pads to sampler sequencer mode. This mode allows sequences of audio samples to be recorded, programmed and edited. This will also display the sampler settings controls for the selected pads."));
 	}
     
     else if (sequencerGrid->isMouseOver(true))

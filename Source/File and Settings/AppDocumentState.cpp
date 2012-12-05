@@ -2183,6 +2183,8 @@ void AppDocumentState::exportSampleBank (int currentlySelectedPad)
     
     if (saveFileChooser.browseForFileToSave(false))
     {
+        //set it so that if the user has selected the toolbox directory, don't create a parent directory. Good idea?
+        
 		//create a bank directory
         String bankName (saveFileChooser.getResult().getFileName());
         File bankDirectory (saveFileChooser.getResult().getFullPathName() + " (Alphabank)");
@@ -2205,9 +2207,9 @@ void AppDocumentState::exportSampleBank (int currentlySelectedPad)
             File audioFileDirectory = (bankDirectory.getFullPathName() + File::separatorString + bankName);
             audioFileDirectory.createDirectory();
             
+            //create .alphabank file
             File bankFile = (bankDirectory.getFullPathName() + File::separatorString + bankName + ".alphabank");
             bankFile.create();
-            
             
             XmlElement *alphaBankDataXml = new XmlElement("ALPHABANK"); //create Xml before extension name is appended
             alphaBankDataXml->setAttribute("name", String(bankFile.getFileNameWithoutExtension()));
@@ -2221,7 +2223,7 @@ void AppDocumentState::exportSampleBank (int currentlySelectedPad)
                 
                 if (audioFilePath != File::nonexistent)
                 {
-                    //create a new file for the imported audio file in the working directory but only if it doesn't already exist!!
+                    //create a new file for the seqs audio file but only if it doesn't already exist!!
                     File audioFileCopy (audioFileDirectory.getFullPathName() + File::separatorString + audioFilePath.getFileName());
                     
                     if (audioFileCopy.existsAsFile() == false) //if it doesn't yet exist
@@ -2287,6 +2289,59 @@ void AppDocumentState::exportSampleBank (int currentlySelectedPad)
 }
 
 
+void AppDocumentState::importSampleBank (Array<int> selectedPads_, bool openBrowser, File fileToOpen)
+{
+    //navigate to app directory
+    FileChooser loadFileChooser(translate("Select a .alphabank file to load..."), 
+                                StoredSettings::getInstance()->appProjectDir, 
+                                "*.alphabank");
+    
+    bool shouldLoad;
+    
+    if (openBrowser == true)
+        shouldLoad = loadFileChooser.browseForFileToOpen(); //open file browser
+    
+    if (shouldLoad == true || openBrowser == false)
+    {
+        File loadedFile;
+        
+        if (openBrowser == true)
+            loadedFile = loadFileChooser.getResult();
+        else
+            loadedFile = fileToOpen;
+        
+        //parse file into xml file
+        ScopedPointer<XmlElement> xmlData (XmlDocument::parse(loadedFile));
+        
+        //the code here is the same as the relevent code for applying sample banks to sequencer pads from the toolbox.
+        //Ideally, the toolbox should just call this function instead of including the same code, however for sampler
+        //mode the mainComponent needs updating which cannot be done from here.
+        //The arguments of this function are there to allow for such implementation.
+        
+        if (xmlData != nullptr && xmlData->hasTagName("ALPHALIVE_SAMPLE_SET"))
+        {
+            int numOfSamples = xmlData->getChildElement(0)->getIntAttribute("numSamples");
+            String fileDirPath (loadedFile.getParentDirectory().getFullPathName());
+            StringArray sampleFilePaths;
+            
+            for (int i = 0; i < numOfSamples; i++)
+            {
+                sampleFilePaths.add(fileDirPath + xmlData->getChildElement(0)->getStringAttribute("sample" + String(i+1)));
+            }
+            
+            for (int i = 0; i < selectedPads_.size(); i++)
+            {
+                int padNum = selectedPads_[i];
+                
+                for (int row = 0; row < 12; row++)
+                {
+                    PAD_SETTINGS_pads->setSequencerSamplesAudioFilePath(File(sampleFilePaths[row]), row);
+                }
+            }
+        }
+        
+    }
+}
 
 void AppDocumentState::createMidiFile (int currentlySelectedSeqNumber, int currentlySelectedPad, int isSeqSet)
 {

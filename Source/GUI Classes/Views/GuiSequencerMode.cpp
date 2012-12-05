@@ -1257,10 +1257,12 @@ void GuiSequencerMode::buttonClicked (Button* button)
 		
 		if (modeSamplesButton->getToggleState() == true) 
 		{
-				if (SINGLE_PAD) 
-				{
-					menu.addItem(15, translate("Export Sample Bank..."));
-				}
+            menu.addItem(16, translate("Import Sample Bank..."));
+            
+            if (SINGLE_PAD) 
+            {
+                menu.addItem(15, translate("Export Sample Bank..."));
+            }
 		}
 		
 		menu.addSeparator();
@@ -1389,9 +1391,13 @@ void GuiSequencerMode::buttonClicked (Button* button)
             //setCurrentSequenceNumber();
             updateDisplay();
         }
-		else if (result == 15)//export and save drum banks
+		else if (result == 15)//export and save .alphabank files
 		{
 			mainComponentRef.getAppDocumentStateRef().exportSampleBank(selectedPads[0]);
+		}
+        else if (result == 16)//import .alphabank files
+		{
+			mainComponentRef.getAppDocumentStateRef().importSampleBank(selectedPads);
 		}
         
 	}

@@ -31,7 +31,7 @@
  
  translate("Services")
  translate("Hide AlphaLive")
- translate("Hide Other")
+ translate("Hide Others")
  translate("Show All")
  translate("Quit AlphaLive")
  translate("Quit")

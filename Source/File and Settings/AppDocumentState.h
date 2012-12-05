@@ -118,7 +118,7 @@ public:
 	
 	void saveEffect (int currentlySelectedPad);
 	
-	void saveDrumBankAs (int currentlySelectedPad);
+	void exportSampleBank (int currentlySelectedPad);
     
     void createMidiFile (int currentlySelectedSeqNumber, 
                          int currentlySelectedPad,

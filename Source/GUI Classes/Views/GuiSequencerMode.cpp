@@ -1259,11 +1259,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
 		{
 				if (SINGLE_PAD) 
 				{
-					menu.addItem(15, translate("Export Drum Bank As..."));
-				}
-				else 
-				{
-					menu.addItem(15, translate("Export Drum Bank As..."), false);
+					menu.addItem(15, translate("Export Sample Bank..."));
 				}
 		}
 		
@@ -1395,7 +1391,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
         }
 		else if (result == 15)//export and save drum banks
 		{
-			mainComponentRef.getAppDocumentStateRef().saveDrumBankAs(selectedPads[0]);
+			mainComponentRef.getAppDocumentStateRef().exportSampleBank(selectedPads[0]);
 		}
         
 	}

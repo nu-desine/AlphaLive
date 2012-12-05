@@ -235,7 +235,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>FC2B824016668A56000B8C6C</string>
+						<string>FC2B826016668E5F000B8C6C</string>
 						<key>history</key>
 						<array>
 							<string>FC2B80FD166641EA000B8C6C</string>
@@ -289,6 +289,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -337,6 +339,7 @@
 								<string>0C78A2B615B467900049C0C8</string>
 								<string>1AC53D384541E9928C012897</string>
 								<string>7387314CE8A002F17139CE02</string>
+								<string>B231AFCA51F0447B8B52FC02</string>
 								<string>7E7716B60647795EFB0429D1</string>
 								<string>90004462C48C6E13E0AFD50B</string>
 								<string>1C37FABC05509CD000000102</string>
@@ -382,8 +385,6 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -401,7 +402,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>FC2B823F16668A56000B8C6C</string>
+										<string>FC2B825F16668E5F000B8C6C</string>
 										<key>history</key>
 										<array>
 											<string>FC0BCA3E165544BA000686F4</string>
@@ -537,8 +538,8 @@
 											<string>FC2B813216664870000B8C6C</string>
 											<string>FC2B813316664870000B8C6C</string>
 											<string>FC2B816E16667B38000B8C6C</string>
-											<string>FC2B823816668A2D000B8C6C</string>
-											<string>FC2B823916668A2D000B8C6C</string>
+											<string>FC2B825D16668E5F000B8C6C</string>
+											<string>FC2B825E16668E5F000B8C6C</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -719,7 +720,7 @@
 	<key>StatusbarIsVisible</key>
 	<true/>
 	<key>TimeStamp</key>
-	<real>375818838.73514402</real>
+	<real>375819871.28729898</real>
 	<key>ToolbarConfigUserDefaultsMinorVersion</key>
 	<string>2</string>
 	<key>ToolbarDisplayMode</key>
@@ -736,16 +737,15 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>FC2B824116668A56000B8C6C</string>
 		<string>FC2B81B21666802B000B8C6C</string>
 		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>FC2B80C216662859000B8C6C</string>
 		<string>FC2B80C316662859000B8C6C</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>FC2B810116664209000B8C6C</string>
-		<string>/Users/felixgodden/Programming/nu-desine/alphalive 2/Builds/MacOSX/AlphaLive.xcodeproj</string>
 		<string>FCDCD115160C8B2F00E0612A</string>
 		<string>1C78EAAD065D492600B07095</string>
+		<string>/Users/felixgodden/Programming/nu-desine/alphalive 2/Builds/MacOSX/AlphaLive.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>0 55 1398 823 0 0 1440 878 </string>

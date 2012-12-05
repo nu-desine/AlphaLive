@@ -2167,20 +2167,25 @@ void AppDocumentState::saveEffect (int currentlySelectedPad)
     
 }
 
+
+
+
 void AppDocumentState::saveDrumBankAs (int currentlySelectedPad)
 {
 	//navigate to app directory
     FileChooser saveFileChooser(translate("Create a drum bank file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphabank");
+	
+	File fileChooserResult (saveFileChooser.getResult());
     
     if (saveFileChooser.browseForFileToSave(false))
     {
 		//create a bank directory
-        File savedDirectory (saveFileChooser.getResult());
+        File savedDirectory = fileChooserResult.getFullPathName() + " - Alphabank";
         
         //create folder to hold the banks audio files (if it doesn't already exist, which it shouldnt (?))
-        File audioFileDirectory = (savedDirectory.getFullPathName() + "- Alphabank"+ File::separatorString + savedDirectory.getFileName());
+        File audioFileDirectory = (savedDirectory.getFullPathName() + File::separatorString + savedDirectory.getFileName() + " - Audio files");
         
         if (AppSettings::Instance()->getCopyExternalFiles() == true)
         {
@@ -2195,7 +2200,7 @@ void AppDocumentState::saveDrumBankAs (int currentlySelectedPad)
 		
         //Surely there's a easier way to do the following code? FileBasedDocument
         File savedFile (saveFileChooser.getResult()); //get file that the user has 'saved'
-        String stringFile = audioFileDirectory.getFullPathName(); //get the filepath name of the file as a string
+        String stringFile = savedDirectory.getFullPathName(); //get the filepath name of the file as a string
 		String fileName = savedFile.getFileName();
 		
 		XmlElement *drumBankDataXml = new XmlElement("DRUM_BANK"); //create Xml before extension name is appended
@@ -2294,8 +2299,6 @@ void AppDocumentState::saveDrumBankAs (int currentlySelectedPad)
 			
 			delete toBeSaved;
 			delete drumBankDataXml;
-			
-			std::cout << savedFile.getFullPathName() << std::endl;
 		}
 	}
 }

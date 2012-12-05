@@ -1402,6 +1402,7 @@ File PadSettings::getSequencerSamplesAudioFilePath(int rowNumber)
             sequencerSamplesAudioFilePath[rowNumber] = String::empty;
         }
 
+		std::cout << audioFile.getFullPathName() << std::endl;
         return audioFile;
     }
     

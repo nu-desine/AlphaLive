@@ -31,7 +31,7 @@ GainAndPan::GainAndPan(int padNumber_, float sampleRate_)
     gain = gainPrev =  gainControl = PAD_SETTINGS->getPadFxGainPanGain();
     pan = panPrev = panControl = PAD_SETTINGS->getPadFxGainPanPan();
     //pan.setPanControlValue(panControl);
-    
+	
     alphaTouchParam = PAD_SETTINGS->getPadFxGainPanAlphaTouch();
     alphaTouchReverse = PAD_SETTINGS->getPadFxGainPanAtReverse();
     alphaTouchIntensity = PAD_SETTINGS->getPadFxGainPanAtIntensity();
@@ -70,6 +70,7 @@ void GainAndPan::processAudio (const AudioSourceChannelInfo& bufferToFill)
     
     //gain and pan
     sharedMemory.enter();
+	
     
     for (int i = 0; i < bufferToFill.buffer->getNumChannels(); ++i)
     {

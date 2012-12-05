@@ -25,6 +25,7 @@
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
 #include "../PanControl.h"
+#include "../Oscillator.h"
 
 class GainAndPan
 {
@@ -49,7 +50,7 @@ public:
     void setSampleRate (float value);
     
 private:
-    
+
     //we need the ...Control variables as the actual gain or pan won't always be
     //equal to the value of their GUI control as the pressure could be used to
     //modulate the value

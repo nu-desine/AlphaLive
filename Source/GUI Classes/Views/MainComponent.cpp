@@ -1125,48 +1125,48 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     
     if (e.eventComponent == modeOffButton)
     {
-        setInfoTextBoxText (translate("Off Mode Button. Click this button to turn off the selected pads."));
+        setInfoTextBoxText (translate("Off Mode. Click this button to turn off the selected pads."));
         
     }
     else if (e.eventComponent == modeMidiButton)
     {
-        setInfoTextBoxText (translate("MIDI Mode Button. Click this button to set the selected pads to MIDI Mode, which enables the pads to send MIDI data. The resultantly displayed controls can then be used to program the MIDI functionality of the AlphaSphere device."));
+        setInfoTextBoxText (translate("MIDI Mode. Click to set the selected pads to MIDI Mode. This enables these pads to send MIDI data. Its controls can then be used to program the MIDI functionality of the AlphaSphere."));
     }
     else if (e.eventComponent == modeSamplerButton)
     {
-        setInfoTextBoxText (translate("Sampler Mode Button.  Click this button to set the selected pads to Sampler Mode. This enables audio files to be triggered, looped, and manipulated."));
+        setInfoTextBoxText (translate("Sampler Mode.  Click to set the selected pads to Sampler Mode. This enables audio files to be triggered, looped, and manipulated."));
     }
     else if (e.eventComponent == modeSequencerButton)
     {
-        setInfoTextBoxText (translate("Sequencer Mode Button. Click this button to set the selected pads to Sequencer Mode. This enables sequences of midi data or audio samples to be created, looped and manipulated."));
+        setInfoTextBoxText (translate("Sequencer Mode. Click to set the selected pads to Sequencer Mode. This enables sequences of midi data or audio samples to be created, looped and manipulated."));
     }
     else if (e.eventComponent == modeControllerButton)
     {
-        setInfoTextBoxText (translate("Controller Mode Button. Click this button to set the selected pads to Controller Mode. This allows a set of other functionalities to be a applied to the pads."));
+        setInfoTextBoxText (translate("Controller Mode. Click to set the selected pads to Controller Mode. This allows the pads to control features of Alphalive or external software."));
     }
     else if (globalSettingsButton->isMouseOver(true))
     {
-        setInfoTextBoxText (translate("Global Pad Settings Button. Displays a set of pad settings which are not specific to any of the pad modes."));
+        setInfoTextBoxText (translate("Global Pad Settings. Click to show settings which are not specific to any of the pad modes."));
     }
     else if (e.eventComponent == openButton)
     {
-        setInfoTextBoxText (translate("Load Project. Allows a set of scenes to be loaded into the application."));
+        setInfoTextBoxText (translate("Load Project. Loads an Alphalive set into Alphalive from disk."));
     }
     else if (e.eventComponent == saveButton)
     {
-        setInfoTextBoxText (translate("Save Project. Allows a set of scenes to be saved to disk."));
+        setInfoTextBoxText (translate("Save Project. Saves the current Alphalive set to disk."));
     }
         else if (sceneComponent->isMouseOver(true))
     {
-        setInfoTextBoxText (translate("Scenes. AlphaLive contains 20 'scene' slots which can each hold a full set of pad settings. Click on a scene to load up its set of settings; right-click to import, export or clear a scenes; or shift-click to copy the currently select scene to the clicked one. AlphaLive scene files (.alphascene) can be imported via drag-and-drop too."));
+        setInfoTextBoxText (translate("Scenes. AlphaLive contains 20 'scene' slots, each can hold a full set of pad settings. Click on a scene to load up its settings and pads; right-click to import, export or clear a scene; or shift-click to copy the currently select scene the clicked scene. AlphaLive scene files (.alphascene) can also be imported via drag-and-drop."));
     }
     else if (gainSlider->isMouseOver(true)==true)
     {
-        setInfoTextBoxText (translate("Global Gain Control. Sets an displays the gain of the overall output audio signal."));
+        setInfoTextBoxText (translate("Global Gain. Controls Alphalive's master gain."));
     }
     else if (panSlider->isMouseOver(true)==true)
     {
-        setInfoTextBoxText (translate("Global Pan Control. Sets and displays the stereo positioning of the overall output audio signal."));
+        setInfoTextBoxText (translate("Global Pan. Controls the stereo positioning of Alphalive's master output."));
     }
     /*
     else if (e.eventComponent == padRotate)
@@ -1176,7 +1176,7 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     */
     else if (e.eventComponent == infoTextBox)
     {
-        setInfoTextBoxText (translate("Info Text Box. Hover the mouse over a control to view a description of what the control does here. It can be disabled using the option in the 'Controls' menu bar menu."));
+        setInfoTextBoxText (translate("Info Box. Hover the mouse over an interface element to view a description of what it does. This can be disabled in the 'Controls' menu bar menu."));
     }
     /*
     else if(killswitchButton->isMouseOver(true))
@@ -1197,7 +1197,7 @@ void MainComponent::mouseEnter (const MouseEvent &e)
         
         if (PAD_SETTINGS->getMode() == 1) //midi mode
         {
-            setInfoTextBoxText (translate("MIDI Note Selector. Use this piano to select the MIDI notes of the selected pads. Use a regular click to select a single note for all selected pads, or cmd-click (Mac) or ctrl-click (Windows) to select multiple notes to apply to a set of pads. When selecting multiple notes, the order of selected notes will be applied to the pads in the order they were selected. Alt-click to transpose a set of notes."));
+            setInfoTextBoxText (translate("MIDI Note Selector. Use the piano keyboard to select the MIDI notes of the selected pads. Click to select a single note for all selected pads, or cmd-click (Mac) or ctrl-click (Windows) to select multiple notes to apply to the selected pads. When selecting multiple notes, the order the notes are selected will be the order they are applied to the pads. Alt-click transpose a set of notes."));
         }
         else if (PAD_SETTINGS->getMode() == 3) //sequencer mode
         {

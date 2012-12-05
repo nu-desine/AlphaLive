@@ -400,43 +400,43 @@ void GuiFxDial::mouseEnter (const MouseEvent &e)
     
     if (fxButtons[0]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Gain and Pan Effect. Allows the pressure of the selected pads to manipulate the gain and pan of the audio."));
+        mainComponentRef.setInfoTextBoxText(translate("Gain and Pan. Allows the pressure of the selected pads to manipulate the gain and pan of the audio."));
     }
     else if (fxButtons[1]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Low-pass Filter Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
+        mainComponentRef.setInfoTextBoxText(translate("Low-pass Filter.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
     else if (fxButtons[2]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("High-pass Filter Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
+        mainComponentRef.setInfoTextBoxText(translate("High-pass Filter.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
     else if (fxButtons[3]->isMouseOver(true))
     {
-       mainComponentRef.setInfoTextBoxText(translate("Band-pass Filter Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
+       mainComponentRef.setInfoTextBoxText(translate("Band-pass Filter.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
     else if (fxButtons[4]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Distortion Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
+        mainComponentRef.setInfoTextBoxText(translate("Distortion.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
     else if (fxButtons[5]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Bitcrusher Distortion Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
+        mainComponentRef.setInfoTextBoxText(translate("Bitcrusher Distortion.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
     else if (fxButtons[6]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Delay/Echo Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
+        mainComponentRef.setInfoTextBoxText(translate("Delay/Echo.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
     else if (fxButtons[7]->isMouseOver(true))
     {
-       mainComponentRef.setInfoTextBoxText(translate("Reverb Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
+       mainComponentRef.setInfoTextBoxText(translate("Reverb.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
     else if (fxButtons[8]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Flanger/Phaser Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
+        mainComponentRef.setInfoTextBoxText(translate("Flanger/Phaser.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
     else if (fxButtons[9]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Tremolo Effect.") + " " + translate(CommonInfoBoxText::effectsButtons));
+        mainComponentRef.setInfoTextBoxText(translate("Tremolo.") + " " + translate(CommonInfoBoxText::effectsButtons));
     }
     
      

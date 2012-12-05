@@ -354,22 +354,22 @@ void GuiDistortion::mouseEnter (const MouseEvent &e)
 {
     if (inputGainSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Input Gain Control. Sets the gain of the signal to be distorted."));
+        mainComponentRef.setInfoTextBoxText(translate("Input Gain. Sets the gain of the signal to be distorted."));
         parameterHoverLabel->setText(String(inputGainSlider->getValue(), 3), false);
     }
     else if (driveSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Drive Control. Sets the amount of drive/distortion for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Drive. Sets the amount of drive/distortion for the selected pads."));
         parameterHoverLabel->setText(String(driveSlider->getValue(), 3), false);
     }
 	else if (toneSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Tone Control. Sets the distortion tone/filtering for the selected pads. Set this control to 0 to bypass the filter."));
+        mainComponentRef.setInfoTextBoxText(translate("Tone. Sets the tone/filtering of the distortion on selected pads. Set this control to 0 to bypass the filter."));
         parameterHoverLabel->setText(String(toneSlider->getValue(), 3), false);
     }
 	else if (wetDryMixSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Mix Control. Sets the wet/dry ratio for the distortion effect for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix. Sets the wet/dry mix for the distortion effect on the selected pads."));
         parameterHoverLabel->setText(String(wetDryMixSlider->getValue(), 3), false);
     }
     else if (distortionTypeMenu->isMouseOver(true))

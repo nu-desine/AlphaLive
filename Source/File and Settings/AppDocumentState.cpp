@@ -2025,7 +2025,7 @@ void AppDocumentState::saveEffect (int currentlySelectedPad)
 		int effect = 0;
 		int modeCheck = PAD_SETTINGS_pad->getMode();
         
-        //delete the file if it exists &write the new data
+        //delete the file if it exists &  write the new data
         if (savedFile.existsAsFile())
         {
             overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("This File Already Exists!"), translate("Are you sure you want to overwrite this file?"));
@@ -2172,6 +2172,139 @@ void AppDocumentState::saveEffect (int currentlySelectedPad)
         }
     }
     
+}
+
+void AppDocumentState::saveDrumBankAs (int currentlySelectedPad)
+{
+	//navigate to app directory
+    FileChooser saveFileChooser(translate("Create a drum bank file to save..."), 
+                                StoredSettings::getInstance()->appProjectDir, 
+                                "*.alphabank");
+    
+    if (saveFileChooser.browseForFileToSave(false))
+    {
+		//create a bank directory
+        File savedDirectory (saveFileChooser.getResult());
+        
+        //create folder to hold the banks audio files (if it doesn't already exist, which it shouldnt (?))
+        File audioFileDirectory = (savedDirectory.getFullPathName() + "- Alphabank"+ File::separatorString + savedDirectory.getFileName());
+        
+        if (AppSettings::Instance()->getCopyExternalFiles() == true)
+        {
+            //copy current working directory to the audio files directory
+            File::getCurrentWorkingDirectory().copyDirectoryTo(audioFileDirectory);
+        }
+        else
+            audioFileDirectory.createDirectory();  
+        
+		//set the audio files directory as the new working directory so when audio files are imported they go straight into here
+        audioFileDirectory.setAsCurrentWorkingDirectory();
+		
+        //Surely there's a easier way to do the following code? FileBasedDocument
+        File savedFile (saveFileChooser.getResult()); //get file that the user has 'saved'
+        String stringFile = audioFileDirectory.getFullPathName(); //get the filepath name of the file as a string
+		String fileName = savedFile.getFileName();
+		
+		XmlElement *drumBankDataXml = new XmlElement("DRUM_BANK"); //create Xml before extension name is appended
+		
+        stringFile = stringFile + ".alphabank"; //append an extension name to the filepath name
+        savedFile = stringFile; //set the file to this name
+        
+        bool overwrite = true; //by default true
+		
+		int modeCheck = PAD_SETTINGS_pad->getSequencerMode();
+        
+		if (modeCheck == 2) 
+		{
+			//delete the file if it exists & write the new data
+			if (savedFile.existsAsFile())
+			{
+				overwrite = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("This File Already Exists!"), translate("Are you sure you want to overwrite this file?"));
+			}
+			
+			if (overwrite == true)
+			{
+				savedFile.deleteFile();
+				audioFileDirectory.setAsCurrentWorkingDirectory();
+				savedFile.create(); //create the file
+				
+				drumBankDataXml->setAttribute("name", String(savedFile.getFileName()));
+				drumBankDataXml->setAttribute("numSamples", 12);
+											  
+				for (int i = 0; i < 12; i++)
+				{
+					File audioFilePath;						  
+					
+					audioFilePath = PAD_SETTINGS_pad->getSequencerSamplesAudioFilePath(i);
+					
+					if (audioFilePath != File::nonexistent)
+					{
+						if (AppSettings::Instance()->getCopyExternalFiles() == true)
+						{
+							//create a new file for the imported audio file in the working directory but only if it doesn't already exist!!
+							File audioFileCopy (File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + audioFilePath.getFileName());
+							
+							if (audioFileCopy.existsAsFile() == false) //if it doesn't yet exist
+							{
+								//copy the added audio file into the newly created file
+								audioFilePath.copyFileTo(audioFileCopy);
+							}
+							
+							else if (audioFileCopy.existsAsFile() == true) //if it already exists 
+							{
+								Array<File> matchingFilesArray;
+								String fileWildCard (audioFileCopy.getFileNameWithoutExtension()+"*");
+								bool importedFileNeedsCopying = true;
+								
+								//Find all possible duplicates of the imported file using fileWildCard
+								//and add reference of all possible files to matchingFilesArray.
+								File::getCurrentWorkingDirectory().findChildFiles(matchingFilesArray, 2, false, fileWildCard);
+								
+								for (int i = 0; i < matchingFilesArray.size(); i++)
+								{
+									if (audioFilePath.hasIdenticalContentTo(matchingFilesArray[i]) == true)
+									{
+										//if it finds a duplicate, flag that the file doesn't need copying
+										importedFileNeedsCopying = false;
+										//set the file
+										audioFileCopy = matchingFilesArray[i];
+										//break out of the for loop once a duplicate has been found to prevent unnecessary checks
+										break;
+									}
+								}
+								
+								if (importedFileNeedsCopying == true) 
+								{
+									//if no duplicate was found...
+									//... copy the added file with an appended name
+									audioFileCopy = audioFileCopy.getNonexistentSibling();
+									audioFilePath.copyFileTo(audioFileCopy); 
+								}
+							}
+							
+							audioFilePath = audioFileCopy;
+						}
+					
+						drumBankDataXml->setAttribute(String("sample" + String(i+1)), String(audioFilePath.getFullPathName()));
+					}
+				}
+			}
+		
+			//create xmlelement to be saved
+			XmlElement *toBeSaved = new XmlElement("ALPHALIVE_SAMPLE_SET");
+			
+			toBeSaved->addChildElement(new XmlElement (*drumBankDataXml));
+			
+			//save to file
+			String xmlDoc = toBeSaved->createDocument(String::empty, false);
+			savedFile.appendText(xmlDoc);
+			
+			delete toBeSaved;
+			delete drumBankDataXml;
+			
+			std::cout << savedFile.getFullPathName() << std::endl;
+		}
+	}
 }
 
 

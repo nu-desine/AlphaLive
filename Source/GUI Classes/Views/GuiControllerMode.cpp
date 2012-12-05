@@ -545,25 +545,25 @@ void GuiControllerMode::mouseEnter (const MouseEvent &e)
     {
         if (controlButtons[0]->isMouseOver(true))
         {
-            mainComponentRef.setInfoTextBoxText(translate("Scene Switch Mode. Select this button to enable the selected pads to be used to switch to a defined scene number."));
+            mainComponentRef.setInfoTextBoxText(translate("Scene Switch Mode. This mode enables the selected pads to be used to switch to the defined scene number."));
         }
         else if (controlButtons[1]->isMouseOver(true))
         {
-            mainComponentRef.setInfoTextBoxText(translate("MIDI Program Change Mode. Select this button to enable the selected pads to be used to send out a MIDI program change message."));
+            mainComponentRef.setInfoTextBoxText(translate("MIDI Program Change Mode. This mode enables the selected pads to be used to to switch to the definted MIDI program."));
         }
         else if (controlButtons[2]->isMouseOver(true))
         {
-            mainComponentRef.setInfoTextBoxText(translate("Dual Scene Switch/MIDI Program Change Mode. Select this button to enable the selected pads to be used to send out a MIDI program change message as well as a scene switch command."));
+            mainComponentRef.setInfoTextBoxText(translate("Dual Scene Switch/MIDI Program Change Mode. This mode enables the selected pads to send out a MIDI program change message as well as a scene switch command."));
         }
         else if (controlButtons[3]->isMouseOver(true))
         {
-            mainComponentRef.setInfoTextBoxText(translate("OSC Output Mode. Select this button to enable the selected pads to be used to send out Open Sound Control messages."));
+            mainComponentRef.setInfoTextBoxText(translate("OSC Output Mode. This mode enables the selected pads to be used to send Open Sound Control messages."));
         }
     }
     
     if (sceneNumberSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Scene Number Selector. Sets and displays the scene number for the selected pads. When the pad is pressed it will cause settings to be loaded from the selected scene."));
+        mainComponentRef.setInfoTextBoxText(translate("Scene Number Selector. Sets the scene number for the selected pads. When the pad is pressed it will load the selected scene."));
     }
     else if (oscIpAddressEditor->isMouseOver(true))
     {
@@ -575,7 +575,7 @@ void GuiControllerMode::mouseEnter (const MouseEvent &e)
     }
     else if (midiProgramChangeNumberSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("MIDI Program Change Number Selector. Sets and displays the MIDI Program Change Number for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("MIDI Program Change Number Selector. Sets the MIDI Program Change Number for the selected pads."));
     }
     
     for (int i = 0; i < 16; i++)

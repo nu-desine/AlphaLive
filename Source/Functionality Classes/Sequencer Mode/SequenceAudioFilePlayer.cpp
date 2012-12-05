@@ -35,7 +35,7 @@ SequenceAudioFilePlayer::SequenceAudioFilePlayer(int padNumber_, int rowNumber_,
 	AudioFormatManager formatManager;
 	formatManager.registerBasicFormats();
     
-    //call this here so that the default drum sounds are loaded in correcntly before this
+    //call this here so that the default drum sounds are loaded in correctly before this
     //object is intialised. This will only be temporary though.
     setAudioFile(PAD_SETTINGS->getSequencerSamplesAudioFilePath(rowNumber));
     attackTime = PAD_SETTINGS->getSequencerSamplesAttackTime();

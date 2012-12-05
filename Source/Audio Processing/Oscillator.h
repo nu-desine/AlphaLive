@@ -25,6 +25,7 @@
 
 //#include <iostream.h>
 #include <math.h>
+#include "../../JuceLibraryCode/JuceHeader.h"
 
 class Oscillator
 {
@@ -42,8 +43,18 @@ private:
     double processTri();
     double processSawUp();
     double processSawDown();
+	
+	CriticalSection sharedMemory;
     
     double currentPhase, increment, sampRate;
+	
+	double numSamples, numSamplesProcess, stepSize, currentSample;
+	
+	AudioSampleBuffer squareBuffer, sawBuffer, sawDownBuffer;
+	AudioFormatReader *reader;
+	
+	//buffer file source
+	File squareWaveFile, sawWaveFile, sawDownWaveFile;
     
 };
 

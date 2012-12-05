@@ -236,7 +236,7 @@ void GlobalOscComponent::mouseEnter (const MouseEvent &e)
 {
     if (globalOscSwitch->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Global OSC Mode. Use this switch to turn on Global OSC Mode which allows you to send out Open Sound Control messages from each pad whilst still maintaining the functionality of their audio/MIDI modes."));
+        mainComponentRef.setInfoTextBoxText(translate("Global OSC Mode. This switch turns on Global OSC Mode which allows you to send Open Sound Control messages from each pad whilst still maintaining the functionality of their audio/MIDI modes."));
     }
     else if (oscIpAddressEditor->isMouseOver(true))
     {

@@ -99,8 +99,11 @@ void Delay::processAudio (const AudioSourceChannelInfo& bufferToFill)
     for (int i = 0; i < bufferToFill.numSamples; ++i)
     {
         //set the output sample data by adding the wet buffer with a feedback value
-        *pOutL = *pOutL + (*pWetL * feedback);
-        *pOutR = *pOutR + (*pWetR * feedback);
+		if (delayTime != 0) 
+		{
+			*pOutL = *pOutL + (*pWetL * feedback);
+			*pOutR = *pOutR + (*pWetR * feedback);
+		}
         
         //set the circular buffers sample data
         circBufferLeft.put(*pOutL);

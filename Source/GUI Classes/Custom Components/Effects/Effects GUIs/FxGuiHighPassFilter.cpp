@@ -224,17 +224,17 @@ void GuiHighPassFilter::mouseEnter (const MouseEvent &e)
 {
     if (mixSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("High-Pass Filter Mix Control. Sets the wet/dry ratio for the High-Pass filter for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix. Sets the Wet/Dry mix for the High-Pass filter on the selected pads."));
         parameterHoverLabel->setText(String(mixSlider->getValue(), 3), false);
     }
     else if (frequencySlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("High-Pass Filter Cut-Off Frequency Control. Sets the cut-off frequency for the High-Pass filter for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Cut-Off Frequency. Sets the cut-off frequency for the High-Pass filter on the selected pads."));
         parameterHoverLabel->setText(String(frequencySlider->getValue(), 0), false);
     }
     else if (bandwidthSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("High-Pass Filter Bandwidth Control. Sets the bandwidth for the High-Pass filter for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Bandwidth. Sets the bandwidth for the High-Pass filter on the selected pads."));
         parameterHoverLabel->setText(String(bandwidthSlider->getValue(), 2), false);
     }
     

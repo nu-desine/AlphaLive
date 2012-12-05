@@ -517,16 +517,16 @@ void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
 {
     if (exclusiveModeButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Exclusive Mode Button. If this button is set to 'on' the selected pads will be set to 'Exclusive Mode' - only a single pad can be playing at any time for each exclusive group."));
+        mainComponentRef.setInfoTextBoxText(translate("Exclusive Mode. When set to 'on' selected pads will be set to 'Exclusive Mode'. Exclusive mode allows only one pad to be playing at a time in each exclusive group. Choose which group is being used on the current pad selection using the Exclusive Group Selector below."));
     }
     else if (exclusiveGroupSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Exclusive Group Selector. Sets and displays the exclusive group number for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Exclusive Group Selector. Sets the exclusive group channel for selected pads."));
         
     }
     else if (pressureCurveButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Pressure Curve Menu. Use this menu to select the curve for the pressure mapping for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Pressure Curve Menu. Use this menu to select the pressure response curve for the selected pads."));
     }
     else if (quantiseButton->isMouseOver(true))
     {
@@ -534,11 +534,11 @@ void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
     }
     else if (velocityCurveButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Velocity Curve Menu. Use this menu to select the curve for the velocity mapping for the selected pads. If 'Static' is selected a seperate control will be displayed to set the static velocity value."));
+        mainComponentRef.setInfoTextBoxText(translate("Velocity Curve Menu. Use this menu to select the velocity response curve of the selected pads. If 'Static' is selected a seperate control is displayed to set the static velocity value."));
     }
     else if (velocitySlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Static Velocity Selector. Sets and displays the static velocity for a MIDI note or sample."));
+        mainComponentRef.setInfoTextBoxText(translate("Static Velocity Selector. Sets the static velocity for a MIDI note or OSC message."));
 		parameterHoverLabel->setText(String(velocitySlider->getValue()), false);
 		parameterHoverLabel->setVisible(true);
     }

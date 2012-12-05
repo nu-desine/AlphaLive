@@ -432,35 +432,35 @@ void GuiDelay::mouseEnter (const MouseEvent &e)
 {
     if (wetMixSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Wet Mix Control. Sets and displays the delayed signal level for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix. Sets the Wet/Dry mix on the selected pads."));
         parameterHoverLabel->setText(String(wetMixSlider->getValue(), 3), false);
     }
     else if (delayTimeSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Delay Time Control. Sets the delay time in milliseconds for the selected pads. If you would like to set the delay time based on note length, click on the 'Sync' button."));
+        mainComponentRef.setInfoTextBoxText(translate("Delay Time. Sets the delay time in milliseconds for the selected pads. To set the delay time based on note length, click the 'Sync' button."));
         parameterHoverLabel->setText(String(delayTimeSlider->getValue(), 2), false);
     }
     else if (delayTimeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Delay Time Menu. Sets the delay time in note length for the selected pads. If you would like to set the delay time in milliseconds, click on the 'Sync' button."));
+        mainComponentRef.setInfoTextBoxText(translate("Delay Time Menu. Sets the delay time in note length for the selected pads. To set the delay time based on note length, click the 'Sync' button."));
     }
     else if (syncButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Tempo Sync Button. Turn this button on to sync the delay to the tempo, else you can set the tempo is milliseconds."));
+        mainComponentRef.setInfoTextBoxText(translate("Tempo Sync. When on the delay will be in sync to the global tempo. When off the tempo can be set in milliseconds."));
     }
     else if (feedbackSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Delay Feedback Control. Sets the feedback level for the selected pads. Please note that high values can create a delay that will get louder and never die out."));
+        mainComponentRef.setInfoTextBoxText(translate("Delay Feedback. Sets the feedback level for the selected pads. Please note that high values cause the delay to continuously feedback and get louder and louder."));
         parameterHoverLabel->setText(String(feedbackSlider->getValue(), 3), false);
     }
     else if (lpfFrequencySlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Low Pass Filter Frequency Control. Sets the LPF cutoff frequency for the selected pads. Please note that if this value is lower than the HPF cutoff frequency the delay signal will not be audible."));
+        mainComponentRef.setInfoTextBoxText(translate("Low Pass Filter Frequency. Sets the cutoff frequency of the Low-pass Filter on the selected pads. Please note that when this value is lower than the Hi-pass Filter cutoff frequency the delayed signal will not be audible."));
         parameterHoverLabel->setText(String(lpfFrequencySlider->getValue(), 0), false);
     }
     else if (hpfFrequencySlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("High Pass Filter Frequency Control. Sets the HPF cutoff frequency for the selected pads. Please note that if this value is higher than the LPF cutoff frequency the delay signal will not be audible."));
+        mainComponentRef.setInfoTextBoxText(translate("High Pass Filter Frequency. Sets the cutoff frequency of the Hi-pass Filter for the selected pads. Please note that when this value is higher than the Hi-pass Filter cutoff frequency the delayed signal will not be audible."));
         parameterHoverLabel->setText(String(hpfFrequencySlider->getValue(), 0), false);
     }
     else if (alphaTouchMenu->isMouseOver(true))

@@ -2339,7 +2339,6 @@ void AppDocumentState::importSampleBank (Array<int> selectedPads_, bool openBrow
                 }
             }
         }
-        
     }
 }
 

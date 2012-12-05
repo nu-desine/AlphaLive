@@ -189,4 +189,5 @@ void Oscillator::setSampleRate (double value)
 void Oscillator::restart()
 {
     currentPhase = 0.0; 
+    currentSample = 0;
 }

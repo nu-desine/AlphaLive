@@ -24,6 +24,10 @@
 #include "../Views/MainComponent.h"
 #include "../AlphaLiveLookandFeel.h"
 #include "../../Application/CommonInfoBoxText.h"
+#include "../Binary Data/BinaryDataNew.h"
+
+#define X_OFFSET 44
+#define Y_OFFSET 537
 
 enum
 {
@@ -37,51 +41,72 @@ enum
 EliteControlsComponent::EliteControlsComponent(MainComponent &ref)
         : mainComponentRef(ref)
 {
-    Path dialShape, buttonShape;
-    dialShape.addEllipse (0, 0, 50, 50);
+    Path buttonShape;
     buttonShape.addRectangle(0, 0, 30, 30);
-    
-    addAndMakeVisible (dial1Button = new ShapeButton("Dial 1", AlphaColours::blue, AlphaColours::lightblue, AlphaColours::blue));
-    dial1Button->setShape(dialShape, true, true, false);
-    dial1Button->addListener(this);
-    dial1Button->addMouseListener(this, true);
-    addAndMakeVisible (dial2Button = new ShapeButton("Dial 2", AlphaColours::blue, AlphaColours::lightblue, AlphaColours::blue));
-    dial2Button->setShape(dialShape, true, true, false);
-    dial2Button->addListener(this);
-    dial2Button->addMouseListener(this, true);
-    
-    addAndMakeVisible (button1Button = new ShapeButton("Button 1", AlphaColours::blue, AlphaColours::lightblue, AlphaColours::blue));
-    button1Button->setShape(buttonShape, true, true, false);
-    button1Button->addListener(this);
-    button1Button->addMouseListener(this, true);
-    addAndMakeVisible (button2Button = new ShapeButton("Button 2", AlphaColours::blue, AlphaColours::lightblue, AlphaColours::blue));
-    button2Button->setShape(buttonShape, true, true, false);
-    button2Button->addListener(this);
-    button2Button->addMouseListener(this, true);
-    addAndMakeVisible (button3Button = new ShapeButton("Button 3", AlphaColours::blue, AlphaColours::lightblue, AlphaColours::blue));
-    button3Button->setShape(buttonShape, true, true, false);
-    button3Button->addListener(this);
-    button3Button->addMouseListener(this, true);
+	
+	Image *dial1Image = new Image(ImageCache::getFromMemory(BinaryDataNew::controlsymbol_png, BinaryDataNew::controlsymbol_pngSize)); 
+	addAndMakeVisible(dial1Button = new ModeButton(dial1Image));
+	dial1Button->addListener(this);
+	dial1Button->setRadioGroupId (84);
+    dial1Button->addMouseListener(this, false);
+	
+	Image *dial2Image = new Image(ImageCache::getFromMemory(BinaryDataNew::controlsymbol_png, BinaryDataNew::controlsymbol_pngSize)); 
+	addAndMakeVisible(dial2Button = new ModeButton(dial2Image));
+	dial2Button->addListener(this);
+	dial2Button->setRadioGroupId (84);
+    dial2Button->addMouseListener(this, false);
+	
+	addAndMakeVisible(button1Button = new AlphaSquareButton(2.0f));
+	button1Button->addListener(this);
+	button1Button->setRadioGroupId (84);
+    button1Button->addMouseListener(this, false);
+	
+	addAndMakeVisible(button2Button = new AlphaSquareButton(2.0f));
+	button2Button->addListener(this);
+	button2Button->setRadioGroupId (84);
+    button2Button->addMouseListener(this, false);
+	
+	addAndMakeVisible(button3Button = new AlphaSquareButton(2.0f));
+	button3Button->addListener(this);
+	button3Button->setRadioGroupId (84);
+    button3Button->addMouseListener(this, false);
     
 }
 
 EliteControlsComponent::~EliteControlsComponent()
 {
-
+    deleteAllChildren();
 }
 
 void EliteControlsComponent::resized()
 {
-    dial1Button->setBounds(4, 0, 30, 30);
-    dial2Button->setBounds(45, 0, 30, 30);
+    dial1Button->setBounds(58-X_OFFSET, 545-Y_OFFSET, 32, 32);
+    dial2Button->setBounds(102-X_OFFSET, 545-Y_OFFSET, 32, 32);
     
-    button1Button->setBounds(0, 40, 20, 20);
-    button2Button->setBounds(30, 40, 20, 20);
-    button3Button->setBounds(60, 40, 20, 20);
+    button1Button->setBounds(52-X_OFFSET, 593-Y_OFFSET, 20, 20);
+    button2Button->setBounds(86-X_OFFSET, 593-Y_OFFSET, 20, 20);
+    button3Button->setBounds(120-X_OFFSET, 593-Y_OFFSET, 20, 20);
 }
 
 void EliteControlsComponent::paint (Graphics& g)
 {
+	
+	g.setColour(Colours::black);
+	
+	g.fillRoundedRectangle(49-X_OFFSET, 590-Y_OFFSET, 26, 26, 2);
+	g.fillRoundedRectangle(83-X_OFFSET, 590-Y_OFFSET, 26, 26, 2);
+	g.fillRoundedRectangle(117-X_OFFSET, 590-Y_OFFSET, 26, 26, 2);
+	g.fillEllipse(55-X_OFFSET, 542-Y_OFFSET, 38, 38);
+	g.fillEllipse(99-X_OFFSET, 542-Y_OFFSET, 38, 38);
+	
+	g.setColour(Colours::grey.withAlpha(0.3f));
+	
+	g.drawRoundedRectangle(49-X_OFFSET, 590-Y_OFFSET, 26, 26, 2, 1.0f);
+	g.drawRoundedRectangle(83-X_OFFSET, 590-Y_OFFSET, 26, 26, 2, 1.0f);
+	g.drawRoundedRectangle(117-X_OFFSET, 590-Y_OFFSET, 26, 26, 2, 1.0f);
+	g.drawEllipse(55-X_OFFSET, 542-Y_OFFSET, 38, 38, 1.0f);
+	g.drawEllipse(99-X_OFFSET, 542-Y_OFFSET, 38,38, 1.0f);
+	
     
 }
 
@@ -103,6 +128,17 @@ void EliteControlsComponent::buttonClicked (Button* button)
     
     mainComponentRef.setEliteControlsSettingsDisplay(clickedControl);
     
+}
+
+void EliteControlsComponent::turnOffButtons()
+{
+	
+	dial1Button->setToggleState(false, false);
+	dial2Button->setToggleState(false, false);
+	button1Button->setToggleState(false, false);
+	button2Button->setToggleState(false, false);
+	button3Button->setToggleState(false, false);
+	
 }
 
 //void EliteControlsComponent::updateDisplay()

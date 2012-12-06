@@ -35,6 +35,7 @@
 
 class GuiPadLayout :    public Component,
                         public Button::Listener,
+                        public KeyListener,
                         public Observer //so this class can 'observe' alphaLiveEngine
 
 {
@@ -73,6 +74,8 @@ public:
     //which will only be available when a single pad is selected
     void copyPadSettings();
     void pastePadSettings();
+    
+    bool keyPressed (const KeyPress &key, Component *originatingComponent);
 	
 private:
 	

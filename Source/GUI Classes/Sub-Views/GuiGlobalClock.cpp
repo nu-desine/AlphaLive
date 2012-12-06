@@ -41,7 +41,7 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
     addAndMakeVisible(tempoSlider = new AlphaSlider());
     tempoSlider->setRange(60.0, 360.0, 0.1);
     tempoSlider->addListener(this);
-    tempoSlider->setComponentValue(120.0);
+    tempoSlider->setValue(120.0);
     tempoSlider->addMouseListener(this, true);
 	
 	//beats per bar buttons
@@ -216,15 +216,10 @@ bool GuiGlobalClock::update(const Subject& theChangedSubject)
         //if beat indicator needs updating
         if (mainComponentRef.getAlphaLiveEngineRef().getGlobalClock()->getGuiUpdateFlag() == 1)
         {
-            //update the beat label number
-            //beatNumberLabel->setText(String(mainComponentRef.getOscRoutingRef().getGlobalClock()->getBeatNumber()), true);
             int beat = mainComponentRef.getAlphaLiveEngineRef().getGlobalClock()->getBeatNumber();
-            //update the bar label number
-            //barNumberLabel->setText(String(mainComponentRef.getOscRoutingRef().getGlobalClock()->getBarNumber()), true);
             int bar = mainComponentRef.getAlphaLiveEngineRef().getGlobalClock()->getBarNumber();
-			
 			currentBeatNumber = (bar * beat) + (beat -1);
-			
+        
             repaint(606-OFFSET_X, 6, 131, 131);
         }
         //if transport button needs updating
@@ -310,7 +305,7 @@ void GuiGlobalClock::triggerTransportButton()
 
 void GuiGlobalClock::updateDisplay()
 {
-    tempoSlider->setComponentValue(AppSettings::Instance()->getGlobalTempo());
+    tempoSlider->setValue(AppSettings::Instance()->getGlobalTempo());
 	
     beatsPerBarButtons[AppSettings::Instance()->getBeatsPerBar()-2]->setToggleState(true, false);
     quantizationValueButtons[6-AppSettings::Instance()->getQuantizationValue()]->setToggleState(true, false);

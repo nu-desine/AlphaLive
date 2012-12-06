@@ -44,6 +44,10 @@ SceneComponent::SceneComponent(AppDocumentState &ref, ModeController &ref2)
     
     selectedSceneNumber = 0;
     slot[0]->setStatus(2);
+    
+    //set this component to listen to itself
+    addKeyListener(this);
+    setWantsKeyboardFocus(true);
 }
 
 SceneComponent::~SceneComponent()
@@ -140,16 +144,59 @@ bool SceneComponent::update(const Subject& theChangedSubject)
     if (&theChangedSubject == &mSubject)
     {
         int sceneNumber = AppSettings::Instance()->padSettings[mSubject.getPadNumber()]->getControllerSceneNumber()-1;
-        
-        //load up slot data 
-        //slotClicked(slot[sceneNumber]);
-        slot[sceneNumber]->selectSlot();
-        
+        selectSlot(sceneNumber);
     }
     
     return true;
 }
 
+void SceneComponent::selectSlot (int slotNumber)
+{
+    
+    //load up slot data 
+    //slotClicked(slot[sceneNumber]);
+    
+    if(slotNumber == -1) //move to next slot number
+    {
+        slotNumber = selectedSceneNumber + 1;
+        
+        if (slotNumber >= NO_OF_SCENES)
+            slotNumber = 0;
+        
+    }
+    else if (slotNumber == -2)  //move to previous slot number
+    {
+        slotNumber = selectedSceneNumber - 1;
+        
+        if (slotNumber < 0)
+            slotNumber = NO_OF_SCENES-1;
+    }
+    
+    //else, slotNumber represents the actualy slot number that needs to be selected
+    
+    
+    //should I be locking the message thread like I'm currently doing?
+    //or could this cause delays/lagging, in which case I should use an aSyncUpdater?
+    const MessageManagerLock mmLock;
+    
+    slot[slotNumber]->selectSlot();
+}
+
+bool SceneComponent::keyPressed (const KeyPress &key, Component *originatingComponent)
+{
+    if (key == KeyPress::downKey || key == KeyPress::rightKey)
+    {
+        selectSlot(-1);
+        return true;
+    }
+    else if (key == KeyPress::upKey || key == KeyPress::leftKey)
+    {
+        selectSlot(-2);
+        return true;
+    }
+    else
+        return false; //incase the keypress is a shortcut that the parent needs to react to.
+}
 
 /*
 void SceneComponent::setCurrentlySelectedPad (Array<int> selectedPads_)

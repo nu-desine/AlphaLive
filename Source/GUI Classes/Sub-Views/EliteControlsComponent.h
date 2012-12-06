@@ -24,6 +24,9 @@
 #define H_ELITECOMPONENTSETTINGS
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
+#include "../Custom Components/General/ModeButton.h"
+#include "../Custom Components/General/AlphaSquareButton.h"
+
 
 class MainComponent;
 class EliteControlsComponent :  public Component,
@@ -39,6 +42,7 @@ public:
 	void paint (Graphics& g);
     
     void buttonClicked (Button* button);
+	void turnOffButtons();
     //void updateDisplay();
 	
 	void mouseEnter (const MouseEvent &e);
@@ -47,7 +51,8 @@ public:
 private:
     
     MainComponent &mainComponentRef;
-    ScopedPointer <ShapeButton> dial1Button, dial2Button, button1Button, button2Button, button3Button;
+    ModeButton *dial1Button, *dial2Button;
+	AlphaSquareButton *button1Button, *button2Button, *button3Button;
 	
 };
 

@@ -24,7 +24,7 @@
 
 #define MAX_PRESSURE 511.0
 
-#define MIDI_OUT_REPORT_ID 0x06
+#define MIDI_OUT_COMMAND_ID 0x06
 
 //To allow ASIO on the windows build, put the ASIO SDK into Source/Third Party Libraries, and put
 //#include <../Source/Third Party Libraries/ASIOSDK2/common/iasiodrv.h> in juce_audio_devices.cpp file

@@ -27,8 +27,11 @@
 
 struct EliteDialData 
 {
+    double prevValue;
+    int status;
     int control;
     
+    int midiControllerType; //0 = absolute, 1 = relative
     int midiCcNumber;
     int midiChannel;
     int midiMinRange;
@@ -38,6 +41,7 @@ struct EliteDialData
     String oscIpAddress;
     double oscMinRange;
     double oscMaxRange;
+    double oscStepValue;
     
 };
 
@@ -48,6 +52,7 @@ struct EliteDialData
 
 struct EliteButtonData 
 {
+    int status;
     int control;
     
     int sceneNumber;
@@ -126,7 +131,10 @@ public:
     bool getCopyExternalFiles();
     
     //Elite Controls Stuff
+    void setEliteDialPrevValue(double value, int dialNumber);
     void setEliteDialControl(int value, int dialNumber);
+    void setEliteDialStatus(int value, int dialNumber);
+    void setEliteDialMidiControllerType(int value, int dialNumber);
     void setEliteDialMidiCcNumber(int value, int dialNumber);
     void setEliteDialMidiChannel(int value, int dialNumber);
     void setEliteDialMidiMinRange(int value, int dialNumber);
@@ -135,8 +143,12 @@ public:
     void setEliteDialOscIpAddress(String value, int dialNumber);
     void setEliteDialOscMinRange(double value, int dialNumber);
     void setEliteDialOscMaxRange(double value, int dialNumber);
+    void setEliteDialOscStepValue(double value, int dialNumber);
     
+    double getEliteDialPrevValue(int dialNumber);
     int getEliteDialControl(int dialNumber);
+    int getEliteDialStatus(int dialNumber);
+    int getEliteDialMidiControllerType(int dialNumber);
     int getEliteDialMidiCcNumber(int dialNumber);
     int getEliteDialMidiChannel(int dialNumber);
     int getEliteDialMidiMinRange(int dialNumber);
@@ -145,8 +157,10 @@ public:
     String getEliteDialOscIpAddress(int dialNumber);
     double getEliteDialOscMinRange(int dialNumber);
     double getEliteDialOscMaxRange(int dialNumber);
+    double getEliteDialOscStepValue(int dialNumber);
     
     void setEliteButtonControl(int value, int buttonNumber);
+    void setEliteButtonStatus(int value, int buttonNumber);
     void setEliteButtonSceneNumber(int value, int buttonNumber);
     void setEliteButtonMidiCcNumber(int value, int buttonNumber);
     void setEliteButtonMidiChannel(int value, int buttonNumber);
@@ -158,6 +172,7 @@ public:
     void setEliteButtonOscOnNumber(double value, int buttonNumber);
     
     int getEliteButtonControl (int buttonNumber);
+    int getEliteButtonStatus(int buttonNumber);
     int getEliteButtonSceneNumber(int buttonNumber);
     int getEliteButtonMidiCcNumber(int buttonNumber);
     int getEliteButtonMidiChannel(int buttonNumber);

@@ -82,6 +82,9 @@
 #include "../My IO Classes/OscOutput.h"
 #include "GlobalClock.h"
 #include "../Audio Processing/PanControl.h"
+#include "EliteControls.h"
+
+class MainComponent;
 
 class AlphaLiveEngine :     public Subject, //so this class can notify observers
                             public AudioIODeviceCallback, //so this class handles the audio output
@@ -93,10 +96,15 @@ public:
     ~AlphaLiveEngine();
     
     void hidInputCallback (int pad, int value, int velocity);
+    void removeMidiOut();
+    
     void handleAsyncUpdate();
     int getRecievedPad();
     int getRecievedValue();
     void playPadFromMouse (int pad, int value);
+    
+    MainComponent* getMainComponent();
+    void setMainComponent(MainComponent *mainComponent_);
     
     AudioDeviceManager& getAudioDeviceManager();
     ModeMidi* getModeMidi(); //used by PadSettings to access the settings accessors
@@ -149,9 +157,11 @@ private:
     ModeSampler *modeSampler;
     ModeSequencer *modeSequencer;
     ModeController *modeController;
+    EliteControls *eliteControls;
     
     int recievedPad;
     float recievedValue;
+    float recievedVelocity;
     
     //midi output device
     MidiOutput *midiOutputDevice; //is this actually needed?
@@ -192,6 +202,8 @@ private:
     //index 2 = group 3 etc...). This will allow pads to be easily found and turned off when a new pad
     //of that group is triggered
     int currentExclusivePad[23];
+    
+    MainComponent *mainComponent;
     
 };
 

@@ -38,7 +38,7 @@
 //==============================================================================
 MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, DocumentWindow* owner_)
                         :   Thread("Info Box Updater"),
-alphaLiveEngineRef(ref),
+                            alphaLiveEngineRef(ref),
                             appDocumentStateRef(ref2),
                             owner(owner_)
                             
@@ -53,6 +53,9 @@ alphaLiveEngineRef(ref),
     
     //attach this class to the subject class
     appDocumentStateRef.attach(this);
+    
+    //allow AlphaLive Engine to communicate with this class (used by the elite controls)
+    alphaLiveEngineRef.setMainComponent(this);
     
     //Look-and-feel stuff
     LookAndFeel::setDefaultLookAndFeel (&alphaLiveLookAndFeel);
@@ -154,6 +157,14 @@ alphaLiveEngineRef(ref),
     //scene component
     addAndMakeVisible(sceneComponent = new SceneComponent(appDocumentStateRef, *alphaLiveEngineRef.getModeController())); //pass in appDocumentStateRef so that appDocumentStateRef function calls can be made within sceneComponent
     sceneComponent->addMouseListener(this, true);
+	
+	//create pan slider
+    addAndMakeVisible(panSlider = new AlphaRotarySlider((225 * (M_PI / 180)), (495 * (M_PI / 180)), 65));
+	panSlider->setRotaryParameters((225 * (M_PI / 180)), (495 * (M_PI / 180)),true);
+    panSlider->setRange(0.0, 1.0);
+    panSlider->addListener(this);
+    panSlider->setValue(0.5, dontSendNotification);
+    panSlider->addMouseListener(this, false);
     
     //create gain slider
     //addAndMakeVisible(gainSlider = new AlphaRotarySlider((225 * (M_PI / 180)), (530 * (M_PI / 180)), 81));
@@ -162,16 +173,8 @@ alphaLiveEngineRef(ref),
 	gainSlider->setRotaryParameters((225 * (M_PI / 180)), (495 * (M_PI / 180)),true);
     gainSlider->setRange(0.0, 2.0);
     gainSlider->addListener(this);
-	gainSlider->setValue(1.0, false);
+	gainSlider->setValue(1.0, dontSendNotification);
     gainSlider->addMouseListener(this, true);
-	
-	//create pan slider
-    addAndMakeVisible(panSlider = new AlphaRotarySlider((225 * (M_PI / 180)), (495 * (M_PI / 180)), 65));
-	panSlider->setRotaryParameters((225 * (M_PI / 180)), (495 * (M_PI / 180)),true);
-    panSlider->setRange(0.0, 1.0);
-    panSlider->addListener(this);
-    panSlider->setValue(0.5, false);
-    panSlider->addMouseListener(this, false);
     
     //gain and pan label
     addAndMakeVisible(gainPanValueLabel = new Label("value label", String::empty));
@@ -224,8 +227,9 @@ alphaLiveEngineRef(ref),
     toolbox->addMouseListener(this, true);
     
     //elite controls display
-    addAndMakeVisible(eliteControls = new EliteControlsComponent(*this));
+    addChildComponent(eliteControls = new EliteControlsComponent(*this));
     eliteControls->addMouseListener(this, true);
+	eliteControls->setInterceptsMouseClicks(false, true);
     
     
     //pop up views
@@ -262,6 +266,7 @@ alphaLiveEngineRef(ref),
     modeSequencerButton->setVisible(false);
     modeControllerButton->setVisible(false);
     globalSettingsButton->setVisible(false);
+	eliteControls->setVisible(true);
     toolbox->setVisible(false); //or maybe it links to projects directory?
     midiPiano->setActive(false);
     
@@ -292,7 +297,7 @@ void MainComponent::resized()
     guiControllerMode->setBounds(0, 0, getWidth(), getHeight());
 	guiGlobalPadSettings->setBounds(0, 0, getWidth(), getHeight());
 	
-    //eliteControls->setBounds(50, 530, 100, 100);
+    eliteControls->setBounds(44, 537, 100, 80);
     eliteControlsSettings->setBounds(0, 0, getWidth(), getHeight());
     
 	midiPiano->setBounds(0, 0, 660, 685);
@@ -425,8 +430,8 @@ bool MainComponent::update(const Subject& theChangedSubject)
             //update GUI things (GUI of global settings) which aren't updated by setCurrentlySelectedPad
             //these things could be put in setCurrentlySelectedPad but they'll be updated everytime a pad is selected which would be inefficent
             //there is still some inefficiency in that these things will be updated everytime a sequence is loaded... sort this out?!!
-            gainSlider->setValue(AppSettings::Instance()->getGlobalGain(), false); 
-            panSlider->setValue(AppSettings::Instance()->getGlobalPan(), false);
+            gainSlider->setValue(AppSettings::Instance()->getGlobalGain(), dontSendNotification); 
+            panSlider->setValue(AppSettings::Instance()->getGlobalPan(), dontSendNotification);
             
             //set the mode colour ring of each pad
             for (int i = 0; i <= 47; i++)
@@ -646,6 +651,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
             //whilst an elite control display is currently in view
             eliteControlsSettings->setDisplay(selectedEliteControl);
             eliteControlsSettings->setVisible(true);
+			//eliteControls->turnOffButtons();
         }
         
         //repaint(); //this is called in setGlobalPadSettingsDisplay() above
@@ -663,6 +669,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
 		globalSettingsButton->setVisible(true);
         toolbox->setVisible(true); //or maybe it links to projects directory?
         eliteControlsSettings->setVisible(false);
+		eliteControls->turnOffButtons();
 		repaint();
     }
     
@@ -997,6 +1004,11 @@ Toolbox* MainComponent::getToolbox()
     return toolbox;
 }
 
+SceneComponent* MainComponent::getSceneComponent()
+{
+    return sceneComponent;
+}
+
 
 
 void MainComponent::setInfoTextBoxText (String text)
@@ -1150,7 +1162,7 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     }
     else if (gainSlider->isMouseOver(true)==true)
     {
-        setInfoTextBoxText (translate("Global Gain. Controls Alphalive's master gain."));
+        setInfoTextBoxText (translate("Global Gain. Controls AlphaLive's master gain."));
     }
     else if (panSlider->isMouseOver(true)==true)
     {
@@ -1185,7 +1197,7 @@ void MainComponent::mouseEnter (const MouseEvent &e)
         
         if (PAD_SETTINGS->getMode() == 1) //midi mode
         {
-            setInfoTextBoxText (translate("MIDI Note Selector. Use the piano keyboard to select the MIDI notes of the selected pads. Click to select a single note for all selected pads, or cmd-click (Mac) or ctrl-click (Windows) to select multiple notes to apply to the selected pads. When selecting multiple notes, the order the notes are selected will be the order they are applied to the pads. Alt-click transpose a set of notes."));
+            setInfoTextBoxText (translate("MIDI Note Selector. Use this piano to select the MIDI notes of the selected pads. Use a regular click to select a single note for all selected pads, or cmd-click (Mac) or ctrl-click (Windows) to select multiple notes to apply to a set of pads. When selecting multiple notes, the order of selected notes will be applied to the pads in the order they were selected. Alt-click to transpose a set of notes."));
         }
         else if (PAD_SETTINGS->getMode() == 3) //sequencer mode
         {
@@ -1230,7 +1242,7 @@ void MainComponent::setLocalisation()
     
     if (countryCode == "de" || countryCode == "deu") //german
     {
-        File transFile(appDir + "Application Data/de_trans");
+        File transFile(appDir + "Application Data" + File::separatorString + "trans_de");
         trans = new LocalisedStrings (transFile);
         LocalisedStrings::setCurrentMappings(trans);
         
@@ -1238,7 +1250,7 @@ void MainComponent::setLocalisation()
     }
     else if (countryCode == "ja" || countryCode == "jpn") //japanese
     {
-        File transFile (appDir + "Application Data/ja_trans");
+        File transFile (appDir + "Application Data" + File::separatorString + "trans_ja");
         trans = new LocalisedStrings (transFile);
         LocalisedStrings::setCurrentMappings(trans);
         alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
@@ -1257,6 +1269,74 @@ void MainComponent::setLocalisation()
      
 }
 
+
+void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
+{
+    //command signifies which control within this class needs changing
+    //eliteControlValue is the value sent by the elite dial  
+    
+    //===get slider depending on command value===
+    Slider *sliderToChange = nullptr;
+    
+    //global gain
+    if (command == 1)
+        sliderToChange = gainSlider;
+    //global pan
+    else if (command == 2)
+        sliderToChange = panSlider;
+    
+    
+    //===process slider value===
+    if (sliderToChange != nullptr)
+    {
+        double newVal = 0;
+        double currentVal = sliderToChange->getValue();
+        double maxValue = sliderToChange->getMaximum();
+        double minValue = sliderToChange->getMinimum();
+        double incremValue = 0.01; //is this value suitable?
+        
+        //incremented value
+        if (eliteControlValue >= 1 && eliteControlValue <= 63)
+            newVal = currentVal + (eliteControlValue * incremValue); //too simple?
+        //decremented value
+        else if (eliteControlValue >= 64 && eliteControlValue <= 127)
+            newVal = currentVal - ((128 - eliteControlValue) * incremValue); //too simple?
+        
+        //if produced value is out of range, set in range
+        if (!(newVal >= minValue && newVal <= maxValue))
+        {
+            if (newVal > maxValue)
+                newVal = maxValue;
+            else if (newVal < minValue)
+                newVal = minValue;
+        }
+        
+        //if new value is different from the previous value, change the slider value
+        if (newVal != currentVal)
+        {
+            //should I be locking the message thread like I'm currently doing?
+            //or could this cause delays/lagging, in which case I should use an aSyncUpdater?
+            const MessageManagerLock mmLock;
+            
+            sliderToChange->setValue(newVal, dontSendNotification);
+            std::cout << "New Slider Value: " << newVal << std::endl;
+        }
+    }
+    
+}
+
+
+void MainComponent::editInterfaceFromDeviceConnectivity (int command)
+{
+    //This function will be used to change the appearence of the interface
+    //when a HID device is connected on runtime.
+    
+    //remove midi output selector from preferences view
+    if (command == 1)
+    {
+        preferencesComponent->removeMidiOutputSelector();
+    }
+}
 
 //=========================command manager stuff=================================
 ApplicationCommandTarget* MainComponent::getNextCommandTarget()

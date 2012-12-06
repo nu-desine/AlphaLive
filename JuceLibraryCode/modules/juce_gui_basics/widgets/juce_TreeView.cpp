@@ -242,7 +242,7 @@ public:
     String getTooltip()
     {
         Rectangle<int> pos;
-        if (TreeViewItem* const item = findItemAt (getMouseXYRelative().getY(), pos))
+        if (TreeViewItem* const item = findItemAt (getMouseXYRelative().y, pos))
             return item->getTooltip();
 
         return owner.getTooltip();
@@ -1271,7 +1271,8 @@ void TreeViewItem::deselectAllRecursively()
 }
 
 void TreeViewItem::setSelected (const bool shouldBeSelected,
-                                const bool deselectOtherItemsFirst)
+                                const bool deselectOtherItemsFirst,
+                                const NotificationType notify)
 {
     if (shouldBeSelected && ! canBeSelected())
         return;
@@ -1285,7 +1286,8 @@ void TreeViewItem::setSelected (const bool shouldBeSelected,
         if (ownerView != nullptr)
             ownerView->repaint();
 
-        itemSelectionChanged (shouldBeSelected);
+        if (notify != dontSendNotification)
+            itemSelectionChanged (shouldBeSelected);
     }
 }
 

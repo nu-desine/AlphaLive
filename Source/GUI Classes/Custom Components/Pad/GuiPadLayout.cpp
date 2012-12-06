@@ -162,7 +162,10 @@ GuiPadLayout::GuiPadLayout(AlphaLiveEngine &subject, MainComponent &ref)
     shouldDisplaySettings = false;
     //currentlySelectedPad = 99;
     selectedPads.clear(); //should I call clearQuick() instead?
-	
+    
+    //set this component to listen to itself
+    addKeyListener(this);
+    setWantsKeyboardFocus(true);
 }
 
 GuiPadLayout::~GuiPadLayout()
@@ -295,7 +298,6 @@ bool GuiPadLayout::update(const Subject& theChangedSubject)
             //However is strange how this doesn't apply when using alt-click to emulate mouse clicks!!
 
         }
-        
     }
     
     return true;
@@ -595,6 +597,41 @@ void GuiPadLayout::deselectAllPads()
     
     mainComponentRef.setCurrentlySelectedPad(selectedPads);
 }
+
+
+bool GuiPadLayout::keyPressed (const KeyPress &key, Component *originatingComponent)
+{
+    int currentPad;
+    
+    if (selectedPads.size() > 0)
+    {
+        currentPad = selectedPads[0];
+    }
+    else
+        currentPad = -1;
+    
+    if (key == KeyPress::upKey || key == KeyPress::leftKey)
+    {
+        int nextPad = currentPad+1;
+        if (nextPad > 47)
+            nextPad = 0;
+        
+        pads[nextPad]->getButton()->triggerClick();
+        return true;
+    }
+    else if (key == KeyPress::downKey || key == KeyPress::rightKey)
+    {
+        int nextPad = currentPad-1;
+        if (nextPad < 0)
+            nextPad = 47;
+        
+        pads[nextPad]->getButton()->triggerClick();
+        return true;
+    }
+    else
+        return false; //incase the keypress is a shortcut that the parent needs to react to.
+}
+
 
 void GuiPadLayout::mouseEnter (const MouseEvent &e)
 {

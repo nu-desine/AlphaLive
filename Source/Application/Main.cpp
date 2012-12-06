@@ -132,6 +132,8 @@ public:
                 appDocumentState->loadProject(false, StoredSettings::getInstance()->recentFiles.getFile(0));
         }
         
+        //Tell the HidComms class that it can start recieving and processing pad and elite control reports.
+        alphaLiveEngine->setAppHasInitialised();
     }
 
     
@@ -248,7 +250,8 @@ public:
             CommandIDs::Open,
             CommandIDs::Save,
             CommandIDs::SaveAs,
-            CommandIDs::CleanUpProject
+            CommandIDs::CleanUpProject,
+            CommandIDs::updateFirmware
         };
         
         commands.addArray (ids, numElementsInArray (ids));
@@ -298,6 +301,12 @@ public:
                             "Removes any unused audio files from the projects 'Audio Files' directory.",
                             CommandCategories::FileCommands, 0);
         }
+        else if (commandID == CommandIDs::updateFirmware)
+        {
+            result.setInfo (translate("Update Firmware..."),
+                            "Updates the firmware on the AlphaSphere device.",
+                            CommandCategories::FileCommands, 0);
+        }
     }
     
     bool perform (const InvocationInfo& info)
@@ -326,6 +335,97 @@ public:
             appDocumentState->removeUneededAudioFiles(false);
         }
         
+        else if(info.commandID == CommandIDs::updateFirmware)
+        {
+            /*
+             Firmware updater feature.
+             Below is the code needed to apply a firmware update to the AlphaSphere.
+             It creates a ChildProcess object that runs the bootloader command line app, passing in the
+             mmcu type and hex file destination as parameters. It then returns the output as a String.
+             The bootloader app and hex file should exist in the Application Data directory.
+             
+             For now this code is just lauched from a menu bar item and expects the user to manually put the
+             device into bootloader mode by pressing the reset button.
+             
+             Eventually firmware updating should be applied using the following method:
+             - The hex file should be numbered to signify the firware version (e.g. SphereWare_1_0.hex, SphereWare_1_1.hex).
+             - When the sphere is connected to AlphaLive it sends a report stating its current firmware version.
+             - If the included hex file has a greater number than the current firmware version, it pops up
+             an alert window telling the user that there is a new firmware version available and asks if they want to update
+             it (stressing that they should as otherwise it could limit the softwares functionality - Maybe the user shouldn't
+             have an option to not update it?). 
+             - The software sends a HID report to the device to change it to the bootloader, an installs the new firmware.
+             - The device will then automatically be reconnected and the user can rock out the new firmware. Boo ya. 
+             
+             Things to consider:
+             - Error handling and feedback - make sure all possible errors can be caught and displayed.
+             - Where in the AlphaLive code should this be placed when the above method is implemented? 
+             - What about if we introduce different firmware versions for different types of foam? We would
+             then need an option somewhere for the user to change the firmware, probably within Preferences. 
+             
+             */
+            
+            ChildProcess bootloader;
+            
+            StringArray arguments;
+            String appDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString);
+            
+            #if JUCE_MAC
+            File bootloaderFile(appDir + "Application Data" + File::separatorString + "firmwareUpdater");
+            #endif
+            #if JUCE_WINDOWS
+            File bootloaderFile(appDir + "Application Data" + File::separatorString + "firmwareUpdater.exe");
+            #endif
+            //LINUX?
+            
+            String mmcuString("-mmcu=atmega32u4");
+            
+            //Get the hexFile. If we start numbering it we will have to find the file differently. 
+            File hexFile(appDir + "Application Data" + File::separatorString + "SphereWare.hex");
+            
+            if (bootloaderFile.exists() == true && hexFile.exists() == true)
+            {
+                arguments.add(bootloaderFile.getFullPathName());
+                arguments.add(mmcuString);
+                
+                #if JUCE_MAC
+                arguments.add(hexFile.getFullPathName());
+                #endif
+                #if JUCE_WINDOWS
+                arguments.add(hexFile.getFullPathName().quoted());  //Needs to be quoted else updaterFirmware.exe
+                                                                    //thinks the whole filepath is just from the last space.
+                #endif
+                //LINUX?
+                
+                //Send HID report here to change the device to the bootloader.
+                //For now, just reconnect the device with the reset button held as per usual
+                
+                bootloader.start(arguments);
+                
+                String bootloaderReport =  bootloader.readAllProcessOutput();
+                
+                std::cout << "..." << bootloaderReport << "..." << std::endl;
+                if (bootloaderReport.contains("Unable to open device"))
+                {
+                    AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Cannot Find Device!"), translate("The AlphaSphere does not appear to be connected to the computer. Please connect it and try again."));
+                }
+                else if (bootloaderReport.isEmpty())
+                {
+                    AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Firmware Updated!"), translate("The AlphaSphere firmware has been successfully updated."));
+                }
+                else
+                {
+                    //catch any other outputs (errors most likely)
+                    AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Error!"), bootloaderReport);
+                }
+                
+            }
+            else
+            {
+                AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Missing Files!"), translate("One or more of the files needed to update the firmware are missing. Please consult the FAQ of the reference manual."));
+            }
+        }
+        
         return true;
     }
     
@@ -346,3 +446,4 @@ private:
 //==============================================================================
 // This macro generates the main() routine that starts the app.
 START_JUCE_APPLICATION(AlphaSoftApplication)
+

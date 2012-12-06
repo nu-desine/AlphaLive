@@ -45,7 +45,7 @@ ModeController::~ModeController()
 
 //this function is called from AlphaLiveEngine whenever an OSC message is recieved
 //who's pad is set to Controller mode
-void ModeController::getOscData(int pad, int value)
+void ModeController::getInputData(int pad, int value, int velocity)
 {
     padNumber = pad;
     padValue = value;
@@ -56,16 +56,12 @@ void ModeController::getOscData(int pad, int value)
     }
     else if (PAD_SETTINGS->getControllerControl() == 4) //osc controller
     {
-        //would be nice if this option wasn't in the controller mode and was in the OSC routing class, as there is a very slight delay. would it make a noticeable difference?
-        //or is the delay down to the code in the OscOutput class?
-        //actually, is there a delay compared to the reaction in other modes???
-        
         //should i bet getting the ip addresses and port numbers for each pad beforehand (is it to cpu heavy accessing PadSettings everytime there is an incoming message?)?
         
         //scale the range back down to 0-127
         padValue = padValue * (127.0/MAX_PRESSURE);
         
-        oscOutput.transmitThruMessage(padNumber+1, padValue, PAD_SETTINGS->getControllerOscIpAddress(), PAD_SETTINGS->getControllerOscPort());
+        oscOutput.transmitOutputMessage(padNumber+1, padValue, PAD_SETTINGS->getControllerOscIpAddress(), PAD_SETTINGS->getControllerOscPort());
     }
     
     else if (PAD_SETTINGS->getControllerControl() == 2) //MIDI program change
@@ -98,12 +94,16 @@ void ModeController::getOscData(int pad, int value)
 //called when pad is set to the scene switcher control
 void ModeController::changeScene()
 {
+    //instead of using Subject/Observer method here to communicate with SceneComponent,
+    //now it would be better to pass in a pointer to MainComponent from AlphaLiveEngine
+    //and access SceneComponent that way like recently implemented for the Elite Controls.
+    //This would make the Subject/Observer here redundant so I can remove it.
+    
     if (prevPadValue[padNumber] == 0 && padValue > 0)
     {
         triggerAsyncUpdate();
         //if there is a 'two clicks' error... it's probably being caused here!
         //how can i fix this?
-        
     }
 
 }
@@ -114,8 +114,7 @@ void ModeController::sendMidiMessage(MidiMessage midiMessage)
 {
     if (alphaLiveEngineRef.hasOpenedHidDevice() == true)
     {
-        uint8 *dataToSend;
-        memset(dataToSend,0,sizeof(dataToSend));
+        unsigned char dataToSend[5];
         
         uint8 *rawMidiMessage = midiMessage.getRawData();
         
@@ -127,7 +126,7 @@ void ModeController::sendMidiMessage(MidiMessage midiMessage)
         
         dataToSend[0] = 0x00;   //if no reportID's are defined in the descriptor,
                                 //must send 0x00. First byte MUST be the report ID.
-        dataToSend[1] = MIDI_OUT_REPORT_ID;
+        dataToSend[1] = MIDI_OUT_COMMAND_ID;
         dataToSend[2] = rawMidiMessage[0]; //midi status byte
         dataToSend[3] = rawMidiMessage[1]; //midi data byte 1
         dataToSend[4] = rawMidiMessage[2]; //midi data byte 2

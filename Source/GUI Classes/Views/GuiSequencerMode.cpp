@@ -55,7 +55,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	numberOfSequencesSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
 	numberOfSequencesSlider->setRange(0, NO_OF_SEQS, 1);
     numberOfSequencesSlider->addListener(this);
-    numberOfSequencesSlider->setValue(1, false);
+    numberOfSequencesSlider->setValue(1, dontSendNotification);
     numberOfSequencesSlider->addMouseListener(this, true);
 	
 	//--------------- relative tempo slider-------------------
@@ -63,7 +63,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	relativeTempoSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
 	relativeTempoSlider->setRange(-2, 2, 1);
     relativeTempoSlider->addListener(this);
-    relativeTempoSlider->setValue(0, false);
+    relativeTempoSlider->setValue(0, dontSendNotification);
     relativeTempoSlider->addMouseListener(this, true);
 	
 	//--------------- midi note length slider-------------------
@@ -71,7 +71,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	noteLengthSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
 	noteLengthSlider->setRange(1, NO_OF_COLUMNS, 1);
     noteLengthSlider->addListener(this);
-    noteLengthSlider->setValue(4, false);
+    noteLengthSlider->setValue(4, dontSendNotification);
     noteLengthSlider->addMouseListener(this, true);
 	
 	//--------------- audio gain slider-------------------
@@ -79,7 +79,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	audioGainSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
 	audioGainSlider->setRange(0.0, 2.0, 0.01);
     audioGainSlider->addListener(this);
-    audioGainSlider->setValue(1.0, false);
+    audioGainSlider->setValue(1.0, dontSendNotification);
     audioGainSlider->addMouseListener(this, true);
 	
 	//--------------- audio pan slider-------------------
@@ -87,7 +87,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	audioPanSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
 	audioPanSlider->setRange(0.0, 1.0, 0.01);
     audioPanSlider->addListener(this);
-    audioPanSlider->setValue(0.5, false);
+    audioPanSlider->setValue(0.5, dontSendNotification);
     audioPanSlider->addMouseListener(this, true);
     
     //--------------- audio pan slider-------------------
@@ -96,7 +96,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	audioAttackSlider->setRange(0.0, 20.0, 0.01);
     audioAttackSlider->setSkewFactor(0.4);
     audioAttackSlider->addListener(this);
-    audioAttackSlider->setValue(0.5, false);
+    audioAttackSlider->setValue(0.5, dontSendNotification);
     audioAttackSlider->addMouseListener(this, true);
 
     
@@ -198,14 +198,14 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     ccControllerSlider->setRange(0, 127, 1);
     ccControllerSlider->addListener(this);
     ccControllerSlider->addMouseListener(this, true);
-    ccControllerSlider->setComponentValue(-999);
+    ccControllerSlider->setValue(-999);
     
     //------------------Pressure minimum range slider------------------------------
     addChildComponent(midiPressureMinRangeSlider = new AlphaRotarySlider((90 * (M_PI / 180)), (315 * (M_PI / 180)), 290));
 	midiPressureMinRangeSlider->setRotaryParameters((90 * (M_PI / 180)), (315 * (M_PI / 180)),true);
     midiPressureMinRangeSlider->setRange(0, 127, 1);
     midiPressureMinRangeSlider->addListener(this);
-    midiPressureMinRangeSlider->setValue(0, false);
+    midiPressureMinRangeSlider->setValue(0, dontSendNotification);
     midiPressureMinRangeSlider->addMouseListener(this, true);
     
     
@@ -214,7 +214,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	midiPressureMaxRangeSlider->setRotaryParameters((90 * (M_PI / 180)), (315 * (M_PI / 180)),true);
     midiPressureMaxRangeSlider->setRange(0, 127, 1);
     midiPressureMaxRangeSlider->addListener(this);
-    midiPressureMaxRangeSlider->setValue(127, false);
+    midiPressureMaxRangeSlider->setValue(127, dontSendNotification);
     midiPressureMaxRangeSlider->addMouseListener(this, true);
     
     
@@ -849,7 +849,7 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
     else if (slider == numberOfSequencesSlider)
     {
         if (slider->getValue() == 0)
-            slider->setValue(1, false);
+            slider->setValue(1, dontSendNotification);
         
         for (int i = 0; i < selectedPads.size(); i++)
         {
@@ -1257,14 +1257,12 @@ void GuiSequencerMode::buttonClicked (Button* button)
 		
 		if (modeSamplesButton->getToggleState() == true) 
 		{
-				if (SINGLE_PAD) 
-				{
-					menu.addItem(15, translate("Export Drum Bank As..."));
-				}
-				else 
-				{
-					menu.addItem(15, translate("Export Drum Bank As..."), false);
-				}
+            menu.addItem(16, translate("Import Sample Bank..."));
+            
+            if (SINGLE_PAD) 
+            {
+                menu.addItem(15, translate("Export Sample Bank..."));
+            }
 		}
 		
 		menu.addSeparator();
@@ -1393,9 +1391,13 @@ void GuiSequencerMode::buttonClicked (Button* button)
             //setCurrentSequenceNumber();
             updateDisplay();
         }
-		else if (result == 15)//export and save drum banks
+		else if (result == 15)//export and save .alphabank files
 		{
-			mainComponentRef.getAppDocumentStateRef().saveDrumBankAs(selectedPads[0]);
+			mainComponentRef.getAppDocumentStateRef().exportSampleBank(selectedPads[0]);
+		}
+        else if (result == 16)//import .alphabank files
+		{
+			mainComponentRef.getAppDocumentStateRef().importSampleBank(selectedPads);
 		}
         
 	}
@@ -1815,24 +1817,24 @@ void GuiSequencerMode::updateDisplay()
         
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         sequenceLength = PAD_SETTINGS->getSequencerLength();
-        numberOfSequencesSlider->setValue(PAD_SETTINGS->getSequencerNumberOfSequences(), false);
-        relativeTempoSlider->setValue(PAD_SETTINGS->getSequencerRelativeTempoMode(), false);
-        noteLengthSlider->setValue(PAD_SETTINGS->getSequencerMidiNoteLength(), false);
+        numberOfSequencesSlider->setValue(PAD_SETTINGS->getSequencerNumberOfSequences(), dontSendNotification);
+        relativeTempoSlider->setValue(PAD_SETTINGS->getSequencerRelativeTempoMode(), dontSendNotification);
+        noteLengthSlider->setValue(PAD_SETTINGS->getSequencerMidiNoteLength(), dontSendNotification);
         setNoteLengthSliderRange(sequenceLength);
-        audioGainSlider->setValue(PAD_SETTINGS->getSequencerGain(), false);
-        audioPanSlider->setValue(PAD_SETTINGS->getSequencerPan(), false);
-        audioAttackSlider->setValue(PAD_SETTINGS->getSequencerSamplesAttackTime(), false);
+        audioGainSlider->setValue(PAD_SETTINGS->getSequencerGain(), dontSendNotification);
+        audioPanSlider->setValue(PAD_SETTINGS->getSequencerPan(), dontSendNotification);
+        audioAttackSlider->setValue(PAD_SETTINGS->getSequencerSamplesAttackTime(), dontSendNotification);
         triggerModeButtons[PAD_SETTINGS->getSequencerTriggerMode()-1]->setToggleState(true, false);
         midiPressureModeButtons[PAD_SETTINGS->getSequencerMidiPressureMode()-1]->setToggleState(true, false);
         midiChannelButtons[PAD_SETTINGS->getSequencerMidiChannel()-1]->setToggleState(true, false);
-        ccControllerSlider->setComponentValue(PAD_SETTINGS->getSequencerMidiCcController());
+        ccControllerSlider->setValue(PAD_SETTINGS->getSequencerMidiCcController());
         loopButton->setToggleState(PAD_SETTINGS->getSequencerShouldLoop(), false);
         indestructibleButton->setToggleState(PAD_SETTINGS->getSequencerIndestructible(), false);
         finishLoopButton->setToggleState(PAD_SETTINGS->getSequencerShouldFinishLoop(), false);
         stickyButton->setToggleState(PAD_SETTINGS->getSequencerSticky(), false);
         linkButton->setToggleState(PAD_SETTINGS->getSequencerDynamicMode(), false);
-        midiPressureMinRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMinPressureRange(), false);
-        midiPressureMaxRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMaxPressureRange(), false);
+        midiPressureMinRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMinPressureRange(), dontSendNotification);
+        midiPressureMaxRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMaxPressureRange(), dontSendNotification);
         recordButton->setToggleState(PAD_SETTINGS->getSequencerRecordEnabled(), false);
         
         
@@ -1947,11 +1949,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerNumberOfSequences() != noOfSeqs_)
             {
-                numberOfSequencesSlider->setValue(1, false);
+                numberOfSequencesSlider->setValue(1, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                numberOfSequencesSlider->setValue(noOfSeqs_, false);
+                numberOfSequencesSlider->setValue(noOfSeqs_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -1961,11 +1963,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerRelativeTempoMode() != relativeTempo_)
             {
-                relativeTempoSlider->setValue(0, false);
+                relativeTempoSlider->setValue(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                relativeTempoSlider->setValue(relativeTempo_, false);
+                relativeTempoSlider->setValue(relativeTempo_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -1975,11 +1977,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerMidiNoteLength() != noteLength_)
             {
-                noteLengthSlider->setValue(1, false);
+                noteLengthSlider->setValue(1, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                noteLengthSlider->setValue(noteLength_, false);
+                noteLengthSlider->setValue(noteLength_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -1989,11 +1991,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerGain() != gain_)
             {
-                audioGainSlider->setValue(1.0, false);
+                audioGainSlider->setValue(1.0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                audioGainSlider->setValue(gain_, false);
+                audioGainSlider->setValue(gain_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -2003,11 +2005,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerPan() != pan_)
             {
-                audioPanSlider->setValue(0.5, false);
+                audioPanSlider->setValue(0.5, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                audioPanSlider->setValue(pan_, false);
+                audioPanSlider->setValue(pan_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -2017,11 +2019,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerSamplesAttackTime() != attack_)
             {
-                audioAttackSlider->setValue(0, false);
+                audioAttackSlider->setValue(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                audioAttackSlider->setValue(attack_, false);
+                audioAttackSlider->setValue(attack_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -2076,11 +2078,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerMidiCcController() != ccNumber_)
             {
-                ccControllerSlider->setComponentValue(-999);
+                ccControllerSlider->setValue(-999);
                 break;
             }
             if (i == selectedPads.size()-1)
-                ccControllerSlider->setComponentValue(ccNumber_);
+                ccControllerSlider->setValue(ccNumber_);
         }
         
         //==================================================================================================
@@ -2160,11 +2162,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerMidiMinPressureRange() != pressureMinRange_)
             {
-                midiPressureMinRangeSlider->setValue(0, false);
+                midiPressureMinRangeSlider->setValue(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                midiPressureMinRangeSlider->setValue(pressureMinRange_, false);
+                midiPressureMinRangeSlider->setValue(pressureMinRange_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -2174,11 +2176,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerMidiMaxPressureRange() != pressureMaxRange_)
             {
-                midiPressureMaxRangeSlider->setValue(127, false);
+                midiPressureMaxRangeSlider->setValue(127, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                midiPressureMaxRangeSlider->setValue(pressureMaxRange_, false);
+                midiPressureMaxRangeSlider->setValue(pressureMaxRange_, dontSendNotification);
         }
         
         int recordEnabled_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSequencerRecordEnabled();
@@ -2320,7 +2322,7 @@ void GuiSequencerMode::setNoteLengthSliderRange (int maxValue)
         if (PAD_SETTINGS->getSequencerMidiNoteLength() > maxValue) //if now out of range
         {
             PAD_SETTINGS->setSequencerMidiNoteLength(maxValue); //set the PAD_SETTINGS value to the new maxValue
-            noteLengthSlider->setValue(maxValue, false); //update the slider display, but don;t send an update
+            noteLengthSlider->setValue(maxValue, dontSendNotification); //update the slider display, but don;t send an update
         }
     }
     
@@ -2378,11 +2380,11 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     
     if (modeMidiButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Sequencer MIDI Mode. Click to set selected pads to MIDI sequencer mode. This mode allows sequences of MIDI messages to be programmed into the AlphaSphere device. This will also display MIDI settings controls for selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Sequencer MIDI Mode. Click to set the selected pads to MIDI sequencer mode. This mode allows sequences of MIDI messages to be recorded, programmed and edited. This will also display the MIDI settings controls for the selected pads."));
     }
 	if (modeSamplesButton->isMouseOver(true))
 	{
-		mainComponentRef.setInfoTextBoxText(translate("Sequencer Sampler Mode. Click to set selected pads to sample sequencer mode. This mode allows sequences using audio samples to be programmed into the AlphaSphere device. This will also display sampler settings controls for selected pads."));
+		mainComponentRef.setInfoTextBoxText(translate("Sequencer Sampler Mode. Click to set the selected pads to sampler sequencer mode. This mode allows sequences of audio samples to be recorded, programmed and edited. This will also display the sampler settings controls for the selected pads."));
 	}
     
     else if (sequencerGrid->isMouseOver(true))

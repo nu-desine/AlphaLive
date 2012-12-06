@@ -133,7 +133,7 @@ public:
     }
 
     /** Returns a pointer to a sample in one of the buffer's channels.
-
+∞¢
         For speed, this doesn't check whether the channel and sample number
         are out-of-range, so be careful when using it!
     */

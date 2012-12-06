@@ -71,7 +71,7 @@ GuiHighPassFilter::GuiHighPassFilter(MainComponent &ref)
     addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
 	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     intensitySlider->setRange(0.0, 1.0);
-    intensitySlider->setValue(1.0, false);
+    intensitySlider->setValue(1.0, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
     intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
@@ -199,22 +199,22 @@ void GuiHighPassFilter::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        mixSlider->setValue(PAD_SETTINGS->getPadFxHpfMix(), false);
-        frequencySlider->setValue(PAD_SETTINGS->getPadFxHpfFreq(), false);
-        bandwidthSlider->setValue(PAD_SETTINGS->getPadFxHpfBandwidth(), false);
+        mixSlider->setValue(PAD_SETTINGS->getPadFxHpfMix(), dontSendNotification);
+        frequencySlider->setValue(PAD_SETTINGS->getPadFxHpfFreq(), dontSendNotification);
+        bandwidthSlider->setValue(PAD_SETTINGS->getPadFxHpfBandwidth(), dontSendNotification);
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxHpfAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getPadFxHpfAtReverse(), false);
-        intensitySlider->setValue(PAD_SETTINGS->getPadFxHpfAtIntensity(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getPadFxHpfAtIntensity(), dontSendNotification);
     }
     
     else if(MULTI_PADS)
     {
-        mixSlider->setValue(1.0, false);
-        frequencySlider->setValue(1000, false);
-        bandwidthSlider->setValue(5.0, false);
+        mixSlider->setValue(1.0, dontSendNotification);
+        frequencySlider->setValue(1000, dontSendNotification);
+        bandwidthSlider->setValue(5.0, dontSendNotification);
         alphaTouchMenu->setSelectedId(0, true);
         reverseButton->setToggleState(0, false);
-        intensitySlider->setValue(1.0, false);
+        intensitySlider->setValue(1.0, dontSendNotification);
     }
     
     

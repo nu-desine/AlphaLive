@@ -159,7 +159,10 @@ public:
     {
         [notificationCenter removeObserver: view];
         setOwner (view, nullptr);
-        [view removeFromSuperview];
+
+        if ([view superview] != nil)
+            [view removeFromSuperview];
+
         [view release];
 
         if (! isSharedWindow)
@@ -994,7 +997,7 @@ public:
         else
             dragInfo.files = getDroppedFiles (pasteboard, contentType);
 
-        if (dragInfo.files.size() > 0 || dragInfo.text.isNotEmpty())
+        if (! dragInfo.isEmpty())
         {
             switch (type)
             {

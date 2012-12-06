@@ -41,9 +41,7 @@ public:
     OscOutput();
     ~OscOutput();
     
-    //theoretically sends the incoming messages straight back out 
-    //so that it 'bypasses' the app and goes elsewhere on the computer.
-    void transmitThruMessage(int padNumber, int padValue, String address, int port);
+    void transmitOutputMessage(int padNumber, int padValue, String address, int port);
     
     //what will other functions look like or be formatted?
     //void transmitLedMessage(int padNumber, int ledBrightness)

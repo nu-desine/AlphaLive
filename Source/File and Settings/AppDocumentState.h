@@ -118,7 +118,10 @@ public:
 	
 	void saveEffect (int currentlySelectedPad);
 	
-	void saveDrumBankAs (int currentlySelectedPad);
+	void exportSampleBank (int currentlySelectedPad);
+    void importSampleBank (Array<int> selectedPads_, 
+                           bool openBrowser = true, 
+                           File fileToOpen = File::nonexistent);
     
     void createMidiFile (int currentlySelectedSeqNumber, 
                          int currentlySelectedPad,

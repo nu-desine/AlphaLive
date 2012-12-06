@@ -66,7 +66,7 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
     addAndMakeVisible(sceneNumberSlider = new AlphaSlider());
     sceneNumberSlider->setRange(1, NO_OF_SCENES, 1);
     sceneNumberSlider->addListener(this);
-    sceneNumberSlider->setValue(1, false);
+    sceneNumberSlider->setValue(1, dontSendNotification);
     sceneNumberSlider->addMouseListener(this, true);
     sceneNumberSlider->setVisible(false);
     
@@ -84,12 +84,12 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
     addChildComponent(oscPortNumberSlider = new AlphaSlider());
     oscPortNumberSlider->setRange(0, 65535, 1);
     oscPortNumberSlider->addListener(this);
-    oscPortNumberSlider->setValue(5004, false);
+    oscPortNumberSlider->setValue(5004, dontSendNotification);
     oscPortNumberSlider->addMouseListener(this, true);
     
     addChildComponent(midiProgramChangeNumberSlider = new AlphaSlider());
     midiProgramChangeNumberSlider->setRange(0, 127, 1);
-    midiProgramChangeNumberSlider->setValue(1, false);
+    midiProgramChangeNumberSlider->setValue(1, dontSendNotification);
     midiProgramChangeNumberSlider->addListener(this);
     midiProgramChangeNumberSlider->addMouseListener(this, true);
     midiProgramChangeNumberSlider->setVisible(false);
@@ -363,10 +363,10 @@ void GuiControllerMode::updateDisplay()
     {
         int padNum = selectedPads[0];
         controlButtons[PAD_SETTINGS->getControllerControl()-1]->setToggleState(true, false);
-        sceneNumberSlider->setComponentValue(PAD_SETTINGS->getControllerSceneNumber());
+        sceneNumberSlider->setValue(PAD_SETTINGS->getControllerSceneNumber());
         oscIpAddressEditor->setText(PAD_SETTINGS->getControllerOscIpAddress(), false);
-        oscPortNumberSlider->setComponentValue(PAD_SETTINGS->getControllerOscPort());
-        midiProgramChangeNumberSlider->setComponentValue(PAD_SETTINGS->getControllerMidiProgramChangeNumber());
+        oscPortNumberSlider->setValue(PAD_SETTINGS->getControllerOscPort());
+        midiProgramChangeNumberSlider->setValue(PAD_SETTINGS->getControllerMidiProgramChangeNumber());
         midiChannelButtons[PAD_SETTINGS->getControllerMidiProgramChangeChannel()-1]->setToggleState(true, false);
         
         setDisplay(PAD_SETTINGS->getControllerControl()-1);
@@ -376,10 +376,10 @@ void GuiControllerMode::updateDisplay()
     {
         /*
         controlButtons[0]->setToggleState(true, false);
-        sceneNumberSlider->setComponentValue(1);
+        sceneNumberSlider->setValue(1);
         oscIpAddressEditor->setText("127.0.0.1", false);
-        oscPortNumberSlider->setComponentValue(5004);
-        midiProgramChangeNumberSlider->setComponentValue(1);
+        oscPortNumberSlider->setValue(5004);
+        midiProgramChangeNumberSlider->setValue(1);
         midiChannelButtons[0]->setToggleState(true, false);
         
         setDisplay(0);
@@ -426,11 +426,11 @@ void GuiControllerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getControllerSceneNumber() != scene_)
             {
-                sceneNumberSlider->setComponentValue(-999);
+                sceneNumberSlider->setValue(-999);
                 break;
             }
             if (i == selectedPads.size()-1)
-                sceneNumberSlider->setComponentValue(scene_);
+                sceneNumberSlider->setValue(scene_);
         }
         
         //==================================================================================================
@@ -440,11 +440,11 @@ void GuiControllerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getControllerOscPort() != oscPort_)
             {
-                oscPortNumberSlider->setComponentValue(-999);
+                oscPortNumberSlider->setValue(-999);
                 break;
             }
             if (i == selectedPads.size()-1)
-                oscPortNumberSlider->setComponentValue(oscPort_);
+                oscPortNumberSlider->setValue(oscPort_);
         }
         
         //==================================================================================================
@@ -454,11 +454,11 @@ void GuiControllerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getControllerMidiProgramChangeNumber() != programChange_)
             {
-                midiProgramChangeNumberSlider->setComponentValue(-999);
+                midiProgramChangeNumberSlider->setValue(-999);
                 break;
             }
             if (i == selectedPads.size()-1)
-                midiProgramChangeNumberSlider->setComponentValue(programChange_);
+                midiProgramChangeNumberSlider->setValue(programChange_);
         }
         
         //==================================================================================================

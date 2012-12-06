@@ -35,7 +35,7 @@ public:
     ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref);
     ~ModeMidi();
     
-    void convertToMidi(int padNumber, int padValue);
+    void getInputData(int padNumber, int padValue, int padVelocity);
     void sendMidiMessage(MidiMessage midiMessage);
     
     void noteOn (int padNumber);
@@ -55,7 +55,6 @@ public:
     //settings
     void setChannel (int value, int pad);
     void setNote (int value, int pad);
-    void setVelocity (int value, int pad);
     void setMinRange (int value, int pad);
     void setMaxRange (int value, int pad);
     void setControllerNumber (int value, int pad);

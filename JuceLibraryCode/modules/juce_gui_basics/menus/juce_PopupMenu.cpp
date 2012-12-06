@@ -215,13 +215,13 @@ class PopupMenu::Window  : public Component,
                            private Timer
 {
 public:
-    Window (const PopupMenu& menu, Window* const window,
+    Window (const PopupMenu& menu, Window* const parentWindow,
             const Options& opts,
             const bool alignToRectangle,
             const bool shouldDismissOnMouseUp,
             ApplicationCommandManager** const manager)
        : Component ("menu"),
-         owner (window),
+         owner (parentWindow),
          options (opts),
          activeSubMenu (nullptr),
          managerOfChosenCommand (manager),
@@ -247,8 +247,11 @@ public:
         setMouseClickGrabsKeyboardFocus (false);
         setAlwaysOnTop (true);
 
-        setLookAndFeel (menu.lookAndFeel);
-        setOpaque (getLookAndFeel().findColour (PopupMenu::backgroundColourId).isOpaque() || ! Desktop::canUseSemiTransparentWindows());
+        setLookAndFeel (owner != nullptr ? &(owner->getLookAndFeel())
+                                         : menu.lookAndFeel);
+
+        setOpaque (getLookAndFeel().findColour (PopupMenu::backgroundColourId).isOpaque()
+                     || ! Desktop::canUseSemiTransparentWindows());
 
         for (int i = 0; i < menu.items.size(); ++i)
         {
@@ -1190,9 +1193,7 @@ void PopupMenu::addCommandItem (ApplicationCommandManager* commandManager,
 {
     jassert (commandManager != nullptr && commandID != 0);
 
-    const ApplicationCommandInfo* const registeredInfo = commandManager->getCommandForID (commandID);
-
-    if (registeredInfo != nullptr)
+    if (const ApplicationCommandInfo* const registeredInfo = commandManager->getCommandForID (commandID))
     {
         ApplicationCommandInfo info (*registeredInfo);
         ApplicationCommandTarget* const target = commandManager->getTargetForCommand (commandID, info);
@@ -1226,16 +1227,6 @@ void PopupMenu::addColouredItem (const int itemResultID,
 }
 
 //==============================================================================
-void PopupMenu::addCustomItem (const int itemResultID, CustomComponent* const customComponent)
-{
-    jassert (itemResultID != 0);    // 0 is used as a return value to indicate that the user
-                                    // didn't pick anything, so you shouldn't use it as the id
-                                    // for an item..
-
-    items.add (new Item (itemResultID, String::empty, true, false, Image::null,
-                         Colours::black, false, customComponent, nullptr, nullptr));
-}
-
 class PopupMenu::NormalComponentWrapper : public PopupMenu::CustomComponent
 {
 public:
@@ -1265,14 +1256,27 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NormalComponentWrapper);
 };
 
+void PopupMenu::addCustomItem (const int itemResultID, CustomComponent* const customComponent)
+{
+    jassert (itemResultID != 0);    // 0 is used as a return value to indicate that the user
+                                    // didn't pick anything, so you shouldn't use it as the id
+                                    // for an item..
+
+    items.add (new Item (itemResultID, String::empty, true, false, Image::null,
+                         Colours::black, false, customComponent, nullptr, nullptr));
+}
+
 void PopupMenu::addCustomItem (const int itemResultID,
                                Component* customComponent,
                                int idealWidth, int idealHeight,
-                               const bool triggerMenuItemAutomaticallyWhenClicked)
+                               const bool triggerMenuItemAutomaticallyWhenClicked,
+                               const PopupMenu* subMenu)
 {
-    addCustomItem (itemResultID,
-                   new NormalComponentWrapper (customComponent, idealWidth, idealHeight,
-                                               triggerMenuItemAutomaticallyWhenClicked));
+    items.add (new Item (itemResultID, String::empty, true, false, Image::null,
+                         Colours::black, false,
+                         new NormalComponentWrapper (customComponent, idealWidth, idealHeight,
+                                                     triggerMenuItemAutomaticallyWhenClicked),
+                         subMenu, nullptr));
 }
 
 //==============================================================================
@@ -1679,4 +1683,12 @@ bool PopupMenu::MenuItemIterator::next()
     commandManager  = item->commandManager;
 
     return true;
+}
+
+void PopupMenu::MenuItemIterator::addItemTo (PopupMenu& targetMenu)
+{
+    targetMenu.items.add (new Item (itemId, itemName, isEnabled, isTicked, customImage,
+                                    customColour != nullptr ? *customColour : Colours::black, customColour != nullptr,
+                                    nullptr,
+                                    subMenu, commandManager));
 }

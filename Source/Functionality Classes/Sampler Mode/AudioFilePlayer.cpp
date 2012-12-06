@@ -52,7 +52,7 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     //grab the setting values (so that if this object is deleted and recreated, it will hold the previous settings)
     //do i need to enter shared memory here?
     
-    gain = PAD_SETTINGS->getSamplerGain(); //should this be cubed?
+    gain = staticGain = PAD_SETTINGS->getSamplerGain(); //should this be cubed?
     panLeft = PanControl::leftChanPan_(PAD_SETTINGS->getSamplerPan());
     panRight = PanControl::rightChanPan_(PAD_SETTINGS->getSamplerPan());
     triggerMode = PAD_SETTINGS->getSamplerTriggerMode();
@@ -79,6 +79,7 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     isInAttack = isInRelease = false;
     attackPosition = releasePosition = 0;
     attRelGainL = attRelGainR = prevGainL = prevGainR = 0;
+    velocity = 127;
     
     //call this here incase a loop has been 'dropped' onto a pad before this AudioFilePlayer instance actually exists,
     //which means that it wouldn't have been called from setSamplerAudioFilePath().
@@ -118,7 +119,7 @@ bool AudioFilePlayer::getAudioTransportSourceStatus()
     
 }
 
-void AudioFilePlayer::processAudioFile(int padValue)
+void AudioFilePlayer::processAudioFile(int padValue, int padVelocity)
 {
     if (currentFile != File::nonexistent && currentAudioFileSource != NULL)
     {
@@ -221,6 +222,31 @@ void AudioFilePlayer::processAudioFile(int padValue)
         //==========================================================================================
         // Start/Stop stuff
         //==========================================================================================
+        
+        //set velocity value...
+        if (triggerModeData.playingStatus == 1) //play
+        {
+            //should I be using local variables below instead of accessing PAD_SETTINGS each time?
+            //Though as I'm only doing this if statement when the pad is first pressed it probably
+            //won't be too CPU extensive here.
+            
+            velocity = padVelocity;
+            
+            if (PAD_SETTINGS->getVelocityCurve() != 4)
+            {
+                // not static velocity
+                gain = staticGain * (velocity*(1.0/127.0));
+            }
+            else
+            {
+                //static velocity - just use Sampler mode gain value
+                gain = staticGain;
+            }
+                
+        }
+        
+        
+        
         if (quantizeMode == 0) //free
         {
             if (triggerModeData.playingStatus == 1) //play
@@ -953,12 +979,24 @@ void AudioFilePlayer::setGain (float value)
     sharedMemory.enter();
     
     if (value <= 1.0)
-        gain = value * value * value;
+        staticGain = value * value * value;
     else
-        gain = value;
+        staticGain = value;
+    
+    //set gain value here in case the sample is currently playing
+    if (PAD_SETTINGS->getVelocityCurve() != 4)
+    {
+        // not static velocity
+        gain = staticGain * (velocity*(1.0/127.0));
+    }
+    else
+    {
+        gain = staticGain;
+    }
     
     sharedMemory.exit();
 }
+
 void AudioFilePlayer::setPan (float value)
 {
     sharedMemory.enter();

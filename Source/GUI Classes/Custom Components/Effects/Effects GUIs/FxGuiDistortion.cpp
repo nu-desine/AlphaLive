@@ -323,29 +323,29 @@ void GuiDistortion::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        inputGainSlider->setValue(PAD_SETTINGS->getPadFxDistortionInputGain(), false);
-        driveSlider->setValue(PAD_SETTINGS->getPadFxDistortionDrive(), false);
-		toneSlider->setValue(PAD_SETTINGS->getPadFxDistortionTone(), false);
-		wetDryMixSlider->setValue(PAD_SETTINGS->getPadFxDistortionWetDryMix(), false);
+        inputGainSlider->setValue(PAD_SETTINGS->getPadFxDistortionInputGain(), dontSendNotification);
+        driveSlider->setValue(PAD_SETTINGS->getPadFxDistortionDrive(), dontSendNotification);
+		toneSlider->setValue(PAD_SETTINGS->getPadFxDistortionTone(), dontSendNotification);
+		wetDryMixSlider->setValue(PAD_SETTINGS->getPadFxDistortionWetDryMix(), dontSendNotification);
         setDistortionTypeMenu(PAD_SETTINGS->getPadFxDistortionTypeMenu());
         
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxDistortionAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getPadFxDistortionAtReverse(), false);
-        intensitySlider->setValue(PAD_SETTINGS->getPadFxDistortionAtIntensity(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getPadFxDistortionAtIntensity(), dontSendNotification);
     }
     
     else if(MULTI_PADS)
     {
-        inputGainSlider->setValue(0.7, false);
-        driveSlider->setValue(1.0, false);
-		toneSlider->setValue(1.0, false);
-		wetDryMixSlider->setValue(1.0, false);
+        inputGainSlider->setValue(0.7, dontSendNotification);
+        driveSlider->setValue(1.0, dontSendNotification);
+		toneSlider->setValue(1.0, dontSendNotification);
+		wetDryMixSlider->setValue(1.0, dontSendNotification);
         distortionTypeMenu->setButtonText("-");
         syncButton->setToggleState(true, false);
         
         alphaTouchMenu->setSelectedId(0, true);
         reverseButton->setToggleState(0, false);
-        intensitySlider->setValue(1.0, false);
+        intensitySlider->setValue(1.0, dontSendNotification);
     }
     
 }

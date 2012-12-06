@@ -49,7 +49,7 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     intensitySlider->setRange(0.0, 1.0);
-    intensitySlider->setValue(0.5, false);
+    intensitySlider->setValue(0.5, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
     intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
@@ -69,7 +69,8 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     //what about other values, such as the d's and t's in Logic's tremolo?
     rateMenu->setSelectedId(3, true);*/
     
-    addAndMakeVisible(syncButton = new AlphaTextButton(translate("SYNC")));
+    Image *syncImage = new Image(ImageCache::getFromMemory(BinaryDataNew::syncicon_png, BinaryDataNew::syncicon_pngSize));
+    addAndMakeVisible(syncButton = new ModeButton(syncImage));
     syncButton->setClickingTogglesState(true);
     syncButton->setToggleState(1, false);
     syncButton->addListener(this);
@@ -345,7 +346,7 @@ void GuiTremolo::buttonClicked (Button *button)
 				
         }
         
-        rateSlider->setValue(lfoRate, false);
+        rateSlider->setValue(lfoRate, dontSendNotification);
         
         for (int i = 0; i < selectedPads.size(); i++)
         {
@@ -386,8 +387,8 @@ void GuiTremolo::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        depthSlider->setValue(PAD_SETTINGS->getPadFxTremoloDepth(), false);
-        rateSlider->setValue(PAD_SETTINGS->getPadFxTremoloRate(), false);
+        depthSlider->setValue(PAD_SETTINGS->getPadFxTremoloDepth(), dontSendNotification);
+        rateSlider->setValue(PAD_SETTINGS->getPadFxTremoloRate(), dontSendNotification);
         //rateMenu->setSelectedId(PAD_SETTINGS->getPadFxTremoloRateMenu(), true);
         syncButton->setToggleState(PAD_SETTINGS->getPadFxTremoloSync(), false);
         //shapeMenu->setSelectedId(PAD_SETTINGS->getPadFxTremoloShape(), true);
@@ -395,7 +396,7 @@ void GuiTremolo::updateDisplay()
         
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxTremoloAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getPadFxTremoloAtReverse(), false);
-        intensitySlider->setValue(PAD_SETTINGS->getPadFxTremoloAtIntensity(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getPadFxTremoloAtIntensity(), dontSendNotification);
 		
 		switch (PAD_SETTINGS->getPadFxTremoloRateMenu())
         {
@@ -438,8 +439,8 @@ void GuiTremolo::updateDisplay()
     
     else if(MULTI_PADS)
     {
-        depthSlider->setValue(0.7, false);
-        rateSlider->setValue(5.0, false);
+        depthSlider->setValue(0.7, dontSendNotification);
+        rateSlider->setValue(5.0, dontSendNotification);
         rateMenu->setButtonText("-");
         syncButton->setToggleState(true, false);
         //shapeMenu->setSelectedId(2, true);
@@ -449,7 +450,7 @@ void GuiTremolo::updateDisplay()
         
         alphaTouchMenu->setSelectedId(0, true);
         reverseButton->setToggleState(0, false);
-        intensitySlider->setValue(1.0, false);
+        intensitySlider->setValue(1.0, dontSendNotification);
     }
     
     

@@ -79,7 +79,8 @@ GuiDelay::GuiDelay(MainComponent &ref)
     delayTimeMenu->addItem(translate("Quarter Beat"), 5);
     delayTimeMenu->setSelectedId(4, true);*/
     
-    addAndMakeVisible(syncButton = new AlphaTextButton(translate("SYNC")));
+	Image *syncImage = new Image(ImageCache::getFromMemory(BinaryDataNew::syncicon_png, BinaryDataNew::syncicon_pngSize));
+    addAndMakeVisible(syncButton = new ModeButton(syncImage));
     syncButton->setClickingTogglesState(true);
     syncButton->setToggleState(1, false);
     syncButton->addListener(this);
@@ -106,7 +107,7 @@ GuiDelay::GuiDelay(MainComponent &ref)
     addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 230));
 	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
     intensitySlider->setRange(0.0, 1.0);
-    intensitySlider->setValue(1.0, false);
+    intensitySlider->setValue(1.0, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
     intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
@@ -325,7 +326,7 @@ void GuiDelay::buttonClicked (Button *button)
                     break;
             }
             
-            delayTimeSlider->setValue(delayTime, false);
+            delayTimeSlider->setValue(delayTime, dontSendNotification);
             
             for (int i = 0; i < selectedPads.size(); i++)
             {
@@ -355,8 +356,8 @@ void GuiDelay::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        wetMixSlider->setValue(PAD_SETTINGS->getPadFxDelayMix(), false);
-        delayTimeSlider->setValue(PAD_SETTINGS->getPadFxDelayTime(), false);
+        wetMixSlider->setValue(PAD_SETTINGS->getPadFxDelayMix(), dontSendNotification);
+        delayTimeSlider->setValue(PAD_SETTINGS->getPadFxDelayTime(), dontSendNotification);
 		
 		switch (PAD_SETTINGS->getPadFxDelayTimeMenu())
         {
@@ -386,29 +387,29 @@ void GuiDelay::updateDisplay()
                 break;
         }
 		
-        feedbackSlider->setValue(PAD_SETTINGS->getPadFxDelayFeedback(), false);
-        lpfFrequencySlider->setValue(PAD_SETTINGS->getPadFxDelayLpfFreq(), false);
-        hpfFrequencySlider->setValue(PAD_SETTINGS->getPadFxDelayHpfFreq(), false);
+        feedbackSlider->setValue(PAD_SETTINGS->getPadFxDelayFeedback(), dontSendNotification);
+        lpfFrequencySlider->setValue(PAD_SETTINGS->getPadFxDelayLpfFreq(), dontSendNotification);
+        hpfFrequencySlider->setValue(PAD_SETTINGS->getPadFxDelayHpfFreq(), dontSendNotification);
         syncButton->setToggleState(PAD_SETTINGS->getPadFxDelaySync(), false);
         
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxDelayAlphaTouch(), true);
         reverseButton->setToggleState(PAD_SETTINGS->getPadFxDelayAtReverse(), false);
-        intensitySlider->setValue(PAD_SETTINGS->getPadFxDelayAtIntensity(), false);
+        intensitySlider->setValue(PAD_SETTINGS->getPadFxDelayAtIntensity(), dontSendNotification);
     }
     
     else if(MULTI_PADS)
     {
-        wetMixSlider->setValue(0.7, false);
-        delayTimeSlider->setValue(500.0, false);
+        wetMixSlider->setValue(0.7, dontSendNotification);
+        delayTimeSlider->setValue(500.0, dontSendNotification);
         delayTimeMenu->setButtonText("-");
-        feedbackSlider->setValue(0.5, false);
-        lpfFrequencySlider->setValue(5000, false);
-        hpfFrequencySlider->setValue(50, false);
+        feedbackSlider->setValue(0.5, dontSendNotification);
+        lpfFrequencySlider->setValue(5000, dontSendNotification);
+        hpfFrequencySlider->setValue(50, dontSendNotification);
         syncButton->setToggleState(1, false);
         
         alphaTouchMenu->setSelectedId(0, true);
         reverseButton->setToggleState(0, false);
-        intensitySlider->setValue(1.0, false);
+        intensitySlider->setValue(1.0, dontSendNotification);
     }
     
     

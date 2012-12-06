@@ -107,6 +107,7 @@ public:
     GuiSequencerMode* getGuiSequencerMode();
     GuiPiano* getGuiPiano();
     Toolbox* getToolbox();
+    SceneComponent* getSceneComponent();
 	
     //==============================================================================
     //application command target stuff
@@ -120,6 +121,10 @@ public:
     void setIsClockRunning (bool value);
     
     void setLocalisation();
+    
+    void sendEliteDialCommand (int command, int eliteControlValue);
+    
+    void editInterfaceFromDeviceConnectivity (int command);
     
     
 private:

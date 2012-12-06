@@ -68,7 +68,6 @@ SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequen
     dynamicMode = PAD_SETTINGS->getSequencerDynamicMode();
     
     midiChannel = PAD_SETTINGS->getSequencerMidiChannel();
-    midiVelocity = PAD_SETTINGS->getSequencerMidiVelocity();
     midiNoteLength  = PAD_SETTINGS->getSequencerMidiNoteLength();
     midiMinRange = PAD_SETTINGS->getSequencerMidiMinPressureRange();
     midiMaxRange = PAD_SETTINGS->getSequencerMidiMaxPressureRange();
@@ -907,8 +906,7 @@ void SequencePlayer::sendMidiMessage(MidiMessage midiMessage)
 {
     if (modeSequencerRef.getAlphaLiveEngineRef().hasOpenedHidDevice() == true)
     {
-        uint8 *dataToSend;
-        memset(dataToSend,0,sizeof(dataToSend));
+        unsigned char dataToSend[5];
         
         uint8 *rawMidiMessage = midiMessage.getRawData();
         
@@ -920,7 +918,7 @@ void SequencePlayer::sendMidiMessage(MidiMessage midiMessage)
         
         dataToSend[0] = 0x00;   //if no reportID's are defined in the descriptor,
         //must send 0x00. First byte MUST be the report ID.
-        dataToSend[1] = MIDI_OUT_REPORT_ID;
+        dataToSend[1] = MIDI_OUT_COMMAND_ID;
         dataToSend[2] = rawMidiMessage[0]; //midi status byte
         dataToSend[3] = rawMidiMessage[1]; //midi data byte 1
         dataToSend[4] = rawMidiMessage[2]; //midi data byte 2
@@ -1369,11 +1367,6 @@ void SequencePlayer::setMidiChannel (int value)
     }
     
     midiChannel = value;
-}
-
-void SequencePlayer::setMidiVelocity (int value)
-{
-    midiVelocity = value;
 }
 void SequencePlayer::setMidiNoteLength (int value)
 {

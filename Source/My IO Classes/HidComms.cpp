@@ -23,9 +23,159 @@
 
 HidComms::HidComms() : Thread("HidThread")
 {
+    appHasInitialised = false;
+    sendOutputReport = false;
+    midiOutExists = hidDeviceExists =  false;
+    
+    connectToDevice();
+    
+    startThread();
+        
+}
+
+HidComms::~HidComms()
+{
+    stopThread(1500);
+    
+    hid_close(handle);
+    hid_exit();
+}
+
+void HidComms::run()
+{
+    res = 0;
+    
+    while( ! threadShouldExit())
+    {
+        
+        //=== if device is connected ===
+        if (handle)
+        {
+            res = hid_read(handle, buf, sizeof(buf));
+            
+            //std::cout << res << std::endl;
+            
+            if (res == 0)
+            {
+                //printf("no report...\n");
+            }
+            if (res < 0)
+            {
+                //printf("Unable to read()\n");
+                
+                //if this statement is entered does it always means that
+                //the device has been disconnected?
+                handle = nullptr;
+                hidDeviceExists = false;
+            }
+            
+            if (res > 0)
+            {
+                //            for (int i = 0; i < res; i++)
+                //                printf("%02hhx ", buf[i]);
+                //            printf("\n");
+                
+                //encode the recieved command byte here based on the report ID
+                if (appHasInitialised == true)
+                {
+                    if (buf[0] == 0x01) //pad data report
+                    {
+//                        unsigned short int pressure = 0;
+//                        pressure = buf[2] + (buf[3]<<8);
+//                        
+//                        hidInputCallback(buf[1], pressure, buf[4]);
+                        
+                        
+                        for (int i = 0; i < 48; i++)
+                        {
+                            unsigned short int padNum = buf[1+(i*4)];
+                            unsigned short int pressure = buf[2+(i*4)] + (buf[3+(i*4)]<<8);
+                            unsigned short int padVelocity = buf[4+(i*4)];
+                            
+                            //need to check here if the previous pressure value of said pad
+                            //and only call the below line if the pressure has changed
+                            hidInputCallback(padNum, pressure, padVelocity);
+                        }
+                        
+                    }
+                    
+                    //The elite dials and buttons could probably use a the same
+                    //command ID now we're not using such a specific report descriptor.
+                    
+                    else if (buf[0] == 0x02) //elite button report
+                    {
+                        //set 'pad' value to be 102-104 to represent the elite buttons
+                        hidInputCallback(buf[1]+102, buf[2], 0);
+                    }
+                    else if (buf[0] == 0x03) //elite dial
+                    {
+                        //set 'pad' value to be 100-101 to represent the elite dials
+                        hidInputCallback(buf[1]+100, buf[2], 0);
+                    }
+                    
+                    else if (buf[0] == 0x07) //test
+                    {
+                        for (int i = 0; i < res; i++)
+                            printf("%02hhx ", buf[i]);
+                        printf("\n");
+                    }
+                }
+                
+                memset(buf,0,sizeof(buf));
+                
+            }
+            
+            //what should the following sleep value be?
+            #ifdef WIN32
+            sleep(5); //should this actually be Sleep() which need a windows library defined? See hidtest.
+            #else
+            usleep(5*1000);
+            #endif
+        }
+        
+        //=== if device is not currently connected ===
+        else
+        {
+            //std::cout << "no device connected" << std::endl;
+            //what should the following sleep value be?
+            #ifdef WIN32
+            sleep(1000); //should this actually be Sleep() which need a windows library defined? See hidtest.
+            #else
+            usleep(1000*1000);
+            #endif
+            
+            //try and connect to the device
+            connectToDevice();
+        }
+        
+        
+    }
+}
+
+//should i be passing in a pointer here instead of an array?
+void HidComms::sendHidControlReport (uint8 *bytesToSend)
+{
+
+    if (handle)
+    {
+//        std::cout << "writing to device: ";
+//        printf("%02hhx ", bytesToSend[0]);
+//        printf("%02hhx ", bytesToSend[1]);
+//        printf("%02hhx ", bytesToSend[2]);
+//        printf("%02hhx ", bytesToSend[3]);
+//        printf("%02hhx ", bytesToSend[4]);
+//        printf("\n");
+        hid_write(handle, bytesToSend, 9);
+    }
+}
+
+
+
+void HidComms::connectToDevice()
+{
     struct hid_device_info *devs, *cur_dev;
     
-    devs = hid_enumerate(0x0, 0x0);
+    devs = hid_enumerate(0x1d50, 0x6021);
     cur_dev = devs;	
     while (cur_dev) 
     {
@@ -46,145 +196,55 @@ HidComms::HidComms() : Thread("HidThread")
     handle = hid_open(0x1d50, 0x6021, NULL); // << AlphaSphere HID device
     //handle = hid_open(0x1d50, 0x6041, NULL); // << AlphaSphere bootloader HID device 
     
+    //device not found
     if (!handle) 
     {
-        printf("unable to open device\n");
-        hasOpenedDevice = false;
+        //printf("unable to open device\n");
+        
+        if (appHasInitialised == false)
+        {
+            // if appliication is currently initialising, flag that
+            // the midi output stuff will exist. Setup of midi output
+            // stuff cannot be called from here as at this point the
+            // AlphaLiveEngine won't exist.
+            
+            midiOutExists = true;
+        }
+        
+        hidDeviceExists = false;
     }
     
+    //device found
     else
     {
-        hasOpenedDevice = true;
-        
-        // Read the Manufacturer String
-        wstr[0] = 0x0000;
-        res = hid_get_manufacturer_string(handle, wstr, MAX_STR);
-        if (res < 0)
+        if (midiOutExists == true)
         {
-            printf("Unable to read manufacturer string\n");
+            //if the midi output stuff currently exists, which would have been caused
+            //by the application initialising without the hid device connected,
+            //remove it.
+            removeMidiOut();
+            midiOutExists = false;
         }
-        printf("Manufacturer String: %ls\n", wstr);
         
-        // Read the Product String
-        wstr[0] = 0x0000;
-        res = hid_get_product_string(handle, wstr, MAX_STR);
-        if (res < 0)
-        {
-            printf("Unable to read product string\n");
-        }
-        printf("Product String: %ls\n", wstr);
+        hidDeviceExists = true;
         
-        // Read the Serial Number String
-        wstr[0] = 0x0000;
-        res = hid_get_serial_number_string(handle, wstr, MAX_STR);
-        if (res < 0)
-        {
-            printf("Unable to read serial number string\n");
-        }
-        printf("Serial Number String: (%d) %ls", wstr[0], wstr);
-        printf("\n");
-        
-        // Read Indexed String 1
-        wstr[0] = 0x0000;
-        res = hid_get_indexed_string(handle, 1, wstr, MAX_STR);
-        if (res < 0)
-        {
-            printf("Unable to read indexed string 1\n");
-        }
-        printf("Indexed String 1: %ls\n", wstr);
-        
-        
-        
-        // Set the hid_read() function to be blocking.
+        // Set the hid_read() function to be non-blocking.
         hid_set_nonblocking(handle, 1);
-        
         memset(buf,0,sizeof(buf));
         
-        startThread();
-        
+        //Here (possibly somewhere else?) we will need to send a report to request a report back
+        //to find out what AlphaSphere model is plugged in. AlphaLive will then use the information
+        //to initialise/change the GUI.
     }
 }
 
-HidComms::~HidComms()
-{
-    stopThread(100);
-    
-    hid_close(handle);
-    // Free static HIDAPI objects. 
-    hid_exit();
-}
-
-void HidComms::run()
-{
-    res = 0;
-    
-    //curently in the below loop, as the hid_read is set to be blocking
-    //when you attempt to exit the thread at close it will force kill it.
-    //instead, should I be using a non-blocking hid_read and have a call
-    //to sleep at 5 ms?
-    while( ! threadShouldExit())
-    {
-        res = hid_read(handle, buf, sizeof(buf));
-        if (res == 0)
-            //printf("no report...\n");
-        if (res < 0)
-            printf("Unable to read()\n");
-        if (res > 0)
-        {
-            for (int i = 0; i < res; i++)
-                printf("%02hhx ", buf[i]);
-            printf("\n");
-            
-            //encode the recieved report here based on the report ID
-            
-            if (buf[0] == 0x01) //pad data report
-            {
-                unsigned short int pressure = 0;
-                pressure = buf[2] + (buf[3]<<8);
-                
-                hidInputCallback(buf[1], pressure, buf[4]);  
-            }
-            else if (buf[0] == 0x02) //elite button report
-            {
-                //set 'pad' value to be 102-105 to represent the elite buttons
-                hidInputCallback(buf[1]+102, buf[2], 0);
-            }
-            else if (buf[0] == 0x03) //elite dial
-            {
-                //set 'pad' value to be 100-101 to represent the elite dials
-                hidInputCallback(buf[1]+100, buf[2], 0);
-            }
-            
-            memset(buf,0,sizeof(buf));
-            
-        }
-        
-        //what should the following sleep value be
-        #ifdef WIN32
-        sleep(5); //should this actually be Sleep() which need a windows library defined? See hidtest.
-        #else
-        usleep(5*1000);
-        #endif
-    }
-}
-
-//should i be passing in a pointer here instead of an array?
-void HidComms::sendHidControlReport (uint8 *bytesToSend)
-{
-    if (handle)
-    {
-        std::cout << "writing to device " << std::endl;
-        printf("%02hhx ", bytesToSend[0]);
-        printf("%02hhx ", bytesToSend[1]);
-        printf("%02hhx ", bytesToSend[2]);
-        printf("%02hhx ", bytesToSend[3]);
-        printf("%02hhx ", bytesToSend[4]);
-        printf("\n");
-        std::cout << hid_write(handle, bytesToSend, sizeof(bytesToSend)+1) << std::endl;
-    }
-}
 
 bool HidComms::hasOpenedHidDevice()
 {
-    return hasOpenedDevice;
+    return hidDeviceExists;
+}
+
+void HidComms::setAppHasInitialised()
+{
+    appHasInitialised = true;
 }

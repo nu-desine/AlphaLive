@@ -24,6 +24,7 @@
 #include "../File and Settings/AppSettings.h"
 #include "Other/LayoutsAndScales.cpp"
 #include "../File and Settings/StoredSettings.h"
+#include "../GUI Classes/Views/MainComponent.h"
 
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[recievedPad]
@@ -93,6 +94,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     modeSampler = new ModeSampler(*this);
     modeSequencer = new ModeSequencer(*midiOutputDevice, *this);
     modeController = new ModeController(*midiOutputDevice, *this);
+    eliteControls = new EliteControls(*midiOutputDevice, *this);
     
     //global clock stuff
     globalClock = new GlobalClock(*this);
@@ -138,6 +140,7 @@ AlphaLiveEngine::~AlphaLiveEngine()
     delete modeSampler;
     delete modeSequencer;
     delete modeController;
+    delete eliteControls;
     
     delete globalClock;
 
@@ -223,12 +226,13 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         
         recievedPad = pad;
         recievedValue = value;
+        recievedVelocity = velocity;
         
         
-        //determine pressure mapping/sensitivity
+        //===determine pressure curve===
         if (PAD_SETTINGS->getPressureCurve() == 1)
         {
-            //non-sensitive - exponential mapping of pressure
+            //exponential mapping of pressure
             recievedValue = exp((float)recievedValue/MAX_PRESSURE)-1;
             recievedValue = recievedValue * (MAX_PRESSURE/1.71828);
             if (recievedValue > MAX_PRESSURE)
@@ -238,7 +242,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         }
         else if (PAD_SETTINGS->getPressureCurve() == 3)
         {
-            //sensitive - logarithmic mapping of pressure
+            //logarithmic mapping of pressure
             recievedValue = log(recievedValue+1);
             recievedValue = recievedValue * (MAX_PRESSURE/6.23832);
             if (recievedValue > MAX_PRESSURE)
@@ -247,32 +251,55 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         //else, pressureCurve == 2 which is a linear mapping of pressure
         
         
+        //===determine velocity curve===
+        if (PAD_SETTINGS->getVelocityCurve() == 1)
+        {
+            //exponential mapping of velocity
+            recievedVelocity = exp((float)recievedVelocity/127.0)-1;
+            recievedVelocity = recievedVelocity * (127.0/1.71828);
+            if (recievedVelocity > 127.0)
+                recievedVelocity = 127.0;
+            if (recievedVelocity > 0 && recievedVelocity < 1) //value 1 = 0.6, which is rounded to 0
+                recievedVelocity = 1;
+        }
+        else if (PAD_SETTINGS->getVelocityCurve() == 3)
+        {
+            //logarithmic mapping of velocity
+            recievedVelocity = log(recievedVelocity+1);
+            recievedVelocity = recievedVelocity * (127.0/6.23832);
+            if (recievedVelocity > 127.0)
+                recievedVelocity = 127.0;
+        }
+        //else, velocityCurve == 2 which is a linear mapping of velocity,
+        //or 4 which is a static velocity.
+        
+        
         //==========================================================================
         //route message to midi mode
         if (PAD_SETTINGS->getMode() == 1) //if the pressed pad is set to Midi mode
         {
-            modeMidi->convertToMidi(recievedPad, recievedValue);
+            modeMidi->getInputData(recievedPad, recievedValue, recievedVelocity);
         }
         //==========================================================================
         
         //route message to sampler mode
         if (PAD_SETTINGS->getMode() == 2) //if the pressed pad is set to Sampler mode
         {
-            modeSampler->getOscData(recievedPad, recievedValue);
+            modeSampler->getInputData(recievedPad, recievedValue, recievedVelocity);
         }
         //==========================================================================
         
         //route message to sequencer mode
         if (PAD_SETTINGS->getMode() == 3) //if the pressed pad is set to Sequencer mode
         {
-            modeSequencer->getOscData(recievedPad, recievedValue);
+            modeSequencer->getInputData(recievedPad, recievedValue);
         }
         //==========================================================================
         
         //route message to controller mode
         if (PAD_SETTINGS->getMode() == 4) //if the pressed pad is set to Controller mode
         {
-            modeController->getOscData(recievedPad, recievedValue);
+            modeController->getInputData(recievedPad, recievedValue, recievedVelocity);
         }
         //==========================================================================
         
@@ -294,12 +321,13 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         
         if (isDualOutputMode == true)
         {
-            oscOutput.transmitThruMessage(recievedPad+1, recievedValue2, oscIpAddress, oscPortNumber);
+            oscOutput.transmitOutputMessage(recievedPad+1, recievedValue2, oscIpAddress, oscPortNumber);
         }
     }
     else 
     {
         //an elite control has been pressed. Do your thang!
+        eliteControls->getInputData(pad, value);
     }
 }
 
@@ -581,6 +609,28 @@ void AlphaLiveEngine::audioDeviceStopped()
 	audioPlayer.audioDeviceStopped();
 }
 
+void AlphaLiveEngine::removeMidiOut()
+{
+    std::cout << "removing midi output stuff" << std::endl;
+    
+    //if currently connected to a midiOutputDevice (either the virtual port on mac/linux
+    //or a hardware port on Windows) delete/dissconnected it.
+    if (midiOutputDevice)
+    {
+        midiOutputDevice->stopBackgroundThread();
+        delete midiOutputDevice;
+        
+        midiOutputDevice = NULL;
+    }
+    
+    #if JUCE_WINDOWS
+    //remove MIDI output selector from the preferences view
+    mainComponent->editInterfaceFromDeviceConnectivity(1);
+    
+    #endif //JUCE_WINDOWS
+    
+}
+
 void AlphaLiveEngine::setMidiOutputDevice (int deviceIndex)
 {
     if (deviceIndex >= 0)
@@ -612,10 +662,11 @@ void AlphaLiveEngine::setMidiOutputDevice (int deviceIndex)
         midiOutputDevice = NULL;
     }
     
-    //set the MidiOutput objects in modeMidi and ModeSequencer
+    //set the MidiOutput objects in the child classes
     modeMidi->setMidiOutputDevice(*midiOutputDevice);
     modeSequencer->setMidiOutputDevice(*midiOutputDevice);
     modeController->setMidiOutputDevice(*midiOutputDevice);
+    eliteControls->setMidiOutputDevice(*midiOutputDevice);
     
     
 }
@@ -632,11 +683,18 @@ AudioDeviceManager& AlphaLiveEngine::getAudioDeviceManager()
     return audioDeviceManager;
 }
 
-//global clock stuff
-
 GlobalClock* AlphaLiveEngine::getGlobalClock()
 {
     return globalClock;
 }
 
+MainComponent* AlphaLiveEngine::getMainComponent()
+{
+    return mainComponent;
+}
 
+void AlphaLiveEngine::setMainComponent(MainComponent *mainComponent_)
+{
+    mainComponent = mainComponent_;
+    eliteControls->setMainComponent(mainComponent_);
+}

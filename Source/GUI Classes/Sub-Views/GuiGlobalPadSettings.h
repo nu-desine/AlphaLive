@@ -26,7 +26,9 @@
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
 #include "../Custom Components/General/AlphaSlider.h"
+#include "../Custom Components/General/AlphaRotarySlider.h"
 #include "../Custom Components/General/ModeButton.h"
+#include "../Custom Components/General/AlphaPopUpImageButton.h"
 
 class MainComponent;
 
@@ -60,10 +62,15 @@ class GuiGlobalPadSettings :    public Component,
     Array <int> selectedPads;
     MainComponent &mainComponentRef;
     
-    TextButton *exclusiveModeButton;
-    AlphaSlider *exclusiveGroupSlider, *velocitySlider;
-    ComboBox *pressureCurveMenu, *velocityCurveMenu;
+    ModeButton *exclusiveModeButton;
+    AlphaSlider *exclusiveGroupSlider;
+    AlphaRotarySlider *velocitySlider;
+	AlphaPopUpImageButton *pressureCurveButton, *velocityCurveButton;
     ModeButton *quantiseButton;
+	Label *parameterHoverLabel;
+	Image *expoImage, *linearImage, *logImage, *staticImage, *emptyImage;
+	PopupMenu *pressureCurveMenu, *velocityCurveMenu;
+    int pressureCurveValue, velocityCurveValue;
 	
 };
 

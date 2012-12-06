@@ -55,7 +55,7 @@ public:
     
     void actionListenerCallback (const String& message);
     
-    void processAudioFile(int padValue);
+    void processAudioFile(int padValue, int padVelocity);
     void playAudioFile();
     void stopAudioFile(bool shouldStopInstantly);
     
@@ -124,9 +124,12 @@ private:
     int currentPressureValue;
     int quantizeMode;
     double attackTime, releaseTime;
+    int velocity;
     
     //audio signal processing stuff
-    float gain, panLeft, panRight, prevGainL, prevGainR;
+    float staticGain, gain; //staticGain is always set to the GUI gain value. 
+                            //gain changes based on the input pad velocity value
+    float panLeft, panRight, prevGainL, prevGainR;
     
     //attack/release stuff
     bool isInAttack, isInRelease;

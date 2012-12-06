@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C1657D815E95709002E924A /* notational_arrangements.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0C1657D715E95709002E924A /* notational_arrangements.xml */; };
 		0C1A3C4F15E50D65004306A3 /* FileDropButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C1A3C4D15E50D65004306A3 /* FileDropButton.cpp */; };
 		0C41D38815B456E90002DCD1 /* document_icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0C41D38615B456E90002DCD1 /* document_icon.icns */; };
 		0C41D38915B456E90002DCD1 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0C41D38715B456E90002DCD1 /* icon.icns */; };
@@ -116,13 +115,13 @@
 		0C85C32515E526140043797E /* SettingsButtonImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C85C32315E526140043797E /* SettingsButtonImage.cpp */; };
 		0C8BD8C216075E2F003A1057 /* EliteControlsComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C8BD8C016075E2F003A1057 /* EliteControlsComponent.cpp */; };
 		0C8BD8C616077158003A1057 /* GuiEliteControlsSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C8BD8C416077158003A1057 /* GuiEliteControlsSettings.cpp */; };
-		0C9950CC15E902C30060688B /* scales.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0C9950CB15E902C30060688B /* scales.xml */; };
 		0C9950D115E9046C0060688B /* Toolbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C9950CF15E9046C0060688B /* Toolbox.cpp */; };
 		0C9950D415E909870060688B /* AlphaListBoxModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C9950D215E909870060688B /* AlphaListBoxModel.cpp */; };
 		0C9950D715E9169E0060688B /* XmlAttributesListBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C9950D515E9169D0060688B /* XmlAttributesListBox.cpp */; };
 		0CA0A4FA15B97E8C001362B3 /* TriggerModes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CA0A4F815B97E8C001362B3 /* TriggerModes.cpp */; };
-		0CFEF744164BEA7C00B1DF17 /* HidComms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CFEF742164BEA7C00B1DF17 /* HidComms.cpp */; };
-		0CFEF748164BF1C700B1DF17 /* hid.c in Sources */ = {isa = PBXBuildFile; fileRef = 0CFEF746164BF1C700B1DF17 /* hid.c */; };
+		0CF1D83D165C0317001E9C2E /* HidComms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CF1D83B165C0317001E9C2E /* HidComms.cpp */; };
+		0CF1D841165C0332001E9C2E /* hid.c in Sources */ = {isa = PBXBuildFile; fileRef = 0CF1D83F165C0332001E9C2E /* hid.c */; };
+		0CF1D844165C0346001E9C2E /* EliteControls.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CF1D842165C0346001E9C2E /* EliteControls.cpp */; };
 		25CABBE894F6F3FE24224C5B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97FE2821188200B689631086 /* QuartzCore.framework */; };
 		2E4F3ED4068A7F5AC3B49264 /* juce_audio_utils.mm in Sources */ = {isa = PBXBuildFile; fileRef = AE8AA00C09CDA8BD939E2BC5 /* juce_audio_utils.mm */; };
 		31C8BDBDE9A06BAAFAD3D687 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8357D7499044959526A92B1 /* CoreAudio.framework */; };
@@ -138,6 +137,8 @@
 		A487784232A03C957AD95E9E /* juce_core.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7DB2F915B83B185748A6D232 /* juce_core.mm */; };
 		AD1B7AB2CF30FED145FDAF6E /* juce_events.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9D83A9D048D3C4B324C2183B /* juce_events.mm */; };
 		B833A4900694C5248CE155C4 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B0711F13B4343AC13C8E66E /* OpenGL.framework */; };
+		B9277294164C274B00B6FC1A /* AlphaSquareButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9277293164C274B00B6FC1A /* AlphaSquareButton.cpp */; };
+		B9ADC67E16554B5800ABA894 /* AlphaPopUpImageButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9ADC67D16554B5800ABA894 /* AlphaPopUpImageButton.cpp */; };
 		C639BA23C8C1C7582FACAB75 /* juce_audio_basics.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB5E813C74CCE66CAEB7E5B1 /* juce_audio_basics.mm */; };
 		CBC91F7970BEE3004596A9D7 /* juce_cryptography.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65CFEDEE871328C5B048CB79 /* juce_cryptography.mm */; };
 		CF2035DB786742F7DCCA085B /* juce_data_structures.mm in Sources */ = {isa = PBXBuildFile; fileRef = 917E421414537A1FFB513BAC /* juce_data_structures.mm */; };
@@ -207,7 +208,6 @@
 		0BA10572CEE7B9491160A103 /* juce_GraphicsContext.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_GraphicsContext.cpp; path = ../../JuceLibraryCode/modules/juce_graphics/contexts/juce_GraphicsContext.cpp; sourceTree = SOURCE_ROOT; };
 		0BB5F1152C93577E4AB4958E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		0C0EBD8EA4693EEDBFEDFAB9 /* juce_ArrowButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_ArrowButton.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/buttons/juce_ArrowButton.cpp; sourceTree = SOURCE_ROOT; };
-		0C1657D715E95709002E924A /* notational_arrangements.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = notational_arrangements.xml; sourceTree = "<group>"; };
 		0C1A3C4D15E50D65004306A3 /* FileDropButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileDropButton.cpp; sourceTree = "<group>"; };
 		0C1A3C4E15E50D65004306A3 /* FileDropButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileDropButton.h; sourceTree = "<group>"; };
 		0C287D087BCB039AABDDD356 /* juce_DynamicLibrary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_DynamicLibrary.h; path = ../../JuceLibraryCode/modules/juce_core/threads/juce_DynamicLibrary.h; sourceTree = SOURCE_ROOT; };
@@ -232,6 +232,7 @@
 		0C52F2B215D6BF4D00E76547 /* GuiGlobalPadSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiGlobalPadSettings.cpp; sourceTree = "<group>"; };
 		0C52F2B315D6BF4E00E76547 /* GuiGlobalPadSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiGlobalPadSettings.h; sourceTree = "<group>"; };
 		0C669E7C15E6974B003B83C1 /* CommonInfoBoxText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonInfoBoxText.h; sourceTree = "<group>"; };
+		0C68958415D123AA00848D62 /* ger_trans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ger_trans; sourceTree = "<group>"; };
 		0C78A2AC15B467900049C0C8 /* AbstractSubjectAndObserver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractSubjectAndObserver.cpp; sourceTree = "<group>"; };
 		0C78A2AD15B467900049C0C8 /* AbstractSubjectAndObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractSubjectAndObserver.h; sourceTree = "<group>"; };
 		0C78A2AE15B467900049C0C8 /* CommandIDs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandIDs.h; sourceTree = "<group>"; };
@@ -441,7 +442,6 @@
 		0C8BD8C116075E2F003A1057 /* EliteControlsComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EliteControlsComponent.h; sourceTree = "<group>"; };
 		0C8BD8C416077158003A1057 /* GuiEliteControlsSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiEliteControlsSettings.cpp; sourceTree = "<group>"; };
 		0C8BD8C516077158003A1057 /* GuiEliteControlsSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiEliteControlsSettings.h; sourceTree = "<group>"; };
-		0C9950CB15E902C30060688B /* scales.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = scales.xml; sourceTree = "<group>"; };
 		0C9950CF15E9046C0060688B /* Toolbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Toolbox.cpp; sourceTree = "<group>"; };
 		0C9950D015E9046C0060688B /* Toolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Toolbox.h; sourceTree = "<group>"; };
 		0C9950D215E909870060688B /* AlphaListBoxModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlphaListBoxModel.cpp; sourceTree = "<group>"; };
@@ -452,10 +452,13 @@
 		0CA0A4F915B97E8C001362B3 /* TriggerModes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriggerModes.h; sourceTree = "<group>"; };
 		0CA92FACC9C857515F5DC895 /* juce_Colours.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Colours.h; path = ../../JuceLibraryCode/modules/juce_graphics/colour/juce_Colours.h; sourceTree = SOURCE_ROOT; };
 		0CABB5C615E267EF00F27184 /* FirmwareStruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirmwareStruct.h; sourceTree = "<group>"; };
-		0CFEF742164BEA7C00B1DF17 /* HidComms.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HidComms.cpp; sourceTree = "<group>"; };
-		0CFEF743164BEA7C00B1DF17 /* HidComms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HidComms.h; sourceTree = "<group>"; };
-		0CFEF746164BF1C700B1DF17 /* hid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = hid.c; path = HIDAPI/hid.c; sourceTree = "<group>"; };
-		0CFEF747164BF1C700B1DF17 /* hidapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hidapi.h; path = HIDAPI/hidapi.h; sourceTree = "<group>"; };
+		0CE4BE3A15D056EE00B444EE /* jap_trans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = jap_trans; sourceTree = "<group>"; };
+		0CF1D83B165C0317001E9C2E /* HidComms.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HidComms.cpp; sourceTree = "<group>"; };
+		0CF1D83C165C0317001E9C2E /* HidComms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HidComms.h; sourceTree = "<group>"; };
+		0CF1D83F165C0332001E9C2E /* hid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hid.c; sourceTree = "<group>"; };
+		0CF1D840165C0332001E9C2E /* hidapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hidapi.h; sourceTree = "<group>"; };
+		0CF1D842165C0346001E9C2E /* EliteControls.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EliteControls.cpp; sourceTree = "<group>"; };
+		0CF1D843165C0346001E9C2E /* EliteControls.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EliteControls.h; sourceTree = "<group>"; };
 		0D5838014A4AB76B63EC13C4 /* juce_FileTreeComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_FileTreeComponent.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/filebrowser/juce_FileTreeComponent.cpp; sourceTree = SOURCE_ROOT; };
 		0D683EFC0C730B43D4BA49E6 /* juce_OggVorbisAudioFormat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_OggVorbisAudioFormat.cpp; path = ../../JuceLibraryCode/modules/juce_audio_formats/codecs/juce_OggVorbisAudioFormat.cpp; sourceTree = SOURCE_ROOT; };
 		0E5EF0D36E7C57B3C30B8832 /* juce_BufferingAudioSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_BufferingAudioSource.h; path = ../../JuceLibraryCode/modules/juce_audio_basics/sources/juce_BufferingAudioSource.h; sourceTree = SOURCE_ROOT; };
@@ -1002,7 +1005,11 @@
 		B89B436E2105E04183C2712C /* juce_SelectedItemSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_SelectedItemSet.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/mouse/juce_SelectedItemSet.h; sourceTree = SOURCE_ROOT; };
 		B8AB98CEA12E5B1C05266B02 /* juce_ComponentDragger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_ComponentDragger.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/mouse/juce_ComponentDragger.cpp; sourceTree = SOURCE_ROOT; };
 		B8EF44B9097B17D89A49AB43 /* juce_OldSchoolLookAndFeel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_OldSchoolLookAndFeel.cpp; path = ../../JuceLibraryCode/modules/juce_gui_extra/lookandfeel/juce_OldSchoolLookAndFeel.cpp; sourceTree = SOURCE_ROOT; };
+		B9277292164C274B00B6FC1A /* AlphaSquareButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlphaSquareButton.h; sourceTree = "<group>"; };
+		B9277293164C274B00B6FC1A /* AlphaSquareButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlphaSquareButton.cpp; sourceTree = "<group>"; };
 		B9A0575587AE7E089DC99D7B /* juce_android_WebBrowserComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_android_WebBrowserComponent.cpp; path = ../../JuceLibraryCode/modules/juce_gui_extra/native/juce_android_WebBrowserComponent.cpp; sourceTree = SOURCE_ROOT; };
+		B9ADC67C16554B5800ABA894 /* AlphaPopUpImageButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlphaPopUpImageButton.h; sourceTree = "<group>"; };
+		B9ADC67D16554B5800ABA894 /* AlphaPopUpImageButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlphaPopUpImageButton.cpp; sourceTree = "<group>"; };
 		B9E3BD00F2B15EBCBC805A1F /* juce_TableListBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_TableListBox.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/widgets/juce_TableListBox.h; sourceTree = SOURCE_ROOT; };
 		BA0AE1072B330AA7098C9098 /* juce_Expression.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_Expression.cpp; path = ../../JuceLibraryCode/modules/juce_core/maths/juce_Expression.cpp; sourceTree = SOURCE_ROOT; };
 		BA9A6B2E943B6DF9C957E982 /* juce_MidiOutput.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_MidiOutput.cpp; path = ../../JuceLibraryCode/modules/juce_audio_devices/midi_io/juce_MidiOutput.cpp; sourceTree = SOURCE_ROOT; };
@@ -1473,6 +1480,8 @@
 				0C78A2DE15B467900049C0C8 /* AlphaLiveEngine.cpp */,
 				0C78A2DA15B467900049C0C8 /* GlobalClock.h */,
 				0C78A2D915B467900049C0C8 /* GlobalClock.cpp */,
+				0CF1D843165C0346001E9C2E /* EliteControls.h */,
+				0CF1D842165C0346001E9C2E /* EliteControls.cpp */,
 				0C78A2DB15B467900049C0C8 /* MIDI Mode */,
 				0C78A2E415B467900049C0C8 /* Sampler Mode */,
 				0C78A2E915B467900049C0C8 /* Sequencer Mode */,
@@ -1654,6 +1663,8 @@
 				0C78A33115B467900049C0C8 /* ModeButton.cpp */,
 				0C52F28815D6914600E76547 /* AlphaPopUpButton.h */,
 				0C52F28715D6914600E76547 /* AlphaPopUpButton.cpp */,
+				B9ADC67C16554B5800ABA894 /* AlphaPopUpImageButton.h */,
+				B9ADC67D16554B5800ABA894 /* AlphaPopUpImageButton.cpp */,
 				0C52F28A15D6914600E76547 /* AlphaRotarySlider.h */,
 				0C52F28915D6914600E76547 /* AlphaRotarySlider.cpp */,
 				0C52F29215D6939B00E76547 /* AlphaTextButton.h */,
@@ -1664,6 +1675,8 @@
 				0C85C32315E526140043797E /* SettingsButtonImage.cpp */,
 				0C1A3C4E15E50D65004306A3 /* FileDropButton.h */,
 				0C1A3C4D15E50D65004306A3 /* FileDropButton.cpp */,
+				B9277292164C274B00B6FC1A /* AlphaSquareButton.h */,
+				B9277293164C274B00B6FC1A /* AlphaSquareButton.cpp */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -1774,8 +1787,8 @@
 				0C78A37715B467910049C0C8 /* OscInput.cpp */,
 				0C78A37A15B467910049C0C8 /* OscOutput.h */,
 				0C78A37915B467910049C0C8 /* OscOutput.cpp */,
-				0CFEF743164BEA7C00B1DF17 /* HidComms.h */,
-				0CFEF742164BEA7C00B1DF17 /* HidComms.cpp */,
+				0CF1D83C165C0317001E9C2E /* HidComms.h */,
+				0CF1D83B165C0317001E9C2E /* HidComms.cpp */,
 			);
 			name = "My IO Classes";
 			path = "../../Source/My IO Classes";
@@ -1784,7 +1797,7 @@
 		0C78A37D15B467910049C0C8 /* Third Party Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				0CFEF745164BF1B400B1DF17 /* HIDAPI */,
+				0CF1D83E165C0332001E9C2E /* HIDAPI */,
 				FC2A0C4E1612038A00395455 /* fastmath.h */,
 				0C78A37E15B467910049C0C8 /* DspFilters */,
 				0C78A3A715B467910049C0C8 /* Juced */,
@@ -1900,16 +1913,6 @@
 			path = osc;
 			sourceTree = "<group>";
 		};
-		0C9950CA15E902C30060688B /* Other Files */ = {
-			isa = PBXGroup;
-			children = (
-				0C9950CB15E902C30060688B /* scales.xml */,
-				0C1657D715E95709002E924A /* notational_arrangements.xml */,
-			);
-			name = "Other Files";
-			path = "../../Other Files";
-			sourceTree = "<group>";
-		};
 		0C9950CE15E9046C0060688B /* Toolbox */ = {
 			isa = PBXGroup;
 			children = (
@@ -1923,13 +1926,23 @@
 			path = Toolbox;
 			sourceTree = "<group>";
 		};
-		0CFEF745164BF1B400B1DF17 /* HIDAPI */ = {
+		0CE4BE3915D056EE00B444EE /* Translation files */ = {
 			isa = PBXGroup;
 			children = (
-				0CFEF747164BF1C700B1DF17 /* hidapi.h */,
-				0CFEF746164BF1C700B1DF17 /* hid.c */,
+				0CE4BE3A15D056EE00B444EE /* jap_trans */,
+				0C68958415D123AA00848D62 /* ger_trans */,
 			);
-			name = HIDAPI;
+			name = "Translation files";
+			path = "../../Translation files";
+			sourceTree = "<group>";
+		};
+		0CF1D83E165C0332001E9C2E /* HIDAPI */ = {
+			isa = PBXGroup;
+			children = (
+				0CF1D83F165C0332001E9C2E /* hid.c */,
+				0CF1D840165C0332001E9C2E /* hidapi.h */,
+			);
+			path = HIDAPI;
 			sourceTree = "<group>";
 		};
 		0D9180AE1B7C81E23FFF9505 /* messages */ = {
@@ -3048,7 +3061,7 @@
 				CDBADE64352FD356CBAD11BE /* AlphaLive */,
 				1AC53D384541E9928C012897 /* Juce Modules */,
 				DCA3EA8A1A8E8E9060589C1E /* Juce Library Code */,
-				0C9950CA15E902C30060688B /* Other Files */,
+				0CE4BE3915D056EE00B444EE /* Translation files */,
 				90004462C48C6E13E0AFD50B /* Resources */,
 				81B322E1A4AEBC13016E085C /* Frameworks */,
 				3D0502C56FF54B447448721B /* Products */,
@@ -3534,8 +3547,6 @@
 			files = (
 				0C41D38815B456E90002DCD1 /* document_icon.icns in Resources */,
 				0C41D38915B456E90002DCD1 /* icon.icns in Resources */,
-				0C9950CC15E902C30060688B /* scales.xml in Resources */,
-				0C1657D815E95709002E924A /* notational_arrangements.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3673,8 +3684,11 @@
 				FC2A0C931612209100395455 /* FxGuiDistortion.cpp in Sources */,
 				FC2A98A3161A04C00020C16D /* Bitcrusher.cpp in Sources */,
 				FC1622BF161B23B0004FE9E3 /* FxGuiBitcrusher.cpp in Sources */,
-				0CFEF744164BEA7C00B1DF17 /* HidComms.cpp in Sources */,
-				0CFEF748164BF1C700B1DF17 /* hid.c in Sources */,
+				B9277294164C274B00B6FC1A /* AlphaSquareButton.cpp in Sources */,
+				B9ADC67E16554B5800ABA894 /* AlphaPopUpImageButton.cpp in Sources */,
+				0CF1D83D165C0317001E9C2E /* HidComms.cpp in Sources */,
+				0CF1D841165C0332001E9C2E /* hid.c in Sources */,
+				0CF1D844165C0346001E9C2E /* EliteControls.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3689,7 +3703,6 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
 				GCC_WARN_MISSING_PARENTHESES = YES;
@@ -3711,7 +3724,6 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
 				GCC_WARN_MISSING_PARENTHESES = YES;

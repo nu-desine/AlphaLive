@@ -16,13 +16,13 @@
 Oscillator::Oscillator (double sampleRate)
 :			
 	sampRate(sampleRate),
-	squareBuffer(1, 20400),
-	sawBuffer(1, 44000),
-	sawDownBuffer(1, 48000)
+	squareBuffer(1, 22071),
+	sawBuffer(1, 21984),
+	sawDownBuffer(1, 21984)
 {
-	squareWaveFile = ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Source/SquareWaveRoundedFINALSHORTESTest.wav");
-    sawWaveFile = ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Source/SawWaveFinal4.wav");
-	sawDownWaveFile = ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Source/SawDownWaveFinal2.wav");
+	squareWaveFile = ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Source/SquareWave20500.wav");
+    sawWaveFile = ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Source/SawWave20500.wav");
+	sawDownWaveFile = ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Source/SawDownWave20500.wav");
 
 	currentPhase = 0.0; 
 	currentSample = 0.0;
@@ -35,23 +35,24 @@ Oscillator::Oscillator (double sampleRate)
 	AudioFormatManager formatManager;
 	formatManager.registerBasicFormats();
 	
-    AudioFormatReader *reader = formatManager.createReaderFor(squareWaveFile);
-	reader->read(&squareBuffer, 0, reader->lengthInSamples, 0, true, false);
+    ScopedPointer <AudioFormatReader> squareReader (formatManager.createReaderFor(squareWaveFile));
+	squareReader->read(&squareBuffer, 0, squareReader->lengthInSamples, 0, true, false);
+	squareNumSamples = squareReader->lengthInSamples;
 	
-	reader = formatManager.createReaderFor(sawWaveFile);
-	reader->read(&sawBuffer, 0, reader->lengthInSamples, 0, true, false);
+	ScopedPointer <AudioFormatReader> sawReader (formatManager.createReaderFor(sawWaveFile));
+	sawReader->read(&sawBuffer, 0, sawReader->lengthInSamples, 0, true, false);
 	
-	reader = formatManager.createReaderFor(sawDownWaveFile);
-	reader->read(&sawDownBuffer, 0, reader->lengthInSamples, 0, true, false);
+	ScopedPointer <AudioFormatReader> sawDownReader (formatManager.createReaderFor(sawDownWaveFile));
+	sawDownReader->read(&sawDownBuffer, 0, sawDownReader->lengthInSamples, 0, true, false);
 	
-	numSamples = reader->lengthInSamples;
+	sawNumSamples = sawReader->lengthInSamples; 
 	
 	sharedMemory.exit();
 }
 
 Oscillator::~Oscillator()
 {
-    
+
 }
 
 double Oscillator::process (double frequency, int waveShape)
@@ -92,17 +93,30 @@ double Oscillator::process (double frequency, int waveShape)
 		if (currentPhase < 0.0)
 			currentPhase += TWOPI;
 	}
-	if (waveShape == 2 || waveShape == 4 || waveShape == 5) 
+	if (waveShape == 2) 
 	{
-		stepSize = numSamples * (frequency / sampRate);
+		stepSize = squareNumSamples * (frequency / sampRate);
 		currentSample += stepSize;
 		
 		//std::cout << "In process current sample: " <<  << std::endl;
 		
-		if (currentSample >= numSamples)
-			currentSample -= numSamples;
+		if (currentSample >= squareNumSamples)
+			currentSample -= squareNumSamples;
 		if (currentSample < 0.0)
-			currentSample += numSamples;
+			currentSample += squareNumSamples;
+		
+	}
+	if (waveShape == 4 || waveShape == 5) 
+	{
+		stepSize = sawNumSamples * (frequency / sampRate);
+		currentSample += stepSize;
+		
+		//std::cout << "In process current sample: " <<  << std::endl;
+		
+		if (currentSample >= sawNumSamples)
+			currentSample -= sawNumSamples;
+		if (currentSample < 0.0)
+			currentSample += sawNumSamples;
 		
 	}
 	

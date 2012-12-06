@@ -93,6 +93,10 @@ double Oscillator::process (double frequency, int waveShape)
             
     }
     
+    //the below functions being in seperate if else statements
+    //means that when switching between certain waveforms the
+    //waveform won't still be in sync. Could do with interating
+    //through all the values no matter what the waveform is
 	if (waveShape == 1 || waveShape == 3) 
 	{
 		increment = frequency * (TWOPI / sampRate);
@@ -103,7 +107,7 @@ double Oscillator::process (double frequency, int waveShape)
 		if (currentPhase < 0.0)
 			currentPhase += TWOPI;
 	}
-	if (waveShape == 2) 
+	else if (waveShape == 2) 
 	{
 		stepSize = squareNumSamples * (frequency / sampRate);
 		currentSample += stepSize;
@@ -116,7 +120,7 @@ double Oscillator::process (double frequency, int waveShape)
 			currentSample += squareNumSamples;
 		
 	}
-	if (waveShape == 4 || waveShape == 5) 
+	else if (waveShape == 4 || waveShape == 5) 
 	{
 		stepSize = sawNumSamples * (frequency / sampRate);
 		currentSample += stepSize;

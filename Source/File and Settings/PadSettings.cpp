@@ -140,6 +140,8 @@ PadSettings::PadSettings(int arrayIndex)
     
     
     //----pad effects----
+    double tempo = 120; //default tempo
+    
     //Gain and Pan
     padFxGainPanGain = 1.0;
     padFxGainPanPan = 0.5;
@@ -169,7 +171,7 @@ PadSettings::PadSettings(int arrayIndex)
     padFxBpfAtIntensity = 1.0;
     //Delay
     padFxDelayMix = 0.7;
-    padFxDelayTime = 500.0;
+    padFxDelayTime = 30000.0/tempo;
     padFxDelayFeedback = 0.5;
     padFxDelayLpfFreq = 20000.0;
     padFxDelayHpfFreq = 30.0;
@@ -189,7 +191,7 @@ PadSettings::PadSettings(int arrayIndex)
     padFxReverbAtIntensity = 1.0;
     //Flanger
     padFxFlangerMix = 0.7;
-    padFxFlangerRate = 0.25;
+    padFxFlangerRate = (tempo/60.0) * 0.25;
     padFxFlangerFeedback = 0.9;
     padFxFlangerIntensity = 0.1;
     padFxFlangerSync = 1;
@@ -199,7 +201,7 @@ PadSettings::PadSettings(int arrayIndex)
     padFxFlangerAtIntensity = 1.0;
     //Tremolo
     padFxTremoloDepth = 1.0;
-    padFxTremoloRate = 5.0;
+    padFxTremoloRate = (tempo/60.0) * 1.0;
     padFxTremoloShape = 1;
     padFxTremoloSync = 1;
     padFxTremoloRateMenu = 3;

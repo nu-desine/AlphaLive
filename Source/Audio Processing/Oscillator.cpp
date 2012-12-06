@@ -20,9 +20,9 @@ Oscillator::Oscillator (double sampleRate)
 	sawBuffer(1, 44000),
 	sawDownBuffer(1, 48000)
 {
-	squareWaveFile = ("/Users/felixgodden/Programming/nu-desine/alphalive 2/Source/SquareWaveRoundedFINALSHORTESTest.wav");
-    sawWaveFile = ("/Users/felixgodden/Programming/nu-desine/alphalive 2/Source/SawWaveFinal4.wav");
-	sawDownWaveFile = ("/Users/felixgodden/Programming/nu-desine/alphalive 2/Source/SawDownWaveFinal2.wav");
+	squareWaveFile = ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Source/SquareWaveRoundedFINALSHORTESTest.wav");
+    sawWaveFile = ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Source/SawWaveFinal4.wav");
+	sawDownWaveFile = ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Source/SawDownWaveFinal2.wav");
 
 	currentPhase = 0.0; 
 	currentSample = 0.0;

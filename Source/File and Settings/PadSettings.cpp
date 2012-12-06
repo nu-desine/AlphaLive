@@ -376,6 +376,34 @@ void PadSettings::resetData (int whatToReset)
     //what about reseting the FX values?
 }
 
+void PadSettings::setTempo (double value)
+{
+    //set the rate of any tempo-relative effects
+    
+    //essentially the below functions are called as they can grab the new tempo
+    //and reset the effect rate if they need to (if they are currently set to sync)
+    
+    if (mode == 2)
+    {
+        if (samplerEffect == 7)
+            setPadFxDelayTimeMenu(padFxDelayTimeMenu);
+        else if (samplerEffect == 9)
+            setPadFxFlangerRateMenu(padFxFlangerRateMenu);
+        else if (samplerEffect == 10)
+            setPadFxTremoloRateMenu(padFxTremoloRateMenu);
+        
+    }
+    else if (mode == 3 && sequencerMode == 2)
+    {
+        if (sequencerEffect == 7)
+            setPadFxDelayTimeMenu(padFxDelayTimeMenu);
+        else if (sequencerEffect == 9)
+            setPadFxFlangerRateMenu(padFxFlangerRateMenu);
+        else if (sequencerEffect == 10)
+            setPadFxTremoloRateMenu(padFxTremoloRateMenu);
+    }
+    
+}
 
 #pragma mark Global mutator functions
 //==================================================================
@@ -1814,10 +1842,41 @@ void PadSettings::setPadFxDelaySync (int value)
 {
     padFxDelaySync = value;
 }
+
 void PadSettings::setPadFxDelayTimeMenu (int value)
 {
     padFxDelayTimeMenu = value;
+    
+    if (padFxDelaySync == true)
+    {
+        //work out delay time based on beat length selected and the tempo.
+        double tempo = AppSettings::Instance()->getGlobalTempo();
+        
+        switch (padFxDelayTimeMenu)
+        {
+            case 1: // 4 beats
+                setPadFxDelayTime(240000.0/tempo);
+                break;
+            case 2: // 2 beats
+                setPadFxDelayTime(120000.0/tempo);
+                break;
+            case 3: // 1 beat
+                setPadFxDelayTime(60000.0/tempo);
+                break;
+            case 4: //half beat
+                setPadFxDelayTime(30000.0/tempo);
+                break;
+            case 5: // quarter beat
+                setPadFxDelayTime(15000.0/tempo);
+                break;
+            default: // 1 beat
+                setPadFxDelayTime(60000.0/tempo);
+                break;
+        }
+    }
+    
 }
+
 void PadSettings::setPadFxDelayAlphaTouch (int value)
 {
     padFxDelayAlphaTouch = value;
@@ -2020,10 +2079,53 @@ void PadSettings::setPadFxFlangerSync (int value)
 {
     padFxFlangerSync = value;
 }
+
 void PadSettings::setPadFxFlangerRateMenu (int value)
 {
     padFxFlangerRateMenu = value;
+    
+    if (padFxFlangerSync == true)
+    {
+        //work out LFO rate based on rate selected and the tempo.
+        double tempo = AppSettings::Instance()->getGlobalTempo();
+        double bps = tempo/60.0;
+        
+        switch (padFxFlangerRateMenu)
+        {
+            case 1: // 8 bars
+                setPadFxFlangerRate(bps * 0.03125);
+                break;
+            case 2: // 4 bars
+                setPadFxFlangerRate(bps * 0.0625);
+                break;
+            case 3: // 2 bars
+                setPadFxFlangerRate(bps * 0.125);
+                break;
+            case 4: // 1 bar - 4 beats
+                setPadFxFlangerRate(bps * 0.25);
+                break;
+            case 5: // 1/2 - 2 beats
+                setPadFxFlangerRate(bps * 0.5);
+                break;
+            case 6: // 1/4 - 1 beat
+                setPadFxFlangerRate(bps * 1.0);
+                break;
+            case 7: // 1/8 - half beat
+                setPadFxFlangerRate(bps * 2.0);
+                break;
+            case 8: // 1/16 - quarter beat
+                setPadFxFlangerRate(bps * 4.0);
+                break;
+            case 9: // 1/32 - 8th beat
+                setPadFxFlangerRate(bps * 8.0);
+                break;
+            default: // 1/4 - 1 beat
+                setPadFxFlangerRate(bps * 1.0);
+                break;
+        }
+    }
 }
+
 void PadSettings::setPadFxFlangerAlphaTouch (int value)
 {
     padFxFlangerAlphaTouch = value;
@@ -2114,10 +2216,50 @@ void PadSettings::setPadFxTremoloSync (int value)
 {
     padFxTremoloSync = value;
 }
+
+
 void PadSettings::setPadFxTremoloRateMenu (int value)
 {
     padFxTremoloRateMenu = value;
+    
+    if (padFxTremoloSync == true)
+    {
+        //work out LFO rate based on rate selected and the tempo.
+        double tempo = AppSettings::Instance()->getGlobalTempo();
+        double bps = tempo/60.0;
+        
+        switch (padFxTremoloRateMenu)
+        {
+            case 1: // 1/1 - 4 beats
+                setPadFxTremoloRate(bps * 0.25);
+                break;
+            case 2: // 1/2 - 2 beats
+                setPadFxTremoloRate(bps * 0.5);
+                break;
+            case 3: // 1/4 - 1 beat
+                setPadFxTremoloRate(bps * 1.0);
+                break;
+            case 4: // 1/8 - half beat
+                setPadFxTremoloRate(bps * 2.0);
+                break;
+            case 5: // 1/16 - quarter beat
+                setPadFxTremoloRate(bps * 4.0);
+                break;
+            case 6: // 1/32 - 8th beat
+                setPadFxTremoloRate(bps * 8.0);
+                break;
+            case 7: // 1/64 - 16th beat
+                setPadFxTremoloRate(bps * 16.0);
+                break;
+            default: // 1/4 - 1 beat
+                setPadFxTremoloRate(bps * 1.0);
+                break;
+        }
+    }
+    
 }
+
+
 void PadSettings::setPadFxTremoloAlphaTouch (int value)
 {
     padFxTremoloAlphaTouch = value;

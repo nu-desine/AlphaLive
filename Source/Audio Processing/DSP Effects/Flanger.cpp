@@ -26,7 +26,7 @@ Flanger::Flanger(int padNumber_, int sampleRate_)
     
     //SET DEAFULT SETTINGS HERE FROM PAD_SETTINGS
     mix = mixPrev = mixControlValue = PAD_SETTINGS->getPadFxFlangerMix();
-    rate = rateControlValue = (AppSettings::Instance()->getGlobalTempo()/60.0) * 0.25; // sets the default rate to 1 bar
+    rate = rateControlValue = PAD_SETTINGS->getPadFxFlangerRate();
     feedback = feedbackControlValue = PAD_SETTINGS->getPadFxFlangerFeedback();
     intensity = intensityControlValue = PAD_SETTINGS->getPadFxFlangerIntensity();
     

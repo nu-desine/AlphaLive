@@ -235,6 +235,8 @@ void AppSettings::setGlobalTempo (float value)
     //send the tempo to all relevent places
     alphaLiveEngineRef->getModeSequencer()->setTempo(globalTempo);
     alphaLiveEngineRef->getGlobalClock()->setTempo(globalTempo);
+    for (int i = 0; i < 48; i++)
+        padSettings[i]->setTempo(globalTempo);
 }
 
 void AppSettings::setQuantizationValue(int value)

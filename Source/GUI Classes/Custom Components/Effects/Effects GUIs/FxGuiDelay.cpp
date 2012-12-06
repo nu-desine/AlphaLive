@@ -266,6 +266,13 @@ void GuiDelay::buttonClicked (Button *button)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setPadFxDelaySync(syncButton->getToggleState());
+            
+            //if set to sync, grab the currently set rate menu value and re-set the rate
+            if (syncButton->getToggleState() == true)
+            {
+                PAD_SETTINGS->setPadFxDelayTimeMenu(PAD_SETTINGS->getPadFxDelayTimeMenu());
+                delayTimeSlider->setValue(PAD_SETTINGS->getPadFxDelayTime(), dontSendNotification);
+            }
         }
         
         delayTimeSlider->setVisible(false);
@@ -288,52 +295,39 @@ void GuiDelay::buttonClicked (Button *button)
 		menu.addItem(4, translate("Half Beat"));
 		menu.addItem(5, translate("Quarter Beat"));
 		
-        //work out delay time (NOT sample number needed) based on beat length selected and the tempo.
-        float delayTime;
-        tempo = AppSettings::Instance()->getGlobalTempo();
-		
 		const int result = menu.show();
         
         if (result != 0) //if the user selects something
         {
             switch (result)
             {
-                    //should the actual delay time be worked out on the other side or within pad settings?
-                    //this will help fix the bug where a default 
                 case 1: // 4 beats
-                    delayTime = 240000.0/tempo;
                     delayTimeMenu->setButtonText("4");
                     break;
                 case 2: // 2 beats
-                    delayTime = 120000.0/tempo;
                     delayTimeMenu->setButtonText("2");
                     break;
                 case 3: // 1 beat
-                    delayTime = 60000.0/tempo;
                     delayTimeMenu->setButtonText("1");
                     break;
                 case 4: //half beat
-                    delayTime = 30000.0/tempo;
                     delayTimeMenu->setButtonText("1/2");
                     break;
                 case 5: // quarter beat
-                    delayTime = 15000.0/tempo;
                     delayTimeMenu->setButtonText("1/4");
                     break;
                 default: // 1 beat
-                    delayTime = 60000.0/tempo;
                     delayTimeMenu->setButtonText("1");
                     break;
             }
-            
-            delayTimeSlider->setValue(delayTime, dontSendNotification);
             
             for (int i = 0; i < selectedPads.size(); i++)
             {
                 int padNum = selectedPads[i];
-                PAD_SETTINGS->setPadFxDelayTime(delayTime);
-                PAD_SETTINGS->setPadFxDelayTimeMenu(result);
+                PAD_SETTINGS->setPadFxDelayTimeMenu(result); //in turn sets the actual delay time
             }
+            
+            delayTimeSlider->setValue(AppSettings::Instance()->padSettings[selectedPads[0]]->getPadFxDelayTime(), dontSendNotification);
         }
         
     }

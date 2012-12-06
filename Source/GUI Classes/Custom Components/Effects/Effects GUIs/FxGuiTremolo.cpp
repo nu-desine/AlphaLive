@@ -275,7 +275,15 @@ void GuiTremolo::buttonClicked (Button *button)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setPadFxTremoloSync(syncButton->getToggleState());
+            
+            //if set to sync, grab the currently set rate menu value and re-set the rate
+            if (syncButton->getToggleState() == true)
+            {
+                PAD_SETTINGS->setPadFxTremoloRateMenu(PAD_SETTINGS->getPadFxTremoloRateMenu());
+                rateSlider->setValue(PAD_SETTINGS->getPadFxTremoloRate(), dontSendNotification);
+            }
         }
+        
         
         rateSlider->setVisible(false);
         rateMenu->setVisible(false);
@@ -289,7 +297,6 @@ void GuiTremolo::buttonClicked (Button *button)
 	
 	else if (button == rateMenu)
     {
-		
 		PopupMenu menu;
 		
 		menu.addItem(1, "1/1");
@@ -300,59 +307,46 @@ void GuiTremolo::buttonClicked (Button *button)
 		menu.addItem(6, "1/32");
 		menu.addItem(7, "1/64");
 		
-        //work out LFO rate based on rate selected and the tempo.
-        tempo = AppSettings::Instance()->getGlobalTempo();
-        double bps = tempo/60.0;
-        double lfoRate;
-		
 		const int result = menu.show();
 
-        
-        switch (result)
+        if (result != 0) //if the user selects something
         {
-                
-            case 1: // 1/1 - 4 beats
-                lfoRate = bps * 0.25;
-				rateMenu->setButtonText("1/1");
-                break;
-            case 2: // 1/2 - 2 beats
-                lfoRate = bps * 0.5;
-				rateMenu->setButtonText("1/2");
-                break;
-            case 3: // 1/4 - 1 beat
-                lfoRate = bps * 1.0;
-				rateMenu->setButtonText("1/4");
-                break;
-            case 4: // 1/8 - half beat
-                lfoRate = bps * 2.0;
-				rateMenu->setButtonText("1/8");
-                break;
-            case 5: // 1/16 - quarter beat
-                lfoRate = bps * 4.0;
-				rateMenu->setButtonText("1/16");
-                break;
-            case 6: // 1/32 - 8th beat
-                lfoRate = bps * 8.0;
-				rateMenu->setButtonText("1/32");
-                break;
-            case 7: // 1/64 - 16th beat
-                lfoRate = bps * 16.0;
-				rateMenu->setButtonText("1/64");
-                break;
-            default: // 1/4 - 1 beat
-                lfoRate = bps * 1.0;
-				rateMenu->setButtonText("1/4");
-                break;
-				
-        }
-        
-        rateSlider->setValue(lfoRate, dontSendNotification);
-        
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setPadFxTremoloRate(lfoRate);
-            PAD_SETTINGS->setPadFxTremoloRateMenu(result);
+            switch (result)
+            {
+                case 1: // 1/1 - 4 beats
+                    rateMenu->setButtonText("1/1");
+                    break;
+                case 2: // 1/2 - 2 beats
+                    rateMenu->setButtonText("1/2");
+                    break;
+                case 3: // 1/4 - 1 beat
+                    rateMenu->setButtonText("1/4");
+                    break;
+                case 4: // 1/8 - half beat
+                    rateMenu->setButtonText("1/8");
+                    break;
+                case 5: // 1/16 - quarter beat
+                    rateMenu->setButtonText("1/16");
+                    break;
+                case 6: // 1/32 - 8th beat
+                    rateMenu->setButtonText("1/32");
+                    break;
+                case 7: // 1/64 - 16th beat
+                    rateMenu->setButtonText("1/64");
+                    break;
+                default: // 1/4 - 1 beat
+                    rateMenu->setButtonText("1/4");
+                    break;
+                    
+            }
+
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                PAD_SETTINGS->setPadFxTremoloRateMenu(result); //in turn sets the actual rate
+            }
+            
+            rateSlider->setValue(AppSettings::Instance()->padSettings[selectedPads[0]]->getPadFxTremoloRate(), dontSendNotification);
         }
         
     }
@@ -389,9 +383,7 @@ void GuiTremolo::updateDisplay()
         int padNum = selectedPads[0];
         depthSlider->setValue(PAD_SETTINGS->getPadFxTremoloDepth(), dontSendNotification);
         rateSlider->setValue(PAD_SETTINGS->getPadFxTremoloRate(), dontSendNotification);
-        //rateMenu->setSelectedId(PAD_SETTINGS->getPadFxTremoloRateMenu(), true);
         syncButton->setToggleState(PAD_SETTINGS->getPadFxTremoloSync(), false);
-        //shapeMenu->setSelectedId(PAD_SETTINGS->getPadFxTremoloShape(), true);
 		shapeMenuButtons[PAD_SETTINGS->getPadFxTremoloShape()-1]->setToggleState(true, false);
         
         alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxTremoloAlphaTouch(), true);

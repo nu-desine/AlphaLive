@@ -149,11 +149,17 @@ namespace BinaryDataNew
     extern const char*  savesymbol_png;
     const int           savesymbol_pngSize = 3212;
 
+    extern const char*  sawdownwave20500_wav;
+    const int           sawdownwave20500_wavSize = 44012;
+
     extern const char*  sawfallingsymbol_png;
     const int           sawfallingsymbol_pngSize = 4830;
 
     extern const char*  sawrisingsymbol_png;
     const int           sawrisingsymbol_pngSize = 4882;
+
+    extern const char*  sawwave20500_wav;
+    const int           sawwave20500_wavSize = 44012;
 
     extern const char*  sequenceicon_png;
     const int           sequenceicon_pngSize = 5134;
@@ -163,6 +169,9 @@ namespace BinaryDataNew
 
     extern const char*  squaresymbol_png;
     const int           squaresymbol_pngSize = 3397;
+
+    extern const char*  squarewave20500_wav;
+    const int           squarewave20500_wavSize = 44186;
 
     extern const char*  standardicon_png;
     const int           standardicon_pngSize = 3410;
@@ -200,6 +209,6 @@ namespace BinaryDataNew
     extern const char*  triggersettingsicon_png;
     const int           triggersettingsicon_pngSize = 4827;
 
-};
+}
 
 #endif

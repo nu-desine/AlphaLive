@@ -7,6 +7,7 @@
 //
 
 #include "Oscillator.h"
+#include "../GUI Classes/Binary Data/BinaryDataNew.h"
 
 #ifndef M_PI
 #define M_PI (3.1415926535897932)
@@ -20,10 +21,6 @@ Oscillator::Oscillator (double sampleRate)
 	sawBuffer(1, 21984),
 	sawDownBuffer(1, 21984)
 {
-	squareWaveFile = ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Source/SquareWave20500.wav");
-    sawWaveFile = ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Source/SawWave20500.wav");
-	sawDownWaveFile = ("/Users/Liam/Desktop/AlphaSphere Software Dev/AlphaLive NEW vDEV/Source/SawDownWave20500.wav");
-
 	currentPhase = 0.0; 
 	currentSample = 0.0;
 	stepSize = 0;
@@ -35,14 +32,27 @@ Oscillator::Oscillator (double sampleRate)
 	AudioFormatManager formatManager;
 	formatManager.registerBasicFormats();
 	
-    ScopedPointer <AudioFormatReader> squareReader (formatManager.createReaderFor(squareWaveFile));
+    ScopedPointer <AudioFormatReader> squareReader 
+    (formatManager.createReaderFor(new MemoryInputStream (BinaryDataNew::squarewave20500_wav,
+                                                          BinaryDataNew::squarewave20500_wavSize,
+                                                          false)));
+    
 	squareReader->read(&squareBuffer, 0, squareReader->lengthInSamples, 0, true, false);
-	squareNumSamples = squareReader->lengthInSamples;
 	
-	ScopedPointer <AudioFormatReader> sawReader (formatManager.createReaderFor(sawWaveFile));
+    squareNumSamples = squareReader->lengthInSamples;
+	
+	ScopedPointer <AudioFormatReader> sawReader 
+    (formatManager.createReaderFor(new MemoryInputStream (BinaryDataNew::sawwave20500_wav,
+                                                          BinaryDataNew::sawwave20500_wavSize,
+                                                          false)));
+    
 	sawReader->read(&sawBuffer, 0, sawReader->lengthInSamples, 0, true, false);
 	
-	ScopedPointer <AudioFormatReader> sawDownReader (formatManager.createReaderFor(sawDownWaveFile));
+	ScopedPointer <AudioFormatReader> sawDownReader
+    (formatManager.createReaderFor(new MemoryInputStream (BinaryDataNew::sawdownwave20500_wav,
+                                                          BinaryDataNew::sawdownwave20500_wavSize,
+                                                          false)));
+    
 	sawDownReader->read(&sawDownBuffer, 0, sawDownReader->lengthInSamples, 0, true, false);
 	
 	sawNumSamples = sawReader->lengthInSamples; 

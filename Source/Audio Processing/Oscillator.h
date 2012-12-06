@@ -51,9 +51,6 @@ private:
 	double squareNumSamples, sawNumSamples, numSamplesProcess, stepSize, currentSample;
 	
 	AudioSampleBuffer squareBuffer, sawBuffer, sawDownBuffer;
-	
-	//buffer file source
-	File squareWaveFile, sawWaveFile, sawDownWaveFile;
     
 };
 

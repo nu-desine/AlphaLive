@@ -2903,12 +2903,16 @@ void AppDocumentState::removeUneededAudioFiles (bool closingApp)
                     }
                 }
             }
-            //create a copy of the working dir (Audio Files dir)
-            File audioFileDirectory = File::getCurrentWorkingDirectory();
-            //delete the current working dir
+            //get working dir's (Audio Files dir) parent
+            File audioFileDirectoryParent = File::getCurrentWorkingDirectory().getParentDirectory();
+            //delete the current working dir to remove the unused files
             File::getCurrentWorkingDirectory().deleteRecursively();
-            //rename the temp dir (which should hold all the needed audio files) to 'Audio Files' so it can be used as the working dir when the project is next loaded up
-            tempAudioDirectory.moveFileTo(audioFileDirectory);
+            //create a new Audio Files directory
+            File audioFileDirectory (audioFileDirectoryParent.getFullPathName() + File::separatorString + "Audio Files");
+            //copy the temp dir (all the needed files) to the new audio files directory
+            tempAudioDirectory.copyDirectoryTo(audioFileDirectory);
+            //delete the temp directory
+            tempAudioDirectory.deleteRecursively();
             
             if (!closingApp)
             {

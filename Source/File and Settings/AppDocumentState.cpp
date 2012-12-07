@@ -42,6 +42,31 @@ AppDocumentState::AppDocumentState()
 												true);
 	#endif
 
+    //Create a AlphaLive temp directory and intially set the current working directory as this.
+    //The current working directory will hold the current projects audio files, however
+    //if audio files are added before a project is created they will be copied into this temp directory.
+    //When the project is created, the content of the temp directory will be coppied into the 
+    //new projects Audio Files directory which is then set as the new current working directory.
+    //The temp directory is then deleted at app shutdown.
+    //However first, we must delete AlphaLive's temp directory if it already exists (could be due to a previous crash
+    //that would cause the directory not be deleted last time).
+    //Annoyingly, Mac and Windows seem to handle temp directories differently:
+    // - Mac - File::getSpecialLocation(File::tempDirectory) is a directory called AlphaLive 
+    // WITHIN the OS temp directory, which is what we want.
+    // - Windows - File::getSpecialLocation(File::tempDirectory) is the OVERALL OS temp directory, 
+    // so we need to manually create the ALphaLive directory within it. 
+    
+    #if JUCE_MAC || JUCE_LINUX //is this right for linux?
+    tempDir = File::getSpecialLocation(File::tempDirectory);
+    #endif
+    #if JUCE_WINDOWS
+    tempDir = File::getSpecialLocation(File::tempDirectory).getFullPathName() + File::separatorString + "AlphaLive";
+    #endif
+    tempDir.deleteRecursively();
+    tempDir.createDirectory();
+    tempDir.setAsCurrentWorkingDirectory();
+    
+    
     for (int i = 0; i <= NO_OF_SCENES-1; i++)
     {
         sceneData.insert(i, new XmlElement("SCENE_" + String(i)));
@@ -66,7 +91,8 @@ AppDocumentState::AppDocumentState()
 
 AppDocumentState::~AppDocumentState()
 {
-
+    //delete temp file
+    tempDir.deleteRecursively();
 }
 
 void AppDocumentState::setMainAppWindowRef (MainAppWindow *ref)
@@ -955,8 +981,10 @@ void AppDocumentState::createNewProject()
         
         currentProjectFile = File::nonexistent;
         
-        File::getSpecialLocation(File::tempDirectory).deleteRecursively();
-        File::getSpecialLocation(File::tempDirectory).setAsCurrentWorkingDirectory();
+        tempDir.deleteRecursively();
+        tempDir.createDirectory();
+        tempDir.setAsCurrentWorkingDirectory();
+        
         numOfFilesAtStart = 0;
         
         //========= clear all XmlElement objects and update the sceneComponent display ===========

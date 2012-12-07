@@ -169,6 +169,8 @@ private:
     int currentlySelectedScene;
     
     int numOfFilesAtStart;
+    
+    File tempDir;
 };
 
 #endif

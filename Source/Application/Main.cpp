@@ -72,13 +72,6 @@ public:
          
         // Create temporary loading window. think about how to implement a realtime progress bar in here!
         loadingWindow = new LoadingWindow();
-        
-        //WOULD IT MAKE MORE SENSE TO DO THE BELOW STUFF IN THE CONSTRUCTOR OF APPDOCUMENTSTATE?
-        //delete the current temp directory (incase of previous app crash that wouldn't have deleted the temp file)
-        File::getSpecialLocation(File::tempDirectory).deleteRecursively();
-        //create temp directory and set to be the current working directory. When a performance is saved,
-        //the working directory is then set to the Audio Files folder created alongside the .alphalive file
-        File::getSpecialLocation(File::tempDirectory).setAsCurrentWorkingDirectory();
    
         //create a single global instance of AppSettings
         p = AppSettings::Instance();
@@ -145,9 +138,6 @@ public:
         #endif
         menuModel = nullptr;
         delete menuModel;
-        
-        //delete temp file
-        File::getSpecialLocation(File::tempDirectory).deleteRecursively();
         
         delete appDocumentState;
         //change the way the Singleton object gets destroyed?

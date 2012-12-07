@@ -42,7 +42,7 @@
 		indexTemplatePath = "";
 	};
 	1321578FCA21CAA9DF2E9344 /* Project object */ = {
-		activeBuildConfigurationName = Debug;
+		activeBuildConfigurationName = Release;
 		activeExecutable = 0C20E01E15EF5FBB00EC3827 /* AlphaLive */;
 		activeTarget = 9E30D4441171F6DB43C90854 /* AlphaLive */;
 		codeSenseManager = 0C20E04C15EF5FEE00EC3827 /* Code sense */;
@@ -57,7 +57,7 @@
 					20,
 					714,
 					20,
-					48.16259765625,
+					48,
 					43,
 					43,
 					20,
@@ -72,8 +72,8 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 368009147;
-			PBXWorkspaceStateSaveDate = 368009147;
+			PBXPerProjectTemplateStateSaveDate = 376591050;
+			PBXWorkspaceStateSaveDate = 376591050;
 		};
 		sourceControlManager = 0C20E04B15EF5FEE00EC3827 /* Source Control */;
 		userBuildSettings = {

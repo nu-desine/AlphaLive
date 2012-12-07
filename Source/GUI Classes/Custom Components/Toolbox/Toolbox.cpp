@@ -328,94 +328,100 @@ void Toolbox::fileClicked (const File& file, const MouseEvent& e)
 
 void Toolbox::fileDoubleClicked (const File& file)
 {
-     int padNum = selectedPads[0];
-    
-    //====================================================================================
-    //====================================================================================
-    
-    if (currentList == AUDIO_SAMPLES)
+    if (file.isDirectory() == false)
     {
-        for (int i = 0; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            PAD_SETTINGS->setSamplerAudioFilePath(file);
-        }
-        
-        mainComponentRef.getGuiSamplerMode()->setAudioFileDisplay(file);
-    }
-    
-    
-    //====================================================================================
-    //====================================================================================
-    
-    else if (currentList == DRUM_BANKS)
-    {
-        ScopedPointer<XmlElement> xmlData (XmlDocument::parse(file));
-        
-        int numOfSamples = xmlData->getChildElement(0)->getIntAttribute("numSamples");
-        String fileDirPath (file.getParentDirectory().getFullPathName());
-        StringArray sampleFilePaths;
-        
-        for (int i = 0; i < numOfSamples; i++)
-        {
-            sampleFilePaths.add(fileDirPath + xmlData->getChildElement(0)->getStringAttribute("sample" + String(i+1)));
-        }
-        
+         int padNum = selectedPads[0];
 
-        if (PAD_SETTINGS->getMode() == 2) //Sampler Mode
+        //====================================================================================
+        //====================================================================================
+
+        if (currentList == AUDIO_SAMPLES)
         {
-            for (int i = 0; i < selectedPads.size(); i++)
+            if (file.getFileExtension() == ".wav" || file.getFileExtension() == ".aif" || file.getFileExtension() == ".aiff")
             {
-                int padNum = selectedPads[i];
-                PAD_SETTINGS->setSamplerAudioFilePath(File(sampleFilePaths[i]));
-            }
-            
-            mainComponentRef.getGuiSamplerMode()->setAudioFileDisplay(File(sampleFilePaths[0]));
-        }
-        
-        else if (PAD_SETTINGS->getMode() == 3) //Sequencer Mode
-        {
-            for (int i = 0; i < selectedPads.size(); i++)
-            {
-                int padNum = selectedPads[i];
-                
-                for (int row = 0; row < 12; row++)
+                for (int i = 0; i < selectedPads.size(); i++)
                 {
-                    PAD_SETTINGS->setSequencerSamplesAudioFilePath(File(sampleFilePaths[row]), row);
+                    int padNum = selectedPads[i];
+                    PAD_SETTINGS->setSamplerAudioFilePath(file);
+                }
+                
+                mainComponentRef.getGuiSamplerMode()->setAudioFileDisplay(file);
+            }
+        }
+
+
+        //====================================================================================
+        //====================================================================================
+
+        else if (currentList == DRUM_BANKS)
+        {
+            if (file.getFileExtension() == ".alphabank")
+            {
+                ScopedPointer<XmlElement> xmlData (XmlDocument::parse(file));
+                
+                int numOfSamples = xmlData->getChildElement(0)->getIntAttribute("numSamples");
+                String fileDirPath (file.getParentDirectory().getFullPathName());
+                StringArray sampleFilePaths;
+                
+                for (int i = 0; i < numOfSamples; i++)
+                {
+                    sampleFilePaths.add(fileDirPath + xmlData->getChildElement(0)->getStringAttribute("sample" + String(i+1)));
+                }
+                
+
+                if (PAD_SETTINGS->getMode() == 2) //Sampler Mode
+                {
+                    for (int i = 0; i < selectedPads.size(); i++)
+                    {
+                        int padNum = selectedPads[i];
+                        PAD_SETTINGS->setSamplerAudioFilePath(File(sampleFilePaths[i]));
+                    }
+                    
+                    mainComponentRef.getGuiSamplerMode()->setAudioFileDisplay(File(sampleFilePaths[0]));
+                }
+                
+                else if (PAD_SETTINGS->getMode() == 3) //Sequencer Mode
+                {
+                    for (int i = 0; i < selectedPads.size(); i++)
+                    {
+                        int padNum = selectedPads[i];
+                        
+                        for (int row = 0; row < 12; row++)
+                        {
+                            PAD_SETTINGS->setSequencerSamplesAudioFilePath(File(sampleFilePaths[row]), row);
+                        }
+                    }
                 }
             }
+        }
+
+        //====================================================================================
+        //====================================================================================
+
+        else if (currentList == SEQUENCES)
+        {
+            
+            if (file.getFileExtension() == ".alphaseq")
+            {
+                int currentSeqNumber = mainComponentRef.getGuiSequencerMode()->getCurrentSequenceNumber()-1;
+                mainComponentRef.getAppDocumentStateRef().loadSequence(currentSeqNumber, selectedPads, false, file);
+            }
+            
+            else if (file.getFileExtension() == ".alphaseqset")
+            {
+                mainComponentRef.getAppDocumentStateRef().loadSequenceSet(selectedPads, false, file);
+            }
             
         }
-        
-    }
-    
-    //====================================================================================
-    //====================================================================================
-    
-    else if (currentList == SEQUENCES)
-    {
-        
-        if (file.getFileExtension() == ".alphaseq")
+
+        //====================================================================================
+        //====================================================================================
+
+        else if (file.getFileExtension() == ".alphapad")
         {
-            int currentSeqNumber = mainComponentRef.getGuiSequencerMode()->getCurrentSequenceNumber()-1;
-            mainComponentRef.getAppDocumentStateRef().loadSequence(currentSeqNumber, selectedPads, false, file);
+            mainComponentRef.getAppDocumentStateRef().loadPadFromDisk(selectedPads, false, file);
         }
-        
-        else if (file.getFileExtension() == ".alphaseqset")
-        {
-            mainComponentRef.getAppDocumentStateRef().loadSequenceSet(selectedPads, false, file);
-        }
-        
     }
-    
-    //====================================================================================
-    //====================================================================================
-    
-    else if (file.getFileExtension() == ".alphapad")
-    {
-        mainComponentRef.getAppDocumentStateRef().loadPadFromDisk(selectedPads, false, file);
-    }
-    
 }
 
 

@@ -49,7 +49,7 @@ private:
     MainComponent &mainComponentRef;
     TextButton *closeButton;
     Label *titleLabel, *versionNumberLabel, *companyLabel, *openSourceLabel, *copyrightLabel, *samplesLabel;
-    HyperlinkButton *nuDesineLink, *gnuLicenseLink;
+    HyperlinkButton *nuDesineLink, *gnuLicenseLink, *githubLink;
     ImageButton *loopmastersButton, *zeroGButton, *fivePinMediaButton;
     
 };

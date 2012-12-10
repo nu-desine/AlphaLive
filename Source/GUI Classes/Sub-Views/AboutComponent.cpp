@@ -48,15 +48,18 @@ AboutComponent::AboutComponent(MainComponent &ref)
     //Font hyperlinkFont(18);
     //nuDesineLink->setFont(hyperlinkFont, true);
     
+    addAndMakeVisible(githubLink = new HyperlinkButton("An open source application", 
+                                                           URL("https://github.com/nu-desine")));
+    
     addAndMakeVisible(openSourceLabel = new Label("Open Source Label"));
-    openSourceLabel->setText(translate("An Open Source application released under the") + " ", false);
+    openSourceLabel->setText(translate("released under the") + " ", false);
     openSourceLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(gnuLicenseLink = new HyperlinkButton("GNU General Public License v2.0", 
                                                          URL("http://www.opensource.org/licenses/GPL-2.0")));
     
     addAndMakeVisible(copyrightLabel = new Label("Copyright Label"));
-    copyrightLabel->setText(translate("Copyright 2011-2012 nu desine."), false);
+    copyrightLabel->setText(translate("Copyright 2011-2013 nu desine."), false);
     copyrightLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(samplesLabel = new Label("Samples Label"));
@@ -118,7 +121,8 @@ void AboutComponent::resized()
     versionNumberLabel->setBounds((getWidth()/2)-50, (getHeight()/6)+50, 100, 40);
     companyLabel->setBounds((getWidth()/2)-110, (getHeight()/6)+120, 150, 40);
     nuDesineLink->setBounds(((getWidth()/2)-110)+112, (getHeight()/6)+129, 80, 22);
-    openSourceLabel->setBounds((getWidth()/2)-150, (getHeight()/6)+160, 300, 40);
+    githubLink->setBounds((getWidth()/2)-215, (getHeight()/6)+169, 300, 22);
+    openSourceLabel->setBounds((getWidth()/2)-65, (getHeight()/6)+160, 300, 40);
     gnuLicenseLink->setBounds(((getWidth()/2)-155)+45, (getHeight()/6)+185, 220, 22);
     copyrightLabel->setBounds(((getWidth()/2)-155)+45, (getHeight()/6)+210, 220, 40);
     samplesLabel->setBounds(((getWidth()/2)-155)+45, (getHeight()/6)+240, 220, 40);

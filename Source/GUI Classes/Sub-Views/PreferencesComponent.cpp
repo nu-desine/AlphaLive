@@ -130,7 +130,7 @@ void PreferencesComponent::mouseEnter (const MouseEvent &e)
     }
     else if (audioAndMidiSettingsComponent->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Audio Output Settings. Displays and allows you to set the global audio output channels of AlphaLive. Output device, sample rate, and audio buffer size can be set from here. The 'test' button can be used to test the channel that audio being sent from."));
+        mainComponentRef.setInfoTextBoxText (translate("Audio Output Settings. Allows you to set the global audio output settings for AlphaLive. Output device, output channels, sample rate, and audio buffer size can be set from here. The 'test' button can be used to play a test tone."));
     }
 }
 
@@ -398,7 +398,7 @@ void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
     
     if (appProjectDirChooser->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("AlphaLive Projects Directory selector. This allows you to change the location of the Alphalive's projects folder. The current folder and its contents will be moved to the new location."));
+        mainComponentRef.setInfoTextBoxText(translate("AlphaLive Projects Directory selector. This allows you to change the location of the AlphaLive's projects folder. The current folder and its contents will be moved to the new location."));
     }
     else if (midiNoteDisplayTypeMenu->isMouseOver(true))
     {
@@ -410,7 +410,7 @@ void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
     }
     else if (killOnClockStopButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("When set to 'on' this option forces any playing pads to be stopped when the clock is stopped."));
+        mainComponentRef.setInfoTextBoxText(translate("If this option is set to 'on' any playing pads will be stopped when the clock is stopped."));
     }
     else if (cleanOnCloseButton->isMouseOver(true))
     {
@@ -418,7 +418,7 @@ void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
     }
     else if (autoSaveScenesButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("By default ('on'). When you switch between scenes it will automatically save the recently changed settings to the scene slot locally (not to the save file). When set to 'off' you will need to save the current scene slot to prevent changes to the scene being lost. Save a scene using shift-click."));
+        mainComponentRef.setInfoTextBoxText(translate("By default ('on') when you switch between scenes it will automatically save the recently changed settings to the scene slot locally (not to file). If this option is set to 'off' you will need to shift-click the current scene slot before switching scenes otherwise any changes to the scenes settings will be lost."));
     }
 }
 

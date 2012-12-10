@@ -48,7 +48,7 @@ AboutComponent::AboutComponent(MainComponent &ref)
     //Font hyperlinkFont(18);
     //nuDesineLink->setFont(hyperlinkFont, true);
     
-    addAndMakeVisible(githubLink = new HyperlinkButton("An open source application", 
+    addAndMakeVisible(githubLink = new HyperlinkButton(translate("An open source application"), 
                                                            URL("https://github.com/nu-desine")));
     
     addAndMakeVisible(openSourceLabel = new Label("Open Source Label"));

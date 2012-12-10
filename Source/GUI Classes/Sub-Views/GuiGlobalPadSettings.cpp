@@ -517,16 +517,16 @@ void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
 {
     if (exclusiveModeButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Exclusive Mode. When set to 'on' selected pads will be set to 'Exclusive Mode'. Exclusive mode allows only one pad to be playing at a time in each exclusive group. Choose which group is being used on the current pad selection using the Exclusive Group Selector below."));
+        mainComponentRef.setInfoTextBoxText(translate("Exclusive Mode. When set to 'on' the selected pads will be set to 'Exclusive Mode'. Exclusive mode allows only one pad to be playing at any time within each exclusive group."));
     }
     else if (exclusiveGroupSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Exclusive Group Selector. Sets the exclusive group channel for selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Exclusive Group Selector. Sets the exclusive group number for selected pads."));
         
     }
     else if (pressureCurveButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Pressure Curve Menu. Use this menu to select the pressure response curve for the selected pads."));
+        mainComponentRef.setInfoTextBoxText(translate("Pressure Curve Menu. Use this menu to select the pressure curve for the selected pads."));
     }
     else if (quantiseButton->isMouseOver(true))
     {
@@ -534,7 +534,7 @@ void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
     }
     else if (velocityCurveButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Velocity Curve Menu. Use this menu to select the velocity response curve of the selected pads. If 'Static' is selected a seperate control is displayed to set the static velocity value."));
+        mainComponentRef.setInfoTextBoxText(translate("Velocity Curve Menu. Use this menu to select the velocity curve of the selected pads. If 'Static' is selected a separate control is displayed to set the static velocity value."));
     }
     else if (velocitySlider->isMouseOver(true))
     {

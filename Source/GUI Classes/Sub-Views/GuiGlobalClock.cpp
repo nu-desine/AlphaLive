@@ -317,7 +317,7 @@ void GuiGlobalClock::mouseEnter (const MouseEvent &e)
 {
     if (tempoSlider->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Global Tempo Selector. Sets the tempo the global clock and any sequences."));
+        mainComponentRef.setInfoTextBoxText (translate("Global Tempo Selector. Sets the tempo of the global clock and any sequences."));
     }
     
     else if (transportButton->isMouseOver(true))
@@ -327,7 +327,7 @@ void GuiGlobalClock::mouseEnter (const MouseEvent &e)
     
      else if (autoStartSwitch->isMouseOver(true))
      {
-     mainComponentRef.setInfoTextBoxText (translate("Clock Auto-Start Switch. When enabled the clock will a start automatically when a note, loop or sequence is played. If this is off the clock will need to be started manually using the Start/Stop button."));
+     mainComponentRef.setInfoTextBoxText (translate("Clock Auto-Start Switch. When enabled the clock will start automatically when a note, sample or sequence is played. If this is off the clock will need to be started manually using the Start/Stop button."));
      }
      else if (metronomeButton->isMouseOver(true))
      {

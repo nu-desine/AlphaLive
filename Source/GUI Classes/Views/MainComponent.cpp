@@ -1142,7 +1142,7 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     }
     else if (e.eventComponent == modeControllerButton)
     {
-        setInfoTextBoxText (translate("Controller Mode. Click to set the selected pads to Controller Mode. This allows the pads to control features of Alphalive or external software."));
+        setInfoTextBoxText (translate("Controller Mode. Click to set the selected pads to Controller Mode. This allows the pads to control features of AlphaLive or external software."));
     }
     else if (globalSettingsButton->isMouseOver(true))
     {
@@ -1150,15 +1150,15 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     }
     else if (e.eventComponent == openButton)
     {
-        setInfoTextBoxText (translate("Load Project. Loads an Alphalive set into Alphalive from disk."));
+        setInfoTextBoxText (translate("Load Project. Loads a set of scenes into the application from an AlphaLive Project file."));
     }
     else if (e.eventComponent == saveButton)
     {
-        setInfoTextBoxText (translate("Save Project. Saves the current Alphalive set to disk."));
+        setInfoTextBoxText (translate("Save Project. Saves the current set of scenes to disk as an AlphaLive Project."));
     }
         else if (sceneComponent->isMouseOver(true))
     {
-        setInfoTextBoxText (translate("Scenes. AlphaLive contains 20 'scene' slots, each can hold a full set of pad settings. Click on a scene to load up its settings and pads; right-click to import, export or clear a scene; or shift-click to copy the currently select scene the clicked scene. AlphaLive scene files (.alphascene) can also be imported via drag-and-drop."));
+        setInfoTextBoxText (translate("Scenes. AlphaLive contains 20 'scene' slots, each can hold a full set of pad settings. Click on a scene to load up its settings and pads; right-click to import, export or clear a scene; or shift-click to copy the currently select scene to the clicked scene. AlphaLive scene files (.alphascene) can also be imported via drag-and-drop."));
     }
     else if (gainSlider->isMouseOver(true)==true)
     {
@@ -1166,7 +1166,7 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     }
     else if (panSlider->isMouseOver(true)==true)
     {
-        setInfoTextBoxText (translate("Global Pan. Controls the stereo positioning of Alphalive's master output."));
+        setInfoTextBoxText (translate("Global Pan. Controls the stereo positioning of AlphaLive's master output."));
     }
     /*
     else if (e.eventComponent == padRotate)
@@ -1233,6 +1233,7 @@ void MainComponent::setLocalisation()
 {
     
     static String countryCode = SystemStats::getDisplayLanguage();
+    std::cout << "Language: " << countryCode << std::endl;
     infoBoxTextSize = 12;
     
     //countryCode will equal ISO 639-1 or ISO 639-2 codes as listed here:
@@ -1242,9 +1243,9 @@ void MainComponent::setLocalisation()
     
     if (countryCode == "de" || countryCode == "deu") //german
     {
-        File transFile(appDir + "Application Data" + File::separatorString + "trans_de");
-        trans = new LocalisedStrings (transFile);
-        LocalisedStrings::setCurrentMappings(trans);
+//        File transFile(appDir + "Application Data" + File::separatorString + "trans_de");
+//        trans = new LocalisedStrings (transFile);
+//        LocalisedStrings::setCurrentMappings(trans);
         
         alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
     }
@@ -1254,6 +1255,17 @@ void MainComponent::setLocalisation()
         trans = new LocalisedStrings (transFile);
         LocalisedStrings::setCurrentMappings(trans);
         alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
+        std::cout << translate("FontToRenderThisLanguageIn") << std::endl;
+        infoBoxTextSize = 13.5;
+        
+    }
+    else if (countryCode == "zh" || countryCode == "zho" || countryCode == "zh-Hant" || countryCode == "zh-Hans") //chinese. do i need the first two? What about on Windows?
+    {
+        File transFile (appDir + "Application Data" + File::separatorString + "trans_zh");
+        trans = new LocalisedStrings (transFile);
+        LocalisedStrings::setCurrentMappings(trans);
+        alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
+        std::cout << translate("FontToRenderThisLanguageIn") << std::endl;
         infoBoxTextSize = 13.5;
         
     }

@@ -549,7 +549,7 @@ void GuiControllerMode::mouseEnter (const MouseEvent &e)
         }
         else if (controlButtons[1]->isMouseOver(true))
         {
-            mainComponentRef.setInfoTextBoxText(translate("MIDI Program Change Mode. This mode enables the selected pads to be used to to switch to the definted MIDI program."));
+            mainComponentRef.setInfoTextBoxText(translate("MIDI Program Change Mode. Select this button to enable the selected pads to send out MIDI program change messages."));
         }
         else if (controlButtons[2]->isMouseOver(true))
         {

@@ -8,7 +8,7 @@ AlphaLive is the AlphaSphere's official software application that allows you to 
 To build AlphaLive on Windows you will need to do the following:
 
 +  Download and install the [Windows Driver Kit (WDK)](http://msdn.microsoft.com/en-gb/library/windows/hardware/gg487428.aspx).
-+  Download the [Steinberg ASIO SDK](http://www.steinberg.net/en/company/developer.html) and add to "./Third Party Libraries". However AlphaLive can be built without ASIO +  compatibility by setting the JUCE_ASIO flag to "0" in "./JuceLibraryCode/AppConfig.h" which will not require the ASIO SDK.
++  Download the [Steinberg ASIO SDK](http://www.steinberg.net/en/company/developer.html) and add to "./Third Party Libraries". However AlphaLive can be built without ASIO compatibility by setting the JUCE_ASIO flag in "./JuceLibraryCode/AppConfig.h" to "0" which will not require the ASIO SDK.
 
 
 ## License ##

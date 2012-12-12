@@ -1,6 +1,6 @@
 # AlphaLive #
 
-AlphaLive is the AlphaSphere's official software application that allows you to program the device into an expressive musical instrument and controller. The software can functions as a MIDI mapping editor, sampler, sequencer, and Open Sound Control converter.
+AlphaLive is the [AlphaSphere's](http://www.alphasphere.com/) official software application that allows you to program the device into an expressive musical instrument and controller. The software can functions as a MIDI mapping editor, sampler, sequencer, and Open Sound Control converter.
 
 
 ## Requirements ##
@@ -16,6 +16,8 @@ See "./Other Files/README - running AlphaLive.txt" for instructions regarding th
 ## License ##
 
 AlphaLive is licensed under the GPLv2. See GPL2.txt for details.
+
+AlphaLive and the AlphaSphere have been developed by [nu desine](http://nu-desine.com/).
 
 The following libraries are included in the source code:
 

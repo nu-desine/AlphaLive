@@ -23,11 +23,18 @@
 #endif
 
 #define MAX_PRESSURE 511.0
-
 #define MIDI_OUT_COMMAND_ID 0x06
 
-//To allow ASIO on the windows build, put the ASIO SDK into Source/Third Party Libraries, and put
-//#include <../Source/Third Party Libraries/ASIOSDK2/common/iasiodrv.h> in juce_audio_devices.cpp file
+/*
+ 
+ To allow ASIO compatability on the windows build, put the ASIO SDK into Source/Third Party Libraries, and add
+ #include <../Source/Third Party Libraries/ASIOSDK2/common/iasiodrv.h> in juce_audio_devices.cpp file.
+ 
+ To correctly link the Windows Driver Kit to Visual Studio...
+ 
+ Changes to the Juce Library code are...
+ 
+ */
 
 // [END_USER_CODE_SECTION]
 

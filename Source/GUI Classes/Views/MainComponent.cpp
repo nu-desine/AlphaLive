@@ -1231,9 +1231,15 @@ void MainComponent::mouseExit (const MouseEvent &e)
 
 void MainComponent::setLocalisation()
 {
-    
     static String countryCode = SystemStats::getDisplayLanguage();
     std::cout << "Language: " << countryCode << std::endl;
+    
+    //We may need to find suitable fonst that exists on the current system
+    //for languages such as Chinese, Japanese, and Korean.
+    //http://en.wikipedia.org/wiki/List_of_CJK_fonts
+    
+    StringArray availableFonts = Font::findAllTypefaceNames();
+    
     infoBoxTextSize = 12;
     
     //countryCode will equal ISO 639-1 or ISO 639-2 codes as listed here:
@@ -1243,36 +1249,62 @@ void MainComponent::setLocalisation()
     
     if (countryCode == "de" || countryCode == "deu") //german
     {
-//        File transFile(appDir + "Application Data" + File::separatorString + "trans_de");
-//        trans = new LocalisedStrings (transFile);
-//        LocalisedStrings::setCurrentMappings(trans);
-        
-        alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
+
     }
     else if (countryCode == "ja" || countryCode == "jpn") //japanese
     {
         File transFile (appDir + "Application Data" + File::separatorString + "trans_ja");
         trans = new LocalisedStrings (transFile);
         LocalisedStrings::setCurrentMappings(trans);
-        alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
-        std::cout << translate("FontToRenderThisLanguageIn") << std::endl;
+        
+        String fontToUse = "Arial Unicode MS"; // available on OSX 10.5 and above
+        
+        if (availableFonts.contains(fontToUse) == false)
+        {
+            fontToUse = "Meiryo"; // available on Windows Vista and above
+            
+            if (availableFonts.contains(fontToUse) == false)
+            {
+                fontToUse = "MS PGothic"; // available on Windows XP
+                
+                //what about on Linux?
+            }
+        }
+
+        alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(fontToUse);
         infoBoxTextSize = 13.5;
         
     }
-    else if (countryCode == "zh" || countryCode == "zho" || countryCode == "zh-Hant" || countryCode == "zh-Hans") //chinese. do i need the first two? What about on Windows?
+    else if (countryCode == "zh" || countryCode == "zho" || countryCode == "zh-Hant" || countryCode == "zh-Hans") //chinese. do i need the first two?
     {
         File transFile (appDir + "Application Data" + File::separatorString + "trans_zh");
         trans = new LocalisedStrings (transFile);
         LocalisedStrings::setCurrentMappings(trans);
-        alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn"));
-        std::cout << translate("FontToRenderThisLanguageIn") << std::endl;
+        
+        String fontToUse = "Arial Unicode MS"; // available on OSX 10.5 and above
+        
+        if (availableFonts.contains(fontToUse) == false)
+        {
+            fontToUse = "Microsoft JhengHei"; // available on Windows Vista and above
+            
+            if (availableFonts.contains(fontToUse) == false)
+            {
+                fontToUse = "SimHei"; // available on Windows XP
+                
+                //do we neeed to consider simplified vs traditional?
+                //what about on Linux?
+            }
+        }
+
+		alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(fontToUse);
         infoBoxTextSize = 13.5;
         
     }
     else //english
     {
         LocalisedStrings::setCurrentMappings(0);
-        alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(translate("FontToRenderThisLanguageIn")); //will set to fallback
+        //Don't need to call the below line anymore, as language can now only be set at app lauch
+        //alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(Font::getFallbackFontStyle());
     }
     
     

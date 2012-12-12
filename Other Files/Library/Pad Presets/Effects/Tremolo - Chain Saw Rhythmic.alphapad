@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_PAD_SETTINGS_VERSION_1>
+  <PAD_DATA effect="10" padFxTremoloDepth="1" padFxTremoloRate="4" padFxTremoloShape="3"
+            padFxTremoloSync="1" padFxTremoloRateMenu="4" padFxTremoloAlphaTouch="3"
+            padFxTremoloAtReverse="0" padFxTremoloAtIntensity="1"/>
+</ALPHALIVE_PAD_SETTINGS_VERSION_1>

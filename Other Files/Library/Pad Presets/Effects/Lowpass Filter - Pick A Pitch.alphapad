@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_PAD_SETTINGS_VERSION_1>
+  <PAD_DATA effect="2" padFxLpfMix="0.924099326" padFxLpfFreq="255" padFxLpfBandwidth="66.2767334"
+            padFxLpfAlphaTouch="3" padFxLpfAtReverse="0" padFxLpfAtIntensity="1"/>
+</ALPHALIVE_PAD_SETTINGS_VERSION_1>

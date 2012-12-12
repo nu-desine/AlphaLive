@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_PAD_SETTINGS_VERSION_1>
+  <PAD_DATA effect="9"
+               padFxFlangerMix="0.984" padFxFlangerRate="0.988"
+               padFxFlangerFeedback="0.948" padFxFlangerIntensity="1.0"
+               padFxFlangerRateMenu="2" padFxFlangerSync="0" padFxFlangerAlphaTouch="2"
+               padFxFlangerAtReverse="0" padFxFlangerAtIntensity="1"/>
+</ALPHALIVE_PAD_SETTINGS_VERSION_1>
+
+

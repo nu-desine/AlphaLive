@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_PAD_SETTINGS_VERSION_1>
+  <PAD_DATA effect="6" padFxBitcrusherInputGain="0.996553923" padFxBitcrusherDownsample="16"
+            padFxBitcrusherCrush="1" padFxBitcrusherSmoothing="1" padFxBitcrusherWetDryMix="0.792378051"
+            padFxBitcrusherAlphaTouch="5" padFxBitcrusherAtReverse="1" padFxBitcrusherAtIntensity="1"/>
+</ALPHALIVE_PAD_SETTINGS_VERSION_1>

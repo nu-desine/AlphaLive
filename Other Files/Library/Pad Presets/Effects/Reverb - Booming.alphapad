@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_PAD_SETTINGS_VERSION_1>
+  <PAD_DATA effect="8" padFxReverbMix="0.578685224" padFxReverbRoomSize="1"
+            padFxReverbDamping="1" padFxReverbWidth="1" padFxReverbFreezeMode="0.200000003"
+            padFxReverbAlphaTouch="3" padFxReverbAtReverse="0" padFxReverbAtIntensity="1"/>
+</ALPHALIVE_PAD_SETTINGS_VERSION_1>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_PAD_SETTINGS_VERSION_1>
+  <PAD_DATA effect="7" padFxDelayMix="1" padFxDelayTime="21.0950394" padFxDelayFeedback="0.584995329"
+            padFxDelayLpfFreq="20000" padFxDelayHpfFreq="358" padFxDelaySync="0"
+            padFxDelayTimeMenu="1" padFxDelayAlphaTouch="4" padFxDelayAtReverse="0"
+            padFxDelayAtIntensity="0.889472544"/>
+</ALPHALIVE_PAD_SETTINGS_VERSION_1>

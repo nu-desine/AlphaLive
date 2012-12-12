@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_PAD_SETTINGS_VERSION_1>
+  <PAD_DATA effect="5" padFxDistortionInputGain="0.739066504" padFxDistortionDrive="60"
+            padFxDistortionWetDryMix="1" padFxDistortionTone="0.756840012"
+            padFxDistortionTypeMenu="4" padFxDistortionAlphaTouch="5" padFxDistortionAtReverse="1"
+            padFxDistortionAtIntensity="1"/>
+</ALPHALIVE_PAD_SETTINGS_VERSION_1>

@@ -94,13 +94,13 @@ private:
     bool isPrepared;
 
     int numInputChans, numOutputChans;
-    float* channels [128];
+    HeapBlock<float*> channels;
     AudioSampleBuffer tempBuffer;
 
     MidiBuffer incomingMidi;
     MidiMessageCollector messageCollector;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioProcessorPlayer);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioProcessorPlayer)
 };
 
 

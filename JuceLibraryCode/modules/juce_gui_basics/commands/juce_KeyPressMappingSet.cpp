@@ -30,7 +30,8 @@ KeyPressMappingSet::KeyPressMappingSet (ApplicationCommandManager& cm)
 }
 
 KeyPressMappingSet::KeyPressMappingSet (const KeyPressMappingSet& other)
-    : commandManager (other.commandManager)
+    : ChangeBroadcaster(),
+      commandManager (other.commandManager)
 {
     Desktop::getInstance().addFocusChangeListener (this);
 }
@@ -241,8 +242,9 @@ bool KeyPressMappingSet::restoreFromXml (const XmlElement& xmlVersion)
                 }
                 else if (map->hasTagName ("UNMAPPING"))
                 {
-                    if (containsMapping (commandId, key))
-                        removeKeyPress (key);
+                    for (int i = mappings.size(); --i >= 0;)
+                        if (mappings.getUnchecked(i)->commandID == commandId)
+                            mappings.getUnchecked(i)->keypresses.removeAllInstancesOf (key);
                 }
             }
         }

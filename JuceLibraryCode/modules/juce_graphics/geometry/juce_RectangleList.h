@@ -212,6 +212,14 @@ public:
     /** Adds an x and y value to all the co-ordinates. */
     void offsetAll (int dx, int dy) noexcept;
 
+    /** Scales all the co-ordinates. */
+    template <typename ScaleType>
+    void scaleAll (ScaleType scaleFactor) noexcept
+    {
+        for (Rectangle<int>* r = rects.begin(), * const e = rects.end(); r != e; ++r)
+            *r *= scaleFactor;
+    }
+
     //==============================================================================
     /** Creates a Path object to represent this region. */
     Path toPath() const;
@@ -249,7 +257,7 @@ public:
         const RectangleList& owner;
         int index;
 
-        JUCE_DECLARE_NON_COPYABLE (Iterator);
+        JUCE_DECLARE_NON_COPYABLE (Iterator)
     };
 
 private:
@@ -257,7 +265,7 @@ private:
     friend class Iterator;
     Array <Rectangle<int> > rects;
 
-    JUCE_LEAK_DETECTOR (RectangleList);
+    JUCE_LEAK_DETECTOR (RectangleList)
 };
 
 

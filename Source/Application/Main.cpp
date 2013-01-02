@@ -360,13 +360,12 @@ public:
             StringArray arguments;
             String appDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString);
             
-            #if JUCE_MAC
+            #if JUCE_MAC || JUCE_LINUX //is this right for Linux?
             File bootloaderFile(appDir + "Application Data" + File::separatorString + "firmwareUpdater");
             #endif
             #if JUCE_WINDOWS
             File bootloaderFile(appDir + "Application Data" + File::separatorString + "firmwareUpdater.exe");
             #endif
-            //LINUX?
             
             String mmcuString("-mmcu=atmega32u4");
             
@@ -378,14 +377,13 @@ public:
                 arguments.add(bootloaderFile.getFullPathName());
                 arguments.add(mmcuString);
                 
-                #if JUCE_MAC
+                #if JUCE_MAC || JUCE_LINUX //is this right for Linux?
                 arguments.add(hexFile.getFullPathName());
                 #endif
                 #if JUCE_WINDOWS
                 arguments.add(hexFile.getFullPathName().quoted());  //Needs to be quoted else updaterFirmware.exe
                                                                     //thinks the whole filepath is just from the last space.
                 #endif
-                //LINUX?
                 
                 //Send HID report here to change the device to the bootloader.
                 //For now, just reconnect the device with the reset button held as per usual

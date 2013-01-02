@@ -373,6 +373,9 @@ void Toolbox::fileDoubleClicked (const File& file)
                 {
                     for (int i = 0; i < selectedPads.size(); i++)
                     {
+                        if (i >= numOfSamples)
+                            break;
+                        
                         int padNum = selectedPads[i];
                         PAD_SETTINGS->setSamplerAudioFilePath(File(sampleFilePaths[i]));
                     }

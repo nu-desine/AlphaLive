@@ -1404,7 +1404,7 @@ void MainComponent::openDocumentation (int type)
     if (opened == false) //probably due to the file not existing
         AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, 
                                           translate("Documentation cannot be found!"), 
-                                          translate("The documentation file seems to be missing. Please consult the FAQ of the reference manual."));
+                                          translate("The documentation file seems to be missing from the AlphaLive application directory."));
 }
 
 //=========================command manager stuff=================================

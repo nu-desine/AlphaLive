@@ -295,7 +295,7 @@ public:
         {
             result.setInfo (translate("Update Firmware..."),
                             "Updates the firmware on the AlphaSphere device.",
-                            CommandCategories::FileCommands, 0);
+                            CommandCategories::OtherCommands, 0);
         }
     }
     

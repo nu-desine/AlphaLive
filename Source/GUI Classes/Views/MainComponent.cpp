@@ -43,6 +43,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
                             owner(owner_)
                             
 {
+    appDir = File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString;
     infoBoxText = String::empty;
     
     //language/localisation stuff
@@ -1245,11 +1246,10 @@ void MainComponent::setLocalisation()
     //countryCode will equal ISO 639-1 or ISO 639-2 codes as listed here:
     //http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
     
-    String appDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString);
-    
     if (countryCode == "de" || countryCode == "deu") //german
     {
 
+        currentLanguage = "German";
     }
     else if (countryCode == "ja" || countryCode == "jpn") //japanese
     {
@@ -1273,6 +1273,8 @@ void MainComponent::setLocalisation()
 
         alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(fontToUse);
         infoBoxTextSize = 13.5;
+        
+        currentLanguage = "Japanese";
         
     }
     else if (countryCode == "zh" || countryCode == "zho" || countryCode == "zh-Hant" || countryCode == "zh-Hans") //chinese. do i need the first two?
@@ -1299,17 +1301,14 @@ void MainComponent::setLocalisation()
 		alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(fontToUse);
         infoBoxTextSize = 13.5;
         
+        currentLanguage = "Chinese";
     }
     else //english
     {
         LocalisedStrings::setCurrentMappings(0);
-        //Don't need to call the below line anymore, as language can now only be set at app lauch
-        //alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(Font::getFallbackFontStyle());
+        
+        currentLanguage = "English";
     }
-    
-    
-    //commandManager->commandStatusChanged();
-    //owner->repaint();
      
 }
 
@@ -1382,6 +1381,32 @@ void MainComponent::editInterfaceFromDeviceConnectivity (int command)
     }
 }
 
+void MainComponent::openDocumentation (int type)
+{
+    String docDir (appDir + "Documentation" + File::separatorString);
+    bool opened = true;
+    
+    if (currentLanguage == "Japanese")
+    {
+        if (type == 1) //Starter guide
+            opened = File(docDir + "Test Japanese Starter Guide.pdf").startAsProcess();
+        else if (type == 2) //Reference manual
+            opened = File(docDir + "Test Japanese Reference Manual.pdf").startAsProcess();
+    }
+    else //English
+    {
+        if (type == 1) //Starter guide
+            opened = File(docDir + "Test English Starter Guide.pdf").startAsProcess();
+        else if (type == 2) //Reference manual
+            opened = File(docDir + "Test English Reference Manual.pdf").startAsProcess();
+    }
+    
+    if (opened == false) //probably due to the file not existing
+        AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, 
+                                          translate("Documentation cannot be found!"), 
+                                          translate("The documentation file seems to be missing. Please consult the FAQ of the reference manual."));
+}
+
 //=========================command manager stuff=================================
 ApplicationCommandTarget* MainComponent::getNextCommandTarget()
 {
@@ -1404,7 +1429,9 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::ClearScene,
         CommandIDs::ClearAllScenes,
         CommandIDs::KillSwitch,
-        CommandIDs::StartStopClock
+        CommandIDs::StartStopClock,
+        CommandIDs::StarterGuide,
+        CommandIDs::ReferenceManual
     };
 	
 	commands.addArray (ids, numElementsInArray (ids));
@@ -1518,8 +1545,20 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
         
         result.addDefaultKeypress(KeyPress::spaceKey, NULL);
         
-        
 	}
+    
+    else if (commandID == CommandIDs::StarterGuide)
+    {
+        result.setInfo (translate("Starter Guide..."),
+                        "Opens the AlphaLive Starter Guide using the systems default PDF viewer application.",
+                        CommandCategories::OtherCommands, 0);
+    }
+    else if (commandID == CommandIDs::ReferenceManual)
+    {
+        result.setInfo (translate("Reference Manual..."),
+                        "Opens the AlphaLive Reference Manual using the systems default PDF viewer application.",
+                        CommandCategories::OtherCommands, 0);
+    }
     
 	
 }
@@ -1607,8 +1646,18 @@ bool MainComponent::perform (const InvocationInfo& info)
 		globalClock->triggerTransportButton();
 	}
     
-	else
-		return false;
+    else if(info.commandID == CommandIDs::StarterGuide)
+    {
+        openDocumentation (1);
+    }
+    
+    else if(info.commandID == CommandIDs::ReferenceManual)
+    {
+        openDocumentation (2);
+    }
+    
+	//else
+	//	return false;
 	
 	return true;
 	

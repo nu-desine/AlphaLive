@@ -119,12 +119,10 @@ public:
     ApplicationCommandManager* getCommandManager(); //is this needed anymore?
     
     void setIsClockRunning (bool value);
-    
     void setLocalisation();
-    
     void sendEliteDialCommand (int command, int eliteControlValue);
-    
     void editInterfaceFromDeviceConnectivity (int command);
+    void openDocumentation (int type);
     
     
 private:
@@ -197,6 +195,9 @@ private:
     
     String infoBoxText;
     float infoBoxTextSize;
+    
+    String appDir;
+    String currentLanguage;
     
     //==============================================================================
 };

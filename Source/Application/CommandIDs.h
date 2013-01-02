@@ -49,9 +49,8 @@ namespace CommandIDs
     
     static const int updateFirmware         = 0x20018;
     
-    //possible future commands
-    
-    static const int Documentation          = 0x20013;
+    static const int StarterGuide           = 0x20019;
+    static const int ReferenceManual        = 0x20020;
     
     
 }

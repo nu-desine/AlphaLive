@@ -227,14 +227,35 @@ void HidComms::connectToDevice()
         }
         
         hidDeviceExists = true;
-        
-        // Set the hid_read() function to be non-blocking.
-        hid_set_nonblocking(handle, 1);
         memset(buf,0,sizeof(buf));
         
-        //Here (possibly somewhere else?) we will need to send a report to request a report back
-        //to find out what AlphaSphere model is plugged in. AlphaLive will then use the information
-        //to initialise/change the GUI.
+        //===============================================================================
+        //Send a report to the device requesting a report containing AlphaLive setup data,
+        //and then process the received reports data to set up AlphaLive correctly.
+        //===============================================================================
+        
+        // Set the hid_read() function to be blocking to start with.
+        hid_set_nonblocking(handle, 0);
+        res = 0;
+        
+        unsigned char dataToSend[1];
+        dataToSend[0] = 0x05; //host setup data request command ID
+        hid_write(handle, dataToSend, 9);
+        
+        res = hid_read(handle, buf, sizeof(buf));
+        
+        if (res > 0 && buf[0] == 0x04)
+        {
+            std::cout << "Received AlphaLive setup report with the following data: " << std::endl;
+            for (int i = 0; i < res; i++)
+                printf("%02hhx ", buf[i]);
+            printf("\n");
+            
+            //process received report data here...
+        }
+                
+        // Set the hid_read() function to be non-blocking.
+        hid_set_nonblocking(handle, 1);
     }
 }
 

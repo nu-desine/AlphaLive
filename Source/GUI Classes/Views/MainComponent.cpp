@@ -270,7 +270,10 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     toolbox->setVisible(false); //or maybe it links to projects directory?
     midiPiano->setActive(false);
     
-    eliteControls->setVisible(false);
+    if (StoredSettings::getInstance()->deviceType == 2)
+        eliteControls->setVisible(true);
+    else
+        eliteControls->setVisible(false);
     
 }
 
@@ -1381,10 +1384,18 @@ void MainComponent::editInterfaceFromDeviceConnectivity (int command)
         preferencesComponent->removeMidiOutputSelector();
     }
     
-    //add elite controls section to the main view
+    //set the the correct GUI based on the current device type
     else if (command == 2)
     {
-        eliteControls->setVisible(true);
+        if (StoredSettings::getInstance()->deviceType == 1)
+        {
+            eliteControls->setVisible(false);
+        }
+        else if (StoredSettings::getInstance()->deviceType == 2)
+        {
+            eliteControls->setVisible(true);
+        }
+        
     }
 }
 

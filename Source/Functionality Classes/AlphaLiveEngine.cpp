@@ -31,6 +31,7 @@
 
 AlphaLiveEngine::AlphaLiveEngine()
 {
+    mainComponent = NULL;
     
     gain = gainPrev =  AppSettings::Instance()->getGlobalGain();
     panLeft = panLeftPrev = PanControl::leftChanPan_(AppSettings::Instance()->getGlobalPan());
@@ -613,6 +614,12 @@ void AlphaLiveEngine::setDeviceType (int type)
 {
     StoredSettings::getInstance()->deviceType = type;
     StoredSettings::getInstance()->flush();
+    
+    if (mainComponent != NULL)
+    {
+        const MessageManagerLock mmLock;
+        mainComponent->editInterfaceFromDeviceConnectivity(2);
+    }
 }
 
 void AlphaLiveEngine::removeMidiOut()
@@ -631,7 +638,10 @@ void AlphaLiveEngine::removeMidiOut()
     
     #if JUCE_WINDOWS
     //remove MIDI output selector from the preferences view
-    mainComponent->editInterfaceFromDeviceConnectivity(1);
+    {
+        const MessageManagerLock mmLock;
+        mainComponent->editInterfaceFromDeviceConnectivity(1);
+    }
     
     #endif //JUCE_WINDOWS
     

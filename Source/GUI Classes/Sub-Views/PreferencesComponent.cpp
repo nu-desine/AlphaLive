@@ -375,6 +375,8 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
     {
         StoredSettings::getInstance()->deviceType = comboBox->getSelectedId();
         StoredSettings::getInstance()->flush();
+        
+        mainComponentRef.editInterfaceFromDeviceConnectivity(2);
     }
     
     else if (comboBox == appProjectDirChooser)

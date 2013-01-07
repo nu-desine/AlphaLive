@@ -1577,8 +1577,7 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
                         "Opens the AlphaLive Reference Manual using the systems default PDF viewer application.",
                         CommandCategories::OtherCommands, 0);
     }
-    
-	
+
 }
 
 bool MainComponent::perform (const InvocationInfo& info)

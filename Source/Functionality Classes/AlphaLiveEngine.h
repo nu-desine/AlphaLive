@@ -98,6 +98,8 @@ public:
     void hidInputCallback (int pad, int value, int velocity);
     void setDeviceType (int type); //1 - AlphaSphere, 2 - AlphaSphere elite
     void removeMidiOut();
+    void updateFirmware();
+    void setFirmwareUpdateStatus (bool status);
     
     void handleAsyncUpdate();
     int getRecievedPad();
@@ -205,6 +207,8 @@ private:
     int currentExclusivePad[23];
     
     MainComponent *mainComponent;
+    
+    bool shouldUpdateFirmware;
     
 };
 

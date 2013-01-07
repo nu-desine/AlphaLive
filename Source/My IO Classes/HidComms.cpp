@@ -249,7 +249,41 @@ void HidComms::connectToDevice()
                 printf("%02hhx ", buf[i]);
             printf("\n");
             
-            //process received report data here...
+            //========process received report data here...========
+            
+            //check to see if the firmware needs updating
+            File appDataDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString + "Application Data");
+            String wildcard = "SphereWare*";
+            Array<File> hexFile;
+            appDataDir.findChildFiles(hexFile, 2, false, wildcard);
+            
+            if (hexFile.size > 0) //which it should
+            {
+                int currentFirmwareNo = buf[1];
+                int newFirmwareNo = hexFile.getLast().getFileNameWithoutExtension().getTrailingIntValue();
+                
+                std::cout << hexFile[0].getFileNameWithoutExtension() << " " << newFirmwareNo << std::endl;
+                
+                //if new firware version number is greater than current firmware number,
+                //flag that the firmware needs updating. 
+                if (newFirmwareNo > currentFirmwareNo)
+                {
+                    //On app launch the updateFirmware function is called from main.
+                    //Can't be called from here at launch as the mainWindow/Component needs
+                    //to be present, so need to just set a flag here. 
+                    //However if we are current not at app launch, it is
+                    //possible to call it directly from here.
+                    
+                    setFirmwareUpdateStatus (true);
+                    
+                    if (appHasInitialised == true)
+                    {
+                        updateFirmware();
+                    }
+                }
+            }
+            
+            //set AlphaSphere device type
             setDeviceType (buf[2] + 1);
         }
                 

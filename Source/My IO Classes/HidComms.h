@@ -55,6 +55,8 @@ public:
     
     virtual void setDeviceType (int type) = 0;
     virtual void removeMidiOut() = 0;
+    virtual void updateFirmware() = 0;
+    virtual void setFirmwareUpdateStatus (bool status) = 0;
     
     void sendHidControlReport (uint8 *bytesToSend);
     

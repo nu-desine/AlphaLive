@@ -609,6 +609,12 @@ void AlphaLiveEngine::audioDeviceStopped()
 	audioPlayer.audioDeviceStopped();
 }
 
+void AlphaLiveEngine::setDeviceType (int type)
+{
+    StoredSettings::getInstance()->deviceType = type;
+    StoredSettings::getInstance()->flush();
+}
+
 void AlphaLiveEngine::removeMidiOut()
 {
     std::cout << "removing midi output stuff" << std::endl;

@@ -27,10 +27,7 @@ HidComms::HidComms() : Thread("HidThread")
     sendOutputReport = false;
     midiOutExists = hidDeviceExists =  false;
     
-    connectToDevice();
-    
     startThread();
-        
 }
 
 HidComms::~HidComms()
@@ -43,6 +40,7 @@ HidComms::~HidComms()
 
 void HidComms::run()
 {
+    handle = nullptr;
     res = 0;
     
     while( ! threadShouldExit())
@@ -252,6 +250,7 @@ void HidComms::connectToDevice()
             printf("\n");
             
             //process received report data here...
+            setDeviceType (buf[2] + 1);
         }
                 
         // Set the hid_read() function to be non-blocking.

@@ -53,6 +53,7 @@ public:
     void run();
     virtual void hidInputCallback (int pad, int value, int velocity) = 0;
     
+    virtual void setDeviceType (int type) = 0;
     virtual void removeMidiOut() = 0;
     
     void sendHidControlReport (uint8 *bytesToSend);

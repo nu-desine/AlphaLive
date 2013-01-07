@@ -96,6 +96,7 @@ public:
     ~AlphaLiveEngine();
     
     void hidInputCallback (int pad, int value, int velocity);
+    void setDeviceType (int type); //1 - AlphaSphere, 2 - AlphaSphere elite
     void removeMidiOut();
     
     void handleAsyncUpdate();

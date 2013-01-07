@@ -172,6 +172,15 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     //To add a non-standard character to a label, combobox, etc..
     // you must wrap the string like this - CharPointer_UTF8 ("日本の").
     
+    addAndMakeVisible(deviceInterfaceMenu = new ComboBox());
+    deviceInterfaceMenu->addItem(translate("AlphaSphere"), 1);
+    deviceInterfaceMenu->addItem(translate("AlphaSphere elite"), 2);
+    deviceInterfaceMenu->addListener(this);
+    deviceInterfaceMenu->addMouseListener(this, true);
+    deviceInterfaceMenu->setSelectedId(StoredSettings::getInstance()->deviceType, true);
+    
+    addAndMakeVisible(deviceInterfaceLabel = new Label("device label", translate("Device Interface:")));
+    deviceInterfaceLabel->setColour(Label::textColourId, Colours::lightgrey);
     
     addAndMakeVisible(appProjectDirChooser = new ComboBox());
     appProjectDirChooser->addItem(StoredSettings::getInstance()->appProjectDir.getFullPathName(), 1);
@@ -265,6 +274,8 @@ GeneralSettingsComponent::~GeneralSettingsComponent()
 
 void GeneralSettingsComponent::resized()
 {
+    deviceInterfaceMenu->setBounds(200, 10, 210, 20);
+    deviceInterfaceLabel->setBounds(60, 10, 120, 20);
     
     appProjectDirChooser->setBounds(200, 50, 210, 20);
     directoryLabel->setBounds(60, 50, 120, 20);
@@ -360,6 +371,12 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
         StoredSettings::getInstance()->flush();
     }
     
+    else if (comboBox == deviceInterfaceMenu)
+    {
+        StoredSettings::getInstance()->deviceType = comboBox->getSelectedId();
+        StoredSettings::getInstance()->flush();
+    }
+    
     else if (comboBox == appProjectDirChooser)
     {
         if (comboBox->getSelectedId() == 2) //set directory
@@ -395,8 +412,11 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
 
 void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
 {
-    
-    if (appProjectDirChooser->isMouseOver(true))
+    if (deviceInterfaceMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("AlphaSphere Device Interface Selector. This allows you to manually change the AlphaLive user interface to comply with a particular AlphaSphere model. When an AlphaSphere is connected to AlphaLive it will automatically display the correct interface."));
+    }
+    else if (appProjectDirChooser->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("AlphaLive Projects Directory selector. This allows you to change the location of the AlphaLive's projects folder. The current folder and its contents will be moved to the new location."));
     }
@@ -433,6 +453,7 @@ void GeneralSettingsComponent::updateDisplay()
     //this function is called from PreferencesComponent::visibilityChanged
     
     midiNoteDisplayTypeMenu->setSelectedId(StoredSettings::getInstance()->midiNoteDisplayType, true);
+    deviceInterfaceMenu->setSelectedId(StoredSettings::getInstance()->deviceType, true);
     
 }
 

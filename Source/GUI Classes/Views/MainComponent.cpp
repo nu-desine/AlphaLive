@@ -267,9 +267,10 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeSequencerButton->setVisible(false);
     modeControllerButton->setVisible(false);
     globalSettingsButton->setVisible(false);
-	eliteControls->setVisible(true);
     toolbox->setVisible(false); //or maybe it links to projects directory?
     midiPiano->setActive(false);
+    
+    eliteControls->setVisible(false);
     
 }
 
@@ -1378,6 +1379,12 @@ void MainComponent::editInterfaceFromDeviceConnectivity (int command)
     if (command == 1)
     {
         preferencesComponent->removeMidiOutputSelector();
+    }
+    
+    //add elite controls section to the main view
+    else if (command == 2)
+    {
+        eliteControls->setVisible(true);
     }
 }
 

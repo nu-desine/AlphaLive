@@ -89,7 +89,9 @@ class MainComponent;
 class AlphaLiveEngine :     public Subject, //so this class can notify observers
                             public AudioIODeviceCallback, //so this class handles the audio output
                             public AsyncUpdater,
-                            public HidComms
+                            public HidComms,
+                            public ActionListener
+
 {
 public:
     AlphaLiveEngine();
@@ -102,6 +104,8 @@ public:
     void setFirmwareUpdateStatus (bool status);
     
     void handleAsyncUpdate();
+    void actionListenerCallback (const String& message);
+    
     int getRecievedPad();
     int getRecievedValue();
     void playPadFromMouse (int pad, int value);
@@ -209,6 +213,7 @@ private:
     MainComponent *mainComponent;
     
     bool shouldUpdateFirmware;
+    ActionBroadcaster broadcaster;
     
 };
 

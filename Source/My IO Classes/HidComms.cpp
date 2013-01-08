@@ -146,7 +146,7 @@ void HidComms::run()
             connectToDevice();
         }
         
-        
+        //std::cout << "listening... ";
     }
 }
 

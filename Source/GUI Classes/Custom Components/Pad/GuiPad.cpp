@@ -486,8 +486,8 @@ void GuiPad::mouseDown (const MouseEvent &e)
         //be 0 (no pressure).
         int pressureValue = abs((getHeight()/2) - e.y) * 10 + 1;
         //emulate pad press
-        //guiPadLayoutRef.getAlphaLiveEngine().hidInputCallback(padNumber, pressureValue, 110);
-        guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, pressureValue);
+        guiPadLayoutRef.getAlphaLiveEngine().hidInputCallback(padNumber, pressureValue, 110);
+        //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, pressureValue);
     }
     
 }
@@ -513,8 +513,8 @@ void GuiPad::mouseDrag (const MouseEvent &e)
         if (shouldIgnoreValues == false)
         {
             //emulate pressure change
-            //guiPadLayoutRef.getAlphaLiveEngine().hidInputCallback(padNumber, pressureValue, 110);
-            guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, pressureValue);
+            guiPadLayoutRef.getAlphaLiveEngine().hidInputCallback(padNumber, pressureValue, 110);
+            //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, pressureValue);
             
             if (pressureValue == MAX_PRESSURE)
                 shouldIgnoreValues = true;
@@ -534,10 +534,10 @@ void GuiPad::mouseUp (const MouseEvent &e)
         //why can't i just sent a 'pressure value' of 0?
         //for some reason i need to send something before that
         //for most of the triggerModes to work. This should probably be fixed!!
-        guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 1);
-        guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 0);
-        //guiPadLayoutRef.getAlphaLiveEngine().hidInputCallback(padNumber, 1, 110);
-        //guiPadLayoutRef.getAlphaLiveEngine().hidInputCallback(padNumber, 0, 110);
+        //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 1);
+        //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 0);
+        guiPadLayoutRef.getAlphaLiveEngine().hidInputCallback(padNumber, 1, 110);
+        guiPadLayoutRef.getAlphaLiveEngine().hidInputCallback(padNumber, 0, 110);
         
         isMouseInPlayMode = false;
     }

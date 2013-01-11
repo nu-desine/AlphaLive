@@ -406,16 +406,26 @@ void AlphaLiveEngine::addPadToQueue (int padNum)
                     {
                         int padMode = AppSettings::Instance()->padSettings[queuedPads[i]]->getMode();
                         
+                        //here we only want to 'kill' a queued pad if it isn't currently playing
                         switch (padMode)
                         {
                             case 1:
-                                modeMidi->killPad(queuedPads[i]);
+                                if (modeMidi->isCurrentlyPlaying(queuedPads[i]) == false)
+                                {
+                                    modeMidi->killPad(queuedPads[i]);
+                                }
                                 break;
                             case 2:
-                                modeSampler->killPad(queuedPads[i]);
+                                if (modeSampler->getAudioFilePlayerInstance(queuedPads[i])->isCurrentlyPlaying() == false)
+                                {
+                                    modeSampler->killPad(queuedPads[i]);
+                                }
                                 break;
                             case 3:
-                                modeSequencer->killPad(queuedPads[i]);
+                                if (modeSequencer->getSequencePlayerInstance(queuedPads[i])->isCurrentlyPlaying() == false)
+                                {
+                                    modeSequencer->killPad(queuedPads[i]);
+                                }
                                 break;
                             default:
                                 break;

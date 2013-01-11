@@ -53,7 +53,7 @@ ModeMidi::ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref)
         //triggerModeData[i].pressureValue = 0;
         
         currentPlayingStatus[i] = 0;
-        isCurrentlyPlaying[i] = false;
+        isPlaying[i] = false;
         prevPadValue[i] = 0;
         pressureValue[i] = 0;
     }
@@ -74,7 +74,7 @@ void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
 {
     //this if statement will be true when a pad is first pressed after it was previously turned off
     //via an 'exclusive group' situation. It is needed so that the pad can be reset correctly.
-    if (currentPlayingStatus[padNumber] == 1 && isCurrentlyPlaying[padNumber] == false && prevPadValue[padNumber] == 0)
+    if (currentPlayingStatus[padNumber] == 1 && isPlaying[padNumber] == false && prevPadValue[padNumber] == 0)
     {
         //reset triggerMode settings
         currentPlayingStatus[padNumber] = 0; 
@@ -120,7 +120,7 @@ void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
             //...and triggerModeData signifies to stop midi, DON'T LET IT...MWAHAHAHA! 
             triggerModeData[padNumber].playingStatus = 2; //ignore
         }
-        else if (triggerModeData[padNumber].playingStatus == 1 && currentPlayingStatus[padNumber] == 1 && triggerModeValue[padNumber] != 6)
+        else if (triggerModeData[padNumber].playingStatus == 1 && currentPlayingStatus[padNumber] == 1 && triggerModeValue[padNumber] != /*6*/4)
         {
             //...and triggerModeData signifies to start midi, 
             //but note is already playing and triggerMode does not equal 'trigger'
@@ -272,12 +272,12 @@ void ModeMidi::noteOn (int padNumber)
         //must send a note off message first otherwise MIDI notes will hang
         MidiMessage message = MidiMessage::noteOff(channel[padNumber], note[padNumber]);
         sendMidiMessage(message);
-        isCurrentlyPlaying[padNumber] = false;
+        isPlaying[padNumber] = false;
     }
     
     MidiMessage message = MidiMessage::noteOn(channel[padNumber], note[padNumber], (uint8)velocity[padNumber]);
     sendMidiMessage(message);
-    isCurrentlyPlaying[padNumber] = true;
+    isPlaying[padNumber] = true;
     
     //NEW - recording into sequencer pads
     if (alphaLiveEngineRef.getRecordingPads().size() > 0)
@@ -369,7 +369,7 @@ void ModeMidi::noteOff (int padNumber)
     
     MidiMessage message = MidiMessage::noteOff(channel[padNumber], note[padNumber]);
     sendMidiMessage(message);
-    isCurrentlyPlaying[padNumber] = false;
+    isPlaying[padNumber] = false;
     
     //update pad GUI
     guiPadOffUpdater.add(padNumber);
@@ -501,7 +501,7 @@ void ModeMidi::triggerQuantizationPoint (int padNum)
 void ModeMidi::killPad (int padNum)
 {
     //if playing, send call noteOff() to send note off MIDI message which also will update the GUI
-    if (isCurrentlyPlaying[padNum] == true) //don't use currentPlayStatus like below as that
+    if (isPlaying[padNum] == true) //don't use currentPlayStatus like below as that
                                             //doesn't always define when a file is truely playing
                                         
     {
@@ -586,11 +586,15 @@ void ModeMidi::setPadData (int padNumber)
     
 }
 
+bool ModeMidi::isCurrentlyPlaying (int padNum)
+{
+    return isPlaying[padNum];
+}
 
 void ModeMidi::setChannel (int value, int pad)
 {
     //if new channel is different from current channel, stop MIDI note if currently playing to prevent hanging notes
-    if (channel[pad] != value && isCurrentlyPlaying[pad] == true)
+    if (channel[pad] != value && isPlaying[pad] == true)
     {
         noteOff(pad);
         triggerModes[pad].reset();
@@ -603,7 +607,7 @@ void ModeMidi::setChannel (int value, int pad)
 void ModeMidi::setNote (int value, int pad)
 {
     //if new note is different from current note, stop MIDI note if currently playing to prevent hanging notes
-    if (note[pad] != value && isCurrentlyPlaying[pad] == true)
+    if (note[pad] != value && isPlaying[pad] == true)
     {
         noteOff(pad);
         triggerModes[pad].reset();
@@ -677,7 +681,7 @@ void ModeMidi::setPressureStatus (bool value, int pad)
 void ModeMidi::setNoteStatus (bool value, int pad)
 {
     //if note status has changed, stop MIDI note if currently playing to prevent hanging notes
-    if (noteStatus[pad] != value && isCurrentlyPlaying[pad] == true)
+    if (noteStatus[pad] != value && isPlaying[pad] == true)
     {
         noteOff(pad);
         triggerModes[pad].reset();

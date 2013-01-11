@@ -1173,6 +1173,11 @@ int SequencePlayer::getCurrentPlayingState()
     return currentPlayingState;
 }
 
+bool SequencePlayer::isCurrentlyPlaying()
+{
+    return isThreadRunning();
+}
+
 void SequencePlayer::setSequenceNumber (int value)
 {
     sequenceNumber = value;

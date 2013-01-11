@@ -79,6 +79,7 @@ public:
     void stopThreadAndReset();
     
     int getCurrentPlayingState();
+    bool isCurrentlyPlaying();
     
     //settings stuff
     void setTempo (float value);

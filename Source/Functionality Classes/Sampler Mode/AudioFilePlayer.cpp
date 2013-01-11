@@ -862,6 +862,10 @@ void AudioFilePlayer::resetTriggerMode()
 }
 
 //=========================================================================================
+bool AudioFilePlayer::isCurrentlyPlaying()
+{
+    return fileSource.isPlaying();
+}
 
 int AudioFilePlayer::getCurrentPlayingState()
 {

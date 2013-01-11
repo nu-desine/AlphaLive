@@ -71,6 +71,7 @@ public:
     
     int getCurrentPlayingState();
     bool getAudioTransportSourceStatus();
+    bool isCurrentlyPlaying();
     
     void setAudioFile (File audioFile_);
     

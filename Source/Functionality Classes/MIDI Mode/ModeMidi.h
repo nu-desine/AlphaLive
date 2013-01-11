@@ -52,6 +52,8 @@ public:
     void setMidiOutputDevice (MidiOutput &midiOutput);
     void setPadData (int padNumber);
     
+    bool isCurrentlyPlaying (int padNum);
+    
     //settings
     void setChannel (int value, int pad);
     void setNote (int value, int pad);
@@ -70,7 +72,7 @@ private:
     
     MidiOutput *midiOutputDevice;
     
-    bool isCurrentlyPlaying[48];    //set whenever a MIDI note on/off message is triggered within the code
+    bool isPlaying[48];    //set whenever a MIDI note on/off message is triggered within the code
     int currentPlayingStatus[48];   //set when a MIDI note is turned on or off directly by the user, but not when
                                     //a midi note is turned off via exclusive mode
     int prevPadValue[48];

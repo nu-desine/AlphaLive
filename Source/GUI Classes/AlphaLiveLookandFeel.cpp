@@ -449,21 +449,21 @@ void AlphaLiveLookandFeel::positionComboBoxText (ComboBox& box, Label& label)
 }
 
 
+
 void AlphaLiveLookandFeel::layoutFilenameComponent (FilenameComponent& filenameComp,
                                            ComboBox* filenameBox,
                                            Button* browseButton)
 {
     browseButton->setColour(TextButton::buttonColourId, AlphaColours::blue);
-	
-	float xBrowseButton = (filenameComp.getWidth() * 0.25);
-	float widthBrowseButton = (filenameComp.getWidth() * 0.5);
-	
-	
-    browseButton->setBounds((xBrowseButton + (widthBrowseButton * 0.16)), (widthBrowseButton * 0.16),
-							(widthBrowseButton * 0.7),(widthBrowseButton * 0.7));
-	
-    filenameBox->setBounds (15, ((filenameComp.getWidth() * 0.5) + 20), (filenameComp.getWidth() * 0.75), filenameComp.getHeight() - ((filenameComp.getWidth() * 0.7) + 2));
+    browseButton->setSize (20, filenameComp.getHeight());
+    
+    //if (TextButton* const tb = dynamic_cast <TextButton*> (browseButton))
+    //    tb->changeWidthToFitText();
+    
+    filenameBox->setBounds (browseButton->getWidth()+5, 0, filenameComp.getWidth()-(browseButton->getWidth()+5), filenameComp.getHeight());
+     
 }
+ 
 
 //==============================================================================
 void AlphaLiveLookandFeel::drawLabel (Graphics& g, Label& label)

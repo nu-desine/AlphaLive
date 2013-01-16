@@ -57,11 +57,7 @@ void ModeController::getInputData(int pad, int value, int velocity)
     else if (PAD_SETTINGS->getControllerControl() == 4) //osc controller
     {
         //should i bet getting the ip addresses and port numbers for each pad beforehand (is it to cpu heavy accessing PadSettings everytime there is an incoming message?)?
-        
-        //scale the range back down to 0-127
-        padValue = padValue * (127.0/MAX_PRESSURE);
-        
-        oscOutput.transmitOutputMessage(padNumber+1, padValue, PAD_SETTINGS->getControllerOscIpAddress(), PAD_SETTINGS->getControllerOscPort());
+        oscOutput.transmitPadMessage(padNumber+1, padValue, velocity, PAD_SETTINGS->getControllerOscIpAddress(), PAD_SETTINGS->getControllerOscPort());
     }
     
     else if (PAD_SETTINGS->getControllerControl() == 2) //MIDI program change

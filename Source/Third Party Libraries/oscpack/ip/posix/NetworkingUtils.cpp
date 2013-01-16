@@ -56,6 +56,8 @@
 #include <string.h>
 #include <stdio.h>
 
+
+
 NetworkInitializer::NetworkInitializer() {}
 
 NetworkInitializer::~NetworkInitializer() {}
@@ -64,14 +66,14 @@ NetworkInitializer::~NetworkInitializer() {}
 unsigned long GetHostByName( const char *name )
 {
     unsigned long result = 0;
-
+    
     struct hostent *h = gethostbyname( name );
     if( h ){
         struct in_addr a;
         memcpy( &a, h->h_addr_list[0], h->h_length );
         result = ntohl(a.s_addr);
     }
-
+    
     return result;
 }
 

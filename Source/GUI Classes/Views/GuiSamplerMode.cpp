@@ -228,6 +228,15 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     pressureStatusButton->setToggleState(true, false);
     pressureStatusButton->addMouseListener(this, false);
     
+    
+    addAndMakeVisible(currentParameterLabel = new Label());
+	currentParameterLabel->setFont(Font(10));
+	currentParameterLabel->setText(translate("TEMPO"), false);
+    currentParameterLabel->setColour(Label::textColourId, Colours::white);
+    currentParameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
+    currentParameterLabel->setJustificationType(Justification::centred);
+    //currentParameterLabel->setEditable(false, false, false);
+    
 }
 
 
@@ -247,8 +256,9 @@ void GuiSamplerMode::resized()
     waveform->setBounds(683, 261, 324, 324);
 	
     //fileChooser->setBounds(787, 393, 116, 80);
-    fileChooser->setBounds(787, 393, 116, 100);
+    fileChooser->setBounds(787, 468, 96, 20);
     
+    currentParameterLabel->setBounds(821, 398, 48, 48);
     plusButton->setBounds(802, 379, 86, 86);
     minusButton->setBounds(802, 379, 86, 86);
 	parameterLabel->setBounds(832,453,26,10);
@@ -271,10 +281,6 @@ void GuiSamplerMode::resized()
 	loopButton->setBounds(918, 431,32, 32);
 	
 	stickyButton->setBounds(853, 496,32, 32);
-	
-    // gainSlider->setBounds(845, 495, 45, 45);
-	//panSlider->setBounds(900, 495, 45, 45);
-    
     fxDial->setBounds(683, 261, 324, 324);
 
 }
@@ -320,10 +326,18 @@ void GuiSamplerMode::paint (Graphics& g)
 	
 	if(triggerSettingsButton->getToggleStateValue()==true)
 	{
-        g.drawEllipse(891,469, 38, 38, 1.0);
-        g.drawEllipse(915,428, 38, 38, 1.0);
+        g.setColour(Colours::black);
+		g.fillEllipse(816, 393, 58, 58);
+		
+		ColourGradient fillGradient(AlphaColours::blue, 816+(58*0.5), 393+(58*0.6), AlphaColours::lightblue, 816+(58*0.5), 393, false);
+		g.setGradientFill(fillGradient);
+        
+		g.fillEllipse((816+(58*0.15)), (393+(58*0.15)), (58*0.7), (58*0.7));
+		
 	}
 	
+    g.setColour(Colours::grey.withAlpha(0.3f));
+    
 	g.drawEllipse((xBrowseButton + (widthBrowseButton * 0.1)), (yBrowseButton + (widthBrowseButton * 0.1)),
 				  (widthBrowseButton * 0.8),(widthBrowseButton * 0.8), 1.0f);
 }
@@ -562,6 +576,7 @@ void GuiSamplerMode::setDisplay(int settingsType)
         plusButton->setVisible(true);
         minusButton->setVisible(true);
         parameterLabel->setVisible(true);
+        currentParameterLabel->setVisible(true);
         
         fxDial->setVisible(false);
         pressureStatusButton->setVisible(false);
@@ -588,6 +603,7 @@ void GuiSamplerMode::setDisplay(int settingsType)
         plusButton->setVisible(false);
         minusButton->setVisible(false);
         parameterLabel->setVisible(false);
+        currentParameterLabel->setVisible(false);
         
         fxDial->setVisible(true);
         pressureStatusButton->setVisible(true);
@@ -863,11 +879,16 @@ void GuiSamplerMode::updateDisplay()
 
 void GuiSamplerMode::setParameterLabelText (String value)
 {
-	//This function is used to update the display of 
-    //parameterLabel which displays the current value of the visible control
+	//This function is used to update the display of currentParameterLabel
+    //which displays the name of the currently visible rotary control,
+    //and parameterLabel which displays the current value of the visible control
     
     //The function is called everytime the value of one of the controls is changed
     //and passes in the controls value as a string and sets it to parameterLabel.
+    
+    //If you want to update the currentParameterLabel text call this function with
+    //String::empty and the currently visible control is found and the name is
+    //put into the label, as well as putting the value of it into the other label.
     
     if (value != String::empty)
     {
@@ -881,18 +902,22 @@ void GuiSamplerMode::setParameterLabelText (String value)
 		
 		if (gainSlider->isVisible())
 		{
+            currentParameterLabel->setText(translate("GAIN"), false);
 			parameterLabel->setText(String(gainSlider->getValue()), false);
 		}
 		else if (panSlider->isVisible())
 		{
+            currentParameterLabel->setText(translate("PAN"), false);
 			parameterLabel->setText(String(panSlider->getValue()), false);
 		}
         else if (attackSlider->isVisible())
 		{
+            currentParameterLabel->setText(translate("ATTACK"), false);
 			parameterLabel->setText(String(attackSlider->getValue()), false);
 		}
         else if (releaseSlider->isVisible())
 		{
+            currentParameterLabel->setText(translate("RELEASE"), false);
 			parameterLabel->setText(String(releaseSlider->getValue()), false);
 		}
 	}

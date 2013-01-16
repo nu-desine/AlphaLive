@@ -35,7 +35,7 @@ OscOutput::~OscOutput()
 }
 
 //what stuff within here could become member variables?
-void OscOutput::transmitOutputMessage(int padNumber, int padValue, String address, int port)
+void OscOutput::transmitPadMessage(int padNumber, int padValue, int padVelocity, String address, int port)
 {
     const char* ipAddress = address.toUTF8();
 
@@ -43,8 +43,21 @@ void OscOutput::transmitOutputMessage(int padNumber, int padValue, String addres
     char buffer[OUTPUT_BUFFER_SIZE];
     osc::OutboundPacketStream p (buffer,OUTPUT_BUFFER_SIZE);
     
-    p << osc::BeginBundleImmediate << osc::BeginMessage( "/alpha" ) << padNumber << padValue << osc::EndMessage << osc::EndBundle;
+    //put velocity last as this parameter won't be in the elite control messages
+    p << osc::BeginBundleImmediate << osc::BeginMessage( "/alpha" ) << padNumber << padValue << padVelocity << osc::EndMessage << osc::EndBundle;
 
     transmitSocket.Send(p.Data(), p.Size());
+}
+
+void OscOutput::transmitEliteControlMessage(int controlNumber, double controlValue, String address, int port)
+{
+    const char* ipAddress = address.toUTF8();
     
+    UdpTransmitSocket transmitSocket (IpEndpointName(ipAddress, port));
+    char buffer[OUTPUT_BUFFER_SIZE];
+    osc::OutboundPacketStream p (buffer,OUTPUT_BUFFER_SIZE);
+    
+    p << osc::BeginBundleImmediate << osc::BeginMessage( "/alpha" ) << controlNumber << controlValue << osc::EndMessage << osc::EndBundle;
+    
+    transmitSocket.Send(p.Data(), p.Size());
 }

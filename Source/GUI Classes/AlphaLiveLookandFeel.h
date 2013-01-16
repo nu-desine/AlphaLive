@@ -66,6 +66,7 @@ public:
 	void layoutFilenameComponent (FilenameComponent& filenameComp,
 								  ComboBox* filenameBox,
 								  Button* browseButton);
+     
 	
 	void drawLabel (Graphics& g, Label& label);
 	

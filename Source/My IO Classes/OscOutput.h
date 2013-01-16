@@ -41,13 +41,9 @@ public:
     OscOutput();
     ~OscOutput();
     
-    void transmitOutputMessage(int padNumber, int padValue, String address, int port);
+    void transmitPadMessage(int padNumber, int padValue, int padVelocity, String address, int port);
+    void transmitEliteControlMessage(int controlNumber, double controlValue, String address, int port);
     
-    //what will other functions look like or be formatted?
-    //void transmitLedMessage(int padNumber, int ledBrightness)
-    //... or ...
-    //void transmitLedOnMessage (int padNumber);
-    //void tranmsitLedOffMessage (int padNumber);
     
 private:
 

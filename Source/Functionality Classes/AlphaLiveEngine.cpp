@@ -41,6 +41,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     
     recievedPad = 0;
     recievedValue = 0;
+    recievedVelocity = 110;
     
     pendingUpdatePadValue = 0;
     
@@ -229,7 +230,14 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         
         recievedPad = pad;
         recievedValue = value;
-        recievedVelocity = velocity;
+        
+        //The firmware only sends a velocity value on the initial press, and then a 0 after that.
+        //This will cause issues when converting to OSC messages.
+        //Therefore, never set recievedVelocity to 0.
+        if (velocity > 0)
+        {
+            recievedVelocity = velocity;
+        }
         
         
         //===determine pressure curve===
@@ -324,7 +332,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         
         if (isDualOutputMode == true)
         {
-            oscOutput.transmitOutputMessage(recievedPad+1, recievedValue2, oscIpAddress, oscPortNumber);
+            oscOutput.transmitPadMessage(recievedPad+1, recievedValue2, recievedVelocity, oscIpAddress, oscPortNumber);
         }
     }
     else 

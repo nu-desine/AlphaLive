@@ -200,7 +200,7 @@ void EliteControls::getInputData(int control, int value)
                 //if new OSC value is different from the previous OSC value, send the OSC message
                 if (oscValue != prevValue)
                 {
-                    oscOutput.transmitOutputMessage(control+1, oscValue, ipAddress, portNumber);
+                    oscOutput.transmitEliteControlMessage(control+1, oscValue, ipAddress, portNumber);
                 }
                 
                 //update prevValue
@@ -281,7 +281,7 @@ void EliteControls::getInputData(int control, int value)
                     oscValue = AppSettings::Instance()->getEliteButtonOscOnNumber(eliteButtonNumber);
                 
                 
-                oscOutput.transmitOutputMessage(control+1, oscValue, ipAddress, portNumber);
+                oscOutput.transmitEliteControlMessage(control+1, oscValue, ipAddress, portNumber);
             }
             
             //Killswitch

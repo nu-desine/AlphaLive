@@ -125,15 +125,18 @@ void HidComms::run()
             
             //what should the following sleep value be?
             #ifdef WIN32
-            sleep(5); //should this actually be Sleep() which need a windows library defined? See hidtest.
+            sleep(3); //should this actually be Sleep() which need a windows library defined? See hidtest.
             #else
-            usleep(5*1000);
+            usleep(3*1000);
             #endif
         }
         
         //=== if device is not currently connected ===
         else
         {
+            //try and connect to the device
+            connectToDevice();
+            
             //std::cout << "no device connected" << std::endl;
             //what should the following sleep value be?
             #ifdef WIN32
@@ -141,9 +144,6 @@ void HidComms::run()
             #else
             usleep(1000*1000);
             #endif
-            
-            //try and connect to the device
-            connectToDevice();
         }
         
         //std::cout << "listening... ";
@@ -240,7 +240,8 @@ void HidComms::connectToDevice()
         dataToSend[0] = 0x05; //host setup data request command ID
         hid_write(handle, dataToSend, 9);
         
-        res = hid_read(handle, buf, sizeof(buf));
+        //TEMPORARILY COMMENTED OUT TO PREVENT PAUSING FOR THE TIME BEING
+        //res = hid_read(handle, buf, sizeof(buf));
         
         if (res > 0 && buf[0] == 0x04)
         {

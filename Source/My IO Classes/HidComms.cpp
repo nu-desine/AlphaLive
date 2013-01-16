@@ -81,6 +81,13 @@ void HidComms::run()
                         unsigned short int pressure = 0;
                         pressure = buf[2] + (buf[3]<<8);
                         
+                        //current problem with the firmware where at max press
+                        //it flickers between 510 and 511. This could cause problems
+                        //within AlphaLive.
+                        int removeThisIfStatementEventually;
+                        if (pressure >= 510)
+                            pressure = 511;
+                        
                         hidInputCallback(buf[1], pressure, buf[4]);
                         
                         
@@ -111,12 +118,6 @@ void HidComms::run()
                         hidInputCallback(buf[1]+100, buf[2], 0);
                     }
                     
-                    else if (buf[0] == 0x07) //test
-                    {
-                        for (int i = 0; i < res; i++)
-                            printf("%02hhx ", buf[i]);
-                        printf("\n");
-                    }
                 }
                 
                 memset(buf,0,sizeof(buf));
@@ -242,6 +243,7 @@ void HidComms::connectToDevice()
         
         //TEMPORARILY COMMENTED OUT TO PREVENT PAUSING FOR THE TIME BEING
         //res = hid_read(handle, buf, sizeof(buf));
+        int uncommentThisLine;
         
         if (res > 0 && buf[0] == 0x04)
         {
@@ -258,7 +260,7 @@ void HidComms::connectToDevice()
             Array<File> hexFile;
             appDataDir.findChildFiles(hexFile, 2, false, wildcard);
             
-            if (hexFile.size > 0) //which it should
+            if (hexFile.size() > 0) //which it should
             {
                 int currentFirmwareNo = buf[1];
                 int newFirmwareNo = hexFile.getLast().getFileNameWithoutExtension().getTrailingIntValue();

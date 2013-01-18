@@ -81,13 +81,6 @@ void HidComms::run()
                         unsigned short int pressure = 0;
                         pressure = buf[2] + (buf[3]<<8);
                         
-                        //current problem with the firmware where at max press
-                        //it flickers between 510 and 511. This could cause problems
-                        //within AlphaLive.
-                        int removeThisIfStatementEventually;
-                        if (pressure >= 510)
-                            pressure = 511;
-                        
                         hidInputCallback(buf[1], pressure, buf[4]);
                         
                         

@@ -211,7 +211,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
     if (pad < 48) //an actual pad as opposed to an elite control
     {
         //=====TEMPORARY PAD NUMBER REVERSAL======
-        //pad = Layouts::padArrangementLayout[pad];
+        pad = Layouts::padArrangementLayout[pad];
         
         //At the point the 'value' value is expected to be between 0 and MAX_PRESSURE.
         //In the older version this was scaled in the serial input class.
@@ -270,7 +270,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
             recievedVelocity = recievedVelocity * (127.0/1.71828);
             if (recievedVelocity > 127.0)
                 recievedVelocity = 127.0;
-            if (recievedVelocity > 0 && recievedVelocity < 1) //value 1 = 0.6, which is rounded to 0
+            if (recievedVelocity > 0 && recievedVelocity < 1) //value 1 = 0.x, which is rounded to 0
                 recievedVelocity = 1;
         }
         else if (PAD_SETTINGS->getVelocityCurve() == 3)

@@ -27,7 +27,7 @@ namespace Layouts
     //the following layout is the new temp layout where the index is in incoming pad number (0-47) 
     //and the number at each index is the new pad number (0-47). 
     //Each number is then incremented by 1 for the GUI so the user is working with pads in the range 1-48
-    const int padArrangementLayout[48] = {4,5,6,7,0,1,2,3,  12,13,14,15,8,9,10,11,  20,21,22,23,16,17,18,19,  28,29,30,31,24,25,26,27,  36,37,38,39,32,33,34,35,  44,45,46,47,40,41,42,43};
+    const int padArrangementLayout[48] = {5,6,7,0,1,2,3,4,  13,14,15,8,9,10,11,12,  21,22,23,16,17,18,19,20,  29,30,31,24,25,26,27,28,  37,38,39,32,33,34,35,36,  45,46,47,40,41,42,43,44};
     
     //the following layout is the default CC controller layout for the pad numbers
     const int ccLayout[48] = {12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,52,53,54,55,56,57,58,59,60,61,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119};

@@ -1567,8 +1567,8 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
     
     else if (commandID == CommandIDs::StarterGuide)
     {
-        result.setInfo (translate("Starter Guide..."),
-                        "Opens the AlphaLive Starter Guide using the systems default PDF viewer application.",
+        result.setInfo (translate("User Guide..."),
+                        "Opens the AlphaLive User Guide using the systems default PDF viewer application.",
                         CommandCategories::OtherCommands, 0);
     }
     else if (commandID == CommandIDs::ReferenceManual)

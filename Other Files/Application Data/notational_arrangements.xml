@@ -13,7 +13,7 @@
     
     <WICKIHAYDEN name="Wicki-Hayden" layout="0 2 4 6 8 10 12 14 19 21 7 9 11 13 15 17 22 24 26 12 14 16 18 20 25 27 29 31 33 19 21 23 28 30 32 34 36 38 24 26 31 33 35 37 39 41 43 45 "/> <!-- translate("Wicki-Hayden") -->
     
-    <PERFECTFOURTHS name="Perfect Fourths" layout="0 5 10 15 20 25 30 35 31 36 1 6 11 16 21 26   27 32 37 2 7 12 17 22 18 23 28 33 38 3 8 13 14 19 24 29 34 39 4 9 5 10 15 20 25 30 35 40 "/> <!-- translate("Perfect Fourths") -->
+    <PERFECTFOURTHS name="Perfect Fourths" layout="0 5 10 15 20 25 30 35 31 36 1 6 11 16 21 26 27 32 37 2 7 12 17 22 18 23 28 33 38 3 8 13 14 19 24 29 34 39 4 9 5 10 15 20 25 30 35 40 "/> <!-- translate("Perfect Fourths") -->
     
     <MAJOR name="Major" layout="0 2 4 5 7 9 11 12 12 14 16 17 19 21 23 24 24 26 28 29 31 33 35 36 36 38 40 41 43 45 47 48 48 50 52 53 55 57 59 60 60 62 64 65 67 69 71 72 "/> <!-- translate("Major") -->
     

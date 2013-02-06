@@ -145,6 +145,7 @@
     <ClCompile Include="..\..\Source\File and Settings\StoredSettings.cpp" />
     <ClCompile Include="..\..\Source\Functionality Classes\AlphaLiveEngine.cpp" />
     <ClCompile Include="..\..\Source\Functionality Classes\Controller Mode\ModeController.cpp" />
+    <ClCompile Include="..\..\Source\Functionality Classes\EliteControls.cpp" />
     <ClCompile Include="..\..\Source\Functionality Classes\GlobalClock.cpp" />
     <ClCompile Include="..\..\Source\Functionality Classes\MIDI Mode\ModeMidi.cpp" />
     <ClCompile Include="..\..\Source\Functionality Classes\Other\LayoutsAndScales.cpp" />
@@ -175,8 +176,10 @@
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\GuiFxDial.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaAudioSettingsComponent.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaPopUpButton.cpp" />
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaPopUpImageButton.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaRotarySlider.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaSlider.cpp" />
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaSquareButton.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaTextButton.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\FileDropButton.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\GuiSwitch.cpp" />
@@ -211,6 +214,7 @@
     <ClCompile Include="..\..\Source\GUI Classes\Views\GuiSamplerMode.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Views\GuiSequencerMode.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Views\MainComponent.cpp" />
+    <ClCompile Include="..\..\Source\My IO Classes\HidComms.cpp" />
     <ClCompile Include="..\..\Source\My IO Classes\OscInput.cpp" />
     <ClCompile Include="..\..\Source\My IO Classes\OscOutput.cpp" />
     <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\Bessel.cpp" />
@@ -230,6 +234,7 @@
     <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\RBJ.cpp" />
     <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\RootFinder.cpp" />
     <ClCompile Include="..\..\Source\Third Party Libraries\DspFilters\State.cpp" />
+    <ClCompile Include="..\..\Source\Third Party Libraries\HIDAPI\hid.c" />
     <ClCompile Include="..\..\Source\Third Party Libraries\oscpack\ip\IpEndpointName.cpp" />
     <ClCompile Include="..\..\Source\Third Party Libraries\oscpack\ip\posix\NetworkingUtils.cpp" />
     <ClCompile Include="..\..\Source\Third Party Libraries\oscpack\ip\posix\UdpSocket.cpp" />
@@ -1319,6 +1324,7 @@
     <ClInclude Include="..\..\Source\File and Settings\StoredSettings.h" />
     <ClInclude Include="..\..\Source\Functionality Classes\AlphaLiveEngine.h" />
     <ClInclude Include="..\..\Source\Functionality Classes\Controller Mode\ModeController.h" />
+    <ClInclude Include="..\..\Source\Functionality Classes\EliteControls.h" />
     <ClInclude Include="..\..\Source\Functionality Classes\GlobalClock.h" />
     <ClInclude Include="..\..\Source\Functionality Classes\MIDI Mode\ModeMidi.h" />
     <ClInclude Include="..\..\Source\Functionality Classes\Other\PlayStates.h" />
@@ -1349,8 +1355,10 @@
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\GuiFxDial.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaAudioSettingsComponent.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaPopUpButton.h" />
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaPopUpImageButton.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaRotarySlider.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaSlider.h" />
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaSquareButton.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaTextButton.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\FileDropButton.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\GuiSwitch.h" />
@@ -1387,6 +1395,7 @@
     <ClInclude Include="..\..\Source\GUI Classes\Views\GuiSamplerMode.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Views\GuiSequencerMode.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Views\MainComponent.h" />
+    <ClInclude Include="..\..\Source\My IO Classes\HidComms.h" />
     <ClInclude Include="..\..\Source\My IO Classes\OscInput.h" />
     <ClInclude Include="..\..\Source\My IO Classes\OscOutput.h" />
     <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Bessel.h" />
@@ -1413,6 +1422,7 @@
     <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Types.h" />
     <ClInclude Include="..\..\Source\Third Party Libraries\DspFilters\Utilities.h" />
     <ClInclude Include="..\..\Source\Third Party Libraries\fastmath.h" />
+    <ClInclude Include="..\..\Source\Third Party Libraries\HIDAPI\hidapi.h" />
     <ClInclude Include="..\..\Source\Third Party Libraries\Juced\jucetice_CircularBuffer.h" />
     <ClInclude Include="..\..\Source\Third Party Libraries\oscpack\ip\IpEndpointName.h" />
     <ClInclude Include="..\..\Source\Third Party Libraries\oscpack\ip\NetworkingUtils.h" />

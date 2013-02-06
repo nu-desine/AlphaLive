@@ -1830,6 +1830,21 @@
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_video\juce_video.cpp">
       <Filter>Juce Library Code</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\My IO Classes\HidComms.cpp">
+      <Filter>AlphaLive\Source\My IO Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Third Party Libraries\HIDAPI\hid.c">
+      <Filter>AlphaLive\Source\Third Party Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaPopUpImageButton.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaSquareButton.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Functionality Classes\EliteControls.cpp">
+      <Filter>AlphaLive\Source\Functionality Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\Application\AbstractSubjectAndObserver.h">
@@ -3498,6 +3513,21 @@
       <Filter>Juce Library Code</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="..\..\Source\My IO Classes\HidComms.h">
+      <Filter>AlphaLive\Source\My IO Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Third Party Libraries\HIDAPI\hidapi.h">
+      <Filter>AlphaLive\Source\Third Party Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaPopUpImageButton.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaSquareButton.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Functionality Classes\EliteControls.h">
+      <Filter>AlphaLive\Source\Functionality Classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\JuceLibraryCode\modules\juce_audio_basics\juce_module_info">

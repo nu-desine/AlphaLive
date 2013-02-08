@@ -41,7 +41,6 @@ XmlAttributesListBox::XmlAttributesListBox (File fileToList, File fileToList2, b
         
         for (int i = 0; i < xmlFile->getNumChildElements(); i++)
         {
-            //ScopedPointer<XmlElement> newElement(new XmlElement (*xmlFile->getChildElement(i)));
             xmlData->addChildElement(new XmlElement (*xmlFile->getChildElement(i)));
         }
     }
@@ -51,8 +50,13 @@ XmlAttributesListBox::XmlAttributesListBox (File fileToList, File fileToList2, b
         
         for (int i = 0; i < xmlFile->getNumChildElements(); i++)
         {
-            //ScopedPointer<XmlElement> newElement(new XmlElement (*xmlFile->getChildElement(i)));
-            xmlData->addChildElement(new XmlElement (*xmlFile->getChildElement(i)));
+            //do some safety checks, as these elements
+            //would have been made by the user.
+            if (xmlFile->getChildElement(i)->hasAttribute("name") &&
+                xmlFile->getChildElement(i)->hasAttribute("layout"))
+            {
+                xmlData->addChildElement(new XmlElement (*xmlFile->getChildElement(i)));
+            }
         }
     }
     

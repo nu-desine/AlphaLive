@@ -13,6 +13,7 @@ Use the following format:
     <LAYOUT name="insert layout name here" layout="insert 48 integer numbers here seperated by single whitespaces (including after the last number)"/>
     
 See the Blues layout below for an example of this.
+Failure to comply to this exact format will result in your layouts not appearing in the Toolbox in AlphaLive, or the layout will not be mapped out as expected.
 
 -->
 

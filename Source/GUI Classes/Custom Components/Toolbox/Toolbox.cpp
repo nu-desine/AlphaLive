@@ -471,6 +471,8 @@ void Toolbox::noteLayoutSelected (String layout, bool isScale)
                 int noteToApply = tokens[i].getIntValue() + rootNote;
                 if (noteToApply > 119)
                     noteToApply = 119;
+                else if (noteToApply < 0)
+                    noteToApply = rootNote;
                 
                 PAD_SETTINGS->setMidiNote(noteToApply);
                 mainComponentRef.getGuiPiano()->setNoteData(noteToApply);
@@ -492,6 +494,8 @@ void Toolbox::noteLayoutSelected (String layout, bool isScale)
                     int noteToApply = tokens[row].getIntValue() + rootNote;
                     if (noteToApply > 119)
                         noteToApply = -500;
+                    else if (noteToApply < 0)
+                        noteToApply = rootNote;
                     
                     PAD_SETTINGS->setSequencerMidiNote(noteToApply, row);
                     

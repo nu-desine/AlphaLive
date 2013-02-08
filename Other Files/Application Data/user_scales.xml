@@ -3,7 +3,7 @@
 <!-- 
 Use this file to manually add your own notational scales to AlphaLive.
 
-The array of numbers you add below are applied to the set of pads in numerical order.
+The array of numbers you add below are applied to a set of pads or sequencer rows in numerical order.
 The scales here should always start with 0 which will be the root note.
 The following numbers are the intervals from the root note.
 The root note is selected via the piano interface in AlphaLive.
@@ -13,12 +13,13 @@ Use the following format:
     <SCALE name="insert scales name here" layout="insert 48 integer numbers here seperated by single whitespaces (including after the last number)"/>
     
 See the Raga Madhuri scale below for an example of this.
+Failure to comply to this exact format will result in your scales not appearing in the Toolbox in AlphaLive, or the scale will not be mapped out as expected.
 
 -->
 
 <ALPHALIVE_SCALES>
 
-    <RAGAMADHURI name="Raga Madhuri" layout="0 4 5 7 9 10 11 12 16 17 19 21 22 23 24 28 29 31 33 34 35 36 40 41 43 45 46 47 48 52 53 55 57 58 59 60 64 65 67 69 70 71 72 76 77 79 81 82 "/> <!-- translate("Raga Madhuri") -->
+    <SCALE name="Raga Madhuri" layout="0 4 5 7 9 10 11 12 16 17 19 21 22 23 24 28 29 31 33 34 35 36 40 41 43 45 46 47 48 52 53 55 57 58 59 60 64 65 67 69 70 71 72 76 77 79 81 82 "/> <!-- translate("Raga Madhuri") -->
 
 <!-- Add your scales here! -->    
     

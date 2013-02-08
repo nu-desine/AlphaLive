@@ -24,7 +24,7 @@
 #include "Toolbox.h"
 
 
-XmlAttributesListBox::XmlAttributesListBox (File fileToList, bool forScales, Toolbox &parent)
+XmlAttributesListBox::XmlAttributesListBox (File fileToList, File fileToList2, bool forScales, Toolbox &parent)
 :   forScales_(forScales),
     parentRef(parent)
 {
@@ -32,17 +32,33 @@ XmlAttributesListBox::XmlAttributesListBox (File fileToList, bool forScales, Too
     //should be check its in an xml format here?
     
     StringArray itemStrings;
-    xmlData = nullptr;
+    xmlData = new XmlElement("data");
     
+    //search through the files for the child elements and append them to xmlData
     if (fileToList.exists())
     {
-        xmlData = XmlDocument::parse(fileToList);
-        int numOfItems = xmlData->getNumChildElements();
+        ScopedPointer <XmlElement> xmlFile(XmlDocument::parse(fileToList));
         
-        for (int i = 0; i < numOfItems; i++)
-            itemStrings.add(xmlData->getChildElement(i)->getStringAttribute("name"));
-        
+        for (int i = 0; i < xmlFile->getNumChildElements(); i++)
+        {
+            //ScopedPointer<XmlElement> newElement(new XmlElement (*xmlFile->getChildElement(i)));
+            xmlData->addChildElement(new XmlElement (*xmlFile->getChildElement(i)));
+        }
     }
+    if (fileToList2.exists())
+    {
+        ScopedPointer <XmlElement> xmlFile(XmlDocument::parse(fileToList2));
+        
+        for (int i = 0; i < xmlFile->getNumChildElements(); i++)
+        {
+            //ScopedPointer<XmlElement> newElement(new XmlElement (*xmlFile->getChildElement(i)));
+            xmlData->addChildElement(new XmlElement (*xmlFile->getChildElement(i)));
+        }
+    }
+    
+    int numOfItems = xmlData->getNumChildElements();
+    for (int i = 0; i < numOfItems; i++)
+        itemStrings.add(xmlData->getChildElement(i)->getStringAttribute("name"));
     
     listBoxModel = new AlphaListBoxModel(itemStrings, *this);
     addAndMakeVisible(listBox = new ListBox("list box", listBoxModel));

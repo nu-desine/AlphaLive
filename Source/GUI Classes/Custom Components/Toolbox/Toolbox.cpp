@@ -146,17 +146,25 @@ Toolbox::Toolbox(MainComponent &parent) :
         fileLists[i]->addMouseListener(this, true);
     }
     
-    File scalesFile(appDir + "Application Data/scales.xml");
+    File scalesFile(appDir + "Application Data/library_scales.xml");
     if (scalesFile.exists() == false)
         scalesFile = File::nonexistent;
     
-    File layoutsFile(appDir + "Application Data/notational_arrangements.xml");
+    File layoutsFile(appDir + "Application Data/library_notational_arrangements.xml");
     if (layoutsFile.exists() == false)
         layoutsFile = File::nonexistent;
     
-    scalesListBox = new XmlAttributesListBox (scalesFile, true, *this);
+    File userScalesFile(appDir + "Application Data/user_scales.xml");
+    if (userScalesFile.exists() == false)
+        userScalesFile = File::nonexistent;
+    
+    File userLayoutsFile(appDir + "Application Data/user_notational_arrangements.xml");
+    if (userLayoutsFile.exists() == false)
+        userLayoutsFile = File::nonexistent;
+    
+    scalesListBox = new XmlAttributesListBox (scalesFile, userScalesFile, true, *this);
     scalesListBox->addMouseListener(this, true);
-    layoutsListBox = new XmlAttributesListBox (layoutsFile, false, *this);
+    layoutsListBox = new XmlAttributesListBox (layoutsFile, userLayoutsFile, false, *this);
     layoutsListBox->addMouseListener(this, true);
 
     //create tabbed component 

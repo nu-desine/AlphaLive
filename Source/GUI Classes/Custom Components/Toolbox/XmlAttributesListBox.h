@@ -35,7 +35,7 @@ class XmlAttributesListBox : public Component
 {
 public:
     //==============================================================================
-    XmlAttributesListBox(File fileToList, bool forScales, Toolbox &parent);
+    XmlAttributesListBox(File fileToList, File fileToList2, bool forScales, Toolbox &parent);
     ~XmlAttributesListBox();
     
     void resized();

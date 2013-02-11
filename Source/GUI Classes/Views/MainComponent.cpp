@@ -232,6 +232,9 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     eliteControls->addMouseListener(this, true);
 	eliteControls->setInterceptsMouseClicks(false, true);
     
+    //device status component
+    addAndMakeVisible(deviceStatusComponent = new DeviceStatusComponent());
+    deviceStatusComponent->addMouseListener(this, false);
     
     //pop up views
     addChildComponent(aboutComponent = new AboutComponent(*this));
@@ -252,6 +255,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     infoTextBox->setFont(infoFont);
     infoTextBox->addMouseListener(this, true);
     infoTextBox->setPopupMenuEnabled(false);
+    
 
     isInfoBoxEnabled = true;
     isClockRunning = false;
@@ -345,6 +349,8 @@ void MainComponent::resized()
 	gainSlider->setBounds(38, 8, 81, 81);
 	panSlider->setBounds(46, 16, 65, 65);
     gainPanValueLabel->setBounds(54, 24, 49, 49);
+    
+    deviceStatusComponent->setBounds(348, -5, 75, 20);
 }
 
 

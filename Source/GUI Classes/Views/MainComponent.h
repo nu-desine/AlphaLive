@@ -57,6 +57,7 @@
 #include "../AlphaLiveLookandFeel.h"
 #include "../Sub-Views/EliteControlsComponent.h"
 #include "../Sub-Views/GuiEliteControlsSettings.h"
+#include "../Custom Components/General/DeviceStatusComponent.h"
 
 class MainComponent :   public Component,
                         public Button::Listener,
@@ -198,6 +199,8 @@ private:
     
     String appDir;
     String currentLanguage;
+    
+    DeviceStatusComponent *deviceStatusComponent;
     
     //==============================================================================
 };

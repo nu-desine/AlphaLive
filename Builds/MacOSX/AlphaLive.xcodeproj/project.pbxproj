@@ -119,6 +119,7 @@
 		0C9950D415E909870060688B /* AlphaListBoxModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C9950D215E909870060688B /* AlphaListBoxModel.cpp */; };
 		0C9950D715E9169E0060688B /* XmlAttributesListBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C9950D515E9169D0060688B /* XmlAttributesListBox.cpp */; };
 		0CA0A4FA15B97E8C001362B3 /* TriggerModes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CA0A4F815B97E8C001362B3 /* TriggerModes.cpp */; };
+		0CCE73BB16C5591C000116B1 /* DeviceStatusComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CCE73B916C5591C000116B1 /* DeviceStatusComponent.cpp */; };
 		0CF1D83D165C0317001E9C2E /* HidComms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CF1D83B165C0317001E9C2E /* HidComms.cpp */; };
 		0CF1D841165C0332001E9C2E /* hid.c in Sources */ = {isa = PBXBuildFile; fileRef = 0CF1D83F165C0332001E9C2E /* hid.c */; };
 		0CF1D844165C0346001E9C2E /* EliteControls.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CF1D842165C0346001E9C2E /* EliteControls.cpp */; };
@@ -450,6 +451,8 @@
 		0CA0A4F915B97E8C001362B3 /* TriggerModes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriggerModes.h; sourceTree = "<group>"; };
 		0CA92FACC9C857515F5DC895 /* juce_Colours.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Colours.h; path = ../../JuceLibraryCode/modules/juce_graphics/colour/juce_Colours.h; sourceTree = SOURCE_ROOT; };
 		0CABB5C615E267EF00F27184 /* FirmwareStruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirmwareStruct.h; sourceTree = "<group>"; };
+		0CCE73B916C5591C000116B1 /* DeviceStatusComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeviceStatusComponent.cpp; sourceTree = "<group>"; };
+		0CCE73BA16C5591C000116B1 /* DeviceStatusComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceStatusComponent.h; sourceTree = "<group>"; };
 		0CF1D83B165C0317001E9C2E /* HidComms.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HidComms.cpp; sourceTree = "<group>"; };
 		0CF1D83C165C0317001E9C2E /* HidComms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HidComms.h; sourceTree = "<group>"; };
 		0CF1D83F165C0332001E9C2E /* hid.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hid.c; sourceTree = "<group>"; };
@@ -1654,6 +1657,8 @@
 				0C1A3C4D15E50D65004306A3 /* FileDropButton.cpp */,
 				B9277292164C274B00B6FC1A /* AlphaSquareButton.h */,
 				B9277293164C274B00B6FC1A /* AlphaSquareButton.cpp */,
+				0CCE73BA16C5591C000116B1 /* DeviceStatusComponent.h */,
+				0CCE73B916C5591C000116B1 /* DeviceStatusComponent.cpp */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -3618,6 +3623,7 @@
 				0CF1D83D165C0317001E9C2E /* HidComms.cpp in Sources */,
 				0CF1D841165C0332001E9C2E /* hid.c in Sources */,
 				0CF1D844165C0346001E9C2E /* EliteControls.cpp in Sources */,
+				0CCE73BB16C5591C000116B1 /* DeviceStatusComponent.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -194,15 +194,9 @@ void SequencePlayer::processSequence(int padValue)
         case 2:
             triggerModeData = triggerModes.toggle(padValue);
             break;
-        //case 3:
-            //triggerModeData = triggerModes.toggleRelease(padValue);
-            //break;
         case 3:
             triggerModeData = triggerModes.latch(padValue);
             break;
-        //case 5:
-           // triggerModeData = triggerModes.latchMax(padValue);
-           // break;
         case 4:
             triggerModeData = triggerModes.trigger(padValue);
             break;
@@ -227,7 +221,7 @@ void SequencePlayer::processSequence(int padValue)
             //...and triggerModeData signifies to stop audio, DON'T LET IT...MWAHAHAHA! 
             triggerModeData.playingStatus = 2; //ignore
         }
-        else if (triggerModeData.playingStatus == 1 && currentPlayingState == 1 && triggerMode != /*6*/4)
+        else if (triggerModeData.playingStatus == 1 && currentPlayingState == 1 && triggerMode != 4)
         {
             //...and triggerModeData signifies to start playing, 
             //but file is already playing and triggerMode does not equal 'trigger'
@@ -330,6 +324,7 @@ void SequencePlayer::processSequence(int padValue)
     {
         if (triggerModeData.playingStatus == 1) //play
         {
+            sequenceNumber = 0;
             currentPlayingState = 2; //waiting to play
             
             //add this objects padNumber to the queuedPads Array within AlphaLiveEngine

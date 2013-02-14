@@ -26,7 +26,7 @@
 DeviceStatusComponent::DeviceStatusComponent()
 {
     //take an argument to set deviceStatus here?
-    //deviceStatus = 2;
+    deviceStatus = 0;
 }
 
 DeviceStatusComponent::~DeviceStatusComponent()

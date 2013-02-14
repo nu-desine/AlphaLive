@@ -241,6 +241,7 @@ void AudioFilePlayer::processAudioFile(int padValue, int padVelocity)
             {
                 //static velocity - just use Sampler mode gain value
                 gain = staticGain;
+                velocity = 110; //this should actually be equal to some value based on staticGain
             }
                 
         }
@@ -488,7 +489,7 @@ void AudioFilePlayer::playAudioFile()
                             if (columnNumberType == 1) //if the closest number is the current column number, add it to the recentAddedSequenceData Array so it isn't played
                                 modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->setRecentlyAddedSequenceData(sequenceNumber, j, columnNumber, true);
                             
-                            AppSettings::Instance()->padSettings[recordingPad]->setSequencerData(sequenceNumber, j, columnNumber, 110);
+                            AppSettings::Instance()->padSettings[recordingPad]->setSequencerData(sequenceNumber, j, columnNumber, velocity);
                             
                             
                             //if currently selected pad is the recording pad, update the grid gui.

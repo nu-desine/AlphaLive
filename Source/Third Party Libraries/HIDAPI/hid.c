@@ -1205,12 +1205,14 @@ extern "C" {
 #endif
 #include <setupapi.h>
 //Link with Setupapi.lib
+//instead of the pragma comment, you could also add the file to Configuration Properties-> Linker-> Input-> Additional Dependencies
 #pragma comment (lib, "setupapi.lib") //added by Liam Lacey
     
 #include <winioctl.h>
 #ifdef HIDAPI_USE_DDK
 	#include <api/hidsdi.h> //modified by Liam Lacey
 	//Link with hid.lib
+	//instead of the pragma comment, you could also add the file to Configuration Properties-> Linker-> Input-> Additional Dependencies
 	#pragma comment (lib, "hid.lib") //added by Liam Lacey
 #endif
     

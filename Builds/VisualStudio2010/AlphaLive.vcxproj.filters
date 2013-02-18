@@ -1845,6 +1845,9 @@
     <ClCompile Include="..\..\Source\Functionality Classes\EliteControls.cpp">
       <Filter>AlphaLive\Source\Functionality Classes</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\DeviceStatusComponent.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\Application\AbstractSubjectAndObserver.h">
@@ -3527,6 +3530,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Functionality Classes\EliteControls.h">
       <Filter>AlphaLive\Source\Functionality Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\DeviceStatusComponent.h">
+      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

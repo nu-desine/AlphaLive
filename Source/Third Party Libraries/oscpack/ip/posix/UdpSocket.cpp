@@ -44,15 +44,6 @@
 
 #if OS_MAC || OS_LINUX
 
-#include <vector>
-#include <algorithm>
-#include <stdexcept>
-#include <assert.h>
-#include <signal.h>
-#include <math.h>
-#include <errno.h>
-#include <string.h> // for memset
-
 #include <pthread.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -63,19 +54,30 @@
 #include <sys/time.h>
 #include <netinet/in.h> // for sockaddr_in
 
+#include <signal.h>
+#include <math.h>
+#include <errno.h>
+#include <string.h> 
+
+#include <algorithm>
+#include <cassert>
+#include <cstring> // for memset
+#include <stdexcept>
+#include <vector>
+
 #include "../PacketListener.h"
 #include "../TimerListener.h"
 
 
 #if defined(__APPLE__) && !defined(_SOCKLEN_T)
-// pre system 10.3 didn have socklen_t
+// pre system 10.3 didn't have socklen_t
 typedef ssize_t socklen_t;
 #endif
 
 
 static void SockaddrFromIpEndpointName( struct sockaddr_in& sockAddr, const IpEndpointName& endpoint )
 {
-    memset( (char *)&sockAddr, 0, sizeof(sockAddr ) );
+    std::memset( (char *)&sockAddr, 0, sizeof(sockAddr ) );
     sockAddr.sin_family = AF_INET;
     
 	sockAddr.sin_addr.s_addr = 
@@ -122,7 +124,7 @@ public:
             throw std::runtime_error("unable to create udp socket\n");
         }
         
-		memset( &sendToAddr_, 0, sizeof(sendToAddr_) );
+		std::memset( &sendToAddr_, 0, sizeof(sendToAddr_) );
         sendToAddr_.sin_family = AF_INET;
 	}
     
@@ -147,7 +149,7 @@ public:
         // get the address
         
         struct sockaddr_in sockAddr;
-        memset( (char *)&sockAddr, 0, sizeof(sockAddr ) );
+        std::memset( (char *)&sockAddr, 0, sizeof(sockAddr ) );
         socklen_t length = sizeof(sockAddr);
         if (getsockname(socket_, (struct sockaddr *)&sockAddr, &length) < 0) {
             throw std::runtime_error("unable to getsockname\n");
@@ -164,7 +166,7 @@ public:
 			// unconnect from the remote address
             
 			struct sockaddr_in unconnectSockAddr;
-			memset( (char *)&unconnectSockAddr, 0, sizeof(unconnectSockAddr ) );
+			std::memset( (char *)&unconnectSockAddr, 0, sizeof(unconnectSockAddr ) );
 			unconnectSockAddr.sin_family = AF_UNSPEC;
 			// address fields are zero
 			int connectResult = connect(socket_, (struct sockaddr *)&unconnectSockAddr, sizeof(unconnectSockAddr));
@@ -187,14 +189,14 @@ public:
 		isConnected_ = true;
 	}
     
-	void Send( const char *data, int size )
+	void Send( const char *data, std::size_t size )
 	{
 		assert( isConnected_ );
         
         send( socket_, data, size, 0 );
 	}
     
-    void SendTo( const IpEndpointName& remoteEndpoint, const char *data, int size )
+    void SendTo( const IpEndpointName& remoteEndpoint, const char *data, std::size_t size )
 	{
 		sendToAddr_.sin_addr.s_addr = htonl( remoteEndpoint.address );
         sendToAddr_.sin_port = htons( remoteEndpoint.port );
@@ -216,22 +218,22 @@ public:
     
 	bool IsBound() const { return isBound_; }
     
-    int ReceiveFrom( IpEndpointName& remoteEndpoint, char *data, int size )
+    std::size_t ReceiveFrom( IpEndpointName& remoteEndpoint, char *data, std::size_t size )
 	{
 		assert( isBound_ );
         
 		struct sockaddr_in fromAddr;
         socklen_t fromAddrLen = sizeof(fromAddr);
         
-        int result = recvfrom(socket_, data, size, 0,
-                              (struct sockaddr *) &fromAddr, (socklen_t*)&fromAddrLen);
+        ssize_t result = recvfrom(socket_, data, size, 0,
+                                  (struct sockaddr *) &fromAddr, (socklen_t*)&fromAddrLen);
 		if( result < 0 )
 			return 0;
         
 		remoteEndpoint.address = ntohl(fromAddr.sin_addr.s_addr);
 		remoteEndpoint.port = ntohs(fromAddr.sin_port);
         
-		return result;
+		return (std::size_t)result;
 	}
     
 	int Socket() { return socket_; }
@@ -257,12 +259,12 @@ void UdpSocket::Connect( const IpEndpointName& remoteEndpoint )
 	impl_->Connect( remoteEndpoint );
 }
 
-void UdpSocket::Send( const char *data, int size )
+void UdpSocket::Send( const char *data, std::size_t size )
 {
 	impl_->Send( data, size );
 }
 
-void UdpSocket::SendTo( const IpEndpointName& remoteEndpoint, const char *data, int size )
+void UdpSocket::SendTo( const IpEndpointName& remoteEndpoint, const char *data, std::size_t size )
 {
 	impl_->SendTo( remoteEndpoint, data, size );
 }
@@ -277,7 +279,7 @@ bool UdpSocket::IsBound() const
 	return impl_->IsBound();
 }
 
-int UdpSocket::ReceiveFrom( IpEndpointName& remoteEndpoint, char *data, int size )
+std::size_t UdpSocket::ReceiveFrom( IpEndpointName& remoteEndpoint, char *data, std::size_t size )
 {
 	return impl_->ReceiveFrom( remoteEndpoint, data, size );
 }
@@ -454,9 +456,9 @@ public:
                 
 				if( FD_ISSET( i->second->impl_->Socket(), &tempfds ) ){
                     
-					int size = i->second->ReceiveFrom( remoteEndpoint, data, MAX_BUFFER_SIZE );
+					std::size_t size = i->second->ReceiveFrom( remoteEndpoint, data, MAX_BUFFER_SIZE );
 					if( size > 0 ){
-						i->first->ProcessPacket( data, size, remoteEndpoint );
+						i->first->ProcessPacket( data, (int)size, remoteEndpoint );
 						if( break_ )
 							break;
 					}
@@ -577,14 +579,19 @@ void SocketReceiveMultiplexer::AsynchronousBreak()
 #include <windows.h>
 #include <mmsystem.h>   // for timeGetTime()
 
-#include <vector>
-#include <algorithm>
-#include <stdexcept>
-#include <assert.h>
-
 #ifndef WINCE
 #include <signal.h>
 #endif
+
+#include <algorithm>
+#include <cassert>
+#include <cstring> // for memset
+#include <stdexcept>
+#include <vector>
+
+#include "../UdpSocket.h" // usually I'd include the module header first
+// but this is causing conflicts with BCB4 due to
+// std::size_t usage.
 
 #include "../NetworkingUtils.h"
 #include "../PacketListener.h"
@@ -596,7 +603,7 @@ typedef int socklen_t;
 
 static void SockaddrFromIpEndpointName( struct sockaddr_in& sockAddr, const IpEndpointName& endpoint )
 {
-    memset( (char *)&sockAddr, 0, sizeof(sockAddr ) );
+    std::memset( (char *)&sockAddr, 0, sizeof(sockAddr ) );
     sockAddr.sin_family = AF_INET;
     
 	sockAddr.sin_addr.s_addr = 
@@ -645,7 +652,7 @@ public:
             throw std::runtime_error("unable to create udp socket\n");
         }
         
-		memset( &sendToAddr_, 0, sizeof(sendToAddr_) );
+		std::memset( &sendToAddr_, 0, sizeof(sendToAddr_) );
         sendToAddr_.sin_family = AF_INET;
 	}
     
@@ -670,7 +677,7 @@ public:
         // get the address
         
         struct sockaddr_in sockAddr;
-        memset( (char *)&sockAddr, 0, sizeof(sockAddr ) );
+        std::memset( (char *)&sockAddr, 0, sizeof(sockAddr ) );
         socklen_t length = sizeof(sockAddr);
         if (getsockname(socket_, (struct sockaddr *)&sockAddr, &length) < 0) {
             throw std::runtime_error("unable to getsockname\n");
@@ -709,19 +716,19 @@ public:
 		isConnected_ = true;
 	}
     
-	void Send( const char *data, int size )
+	void Send( const char *data, std::size_t size )
 	{
 		assert( isConnected_ );
         
-        send( socket_, data, size, 0 );
+        send( socket_, data, (int)size, 0 );
 	}
     
-    void SendTo( const IpEndpointName& remoteEndpoint, const char *data, int size )
+    void SendTo( const IpEndpointName& remoteEndpoint, const char *data, std::size_t size )
 	{
 		sendToAddr_.sin_addr.s_addr = htonl( remoteEndpoint.address );
         sendToAddr_.sin_port = htons( (short)remoteEndpoint.port );
         
-        sendto( socket_, data, size, 0, (sockaddr*)&sendToAddr_, sizeof(sendToAddr_) );
+        sendto( socket_, data, (int)size, 0, (sockaddr*)&sendToAddr_, sizeof(sendToAddr_) );
 	}
     
 	void Bind( const IpEndpointName& localEndpoint )
@@ -738,14 +745,14 @@ public:
     
 	bool IsBound() const { return isBound_; }
     
-    int ReceiveFrom( IpEndpointName& remoteEndpoint, char *data, int size )
+    std::size_t ReceiveFrom( IpEndpointName& remoteEndpoint, char *data, std::size_t size )
 	{
 		assert( isBound_ );
         
 		struct sockaddr_in fromAddr;
         socklen_t fromAddrLen = sizeof(fromAddr);
         
-        int result = recvfrom(socket_, data, size, 0,
+        int result = recvfrom(socket_, data, (int)size, 0,
                               (struct sockaddr *) &fromAddr, (socklen_t*)&fromAddrLen);
 		if( result < 0 )
 			return 0;
@@ -779,12 +786,12 @@ void UdpSocket::Connect( const IpEndpointName& remoteEndpoint )
 	impl_->Connect( remoteEndpoint );
 }
 
-void UdpSocket::Send( const char *data, int size )
+void UdpSocket::Send( const char *data, std::size_t size )
 {
 	impl_->Send( data, size );
 }
 
-void UdpSocket::SendTo( const IpEndpointName& remoteEndpoint, const char *data, int size )
+void UdpSocket::SendTo( const IpEndpointName& remoteEndpoint, const char *data, std::size_t size )
 {
 	impl_->SendTo( remoteEndpoint, data, size );
 }
@@ -799,7 +806,7 @@ bool UdpSocket::IsBound() const
 	return impl_->IsBound();
 }
 
-int UdpSocket::ReceiveFrom( IpEndpointName& remoteEndpoint, char *data, int size )
+std::size_t UdpSocket::ReceiveFrom( IpEndpointName& remoteEndpoint, char *data, std::size_t size )
 {
 	return impl_->ReceiveFrom( remoteEndpoint, data, size );
 }
@@ -958,9 +965,9 @@ public:
             
 			if( waitResult != WAIT_TIMEOUT ){
 				for( int i = waitResult - WAIT_OBJECT_0; i < (int)socketListeners_.size(); ++i ){
-					int size = socketListeners_[i].second->ReceiveFrom( remoteEndpoint, data, MAX_BUFFER_SIZE );
+					std::size_t size = socketListeners_[i].second->ReceiveFrom( remoteEndpoint, data, MAX_BUFFER_SIZE );
 					if( size > 0 ){
-						socketListeners_[i].first->ProcessPacket( data, size, remoteEndpoint );
+						socketListeners_[i].first->ProcessPacket( data, (int)size, remoteEndpoint );
 						if( break_ )
 							break;
 					}

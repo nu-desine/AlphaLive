@@ -53,8 +53,8 @@
 #include <netdb.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <string.h>
-#include <stdio.h>
+
+#include <cstring>
 
 
 
@@ -70,7 +70,7 @@ unsigned long GetHostByName( const char *name )
     struct hostent *h = gethostbyname( name );
     if( h ){
         struct in_addr a;
-        memcpy( &a, h->h_addr_list[0], h->h_length );
+        std::memcpy( &a, h->h_addr_list[0], h->h_length );
         result = ntohl(a.s_addr);
     }
     
@@ -88,8 +88,8 @@ unsigned long GetHostByName( const char *name )
 
 #include <winsock2.h>   // this must come first to prevent errors with MSVC7
 #include <windows.h>
-#include <stdlib.h>
-#include <stdio.h>
+
+#include <cstring>
 
 
 static LONG initCount_ = 0;
@@ -137,7 +137,7 @@ unsigned long GetHostByName( const char *name )
     struct hostent *h = gethostbyname( name );
     if( h ){
         struct in_addr a;
-        memcpy( &a, h->h_addr_list[0], h->h_length );
+        std::memcpy( &a, h->h_addr_list[0], h->h_length );
         result = ntohl(a.s_addr);
     }
     

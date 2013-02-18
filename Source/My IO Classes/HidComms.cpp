@@ -119,9 +119,9 @@ void HidComms::run()
             
             //what should the following sleep value be?
             #ifdef WIN32
-            sleep(3); //should this actually be Sleep() which need a windows library defined? See hidtest.
+            sleep(1); //should this actually be Sleep() which need a windows library defined? See hidtest.
             #else
-            usleep(3*1000);
+            usleep(1*1000);
             #endif
         }
         

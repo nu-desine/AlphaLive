@@ -69,7 +69,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     
     
     //SET UP MIDI OUTPUT if not connected to the HID device
-    if (hasOpenedHidDevice() == false)
+    if (getDeviceStatus() == 0)
     {
         #if JUCE_MAC || JUCE_LINUX
         //==========================================================================
@@ -641,6 +641,16 @@ void AlphaLiveEngine::setDeviceType (int type)
         mainComponent->editInterfaceFromDeviceConnectivity(2);
     }
 }
+
+void AlphaLiveEngine::setDeviceStatus()
+{
+    if (mainComponent != NULL)
+    {
+        const MessageManagerLock mmLock;
+        mainComponent->editInterfaceFromDeviceConnectivity(3);
+    }
+}
+
 
 void AlphaLiveEngine::removeMidiOut()
 {

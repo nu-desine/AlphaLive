@@ -123,6 +123,7 @@ public:
     void setLocalisation();
     void sendEliteDialCommand (int command, int eliteControlValue);
     void editInterfaceFromDeviceConnectivity (int command);
+    void setDeviceStatus (int status);
     void openDocumentation (int type);
     
     

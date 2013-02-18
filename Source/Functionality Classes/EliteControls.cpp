@@ -299,7 +299,7 @@ void EliteControls::getInputData(int control, int value)
 
 void EliteControls::sendMidiMessage(MidiMessage midiMessage)
 {
-    if (alphaLiveEngineRef.hasOpenedHidDevice() == true)
+    if (alphaLiveEngineRef.getDeviceStatus() != 0)
     {
         unsigned char dataToSend[5];
         

@@ -445,7 +445,7 @@ void ModeMidi::sendPressureData (int padNumber)
 //Output the MIDI messages
 void ModeMidi::sendMidiMessage(MidiMessage midiMessage)
 {
-    if (alphaLiveEngineRef.hasOpenedHidDevice() == true)
+    if (alphaLiveEngineRef.getDeviceStatus() != 0)
     {
         unsigned char dataToSend[5];
         

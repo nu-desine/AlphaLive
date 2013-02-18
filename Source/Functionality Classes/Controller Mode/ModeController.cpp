@@ -108,7 +108,7 @@ void ModeController::changeScene()
 //Output the MIDI messages
 void ModeController::sendMidiMessage(MidiMessage midiMessage)
 {
-    if (alphaLiveEngineRef.hasOpenedHidDevice() == true)
+    if (alphaLiveEngineRef.getDeviceStatus() != 0)
     {
         unsigned char dataToSend[5];
         

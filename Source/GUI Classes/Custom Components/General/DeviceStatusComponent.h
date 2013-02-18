@@ -36,6 +36,8 @@ public:
     void mouseDown (const MouseEvent &e);
     void mouseUp (const MouseEvent &e);
     void mouseDrag (const MouseEvent &e);
+    
+    void setDeviceStatus (int status);
 
 private:
     //==============================================================================

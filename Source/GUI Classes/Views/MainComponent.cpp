@@ -235,6 +235,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //device status component
     addAndMakeVisible(deviceStatusComponent = new DeviceStatusComponent());
     deviceStatusComponent->addMouseListener(this, false);
+    deviceStatusComponent->setDeviceStatus(alphaLiveEngineRef.getDeviceStatus());
     
     //pop up views
     addChildComponent(aboutComponent = new AboutComponent(*this));
@@ -1403,6 +1404,18 @@ void MainComponent::editInterfaceFromDeviceConnectivity (int command)
         }
         
     }
+    
+    //set the device status component
+    else if (command == 3)
+    {
+        // 0 - disconnected, 1 - connected, 2 - error
+        deviceStatusComponent->setDeviceStatus(alphaLiveEngineRef.getDeviceStatus());
+    }
+}
+
+void MainComponent::setDeviceStatus (int status)
+{
+    
 }
 
 void MainComponent::openDocumentation (int type)

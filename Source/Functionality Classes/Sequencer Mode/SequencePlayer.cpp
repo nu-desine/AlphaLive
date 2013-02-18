@@ -899,7 +899,7 @@ void SequencePlayer::sendMidiPressureData()
 //Output any MIDI messages
 void SequencePlayer::sendMidiMessage(MidiMessage midiMessage)
 {
-    if (modeSequencerRef.getAlphaLiveEngineRef().hasOpenedHidDevice() == true)
+    if (modeSequencerRef.getAlphaLiveEngineRef().getDeviceStatus() != 0)
     {
         unsigned char dataToSend[5];
         

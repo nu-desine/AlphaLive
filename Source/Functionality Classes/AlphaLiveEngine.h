@@ -102,6 +102,7 @@ public:
     void removeMidiOut();
     void updateFirmware();
     void setFirmwareUpdateStatus (bool status);
+    void setDeviceStatus();
     
     void handleAsyncUpdate();
     void actionListenerCallback (const String& message);

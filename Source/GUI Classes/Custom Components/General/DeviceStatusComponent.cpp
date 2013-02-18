@@ -87,3 +87,9 @@ void DeviceStatusComponent::mouseDrag (const MouseEvent &e)
 {
     
 }
+
+void DeviceStatusComponent::setDeviceStatus (int status)
+{
+    deviceStatus = status;
+    repaint();
+}

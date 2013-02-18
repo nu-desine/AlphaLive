@@ -25,7 +25,7 @@ HidComms::HidComms() : Thread("HidThread")
 {
     appHasInitialised = false;
     sendOutputReport = false;
-    midiOutExists = hidDeviceExists =  false;
+    midiOutExists = hidDeviceStatus =  0;
     
     startThread();
 }
@@ -64,7 +64,7 @@ void HidComms::run()
                 //if this statement is entered does it always means that
                 //the device has been disconnected?
                 handle = nullptr;
-                hidDeviceExists = false;
+                hidDeviceStatus = 0;
             }
             
             if (res > 0)
@@ -203,7 +203,8 @@ void HidComms::connectToDevice()
             midiOutExists = true;
         }
         
-        hidDeviceExists = false;
+        hidDeviceStatus = 0;
+        setDeviceStatus();
     }
     
     //device found
@@ -218,7 +219,9 @@ void HidComms::connectToDevice()
             midiOutExists = false;
         }
         
-        hidDeviceExists = true;
+        hidDeviceStatus = 1;
+        setDeviceStatus();
+        
         memset(buf,0,sizeof(buf));
         
         //===============================================================================
@@ -289,9 +292,9 @@ void HidComms::connectToDevice()
 }
 
 
-bool HidComms::hasOpenedHidDevice()
+int HidComms::getDeviceStatus()
 {
-    return hidDeviceExists;
+    return hidDeviceStatus;
 }
 
 void HidComms::setAppHasInitialised()

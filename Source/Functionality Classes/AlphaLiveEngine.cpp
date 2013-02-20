@@ -115,6 +115,7 @@ AlphaLiveEngine::AlphaLiveEngine()
         currentExclusivePad[i] = 100; //'100' here is used to signify an 'empty/NULL' value
     
     broadcaster.addActionListener(this);
+    
 }
 
 AlphaLiveEngine::~AlphaLiveEngine()
@@ -221,12 +222,12 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         //and the stored pad value of the pending update is 0, force a GUI update.
         //This will occasionally be needed to reset a pad's GUI back to 'off' when mutiple pads
         //are simultaneously being pressed.
-        if (isUpdatePending() == true && pendingUpdatePadValue == 0) 
-        {
-            const MessageManagerLock mmLock; //lock event thread so it is safe to make calls in the message thread
-            guiUpdateFlag = 0;
-            handleUpdateNowIfNeeded(); //force GUI to be updated now
-        }
+//        if (isUpdatePending() == true && pendingUpdatePadValue == 0) 
+//        {
+//            const MessageManagerLock mmLock; //lock event thread so it is safe to make calls in the message thread
+//            guiUpdateFlag = 0;
+//            handleUpdateNowIfNeeded(); //force GUI to be updated now
+//        }
         
         recievedPad = pad;
         recievedValue = value;
@@ -294,50 +295,51 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         //==========================================================================
         
         //route message to sampler mode
-        if (PAD_SETTINGS->getMode() == 2) //if the pressed pad is set to Sampler mode
+        else if (PAD_SETTINGS->getMode() == 2) //if the pressed pad is set to Sampler mode
         {
             modeSampler->getInputData(recievedPad, recievedValue, recievedVelocity);
         }
         //==========================================================================
         
         //route message to sequencer mode
-        if (PAD_SETTINGS->getMode() == 3) //if the pressed pad is set to Sequencer mode
+        else if (PAD_SETTINGS->getMode() == 3) //if the pressed pad is set to Sequencer mode
         {
             modeSequencer->getInputData(recievedPad, recievedValue);
         }
         //==========================================================================
         
         //route message to controller mode
-        if (PAD_SETTINGS->getMode() == 4) //if the pressed pad is set to Controller mode
+        else if (PAD_SETTINGS->getMode() == 4) //if the pressed pad is set to Controller mode
         {
             modeController->getInputData(recievedPad, recievedValue, recievedVelocity);
         }
         //==========================================================================
         
+        sharedMemoryGui.enter();
+        padPressure[recievedPad] = recievedValue;
+        padPressureGuiQueue.add(recievedPad);
+        broadcaster.sendActionMessage("UPDATE PRESSURE GUI");
+        sharedMemoryGui.exit();
         
-        //update GUI asyncronously
-        guiUpdateFlag = 0;
-        triggerAsyncUpdate();
+//        //update GUI asyncronously
+//        guiUpdateFlag = 0;
+//        triggerAsyncUpdate();
+//        
+//        //store the pad pressure value 
+//        if (isUpdatePending() == true)
+//            pendingUpdatePadValue = recievedValue;
         
-        //store the pad pressure value 
-        if (isUpdatePending() == true)
-            pendingUpdatePadValue = recievedValue;
-        
-        
-        //=========================================================================
-        //OSC OUTPUT MODE STUFF
-        
-        //scale the range back down to 0-127
-        int recievedValue2 = recievedValue * (127.0/MAX_PRESSURE);
-        
-        if (isDualOutputMode == true)
-        {
-            oscOutput.transmitPadMessage(recievedPad+1, recievedValue2, recievedVelocity, oscIpAddress, oscPortNumber);
-        }
+//        //=========================================================================
+//        //OSC OUTPUT MODE STUFF
+//        
+//        if (isDualOutputMode == true)
+//        {
+//            oscOutput.transmitPadMessage(recievedPad+1, recievedValue, recievedVelocity, oscIpAddress, oscPortNumber);
+//        }
     }
     else 
     {
-        //an elite control has been pressed. Do your thang!
+        //an elite control has been touched. Do your thang!
         eliteControls->getInputData(pad, value);
     }
 }
@@ -382,12 +384,17 @@ void AlphaLiveEngine::handleExclusiveMode (int padNum)
 
 void AlphaLiveEngine::updatePadPlayingStatus (int padNumber, int status)
 {
-    guiUpdateFlag = 1;
-    padNumberForPlayingStatus = padNumber;
-    playingStatus = status;
+    //is this function called from an external actionListenerCallback function every time?
+    //If so do we need the MessageManagerLock here?
     
-    const MessageManagerLock mmLock; //lock event thread so it is safe to make calls in the message thread
-    notifyObs();
+    mainComponent->getGuiPadLayout()->setPadPlayingState(padNumber, status);
+    
+//    guiUpdateFlag = 1;
+//    padNumberForPlayingStatus = padNumber;
+//    playingStatus = status;
+//    
+//    const MessageManagerLock mmLock; //lock event thread so it is safe to make calls in the message thread
+//    notifyObs();
     
 }
 
@@ -730,8 +737,23 @@ void AlphaLiveEngine::updateFirmware()
 
 void AlphaLiveEngine::actionListenerCallback (const String& message)
 {
-    //update playhead gui
-    if (message == "UPDATE FIRMWARE")
+    if (message == "UPDATE PRESSURE GUI")
+    {
+        
+        sharedMemoryGui.enter();
+        
+        for (int i = 0; i < padPressureGuiQueue.size(); i++)
+        {
+            int padNum = padPressureGuiQueue[i];
+            mainComponent->getGuiPadLayout()->setPadPressure(padNum, padPressure[padNum]);
+        }
+        
+        padPressureGuiQueue.clear();
+        
+        sharedMemoryGui.exit();
+    }
+    
+    else if (message == "UPDATE FIRMWARE")
     {
         if (shouldUpdateFirmware == true)
         {

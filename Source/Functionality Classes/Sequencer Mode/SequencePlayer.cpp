@@ -156,7 +156,11 @@ SequencePlayer::~SequencePlayer()
     
     stopThread(timeInterval);
     //stopThreadAndReset();
-    modeSequencerRef.updatePadPlayingStatus(padNumber, 0);
+    
+    {
+        const MessageManagerLock mmLock; //lock event thread so it is safe to make calls in the message thread
+        modeSequencerRef.updatePadPlayingStatus(padNumber, 0);
+    }
     
     for (int row = 0; row <= NO_OF_ROWS-1; row++)
     {

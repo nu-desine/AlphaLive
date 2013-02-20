@@ -109,6 +109,8 @@ public:
     GuiPiano* getGuiPiano();
     Toolbox* getToolbox();
     SceneComponent* getSceneComponent();
+    GuiPadLayout* getGuiPadLayout();
+    
 	
     //==============================================================================
     //application command target stuff

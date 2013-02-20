@@ -176,7 +176,7 @@ private:
     
     //audio related
 	AudioDeviceManager audioDeviceManager;	// this wraps the actual audio device
-    CriticalSection sharedMemory;
+    CriticalSection sharedMemory, sharedMemoryGui;
     
     //audio stuff for mixing the modeSampler and modeSequencer objects, which are AudioSources
     MixerAudioSource audioMixer;
@@ -215,6 +215,9 @@ private:
     
     bool shouldUpdateFirmware;
     ActionBroadcaster broadcaster;
+    
+    Array <int> padPressureGuiQueue;
+    int padPressure[48];
     
 };
 

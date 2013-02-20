@@ -105,7 +105,11 @@ AudioFilePlayer::~AudioFilePlayer()
 	delete distortion;
 	delete bitcrusher;
     
-    modeSamplerRef.updatePadPlayingStatus(padNumber, 0);
+    {
+        const MessageManagerLock mmLock; //lock event thread so it is safe to make calls in the message thread
+        modeSamplerRef.updatePadPlayingStatus(padNumber, 0);
+    }
+    
     fileSource.setSource(0);//unload the current file
 	deleteAndZero(currentAudioFileSource);//delete the current file
 }

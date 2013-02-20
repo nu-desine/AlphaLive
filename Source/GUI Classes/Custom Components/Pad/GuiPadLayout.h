@@ -61,6 +61,9 @@ public:
     bool update(const Subject& theChangedSubject);
     void updateCurrentlySelectedPad();
     
+    void setPadPlayingState (int pad, int state);
+    void setPadPressure (int pad, int pressure);
+    
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);
     

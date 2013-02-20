@@ -1020,6 +1020,10 @@ SceneComponent* MainComponent::getSceneComponent()
     return sceneComponent;
 }
 
+GuiPadLayout* MainComponent::getGuiPadLayout()
+{
+    return guiPadLayout;
+}
 
 
 void MainComponent::setInfoTextBoxText (String text)

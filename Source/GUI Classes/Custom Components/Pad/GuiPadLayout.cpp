@@ -258,6 +258,17 @@ void GuiPadLayout::resized()
 	
 }
 
+void GuiPadLayout::setPadPlayingState (int pad, int state)
+{
+    if (pads[pad] != nullptr)
+        pads[pad]->setPadPlayingState(state);
+}
+
+void GuiPadLayout::setPadPressure (int pad, int pressure)
+{
+    //update gradient
+    pads[pad]->setGradient(pressure); 
+}
 
 //observers update function, called everytime an OSC message is recieved
 bool GuiPadLayout::update(const Subject& theChangedSubject)

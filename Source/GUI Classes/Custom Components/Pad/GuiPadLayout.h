@@ -26,7 +26,6 @@
 #include "../../../../JuceLibraryCode/JuceHeader.h"
 #include "GuiPad.h"
 #include "GuiPadRow.h"
-#include "../../../Application/AbstractSubjectAndObserver.h"
 #include "../../../Functionality Classes/AlphaLiveEngine.h"
 #include "../../Views/MainComponent.h" //how come I can include this here and don't have to use a forward declaration?
 //class MainComponent;
@@ -35,15 +34,14 @@
 
 class GuiPadLayout :    public Component,
                         public Button::Listener,
-                        public KeyListener,
-                        public Observer //so this class can 'observe' alphaLiveEngine
+                        public KeyListener
 
 {
 public:
 	//take in two paramaters:
     // - a reference to the AlphaLiveEngine instance so that it can be attached as this classes 'subject'
     // - a reference to the MainComponent class so that calls to its functions can be made from here
-	GuiPadLayout(AlphaLiveEngine &subject, MainComponent &ref);
+	GuiPadLayout(AlphaLiveEngine &alphaLiveEngineRef_, MainComponent &ref);
 	~GuiPadLayout();
 	
 	void resized();
@@ -57,8 +55,6 @@ public:
 	void modeChange(int padNumber, int modeNumber);
 	Image snapshot();
     
-    //override the Observer virtual update function
-    bool update(const Subject& theChangedSubject);
     void updateCurrentlySelectedPad();
     
     void setPadPlayingState (int pad, int state);
@@ -82,8 +78,7 @@ public:
 	
 private:
 	
-    //create a reference to the subject that you want this class to observe
-    AlphaLiveEngine &mSubject;
+    AlphaLiveEngine &alphaLiveEngineRef;
     MainComponent &mainComponentRef;
     
     Array <int> selectedPads;

@@ -23,16 +23,14 @@
 #include "GuiPadLayout.h"
 //#include "../../Views/MainComponent.h"
 
-GuiPadLayout::GuiPadLayout(AlphaLiveEngine &subject, MainComponent &ref)
+GuiPadLayout::GuiPadLayout(AlphaLiveEngine &alphaLiveEngineRef_, MainComponent &ref)
                             :   Component ("GuiPadLayout"),
-                                mSubject(subject), //set the classes subject to the alphaLiveEngine ref
+                                alphaLiveEngineRef(alphaLiveEngineRef_), //set the classes subject to the alphaLiveEngine ref
                                 mainComponentRef(ref) //take in a reference of MainComponent
                                 
 
 {
-    
-    //attach this class to the subject class
-    mSubject.attach(this);
+
     
     //adds buttons to select rows using custom button GuiPadRow
     row6Sb =  new GuiPadRow(40);
@@ -179,9 +177,6 @@ GuiPadLayout::~GuiPadLayout()
 	delete row5Sb;
 	delete row6Sb;
     delete row7Sb;
-    
-    //detach this class from the subject class
-    mSubject.detach(this);
 
 }
 
@@ -269,51 +264,6 @@ void GuiPadLayout::setPadPressure (int pad, int pressure)
     //update gradient
     pads[pad]->setGradient(pressure); 
 }
-
-//observers update function, called everytime an OSC message is recieved
-bool GuiPadLayout::update(const Subject& theChangedSubject)
-{
-    if (&theChangedSubject == &mSubject)
-    {
-        if (mSubject.getGuiUpdateFlag() == 0) //update gradient from pressure
-        {
-            //if 'show pad settings when pressed' control is set to on, the pad settings are currently
-            //not being displayed, display current settings of the pressed pad
-            /*
-            if (shouldDisplaySettings == true)
-            {
-                
-                if (pStore != mSubject.getRecievedPad()) 
-                {
-                    turnOff(pStore);
-                    pStore = mSubject.getRecievedPad();
-                    mainComponentRef.setCurrentlySelectedPad(pStore);
-                
-                    pads[mSubject.getRecievedPad()]->turnOn();
-                    pads[mSubject.getRecievedPad()]->toggleChange();
-                }
-            }
-             */
-            
-            //update gradient
-            pads[mSubject.getRecievedPad()]->setGradient(mSubject.getRecievedValue());
-            
-            
-        }
-        else if (mSubject.getGuiUpdateFlag() == 1) //update pad playing status visual signifier
-        {
-            pads[mSubject.getPadNumberForPlayingStatus()]->setPadPlayingState(mSubject.getPlayingStatus());
-            mSubject.setGuiUpdateFlag(0);   // this is needed so that the pad gradient can be set to 0
-                                            // when the playing status is being changed at the same time.
-                                            // Without this line the pad will hang orange.
-            //However is strange how this doesn't apply when using alt-click to emulate mouse clicks!!
-
-        }
-    }
-    
-    return true;
-}
-
 
 void GuiPadLayout::rotated(int val)
 {
@@ -580,7 +530,7 @@ Image GuiPadLayout::snapshot()
 
 AlphaLiveEngine& GuiPadLayout::getAlphaLiveEngine()
 {
-    return mSubject;
+    return alphaLiveEngineRef;
 }
 
 MainComponent& GuiPadLayout::getMainComponent()

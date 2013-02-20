@@ -488,13 +488,6 @@ void AlphaLiveEngine::triggerQuantizationPoint()
 }
 
 
-void AlphaLiveEngine::handleAsyncUpdate()
-{
-    //notify the observers
-    notifyObs();
-}
-
-
 void AlphaLiveEngine::killAll()
 {
     for (int i = 0; i <= 47; i++)

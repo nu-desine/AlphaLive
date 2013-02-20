@@ -78,7 +78,6 @@
 #include "Sampler Mode/ModeSampler.h"
 #include "Sequencer Mode/ModeSequencer.h"
 #include "Controller Mode/ModeController.h"
-#include "../Application/AbstractSubjectAndObserver.h"
 #include "../My IO Classes/OscOutput.h"
 #include "GlobalClock.h"
 #include "../Audio Processing/PanControl.h"
@@ -86,9 +85,7 @@
 
 class MainComponent;
 
-class AlphaLiveEngine :     public Subject, //so this class can notify observers
-                            public AudioIODeviceCallback, //so this class handles the audio output
-                            public AsyncUpdater,
+class AlphaLiveEngine :     public AudioIODeviceCallback, //so this class handles the audio output
                             public HidComms,
                             public ActionListener
 
@@ -104,7 +101,6 @@ public:
     void setFirmwareUpdateStatus (bool status);
     void setDeviceStatus();
     
-    void handleAsyncUpdate();
     void actionListenerCallback (const String& message);
     
     int getRecievedPad();

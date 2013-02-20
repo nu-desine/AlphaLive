@@ -27,6 +27,11 @@ HidComms::HidComms() : Thread("HidThread")
     sendOutputReport = false;
     midiOutExists = hidDeviceStatus =  0;
     
+    for (int i = 0; i < 48; i++)
+        prevPadPressure[i] = 0;
+    for (int i = 0; i < 2; i++)
+        prevButtonValue[i] = 0;
+    
     startThread();
 }
 
@@ -73,30 +78,83 @@ void HidComms::run()
                 //                printf("%02hhx ", buf[i]);
                 //            printf("\n");
                 
-                //encode the recieved command byte here based on the report ID
                 if (appHasInitialised == true)
                 {
-                    if (buf[0] == 0x01) //pad data report
-                    {
-                        unsigned short int pressure = 0;
-                        pressure = buf[2] + (buf[3]<<8);
-                        
-                        hidInputCallback(buf[1], pressure, buf[4]);
-                        
-                    }
+                    //NEW PROTOCOL READING
+                    //refer to http://kaspar.h1x.com/nuwiki/index.php/HID_Protocol_0.2.1
+                    //for details on the protocol and HID report format.
                     
-                    //The elite dials and buttons could probably use a the same
-                    //command ID now we're not using such a specific report descriptor.
-                    
-                    else if (buf[0] == 0x02) //elite button report
+                    if (buf[0] == 0x01)
                     {
-                        //set 'pad' value to be 102-104 to represent the elite buttons
-                        hidInputCallback(buf[1]+102, buf[2], 0);
-                    }
-                    else if (buf[0] == 0x03) //elite dial
-                    {
-                        //set 'pad' value to be 100-101 to represent the elite dials
-                        hidInputCallback(buf[1]+100, buf[2], 0);
+                        //==== pad data ====
+                        for (int i = 0; i < 48; i++)
+                        {
+                            int padIndex = (i * 2) + 1;
+                            
+                            int pressure = buf[padIndex + 1] << 1;
+                            pressure += buf[padIndex] >> 7;
+                            
+                            if (pressure != prevPadPressure[i])
+                            {
+                                int velocity = buf[padIndex] & 127;
+                            
+                                //std::cout << pressure << " : " << velocity << std::endl;
+                                hidInputCallback(i, pressure, velocity);
+                                
+                                prevPadPressure[i] = pressure;
+                            }
+                        }
+                        
+                        //The following algorithm must be set up so that
+                        //it allows for the possibility of multiple buttton 
+                        //presses/releases or multiple dial rotations to be 
+                        //sent in a single message within the HID report.
+                        //Therefore we must check each pair of bits within
+                        //the button data byte (buf[messageIndex + 1]) 
+                        //and the dial data byte (buf[messageIndex + 2]).
+                        //Using the bitwise right-shift operator we need to check
+                        //for value of 1 and 2 for each control.
+                        
+                        //hidInputCallback() expects the following values:
+                        //button numbers = 102 to 104 (ignore reset button)
+                        //dial numbers = 100 - 101
+                        //button press = 1
+                        //button release = 0
+                        //dial left turn = 127
+                        //dial right turn = 1
+                        
+                        int eliteByte = 97;
+                        
+                        //decode bits 1-3 as pairs from the button/dial data byte,
+                        //looking for a button presses and releases.
+                        for (int i = 1; i < 4; i++)
+                        {
+                            int buttonNum = i + 101;
+                            int buttonVal = buf[eliteByte] >> i;
+                            
+                            if (buttonVal != prevButtonValue[i-1])
+                            {
+                                hidInputCallback(buttonNum, buttonVal, 0);
+                                prevButtonValue[i-1] = buttonVal;
+                            }
+                        }
+                        
+                        //decode bits 4-7 as pairs from the button/dial data byte,
+                        //looking for a dial rotations.
+                        for (int i = 0; i < 2; i++)
+                        {
+                            int dialNum = i + 100;
+                            int dialVal = buf[eliteByte] >> (i * 2) + 4;
+                            
+                            if (dialVal == 1) //left/anti-clockwise
+                            {
+                                hidInputCallback(dialNum, 127, 0);
+                            }
+                            else if (dialVal == 2) //right/clockwise
+                            {
+                                hidInputCallback(dialNum, 1, 0);
+                            }
+                        }
                     }
                     
                 }

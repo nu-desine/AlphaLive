@@ -78,6 +78,9 @@ private:
     
     bool sendOutputReport;
     bool appHasInitialised;
+    
+    int prevPadPressure[48];
+    int prevButtonValue[3];
 };
 
 

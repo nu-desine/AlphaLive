@@ -233,9 +233,8 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	eliteControls->setInterceptsMouseClicks(false, true);
     
     //device status component
-    addAndMakeVisible(deviceStatusComponent = new DeviceStatusComponent());
+    addAndMakeVisible(deviceStatusComponent = new DeviceStatusComponent(alphaLiveEngineRef.getDeviceStatus()));
     deviceStatusComponent->addMouseListener(this, false);
-    deviceStatusComponent->setDeviceStatus(alphaLiveEngineRef.getDeviceStatus());
     
     //pop up views
     addChildComponent(aboutComponent = new AboutComponent(*this));

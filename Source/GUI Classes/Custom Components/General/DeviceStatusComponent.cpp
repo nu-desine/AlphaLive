@@ -23,10 +23,9 @@
 #include "../../AlphaLiveLookandFeel.h"
 
 
-DeviceStatusComponent::DeviceStatusComponent()
+DeviceStatusComponent::DeviceStatusComponent (int status)
 {
-    //take an argument to set deviceStatus here?
-    deviceStatus = 0;
+    deviceStatus = status;
 }
 
 DeviceStatusComponent::~DeviceStatusComponent()

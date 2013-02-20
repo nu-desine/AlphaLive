@@ -27,7 +27,7 @@ class DeviceStatusComponent :	public Component
 {
 public:
     
-    DeviceStatusComponent();
+    DeviceStatusComponent (int status);
     ~DeviceStatusComponent();
 	
 	void resized();

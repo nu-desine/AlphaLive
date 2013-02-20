@@ -134,9 +134,9 @@ void HidComms::run()
             //std::cout << "no device connected" << std::endl;
             //what should the following sleep value be?
             #ifdef WIN32
-            sleep(1000); //should this actually be Sleep() which need a windows library defined? See hidtest.
+            sleep(500); //should this actually be Sleep() which need a windows library defined? See hidtest.
             #else
-            usleep(1000*1000);
+            usleep(500*1000);
             #endif
         }
         
@@ -219,9 +219,6 @@ void HidComms::connectToDevice()
             midiOutExists = false;
         }
         
-        hidDeviceStatus = 1;
-        setDeviceStatus();
-        
         memset(buf,0,sizeof(buf));
         
         //===============================================================================
@@ -288,6 +285,9 @@ void HidComms::connectToDevice()
                 
         // Set the hid_read() function to be non-blocking.
         hid_set_nonblocking(handle, 1);
+        
+        hidDeviceStatus = 1;
+        setDeviceStatus();
     }
 }
 

@@ -131,11 +131,6 @@ public:
     void setGain (float value);
     void setPan (float value);
     
-    int getGuiUpdateFlag();
-    void setGuiUpdateFlag (int value);
-    int getPadNumberForPlayingStatus();
-    int getPlayingStatus();
-    
     void updatePadPlayingStatus (int padNumber, int status);
     
     void setIsDualOutputMode (bool value);
@@ -179,15 +174,7 @@ private:
     AudioSourcePlayer audioPlayer;
     
     float gain, gainPrev, panLeft, panLeftPrev, panRight, panRightPrev;
-    
-    int pendingUpdatePadValue;
-    
-    //guiUpdateFlag is accessed by the observer class (GuiPadLayout) so it knows what part of the GUI it should be updating.
-    // 0 = pad gradient/pressure (default)
-    // 1 = pad playing status signifier
-    int guiUpdateFlag;
-    
-    int padNumberForPlayingStatus;
+
     int playingStatus;
     
     OscOutput oscOutput;
@@ -214,7 +201,6 @@ private:
     
     Array <int> padPressureGuiQueue;
     int padPressure[48];
-    
 };
 
 #endif // H_ALPHALIVEENGINE

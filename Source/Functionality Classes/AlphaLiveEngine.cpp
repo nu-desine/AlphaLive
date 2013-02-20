@@ -38,15 +38,10 @@ AlphaLiveEngine::AlphaLiveEngine()
     panLeft = panLeftPrev = PanControl::leftChanPan_(AppSettings::Instance()->getGlobalPan());
     panRight = panRightPrev = PanControl::rightChanPan_(AppSettings::Instance()->getGlobalPan());
     
-    
     recievedPad = 0;
     recievedValue = 0;
     recievedVelocity = 110;
-    
-    pendingUpdatePadValue = 0;
-    
-    guiUpdateFlag = 0;
-    padNumberForPlayingStatus = 0;
+
     playingStatus = 0;
     
     //==========================================================================
@@ -172,16 +167,6 @@ ModeController* AlphaLiveEngine::getModeController()
     return modeController;
 }
 
-int AlphaLiveEngine::getGuiUpdateFlag()
-{
-    return guiUpdateFlag;
-}
-
-void AlphaLiveEngine::setGuiUpdateFlag (int value)
-{
-    guiUpdateFlag = value;
-}
-
 //emulate a pad press for the pad GUI
 void AlphaLiveEngine::playPadFromMouse (int pad, int value)
 {
@@ -218,17 +203,6 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         //In the older version this was scaled in the serial input class.
         //This range is also scaled in the Pad.cpp class for emulating pad presses.
         
-        //if the incoming data is too fast for asyncUpdater to handle and has caused a pending update,
-        //and the stored pad value of the pending update is 0, force a GUI update.
-        //This will occasionally be needed to reset a pad's GUI back to 'off' when mutiple pads
-        //are simultaneously being pressed.
-//        if (isUpdatePending() == true && pendingUpdatePadValue == 0) 
-//        {
-//            const MessageManagerLock mmLock; //lock event thread so it is safe to make calls in the message thread
-//            guiUpdateFlag = 0;
-//            handleUpdateNowIfNeeded(); //force GUI to be updated now
-//        }
-        
         recievedPad = pad;
         recievedValue = value;
         
@@ -239,7 +213,6 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         {
             recievedVelocity = velocity;
         }
-        
         
         //===determine pressure curve===
         if (PAD_SETTINGS->getPressureCurve() == 1)
@@ -321,14 +294,6 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         broadcaster.sendActionMessage("UPDATE PRESSURE GUI");
         sharedMemoryGui.exit();
         
-//        //update GUI asyncronously
-//        guiUpdateFlag = 0;
-//        triggerAsyncUpdate();
-//        
-//        //store the pad pressure value 
-//        if (isUpdatePending() == true)
-//            pendingUpdatePadValue = recievedValue;
-        
 //        //=========================================================================
 //        //OSC OUTPUT MODE STUFF
 //        
@@ -385,16 +350,9 @@ void AlphaLiveEngine::handleExclusiveMode (int padNum)
 void AlphaLiveEngine::updatePadPlayingStatus (int padNumber, int status)
 {
     //is this function called from an external actionListenerCallback function every time?
-    //If so do we need the MessageManagerLock here?
+    //If not do we need a MessageManagerLock here?
     
     mainComponent->getGuiPadLayout()->setPadPlayingState(padNumber, status);
-    
-//    guiUpdateFlag = 1;
-//    padNumberForPlayingStatus = padNumber;
-//    playingStatus = status;
-//    
-//    const MessageManagerLock mmLock; //lock event thread so it is safe to make calls in the message thread
-//    notifyObs();
     
 }
 
@@ -516,16 +474,6 @@ void AlphaLiveEngine::setRecordingSequencerPadsState (int padNum, int state)
 Array<int> AlphaLiveEngine::getRecordingPads()
 {
     return recordingPads;
-}
-
-int AlphaLiveEngine::getPadNumberForPlayingStatus()
-{
-    return padNumberForPlayingStatus;
-}
-
-int AlphaLiveEngine::getPlayingStatus()
-{
-    return playingStatus;
 }
 
 int AlphaLiveEngine::getRecievedPad()

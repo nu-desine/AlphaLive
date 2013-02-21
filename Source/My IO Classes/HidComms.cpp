@@ -172,7 +172,7 @@ void HidComms::run()
                     // ==== write output report (just MIDI messages?) ====
                     
                     //if report contains messages, send it
-                    if (outBuf[1] > 0)
+                    if (outBuf[2] > 0)
                     {
                         std::cout << "Report data: ";
                         for (int i = 0; i < sizeof(outBuf); i++)
@@ -180,10 +180,11 @@ void HidComms::run()
                         printf("\n");
 
                         outBuf[0] = 0x00;
+                        outBuf[1] = 0x01;
                         hid_write(handle, outBuf, 129);
                     
                         //reset number of messages byte
-                        outBuf[1] = 0x00;
+                        outBuf[2] = 0x00;
                     }
                     
                 }
@@ -237,14 +238,14 @@ void HidComms::sendHidControlReport (uint8 *bytesToSend)
 
 void HidComms::addMessageToHidOutReport (uint8 message[])
 {
-    int noOfMessages = outBuf[1];
+    int noOfMessages = outBuf[2];
     
     if (noOfMessages < 15)
     {
         //==== append message to out report ====
         
         //get index of the report where the new message should go
-        int newMessageIndex = (noOfMessages * 4) + 2;
+        int newMessageIndex = (noOfMessages * 4) + 3;
         
         outBuf[newMessageIndex] = message[0];
         outBuf[newMessageIndex + 1] = message[1];
@@ -252,7 +253,7 @@ void HidComms::addMessageToHidOutReport (uint8 message[])
         outBuf[newMessageIndex + 3] = message[3];
         
         //increase number of messages byte value
-        outBuf[1] = outBuf[1] + 1;
+        outBuf[2] = outBuf[2] + 1;
     }
     
 }
@@ -328,11 +329,12 @@ void HidComms::connectToDevice()
         
         unsigned char dataToSend[1];
         dataToSend[0] = 0x05; //host setup data request command ID
-        hid_write(handle, dataToSend, 9);
+        //hid_write(handle, dataToSend, 129);
+        int uncommentThisLine;
         
         //TEMPORARILY COMMENTED OUT TO PREVENT PAUSING FOR THE TIME BEING
         //res = hid_read(handle, buf, sizeof(buf));
-        int uncommentThisLine;
+        int uncommentThisLineAsWell;
         
         if (res > 0 && buf[0] == 0x04)
         {

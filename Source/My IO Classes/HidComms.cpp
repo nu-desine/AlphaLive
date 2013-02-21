@@ -130,10 +130,14 @@ void HidComms::run()
                         for (int i = 1; i < 4; i++)
                         {
                             int buttonNum = i + 101;
+                            //shift the value to the first bit
                             int buttonVal = buf[eliteByte] >> i;
+                            //mask the first bit
+                            buttonVal = buttonVal & 1;
                             
                             if (buttonVal != prevButtonValue[i-1])
                             {
+                                //std::cout << buttonNum << " : " << buttonVal << std::endl;
                                 hidInputCallback(buttonNum, buttonVal, 0);
                                 prevButtonValue[i-1] = buttonVal;
                             }
@@ -144,14 +148,19 @@ void HidComms::run()
                         for (int i = 0; i < 2; i++)
                         {
                             int dialNum = i + 100;
+                            //shift the value to the first 2 bits
                             int dialVal = buf[eliteByte] >> (i * 2) + 4;
+                            //mask the first 2 bits
+                            dialVal = dialVal & 3;
                             
                             if (dialVal == 1) //left/anti-clockwise
                             {
+                                //std::cout << dialNum << " : " << dialVal << std::endl;
                                 hidInputCallback(dialNum, 127, 0);
                             }
                             else if (dialVal == 2) //right/clockwise
                             {
+                                //std::cout << dialNum << " : " << dialVal << std::endl;
                                 hidInputCallback(dialNum, 1, 0);
                             }
                         }

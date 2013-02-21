@@ -60,6 +60,7 @@ public:
     virtual void setDeviceStatus() = 0;
     
     void sendHidControlReport (uint8 *bytesToSend);
+    void addMessageToHidOutReport (uint8 message[]);
     
     int getDeviceStatus();
     void setAppHasInitialised();
@@ -81,6 +82,8 @@ private:
     
     int prevPadPressure[48];
     int prevButtonValue[3];
+    
+    unsigned char outBuf[128];
 };
 
 

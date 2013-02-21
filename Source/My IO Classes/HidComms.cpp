@@ -23,6 +23,8 @@
 
 HidComms::HidComms() : Thread("HidThread")
 {
+    memset(outBuf,0,sizeof(buf));
+    
     appHasInitialised = false;
     sendOutputReport = false;
     midiOutExists = hidDeviceStatus =  0;
@@ -98,7 +100,7 @@ void HidComms::run()
                             {
                                 int velocity = buf[padIndex] & 127;
                             
-                                //std::cout << pressure << " : " << velocity << std::endl;
+                                //std::cout << i << " : " << pressure << " : " << velocity << std::endl;
                                 hidInputCallback(i, pressure, velocity);
                                 
                                 prevPadPressure[i] = pressure;
@@ -166,6 +168,24 @@ void HidComms::run()
                         }
                     }
                     
+                    
+                    // ==== write output report (just MIDI messages?) ====
+                    
+                    //if report contains messages, send it
+                    if (outBuf[1] > 0)
+                    {
+                        std::cout << "Report data: ";
+                        for (int i = 0; i < sizeof(outBuf); i++)
+                        printf("%02hhx ", outBuf[i]);
+                        printf("\n");
+
+                        outBuf[0] = 0x00;
+                        hid_write(handle, outBuf, 129);
+                    
+                        //reset number of messages byte
+                        outBuf[1] = 0x00;
+                    }
+                    
                 }
                 
                 memset(buf,0,sizeof(buf));
@@ -199,7 +219,6 @@ void HidComms::run()
     }
 }
 
-//should i be passing in a pointer here instead of an array?
 void HidComms::sendHidControlReport (uint8 *bytesToSend)
 {
 
@@ -214,6 +233,28 @@ void HidComms::sendHidControlReport (uint8 *bytesToSend)
 //        printf("\n");
         hid_write(handle, bytesToSend, 9);
     }
+}
+
+void HidComms::addMessageToHidOutReport (uint8 message[])
+{
+    int noOfMessages = outBuf[1];
+    
+    if (noOfMessages < 15)
+    {
+        //==== append message to out report ====
+        
+        //get index of the report where the new message should go
+        int newMessageIndex = (noOfMessages * 4) + 2;
+        
+        outBuf[newMessageIndex] = message[0];
+        outBuf[newMessageIndex + 1] = message[1];
+        outBuf[newMessageIndex + 2] = message[2];
+        outBuf[newMessageIndex + 3] = message[3];
+        
+        //increase number of messages byte value
+        outBuf[1] = outBuf[1] + 1;
+    }
+    
 }
 
 

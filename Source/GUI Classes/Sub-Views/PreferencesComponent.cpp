@@ -36,7 +36,7 @@ PreferencesComponent::PreferencesComponent(MainComponent &ref, AlphaLiveEngine &
     audioAndMidiSettingsComponent = new AlphaAudioSettingsComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, false, false, true, false, alphaLiveEngineRef);
     #endif
     #if JUCE_WINDOWS
-    if (alphaLiveEngineRef.hasOpenedHidDevice() == true)
+    if (alphaLiveEngineRef.getDeviceStatus() != 0)
     {
         //don't display the option to set a MIDI ouput device
         audioAndMidiSettingsComponent = new AlphaAudioSettingsComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, false, false, true, false, alphaLiveEngineRef);

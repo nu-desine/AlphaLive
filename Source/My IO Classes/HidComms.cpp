@@ -23,6 +23,8 @@
 
 HidComms::HidComms() : Thread("HidThread")
 {
+    memset(outBuf,0,sizeof(buf));
+    
     appHasInitialised = false;
     sendOutputReport = false;
     midiOutExists = hidDeviceStatus =  0;
@@ -98,7 +100,7 @@ void HidComms::run()
                             {
                                 int velocity = buf[padIndex] & 127;
                             
-                                //std::cout << pressure << " : " << velocity << std::endl;
+                                //std::cout << i << " : " << pressure << " : " << velocity << std::endl;
                                 hidInputCallback(i, pressure, velocity);
                                 
                                 prevPadPressure[i] = pressure;
@@ -166,6 +168,29 @@ void HidComms::run()
                         }
                     }
                     
+                    
+                    // ==== write output report (just MIDI messages?) ====
+                    
+                    //if report contains messages, send it
+                    if (outBuf[2] > 0)
+                    {
+                        sharedMemory.enter();
+                        
+                        outBuf[0] = 0x00;
+                        outBuf[1] = 0x01;
+                        hid_write(handle, outBuf, 129);
+                        
+//                        std::cout << "Report data: ";
+//                        for (int i = 0; i < sizeof(outBuf); i++)
+//                            printf("%02hhx ", outBuf[i]);
+//                        printf("\n");
+                    
+                        //reset number of messages byte
+                        outBuf[2] = 0x00;
+                        
+                        sharedMemory.exit();
+                    }
+                    
                 }
                 
                 memset(buf,0,sizeof(buf));
@@ -199,21 +224,30 @@ void HidComms::run()
     }
 }
 
-//should i be passing in a pointer here instead of an array?
-void HidComms::sendHidControlReport (uint8 *bytesToSend)
+void HidComms::addMessageToHidOutReport (uint8 message[])
 {
-
-    if (handle)
+    int noOfMessages = outBuf[2];
+    
+    if (noOfMessages < 15)
     {
-//        std::cout << "writing to device: ";
-//        printf("%02hhx ", bytesToSend[0]);
-//        printf("%02hhx ", bytesToSend[1]);
-//        printf("%02hhx ", bytesToSend[2]);
-//        printf("%02hhx ", bytesToSend[3]);
-//        printf("%02hhx ", bytesToSend[4]);
-//        printf("\n");
-        hid_write(handle, bytesToSend, 129);
+        sharedMemory.enter();
+        
+        //==== append message to out report ====
+        
+        //get index of the report where the new message should go
+        int newMessageIndex = (noOfMessages * 4) + 3;
+        
+        outBuf[newMessageIndex] = message[0];
+        outBuf[newMessageIndex + 1] = message[1];
+        outBuf[newMessageIndex + 2] = message[2];
+        outBuf[newMessageIndex + 3] = message[3];
+        
+        //increase number of messages byte value
+        outBuf[2] = outBuf[2] + 1;
+        
+        sharedMemory.exit();
     }
+    
 }
 
 
@@ -287,11 +321,12 @@ void HidComms::connectToDevice()
         
         unsigned char dataToSend[1];
         dataToSend[0] = 0x05; //host setup data request command ID
-        hid_write(handle, dataToSend, 9);
+        //hid_write(handle, dataToSend, 129);
+        int uncommentThisLine;
         
         //TEMPORARILY COMMENTED OUT TO PREVENT PAUSING FOR THE TIME BEING
         //res = hid_read(handle, buf, sizeof(buf));
-        int uncommentThisLine;
+        int uncommentThisLineAsWell;
         
         if (res > 0 && buf[0] == 0x04)
         {

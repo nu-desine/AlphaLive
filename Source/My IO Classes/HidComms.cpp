@@ -174,17 +174,21 @@ void HidComms::run()
                     //if report contains messages, send it
                     if (outBuf[2] > 0)
                     {
-                        std::cout << "Report data: ";
-                        for (int i = 0; i < sizeof(outBuf); i++)
-                        printf("%02hhx ", outBuf[i]);
-                        printf("\n");
-
+                        sharedMemory.enter();
+                        
                         outBuf[0] = 0x00;
                         outBuf[1] = 0x01;
                         hid_write(handle, outBuf, 129);
+                        
+                        std::cout << "Report data: ";
+                        for (int i = 0; i < sizeof(outBuf); i++)
+                            printf("%02hhx ", outBuf[i]);
+                        printf("\n");
                     
                         //reset number of messages byte
                         outBuf[2] = 0x00;
+                        
+                        sharedMemory.exit();
                     }
                     
                 }
@@ -242,6 +246,8 @@ void HidComms::addMessageToHidOutReport (uint8 message[])
     
     if (noOfMessages < 15)
     {
+        sharedMemory.enter();
+        
         //==== append message to out report ====
         
         //get index of the report where the new message should go
@@ -254,6 +260,8 @@ void HidComms::addMessageToHidOutReport (uint8 message[])
         
         //increase number of messages byte value
         outBuf[2] = outBuf[2] + 1;
+        
+        sharedMemory.exit();
     }
     
 }

@@ -766,10 +766,10 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
                     #endif
                     
                     //Send HID report here to change the device to the bootloader.
-                    unsigned char dataToSend[2];
-                    dataToSend[0] = 0x00;
-                    dataToSend[1] = 0x07;
-                    sendHidControlReport(dataToSend);
+//                    unsigned char dataToSend[2];
+//                    dataToSend[0] = 0x00;
+//                    dataToSend[1] = 0x07;
+//                    sendHidControlReport(dataToSend);
                     
                     #ifdef JUCE_WINDOWS
                     sleep(5000); //should this actually be Sleep() which need a windows library defined? See hidtest.

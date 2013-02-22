@@ -59,7 +59,6 @@ public:
     virtual void setFirmwareUpdateStatus (bool status) = 0;
     virtual void setDeviceStatus() = 0;
     
-    void sendHidControlReport (uint8 *bytesToSend);
     void addMessageToHidOutReport (uint8 message[]);
     
     int getDeviceStatus();

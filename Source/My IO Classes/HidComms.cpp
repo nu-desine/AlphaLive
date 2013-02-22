@@ -337,7 +337,8 @@ void HidComms::connectToDevice()
             
             //========process received report data here...========
             
-            //check to see if the firmware needs updating
+            //==== check to see if the firmware needs updating ====
+            
             File appDataDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString + "Application Data");
             String wildcard = "SphereWare*";
             Array<File> hexFile;
@@ -345,7 +346,8 @@ void HidComms::connectToDevice()
             
             if (hexFile.size() > 0) //which it should
             {
-                int currentFirmwareNo = buf[1];
+                int currentFirmwareNo; //this will be taken from cur_dev->release_number
+                
                 int newFirmwareNo = hexFile.getLast().getFileNameWithoutExtension().getTrailingIntValue();
                 
                 std::cout << hexFile[0].getFileNameWithoutExtension() << " " << newFirmwareNo << std::endl;

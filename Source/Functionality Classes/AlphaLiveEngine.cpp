@@ -711,17 +711,14 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
                  mmcu type and hex file destination as parameters. It then returns the output as a String.
                  The bootloader app and hex file should exist in the Application Data directory.
                  
-                 For now this code is just lauched from a menu bar item and expects the user to manually put the
-                 device into bootloader mode by pressing the reset button.
-                 
-                 Eventually firmware updating should be applied using the following method:
+                  Firmware updating should be applied using the following method:
                  - The hex file should be numbered to signify the firware version (e.g. SphereWare_1_0.hex, SphereWare_1_1.hex).
                  - When the sphere is connected to AlphaLive it sends a report stating its current firmware version.
                  - If the included hex file has a greater number than the current firmware version, it pops up
                  an alert window telling the user that there is a new firmware version available and asks if they want to update
                  it (stressing that they should as otherwise it could limit the softwares functionality - Maybe the user shouldn't
                  have an option to not update it?). 
-                 - The software sends a HID report to the device to change it to the bootloader, an installs the new firmware.
+                 - The user is then told how to enter the bootloader mode
                  - The device will then automatically be reconnected and the user can rock out the new firmware. Boo ya. 
                  
                  Things to consider:
@@ -765,35 +762,39 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
                     //thinks the whole filepath is just from the last space.
                     #endif
                     
-                    //Send HID report here to change the device to the bootloader.
-//                    unsigned char dataToSend[2];
-//                    dataToSend[0] = 0x00;
-//                    dataToSend[1] = 0x07;
-//                    sendHidControlReport(dataToSend);
+                    int tryToUpdate = true;
                     
-                    #ifdef JUCE_WINDOWS
-                    sleep(5000); //should this actually be Sleep() which need a windows library defined? See hidtest.
-                    #else
-                    usleep(5000*1000);
-                    #endif
-                    
-                    bootloader.start(arguments);
-                    
-                    String bootloaderReport =  bootloader.readAllProcessOutput();
-                    
-                    std::cout << "..." << bootloaderReport << "..." << std::endl;
-                    if (bootloaderReport.contains("Unable to open device"))
+                    while (tryToUpdate)
                     {
-                        AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Cannot Find Device!"), translate("The AlphaSphere does not appear to be connected to the computer. Please connect it and try again."));
-                    }
-                    else if (bootloaderReport.isEmpty())
-                    {
-                        AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Firmware Updated!"), translate("The AlphaSphere firmware has been successfully updated."));
-                    }
-                    else
-                    {
-                        //catch any other outputs (errors most likely)
-                        AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Error!"), bootloaderReport);
+                        AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Enter Updater Mode"), translate("To allow the AlphaSphere to be updated, please unplug the device, hold down the reset button (next to the USB port), and plug the device back in. If the AlphaSphere is now flashing red, it has successfully entered the updater mode. Press OK to continue."));
+                        
+                        bootloader.start(arguments);
+                        
+                        String bootloaderReport =  bootloader.readAllProcessOutput();
+                        
+                        std::cout << "..." << bootloaderReport << "..." << std::endl;
+                        
+                        if (bootloaderReport.contains("Unable to open device"))
+                        {
+                            AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Cannot Find Device!"), translate("The AlphaSphere does not appear to be connected to the computer. Please connect it normally and try again."));
+                            
+                            tryToUpdate = AlertWindow::showOkCancelBox(AlertWindow::InfoIcon, 
+                                                                         translate("Cannot Find Device!"), 
+                                                                         translate("The AlphaSphere does not appear to be connected to the computer or be the updater mode. Would you like to try again?."));
+                        }
+                        else if (bootloaderReport.isEmpty())
+                        {
+                            AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Firmware Updated!"), translate("The AlphaSphere firmware has been successfully updated."));
+                            
+                            tryToUpdate = false;
+                        }
+                        else
+                        {
+                            //catch any other outputs (errors most likely)
+                            AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Error!"), bootloaderReport);
+                            
+                            tryToUpdate = false;
+                        }
                     }
                     
                 }

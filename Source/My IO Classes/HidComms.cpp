@@ -212,7 +212,7 @@ void HidComms::sendHidControlReport (uint8 *bytesToSend)
 //        printf("%02hhx ", bytesToSend[3]);
 //        printf("%02hhx ", bytesToSend[4]);
 //        printf("\n");
-        hid_write(handle, bytesToSend, 9);
+        hid_write(handle, bytesToSend, 129);
     }
 }
 

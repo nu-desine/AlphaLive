@@ -766,6 +766,13 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
                     
                     while (tryToUpdate)
                     {
+                        //sleep to make it more clear that a new alert has popped up...
+                        #if JUCE_WINDOWS
+                        sleep(500); //should this actually be Sleep() which need a windows library defined?
+                        #else
+                        usleep(500*1000);
+                        #endif
+                        
                         bool shouldContinue = AlertWindow::showOkCancelBox (AlertWindow::NoIcon, 
                                                       translate("Enter Updater Mode"), 
                                                       translate("To allow the AlphaSphere to be updated, please unplug the device, hold down the reset button (next to the USB port), and plug the device back in. If the AlphaSphere is now flashing red, it has successfully entered the updater mode. Press OK to continue."));
@@ -780,6 +787,12 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
                             
                             if (bootloaderReport.contains("Unable to open device"))
                             {
+                                //sleep to make it more clear that a new alert has popped up...
+                                #if JUCE_WINDOWS
+                                sleep(500); //should this actually be Sleep() which need a windows library defined?
+                                #else
+                                usleep(500*1000);
+                                #endif
                                 
                                 tryToUpdate = AlertWindow::showOkCancelBox(AlertWindow::InfoIcon, 
                                                                            translate("Cannot Find Device!"), 
@@ -793,6 +806,13 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
                             }
                             else
                             {
+                                //sleep to make it more clear that a new alert has popped up...
+                                #if JUCE_WINDOWS
+                                sleep(500); //should this actually be Sleep() which need a windows library defined?
+                                #else
+                                usleep(500*1000);
+                                #endif
+                                
                                 //catch any other outputs (errors most likely)
                                 AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, translate("Error!"), bootloaderReport);
                                 

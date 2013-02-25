@@ -255,6 +255,7 @@ void HidComms::addMessageToHidOutReport (uint8 message[])
 void HidComms::connectToDevice()
 {
     struct hid_device_info *devs, *cur_dev;
+    float currentFirmwareNo = 0;
     
     devs = hid_enumerate(0x1d50, 0x6021);
     cur_dev = devs;	
@@ -267,13 +268,15 @@ void HidComms::connectToDevice()
         printf("  Release:      %hx\n", cur_dev->release_number);
         printf("  Interface:    %d\n",  cur_dev->interface_number);
         printf("\n");
+        
+        currentFirmwareNo = cur_dev->release_number / 100.0; 
+        
         cur_dev = cur_dev->next;
     }
     hid_free_enumeration(devs);
     
     // Open the device using the VID, PID,
     // and optionally the Serial number.
-    //handle = hid_open(0x3eb, 0x204f, NULL); // << LUFA demo HID device
     handle = hid_open(0x1d50, 0x6021, NULL); // << AlphaSphere HID device
     //handle = hid_open(0x1d50, 0x6041, NULL); // << AlphaSphere bootloader HID device 
     
@@ -320,11 +323,11 @@ void HidComms::connectToDevice()
         
         if (hexFile.size() > 0) //which it should
         {
-            int currentFirmwareNo = 1; //this will be taken from cur_dev->release_number
-            
-            int newFirmwareNo = hexFile.getLast().getFileNameWithoutExtension().getTrailingIntValue();
-            
-            std::cout << hexFile[0].getFileNameWithoutExtension() << " " << newFirmwareNo << std::endl;
+            //get the new firmware version number from the hex file name
+            StringArray tokens;
+            tokens.addTokens(hexFile.getLast().getFileNameWithoutExtension(), "_", String::empty);
+            float newFirmwareNo = tokens[1].getFloatValue();
+            //std::cout << hexFile.getLast().getFileNameWithoutExtension() << " " << newFirmwareNo << std::endl;
             
             //if new firware version number is greater than current firmware number,
             //flag that the firmware needs updating. 

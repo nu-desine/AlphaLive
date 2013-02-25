@@ -310,6 +310,41 @@ void HidComms::connectToDevice()
         
         memset(buf,0,sizeof(buf));
         
+        
+        //==== check to see if the firmware needs updating ====
+        
+        File appDataDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString + "Application Data");
+        String wildcard = "SphereWare*";
+        Array<File> hexFile;
+        appDataDir.findChildFiles(hexFile, 2, false, wildcard);
+        
+        if (hexFile.size() > 0) //which it should
+        {
+            int currentFirmwareNo = 1; //this will be taken from cur_dev->release_number
+            
+            int newFirmwareNo = hexFile.getLast().getFileNameWithoutExtension().getTrailingIntValue();
+            
+            std::cout << hexFile[0].getFileNameWithoutExtension() << " " << newFirmwareNo << std::endl;
+            
+            //if new firware version number is greater than current firmware number,
+            //flag that the firmware needs updating. 
+            if (newFirmwareNo > currentFirmwareNo)
+            {
+                //On app launch the updateFirmware function is called from main.
+                //Can't be called from here at launch as the mainWindow/Component needs
+                //to be present, so need to just set a flag here. 
+                //However if we are current not at app launch, it is
+                //possible to call it directly from here.
+                
+                setFirmwareUpdateStatus (true);
+                
+                if (appHasInitialised == true)
+                {
+                    updateFirmware();
+                }
+            }
+        }
+        
         //===============================================================================
         //Send a report to the device requesting a report containing AlphaLive setup data,
         //and then process the received reports data to set up AlphaLive correctly.
@@ -328,52 +363,15 @@ void HidComms::connectToDevice()
         //res = hid_read(handle, buf, sizeof(buf));
         int uncommentThisLineAsWell;
         
-        if (res > 0 && buf[0] == 0x04)
-        {
-            std::cout << "Received AlphaLive setup report with the following data: " << std::endl;
-            for (int i = 0; i < res; i++)
-                printf("%02hhx ", buf[i]);
-            printf("\n");
-            
-            //========process received report data here...========
-            
-            //==== check to see if the firmware needs updating ====
-            
-            File appDataDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString + "Application Data");
-            String wildcard = "SphereWare*";
-            Array<File> hexFile;
-            appDataDir.findChildFiles(hexFile, 2, false, wildcard);
-            
-            if (hexFile.size() > 0) //which it should
-            {
-                int currentFirmwareNo; //this will be taken from cur_dev->release_number
-                
-                int newFirmwareNo = hexFile.getLast().getFileNameWithoutExtension().getTrailingIntValue();
-                
-                std::cout << hexFile[0].getFileNameWithoutExtension() << " " << newFirmwareNo << std::endl;
-                
-                //if new firware version number is greater than current firmware number,
-                //flag that the firmware needs updating. 
-                if (newFirmwareNo > currentFirmwareNo)
-                {
-                    //On app launch the updateFirmware function is called from main.
-                    //Can't be called from here at launch as the mainWindow/Component needs
-                    //to be present, so need to just set a flag here. 
-                    //However if we are current not at app launch, it is
-                    //possible to call it directly from here.
-                    
-                    setFirmwareUpdateStatus (true);
-                    
-                    if (appHasInitialised == true)
-                    {
-                        updateFirmware();
-                    }
-                }
-            }
-            
-            //set AlphaSphere device type
-            setDeviceType (buf[2] + 1);
-        }
+        std::cout << "Received AlphaLive setup report with the following data: " << std::endl;
+        for (int i = 0; i < res; i++)
+            printf("%02hhx ", buf[i]);
+        printf("\n");
+        
+        //========process received report data here...========
+        
+        //set AlphaSphere device type
+        //setDeviceType (buf[2] + 1);
                 
         // Set the hid_read() function to be non-blocking.
         hid_set_nonblocking(handle, 1);

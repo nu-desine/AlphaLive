@@ -228,7 +228,7 @@ void HidComms::addMessageToHidOutReport (uint8 message[])
 {
     int noOfMessages = outBuf[2];
     
-    if (noOfMessages < 15)
+    if (noOfMessages < 30)
     {
         sharedMemory.enter();
         

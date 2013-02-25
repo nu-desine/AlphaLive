@@ -775,7 +775,7 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
                         
                         bool shouldContinue = AlertWindow::showOkCancelBox (AlertWindow::NoIcon, 
                                                       translate("Enter Updater Mode"), 
-                                                      translate("To allow the AlphaSphere to be updated, please unplug the device, hold down the reset button (next to the USB port), and plug the device back in. If the AlphaSphere is now flashing red, it has successfully entered the updater mode. Press OK to continue."));
+                                                      translate("To allow the AlphaSphere to be updated, please unplug the device, hold down the reset button (next to the USB port), and plug the device back in. If the AlphaSphere is now flashing red, release the reset button and the device will successfully enter the updater mode. Press OK to continue."));
                         
                         if (shouldContinue)
                         {
@@ -796,7 +796,7 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
                                 
                                 tryToUpdate = AlertWindow::showOkCancelBox(AlertWindow::InfoIcon, 
                                                                            translate("Cannot Find Device!"), 
-                                                                           translate("The AlphaSphere does not appear to be connected to the computer or be in the updater mode. Would you like to try again?"));
+                                                                           translate("The AlphaSphere does not appear to be connected to the computer or be set to the updater mode. Would you like to try again?"));
                             }
                             else if (bootloaderReport.isEmpty())
                             {

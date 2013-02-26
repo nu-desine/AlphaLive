@@ -31,8 +31,14 @@ HidComms::HidComms() : Thread("HidThread")
     
     for (int i = 0; i < 48; i++)
         prevPadPressure[i] = 0;
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < 3; i++)
         prevButtonValue[i] = 0;
+    for (int i = 0; i < 2; i++)
+    {
+        dialCounter[i] = 0;
+        dialValue[i] = 0;
+        dialCounterFlag[i] = 0;
+    }
     
     startThread();
 }
@@ -111,19 +117,17 @@ void HidComms::run()
                         //it allows for the possibility of multiple buttton 
                         //presses/releases or multiple dial rotations to be 
                         //sent in a single message within the HID report.
-                        //Therefore we must check each pair of bits within
-                        //the button data byte (buf[messageIndex + 1]) 
-                        //and the dial data byte (buf[messageIndex + 2]).
-                        //Using the bitwise right-shift operator we need to check
-                        //for value of 1 and 2 for each control.
+                        //Therefore we must check the bits within the elite
+                        //controls data byte (buf[97]), using the bitwise 
+                        //right-shift and bitwise-AND operators. 
                         
                         //hidInputCallback() expects the following values:
                         //button numbers = 102 to 104 (ignore reset button)
                         //dial numbers = 100 - 101
                         //button press = 1
                         //button release = 0
-                        //dial left turn = 127
-                        //dial right turn = 1
+                        //dial left turn = 127-64
+                        //dial right turn = 1-63
                         
                         int eliteByte = 97;
                         
@@ -155,15 +159,81 @@ void HidComms::run()
                             //mask the first 2 bits
                             dialVal = dialVal & 3;
                             
+                            /*
+                             Below, hidInputCallback() calls aren't made straight away.
+                             Instead, it counts the number of turns recieved within a certain
+                             amount of time and then sends a larger value. This allows for
+                             faster turns by the user to send bigger values, providing the user
+                             with both fine and coarse control of parameters using these dials.
+                            */
+                            
                             if (dialVal == 1) //left/anti-clockwise
                             {
-                                //std::cout << dialNum << " : " << dialVal << std::endl;
-                                hidInputCallback(dialNum, 127, 0);
+                                //flag that the 'timer' should start or be on.
+                                dialCounterFlag[i] = 1;
+                                //decrement the dial value.
+                                //Ideally we want some more complex algorithm here
+                                //that creates a non-linear value.
+                                dialValue[i] -= 1;
                             }
                             else if (dialVal == 2) //right/clockwise
                             {
-                                //std::cout << dialNum << " : " << dialVal << std::endl;
-                                hidInputCallback(dialNum, 1, 0);
+                                //flag that the 'timer' should start or be on.
+                                dialCounterFlag[i] = 1;
+                                //increment the dial value.
+                                //Ideally we want some more complex algorithm here
+                                //that creates a non-linear value.
+                                dialValue[i] += 1;
+                            }
+                            
+                            //if the timer is on...
+                            if (dialCounterFlag[i] == 1)
+                            {
+                                dialCounter[i]++;
+                                
+                                //if the timer has 'finished'...
+                                if (dialCounter[i] >= 10)
+                                {
+                                    if (dialValue[i] < 0)
+                                    {
+                                        /*
+                                         The value will be a negative value the dial
+                                         has been turned anti-clockwise. However the 
+                                         application expects anti-clockwise turns to
+                                         be of a value between 127-64, with a smaller
+                                         value indicating a more coarse rotation. 
+                                         Therefore we must convert the value to a 
+                                         postive one and cap it at 64.
+                                        */
+                                        
+                                        dialValue[i] += 128;
+                                        if (dialValue[i] < 64)
+                                            dialValue[i] = 64;
+                                    }
+                                    else
+                                    {
+                                        /*
+                                         The application expects clockwise turns to
+                                         be of a value between 1-63, with a larger
+                                         value indicating a more coarse rotation. 
+                                         Therefore we must cap the value at 63.
+                                         */
+                                        
+                                        if (dialValue[i] > 63)
+                                            dialValue[i] = 63;
+                                    }
+                                    
+                                    //send the value to AlphaLiveEngine
+                                    std::cout << "Dial Value: " << dialValue[i] << std::endl;
+                                    hidInputCallback(dialNum, dialValue[i], 0);
+                                    
+                                    //reset the relevant values so that the timer 'stops'
+                                    //and that the whole timing algorithm is ready to start
+                                    //again when requested.
+                                    dialValue[i] = 0;
+                                    dialCounter[i] = 0;
+                                    dialCounterFlag[i] = 0;
+                                }
                             }
                         }
                     }

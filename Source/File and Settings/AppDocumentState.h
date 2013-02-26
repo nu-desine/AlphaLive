@@ -89,6 +89,8 @@ public:
     void loadFromScene (int sceneNumber);
     void clearScene (int sceneNumber);
     
+    void applyEliteSettingsToAllScenes (int eliteControl);
+    
     void createNewProject();
     void saveProject();
     void saveProjectAs();

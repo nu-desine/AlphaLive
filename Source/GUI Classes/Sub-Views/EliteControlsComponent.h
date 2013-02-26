@@ -47,6 +47,9 @@ public:
 	
 	void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);
+    
+    void mouseDown (const MouseEvent &e);
+    void mouseUp (const MouseEvent &e);
 	
 private:
     

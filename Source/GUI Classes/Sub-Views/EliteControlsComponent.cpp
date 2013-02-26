@@ -146,6 +146,50 @@ void EliteControlsComponent::turnOffButtons()
 //    
 //}
 
+void EliteControlsComponent::mouseDown (const MouseEvent &e)
+{
+    //====================================================================================
+    //right-click (or ctrl-click on a mac) to bring up the popup menu to allow settings 
+    //to be applied to all scenes.
+    //====================================================================================
+    if (e.mods.isPopupMenu() == true)
+    {
+        PopupMenu menu;
+        menu.addItem(1, translate("Apply settings to all scenes..."));
+        
+        const int result = menu.show();
+        
+        if (result == 0)
+        {
+            // user dismissed the menu without picking anything
+        }
+        
+        else if (result == 1)
+        {
+            int selectedControl = 0;
+            
+            if (e.originalComponent == dial1Button)
+                selectedControl = DIAL_1; 
+            else if (e.originalComponent == dial2Button)
+                selectedControl = DIAL_2; 
+            else if (e.originalComponent == button1Button)
+                selectedControl = BUTTON_1; 
+            else if (e.originalComponent == button2Button)
+                selectedControl = BUTTON_2; 
+            else if (e.originalComponent == button3Button)
+                selectedControl = BUTTON_3; 
+            
+            mainComponentRef.getAppDocumentStateRef().applyEliteSettingsToAllScenes (selectedControl);
+        }
+        
+    }
+}
+
+void EliteControlsComponent::mouseUp (const MouseEvent &e)
+{
+    
+}
+
 void EliteControlsComponent::mouseEnter (const MouseEvent &e)
 {
     if (dial1Button->isMouseOver(true))

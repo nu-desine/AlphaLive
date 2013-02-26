@@ -935,6 +935,73 @@ void AppDocumentState::clearScene (int sceneNumber)
 
 
 
+void AppDocumentState::applyEliteSettingsToAllScenes (int eliteControl)
+{
+    for (int sceneNumber = 0; sceneNumber < NO_OF_SCENES; sceneNumber++)
+    {
+        if (sceneNumber != currentlySelectedScene)
+        {
+            if (sceneData[sceneNumber] != nullptr && sceneData[sceneNumber]->hasTagName("SCENE_"+String(sceneNumber)))
+            {
+                if (eliteControl == 1 || eliteControl == 2)
+                {
+                    //==========elite dial=============
+                    int i = eliteControl-1;
+                    
+                    sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteDialPrevValue" + String(i), AppSettings::Instance()->getEliteDialPrevValue(i));
+                    sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteDialControl" + String(i), AppSettings::Instance()->getEliteDialControl(i));
+                    sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteDialStatus" + String(i), AppSettings::Instance()->getEliteDialStatus(i));
+                    
+                    if (AppSettings::Instance()->getEliteDialControl(i) == 4) //midi cc
+                    {
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteDialMidiControllerType" + String(i), AppSettings::Instance()->getEliteDialMidiControllerType(i));
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteDialMidiCcNumber" + String(i), AppSettings::Instance()->getEliteDialMidiCcNumber(i));
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteDialMidiChannel" + String(i), AppSettings::Instance()->getEliteDialMidiChannel(i));
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteDialMidiMinRange" + String(i), AppSettings::Instance()->getEliteDialMidiMinRange(i));
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteDialMidiMaxRange" + String(i), AppSettings::Instance()->getEliteDialMidiMaxRange(i));
+                    }
+                    else if (AppSettings::Instance()->getEliteDialControl(i) == 5) //osc
+                    {
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteDialOscPortNumber" + String(i), AppSettings::Instance()->getEliteDialOscPortNumber(i));
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteDialOscMinRange" + String(i), AppSettings::Instance()->getEliteDialOscMinRange(i));
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteDialOscMaxRange" + String(i), AppSettings::Instance()->getEliteDialOscMaxRange(i));
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteDialOscIpAddress" + String(i), AppSettings::Instance()->getEliteDialOscIpAddress(i));
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteDialOscStepValue" + String(i), AppSettings::Instance()->getEliteDialOscStepValue(i));
+                    }
+                    
+                }
+                
+                else if (eliteControl == 3 || eliteControl == 4 || eliteControl == 5)
+                {
+                    //==========elite buttons=============
+                    int i = eliteControl - 3;
+                    
+                    sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteButtonControl" + String(i), AppSettings::Instance()->getEliteButtonControl(i));
+                    sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteButtonStatus" + String(i), AppSettings::Instance()->getEliteButtonStatus(i));
+                    
+                    if (AppSettings::Instance()->getEliteButtonControl(i) == 2) //scene switcher
+                    {
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteButtonSceneNumber" + String(i), AppSettings::Instance()->getEliteButtonSceneNumber(i));
+                    }
+                    else if (AppSettings::Instance()->getEliteButtonControl(i) == 4) //midi cc
+                    {
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteButtonMidiCcNumber" + String(i), AppSettings::Instance()->getEliteButtonMidiCcNumber(i));
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteButtonMidiChannel" + String(i), AppSettings::Instance()->getEliteButtonMidiChannel(i));
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteButtonMidiOffNumber" + String(i), AppSettings::Instance()->getEliteButtonMidiOffNumber(i));
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteButtonMidiOnNumber" + String(i), AppSettings::Instance()->getEliteButtonMidiOnNumber(i));
+                    }
+                    else if (AppSettings::Instance()->getEliteButtonControl(i) == 5) //osc
+                    {
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteButtonOscPortNumber" + String(i), AppSettings::Instance()->getEliteButtonOscPortNumber(i));
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteButtonOscOffNumber" + String(i), AppSettings::Instance()->getEliteButtonOscOffNumber(i));
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteButtonOscOnNumber" + String(i), AppSettings::Instance()->getEliteButtonOscOnNumber(i));
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteButtonOscIpAddress" + String(i), AppSettings::Instance()->getEliteButtonOscIpAddress(i));
+                    }
+                }
+            }
+        }
+    }
+}
 
 
 

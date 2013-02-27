@@ -206,12 +206,14 @@ void Toolbox::setCurrentlySelectedPad (Array<int> selectedPads_)
 void Toolbox::updateDisplay()
 {
     //should I only call deselect on last click component that can be found from currentList?
-    for (int i = 0; i < 7; i++)
-        fileLists[i]->deselectAllFiles();
-    for (int i = 0; i < 2; i++)
-        treeLists[i]->deselectAllFiles();
-    layoutsListBox->deselectAllRows();
-    scalesListBox->deselectAllRows();
+//    for (int i = 0; i < 7; i++)
+//        fileLists[i]->deselectAllFiles();
+//    for (int i = 0; i < 2; i++)
+//        treeLists[i]->deselectAllFiles();
+//    layoutsListBox->deselectAllRows();
+//    scalesListBox->deselectAllRows();
+    
+    int currentTabIndex = tabbedComponent->getCurrentTabIndex();
     
     tabbedComponent->clearTabs();
     tabbedComponent->setVisible(true);
@@ -308,6 +310,12 @@ void Toolbox::updateDisplay()
         
     }
     
+    int noOfTabs = tabbedComponent->getNumTabs();
+    
+    if (currentTabIndex >= noOfTabs || currentTabIndex < 0)
+        currentTabIndex = 0;
+    
+    tabbedComponent->setCurrentTabIndex (currentTabIndex);
 }
 
           

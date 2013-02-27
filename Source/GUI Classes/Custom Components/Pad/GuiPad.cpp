@@ -531,12 +531,9 @@ void GuiPad::mouseUp (const MouseEvent &e)
     if (isMouseInPlayMode == true)
     {
         setEnabled(true);
-        //why can't i just sent a 'pressure value' of 0?
-        //for some reason i need to send something before that
-        //for most of the triggerModes to work. This should probably be fixed!!
-        ///guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 1);
+ 
+        //emulate pad release
         //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 0);
-        guiPadLayoutRef.getAlphaLiveEngine().hidInputCallback(padNumber, 1, 110);
         guiPadLayoutRef.getAlphaLiveEngine().hidInputCallback(padNumber, 0, 110);
         
         isMouseInPlayMode = false;

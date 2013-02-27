@@ -153,10 +153,10 @@ namespace BinaryDataNew
     const int           sawdownwave20500_wavSize = 44012;
 
     extern const char*  sawfallingsymbol_png;
-    const int           sawfallingsymbol_pngSize = 4830;
+    const int           sawfallingsymbol_pngSize = 2993;
 
     extern const char*  sawrisingsymbol_png;
-    const int           sawrisingsymbol_pngSize = 4882;
+    const int           sawrisingsymbol_pngSize = 3004;
 
     extern const char*  sawwave20500_wav;
     const int           sawwave20500_wavSize = 44012;
@@ -165,10 +165,10 @@ namespace BinaryDataNew
     const int           sequenceicon_pngSize = 5134;
 
     extern const char*  sinesymbol_png;
-    const int           sinesymbol_pngSize = 5563;
+    const int           sinesymbol_pngSize = 3003;
 
     extern const char*  squaresymbol_png;
-    const int           squaresymbol_pngSize = 3397;
+    const int           squaresymbol_pngSize = 2970;
 
     extern const char*  squarewave20500_wav;
     const int           squarewave20500_wavSize = 44186;
@@ -201,7 +201,7 @@ namespace BinaryDataNew
     const int           tremoloicon_pngSize = 3641;
 
     extern const char*  trianglesymbol_png;
-    const int           trianglesymbol_pngSize = 5561;
+    const int           trianglesymbol_pngSize = 2991;
 
     extern const char*  triggericon_png;
     const int           triggericon_pngSize = 3702;

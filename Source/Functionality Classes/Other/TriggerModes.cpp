@@ -85,6 +85,7 @@ TriggerModeData TriggerModes::toggle (int padValue)
     else if(currentPlayingStatus == 1 && padValue == 0)
     {
         releaseCount = 1;
+        triggerModeData.playingStatus = 2;
     }
     else if(currentPlayingStatus == 1 && padValue > 0 && releaseCount == 1 && pressCount >= 1) 
     {
@@ -95,6 +96,7 @@ TriggerModeData TriggerModes::toggle (int padValue)
     else if(currentPlayingStatus == 0 && padValue == 0 && releaseCount == 1 && pressCount == 0)
     {
         releaseCount = 0;
+        triggerModeData.playingStatus = 2;
     }
     else
     {
@@ -125,11 +127,13 @@ TriggerModeData TriggerModes::toggleRelease (int padValue)
     else if(currentPlayingStatus == 1 && padValue == 0 && releaseCount == 0 && pressCount == 1)
     {
         releaseCount = 1;
+        triggerModeData.playingStatus = 2;
         
     }
     else if(currentPlayingStatus == 1 && padValue > 0 && releaseCount == 1 && pressCount == 1)
     {
         pressCount = 2;
+        triggerModeData.playingStatus = 2;
         
     }
     else if(currentPlayingStatus == 1 && padValue == 0 && pressCount >= 2)
@@ -168,6 +172,7 @@ TriggerModeData TriggerModes::latch (int padValue)
     else if(padValue == MAX_PRESSURE && maxPressCount == 1)
     {
         maxPressCount = 0;
+        triggerModeData.playingStatus = 2;
     }
     else if(currentPlayingStatus == 1 && padValue == 0 && maxPressCount == 0) 
     {
@@ -179,6 +184,7 @@ TriggerModeData TriggerModes::latch (int padValue)
     else if(currentPlayingStatus == 1 && padValue == 0 && pressCount == 1) 
     {
         releaseCount = 1;
+        triggerModeData.playingStatus = 2;
     }
     else
     {
@@ -210,10 +216,12 @@ TriggerModeData TriggerModes::latchMax (int padValue)
     else if(padValue == MAX_PRESSURE && maxPressCount == 0)
     {
         maxPressCount = 1;
+        triggerModeData.playingStatus = 2;
     }
     else if(padValue == MAX_PRESSURE && maxPressCount == 1)
     {
         maxPressCount = 0;
+        triggerModeData.playingStatus = 2;
     }
     else if (currentPlayingStatus == 1 && padValue == 0 && maxPressCount == 0)
     {
@@ -226,6 +234,7 @@ TriggerModeData TriggerModes::latchMax (int padValue)
     else if(currentPlayingStatus == 1 && padValue == 0 && pressCount == 1) 
     {
         releaseCount = 1;
+        triggerModeData.playingStatus = 2;
     }
     else
     {
@@ -258,11 +267,13 @@ TriggerModeData TriggerModes::trigger (int padValue)
     {
         releaseCount = 1;
         rePressCount = 0;
+        triggerModeData.playingStatus = 2;
         
     }
     else if(padValue == MAX_PRESSURE)
     {
         maxPressCount = 0;
+        triggerModeData.playingStatus = 2;
     }
     else if(currentPlayingStatus == 1 && padValue == 0 && maxPressCount == 0)
     {
@@ -310,15 +321,18 @@ TriggerModeData TriggerModes::cycle (int padValue)
     {
         releaseCount = 1;
         rePressCount = 0;
+        triggerModeData.playingStatus = 2;
     }
     else if (currentPlayingStatus == 1 && padValue > 0 && rePressCount == 0 && releaseCount == 1) 
     {
         triggerModeData.moveToNextSeq = true;
         rePressCount = 1;
+        triggerModeData.playingStatus = 2;
     }
     else if(padValue == MAX_PRESSURE)
     {
         maxPressCount = 0;
+        triggerModeData.playingStatus = 2;
     }
     else if(currentPlayingStatus == 1 && padValue == 0 && maxPressCount == 0) 
     {
@@ -355,6 +369,7 @@ TriggerModeData TriggerModes::autoCycle (int padValue)
     else if(currentPlayingStatus == 1 && padValue == 0)
     {
         releaseCount = 1;
+        triggerModeData.playingStatus = 2;
     }
     else if(currentPlayingStatus == 1 && padValue > 0 && pressCount >= 1 && releaseCount == 1) 
     {
@@ -365,6 +380,7 @@ TriggerModeData TriggerModes::autoCycle (int padValue)
     else if(currentPlayingStatus == 0 && padValue == 0 && pressCount == 0 && releaseCount == 1)
     {
         releaseCount = 0;
+        triggerModeData.playingStatus = 2;
     }
     else
     {

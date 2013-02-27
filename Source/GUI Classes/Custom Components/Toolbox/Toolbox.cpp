@@ -299,10 +299,10 @@ void Toolbox::updateDisplay()
         tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[SEQUENCER_PRESETS], false);
     
     }
-    else if (mode == 4)
-    {
-        tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[CONTROLLER_PRESETS], false);
-    }
+//    else if (mode == 4)
+//    {
+//        tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[CONTROLLER_PRESETS], false);
+//    }
     else
     {
         //tabbedComponent->addTab(translate("Scene Presets"), Colours::darkgrey, scenePresetsList, false);

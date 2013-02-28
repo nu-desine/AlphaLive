@@ -208,6 +208,7 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
             padData->setAttribute("sequencerPan", PAD_SETTINGS->getSequencerPan());
             padData->setAttribute("sequencerGain", PAD_SETTINGS->getSequencerGain());
             padData->setAttribute("sequencerSamplesAttack", PAD_SETTINGS->getSequencerSamplesAttackTime());
+            padData->setAttribute("sequencerSamplesPolyphony", PAD_SETTINGS->getSequencerSamplesPolyphony());
         }
     }
     
@@ -564,6 +565,9 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
                 PAD_SETTINGS->setSequencerGain(padData->getDoubleAttribute("sequencerGain"));
             if (padData->hasAttribute("sequencerSamplesAttack"))
                  PAD_SETTINGS->setSequencerSamplesAttackTime(padData->getDoubleAttribute("sequencerSamplesAttack"));
+            if (padData->hasAttribute("sequencerSamplesPolyphony"))
+                PAD_SETTINGS->setSequencerSamplesPolyphony(padData->getIntAttribute("sequencerSamplesPolyphony"));
+            
         }
     }
     

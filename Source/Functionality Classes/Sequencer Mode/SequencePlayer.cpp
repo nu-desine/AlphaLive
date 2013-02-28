@@ -1549,6 +1549,14 @@ void SequencePlayer::setSamplesAttackTime (double value)
     }
 }
 
+void SequencePlayer::setSamplesPolyphony (int value)
+{
+    for (int i = 0; i < NO_OF_ROWS; i++)
+    {
+        sequenceAudioFilePlayer[i]->setPolyphony(value);
+    }
+}
+
 void SequencePlayer::setRecordEnabled (bool value)
 {
     recordEnabled = value;

@@ -35,8 +35,8 @@ SequenceAudioFilePlayer::SequenceAudioFilePlayer(int padNumber_, int rowNumber_,
 	AudioFormatManager formatManager;
 	formatManager.registerBasicFormats();
     
-    //call this here so that the default drum sounds are loaded in correctly before this
-    //object is intialised. This will only be temporary though.
+    currentFile = File::nonexistent;
+    setPolyphony(PAD_SETTINGS->getSequencerSamplesPolyphony());
     setAudioFile(PAD_SETTINGS->getSequencerSamplesAudioFilePath(rowNumber));
     attackTime = PAD_SETTINGS->getSequencerSamplesAttackTime();
     
@@ -44,11 +44,18 @@ SequenceAudioFilePlayer::SequenceAudioFilePlayer(int padNumber_, int rowNumber_,
     isInAttack = false;
     attackPosition = 0;
     
+    nextFileSourceIndex = 0;
+    
 }
 
 SequenceAudioFilePlayer::~SequenceAudioFilePlayer()
 {
-    fileSource.setSource(0);//unload the current file
+    for (int i = 0; i < polyphony; i++)
+        fileSource[i]->setSource(0);//unload the current file
+    
+    audioMixer.removeAllInputs();
+    fileSource.clear(true);
+    
 	deleteAndZero(currentAudioFileSource);//delete the current file
     
 }
@@ -60,16 +67,18 @@ void SequenceAudioFilePlayer::setAudioFile (File audioFile_)
 {
     if (audioFile_ != File::nonexistent)
     {
-        
         //passes in pads audio file
         File audioFile (audioFile_);
         
         //if the audio file is different from the previous one, stop and load in the new file
         if (audioFile != currentFile)
         {
-            // unload the previous file source and delete it..
-            fileSource.stop();
-            fileSource.setSource (0);
+            for (int i = 0; i < polyphony; i++)
+            {
+                fileSource[i]->stop();
+                fileSource[i]->setPosition(0.0);
+                fileSource[i]->setSource (0);
+            }
             deleteAndZero (currentAudioFileSource);
             
             // create a new file source from the file..
@@ -84,57 +93,71 @@ void SequenceAudioFilePlayer::setAudioFile (File audioFile_)
                 currentFile = audioFile;
                 currentAudioFileSource = new AudioFormatReaderSource (reader, true);
                 
-                //set read ahead buffer size
-                int bufferSize = currentAudioFileSource->getTotalLength()/2;
-                //restrict buffer size value
-                if (bufferSize > 48000)
-                    bufferSize = 48000;
-                else if (bufferSize < 8000)
-                    bufferSize = 8000;
-                
-                // ..and plug it into our transport source
-                fileSource.setSource (currentAudioFileSource,
-                                      bufferSize, // tells it to buffer this many samples ahead
-                                      audioTransportSourceThread,
-                                      reader->sampleRate);
-                
+                //add the audio file to the fileSource array
+                for (int i = 0; i < polyphony; i++)
+                {
+                    addtoFileSourceArray(i, reader);
+                }
                 
             }
-            
-        }  
+        } 
     }
 }
 
+void SequenceAudioFilePlayer::addtoFileSourceArray (int arrayIndex, AudioFormatReader* reader_)
+{
+    //set read ahead buffer size
+    int bufferSize = currentAudioFileSource->getTotalLength()/2;
+    //restrict buffer size value
+    if (bufferSize > 48000)
+        bufferSize = 48000;
+    else if (bufferSize < 8000)
+        bufferSize = 8000;
+    
+    // ..and plug it into our transport source
+    fileSource[arrayIndex]->setSource (currentAudioFileSource,
+                                       bufferSize, // tells it to buffer this many samples ahead
+                                       audioTransportSourceThread,
+                                       reader_->sampleRate);
+}
 
 
 void SequenceAudioFilePlayer::playAudioFile (float gain)
 {
-    fileSource.setGain(gain); //ideal the gain should be mapped logorythmitically (?)
-    //there is a bug here in that when the gain is changed to a low value, it doesn't seem to change in time
-    //most likely this is a juce bug that would have been fixed in the latest version?
-
     if (attackTime > 0)
     {
         isInAttack = true;
         attackPosition = 0;
     }
     
-    fileSource.setPosition (0.0);
-    fileSource.start();
+    if (nextFileSourceIndex >= polyphony)
+        nextFileSourceIndex = 0;
+    
+    fileSource[nextFileSourceIndex]->setGain(gain); //ideal the gain should be mapped logorythmitically (?)
+    //there is a bug here in that when the gain is changed to a low value, it doesn't seem to change in time
+    //most likely this is a juce bug that would have been fixed in the latest version?
+    
+    fileSource[nextFileSourceIndex]->setPosition (0.0);
+    fileSource[nextFileSourceIndex]->start();
+    
+    //iterate to next index of the FileSource array
+    nextFileSourceIndex++;
 }
 
 
 void SequenceAudioFilePlayer::stopAudioFile()
 {
-    fileSource.stop();
-    //fileSource.setPosition (0.0);
+    for (int i = 0; i < polyphony; i++)
+        fileSource[i]->stop();
+    
+    nextFileSourceIndex = 0;
 }
 
 
 
 void SequenceAudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill)
 {
-    fileSource.getNextAudioBlock(bufferToFill);
+    audioMixer.getNextAudioBlock(bufferToFill);
     
     if (isInAttack == true)
     {
@@ -189,7 +212,7 @@ void SequenceAudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& b
 
 void SequenceAudioFilePlayer::prepareToPlay (int samplesPerBlockExpected,double sampleRate)
 {
-    fileSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    audioMixer.prepareToPlay(samplesPerBlockExpected, sampleRate);
     
     sampleRate_ = sampleRate;
     attackSamples = attackTime * sampleRate_;
@@ -197,7 +220,7 @@ void SequenceAudioFilePlayer::prepareToPlay (int samplesPerBlockExpected,double 
 
 void SequenceAudioFilePlayer::releaseResources()
 {
-    fileSource.releaseResources();
+    audioMixer.releaseResources();
 }
 
 
@@ -205,5 +228,49 @@ void SequenceAudioFilePlayer::setAttackTime (double value)
 {
     attackTime = value;
     attackSamples = attackTime * sampleRate_;
+}
+
+void SequenceAudioFilePlayer::setPolyphony (int value)
+{
+    int arraySize = fileSource.size();
+    
+    if (value > arraySize)
+    {
+        AudioFormatManager formatManager;
+        formatManager.registerBasicFormats();
+        ScopedPointer <AudioFormatReader> reader (formatManager.createReaderFor (currentFile));
+        
+        for (int i = 0; i < (value - arraySize); i++)
+        {
+            //add element
+            fileSource.add (new AudioTransportSource());
+            //add new element as an input source to audioMixer
+            audioMixer.addInputSource(fileSource.getLast(), false);
+            
+            //apply audio file to new element
+            if (currentFile != File::nonexistent)
+            {
+                addtoFileSourceArray (fileSource.size()-1, reader);
+            }
+        }
+        
+        //set AFTER elements have been created to prevent
+        //any potential crashes.
+        polyphony = value;
+    }
+    else if (value < arraySize)
+    {
+        //set BEFORE elements have been deleted to prevent
+        //any potential crashes.
+        polyphony = value;
+        
+        for (int i = 0; i < (arraySize - value); i++)
+        {
+            //remove elements
+            audioMixer.removeInputSource(fileSource.getLast());
+            fileSource.removeLast();
+        }
+    }
+    
 }
 

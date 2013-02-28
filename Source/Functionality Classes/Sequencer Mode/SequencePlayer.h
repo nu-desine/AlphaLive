@@ -109,6 +109,7 @@ public:
     void setSamplesGain (float value);
     void setSamplesPan (float value);
     void setSamplesAttackTime (double value);
+    void setSamplesPolyphony (int value);
     
     void setRelativeTempoMode (int value);
     double getTimeInterval();

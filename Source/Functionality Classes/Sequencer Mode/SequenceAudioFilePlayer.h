@@ -40,7 +40,10 @@ public:
     void stopAudioFile();
     
     void setAudioFile (File audioFile_);
+    void addtoFileSourceArray (int arrayIndex, AudioFormatReader* reader_);
+    
     void setAttackTime (double value);
+    void setPolyphony (int value);
     
     
 private:
@@ -48,7 +51,8 @@ private:
     int padNumber, rowNumber;
     
     //audio related
-	AudioTransportSource fileSource;	// this controls the playback of a positionable audio stream, handling the starting/stopping and sample-rate conversion
+	MixerAudioSource audioMixer;
+	OwnedArray <AudioTransportSource> fileSource; //controls the playback of a positionable audio streams
 	File currentFile;
     AudioFormatReaderSource* currentAudioFileSource;
     TimeSliceThread *audioTransportSourceThread;
@@ -58,10 +62,14 @@ private:
     double sampleRate_;
     
     double attackTime;
+    int polyphony;
+    
     bool isInAttack;
     int attackSamples;
     int attackPosition;
-
+    
+    int nextFileSourceIndex;
+ 
 };
 
 

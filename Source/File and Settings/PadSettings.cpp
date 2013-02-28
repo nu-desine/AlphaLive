@@ -128,6 +128,7 @@ PadSettings::PadSettings(int arrayIndex)
     sequencerPan = 0.5;
     sequencerGain = 1.0;
     sequencerSamplesAttackTime = 0;
+    sequencerSamplesPolyphony = 2;
     
     sequencerRecordEnabled = false;
     
@@ -362,6 +363,7 @@ void PadSettings::resetData (int whatToReset)
         setSequencerPan (0.5);
         setSequencerGain (1.0);
         setSequencerSamplesAttackTime (0);
+        setSequencerSamplesPolyphony (2);
         
         setSequencerRecordEnabled(false);
     }
@@ -1311,6 +1313,15 @@ void PadSettings::setSequencerSamplesAttackTime (double value)
     }
 }
 
+void PadSettings::setSequencerSamplesPolyphony (int value)
+{
+    sequencerSamplesPolyphony = value;
+    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setSamplesPolyphony(value);
+    }
+}
+
 void PadSettings::setSequencerRecordEnabled (bool value)
 {
     
@@ -1453,6 +1464,10 @@ double PadSettings::getSequencerSamplesAttackTime()
     return sequencerSamplesAttackTime;
 }
 
+int PadSettings::getSequencerSamplesPolyphony()
+{
+    return sequencerSamplesPolyphony;
+}
 
 bool PadSettings::getSequencerRecordEnabled()
 {

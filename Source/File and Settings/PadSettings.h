@@ -115,6 +115,7 @@ public:
     void setSamplerGain (float value);
     void setSamplerAttackTime (double value);
     void setSamplerReleaseTime (double value);
+    void setSamplerPolyphony (int value);
     
     File getSamplerAudioFilePath();
     bool getSamplerIsLibraryFile();
@@ -128,6 +129,7 @@ public:
     float getSamplerGain();
     double getSamplerAttackTime();
     double getSamplerReleaseTime();
+    int getSamplerPolyphony();
     
     //==================================================================
     //Sequencer mode
@@ -424,6 +426,7 @@ private:
     float samplerGain;
     double samplerAttackTime;
     double samplerReleaseTime;
+    int samplerPolyphony;
     
     //==================================================================
     //Sequencer mode

@@ -81,13 +81,14 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     attRelGainL = attRelGainR = prevGainL = prevGainR = 0;
     velocity = 127;
     
-    //call this here incase a loop has been 'dropped' onto a pad before this AudioFilePlayer instance actually exists,
-    //which means that it wouldn't have been called from setSamplerAudioFilePath().
+    currentFile = File::nonexistent;
+    setPolyphony(PAD_SETTINGS->getSamplerPolyphony());
     setAudioFile(PAD_SETTINGS->getSamplerAudioFilePath());
     
     columnNumber = sequenceNumber = 0;
     
-    
+    nextFileSourceIndex = 0;
+    hasAlertedGui = false;
     
     broadcaster.addActionListener(this);
 }
@@ -110,13 +111,19 @@ AudioFilePlayer::~AudioFilePlayer()
         modeSamplerRef.updatePadPlayingStatus(padNumber, 0);
     }
     
-    fileSource.setSource(0);//unload the current file
+    for (int i = 0; i < polyphony; i++)
+        fileSource[i]->setSource(0);//unload the current file
+    
+    audioMixer.removeAllInputs();
+    fileSource.clear(true);
+    
 	deleteAndZero(currentAudioFileSource);//delete the current file
 }
 
+//is this function needed? isn't it the same as isCurrentlyPlaying()?
 bool AudioFilePlayer::getAudioTransportSourceStatus()
 {
-    if (fileSource.isPlaying() == true)
+    if (isCurrentlyPlaying() == true)
         return true;
     else
         return false;
@@ -128,11 +135,13 @@ void AudioFilePlayer::processAudioFile(int padValue, int padVelocity)
     if (currentFile != File::nonexistent && currentAudioFileSource != NULL)
     {
         //this is needed incase audio ends on its own or is stopped via the 'exclusive mode' feature, in order to reset everything so it will trigger again properly
-        if ((fileSource.isPlaying() == false && currentPlayingState == 1 && prevPadValue == 0) ||
+        if ((isCurrentlyPlaying() == false && 
+             currentPlayingState == 1 && prevPadValue == 0) ||
             (isInRelease == true && currentPlayingState == 1 && prevPadValue == 0))
         {
             std::cout << "stream ended on its own!!";
             currentPlayingState = 0;
+            nextFileSourceIndex = 0;
             triggerModes.reset();
         }
         
@@ -147,15 +156,9 @@ void AudioFilePlayer::processAudioFile(int padValue, int padVelocity)
             case 2:
                 triggerModeData = triggerModes.toggle(padValue);
                 break;
-            //case 3:
-                //triggerModeData = triggerModes.toggleRelease(padValue);
-                //break;
             case 3:
                 triggerModeData = triggerModes.latch(padValue);
                 break;
-            //case 5:
-             //   triggerModeData = triggerModes.latchMax(padValue);
-             //   break;
             case 4:
                 triggerModeData = triggerModes.trigger(padValue);
                 break;
@@ -213,7 +216,7 @@ void AudioFilePlayer::processAudioFile(int padValue, int padVelocity)
                 //...and triggerModeData signifies to stop audio, DON'T LET IT...MWAHAHAHA! 
                 triggerModeData.playingStatus = 2; //ignore
             }
-            else if (triggerModeData.playingStatus == 1 && currentPlayingState == 1 && triggerMode != /*6*/4)
+            else if (triggerModeData.playingStatus == 1 && currentPlayingState == 1 && triggerMode != 4)
             {
                 //...and triggerModeData signifies to start playing, 
                 //but file is already playing and triggerMode does not equal 'trigger'
@@ -381,9 +384,13 @@ void AudioFilePlayer::setAudioFile (File audioFile_)
         {
             // unload the previous file source and delete it..
             broadcaster.sendActionMessage("OFF");
-            fileSource.stop();
-            fileSource.setPosition(0.0);
-            fileSource.setSource (0);
+            
+            for (int i = 0; i < polyphony; i++)
+            {
+                fileSource[i]->stop();
+                fileSource[i]->setPosition(0.0);
+                fileSource[i]->setSource (0);
+            }
             deleteAndZero (currentAudioFileSource);
             
             // create a new file source from the file..
@@ -398,26 +405,32 @@ void AudioFilePlayer::setAudioFile (File audioFile_)
                 currentFile = audioFile;
                 currentAudioFileSource = new AudioFormatReaderSource (reader, true);
                 
-                //set read ahead buffer size
-                int bufferSize = currentAudioFileSource->getTotalLength()/2;
-                //restrict buffer size value
-                if (bufferSize > 48000)
-                    bufferSize = 48000;
-                else if (bufferSize < 8000)
-                    bufferSize = 8000;
-                
-                
-                // ..and plug it into our transport source
-                fileSource.setSource (currentAudioFileSource,
-                                      bufferSize, // tells it to buffer this many samples ahead
-                                      audioTransportSourceThread,
-                                      reader->sampleRate);
-                
-                
+                //add the audio file to the fileSource array
+                for (int i = 0; i < polyphony; i++)
+                {
+                    addtoFileSourceArray(i, reader);
+                }
+  
             }
         }
     }
+}
 
+void AudioFilePlayer::addtoFileSourceArray (int arrayIndex, AudioFormatReader* reader_)
+{
+    //set read ahead buffer size
+    int bufferSize = currentAudioFileSource->getTotalLength()/2;
+    //restrict buffer size value
+    if (bufferSize > 48000)
+        bufferSize = 48000;
+    else if (bufferSize < 8000)
+        bufferSize = 8000;
+    
+    // ..and plug it into our transport source
+    fileSource[arrayIndex]->setSource (currentAudioFileSource,
+                                       bufferSize, // tells it to buffer this many samples ahead
+                                       audioTransportSourceThread,
+                                       reader_->sampleRate);
 }
 
 void AudioFilePlayer::triggerQuantizationPoint()
@@ -451,10 +464,18 @@ void AudioFilePlayer::playAudioFile()
         isInAttack = true;
     }
     
-    //start audio file
-    fileSource.setPosition (0.0);
-    fileSource.start();
+    if (nextFileSourceIndex >= polyphony)
+        nextFileSourceIndex = 0;
     
+    //start audio file
+    fileSource[nextFileSourceIndex]->setPosition (0.0);
+    fileSource[nextFileSourceIndex]->start();
+    
+    //iterate to next index of the FileSource array
+    nextFileSourceIndex++;
+    
+    
+    hasAlertedGui = false;
     
     //NEW - recording into sequencer pads
     if (modeSamplerRef.getAlphaLiveEngineRef().getRecordingPads().size() > 0)
@@ -536,7 +557,7 @@ void AudioFilePlayer::stopAudioFile (bool shouldStopInstantly)
 {
     // shouldStopInstantly will be true when called from killPads()
     
-    if (releaseTime > 0 && shouldStopInstantly == false && fileSource.isPlaying() == true)
+    if (releaseTime > 0 && shouldStopInstantly == false && isCurrentlyPlaying() == true)
     {
         if (isInRelease == false)   //to prevent cases where a pad may be in release state but then
                                     //another pad tries to stop the pad (hence, start the release again)
@@ -558,8 +579,11 @@ void AudioFilePlayer::stopAudioFile (bool shouldStopInstantly)
     }
     else
     {
-        fileSource.stop();
-    
+        for (int i = 0; i < polyphony; i++)
+            fileSource[i]->stop();
+        
+        nextFileSourceIndex = 0;
+        
         playingLastLoop = false;
         broadcaster.sendActionMessage("OFF");
     }
@@ -597,7 +621,11 @@ void AudioFilePlayer::actionListenerCallback (const String& message)
     
     else if (message == "STOP AFTER RELEASE")
     {
-        fileSource.stop();
+        for (int i = 0; i < polyphony; i++)
+            fileSource[i]->stop();
+        
+        nextFileSourceIndex = 0;
+        
         playingLastLoop = false;
         modeSamplerRef.updatePadPlayingStatus(padNumber, 0);
     
@@ -613,7 +641,7 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
     //do not call anything from AppSettings in here. Only call member variables of this class,
     //otherwise it is to CPU heavy!
     
-    fileSource.getNextAudioBlock(bufferToFill);
+    audioMixer.getNextAudioBlock(bufferToFill);
     
     //how can I set it so that effects will only be applied when playing, but without causing clicks at the start and the end of sound? Need something like a look ahead and release time.
     sharedMemory.enter();
@@ -784,9 +812,12 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
     
     
 
-    if (fileSource.hasStreamFinished() == true) //if the audio file has ended on its own, automatically update the pad GUI
-        //NOTE - hasStreamFinshed could be used above where I've been manually checking if the stream has ended on its own
+    if (hasAlertedGui == false && 
+        isCurrentlyPlaying() == false && 
+        currentPlayingState == 1) //if the audio file has ended on its own, automatically update the pad GUI
     {
+        hasAlertedGui = true;
+        
         //can't directly call modeSamplerRef.updatePadPlayingStatus(padNumber, false) to update the pad GUI as
         //we are currently in ther audio thread here and calling it causes some form of objective C leak. Therefore we
         //are using a Async action broadcaster so that it doesn't cause any time-critical pauses in the thread which i think
@@ -799,7 +830,7 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
 
 void AudioFilePlayer::prepareToPlay (int samplesPerBlockExpected,double sampleRate)
 {
-    fileSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    audioMixer.prepareToPlay(samplesPerBlockExpected, sampleRate);
     
     sampleRate_ = sampleRate;
     attackSamples = attackTime * sampleRate_;
@@ -846,7 +877,7 @@ void AudioFilePlayer::prepareToPlay (int samplesPerBlockExpected,double sampleRa
 }
 void AudioFilePlayer::releaseResources()
 {
-    fileSource.releaseResources();
+    audioMixer.releaseResources();
 }
 
 
@@ -869,7 +900,20 @@ void AudioFilePlayer::resetTriggerMode()
 //=========================================================================================
 bool AudioFilePlayer::isCurrentlyPlaying()
 {
-    return fileSource.isPlaying();
+    //check to see if any of the fileSources are currently playing, and return true if so.
+    
+    bool status = false;
+    
+    for (int i = 0; i < polyphony; i++)
+    {
+        if (/*fileSource[i] != nullptr && */fileSource[i]->isPlaying() == true)
+        {
+            status = true;
+            break;
+        }
+    }
+    
+    return status;
 }
 
 int AudioFilePlayer::getCurrentPlayingState()
@@ -1034,7 +1078,6 @@ void AudioFilePlayer::setSticky (int value)
 
 void AudioFilePlayer::setAttackTime (double value)
 {
-    //do we actually needs the attackTime variable? Won't attackSamples be enough here?
     sharedMemory.enter();
     attackTime = value;
     attackSamples = attackTime * sampleRate_;
@@ -1043,11 +1086,56 @@ void AudioFilePlayer::setAttackTime (double value)
 
 void AudioFilePlayer::setReleaseTime (double value)
 {
-    //do we actually needs the releaseTime variable? Won't releaseSamples be enough here?
     sharedMemory.enter();
     releaseTime = value;
     releaseSamples = releaseTime * sampleRate_;
     sharedMemory.exit();
+}
+
+void AudioFilePlayer::setPolyphony (int value)
+{
+    int arraySize = fileSource.size();
+    
+    if (value > arraySize)
+    {
+        AudioFormatManager formatManager;
+        formatManager.registerBasicFormats();
+        ScopedPointer <AudioFormatReader> reader (formatManager.createReaderFor (currentFile));
+        
+        for (int i = 0; i < (value - arraySize); i++)
+        {
+            //add element
+            fileSource.add (new AudioTransportSource());
+            //add new element as an input source to audioMixer
+            audioMixer.addInputSource(fileSource.getLast(), false);
+            
+            //apply audio file to new element
+            if (currentFile != File::nonexistent)
+            {
+                addtoFileSourceArray (fileSource.size()-1, reader);
+            }
+        }
+        
+        //set AFTER elements have been created so any calls to
+        //isCurrentlyPlaying() don't cause a crash due to 
+        //elements not existing yet.
+        polyphony = value;
+    }
+    else if (value < arraySize)
+    {
+        //set BEFORE elements have been deleted so any calls to
+        //isCurrentlyPlaying() don't cause a crash due to 
+        //elements not existing anymore.
+        polyphony = value;
+        
+        for (int i = 0; i < (arraySize - value); i++)
+        {
+            //remove elements
+            audioMixer.removeInputSource(fileSource.getLast());
+            fileSource.removeLast();
+        }
+    }
+    
 }
 
 //========================================================================================

@@ -72,6 +72,7 @@ PadSettings::PadSettings(int arrayIndex)
     samplerGain = 0.9;
     samplerAttackTime = 0;
     samplerReleaseTime = 0;
+    samplerPolyphony = 1;
     
     //sequencer mode
     //init all indexes of the sequencerData 3D array to 0.
@@ -313,6 +314,7 @@ void PadSettings::resetData (int whatToReset)
         setSamplerGain (0.9);
         setSamplerAttackTime(0);
         setSamplerReleaseTime(0);
+        setSamplerPolyphony (1);
     }
     
     if (whatToReset != 3)
@@ -832,6 +834,15 @@ void PadSettings::setSamplerReleaseTime (double value)
     }
 }
 
+void PadSettings::setSamplerPolyphony (int value)
+{
+    samplerPolyphony = value;
+    if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
+    {
+        alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setPolyphony(value);
+    }
+}
+
 #pragma mark Sampler mode accessor functions
 
 File PadSettings::getSamplerAudioFilePath()
@@ -905,6 +916,11 @@ double PadSettings::getSamplerAttackTime()
 double PadSettings::getSamplerReleaseTime()
 {
     return samplerReleaseTime;
+}
+
+int PadSettings::getSamplerPolyphony()
+{
+    return samplerPolyphony;
 }
 
 

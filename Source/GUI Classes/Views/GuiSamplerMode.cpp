@@ -126,6 +126,14 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     releaseSlider->setValue(0.01, dontSendNotification);
     releaseSlider->addMouseListener(this, true);
     
+    //--------------- polyphony slider -------------------
+	addChildComponent(polyphonySlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
+	polyphonySlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
+	polyphonySlider->setRange(0, 16, 1);
+    polyphonySlider->addListener(this);
+    polyphonySlider->setValue(1, dontSendNotification);
+    polyphonySlider->addMouseListener(this, true);
+    
     //---------------------- plus and minus buttons ------------------
     addAndMakeVisible(plusButton = new SettingsButton("+", (135 * (M_PI / 180)), 
                                                       (160 * (M_PI / 180)),
@@ -266,6 +274,7 @@ void GuiSamplerMode::resized()
     panSlider->setBounds(804, 381, 82, 82);
     attackSlider->setBounds(804, 381, 82, 82);
     releaseSlider->setBounds(804, 381, 82, 82);
+    polyphonySlider->setBounds(804, 381, 82, 82);
 	
 	quantiseButton->setBounds(681, 288,32, 32);
 	triggerSettingsButton->setBounds(789, 221,42, 42);
@@ -396,6 +405,19 @@ void GuiSamplerMode::sliderValueChanged (Slider* slider)
         }
         
 		setParameterLabelText(String(releaseSlider->getValue()));
+    }
+    else if (slider == polyphonySlider)
+    {
+        if (slider->getValue() == 0)
+            slider->setValue(1, dontSendNotification);
+        
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setSamplerPolyphony(slider->getValue());
+        }
+        
+		setParameterLabelText(String(polyphonySlider->getValue()));
     }
 
 }
@@ -539,10 +561,10 @@ void GuiSamplerMode::buttonClicked (Button* button)
         else if (button == minusButton)
             controlDisplayId--;
         
-        if (controlDisplayId > 3)
+        if (controlDisplayId > 4)
             controlDisplayId = 0;
         else if (controlDisplayId < 0)
-            controlDisplayId = 3;
+            controlDisplayId = 4;
         
         setRotaryControlDisplay();
 	}
@@ -649,6 +671,7 @@ void GuiSamplerMode::updateDisplay()
         panSlider->setValue(PAD_SETTINGS->getSamplerPan(), dontSendNotification);
         attackSlider->setValue(PAD_SETTINGS->getSamplerAttackTime(), dontSendNotification);
         releaseSlider->setValue(PAD_SETTINGS->getSamplerReleaseTime(), dontSendNotification);
+        polyphonySlider->setValue(PAD_SETTINGS->getSamplerPolyphony(), dontSendNotification);
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         triggerModeButtons[PAD_SETTINGS->getSamplerTriggerMode()-1]->setToggleState(true, false);
         loopButton->setToggleState(PAD_SETTINGS->getSamplerShouldLoop(), false);
@@ -840,6 +863,20 @@ void GuiSamplerMode::updateDisplay()
         }
         
         //==================================================================================================
+        double polyphony_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerPolyphony();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getSamplerPolyphony() != polyphony_)
+            {
+                polyphonySlider->setValue(1, dontSendNotification);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                polyphonySlider->setValue(polyphony_, dontSendNotification);
+        }
+        
+        //==================================================================================================
         //for pressure status button
         int effect_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerEffect();
         
@@ -920,6 +957,11 @@ void GuiSamplerMode::setParameterLabelText (String value)
             currentParameterLabel->setText(translate("RELEASE"), false);
 			parameterLabel->setText(String(releaseSlider->getValue()), false);
 		}
+        else if (polyphonySlider->isVisible())
+		{
+            currentParameterLabel->setText(translate("POLYPHONY"), false);
+			parameterLabel->setText(String(polyphonySlider->getValue()), false);
+		}
 	}
     
 }
@@ -930,6 +972,7 @@ void GuiSamplerMode::setRotaryControlDisplay()
     panSlider->setVisible(false);
     attackSlider->setVisible(false);
     releaseSlider->setVisible(false);
+    polyphonySlider->setVisible(false);
     
     if (triggerSettingsButton->getToggleState())
     {
@@ -941,6 +984,8 @@ void GuiSamplerMode::setRotaryControlDisplay()
             attackSlider->setVisible(true);
         else if (controlDisplayId == 3)
             releaseSlider->setVisible(true);
+        else if (controlDisplayId == 4)
+            polyphonySlider->setVisible(true);
     }
     
     setParameterLabelText (String::empty);
@@ -960,6 +1005,8 @@ void GuiSamplerMode::mouseEnter (const MouseEvent &e)
 		setParameterLabelText(String(attackSlider->getValue()));
     else if (releaseSlider->isMouseOver(true))
 		setParameterLabelText(String(releaseSlider->getValue()));
+    else if (polyphonySlider->isMouseOver(true))
+		setParameterLabelText(String(polyphonySlider->getValue()));
     
     // ======= info box text command =========
     // =======================================
@@ -1022,6 +1069,10 @@ void GuiSamplerMode::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText(translate("Release Time. Set the audio sample release time in seconds for selected pads."));
     }
+    else if (polyphonySlider->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Polyphony Value. Sets how many instances of the audio sample can be playing simultaneously. If you are trigger loops a polyphony value of 1 will most likely be desired, however for one-shots and drum hits a higher value may be more suitable."));
+    }
     
     if (fileChooser->isMouseOver(true))
     {
@@ -1060,6 +1111,8 @@ void GuiSamplerMode::mouseExit (const MouseEvent &e)
     else if (e.eventComponent == attackSlider)
 		setParameterLabelText(String::empty);
     else if (e.eventComponent == releaseSlider)
+		setParameterLabelText(String::empty);
+    else if (e.eventComponent == polyphonySlider)
 		setParameterLabelText(String::empty);
     
     

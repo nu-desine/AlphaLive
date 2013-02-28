@@ -68,12 +68,14 @@ public:
     void setQuantizeMode (int value);
     void setAttackTime (double value);
     void setReleaseTime (double value);
+    void setPolyphony (int value);
     
     int getCurrentPlayingState();
     bool getAudioTransportSourceStatus();
     bool isCurrentlyPlaying();
     
     void setAudioFile (File audioFile_);
+    void addtoFileSourceArray (int arrayIndex, AudioFormatReader* reader_);
     
     //audio signal processing stuff
     void setGain (float value);
@@ -100,7 +102,8 @@ public:
 private:
 	
 	//audio related
-	AudioTransportSource fileSource; //this controls the playback of a positionable audio stream, handling the starting/stopping and sample-rate conversion
+    MixerAudioSource audioMixer;
+	OwnedArray <AudioTransportSource> fileSource; //controls the playback of a positionable audio streams
 	File currentFile;
     AudioFormatReaderSource* currentAudioFileSource;
     TimeSliceThread *audioTransportSourceThread; //this can't be a ScopedPointer as it will be equal to the scoped pointer within ModeSampler, so when deleting an instance of AudioFilePlayer it gets complicated as things will automatically try to be deleted when they might not exist anymore!
@@ -126,6 +129,7 @@ private:
     int quantizeMode;
     double attackTime, releaseTime;
     int velocity;
+    int polyphony;
     
     //audio signal processing stuff
     float staticGain, gain; //staticGain is always set to the GUI gain value. 
@@ -159,6 +163,9 @@ private:
     //playback manipulation stuff
     double fileStartPosition, fileEndPosition, currentPositionInRegion;
     int prevPressureRegion;
+    
+    int nextFileSourceIndex;
+    bool hasAlertedGui;
 };
 
 #endif

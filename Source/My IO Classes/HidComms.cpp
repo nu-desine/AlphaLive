@@ -23,9 +23,16 @@
 
 HidComms::HidComms() : Thread("HidThread")
 {
+    memset(outBuf,0,sizeof(buf));
+    
     appHasInitialised = false;
     sendOutputReport = false;
     midiOutExists = hidDeviceStatus =  0;
+    
+    for (int i = 0; i < 48; i++)
+        prevPadPressure[i] = 0;
+    for (int i = 0; i < 2; i++)
+        prevButtonValue[i] = 0;
     
     startThread();
 }
@@ -73,30 +80,115 @@ void HidComms::run()
                 //                printf("%02hhx ", buf[i]);
                 //            printf("\n");
                 
-                //encode the recieved command byte here based on the report ID
                 if (appHasInitialised == true)
                 {
-                    if (buf[0] == 0x01) //pad data report
+                    //NEW PROTOCOL READING
+                    //refer to http://kaspar.h1x.com/nuwiki/index.php/HID_Protocol_0.2.1
+                    //for details on the protocol and HID report format.
+                    
+                    if (buf[0] == 0x01)
                     {
-                        unsigned short int pressure = 0;
-                        pressure = buf[2] + (buf[3]<<8);
+                        //==== pad data ====
+                        for (int i = 0; i < 48; i++)
+                        {
+                            int padIndex = (i * 2) + 1;
+                            
+                            int pressure = buf[padIndex + 1] << 1;
+                            pressure += buf[padIndex] >> 7;
+                            
+                            if (pressure != prevPadPressure[i])
+                            {
+                                int velocity = buf[padIndex] & 127;
+                            
+                                //std::cout << i << " : " << pressure << " : " << velocity << std::endl;
+                                hidInputCallback(i, pressure, velocity);
+                                
+                                prevPadPressure[i] = pressure;
+                            }
+                        }
                         
-                        hidInputCallback(buf[1], pressure, buf[4]);
+                        //The following algorithm must be set up so that
+                        //it allows for the possibility of multiple buttton 
+                        //presses/releases or multiple dial rotations to be 
+                        //sent in a single message within the HID report.
+                        //Therefore we must check each pair of bits within
+                        //the button data byte (buf[messageIndex + 1]) 
+                        //and the dial data byte (buf[messageIndex + 2]).
+                        //Using the bitwise right-shift operator we need to check
+                        //for value of 1 and 2 for each control.
                         
+                        //hidInputCallback() expects the following values:
+                        //button numbers = 102 to 104 (ignore reset button)
+                        //dial numbers = 100 - 101
+                        //button press = 1
+                        //button release = 0
+                        //dial left turn = 127
+                        //dial right turn = 1
+                        
+                        int eliteByte = 97;
+                        
+                        //decode bits 1-3 as pairs from the button/dial data byte,
+                        //looking for a button presses and releases.
+                        for (int i = 1; i < 4; i++)
+                        {
+                            int buttonNum = i + 101;
+                            //shift the value to the first bit
+                            int buttonVal = buf[eliteByte] >> i;
+                            //mask the first bit
+                            buttonVal = buttonVal & 1;
+                            
+                            if (buttonVal != prevButtonValue[i-1])
+                            {
+                                //std::cout << buttonNum << " : " << buttonVal << std::endl;
+                                hidInputCallback(buttonNum, buttonVal, 0);
+                                prevButtonValue[i-1] = buttonVal;
+                            }
+                        }
+                        
+                        //decode bits 4-7 as pairs from the button/dial data byte,
+                        //looking for a dial rotations.
+                        for (int i = 0; i < 2; i++)
+                        {
+                            int dialNum = i + 100;
+                            //shift the value to the first 2 bits
+                            int dialVal = buf[eliteByte] >> (i * 2) + 4;
+                            //mask the first 2 bits
+                            dialVal = dialVal & 3;
+                            
+                            if (dialVal == 1) //left/anti-clockwise
+                            {
+                                //std::cout << dialNum << " : " << dialVal << std::endl;
+                                hidInputCallback(dialNum, 127, 0);
+                            }
+                            else if (dialVal == 2) //right/clockwise
+                            {
+                                //std::cout << dialNum << " : " << dialVal << std::endl;
+                                hidInputCallback(dialNum, 1, 0);
+                            }
+                        }
                     }
                     
-                    //The elite dials and buttons could probably use a the same
-                    //command ID now we're not using such a specific report descriptor.
                     
-                    else if (buf[0] == 0x02) //elite button report
+                    // ==== write output report (just MIDI messages?) ====
+                    
+                    //if report contains messages, send it
+                    if (outBuf[2] > 0)
                     {
-                        //set 'pad' value to be 102-104 to represent the elite buttons
-                        hidInputCallback(buf[1]+102, buf[2], 0);
-                    }
-                    else if (buf[0] == 0x03) //elite dial
-                    {
-                        //set 'pad' value to be 100-101 to represent the elite dials
-                        hidInputCallback(buf[1]+100, buf[2], 0);
+                        sharedMemory.enter();
+                        
+                        outBuf[0] = 0x00;
+                        outBuf[1] = 0x01;
+                        hid_write(handle, outBuf, 129);
+                        
+//                        std::cout << "Report data: ";
+//                        for (int i = 0; i < sizeof(outBuf); i++)
+//                            printf("%02hhx ", outBuf[i]);
+//                        printf("\n");
+                    
+                        //reset number of messages byte
+                        outBuf[2] = 0x00;
+                        
+                        sharedMemory.exit();
                     }
                     
                 }
@@ -132,21 +224,30 @@ void HidComms::run()
     }
 }
 
-//should i be passing in a pointer here instead of an array?
-void HidComms::sendHidControlReport (uint8 *bytesToSend)
+void HidComms::addMessageToHidOutReport (uint8 message[])
 {
-
-    if (handle)
+    int noOfMessages = outBuf[2];
+    
+    if (noOfMessages < 30)
     {
-//        std::cout << "writing to device: ";
-//        printf("%02hhx ", bytesToSend[0]);
-//        printf("%02hhx ", bytesToSend[1]);
-//        printf("%02hhx ", bytesToSend[2]);
-//        printf("%02hhx ", bytesToSend[3]);
-//        printf("%02hhx ", bytesToSend[4]);
-//        printf("\n");
-        hid_write(handle, bytesToSend, 9);
+        sharedMemory.enter();
+        
+        //==== append message to out report ====
+        
+        //get index of the report where the new message should go
+        int newMessageIndex = (noOfMessages * 4) + 3;
+        
+        outBuf[newMessageIndex] = message[0];
+        outBuf[newMessageIndex + 1] = message[1];
+        outBuf[newMessageIndex + 2] = message[2];
+        outBuf[newMessageIndex + 3] = message[3];
+        
+        //increase number of messages byte value
+        outBuf[2] = outBuf[2] + 1;
+        
+        sharedMemory.exit();
     }
+    
 }
 
 
@@ -154,6 +255,7 @@ void HidComms::sendHidControlReport (uint8 *bytesToSend)
 void HidComms::connectToDevice()
 {
     struct hid_device_info *devs, *cur_dev;
+    float currentFirmwareNo = 0;
     
     devs = hid_enumerate(0x1d50, 0x6021);
     cur_dev = devs;	
@@ -166,13 +268,15 @@ void HidComms::connectToDevice()
         printf("  Release:      %hx\n", cur_dev->release_number);
         printf("  Interface:    %d\n",  cur_dev->interface_number);
         printf("\n");
+        
+        currentFirmwareNo = cur_dev->release_number / 100.0; 
+        
         cur_dev = cur_dev->next;
     }
     hid_free_enumeration(devs);
     
     // Open the device using the VID, PID,
     // and optionally the Serial number.
-    //handle = hid_open(0x3eb, 0x204f, NULL); // << LUFA demo HID device
     handle = hid_open(0x1d50, 0x6021, NULL); // << AlphaSphere HID device
     //handle = hid_open(0x1d50, 0x6041, NULL); // << AlphaSphere bootloader HID device 
     
@@ -209,6 +313,41 @@ void HidComms::connectToDevice()
         
         memset(buf,0,sizeof(buf));
         
+        
+        //==== check to see if the firmware needs updating ====
+        
+        File appDataDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString + "Application Data");
+        String wildcard = "SphereWare*";
+        Array<File> hexFile;
+        appDataDir.findChildFiles(hexFile, 2, false, wildcard);
+        
+        if (hexFile.size() > 0) //which it should
+        {
+            //get the new firmware version number from the hex file name
+            StringArray tokens;
+            tokens.addTokens(hexFile.getLast().getFileNameWithoutExtension(), "_", String::empty);
+            float newFirmwareNo = tokens[1].getFloatValue();
+            //std::cout << hexFile.getLast().getFileNameWithoutExtension() << " " << newFirmwareNo << std::endl;
+            
+            //if new firware version number is greater than current firmware number,
+            //flag that the firmware needs updating. 
+            if (newFirmwareNo > currentFirmwareNo)
+            {
+                //On app launch the updateFirmware function is called from main.
+                //Can't be called from here at launch as the mainWindow/Component needs
+                //to be present, so need to just set a flag here. 
+                //However if we are current not at app launch, it is
+                //possible to call it directly from here.
+                
+                setFirmwareUpdateStatus (true);
+                
+                if (appHasInitialised == true)
+                {
+                    updateFirmware();
+                }
+            }
+        }
+        
         //===============================================================================
         //Send a report to the device requesting a report containing AlphaLive setup data,
         //and then process the received reports data to set up AlphaLive correctly.
@@ -220,56 +359,22 @@ void HidComms::connectToDevice()
         
         unsigned char dataToSend[1];
         dataToSend[0] = 0x05; //host setup data request command ID
-        hid_write(handle, dataToSend, 9);
+        //hid_write(handle, dataToSend, 129);
+        int uncommentThisLine;
         
         //TEMPORARILY COMMENTED OUT TO PREVENT PAUSING FOR THE TIME BEING
         //res = hid_read(handle, buf, sizeof(buf));
-        int uncommentThisLine;
+        int uncommentThisLineAsWell;
         
-        if (res > 0 && buf[0] == 0x04)
-        {
-            std::cout << "Received AlphaLive setup report with the following data: " << std::endl;
-            for (int i = 0; i < res; i++)
-                printf("%02hhx ", buf[i]);
-            printf("\n");
-            
-            //========process received report data here...========
-            
-            //check to see if the firmware needs updating
-            File appDataDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString + "Application Data");
-            String wildcard = "SphereWare*";
-            Array<File> hexFile;
-            appDataDir.findChildFiles(hexFile, 2, false, wildcard);
-            
-            if (hexFile.size() > 0) //which it should
-            {
-                int currentFirmwareNo = buf[1];
-                int newFirmwareNo = hexFile.getLast().getFileNameWithoutExtension().getTrailingIntValue();
-                
-                std::cout << hexFile[0].getFileNameWithoutExtension() << " " << newFirmwareNo << std::endl;
-                
-                //if new firware version number is greater than current firmware number,
-                //flag that the firmware needs updating. 
-                if (newFirmwareNo > currentFirmwareNo)
-                {
-                    //On app launch the updateFirmware function is called from main.
-                    //Can't be called from here at launch as the mainWindow/Component needs
-                    //to be present, so need to just set a flag here. 
-                    //However if we are current not at app launch, it is
-                    //possible to call it directly from here.
-                    
-                    setFirmwareUpdateStatus (true);
-                    
-                    if (appHasInitialised == true)
-                    {
-                        updateFirmware();
-                    }
-                }
-            }
-            
-            //set AlphaSphere device type
-            setDeviceType (buf[2] + 1);
-        }
+        std::cout << "Received AlphaLive setup report with the following data: " << std::endl;
+        for (int i = 0; i < res; i++)
+            printf("%02hhx ", buf[i]);
+        printf("\n");
+        
+        //========process received report data here...========
+        
+        //set AlphaSphere device type
+        //setDeviceType (buf[2] + 1);
                 
         // Set the hid_read() function to be non-blocking.
         hid_set_nonblocking(handle, 1);

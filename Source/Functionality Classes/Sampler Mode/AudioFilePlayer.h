@@ -129,11 +129,11 @@ private:
     int quantizeMode;
     double attackTime, releaseTime;
     int velocity;
+    double velocityGain;
     int polyphony;
     
     //audio signal processing stuff
-    float staticGain, gain; //staticGain is always set to the GUI gain value. 
-                            //gain changes based on the input pad velocity value
+    float gain; //gain changes based on the input pad velocity value            
     float panLeft, panRight, prevGainL, prevGainR;
     
     //attack/release stuff

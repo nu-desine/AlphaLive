@@ -128,7 +128,7 @@ PadSettings::PadSettings(int arrayIndex)
     sequencerPan = 0.5;
     sequencerGain = 1.0;
     sequencerSamplesAttackTime = 0;
-    sequencerSamplesPolyphony = 2;
+    sequencerSamplesPolyphony = 4;
     
     sequencerRecordEnabled = false;
     
@@ -363,7 +363,7 @@ void PadSettings::resetData (int whatToReset)
         setSequencerPan (0.5);
         setSequencerGain (1.0);
         setSequencerSamplesAttackTime (0);
-        setSequencerSamplesPolyphony (2);
+        setSequencerSamplesPolyphony (4);
         
         setSequencerRecordEnabled(false);
     }

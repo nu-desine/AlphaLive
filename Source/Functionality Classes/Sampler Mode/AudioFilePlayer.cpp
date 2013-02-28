@@ -52,7 +52,7 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     //grab the setting values (so that if this object is deleted and recreated, it will hold the previous settings)
     //do i need to enter shared memory here?
     
-    gain = staticGain = PAD_SETTINGS->getSamplerGain(); //should this be cubed?
+    gain = PAD_SETTINGS->getSamplerGain(); //should this be cubed?
     panLeft = PanControl::leftChanPan_(PAD_SETTINGS->getSamplerPan());
     panRight = PanControl::rightChanPan_(PAD_SETTINGS->getSamplerPan());
     triggerMode = PAD_SETTINGS->getSamplerTriggerMode();
@@ -79,6 +79,7 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     isInAttack = isInRelease = false;
     attackPosition = releasePosition = 0;
     attRelGainL = attRelGainR = prevGainL = prevGainR = 0;
+    velocityGain = 1.0;
     velocity = 127;
     
     currentFile = File::nonexistent;
@@ -237,18 +238,20 @@ void AudioFilePlayer::processAudioFile(int padValue, int padVelocity)
             //Though as I'm only doing this if statement when the pad is first pressed it probably
             //won't be too CPU extensive here.
             
-            velocity = padVelocity;
-            
             if (PAD_SETTINGS->getVelocityCurve() != 4)
             {
                 // not static velocity
-                gain = staticGain * (velocity*(1.0/127.0));
+                velocityGain = padVelocity * (1.0 / 127.0);
+                if (velocityGain > 1.0)
+                    velocityGain = 1.0;
+                
+                velocity = padVelocity;
             }
             else
             {
-                //static velocity - just use Sampler mode gain value
-                gain = staticGain;
-                velocity = 110; //this should actually be equal to some value based on staticGain
+                //static velocity
+                velocityGain = 1.0;
+                velocity = 127; //this should actually be based on the static gain value
             }
                 
         }
@@ -468,6 +471,8 @@ void AudioFilePlayer::playAudioFile()
         nextFileSourceIndex = 0;
     
     //start audio file
+    //std::cout << "Velocity: " << velocity << " Gain : " << velocityGain << std::endl;
+    fileSource[nextFileSourceIndex]->setGain(velocityGain);
     fileSource[nextFileSourceIndex]->setPosition (0.0);
     fileSource[nextFileSourceIndex]->start();
     
@@ -1032,20 +1037,9 @@ void AudioFilePlayer::setGain (float value)
     sharedMemory.enter();
     
     if (value <= 1.0)
-        staticGain = value * value * value;
+        gain = value * value * value;
     else
-        staticGain = value;
-    
-    //set gain value here in case the sample is currently playing
-    if (PAD_SETTINGS->getVelocityCurve() != 4)
-    {
-        // not static velocity
-        gain = staticGain * (velocity*(1.0/127.0));
-    }
-    else
-    {
-        gain = staticGain;
-    }
+        gain = value;
     
     sharedMemory.exit();
 }

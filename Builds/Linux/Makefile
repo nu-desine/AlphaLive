@@ -100,6 +100,7 @@ OBJECTS := \
   $(OBJDIR)/AlphaSlider_e04a0b01.o \
   $(OBJDIR)/AlphaSquareButton_3402818f.o \
   $(OBJDIR)/AlphaTextButton_a43b885f.o \
+  $(OBJDIR)/DeviceStatusComponent_aa8053d7.o \
   $(OBJDIR)/FileDropButton_bc0a5ac5.o \
   $(OBJDIR)/GuiSwitch_49506eb1.o \
   $(OBJDIR)/ImageSlider_e336eabe.o \
@@ -495,6 +496,11 @@ $(OBJDIR)/AlphaSquareButton_3402818f.o: ../../Source/GUI\ Classes/Custom\ Compon
 $(OBJDIR)/AlphaTextButton_a43b885f.o: ../../Source/GUI\ Classes/Custom\ Components/General/AlphaTextButton.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling AlphaTextButton.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/DeviceStatusComponent_aa8053d7.o: ../../Source/GUI\ Classes/Custom\ Components/General/DeviceStatusComponent.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling DeviceStatusComponent.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/FileDropButton_bc0a5ac5.o: ../../Source/GUI\ Classes/Custom\ Components/General/FileDropButton.cpp

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_PAD_SETTINGS_VERSION_1>
+    <PAD_DATA mode="3" 
+    pressureCurve="2" 
+    exclusiveMode="0" 
+    exclusiveGroup="1"
+    quantizeMode="0" 
+    velocityCurve="2" 
+    velocity="110" 
+    sequencerMode="1"
+    sequencerTriggerMode="2" 
+    sequencerShouldLoop="1"
+    sequencerIndestructible="0" 
+    sequencerShouldFinishLoop="0" 
+    sequencerSticky="0"
+    sequencerRelativeTempoMode="0" 
+    sequencerDynamicMode="0"
+    sequencerMidiNoteLength="4" 
+    sequencerMidiMinPressureRange="0"
+    sequencerMidiMaxPressureRange="127" 
+    sequencerMidiPressureMode="1"
+    sequencerMidiPressureStatus="1" 
+    sequencerMidiCcController="12"/>
+</ALPHALIVE_PAD_SETTINGS_VERSION_1>

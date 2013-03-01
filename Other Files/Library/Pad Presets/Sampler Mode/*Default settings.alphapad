@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_PAD_SETTINGS_VERSION_1>
+    <PAD_DATA mode="2" 
+    pressureCurve="2" 
+    exclusiveMode="0" 
+    exclusiveGroup="1"
+    quantizeMode="0" 
+    velocityCurve="2" 
+    velocity="110"
+    samplerTriggerMode="2" 
+    samplerShouldLoop="1" 
+    samplerIndestructible="0"
+    samplerShouldFinishLoop="0" 
+    samplerSticky="0" 
+    samplerEffect="0"
+    samplerPan="0.5" 
+    samplerGain="0.899999976" 
+    samplerAttackTime="0"
+    samplerReleaseTime="0" 
+    samplerPolyphony="1"/>
+</ALPHALIVE_PAD_SETTINGS_VERSION_1>

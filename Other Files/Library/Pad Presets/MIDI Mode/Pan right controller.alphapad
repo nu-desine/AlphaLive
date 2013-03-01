@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_PAD_SETTINGS_VERSION_1>
+    <PAD_DATA mode="1" 
+    midiMinPressureRange="64" 
+    midiMaxPressureRange="127"
+    midiPressureMode="4"
+    midiSticky="0" 
+    midiPressureStatus="1" 
+    midiNoteStatus="0" 
+    midiCcController="10"/>
+</ALPHALIVE_PAD_SETTINGS_VERSION_1>

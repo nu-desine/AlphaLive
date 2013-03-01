@@ -1106,6 +1106,16 @@ void AudioFilePlayer::setPolyphony (int value)
             //apply audio file to new element
             if (currentFile != File::nonexistent)
             {
+                //here, do I need to do the... 
+                
+                //if (reader != 0)
+                //{
+                ///    currentAudioFileSource = new AudioFormatReaderSource (reader, true);
+                //}
+                
+                //... like in setAudioFile() above?
+                //this will involve having to delete currentAudioFileSource first.
+                
                 addtoFileSourceArray (fileSource.size()-1, reader);
             }
         }

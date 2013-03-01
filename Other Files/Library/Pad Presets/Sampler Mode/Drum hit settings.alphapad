@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_PAD_SETTINGS_VERSION_1>
+    <PAD_DATA mode="2" 
+    exclusiveMode="0"
+    velocityCurve="2" 
+    samplerTriggerMode="4"
+    samplerShouldLoop="0" 
+    samplerIndestructible="0" 
+    samplerShouldFinishLoop="1"
+    samplerAttackTime="0"
+    samplerReleaseTime="0" 
+    samplerPolyphony="8"/>
+</ALPHALIVE_PAD_SETTINGS_VERSION_1>

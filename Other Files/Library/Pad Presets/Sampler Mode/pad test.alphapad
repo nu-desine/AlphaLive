@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<ALPHALIVE_PAD_SETTINGS_VERSION_1>
-  <PAD_DATA mode="2" samplerTriggerMode="4"
-               samplerShouldLoop="0" samplerIndestructible="1" samplerShouldFinishLoop="0"
-               samplerSticky="0" samplerPan="0.5" samplerGain="1"/>
-</ALPHALIVE_PAD_SETTINGS_VERSION_1>

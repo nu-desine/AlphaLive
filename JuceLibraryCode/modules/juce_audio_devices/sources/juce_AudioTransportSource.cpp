@@ -288,8 +288,8 @@ void AudioTransportSource::getNextAudioBlock (const AudioSourceChannelInfo& info
 
         for (int i = info.buffer->getNumChannels(); --i >= 0;)
         {
-            info.buffer->applyGainRamp (i, info.startSample, info.numSamples,
-                                        lastGain, gain);
+            info.buffer->applyGain (i, info.startSample, info.numSamples,
+                                        gain);
         }
     }
     else

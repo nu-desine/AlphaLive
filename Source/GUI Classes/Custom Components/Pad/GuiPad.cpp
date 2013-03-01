@@ -383,7 +383,8 @@ bool GuiPad::isInterestedInFileDrag (const StringArray& files)
 			
 	//Only allow .wav and .aiff files to be dropped. Ignore any other files
     //is there a way to accept any common audio files?
-	if (extension == ".wav" || extension == ".aiff" || extension == ".aif")
+	if (PAD_SETTINGS->getMode() == 2 &&
+        (extension == ".wav" || extension == ".aiff" || extension == ".aif"))
 	{
 		return true;
 	}
@@ -449,6 +450,12 @@ void GuiPad::mouseDown (const MouseEvent &e)
         menu.addItem(1, translate("Copy pad settings..."));
         menu.addItem(2, translate("Paste pad settings..."));
         
+        if (PAD_SETTINGS->getMode() == 2)
+        {
+            menu.addSeparator();
+            menu.addItem(3, translate("Set audio sample..."));
+        }
+        
         const int result = menu.show();
         
         if (result == 0)
@@ -466,6 +473,22 @@ void GuiPad::mouseDown (const MouseEvent &e)
             pastePadSettings();
             
         }
+        
+        else if (result == 3)
+        {
+            FileChooser myChooser (translate("Please select an audio file to load..."),
+                                   File::getSpecialLocation (File::userMusicDirectory),
+                                   "*.wav;*.aif;*.aiff");
+            
+            if (myChooser.browseForFileToOpen() == true)
+            {
+                File selectedAudioFile (myChooser.getResult());
+                PAD_SETTINGS->setSamplerAudioFilePath(selectedAudioFile);
+                
+                guiPadLayoutRef.getMainComponent().getGuiSamplerMode()->setAudioFileDisplay(selectedAudioFile);
+            }
+        }
+                         
     }
     
     //====================================================================================

@@ -348,35 +348,25 @@ void HidComms::connectToDevice()
             }
         }
         
-        //===============================================================================
-        //Send a report to the device requesting a report containing AlphaLive setup data,
-        //and then process the received reports data to set up AlphaLive correctly.
-        //===============================================================================
+        //==== check whether it's an elite model or not ====
         
-        // Set the hid_read() function to be blocking to start with.
+        // Set the hid_read() function to be blocking
+        // so that it won't continue until the IN report
+        // is received.
         hid_set_nonblocking(handle, 0);
+        
         res = 0;
+        res = hid_read(handle, buf, sizeof(buf));
         
-        unsigned char dataToSend[1];
-        dataToSend[0] = 0x05; //host setup data request command ID
-        //hid_write(handle, dataToSend, 129);
-        int uncommentThisLine;
-        
-        //TEMPORARILY COMMENTED OUT TO PREVENT PAUSING FOR THE TIME BEING
-        //res = hid_read(handle, buf, sizeof(buf));
-        int uncommentThisLineAsWell;
-        
-        std::cout << "Received AlphaLive setup report with the following data: " << std::endl;
-        for (int i = 0; i < res; i++)
-            printf("%02hhx ", buf[i]);
-        printf("\n");
-        
-        //========process received report data here...========
+        //get the device type bit
+        int deviceType = buf[97];
+        deviceType = deviceType & 1;
         
         //set AlphaSphere device type
-        //setDeviceType (buf[2] + 1);
+        setDeviceType (deviceType + 1);
                 
-        // Set the hid_read() function to be non-blocking.
+        // Set the hid_read() function to be non-blocking
+        // for the rest of the program
         hid_set_nonblocking(handle, 1);
         
         hidDeviceStatus = 1;

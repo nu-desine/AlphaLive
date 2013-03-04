@@ -478,11 +478,18 @@ void GuiEliteControlsSettings::sliderValueChanged (Slider* slider)
 	{
         AppSettings::Instance()->setEliteDialMidiMinRange(slider->getValue(), DIAL_NO);
 		parameterHoverLabel->setText(String(slider->getValue()), false);
+        
+        if (slider->getValue() >= dialMidiMaxRange->getValue())
+            dialMidiMaxRange->setValue(slider->getValue()+2, sendNotification);
+            
 	}
     else if (slider == dialMidiMaxRange)
 	{
         AppSettings::Instance()->setEliteDialMidiMaxRange(slider->getValue(), DIAL_NO);
 		parameterHoverLabel->setText(String(slider->getValue()), false);
+        
+        if (slider->getValue() <= dialMidiMinRange->getValue())
+            dialMidiMinRange->setValue(slider->getValue()-2, sendNotification);
 	}
     else if (slider == dialOscPortNumber)
         AppSettings::Instance()->setEliteDialOscPortNumber(slider->getValue(), DIAL_NO);

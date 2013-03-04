@@ -81,6 +81,9 @@ private:
     
     int prevPadPressure[48];
     int prevButtonValue[3];
+    int dialCounter[2];
+    int dialCounterFlag[2];
+    int dialValue[2];
     
     unsigned char outBuf[128];
 };

@@ -1350,14 +1350,14 @@ void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
         double currentVal = sliderToChange->getValue();
         double maxValue = sliderToChange->getMaximum();
         double minValue = sliderToChange->getMinimum();
-        double incremValue = 0.01; //is this value suitable?
+        double incremValue = 0.01;
         
         //incremented value
         if (eliteControlValue >= 1 && eliteControlValue <= 63)
-            newVal = currentVal + (eliteControlValue * incremValue); //too simple?
+            newVal = currentVal + (eliteControlValue * incremValue);
         //decremented value
         else if (eliteControlValue >= 64 && eliteControlValue <= 127)
-            newVal = currentVal - ((128 - eliteControlValue) * incremValue); //too simple?
+            newVal = currentVal - ((128 - eliteControlValue) * incremValue);
         
         //if produced value is out of range, set in range
         if (!(newVal >= minValue && newVal <= maxValue))
@@ -1376,7 +1376,7 @@ void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
             const MessageManagerLock mmLock;
             
             sliderToChange->setValue(newVal, dontSendNotification);
-            std::cout << "New Slider Value: " << newVal << std::endl;
+            //std::cout << "New Slider Value: " << newVal << std::endl;
         }
     }
     

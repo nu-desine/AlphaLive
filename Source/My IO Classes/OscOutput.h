@@ -42,7 +42,7 @@ public:
     ~OscOutput();
     
     void transmitPadMessage(int padNumber, int padValue, int padVelocity, String address, int port);
-    void transmitEliteControlMessage(int controlNumber, double controlValue, String address, int port);
+    void transmitEliteControlMessage(int controlNumber, float controlValue, String address, int port);
     
     
 private:

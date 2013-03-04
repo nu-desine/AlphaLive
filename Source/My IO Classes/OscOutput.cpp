@@ -43,13 +43,12 @@ void OscOutput::transmitPadMessage(int padNumber, int padValue, int padVelocity,
     char buffer[OUTPUT_BUFFER_SIZE];
     osc::OutboundPacketStream p (buffer,OUTPUT_BUFFER_SIZE);
     
-    //put velocity last as this parameter won't be in the elite control messages
     p << osc::BeginBundleImmediate << osc::BeginMessage( "/alpha" ) << padNumber << padValue << padVelocity << osc::EndMessage << osc::EndBundle;
 
     transmitSocket.Send(p.Data(), p.Size());
 }
 
-void OscOutput::transmitEliteControlMessage(int controlNumber, double controlValue, String address, int port)
+void OscOutput::transmitEliteControlMessage(int controlNumber, float controlValue, String address, int port)
 {
     const char* ipAddress = address.toUTF8();
     

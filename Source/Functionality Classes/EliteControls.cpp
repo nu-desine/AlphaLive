@@ -228,6 +228,7 @@ void EliteControls::getInputData(int control, int value)
             {
                 if (eliteControlValue == 1)
                 {
+                    //const MessageManagerLock mmLock;
                     mainComponent->perform(CommandIDs::StartStopClock);
                 }
             }
@@ -246,6 +247,7 @@ void EliteControls::getInputData(int control, int value)
             {
                 if (eliteControlValue == 1)
                 {
+                    //const MessageManagerLock mmLock;
                     mainComponent->getAppDocumentStateRef().saveProject();
                 }
             }
@@ -289,6 +291,7 @@ void EliteControls::getInputData(int control, int value)
             {
                 if (eliteControlValue == 1)
                 {
+                    const MessageManagerLock mmLock;
                     mainComponent->perform(CommandIDs::KillSwitch);
                 }
             }

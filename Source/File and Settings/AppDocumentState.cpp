@@ -1940,6 +1940,8 @@ void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int current
             
             XmlElement sequenceDataXml("SEQUENCE_DATA");
             
+            sequenceDataXml.setAttribute("sequencerLength", PAD_SETTINGS_pad->getSequencerLength());
+            
             //get single sequence data string based on currently selected sequencer number slider value
             sequenceDataXml.setAttribute("sequenceData", PAD_SETTINGS_pad->getSequencerDataString(currentlySelectedSeqNumber));
             
@@ -1988,9 +1990,11 @@ void AppDocumentState::loadSequence (int currentlySeletedSeqNumber,
                 int padNum = selectedPads_[i];
                 //get the saved string and call stringToSeqData() to convert it back int a stream of int's
                 PAD_SETTINGS_pads->stringToSeqData(xml->getStringAttribute("sequenceData"), currentlySeletedSeqNumber);
+                
+                if (xml->hasAttribute("sequencerLength"))
+                    PAD_SETTINGS_pads->setSequencerLength(xml->getIntAttribute("sequencerLength"));
             }
-            
-
+  
         }
         
         delete xml;
@@ -2036,6 +2040,7 @@ void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
             XmlElement sequenceDataXml("SEQUENCE_DATA");
             
             sequenceDataXml.setAttribute("sequencerNumberOfSequences", PAD_SETTINGS_pad->getSequencerNumberOfSequences());
+            sequenceDataXml.setAttribute("sequencerLength", PAD_SETTINGS_pad->getSequencerLength());
             
             //get all sequence data strings 
             for (int i = 0; i <= NO_OF_SEQS-1; i++)
@@ -2092,6 +2097,9 @@ void AppDocumentState::loadSequenceSet(Array<int> selectedPads_,
                 
                 if (xml->hasAttribute("sequencerNumberOfSequences"))
                     PAD_SETTINGS_pads->setSequencerNumberOfSequences(xml->getIntAttribute("sequencerNumberOfSequences"));
+                
+                if (xml->hasAttribute("sequencerLength"))
+                    PAD_SETTINGS_pads->setSequencerLength(xml->getIntAttribute("sequencerLength"));
             }
             
         }

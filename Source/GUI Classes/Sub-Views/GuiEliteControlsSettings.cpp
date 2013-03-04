@@ -423,9 +423,17 @@ void GuiEliteControlsSettings::buttonClicked (Button* button)
 		AppSettings::Instance()->setEliteDialMidiControllerType(button->getToggleState(), DIAL_NO);
         
 		if(dialMidiControllerType->getToggleStateValue()==true)
+        {
 			dialMidiControllerType->setButtonText("RELATIVE");
+            dialMidiMinRange->setVisible(false);
+            dialMidiMaxRange->setVisible(false);
+        }
 		else 
+        {
 			dialMidiControllerType->setButtonText("ABSOLUTE");
+            dialMidiMinRange->setVisible(true);
+            dialMidiMaxRange->setVisible(true);
+        }
 		
 
 		
@@ -582,10 +590,18 @@ void GuiEliteControlsSettings::comboBoxChanged (ComboBox* comboBox)
             {
                 case 4:
                     dialMidiCcNumber->setVisible(true);
-                   // dialMidiChannel->setVisible(true);
-                    dialMidiMinRange->setVisible(true);
-                    dialMidiMaxRange->setVisible(true);
 					dialMidiControllerType->setVisible(true);
+                    
+                    if(dialMidiControllerType->getToggleStateValue()==true)
+                    {
+                        dialMidiMinRange->setVisible(false);
+                        dialMidiMaxRange->setVisible(false);
+                    }
+                    else 
+                    {
+                        dialMidiMinRange->setVisible(true);
+                        dialMidiMaxRange->setVisible(true);
+                    }
 					
 					for (int chan = 0; chan < 16; chan++)
 					{
@@ -729,11 +745,6 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
 		
         if (statusButton->getToggleState() == false)
             notSelected->setVisible(true);
-        
-		if(dialMidiControllerType->getToggleStateValue()==true)
-			dialMidiControllerType->setButtonText("RELATIVE");
-		else 
-			dialMidiControllerType->setButtonText("ABSOLUTE");
 		
 		int channel_ = AppSettings::Instance()->getEliteDialMidiChannel(DIAL_NO);
 		dialMidiChannel[channel_-1]->setToggleState(true, false);
@@ -743,10 +754,21 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
         if (dialsMenu->getSelectedId() == 4)
         {
             dialMidiCcNumber->setVisible(true);
-            //dialMidiChannel->setVisible(true);
-            dialMidiMinRange->setVisible(true);
-            dialMidiMaxRange->setVisible(true);
 			dialMidiControllerType->setVisible(true);
+            
+            if(dialMidiControllerType->getToggleStateValue()==true)
+            {
+                dialMidiControllerType->setButtonText("RELATIVE");
+                dialMidiMinRange->setVisible(false);
+                dialMidiMaxRange->setVisible(false);
+            }
+            else 
+            {
+                dialMidiControllerType->setButtonText("ABSOLUTE");
+                dialMidiMinRange->setVisible(true);
+                dialMidiMaxRange->setVisible(true);
+            }
+            
 			for (int chan = 0; chan < 16; chan++)
 				dialMidiChannel[chan]->setVisible(true);
 			

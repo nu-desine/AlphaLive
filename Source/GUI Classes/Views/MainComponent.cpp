@@ -1376,7 +1376,7 @@ void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
             const MessageManagerLock mmLock;
             
             sliderToChange->setValue(newVal, dontSendNotification);
-            std::cout << "New Slider Value: " << newVal << std::endl;
+            //std::cout << "New Slider Value: " << newVal << std::endl;
         }
     }
     

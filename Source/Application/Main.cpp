@@ -224,6 +224,28 @@ public:
         }
     }
     
+    void updateSoftware()
+    {
+        //get latest AlphaLive version from somewhere online
+        //and compared it to the current version.
+        URL versionUrl ("http://liamlacey.web44.net/test/version.php");
+        String urlString = versionUrl.readEntireTextStream();
+        int startIndex = urlString.indexOf("AlphaLiveVersion=") + 18;
+        int endIndex = urlString.indexOf(startIndex, "\"");
+        String versionString (urlString.substring(startIndex, endIndex));
+        int versionNumber = versionString.getHexValue32();
+        
+        std::cout << "Current Version: " << ProjectInfo::versionNumber << " Latest Version: " << versionNumber << std::endl;
+        
+        if (versionNumber > ProjectInfo::versionNumber)
+        {
+            std::cout << "Update Available" << std::endl;
+        }
+        
+        //===========
+        
+    }
+    
     //==============================================================================
     //removed the nested MainMenuModel class and put it in a seperate file,
     //due to BAD_ACCESS when trying to call AppDocumentState::loadPerformance
@@ -329,7 +351,7 @@ public:
         
         else if(info.commandID == CommandIDs::UpdateSoftware)
         {
-            
+            updateSoftware();
         }
         
         

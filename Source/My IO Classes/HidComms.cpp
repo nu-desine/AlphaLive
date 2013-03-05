@@ -251,7 +251,7 @@ void HidComms::run()
                         
                         outBuf[0] = 0x00;
                         outBuf[1] = 0x01;
-                        hid_write(handle, outBuf, 129);
+                        hid_write(handle, outBuf, 128);
                         
 //                        std::cout << "Report data: ";
 //                        for (int i = 0; i < sizeof(outBuf); i++)

@@ -36,6 +36,11 @@
 #include "../File and Settings/StoredSettings.h"
 #include "MainMenuModel.h"
 
+#if JUCE_MAC || JUCE_LINUX
+//#include <sys/types.h>
+#include <sys/stat.h>
+#endif
+
 //==============================================================================
 class AlphaSoftApplication  :   public JUCEApplication
 {
@@ -228,6 +233,8 @@ public:
     {
         //get latest AlphaLive version from somewhere online
         //and compared it to the current version.
+        
+        //what if there is no internet connection?
         URL versionUrl ("http://liamlacey.web44.net/test/version.php");
         String urlString = versionUrl.readEntireTextStream();
         int startIndex = urlString.indexOf("AlphaLiveVersion=") + 18;
@@ -239,7 +246,92 @@ public:
         
         if (versionNumber > ProjectInfo::versionNumber)
         {
-            std::cout << "Update Available" << std::endl;
+            bool userSelection = AlertWindow::showOkCancelBox(AlertWindow::InfoIcon, 
+                                                              translate("Software update available!"), 
+                                                              translate("There is a new version of AlphaLive available to download. Press OK to install the update. The installation process involves restarting AlphaLive so you may want to go back and save the current project first."));
+            
+            if (userSelection == true)
+            {
+                
+                //get AlphaLive zip file from our server
+                URL zipUrl ("http://liamlacey.web44.net/test/AlphaLive_update.zip");
+                InputStream* urlStream = zipUrl.createInputStream (true);
+                
+                File alphaLiveDirectory (File::getSpecialLocation (File::currentApplicationFile).getParentDirectory());
+                
+                //uncompress zip file
+                ZipFile zipFile (urlStream, true);
+                //ZipFile zipFile (File ("/Users/Liam/Desktop/AlphaLive_update.zip"));
+                //should it be downloaded into a temp file instead?
+                Result result = zipFile.uncompressTo(alphaLiveDirectory);
+                
+                if (result.wasOk())
+                {
+                    File updateDirectory (alphaLiveDirectory.getFullPathName() + File::separatorString + "AlphaLive_update");
+                    
+                    #if JUCE_MAC
+                    //when uncompressed, the executable bit of any files has for some been removed,
+                    //meaning that any application files can't be opened, as found here:
+                    //http://www.rawmaterialsoftware.com/viewtopic.php?f=2&t=5727
+                    //To fix the file permissions, you can use the command chmod 775 in terminal
+                    //or use th chmod() function as documented here:
+                    //http://www.manpagez.com/man/2/chmod/osx-10.4.php
+                    
+                    File exe1 (updateDirectory.getFullPathName() + File::separatorString + "Mac Files/firmwareUpdater");
+                    File exe2 (updateDirectory.getFullPathName() + File::separatorString + "Mac Files/AlphaLive.app/Contents/MacOS/AlphaLive");
+                    
+                    chmod (exe1.getFullPathName().toUTF8(), S_IRWXO | S_IRWXU | S_IRWXG);
+                    chmod (exe2.getFullPathName().toUTF8(), S_IRWXO | S_IRWXU | S_IRWXG);
+                    #endif 
+                    
+                    //what about on windows?
+                    
+                    //==== Move the new version of alphalive_updater, and launch it ====
+                    
+                    ChildProcess updater;
+                    
+                    StringArray arguments;
+                    String appDirString (alphaLiveDirectory.getFullPathName() + File::separatorString);
+                    
+                    #if JUCE_MAC || JUCE_LINUX //is this right for Linux?
+                    File updaterFile(appDirString + "Application Data" + File::separatorString + "alphalive_updater");
+                    #endif
+                    #if JUCE_WINDOWS
+                    File updaterFile(appDirString + "Application Data" + File::separatorString + "alphalive_updater.exe");
+                    #endif
+                    
+                    if (updaterFile.exists())
+                    {
+                        arguments.add(updaterFile.getFullPathName());
+                        
+                        #if JUCE_MAC || JUCE_LINUX //is this right for Linux?
+                        arguments.add(alphaLiveDirectory.getFullPathName());
+                        #endif
+                        #if JUCE_WINDOWS
+                        arguments.add(alphaLiveDirectory.getFullPathName().quoted());  //Needs to be quoted else the exe
+                        //thinks the whole filepath is just from the last space.
+                        #endif
+                        
+                        
+                        updater.start(arguments);
+                        
+                        String updaterReport =  updater.readAllProcessOutput();
+                        
+                        std::cout << "..." << updaterReport << "..." << std::endl;
+                    }
+                }
+                else if (result.failed())
+                {
+                    AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
+                                                      translate("Couldn't download update!"),
+                                                      translate("There was an problem downloading the update. Please check your internet connection or try again later."));
+                    
+                    //show an error message from result.getErrorMessage() ???
+                }
+
+                
+            }
+            //else, no updating will take place
         }
         
         //===========

@@ -242,7 +242,8 @@ public:
             CommandIDs::Open,
             CommandIDs::Save,
             CommandIDs::SaveAs,
-            CommandIDs::CleanUpProject
+            CommandIDs::CleanUpProject,
+            CommandIDs::UpdateSoftware
         };
         
         commands.addArray (ids, numElementsInArray (ids));
@@ -292,6 +293,12 @@ public:
                             "Removes any unused audio files from the projects 'Audio Files' directory.",
                             CommandCategories::FileCommands, 0);
         }
+        else if (commandID == CommandIDs::UpdateSoftware)
+        {
+            result.setInfo (translate("Check for updates..."),
+                            "Checks online to see if there is an AlphaLive update available, and installs it if so.",
+                            CommandCategories::FileCommands, 0);
+        }
     }
     
     bool perform (const InvocationInfo& info)
@@ -318,6 +325,11 @@ public:
         else if(info.commandID == CommandIDs::CleanUpProject)
         {
             appDocumentState->removeUneededAudioFiles(false);
+        }
+        
+        else if(info.commandID == CommandIDs::UpdateSoftware)
+        {
+            
         }
         
         

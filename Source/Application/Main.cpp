@@ -370,37 +370,40 @@ public:
                         #endif
                         
                         //launch alphaliveUpdater
-//                        #if JUCE_MAC
-//                        File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/alphaliveUpdater");
-//                        #endif
-//                        #if JUCE_WINDOWS
-//                        File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/alphaliveUpdater.exe");
-//                        #endif
-//                        
-//                        if (alphaliveUpdaterApp.exists())
-//                        {
-//                            alphaliveUpdaterApp.startAsProcess();
-//                            //close AlphaLive
-//                            quit();
-//                        }
-                        
-                        
-                        StringArray arguments;
-                        String appDirString (alphaLiveDirectory.getFullPathName() + File::separatorString);
-                        
-                        #if JUCE_MAC || JUCE_LINUX //is this right for Linux?
-                        File updaterFile(appDirString + "Application Data" + File::separatorString + "alphalive_updater");
+                        #if JUCE_MAC
+                        File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/alphaliveUpdater");
                         #endif
                         #if JUCE_WINDOWS
-                        File updaterFile(appDirString + "Application Data" + File::separatorString + "alphalive_updater.exe");
+                        File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/alphaliveUpdater.exe");
                         #endif
                         
-                        if (updaterFile.exists())
+                        if (alphaliveUpdaterApp.exists())
                         {
-                            arguments.add(updaterFile.getFullPathName());
-                            updater.start(arguments);
-                            
+                            alphaliveUpdaterApp.startAsProcess();
+                            //close AlphaLive
+                            quit();
                         }
+                        
+//                        ChildProcess updater;
+//                        StringArray arguments;
+//                        String appDirString (alphaLiveDirectory.getFullPathName() + File::separatorString);
+//                        
+//                        #if JUCE_MAC || JUCE_LINUX //is this right for Linux?
+//                        File updaterFile(appDirString + "Application Data" + File::separatorString + "alphaliveUpdater");
+//                        #endif
+//                        #if JUCE_WINDOWS
+//                        File updaterFile(appDirString + "Application Data" + File::separatorString + "alphaliveUpdater.exe");
+//                        #endif
+//                        
+//                        if (updaterFile.exists())
+//                        {
+//                            arguments.add(updaterFile.getFullPathName());
+//                            updater.start(arguments);
+//                            
+//                            //close AlphaLive
+//                            quit();
+//                            
+//                        }
                         
                         
                     }
@@ -556,7 +559,6 @@ private:
     
     //ScopedPointer<MainMenuModel> menuModel;
     MainMenuModel *menuModel;
-    ChildProcess updater;
 };
 
 //==============================================================================

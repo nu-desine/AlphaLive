@@ -1426,20 +1426,20 @@ void MainComponent::openDocumentation (int type)
     String docDir (appDir + "Documentation" + File::separatorString);
     bool opened = true;
     
-    if (currentLanguage == "Japanese")
-    {
+//    if (currentLanguage == "Japanese")
+//    {
+//        if (type == 1) //Starter guide
+//            opened = File(docDir + "").startAsProcess();
+//        else if (type == 2) //Reference manual
+//            opened = File(docDir + "").startAsProcess();
+//    }
+//    else //English
+//    {
         if (type == 1) //Starter guide
-            opened = File(docDir + "Test Japanese Starter Guide.pdf").startAsProcess();
+            opened = File(docDir + "").startAsProcess();
         else if (type == 2) //Reference manual
-            opened = File(docDir + "Test Japanese Reference Manual.pdf").startAsProcess();
-    }
-    else //English
-    {
-        if (type == 1) //Starter guide
-            opened = File(docDir + "Test English Starter Guide.pdf").startAsProcess();
-        else if (type == 2) //Reference manual
-            opened = File(docDir + "Test English Reference Manual.pdf").startAsProcess();
-    }
+            opened = File(docDir + "AlphaLive Reference Manual English.pdf").startAsProcess();
+//    }
     
     if (opened == false) //probably due to the file not existing
         AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, 

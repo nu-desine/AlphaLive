@@ -127,7 +127,7 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
     }
     else if (topLevelMenuIndex == 4) //Help
     {
-        menu.addCommandItem (commandManager, CommandIDs::StarterGuide);
+        //menu.addCommandItem (commandManager, CommandIDs::StarterGuide);
         menu.addCommandItem (commandManager, CommandIDs::ReferenceManual);
         
         //add the 'about' on non-mac platforms

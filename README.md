@@ -1,7 +1,8 @@
 # AlphaLive #
 
-AlphaLive is the [AlphaSphere's](http://www.alphasphere.com/) official software application that allows you to program the device into an expressive musical instrument and controller. The software can functions as a MIDI mapping editor, sampler, sequencer, and Open Sound Control converter.
+AlphaLive is the [AlphaSphere](http://www.alphasphere.com/)'s official software application that allows you to program the device into an expressive musical instrument and controller. The software can functions as a MIDI mapping editor, sampler, sequencer, and Open Sound Control converter.
 
+AlphaLive has been programmed using the [JUCE](http://www.rawmaterialsoftware.com/juce.php) cross-platform C++ library, and includes an Xcode project for building on Mac OS X, a Visual Studio 2010 project for building on Windows, and a makefile for building on Linux.
 
 ## Requirements ##
 
@@ -10,7 +11,7 @@ To build AlphaLive on Windows you will need to do the following:
 +  Download and install the [Windows Driver Kit (WDK)](http://msdn.microsoft.com/en-gb/library/windows/hardware/gg487428.aspx).
 +  Download the [Steinberg ASIO SDK](http://www.steinberg.net/en/company/developer.html) and add to "./Third Party Libraries". However AlphaLive can be built without ASIO compatibility by setting the JUCE_ASIO flag in "./JuceLibraryCode/AppConfig.h" to "0" which will not require the ASIO SDK.
 
-See "./Other Files/README - running AlphaLive.txt" for instructions regarding the extra files needed when running the built AlphaLive binary. 
+For all platforms see "./Other Files/README - running AlphaLive.txt" for instructions regarding the extra files needed when running the built AlphaLive binary. 
 
 
 ## License ##

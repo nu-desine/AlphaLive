@@ -181,7 +181,6 @@ void SequencePlayer::processSequence(int padValue)
     //this is needed incase audio ends on its own or is stopped via the 'exclusive mode' feature(?) , in order to reset everything so it will trigger again properly
     if (isThreadRunning() == false && currentPlayingState == 1 && prevPadValue == 0)
     {
-        std::cout << "stream ended on its own!!";
         currentPlayingState = 0;
         triggerModes.reset();
     }
@@ -257,7 +256,6 @@ void SequencePlayer::processSequence(int padValue)
              && indestructible == 0 
              && currentPlayingState == 1)
     {
-        std::cout << "here..." << std::endl;
         playingLastLoop = false;
         shouldLoop = PAD_SETTINGS->getSequencerShouldLoop();
         triggerModeData.playingStatus = 1;

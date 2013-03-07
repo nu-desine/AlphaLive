@@ -106,7 +106,7 @@ void GainAndPan::processAlphaTouch (int pressureValue)
             else
                 gain = gainControl - (pressureValue * (((1.0-(1.0-gainControl))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << gain << std::endl;
+            //std::cout << gain << std::endl;
             break;
             
         case 3: //Pan

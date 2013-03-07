@@ -121,7 +121,7 @@ void Flanger::processAlphaTouch (int pressureValue)
             else
                 mix = mixControlValue - (pressureValue * (((1.0-(1.0-mixControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << mix << std::endl;
+            //std::cout << mix << std::endl;
             break;
             
         case 3: //rate
@@ -131,7 +131,7 @@ void Flanger::processAlphaTouch (int pressureValue)
             else
                 rate = rateControlValue - (pressureValue * (((20.0-(20.0-rateControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << rate << std::endl;
+            //std::cout << rate << std::endl;
             break;
             
         case 4: //feedback
@@ -140,7 +140,7 @@ void Flanger::processAlphaTouch (int pressureValue)
             else
                 feedback = feedbackControlValue - (pressureValue * (((1.0-(1.0-feedbackControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << feedback << std::endl;
+            //std::cout << feedback << std::endl;
             break;
             
         case 5: //intensity
@@ -149,7 +149,7 @@ void Flanger::processAlphaTouch (int pressureValue)
             else
                 intensity = intensityControlValue - (pressureValue * (((1.0-(1.0-intensityControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << intensity << std::endl;
+            //std::cout << intensity << std::endl;
             break;
             
             

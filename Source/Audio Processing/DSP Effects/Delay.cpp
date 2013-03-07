@@ -160,7 +160,7 @@ void Delay::processAlphaTouch (int pressureValue)
             else
                 wetMix = wetMixControlValue - (pressureValue * (((1.0-(1.0-wetMixControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << wetMix << std::endl;
+            //std::cout << wetMix << std::endl;
             break;
             
         case 3: //delay time/samples
@@ -170,7 +170,7 @@ void Delay::processAlphaTouch (int pressureValue)
             else
                 delaySamples = delaySamplesControlValue - (pressureValue * (((maxSamplesRange-(maxSamplesRange-delaySamplesControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << delaySamples << std::endl;
+            //std::cout << delaySamples << std::endl;
             break;
             
         case 4: //Feedback
@@ -179,7 +179,7 @@ void Delay::processAlphaTouch (int pressureValue)
             else
                 feedback = feedbackControlValue - (pressureValue * (((1.0-(1.0-feedbackControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << feedback << std::endl;
+            //std::cout << feedback << std::endl;
             break;
             
         case 5: //LPF Frequency
@@ -188,7 +188,7 @@ void Delay::processAlphaTouch (int pressureValue)
             else
                 paramsLpFilter[1] = lpfFrequencyControlValue - (pressureValue * (((19970.0-(20000.0 - lpfFrequencyControlValue))*alphaTouchIntensity)/MAX_PRESSURE)); 
             
-            std::cout << paramsLpFilter[1] << std::endl;
+            //std::cout << paramsLpFilter[1] << std::endl;
             break;
             
         case 6: //HPF Frequency
@@ -197,7 +197,7 @@ void Delay::processAlphaTouch (int pressureValue)
             else
                 paramsHpFilter[1] = hpfFrequencyControlValue - (pressureValue * (((19970.0-(20000.0 - hpfFrequencyControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << paramsHpFilter[1] << std::endl;
+            //std::cout << paramsHpFilter[1] << std::endl;
             break;
             
         default:

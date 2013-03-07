@@ -301,7 +301,7 @@ void Distortion::processAlphaTouch (int pressureValue)
 			}
             
             inputGain = inputGain * inputGain * inputGain;
-            std::cout << inputGain << std::endl;
+            //std::cout << inputGain << std::endl;
             break;
 			
 		case 3: //Drive
@@ -312,7 +312,7 @@ void Distortion::processAlphaTouch (int pressureValue)
 			else
                 drive = driveControlValue - (pressureValue * (((59.9-(60.0 - driveControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << drive << std::endl;
+            //std::cout << drive << std::endl;
             break;
 			
 		case 4: //Tone
@@ -332,7 +332,7 @@ void Distortion::processAlphaTouch (int pressureValue)
 				bypassFilter = true;
 			}
 
-			std::cout << paramsPostFilter1[1] << " : " << paramsPostFilter2[1] << std::endl;
+			//std::cout << paramsPostFilter1[1] << " : " << paramsPostFilter2[1] << std::endl;
             break;
 		
 		case 5: //Mix
@@ -346,7 +346,7 @@ void Distortion::processAlphaTouch (int pressureValue)
 			}
             wetDryMix = wetDryMix * wetDryMix * wetDryMix;
 			
-            std::cout << wetDryMix << std::endl;
+            //std::cout << wetDryMix << std::endl;
             
             break;
 
@@ -383,8 +383,6 @@ void Distortion::setMix (double value)
 
 void Distortion::setTone (double value)
 {
-	std::cout << value << "\n";
-    
     sharedMemory.enter();
 	value = value*value*value;
 	toneControl = value;

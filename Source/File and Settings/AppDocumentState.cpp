@@ -1690,7 +1690,6 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
                                 if (newFile.existsAsFile() == false) //if it doesn't already exist
                                 {
                                     originalFile.copyFileTo(newFile); 
-                                    std::cout << "Copying audio file from loaded scene's dir to current working dir!\n";
                                 }
                             }
                             else
@@ -1742,7 +1741,6 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
                                     if (newFile.existsAsFile() == false) //if it doesn't already exist
                                     {
                                         originalFile.copyFileTo(newFile); 
-                                        std::cout << "Copying audio file from loaded scene's dir to current working dir!\n";
                                     }
                                 }
                                 else
@@ -1947,10 +1945,6 @@ void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int current
             
             String xmlDoc = sequenceDataXml.createDocument(String::empty);
             savedFile.appendText(xmlDoc);
-            
-            std::cout << savedFile.getFullPathName() << std::endl;
-            
-            //AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Single Sequence Saved", "The sequence has been successfully saved to file");
         }
     }
     
@@ -2275,10 +2269,6 @@ void AppDocumentState::saveEffect (int currentlySelectedPad)
             
             delete toBeSaved;
 			delete effectDataXml;
-            
-            std::cout << savedFile.getFullPathName() << std::endl;
-            
-            //AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Effect Saved", "The effect has been successfully saved to file");
         }
     }
     
@@ -2393,7 +2383,6 @@ void AppDocumentState::exportSampleBank (int currentlySelectedPad)
             delete toBeSaved;
             delete alphaBankDataXml;
             
-            std::cout << bankFile.getFullPathName() << std::endl;
         }
 	}
 }
@@ -2672,7 +2661,7 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
             if (midiFile.getNumTracks() > 1)
                 trackToImport = 1;
             
-            std::cout << "Midi file no of tracks: " << midiFile.getNumTracks() << std::endl;
+            //std::cout << "Midi file no of tracks: " << midiFile.getNumTracks() << std::endl;
             
             //pointer to midiFile content. Will get deleted when midiFile goes out of scope.
             const MidiMessageSequence *midiSequence (midiFile.getTrack(trackToImport)); 
@@ -2689,7 +2678,7 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
             if (midiSequence != 0) //if it got a track from midiFile
             {
                 int noOfEvents = midiSequence->getNumEvents();
-                std::cout << noOfEvents << std::endl;
+                //std::cout << noOfEvents << std::endl;
                 
                 if (noOfEvents > 0)
                 {
@@ -3235,7 +3224,6 @@ void AppDocumentState::registerRecentFile (const File& file)
 void AppDocumentState::setCurrentlySelectedScene(int value)
 {
     currentlySelectedScene = value;
-    std::cout << "Currently Selected Scene = " << currentlySelectedScene << std::endl;
 }
 
 

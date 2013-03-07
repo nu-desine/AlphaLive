@@ -177,7 +177,7 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
             
             inputGain = inputGain * inputGain * inputGain;
 			
-			std::cout << inputGain << std::endl;
+			//std::cout << inputGain << std::endl;
 			break;
 			
 		case 3: //downsample
@@ -190,7 +190,7 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
                 downsample = roundToInt (downsampleControl - (pressureValue * (((15.0-(16.0-downsampleControl))*alphaTouchIntensity)/MAX_PRESSURE)));
             }
             
-			std::cout << downsample << std::endl;
+			//std::cout << downsample << std::endl;
 			break;
 			
         case 4: //crush
@@ -203,7 +203,7 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
                 crush = roundToInt (crushControlValue - (pressureValue * (((7.0 - (8.0 - crushControlValue))*alphaTouchIntensity)/MAX_PRESSURE)));
             }
             
-			std::cout << crush << std::endl;
+			//std::cout << crush << std::endl;
 			
 			break;
 			
@@ -215,7 +215,7 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
 			else
                 paramsSmoothingFilter[1] = 10000 * (smoothingControl - (pressureValue * (((0.99-(1.0-smoothingControl))*alphaTouchIntensity)/MAX_PRESSURE)));
            
-			std::cout << paramsSmoothingFilter[1] << std::endl;
+			//std::cout << paramsSmoothingFilter[1] << std::endl;
 			break;
 			
         case 6: //Mix
@@ -230,7 +230,7 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
 			
             wetDryMix = wetDryMix * wetDryMix * wetDryMix;
             
-			std::cout << wetDryMix << std::endl;
+			//std::cout << wetDryMix << std::endl;
 			break;
 
         default:
@@ -242,8 +242,6 @@ void Bitcrusher::processAlphaTouch (int pressureValue)
 
 void Bitcrusher::setInputGain (double value)
 {
-	std::cout << value << std::endl;
-	
     sharedMemory.enter();
     value = value*value*value;
     inputGain = inputGainControl = value;
@@ -252,8 +250,7 @@ void Bitcrusher::setInputGain (double value)
 
 void Bitcrusher::setCrush(int value)
 {
-	std::cout << value << std::endl;
-	
+
 	sharedMemory.enter();
     crush = crushControlValue = value;
     sharedMemory.exit();
@@ -261,8 +258,6 @@ void Bitcrusher::setCrush(int value)
 
 void Bitcrusher::setDownsample(int value)
 {
-	std::cout << value << std::endl;
-	
 	sharedMemory.enter();
 	downsample = downsampleControl = value;
 	sharedMemory.exit();
@@ -270,8 +265,6 @@ void Bitcrusher::setDownsample(int value)
 
 void Bitcrusher::setMix (double value)
 {
-	std::cout << value << std::endl;
-	
     sharedMemory.enter();
     value = value*value*value;
     wetDryMix = wetDryMixPrev = wetDryMixControl = value;
@@ -283,7 +276,6 @@ void Bitcrusher::setSmoothing (double value)
     sharedMemory.enter();
 	paramsSmoothingFilter[1] = value * 10000;
     smoothingControl = value;
-    std::cout << value << " " << paramsSmoothingFilter[1] << std::endl;
     sharedMemory.exit();
     
 }

@@ -106,7 +106,7 @@ void ReverbClass::processAlphaTouch (int pressureValue)
             else
                 mix = mixControlValue - (pressureValue * (((1.0-(1.0-mixControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << mix << std::endl;
+            //std::cout << mix << std::endl;
             break;
             
         case 3: //Room Size
@@ -115,7 +115,7 @@ void ReverbClass::processAlphaTouch (int pressureValue)
             else
                 params.roomSize = roomSizeControl - (pressureValue * (((1.0-(1.0-roomSizeControl))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << params.roomSize << std::endl;
+            //std::cout << params.roomSize << std::endl;
             break;
             
         case 4: //Damping
@@ -124,7 +124,7 @@ void ReverbClass::processAlphaTouch (int pressureValue)
             else
                 params.damping = dampingControl - (pressureValue * (((1.0-(1.0-dampingControl))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << params.damping << std::endl;
+            //std::cout << params.damping << std::endl;
             break;
             
         case 5: //Width
@@ -133,7 +133,7 @@ void ReverbClass::processAlphaTouch (int pressureValue)
             else
                 params.width = widthControl - (pressureValue * (((1.0-(1.0-widthControl))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << params.width << std::endl;
+            //std::cout << params.width << std::endl;
             break;
             
         default:

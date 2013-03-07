@@ -140,7 +140,6 @@ void AudioFilePlayer::processAudioFile(int padValue, int padVelocity)
              currentPlayingState == 1 && prevPadValue == 0) ||
             (isInRelease == true && currentPlayingState == 1 && prevPadValue == 0))
         {
-            std::cout << "stream ended on its own!!";
             currentPlayingState = 0;
             nextFileSourceIndex = 0;
             triggerModes.reset();

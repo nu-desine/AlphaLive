@@ -79,7 +79,6 @@ void ModeSequencer::getInputData(int padNumber, int padValue)
         //Should these variables be past into this class each time they change?
         if (alphaLiveEngineRef.getGlobalClock()->isThreadRunning() == false && AppSettings::Instance()->getAutoStartClock() == 1)
         {
-            std::cout << "Clock Starting!" << std::endl;
             alphaLiveEngineRef.getGlobalClock()->startClock();
         }
     }

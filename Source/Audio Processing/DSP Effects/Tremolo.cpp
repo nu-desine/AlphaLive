@@ -87,7 +87,7 @@ void Tremolo::processAlphaTouch (int pressureValue)
             else
                 depth = depthControlValue - (pressureValue * (((1.0-(1.0-depthControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << depth << std::endl;
+            //std::cout << depth << std::endl;
             break;
             
         case 3: //rate
@@ -97,7 +97,7 @@ void Tremolo::processAlphaTouch (int pressureValue)
             else
                 rate = rateControlValue - (pressureValue * (((50.0-(50.0-rateControlValue))*alphaTouchIntensity)/MAX_PRESSURE));
             
-            std::cout << rate << std::endl;
+            //std::cout << rate << std::endl;
             break;
             
         case 4: //shape
@@ -108,7 +108,7 @@ void Tremolo::processAlphaTouch (int pressureValue)
             
             //the above equations don't seem to work. why?
             
-            std::cout << shape << std::endl;
+            //std::cout << shape << std::endl;
             break;
             
             

@@ -1375,7 +1375,7 @@ void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
             //or could this cause delays/lagging, in which case I should use an aSyncUpdater?
             const MessageManagerLock mmLock;
             
-            sliderToChange->setValue(newVal, dontSendNotification);
+            sliderToChange->setValue(newVal, sendNotification);
             //std::cout << "New Slider Value: " << newVal << std::endl;
         }
     }

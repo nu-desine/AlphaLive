@@ -49,7 +49,7 @@ AboutComponent::AboutComponent(MainComponent &ref)
     //nuDesineLink->setFont(hyperlinkFont, true);
     
     addAndMakeVisible(githubLink = new HyperlinkButton(translate("An open source application"), 
-                                                           URL("https://github.com/nu-desine")));
+                                                           URL("https://github.com/nu-desine/AlphaLive")));
     
     addAndMakeVisible(openSourceLabel = new Label("Open Source Label"));
     openSourceLabel->setText(translate("released under the") + " ", false);

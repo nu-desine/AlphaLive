@@ -48,7 +48,17 @@ HidComms::~HidComms()
     stopThread(1500);
     
     hid_close(handle);
+    
+    #if ! JUCE_MAC
+    //For some reason the app crashes on OS X 10.8 when it tries to call hid_exit().
+    //For now I have quick fixed this by not calling it on Mac.
+    //This isn't causing any noticeable problems, though is probably causing memory leaks,
+    //so I should probably sort this issue out properly at a later date.
+    //Ideally I should move to the latest tip of HIDAPI, studying the hidtest.cpp file
+    //again, and make sure this is working on all platforms of OS X.
+    
     hid_exit();
+    #endif
 }
 
 void HidComms::run()

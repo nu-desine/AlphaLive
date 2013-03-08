@@ -111,7 +111,9 @@ public:
 		//get the file path and opent he file.
 		//On Mac this seems to be handled within anotherInstanceStarted() only,
 		//so this won't currently work on mac here which can cause bugs
-
+        //NEW OBSERVATION 8/3/13 - 
+        //The below code causes an assertion fail on OS X 10.8. Maybe the above
+        //statement only applies to 10.6/10.7 version and below? Worth investigating!
 		File selectedFile(commandLine.unquoted());
         //check to see if the clicked file is a .alphalive file
         if (selectedFile.getFileExtension() == ".alphalive")

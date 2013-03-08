@@ -39,8 +39,6 @@ HidComms::HidComms() : Thread("HidThread")
         dialValue[i] = 0;
         dialCounterFlag[i] = 0;
     }
-    
-    startThread();
 }
 
 HidComms::~HidComms()

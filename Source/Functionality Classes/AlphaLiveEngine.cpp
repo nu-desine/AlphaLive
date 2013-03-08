@@ -112,6 +112,22 @@ AlphaLiveEngine::AlphaLiveEngine()
     
     broadcaster.addActionListener(this);
     
+    //Start HID thread here, and then remove the MIDI out stuff if the device exists.
+    //For some reason if started any earlier in this function or within the HidComms constructor
+    //it causes weird lagging issues with the MIDI stuff if the AlphaSphere is connected
+    //at launch. However this is just a quick fix - it is convoluted to create the MIDI out above
+    //and then probably removing it here, so this issue needs to be resolved properly asap!!
+    startThread();
+    
+    //sleep to give the HID thread time to attempt to connect to the device.
+    #ifdef WIN32
+    sleep(100); //should this actually be Sleep() which need a windows library defined? See hidtest.
+    #else
+    usleep(100*1000);
+    #endif
+    
+    if (getDeviceStatus() != 0)
+        removeMidiOut();
 }
 
 AlphaLiveEngine::~AlphaLiveEngine()

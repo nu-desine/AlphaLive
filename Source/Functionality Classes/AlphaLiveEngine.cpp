@@ -32,6 +32,12 @@
 
 AlphaLiveEngine::AlphaLiveEngine()
 {
+	#if JUCE_WINDOWS || JUCE_LINUX
+	//start HID thread.
+	//For OS X, see bottom of this function.
+	startThread();
+	#endif
+
     mainComponent = NULL;
     shouldUpdateFirmware = false;
     
@@ -112,9 +118,10 @@ AlphaLiveEngine::AlphaLiveEngine()
     
     broadcaster.addActionListener(this);
     
+	#if JUCE_MAC
     //Start HID thread here, and then remove the MIDI out stuff if the device exists.
     //For some reason if started any earlier in this function or within the HidComms constructor
-    //it causes weird lagging issues with the MIDI stuff if the AlphaSphere is connected
+    //it causes weird lagging issues with the MIDI stuff on OS X 10.8 if the AlphaSphere is connected
     //at launch. However this is just a quick fix - it is convoluted to create the MIDI out above
     //and then probably removing it here, so this issue needs to be resolved properly asap!!
     startThread();
@@ -128,6 +135,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     
     if (getDeviceStatus() != 0)
         removeMidiOut();
+	#endif
 }
 
 AlphaLiveEngine::~AlphaLiveEngine()

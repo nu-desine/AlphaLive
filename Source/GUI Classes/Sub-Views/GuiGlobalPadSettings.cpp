@@ -74,20 +74,6 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
     velocitySlider->addListener(this);
     velocitySlider->setValue(110, dontSendNotification);
     velocitySlider->addMouseListener(this, true);
-    
-	
-    pressureCurveMenu = new PopupMenu();
-	pressureCurveMenu->addItem(1, translate("Exponential"));
-	pressureCurveMenu->addItem(2, translate("Linear"));
-	pressureCurveMenu->addItem(3, translate("Logarithmic"));
-    
-    
-    velocityCurveMenu = new PopupMenu();
-    velocityCurveMenu->addItem(1, translate("Exponential"));
-	velocityCurveMenu->addItem(2, translate("Linear"));
-	velocityCurveMenu->addItem(3, translate("Logarithmic"));
-    velocityCurveMenu->addItem(4, translate("Static"));
-    
 	
 	addAndMakeVisible(velocityCurveButton = new AlphaPopUpImageButton(linearImage));
     velocityCurveButton->addListener(this);
@@ -113,8 +99,6 @@ GuiGlobalPadSettings::~GuiGlobalPadSettings()
     delete logImage;
     delete staticImage;
     delete emptyImage;
-	delete pressureCurveMenu;
-    delete velocityCurveMenu;
 	deleteAllChildren();
 }
 
@@ -199,7 +183,38 @@ void GuiGlobalPadSettings::buttonClicked (Button* button)
 	else if(button == velocityCurveButton)
 	{
 	
-		const int result = velocityCurveMenu->show();
+        //temporary - determine if any of the selected pads are not top row pads
+        //if so, show full menu, else only give the option to set static velocity
+        bool justTopRow = true;
+        
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            if (selectedPads[i] < 40)
+            {
+                justTopRow = false;
+                break;
+            }
+        }
+        
+        PopupMenu menu;
+        
+        if (justTopRow == true)
+        {
+            menu.addItem(1, translate("Exponential"), false);
+            menu.addItem(2, translate("Linear"), false);
+            menu.addItem(3, translate("Logarithmic"), false);
+            menu.addItem(4, translate("Static"));
+        }
+        else
+        {
+            //show full menu
+            menu.addItem(1, translate("Exponential"));
+            menu.addItem(2, translate("Linear"));
+            menu.addItem(3, translate("Logarithmic"));
+            menu.addItem(4, translate("Static"));
+        }
+        
+		const int result = menu.show();
         
         if (result != 0) //if the user selects something
         {
@@ -252,7 +267,12 @@ void GuiGlobalPadSettings::buttonClicked (Button* button)
 	else if(button == pressureCurveButton)
 	{
 		
-		const int result = pressureCurveMenu->show();
+        PopupMenu menu;
+        menu.addItem(1, translate("Exponential"));
+        menu.addItem(2, translate("Linear"));
+        menu.addItem(3, translate("Logarithmic"));
+        
+		const int result = menu.show();
         
         if (result != 0) //if the user selects something
         {

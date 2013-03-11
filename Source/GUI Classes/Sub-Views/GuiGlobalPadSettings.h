@@ -69,7 +69,6 @@ class GuiGlobalPadSettings :    public Component,
     ModeButton *quantiseButton;
 	Label *parameterHoverLabel;
 	Image *expoImage, *linearImage, *logImage, *staticImage, *emptyImage;
-	PopupMenu *pressureCurveMenu, *velocityCurveMenu;
     int pressureCurveValue, velocityCurveValue;
 	
 };

@@ -43,8 +43,14 @@ PadSettings::PadSettings(int arrayIndex)
     exclusiveMode = 0;
     exclusiveGroup = 1;
     quantizeMode = 0; //unquantized
-    velocityCurve = 2; //Linear
-    staticVelocity = 110;
+    
+    //hard code top row of pads to be static 
+    if (padNumber < 40)
+        velocityCurve = 3; //Log
+    else
+        velocityCurve = 4; //Static
+    
+    staticVelocity = 100;
     
     //midi mode
     midiNote = 60;
@@ -283,8 +289,14 @@ void PadSettings::resetData (int whatToReset)
         setExclusiveMode(0);
         setExclusiveGroup(1);
         setQuantizeMode(0);
-        setVelocityCurve(2);
-        setStaticVelocity(110);
+        
+        //hard code top row of pads to be static 
+        if (padNumber < 40)
+            setVelocityCurve(3);
+        else
+            setVelocityCurve(4);
+        
+        setStaticVelocity(100);
     }
     
     if (whatToReset != 1)
@@ -503,7 +515,11 @@ void PadSettings::setQuantizeMode (int value)
 
 void PadSettings::setVelocityCurve (int value)
 {
-    velocityCurve = value;
+    //for top row of pads, hard code to static velocity for now
+    if (padNumber < 40)
+        velocityCurve = value;
+    else
+        velocityCurve = 4;
 }
 
 void PadSettings::setStaticVelocity(int value)

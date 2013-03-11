@@ -238,7 +238,14 @@ void EliteControls::getInputData(int control, int value)
             {
                 if (eliteControlValue == 1)
                 {
-                    mainComponent->getSceneComponent()->selectSlot(AppSettings::Instance()->getEliteButtonSceneNumber(eliteButtonNumber) -1 );
+                    int sceneMode = AppSettings::Instance()->getEliteButtonSceneMode(eliteButtonNumber);
+                    
+                    if (sceneMode == 1) //next scene
+                        mainComponent->getSceneComponent()->selectSlot(-1);
+                    else if (sceneMode == 2) //previous scene
+                        mainComponent->getSceneComponent()->selectSlot(-2);
+                    else //a specific scene
+                        mainComponent->getSceneComponent()->selectSlot(AppSettings::Instance()->getEliteButtonSceneNumber(eliteButtonNumber) -1 );
                 }
             }
             

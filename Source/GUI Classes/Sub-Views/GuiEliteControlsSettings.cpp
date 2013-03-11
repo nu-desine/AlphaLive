@@ -152,6 +152,13 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     */
 	
     //===============button stuff===============
+    addChildComponent(buttonSceneModeMenu = new ComboBox());
+    buttonSceneModeMenu->addItem(translate("Next Scene"), 1);
+    buttonSceneModeMenu->addItem(translate("Previous Scene"), 2);
+    buttonSceneModeMenu->addItem(translate("Specific Scene"), 3);
+    buttonSceneModeMenu->addListener(this);
+    buttonSceneModeMenu->addMouseListener(this, true);
+    
     addChildComponent(buttonSceneNumber = new AlphaSlider());
     buttonSceneNumber->setRange(1, NO_OF_SCENES, 1);
     buttonSceneNumber->addListener(this);
@@ -317,7 +324,8 @@ void GuiEliteControlsSettings::resized()
 	dialOscStepSlider->setBounds(683 + 37,261 + 37, 250, 250);
     dialOscIpAddressEditor->setBounds(797, 555, 100, 15);
     
-    buttonSceneNumber->setBounds(816, 490, 58, 58);
+    buttonSceneModeMenu->setBounds(802, 490, 86, 15);
+    buttonSceneNumber->setBounds(816, 520, 58, 58);
     
     buttonMidiCcNumber->setBounds(816, 490, 58, 58);
     //buttonMidiChannel->setBounds((797-29)+100, 330, 58, 58);
@@ -567,6 +575,7 @@ void GuiEliteControlsSettings::comboBoxChanged (ComboBox* comboBox)
         dialOscMaxRange->setVisible(false);
 		 dialOscStepSlider->setVisible(false);
         dialOscIpAddressEditor->setVisible(false);
+        buttonSceneModeMenu->setVisible(false);
         buttonSceneNumber->setVisible(false);
         buttonMidiCcNumber->setVisible(false);
         //buttonMidiChannel->setVisible(false);
@@ -637,7 +646,9 @@ void GuiEliteControlsSettings::comboBoxChanged (ComboBox* comboBox)
             switch (comboBox->getSelectedId())
             {
                 case 2:
-                    buttonSceneNumber->setVisible(true);
+                    buttonSceneModeMenu->setVisible(true);
+                    if (buttonSceneModeMenu->getSelectedId() == 3)
+                        buttonSceneNumber->setVisible(true);
                     break;
                 case 4:
                     buttonMidiCcNumber->setVisible(true);
@@ -665,6 +676,17 @@ void GuiEliteControlsSettings::comboBoxChanged (ComboBox* comboBox)
             }
         }
         repaint();
+    }
+    else if (comboBox == buttonSceneModeMenu)
+    {
+        
+        AppSettings::Instance()->setEliteButtonSceneMode(comboBox->getSelectedId(), BUTTON_NO);
+        
+        if (buttonSceneModeMenu->getSelectedId() == 3)
+            buttonSceneNumber->setVisible(true);
+        else
+            buttonSceneNumber->setVisible(false);
+            
     }
 	
 }
@@ -711,6 +733,7 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
     dialOscMaxRange->setVisible(false);
 	dialOscStepSlider->setVisible(false);
     dialOscIpAddressEditor->setVisible(false);
+    buttonSceneModeMenu->setVisible(false);
     buttonSceneNumber->setVisible(false);
     buttonMidiCcNumber->setVisible(false);
     //buttonMidiChannel->setVisible(false);
@@ -794,6 +817,7 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
     {
         statusButton->setToggleState(AppSettings::Instance()->getEliteButtonStatus(BUTTON_NO), false);
         buttonsMenu->setSelectedId(AppSettings::Instance()->getEliteButtonControl(BUTTON_NO), true);
+        buttonSceneModeMenu->setSelectedId(AppSettings::Instance()->getEliteButtonSceneMode(BUTTON_NO));
         buttonSceneNumber->setValue(AppSettings::Instance()->getEliteButtonSceneNumber(BUTTON_NO));
         buttonMidiCcNumber->setValue(AppSettings::Instance()->getEliteButtonMidiCcNumber(BUTTON_NO));
         //buttonMidiChannel->setValue(AppSettings::Instance()->getEliteButtonMidiChannel(BUTTON_NO));
@@ -817,7 +841,10 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
         
         if (buttonsMenu->getSelectedId() == 2)
         {
-            buttonSceneNumber->setVisible(true);
+            buttonSceneModeMenu->setVisible(true);
+            
+            if (buttonSceneModeMenu->getSelectedId() == 3)
+                buttonSceneNumber->setVisible(true);
         }
         else if (buttonsMenu->getSelectedId() == 4)
         {
@@ -912,7 +939,10 @@ void GuiEliteControlsSettings::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::eliteOscIpAddress));
     }
-    
+    else if (buttonSceneModeMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Scene Switcher Mode Selector. Sets and displays which scene the selected elite button is used to switch to."));
+    }
     else if (buttonSceneNumber->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Scene Number Selector. Sets and displays the scene number that the selected elite button is used to switch to."));

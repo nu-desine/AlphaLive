@@ -797,6 +797,7 @@ void AppDocumentState::saveToScene (int sceneNumber)
         
         if (AppSettings::Instance()->getEliteButtonControl(i) == 2) //scene switcher
         {
+            globalData->setAttribute("eliteButtonSceneMode" + String(i), AppSettings::Instance()->getEliteButtonSceneMode(i));
             globalData->setAttribute("eliteButtonSceneNumber" + String(i), AppSettings::Instance()->getEliteButtonSceneNumber(i));
         }
         else if (AppSettings::Instance()->getEliteButtonControl(i) == 4) //midi cc
@@ -890,6 +891,7 @@ void AppDocumentState::loadFromScene (int sceneNumber)
             
             if (AppSettings::Instance()->getEliteButtonControl(i) == 2) //scene switcher
             {
+                AppSettings::Instance()->setEliteButtonSceneMode(globalData->getIntAttribute("eliteButtonSceneMode" + String(i)), i);
                 AppSettings::Instance()->setEliteButtonSceneNumber(globalData->getIntAttribute("eliteButtonSceneNumber" + String(i)), i);
             }
             else if (AppSettings::Instance()->getEliteButtonControl(i) == 4) //midi cc
@@ -944,6 +946,10 @@ void AppDocumentState::clearScene (int sceneNumber)
 
 void AppDocumentState::applyEliteSettingsToAllScenes (int eliteControl)
 {
+    //would be good if saving/loading elite control data was handled with a single
+    //pair of functions that were accessed both here and when loading from/saving to
+    //scenes, so that any changes to elite settings would only have to be done once.
+    
     for (int sceneNumber = 0; sceneNumber < NO_OF_SCENES; sceneNumber++)
     {
         if (sceneNumber != currentlySelectedScene)
@@ -988,6 +994,7 @@ void AppDocumentState::applyEliteSettingsToAllScenes (int eliteControl)
                     
                     if (AppSettings::Instance()->getEliteButtonControl(i) == 2) //scene switcher
                     {
+                        sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteButtonSceneMode" + String(i), AppSettings::Instance()->getEliteButtonSceneMode(i));
                         sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")->setAttribute("eliteButtonSceneNumber" + String(i), AppSettings::Instance()->getEliteButtonSceneNumber(i));
                     }
                     else if (AppSettings::Instance()->getEliteButtonControl(i) == 4) //midi cc

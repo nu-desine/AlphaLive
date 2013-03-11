@@ -58,8 +58,8 @@ AppSettings::AppSettings()
     eliteDial[0].control = 1;
     eliteDial[1].control = 2;
     eliteButton[0].control = 1;
-    eliteButton[1].control = 2;
-    eliteButton[2].control = 6;
+    eliteButton[1].control = 6;
+    eliteButton[2].control = 2;
     
     for (int i = 0; i < 2; i++)
     {
@@ -79,6 +79,7 @@ AppSettings::AppSettings()
     for (int i = 0; i < 3; i++)
     {
         eliteButton[i].status = 1;
+        eliteButton[i].sceneMode = 1;
         eliteButton[i].sceneNumber = 2;
         eliteButton[i].midiCcNumber = 13;
         eliteButton[i].midiChannel = 1;
@@ -157,6 +158,7 @@ void AppSettings::resetData()
     for (int i = 0; i < 3; i++)
     {
         eliteButton[i].status = 1;
+        eliteButton[i].sceneMode = 1;
         eliteButton[i].sceneNumber = 2;
         eliteButton[i].midiCcNumber = 13;
         eliteButton[i].midiChannel = 1;
@@ -435,6 +437,10 @@ void AppSettings::setEliteButtonStatus(int value, int buttonNumber)
     eliteButton[buttonNumber].status = value;
 }
 
+void AppSettings::setEliteButtonSceneMode(int value, int buttonNumber)
+{
+    eliteButton[buttonNumber].sceneMode = value;
+}
 void AppSettings::setEliteButtonSceneNumber(int value, int buttonNumber)
 {
     eliteButton[buttonNumber].sceneNumber = value;
@@ -479,6 +485,10 @@ int AppSettings::getEliteButtonControl (int buttonNumber)
 int AppSettings::getEliteButtonStatus(int buttonNumber)
 {
     return eliteButton[buttonNumber].status;
+}
+int AppSettings::getEliteButtonSceneMode(int buttonNumber)
+{
+    return eliteButton[buttonNumber].sceneMode;
 }
 int AppSettings::getEliteButtonSceneNumber(int buttonNumber)
 {

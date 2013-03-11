@@ -55,6 +55,7 @@ struct EliteButtonData
     int status;
     int control;
     
+    int sceneMode;
     int sceneNumber;
     
     int midiCcNumber;
@@ -161,6 +162,7 @@ public:
     
     void setEliteButtonControl(int value, int buttonNumber);
     void setEliteButtonStatus(int value, int buttonNumber);
+    void setEliteButtonSceneMode(int value, int buttonNumber);
     void setEliteButtonSceneNumber(int value, int buttonNumber);
     void setEliteButtonMidiCcNumber(int value, int buttonNumber);
     void setEliteButtonMidiChannel(int value, int buttonNumber);
@@ -173,6 +175,7 @@ public:
     
     int getEliteButtonControl (int buttonNumber);
     int getEliteButtonStatus(int buttonNumber);
+    int getEliteButtonSceneMode(int buttonNumber);
     int getEliteButtonSceneNumber(int buttonNumber);
     int getEliteButtonMidiCcNumber(int buttonNumber);
     int getEliteButtonMidiChannel(int buttonNumber);

@@ -81,6 +81,7 @@ private:
     
     ScopedPointer <AlphaSlider> buttonSceneNumber, buttonMidiCcNumber, buttonOscPortNumber; 
 	ScopedPointer <AlphaRotarySlider> buttonMidiOffNumber, buttonMidiOnNumber, buttonOscOffNumber, buttonOscOnNumber;
+    ScopedPointer <ComboBox> buttonSceneModeMenu;
     ScopedPointer <Label> buttonOscIpAddressEditor;
 	
 };

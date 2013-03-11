@@ -527,3 +527,7 @@ countries: jp
 "Polyphony Value. Sets how many instances of the audio sample can be playing simultaneously. If you are trigger loops a polyphony value of 1 will most likely be desired, however for one-shots and drum hits a higher value may be more suitable." = "ポリフォニー値:オーディオサンプルと同時演奏できる数値を設定します。ドラムショットを使う場合は"1"以上の数値が適切です。"
 "Polyphony Value. Sets how many instances of each audio sample can be playing simultaneously." = "ポリフォニー値:オーディオサンプルと同時演奏できる数値を設定します。"
 "<< none >>" = "<< none >>"
+"Next Scene" = ""
+"Previous Scene" = ""
+"Specific Scene" = ""
+"Scene Switcher Mode Selector. Sets and displays which scene the selected elite button is used to switch to." = ""

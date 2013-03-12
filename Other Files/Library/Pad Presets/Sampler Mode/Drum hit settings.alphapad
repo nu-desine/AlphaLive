@@ -3,6 +3,7 @@
 <ALPHALIVE_PAD_SETTINGS_VERSION_1>
     <PAD_DATA mode="2" 
     exclusiveMode="0"
+    quantizeMode="0"
     velocityCurve="2" 
     samplerTriggerMode="4"
     samplerShouldLoop="0" 

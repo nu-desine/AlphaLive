@@ -138,8 +138,8 @@ void AppSettings::resetData()
     eliteDial[0].control = 1;
     eliteDial[1].control = 2;
     eliteButton[0].control = 1;
-    eliteButton[1].control = 2;
-    eliteButton[2].control = 6;
+    eliteButton[1].control = 6;
+    eliteButton[2].control = 2;
     for (int i = 0; i < 2; i++)
     {
         eliteDial[i].status = 1;

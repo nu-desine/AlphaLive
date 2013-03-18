@@ -358,7 +358,7 @@ public:
                         }
                         else
                         {
-                            File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString +  "/Win86 Files/alphaliveUpdater.exe");
+                            File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString +  "/Win32 Files/alphaliveUpdater.exe");
                             
                             if (newUpdaterFile.exists())
                             {

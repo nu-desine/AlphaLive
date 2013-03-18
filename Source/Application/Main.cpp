@@ -233,15 +233,15 @@ public:
     {
         /*
          
-         This function and the alphaliveUpdater executable should share responsibilities
+         This function and the AlphaLive Updater executable should share responsibilities
          of the software updating process in such a way so there is scope for the user
          to be able to update the software on a machine without an internet connection.
          This would involve:
          -  manually downloading the zip file on a networked machine 
          -  uncompressing it into the right place on the machine containing AlphaLive 
-         -  manually moving the new alphaliveUpdater exe into the right place,
+         -  manually moving the new AlphaLive Updater exe into the right place,
          if it exists.
-         -  manually launching alphaliveUpdater
+         -  manually launching AlphaLive Updater
          
          Therefore this function should be responsible for the following steps:
          -  Getting the latest AlphaLive version number by decoding the String
@@ -249,13 +249,13 @@ public:
          -  Downloading the update zip file from our server
          -  Uncompressing the zip file into the AlphaLive application directory
          -  Correct the file permissions of any executable files. Or should this
-         -  be done within alphaliveUpdater?
-         -  If there is a new alphaliveUpdater exe, move that into the
+         -  be done within AlphaLive Updater?
+         -  If there is a new AlphaLive Updater exe, move that into the
          correct place.
-         -  Launch the alphaliveUpdater executable.
+         -  Launch the AlphaLive Updater executable.
          -  Close AlphaLive.
          
-         The alphaliveUpdater executable will then execute the following steps:
+         The AlphaLive Updater executable will then execute the following steps:
          -  Copying all the new files into place
          -  Deleting all downloaded files
          -  Reopening AlphaLive.
@@ -319,7 +319,7 @@ public:
                         //http://www.manpagez.com/man/2/chmod/osx-10.4.php
                         
                         File exe1 (updateDirectory.getFullPathName() + "/Mac Files/AlphaLive.app/Contents/MacOS/AlphaLive");
-                        File exe2 (updateDirectory.getFullPathName() + "/Mac Files/alphaliveUpdater");
+                        File exe2 (updateDirectory.getFullPathName() + "/Mac Files/AlphaLive Updater");
                         File exe3 (updateDirectory.getFullPathName() + "/Mac Files/firmwareUpdater");
                         
                         chmod (exe1.getFullPathName().toUTF8(), S_IRWXO | S_IRWXU | S_IRWXG);
@@ -331,14 +331,14 @@ public:
                         
                         //what about on windows?
                         
-                        //==== Move the new version of alphaliveUpdater if there is one ====
+                        //==== Move the new version of AlphaLive Updater if there is one ====
                         
                         #if JUCE_MAC
-                        File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString + "/Mac Files/alphaliveUpdater");
+                        File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString + "/Mac Files/AlphaLive Updater");
                         
                         if (newUpdaterFile.exists())
                         {
-                            File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/alphaliveUpdater");
+                            File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater");
                             oldUpdaterFile.deleteRecursively();
                             std::cout << newUpdaterFile.copyFileTo(oldUpdaterFile) << std::endl;
                         }
@@ -347,34 +347,34 @@ public:
                         #if JUCE_WINDOWS
                         if (SystemStats::isOperatingSystem64Bit())
                         {
-                            File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString +  "/Win64 Files/alphaliveUpdater.exe");
+                            File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString +  "/Win64 Files/AlphaLive Updater.exe");
                             
                             if (newUpdaterFile.exists())
                             {
-                                File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/alphaliveUpdater.exe");
+                                File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.exe");
                                 oldUpdaterFile.deleteRecursively();
                                 std::cout << newUpdaterFile.copyFileTo(oldUpdaterFile) << std::endl;
                             }
                         }
                         else
                         {
-                            File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString +  "/Win32 Files/alphaliveUpdater.exe");
+                            File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString +  "/Win32 Files/AlphaLive Updater.exe");
                             
                             if (newUpdaterFile.exists())
                             {
-                                File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/alphaliveUpdater.exe");
+                                File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.exe");
                                 oldUpdaterFile.deleteRecursively();
                                 std::cout << newUpdaterFile.copyFileTo(oldUpdaterFile) << std::endl;
                             }
                         }
                         #endif
                         
-                        //launch alphaliveUpdater
+                        //launch AlphaLive Updater
                         #if JUCE_MAC
-                        File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/alphaliveUpdater");
+                        File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.app");
                         #endif
                         #if JUCE_WINDOWS
-                        File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/alphaliveUpdater.exe");
+                        File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.exe");
                         #endif
                         
                         if (alphaliveUpdaterApp.exists())
@@ -389,10 +389,10 @@ public:
 //                        String appDirString (alphaLiveDirectory.getFullPathName() + File::separatorString);
 //                        
 //                        #if JUCE_MAC || JUCE_LINUX //is this right for Linux?
-//                        File updaterFile(appDirString + "Application Data" + File::separatorString + "alphaliveUpdater");
+//                        File updaterFile(appDirString + "Application Data" + File::separatorString + "AlphaLive Updater");
 //                        #endif
 //                        #if JUCE_WINDOWS
-//                        File updaterFile(appDirString + "Application Data" + File::separatorString + "alphaliveUpdater.exe");
+//                        File updaterFile(appDirString + "Application Data" + File::separatorString + "AlphaLive Updater.exe");
 //                        #endif
 //                        
 //                        if (updaterFile.exists())

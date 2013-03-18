@@ -1605,7 +1605,7 @@ void MainComponent::updateSoftware (bool autoCheck)
                     {
                         alphaliveUpdaterApp.startAsProcess();
                         //close AlphaLive
-                        //quit();
+                        JUCEApplication::quit();
                     }   
                 }
                 else if (result.failed())

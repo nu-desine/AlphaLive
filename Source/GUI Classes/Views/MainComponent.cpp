@@ -28,6 +28,11 @@
 #include "../../File and Settings/StoredSettings.h"
 #include "../Binary Data/BinaryDataNew.h"
 
+#if JUCE_MAC || JUCE_LINUX
+//#include <sys/types.h>
+#include <sys/stat.h>
+#endif
+
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
@@ -1447,6 +1452,187 @@ void MainComponent::openDocumentation (int type)
                                           translate("The documentation file seems to be missing from the AlphaLive application directory."));
 }
 
+
+void MainComponent::updateSoftware (bool autoCheck)
+{
+    /*
+     
+     This function and the AlphaLive Updater executable should share responsibilities
+     of the software updating process in such a way so there is scope for the user
+     to be able to update the software on a machine without an internet connection.
+     This would involve:
+     -  manually downloading the zip file on a networked machine 
+     -  uncompressing it into the right place on the machine containing AlphaLive 
+     -  manually moving the new AlphaLive Updater exe into the right place,
+     if it exists.
+     -  manually launching AlphaLive Updater
+     
+     Therefore this function should be responsible for the following steps:
+     -  Getting the latest AlphaLive version number by decoding the String
+     from the relevant .php file on our server.
+     -  Downloading the update zip file from our server
+     -  Uncompressing the zip file into the AlphaLive application directory
+     -  Correct the file permissions of any executable files. Or should this
+     -  be done within AlphaLive Updater?
+     -  If there is a new AlphaLive Updater exe, move that into the
+     correct place.
+     -  Launch the AlphaLive Updater executable.
+     -  Close AlphaLive.
+     
+     The AlphaLive Updater executable will then execute the following steps:
+     -  Copying all the new files into place
+     -  Deleting all downloaded files
+     -  Reopening AlphaLive.
+     */
+    
+    
+    //get latest AlphaLive version from somewhere online
+    URL versionUrl ("http://liamlacey.web44.net/test/version.php");
+    String urlString = versionUrl.readEntireTextStream();
+    int startIndex = urlString.indexOf("AlphaLiveVersion=") + 18;
+    int endIndex = urlString.indexOf(startIndex, "\"");
+    String versionString (urlString.substring(startIndex, endIndex));
+    int versionNumber = versionString.getHexValue32();
+    
+    if (versionNumber == 0)
+    {
+        //Probably means the computer is not connected to the internet
+        
+        if (autoCheck == false)
+        {
+            AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
+                                              translate("Error!"),
+                                              translate("This computer's internet connection appears to be offline, or there is a problem connecting to our server. Please check your network settings or try again later."));
+        }
+    }
+    else
+    {
+        std::cout << "Current Version: " << ProjectInfo::versionNumber << " Latest Version: " << versionNumber << std::endl;
+        
+        //compare current version number with latest version number
+        if (versionNumber > ProjectInfo::versionNumber)
+        {
+            bool userSelection = AlertWindow::showOkCancelBox(AlertWindow::InfoIcon, 
+                                                              translate("Software update available!"), 
+                                                              translate("There is a new version of AlphaLive available to download. Press OK to install the update. The installation process involves restarting AlphaLive so you may want to go back and save the current project first."));
+            
+            if (userSelection == true)
+            {
+                
+                //get AlphaLive zip file from our server
+                URL zipUrl ("http://liamlacey.web44.net/test/AlphaLive_update.zip");
+                InputStream* urlStream = zipUrl.createInputStream (true);
+                
+                File alphaLiveDirectory (File::getSpecialLocation (File::currentApplicationFile).getParentDirectory());
+                
+                //uncompress zip file
+                ZipFile zipFile (urlStream, true);
+                //should it be downloaded into a temp file instead?
+                Result result = zipFile.uncompressTo(alphaLiveDirectory);
+                
+                if (result.wasOk())
+                {
+                    File updateDirectory (alphaLiveDirectory.getFullPathName() + File::separatorString + "AlphaLive_update");
+                    
+                    #if JUCE_MAC
+                    //when uncompressed, the executable bit of any files has for some been removed,
+                    //meaning that any application files can't be opened, as found here:
+                    //http://www.rawmaterialsoftware.com/viewtopic.php?f=2&t=5727
+                    //To fix the file permissions, you can use the command chmod 775 in terminal
+                    //or use th chmod() function as documented here:
+                    //http://www.manpagez.com/man/2/chmod/osx-10.4.php
+                    
+                    File exe1 (updateDirectory.getFullPathName() + "/Mac Files/AlphaLive.app/Contents/MacOS/AlphaLive");
+                    File exe2 (updateDirectory.getFullPathName() + "/Mac Files/AlphaLive Updater");
+                    File exe3 (updateDirectory.getFullPathName() + "/Mac Files/firmwareUpdater");
+                    
+                    chmod (exe1.getFullPathName().toUTF8(), S_IRWXO | S_IRWXU | S_IRWXG);
+                    if (exe2.exists())
+                        chmod (exe2.getFullPathName().toUTF8(), S_IRWXO | S_IRWXU | S_IRWXG);
+                    if (exe3.exists())
+                        chmod (exe3.getFullPathName().toUTF8(), S_IRWXO | S_IRWXU | S_IRWXG);
+                    #endif 
+                    
+                    //what about on windows?
+                    
+                    //==== Move the new version of AlphaLive Updater if there is one ====
+                    
+                    #if JUCE_MAC
+                    File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString + "/Mac Files/AlphaLive Updater");
+                    
+                    if (newUpdaterFile.exists())
+                    {
+                        File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater");
+                        oldUpdaterFile.deleteRecursively();
+                        std::cout << newUpdaterFile.copyFileTo(oldUpdaterFile) << std::endl;
+                    }
+                    #endif
+                    
+                    #if JUCE_WINDOWS
+                    if (SystemStats::isOperatingSystem64Bit())
+                    {
+                        File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString +  "/Win64 Files/AlphaLive Updater.exe");
+                        
+                        if (newUpdaterFile.exists())
+                        {
+                            File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.exe");
+                            oldUpdaterFile.deleteRecursively();
+                            std::cout << newUpdaterFile.copyFileTo(oldUpdaterFile) << std::endl;
+                        }
+                    }
+                    else
+                    {
+                        File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString +  "/Win32 Files/AlphaLive Updater.exe");
+                        
+                        if (newUpdaterFile.exists())
+                        {
+                            File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.exe");
+                            oldUpdaterFile.deleteRecursively();
+                            std::cout << newUpdaterFile.copyFileTo(oldUpdaterFile) << std::endl;
+                        }
+                    }
+                    #endif
+                    
+                    //launch AlphaLive Updater
+                    #if JUCE_MAC
+                    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.app");
+                    #endif
+                    #if JUCE_WINDOWS
+                    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.exe");
+                    #endif
+                    
+                    if (alphaliveUpdaterApp.exists())
+                    {
+                        alphaliveUpdaterApp.startAsProcess();
+                        //close AlphaLive
+                        //quit();
+                    }   
+                }
+                else if (result.failed())
+                {
+                    AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
+                                                      translate("Couldn't download update!"),
+                                                      translate("There was an problem downloading the update. Please check your internet connection or try again later."));
+                    
+                    //show an error message from result.getErrorMessage() ???
+                }  
+            }
+            //else, no updating will take place
+        }
+        else
+        {
+            if (autoCheck == false)
+            {
+                AlertWindow::showMessageBoxAsync (AlertWindow::InfoIcon,
+                                                  translate("AlphaLive is up-to-date!"),
+                                                  translate("There is no update available for AlphaLive at this time."));
+            }
+        }
+    }
+    
+    //===========
+}
+
 //=========================command manager stuff=================================
 ApplicationCommandTarget* MainComponent::getNextCommandTarget()
 {
@@ -1471,7 +1657,8 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::KillSwitch,
         CommandIDs::StartStopClock,
         CommandIDs::StarterGuide,
-        CommandIDs::ReferenceManual
+        CommandIDs::ReferenceManual,
+        CommandIDs::UpdateSoftware
     };
 	
 	commands.addArray (ids, numElementsInArray (ids));
@@ -1599,7 +1786,12 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
                         "Opens the AlphaLive Reference Manual using the systems default PDF viewer application.",
                         CommandCategories::OtherCommands, 0);
     }
-
+    else if (commandID == CommandIDs::UpdateSoftware)
+    {
+        result.setInfo (translate("Check for updates..."),
+                        "Checks online to see if there is an AlphaLive update available, and installs it if so.",
+                        CommandCategories::FileCommands, 0);
+    }
 }
 
 bool MainComponent::perform (const InvocationInfo& info)
@@ -1693,6 +1885,11 @@ bool MainComponent::perform (const InvocationInfo& info)
     else if(info.commandID == CommandIDs::ReferenceManual)
     {
         openDocumentation (2);
+    }
+    
+    else if(info.commandID == CommandIDs::UpdateSoftware)
+    {
+        updateSoftware(false);
     }
     
 	//else

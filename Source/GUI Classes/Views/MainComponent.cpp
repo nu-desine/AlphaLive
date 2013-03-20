@@ -28,12 +28,6 @@
 #include "../../File and Settings/StoredSettings.h"
 #include "../Binary Data/BinaryDataNew.h"
 
-#if JUCE_MAC || JUCE_LINUX
-//#include <sys/types.h>
-#include <sys/stat.h>
-#endif
-
-
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
 #define MULTI_PADS (selectedPads.size() > 1)
@@ -248,6 +242,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     preferencesComponent->setAlpha(0.975f);
     addChildComponent(projectSettingsComponent = new ProjectSettingsComponent(*this, alphaLiveEngineRef, appDocumentStateRef));
     projectSettingsComponent->setAlpha(0.975f);
+    addChildComponent (softwareUpdateComponent = new SoftwareUpdateComponent());
     
     //info box
     addAndMakeVisible(infoTextBox = new TextEditor());
@@ -350,6 +345,7 @@ void MainComponent::resized()
     aboutComponent->setBounds(0, 0, getWidth(), getHeight());
     preferencesComponent->setBounds(0, 0, getWidth(), getHeight());
     projectSettingsComponent->setBounds(0, 0, getWidth(), getHeight());
+    softwareUpdateComponent->setBounds(0, 0, getWidth(), getHeight());
 	
 	gainSlider->setBounds(38, 8, 81, 81);
 	panSlider->setBounds(46, 16, 65, 65);
@@ -1485,7 +1481,6 @@ void MainComponent::updateSoftware (bool autoCheck)
      -  Reopening AlphaLive.
      */
     
-    
     //get latest AlphaLive version from somewhere online
     URL versionUrl ("http://liamlacey.web44.net/test/version.php");
     String urlString = versionUrl.readEntireTextStream();
@@ -1519,103 +1514,8 @@ void MainComponent::updateSoftware (bool autoCheck)
             if (userSelection == true)
             {
                 
-                //get AlphaLive zip file from our server
-                URL zipUrl ("http://liamlacey.web44.net/test/AlphaLive_update.zip");
-                InputStream* urlStream = zipUrl.createInputStream (true);
+                softwareUpdateComponent->startThread();
                 
-                File alphaLiveDirectory (File::getSpecialLocation (File::currentApplicationFile).getParentDirectory());
-                
-                //uncompress zip file
-                ZipFile zipFile (urlStream, true);
-                //should it be downloaded into a temp file instead?
-                Result result = zipFile.uncompressTo(alphaLiveDirectory);
-                
-                if (result.wasOk())
-                {
-                    File updateDirectory (alphaLiveDirectory.getFullPathName() + File::separatorString + "AlphaLive_update");
-                    
-                    #if JUCE_MAC
-                    //when uncompressed, the executable bit of any files has for some been removed,
-                    //meaning that any application files can't be opened, as found here:
-                    //http://www.rawmaterialsoftware.com/viewtopic.php?f=2&t=5727
-                    //To fix the file permissions, you can use the command chmod 775 in terminal
-                    //or use th chmod() function as documented here:
-                    //http://www.manpagez.com/man/2/chmod/osx-10.4.php
-                    
-                    File exe1 (updateDirectory.getFullPathName() + "/Mac Files/AlphaLive.app/Contents/MacOS/AlphaLive");
-                    File exe2 (updateDirectory.getFullPathName() + "/Mac Files/AlphaLive Updater");
-                    File exe3 (updateDirectory.getFullPathName() + "/Mac Files/firmwareUpdater");
-                    
-                    chmod (exe1.getFullPathName().toUTF8(), S_IRWXO | S_IRWXU | S_IRWXG);
-                    if (exe2.exists())
-                        chmod (exe2.getFullPathName().toUTF8(), S_IRWXO | S_IRWXU | S_IRWXG);
-                    if (exe3.exists())
-                        chmod (exe3.getFullPathName().toUTF8(), S_IRWXO | S_IRWXU | S_IRWXG);
-                    #endif 
-                    
-                    //what about on windows?
-                    
-                    //==== Move the new version of AlphaLive Updater if there is one ====
-                    
-                    #if JUCE_MAC
-                    File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString + "/Mac Files/AlphaLive Updater");
-                    
-                    if (newUpdaterFile.exists())
-                    {
-                        File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater");
-                        oldUpdaterFile.deleteRecursively();
-                        std::cout << newUpdaterFile.copyFileTo(oldUpdaterFile) << std::endl;
-                    }
-                    #endif
-                    
-                    #if JUCE_WINDOWS
-                    if (SystemStats::isOperatingSystem64Bit())
-                    {
-                        File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString +  "/Win64 Files/AlphaLive Updater.exe");
-                        
-                        if (newUpdaterFile.exists())
-                        {
-                            File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.exe");
-                            oldUpdaterFile.deleteRecursively();
-                            std::cout << newUpdaterFile.copyFileTo(oldUpdaterFile) << std::endl;
-                        }
-                    }
-                    else
-                    {
-                        File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString +  "/Win32 Files/AlphaLive Updater.exe");
-                        
-                        if (newUpdaterFile.exists())
-                        {
-                            File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.exe");
-                            oldUpdaterFile.deleteRecursively();
-                            std::cout << newUpdaterFile.copyFileTo(oldUpdaterFile) << std::endl;
-                        }
-                    }
-                    #endif
-                    
-                    //launch AlphaLive Updater
-                    #if JUCE_MAC
-                    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.app");
-                    #endif
-                    #if JUCE_WINDOWS
-                    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.exe");
-                    #endif
-                    
-                    if (alphaliveUpdaterApp.exists())
-                    {
-                        alphaliveUpdaterApp.startAsProcess();
-                        //close AlphaLive
-                        JUCEApplication::quit();
-                    }   
-                }
-                else if (result.failed())
-                {
-                    AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
-                                                      translate("Couldn't download update!"),
-                                                      translate("There was an problem downloading the update. Please check your internet connection or try again later."));
-                    
-                    //show an error message from result.getErrorMessage() ???
-                }  
             }
             //else, no updating will take place
         }

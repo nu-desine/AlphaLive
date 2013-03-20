@@ -260,8 +260,20 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     addAndMakeVisible(autoSaveScenesLabel = new Label());
     autoSaveScenesLabel->setText(translate("Auto-save Scenes:"), false);
     autoSaveScenesLabel->setColour(Label::textColourId, Colours::lightgrey);
-    
 
+    addAndMakeVisible(autoCheckUpdatesButton = new TextButton());
+    autoCheckUpdatesButton->setClickingTogglesState(true);
+    autoCheckUpdatesButton->setToggleState(StoredSettings::getInstance()->autoCheckUpdates-1, false);
+    if(autoCheckUpdatesButton->getToggleStateValue() == true)
+        autoCheckUpdatesButton->setButtonText(translate("On"));
+    else
+        autoCheckUpdatesButton->setButtonText(translate("Off")); 
+    autoCheckUpdatesButton->addListener(this);
+    autoCheckUpdatesButton->addMouseListener(this, true);
+    
+    addAndMakeVisible(autoCheckUpdatesLabel = new Label());
+    autoCheckUpdatesLabel->setText(translate("Autocheck for Updates:"), false);
+    autoCheckUpdatesLabel->setColour(Label::textColourId, Colours::lightgrey);
     
 }
 
@@ -294,6 +306,9 @@ void GeneralSettingsComponent::resized()
     
     autoSaveScenesButton->setBounds(230, 248, 40, 25);
     autoSaveScenesLabel->setBounds(60, 250, 150, 20);
+    
+    autoCheckUpdatesButton->setBounds(230, 288, 40, 25);
+    autoCheckUpdatesLabel->setBounds(60, 290, 150, 20);
 }
 
 void GeneralSettingsComponent::paint (Graphics& g)
@@ -349,6 +364,23 @@ void GeneralSettingsComponent::buttonClicked (Button* button)
         else
         {
             StoredSettings::getInstance()->autoSaveScenes = 1;
+            button->setButtonText(translate("Off"));
+        }
+        
+        StoredSettings::getInstance()->flush();
+    }
+    
+    else if (button == autoCheckUpdatesButton)
+    {
+        if(button->getToggleStateValue() == true)
+        {
+            StoredSettings::getInstance()->autoCheckUpdates = 2;
+            button->setButtonText(translate("On"));
+        }
+        
+        else
+        {
+            StoredSettings::getInstance()->autoCheckUpdates = 1;
             button->setButtonText(translate("Off"));
         }
         
@@ -441,6 +473,10 @@ void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
     else if (autoSaveScenesButton->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("By default ('on') when you switch between scenes it will automatically save the recently changed settings to the scene slot locally (not to file). If this option is set to 'off' you will need to shift-click the current scene slot before switching scenes otherwise any changes to the scenes settings will be lost."));
+    }
+    else if (autoCheckUpdatesButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("When this option is set to 'on' the application will automatically check online for software updates when the application is launched. You can manually check for updates using the option in the 'Help' item on the menu bar."));
     }
 }
 

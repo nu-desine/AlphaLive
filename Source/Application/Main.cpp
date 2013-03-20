@@ -103,8 +103,6 @@ public:
         //delete loading window now as everything will be loaded at this point
         loadingWindow = 0;
         
-        alphaLiveEngine->updateFirmware();
-        
 		//open any requested files/projects
 		
 		//If the app has been lauched by opening a .alphalive file,
@@ -129,6 +127,10 @@ public:
         
         //Tell the HidComms class that it can start recieving and processing pad and elite control reports.
         alphaLiveEngine->setAppHasInitialised();
+        
+        mainWindow->getMainComponent()->updateSoftware(true);
+        
+        alphaLiveEngine->updateFirmware();
     }
 
     

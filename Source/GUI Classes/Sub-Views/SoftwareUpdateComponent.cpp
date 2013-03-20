@@ -78,29 +78,48 @@ void SoftwareUpdateComponent::paint (Graphics& g)
 
 void SoftwareUpdateComponent::run()
 {
+    //first make sure the AlphaLive Updater app exists,
+    //and don't run the thread if it doesn't.
+    alphaLiveDirectory = File::getSpecialLocation (File::currentApplicationFile).getParentDirectory();
+    
+    #if JUCE_MAC
+    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.app");
+    #endif
+    #if JUCE_WINDOWS
+    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.exe");
+    #endif
+    
+    if (! alphaliveUpdaterApp.exists())
     {
-        const MessageManagerLock mmLock;
-        setVisible(true);
+        AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
+                                          translate("Missing file!"),
+                                          translate("The \"AlphaLive Updater\" application appears to be missing from the \"AlphaLive/Application Data\" directory. Please consult the troubleshooting section of the reference manual."));
+        
+        signalThreadShouldExit();
     }
+    
+    //===========================================
     
     while (!threadShouldExit())
     {
+        {
+            const MessageManagerLock mmLock;
+            setVisible(true);
+        }
         
         //get AlphaLive zip file from our server
         URL zipUrl ("http://liamlacey.web44.net/test/AlphaLive_update.zip");
         InputStream* urlStream = zipUrl.createInputStream (true);
-        
-        alphaLiveDirectory = File::getSpecialLocation (File::currentApplicationFile).getParentDirectory();
         
         //uncompress zip file
         ZipFile zipFile (urlStream, true);
         //should it be downloaded into a temp file instead?
         Result result = zipFile.uncompressTo(alphaLiveDirectory);
         
-        if (result.wasOk())
+        File updateDirectory (alphaLiveDirectory.getFullPathName() + File::separatorString + "AlphaLive_update");
+        
+        if (result.wasOk() && updateDirectory.exists())
         {
-            File updateDirectory (alphaLiveDirectory.getFullPathName() + File::separatorString + "AlphaLive_update");
-            
             #if JUCE_MAC
             //when uncompressed, the executable bit of any files has for some been removed,
             //meaning that any application files can't be opened, as found here:
@@ -176,11 +195,11 @@ void SoftwareUpdateComponent::run()
             }
             
         }
-        else if (result.failed())
+        else if (result.failed() || ! updateDirectory.exists())
         {
             AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
                                               translate("Couldn't download update!"),
-                                              translate("There was an problem downloading the update. Please check your internet connection or try again later."));
+                                              translate("There was a problem downloading the update. Please check your internet connection or try again later."));
             
             //show an error message from result.getErrorMessage() ???
         }  
@@ -211,11 +230,5 @@ void SoftwareUpdateComponent::handleAsyncUpdate()
         //close AlphaLive
         JUCEApplication::quit();
     } 
-    else
-    {
-        AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
-                                          translate("Missing file!"),
-                                          translate("The \"AlphaLive Updater\" application appears to be missing from the \"AlphaLive/Application Data\" directory. Please consult the troubleshooting section of the reference manual."));
-    }
 
 }

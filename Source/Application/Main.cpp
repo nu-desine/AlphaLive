@@ -128,9 +128,18 @@ public:
         //Tell the HidComms class that it can start recieving and processing pad and elite control reports.
         alphaLiveEngine->setAppHasInitialised();
         
-        mainWindow->getMainComponent()->updateSoftware(true);
+        //If auto-check is on, check for software updates
+        bool isUpdating = false;
         
-        alphaLiveEngine->updateFirmware();
+        if (StoredSettings::getInstance()->autoCheckUpdates == 2)
+        {
+            //should this be called asyncronously instead?
+            isUpdating = mainWindow->getMainComponent()->updateSoftware(true);
+        }
+        
+        //If not currently updating software, check for firmware updates
+        if (isUpdating == false)
+            alphaLiveEngine->updateFirmware();
     }
 
     

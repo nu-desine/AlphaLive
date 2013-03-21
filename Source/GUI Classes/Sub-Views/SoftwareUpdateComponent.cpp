@@ -50,7 +50,7 @@ SoftwareUpdateComponent::SoftwareUpdateComponent()
 
 SoftwareUpdateComponent::~SoftwareUpdateComponent()
 {
-    
+    stopThread(4010);
 }
 
 void SoftwareUpdateComponent::resized()

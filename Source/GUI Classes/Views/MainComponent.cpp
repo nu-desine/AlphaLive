@@ -1449,7 +1449,7 @@ void MainComponent::openDocumentation (int type)
 }
 
 
-void MainComponent::updateSoftware (bool autoCheck)
+bool MainComponent::updateSoftware (bool autoCheck)
 {
     /*
      
@@ -1481,6 +1481,8 @@ void MainComponent::updateSoftware (bool autoCheck)
      -  Reopening AlphaLive.
      */
     
+    bool isUpdating = false;
+    
     //get latest AlphaLive version from somewhere online
     URL versionUrl ("http://liamlacey.web44.net/test/version.php");
     String urlString = versionUrl.readEntireTextStream();
@@ -1507,14 +1509,34 @@ void MainComponent::updateSoftware (bool autoCheck)
         //compare current version number with latest version number
         if (versionNumber > ProjectInfo::versionNumber)
         {
-            bool userSelection = AlertWindow::showOkCancelBox(AlertWindow::InfoIcon, 
-                                                              translate("Software update available!"), 
-                                                              translate("There is a new version of AlphaLive available to download. Press OK to install the update. The installation process involves restarting AlphaLive so you may want to go back and save the current project first."));
+            bool userSelection;
+            
+            if (autoCheck == false)
+            {
+                userSelection = AlertWindow::showOkCancelBox(AlertWindow::InfoIcon, 
+                                                            translate("Software update available!"), 
+                                                            translate("There is a new version of AlphaLive available to download. Press OK to install the update. The installation process involves restarting AlphaLive so you may want to go back and save the current project first."));
+            }
+            else
+            {
+                userSelection = AlertWindow::showOkCancelBox(AlertWindow::InfoIcon, 
+                                                            translate("Software update available!"), 
+                                                            translate("There is a new version of AlphaLive available to download. Press OK to install the update. You can turn off automatic software update checks via the preferences display."));
+            }
             
             if (userSelection == true)
             {
+                // kill any pads to help prevent crashes
+                //is there a way to prevent the users from
+                //pressing pads when updating? Ideally I just
+                //need to make sure the app won't crash on close
+                //when there are playing pads.
+                alphaLiveEngineRef.killAll();
+                globalClock->toggleTransportButtonOff();
                 
+                //trigger update procedure 
                 softwareUpdateComponent->startThread();
+                isUpdating = true;
                 
             }
             //else, no updating will take place
@@ -1531,6 +1553,8 @@ void MainComponent::updateSoftware (bool autoCheck)
     }
     
     //===========
+    
+    return isUpdating;
 }
 
 //=========================command manager stuff=================================

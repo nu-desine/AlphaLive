@@ -129,7 +129,7 @@ public:
     void editInterfaceFromDeviceConnectivity (int command);
     void setDeviceStatus (int status);
     void openDocumentation (int type);
-    void updateSoftware (bool autoCheck);
+    bool updateSoftware (bool autoCheck);
     
     
 private:

@@ -57,6 +57,7 @@ void StoredSettings::flush()
         props->setValue ("cleanOnClose", cleanOnClose);
         props->setValue ("autoSaveScenes", autoSaveScenes);
         props->setValue ("deviceType", deviceType);
+        props->setValue ("autoCheckUpdates", autoCheckUpdates);
     }
 
     props = nullptr;
@@ -86,6 +87,7 @@ void StoredSettings::flush()
     cleanOnClose = props->getIntValue("cleanOnClose");
     autoSaveScenes = props->getIntValue("autoSaveScenes");
     deviceType = props->getIntValue("deviceType");
+    autoCheckUpdates = props->getIntValue("autoCheckUpdates");
 
 }
 
@@ -138,6 +140,9 @@ void StoredSettings::setDefaultValues()
     
     if (deviceType == 0)
         deviceType = 1;
+    
+    if (autoCheckUpdates == 0)
+        autoCheckUpdates = 2;
     
     flush();
 }

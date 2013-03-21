@@ -58,6 +58,8 @@
 #include "../Sub-Views/EliteControlsComponent.h"
 #include "../Sub-Views/GuiEliteControlsSettings.h"
 #include "../Custom Components/General/DeviceStatusComponent.h"
+#include "../Sub-Views/SoftwareUpdateComponent.h"
+
 
 class MainComponent :   public Component,
                         public Button::Listener,
@@ -127,6 +129,7 @@ public:
     void editInterfaceFromDeviceConnectivity (int command);
     void setDeviceStatus (int status);
     void openDocumentation (int type);
+    bool updateSoftware (bool autoCheck);
     
     
 private:
@@ -204,6 +207,7 @@ private:
     String currentLanguage;
     
     DeviceStatusComponent *deviceStatusComponent;
+    SoftwareUpdateComponent *softwareUpdateComponent;
     
     //==============================================================================
 };

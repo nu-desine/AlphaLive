@@ -19,6 +19,7 @@
 		0C52F2A215D6983300E76547 /* GuiPiano.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C52F2A015D6983300E76547 /* GuiPiano.cpp */; };
 		0C52F2AB15D69D6000E76547 /* SettingsButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C52F2A915D69D5C00E76547 /* SettingsButton.cpp */; };
 		0C52F2B415D6BF4E00E76547 /* GuiGlobalPadSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C52F2B215D6BF4D00E76547 /* GuiGlobalPadSettings.cpp */; };
+		0C5405E616F9D45400953811 /* SoftwareUpdateComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C5405E416F9D45400953811 /* SoftwareUpdateComponent.cpp */; };
 		0C78A3C115B467910049C0C8 /* AbstractSubjectAndObserver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2AC15B467900049C0C8 /* AbstractSubjectAndObserver.cpp */; };
 		0C78A3C215B467910049C0C8 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2B015B467900049C0C8 /* Main.cpp */; };
 		0C78A3C315B467910049C0C8 /* MainMenuModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2B115B467900049C0C8 /* MainMenuModel.cpp */; };
@@ -231,6 +232,8 @@
 		0C52F2AA15D69D5E00E76547 /* SettingsButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsButton.h; sourceTree = "<group>"; };
 		0C52F2B215D6BF4D00E76547 /* GuiGlobalPadSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuiGlobalPadSettings.cpp; sourceTree = "<group>"; };
 		0C52F2B315D6BF4E00E76547 /* GuiGlobalPadSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuiGlobalPadSettings.h; sourceTree = "<group>"; };
+		0C5405E416F9D45400953811 /* SoftwareUpdateComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoftwareUpdateComponent.cpp; sourceTree = "<group>"; };
+		0C5405E516F9D45400953811 /* SoftwareUpdateComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoftwareUpdateComponent.h; sourceTree = "<group>"; };
 		0C669E7C15E6974B003B83C1 /* CommonInfoBoxText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonInfoBoxText.h; sourceTree = "<group>"; };
 		0C78A2AC15B467900049C0C8 /* AbstractSubjectAndObserver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractSubjectAndObserver.cpp; sourceTree = "<group>"; };
 		0C78A2AD15B467900049C0C8 /* AbstractSubjectAndObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractSubjectAndObserver.h; sourceTree = "<group>"; };
@@ -1740,6 +1743,8 @@
 				0C8BD8C016075E2F003A1057 /* EliteControlsComponent.cpp */,
 				0C8BD8C516077158003A1057 /* GuiEliteControlsSettings.h */,
 				0C8BD8C416077158003A1057 /* GuiEliteControlsSettings.cpp */,
+				0C5405E516F9D45400953811 /* SoftwareUpdateComponent.h */,
+				0C5405E416F9D45400953811 /* SoftwareUpdateComponent.cpp */,
 			);
 			path = "Sub-Views";
 			sourceTree = "<group>";
@@ -3624,6 +3629,7 @@
 				0CF1D841165C0332001E9C2E /* hid.c in Sources */,
 				0CF1D844165C0346001E9C2E /* EliteControls.cpp in Sources */,
 				0CCE73BB16C5591C000116B1 /* DeviceStatusComponent.cpp in Sources */,
+				0C5405E616F9D45400953811 /* SoftwareUpdateComponent.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

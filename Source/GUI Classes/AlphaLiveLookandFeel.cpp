@@ -173,8 +173,8 @@ AlphaLiveLookandFeel::AlphaLiveLookandFeel()
         AlertWindow::textColourId,                  0xff000000,
         AlertWindow::outlineColourId,               0xff666666,
 		
-        ProgressBar::backgroundColourId,            0xffeeeeee,
-        ProgressBar::foregroundColourId,            0xffaaaaee,
+        ProgressBar::backgroundColourId,            AlphaColours::verydarkgrey_,
+        ProgressBar::foregroundColourId,            0xff808080, //grey
 		
         TooltipWindow::backgroundColourId,          0x00000000,
         TooltipWindow::textColourId,                0xffffffff,

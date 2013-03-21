@@ -28,7 +28,6 @@
 #include "../../File and Settings/StoredSettings.h"
 #include "../Binary Data/BinaryDataNew.h"
 
-
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
 #define MULTI_PADS (selectedPads.size() > 1)
@@ -243,6 +242,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     preferencesComponent->setAlpha(0.975f);
     addChildComponent(projectSettingsComponent = new ProjectSettingsComponent(*this, alphaLiveEngineRef, appDocumentStateRef));
     projectSettingsComponent->setAlpha(0.975f);
+    addChildComponent (softwareUpdateComponent = new SoftwareUpdateComponent());
     
     //info box
     addAndMakeVisible(infoTextBox = new TextEditor());
@@ -345,6 +345,7 @@ void MainComponent::resized()
     aboutComponent->setBounds(0, 0, getWidth(), getHeight());
     preferencesComponent->setBounds(0, 0, getWidth(), getHeight());
     projectSettingsComponent->setBounds(0, 0, getWidth(), getHeight());
+    softwareUpdateComponent->setBounds(0, 0, getWidth(), getHeight());
 	
 	gainSlider->setBounds(38, 8, 81, 81);
 	panSlider->setBounds(46, 16, 65, 65);
@@ -1447,6 +1448,115 @@ void MainComponent::openDocumentation (int type)
                                           translate("The documentation file seems to be missing from the AlphaLive application directory."));
 }
 
+
+bool MainComponent::updateSoftware (bool autoCheck)
+{
+    /*
+     
+     This function and the AlphaLive Updater executable should share responsibilities
+     of the software updating process in such a way so there is scope for the user
+     to be able to update the software on a machine without an internet connection.
+     This would involve:
+     -  manually downloading the zip file on a networked machine 
+     -  uncompressing it into the right place on the machine containing AlphaLive 
+     -  manually moving the new AlphaLive Updater exe into the right place,
+     if it exists.
+     -  manually launching AlphaLive Updater
+     
+     Therefore this function should be responsible for the following steps:
+     -  Getting the latest AlphaLive version number by decoding the String
+     from the relevant .php file on our server.
+     -  Downloading the update zip file from our server
+     -  Uncompressing the zip file into the AlphaLive application directory
+     -  Correct the file permissions of any executable files. Or should this
+     -  be done within AlphaLive Updater?
+     -  If there is a new AlphaLive Updater exe, move that into the
+     correct place.
+     -  Launch the AlphaLive Updater executable.
+     -  Close AlphaLive.
+     
+     The AlphaLive Updater executable will then execute the following steps:
+     -  Copying all the new files into place
+     -  Deleting all downloaded files
+     -  Reopening AlphaLive.
+     */
+    
+    bool isUpdating = false;
+    
+    //get latest AlphaLive version from somewhere online
+    URL versionUrl ("http://liamlacey.web44.net/test/version.php");
+    String urlString = versionUrl.readEntireTextStream();
+    int startIndex = urlString.indexOf("AlphaLiveVersion=") + 18;
+    int endIndex = urlString.indexOf(startIndex, "\"");
+    String versionString (urlString.substring(startIndex, endIndex));
+    int versionNumber = versionString.getHexValue32();
+    
+    if (versionNumber == 0)
+    {
+        //Probably means the computer is not connected to the internet
+        
+        if (autoCheck == false)
+        {
+            AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
+                                              translate("Error!"),
+                                              translate("This computer's internet connection appears to be offline, or there is a problem connecting to our server. Please check your network settings or try again later."));
+        }
+    }
+    else
+    {
+        std::cout << "Current Version: " << ProjectInfo::versionNumber << " Latest Version: " << versionNumber << std::endl;
+        
+        //compare current version number with latest version number
+        if (versionNumber > ProjectInfo::versionNumber)
+        {
+            bool userSelection;
+            
+            if (autoCheck == false)
+            {
+                userSelection = AlertWindow::showOkCancelBox(AlertWindow::InfoIcon, 
+                                                            translate("Software update available!"), 
+                                                            translate("There is a new version of AlphaLive available to download. Press OK to install the update. The installation process involves restarting AlphaLive so you may want to go back and save the current project first."));
+            }
+            else
+            {
+                userSelection = AlertWindow::showOkCancelBox(AlertWindow::InfoIcon, 
+                                                            translate("Software update available!"), 
+                                                            translate("There is a new version of AlphaLive available to download. Press OK to install the update. You can turn off automatic software update checks via the preferences display."));
+            }
+            
+            if (userSelection == true)
+            {
+                // kill any pads to help prevent crashes
+                //is there a way to prevent the users from
+                //pressing pads when updating? Ideally I just
+                //need to make sure the app won't crash on close
+                //when there are playing pads.
+                alphaLiveEngineRef.killAll();
+                globalClock->toggleTransportButtonOff();
+                
+                //trigger update procedure 
+                softwareUpdateComponent->startThread();
+                isUpdating = true;
+                
+            }
+            //else, no updating will take place
+        }
+        else
+        {
+            if (autoCheck == false)
+            {
+                AlertWindow::showMessageBoxAsync (AlertWindow::InfoIcon,
+                                                  translate("AlphaLive is up-to-date!"),
+                                                  translate("There is no update available for AlphaLive at this time."));
+            }
+        }
+    }
+    
+    //===========
+    
+    return isUpdating;
+}
+
 //=========================command manager stuff=================================
 ApplicationCommandTarget* MainComponent::getNextCommandTarget()
 {
@@ -1471,7 +1581,8 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::KillSwitch,
         CommandIDs::StartStopClock,
         CommandIDs::StarterGuide,
-        CommandIDs::ReferenceManual
+        CommandIDs::ReferenceManual,
+        CommandIDs::UpdateSoftware
     };
 	
 	commands.addArray (ids, numElementsInArray (ids));
@@ -1599,7 +1710,12 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
                         "Opens the AlphaLive Reference Manual using the systems default PDF viewer application.",
                         CommandCategories::OtherCommands, 0);
     }
-
+    else if (commandID == CommandIDs::UpdateSoftware)
+    {
+        result.setInfo (translate("Check for updates..."),
+                        "Checks online to see if there is an AlphaLive update available, and installs it if so.",
+                        CommandCategories::FileCommands, 0);
+    }
 }
 
 bool MainComponent::perform (const InvocationInfo& info)
@@ -1693,6 +1809,11 @@ bool MainComponent::perform (const InvocationInfo& info)
     else if(info.commandID == CommandIDs::ReferenceManual)
     {
         openDocumentation (2);
+    }
+    
+    else if(info.commandID == CommandIDs::UpdateSoftware)
+    {
+        updateSoftware(false);
     }
     
 	//else

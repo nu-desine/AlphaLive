@@ -48,6 +48,7 @@ namespace CommandIDs
     static const int KillSwitch             = 0x20012;
     
     static const int updateFirmware         = 0x20018;
+    static const int UpdateSoftware         = 0x20021;
     
     static const int StarterGuide           = 0x20019;
     static const int ReferenceManual        = 0x20020;

@@ -693,11 +693,6 @@ void AlphaLiveEngine::setMidiOutputDevice (int deviceIndex)
 
 void AlphaLiveEngine::updateFirmware()
 {
-    //does the updateFirmware code actually need to be trigger asynchronously?
-    //If not it can just be called directly from this function.
-    //The real question is whether they'll be a problem if this function is called
-    //from HidComms::connectToDevice() and pauses the HID thread (caused by this
-    //function being called syncronously instead.
     broadcaster.sendActionMessage("UPDATE FIRMWARE");
 }
 

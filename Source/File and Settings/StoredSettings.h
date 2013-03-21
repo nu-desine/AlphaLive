@@ -52,6 +52,7 @@ public:
     int autoSaveScenes; //1 - dont auto save, 2 - do auto save
     String audioSettings; //this will hold the XML element created using createStateXml()
     int deviceType; //1 - AlphaSphere, 2 - AlphaSphere elite 
+    int autoCheckUpdates; // 1 - off, 2 - on
     
 private:
     ScopedPointer<PropertiesFile> props;

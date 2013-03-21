@@ -103,8 +103,6 @@ public:
         //delete loading window now as everything will be loaded at this point
         loadingWindow = 0;
         
-        alphaLiveEngine->updateFirmware();
-        
 		//open any requested files/projects
 		
 		//If the app has been lauched by opening a .alphalive file,
@@ -131,6 +129,19 @@ public:
         
         //Tell the HidComms class that it can start recieving and processing pad and elite control reports.
         alphaLiveEngine->setAppHasInitialised();
+        
+        //If auto-check is on, check for software updates
+        bool isUpdating = false;
+        
+        if (StoredSettings::getInstance()->autoCheckUpdates == 2)
+        {
+            //should this be called asyncronously instead?
+            isUpdating = mainWindow->getMainComponent()->updateSoftware(true);
+        }
+        
+        //If not currently updating software, check for firmware updates
+        if (isUpdating == false)
+            alphaLiveEngine->updateFirmware();
     }
 
     
@@ -225,6 +236,7 @@ public:
             
         }
     }
+    
     
     //==============================================================================
     //removed the nested MainMenuModel class and put it in a seperate file,
@@ -321,8 +333,7 @@ public:
         {
             appDocumentState->removeUneededAudioFiles(false);
         }
-        
-        
+
         return true;
     }
     

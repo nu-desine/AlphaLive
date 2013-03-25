@@ -27,7 +27,7 @@ HidComms::HidComms() : Thread("HidThread")
     
     appHasInitialised = false;
     sendOutputReport = false;
-    midiOutExists = hidDeviceStatus =  0;
+    midiOutExists = hidDeviceStatus = reconnectCounter = 0;
     
     for (int i = 0; i < 48; i++)
         prevPadPressure[i] = 0;
@@ -43,7 +43,7 @@ HidComms::HidComms() : Thread("HidThread")
 
 HidComms::~HidComms()
 {
-    stopThread(5000);
+    stopThread(100);
     
     hid_close(handle);
     
@@ -278,29 +278,29 @@ void HidComms::run()
                 
             }
             
-            //what should the following sleep value be?
-            #ifdef WIN32
-            sleep(1); //should this actually be Sleep() which need a windows library defined? See hidtest.
-            #else
-            usleep(1*1000);
-            #endif
+            
         }
         
         //=== if device is not currently connected ===
         else
         {
             //try and connect to the device
-            connectToDevice();
             
-            //std::cout << "no device connected" << std::endl;
-            //what should the following sleep value be?
-            #ifdef WIN32
-            sleep(500); //should this actually be Sleep() which need a windows library defined? See hidtest.
-            #else
-            usleep(500*1000);
-            #endif
+            if (reconnectCounter >= 500)
+            {
+                connectToDevice();
+                reconnectCounter = 0;
+            }
         }
         
+        //what should the following sleep value be?
+        #ifdef WIN32
+        sleep(1); //should this actually be Sleep() which need a windows library defined? See hidtest.
+        #else
+        usleep(1*1000);
+        #endif
+        
+        reconnectCounter ++;
         //std::cout << "listening... ";
     }
 }

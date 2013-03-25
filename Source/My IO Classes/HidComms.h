@@ -73,6 +73,7 @@ private:
     
     bool hidDeviceStatus;
     bool midiOutExists;
+    int reconnectCounter;
     
     CriticalSection sharedMemory;
     

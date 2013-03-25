@@ -23,6 +23,8 @@
 #ifndef H_SOFTWAREUPDATECOMPONENT
 #define H_SOFTWAREUPDATECOMPONENT
 
+class MainComponent;
+
 #include "../../../JuceLibraryCode/JuceHeader.h"
 
 class SoftwareUpdateComponent :     public Component,
@@ -30,7 +32,7 @@ class SoftwareUpdateComponent :     public Component,
                                     public AsyncUpdater
 {
 public:
-    SoftwareUpdateComponent();
+    SoftwareUpdateComponent (MainComponent &ref);
     ~SoftwareUpdateComponent();
     
     void resized();
@@ -40,6 +42,8 @@ public:
     void handleAsyncUpdate();
     
 private:
+    
+    MainComponent &mainComponentRef;
     
     File alphaLiveDirectory;
     

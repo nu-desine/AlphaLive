@@ -242,7 +242,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     preferencesComponent->setAlpha(0.975f);
     addChildComponent(projectSettingsComponent = new ProjectSettingsComponent(*this, alphaLiveEngineRef, appDocumentStateRef));
     projectSettingsComponent->setAlpha(0.975f);
-    addChildComponent (softwareUpdateComponent = new SoftwareUpdateComponent());
+    addChildComponent (softwareUpdateComponent = new SoftwareUpdateComponent (*this));
     
     //info box
     addAndMakeVisible(infoTextBox = new TextEditor());

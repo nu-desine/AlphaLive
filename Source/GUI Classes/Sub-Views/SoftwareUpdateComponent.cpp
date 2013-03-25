@@ -22,6 +22,7 @@
 
 #include "SoftwareUpdateComponent.h"
 #include "../AlphaLiveLookandFeel.h"
+#include "../Views/MainComponent.h"
 
 #if JUCE_MAC || JUCE_LINUX
 #include <sys/stat.h>
@@ -33,8 +34,9 @@
 #define BOX_W (getWidth()/9)*3
 #define BOX_H (getHeight()/9)*3
 
-SoftwareUpdateComponent::SoftwareUpdateComponent()
-                            : Thread ("software downloader thread")
+SoftwareUpdateComponent::SoftwareUpdateComponent (MainComponent &ref)
+                            :   Thread ("software downloader thread"),
+                                mainComponentRef(ref)
 {
     addAndMakeVisible (infoLabel = new Label());
     infoLabel->setJustificationType(Justification::centred);
@@ -227,7 +229,8 @@ void SoftwareUpdateComponent::handleAsyncUpdate()
     if (alphaliveUpdaterApp.exists())
     {
         alphaliveUpdaterApp.startAsProcess();
-        //close AlphaLive
+        //stop HID thread and close AlphaLive
+        mainComponentRef.getAlphaLiveEngineRef().stopThread(100);
         JUCEApplication::quit();
     } 
 

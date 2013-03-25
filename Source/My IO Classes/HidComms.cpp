@@ -43,7 +43,7 @@ HidComms::HidComms() : Thread("HidThread")
 
 HidComms::~HidComms()
 {
-    stopThread(100);
+    stopThread(1000);
     
     hid_close(handle);
     

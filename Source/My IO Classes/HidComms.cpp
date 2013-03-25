@@ -43,6 +43,9 @@ HidComms::HidComms() : Thread("HidThread")
 
 HidComms::~HidComms()
 {
+    //Do I need to call stopThread() here if
+    //I'm calling it in the deconstructor of
+    //AlphaLiveEngine?
     stopThread(1000);
     
     hid_close(handle);

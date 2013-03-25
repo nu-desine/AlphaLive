@@ -140,6 +140,8 @@ AlphaLiveEngine::AlphaLiveEngine()
 
 AlphaLiveEngine::~AlphaLiveEngine()
 {
+    killAll();
+    
     //save audio output settings to prefs
     XmlElement *audioSettingsXml = audioDeviceManager.createStateXml();
     if (audioSettingsXml != nullptr)

@@ -154,16 +154,14 @@ public:
         menuModel = nullptr;
         delete menuModel;
         
+        mainWindow = 0;
+        delete alphaLiveEngine;
+        
         delete appDocumentState;
         //change the way the Singleton object gets destroyed?
         delete p;
-    
-        mainWindow = 0;
-        
-        delete alphaLiveEngine;
         
         commandManager = nullptr;
-        
         StoredSettings::deleteInstance();
     }
 

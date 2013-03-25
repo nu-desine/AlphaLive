@@ -379,8 +379,8 @@ void AlphaLiveEngine::updatePadPlayingStatus (int padNumber, int status)
 {
     //is this function called from an external actionListenerCallback function every time?
     //If not do we need a MessageManagerLock here?
-    
-    mainComponent->getGuiPadLayout()->setPadPlayingState(padNumber, status);
+    if (mainComponent != NULL)
+        mainComponent->getGuiPadLayout()->setPadPlayingState(padNumber, status);
     
 }
 
@@ -644,6 +644,7 @@ void AlphaLiveEngine::removeMidiOut()
     
     #if JUCE_WINDOWS
     //remove MIDI output selector from the preferences view
+    if (mainComponent != NULL)
     {
         const MessageManagerLock mmLock;
         mainComponent->editInterfaceFromDeviceConnectivity(1);
@@ -709,7 +710,8 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
         for (int i = 0; i < padPressureGuiQueue.size(); i++)
         {
             int padNum = padPressureGuiQueue[i];
-            mainComponent->getGuiPadLayout()->setPadPressure(padNum, padPressure[padNum]);
+            if (mainComponent != NULL)
+                mainComponent->getGuiPadLayout()->setPadPressure(padNum, padPressure[padNum]);
         }
         
         padPressureGuiQueue.clear();

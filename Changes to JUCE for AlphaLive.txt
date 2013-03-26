@@ -1,0 +1,21 @@
+
+There are a few changes that have been made to the JUCE library code
+for AlphaLive to work correctly. Make sure that if you update the library
+code you reapply these changes:
+
+JuceLibraryCode/modules/juce_audio_devices/juce_audio_devices.cpp
+Line 91
+Change to: 
+#include <../Source/Third Party Libraries/ASIOSDK2/common/iasiodrv.h>
+
+JuceLibraryCode/modules/juce_audio_devices/sources/juce_AudioTransportSource.cpp
+Line 290-291
+Change to:
+info.buffer->applyGain (i, info.startSample, info.numSamples,
+                        gain);
+
+JuceLibraryCode/modules/juce_gui_basics/filebrowser/juce_FileTreeComponent.cpp
+Line 71
+Change to:
+int getItemHeight() const                   { return 16; }
+

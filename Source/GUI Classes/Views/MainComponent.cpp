@@ -493,34 +493,15 @@ void MainComponent::sliderValueChanged (Slider *slider)
     
 }
 
-
-
 void MainComponent::sliderDragEnded (Slider *slider)
 {
 	
-	if (slider == padRotate)
-	{
-		guiPadLayout->setVisible(true);
-		rotateFlag = 0;
-		
-		guiPadLayout->setTransform (AffineTransform::rotation ((float) (padRotate->getValue() / (180.0 / double_Pi)),
-                                                       pivotX, pivotY));
-		guiPadLayout->rotated(padRotate->getValue());
-		repaint();
-	}
 }
-
 
 void MainComponent::sliderDragStarted (Slider *slider)
 {
-	if (slider == padRotate)
-	{
-		rotatedPadsImage = guiPadLayout->snapshot();
-	}
     
 }
-
-
 
 void MainComponent::buttonClicked(Button *button)
 {

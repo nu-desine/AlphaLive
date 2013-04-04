@@ -48,12 +48,10 @@ public:
 	void paint (Graphics& g);
 	bool hitTest (int x, int y);
 	void buttonClicked (Button *button);
-	void rotated (int val);
     
     void turnOn(int pad);
 	void turnOff(int pad);
 	void modeChange(int padNumber, int modeNumber);
-	Image snapshot();
     
     void updateCurrentlySelectedPad();
     
@@ -85,14 +83,9 @@ private:
 	OwnedArray<GuiPad> pads;
 	
 	Path hitPath, globalpath, row1path, row2path, row3path, row4path, row5path, row6path;
-	int pStore;
-	int rotateValue;
-	float pivotX;
-	float pivotY;
-	int s;
+    
 	Colour normalColour, overColour, downColour;
 
-	Image snap;
 	GuiPadRow *globalSb, *row1Sb, *row2Sb, *row3Sb, *row4Sb, *row5Sb, *row6Sb, *row7Sb;
 	
 	float sin1, sin2, sinN1, sinN2, sin3, sin4, sin5, sin6, sin7, sinN3, sinN4, sinN5, sinN6, sinN7, sin8, sin9, sin10, sin11, sinN8, sinN9, sinN10, sinN11;

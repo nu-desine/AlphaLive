@@ -84,12 +84,6 @@ GuiPadLayout::GuiPadLayout(AlphaLiveEngine &alphaLiveEngineRef_, MainComponent &
 	//path for hit test - DO WE NEED A HIT TEST FOR THIS COMPONENT?
 	hitPath.addEllipse (220.0f, 40.0f, 570.0f, 570.0f);
 	
-	pStore = 0;
-	rotateValue = 0;
-	pivotX = 0;
-	pivotY = 0;
-	s = 0;	
-	
 	sin1 = 0.3826834324;
 	sin2 = 0.9238795325;
 	sinN1 = -sin1;
@@ -250,32 +244,8 @@ void GuiPadLayout::setPadPressure (int pad, int pressure)
     pads[pad]->setGradient(pressure); 
 }
 
-void GuiPadLayout::rotated(int val)
-{
-	//function is called once the pad rotate slider drag has ended to rotate individual pads to original angle 
-	rotateValue = val;
-	rotateValue = -rotateValue;
-	repaint();
-}
-
 void GuiPadLayout::paint (Graphics& g)
 {
-		
-	if (s == 1) 
-    {
-		//used to create image snapshot of component and children
-		paintEntireComponent(g, false);
-	}
-	
-	for (int i = 0; i <= 47; i++) 
-    {
-		//variables to find centre point of individual pads
-		pivotX = pads[i]->getX() + (pads[i]->getWidth() * 0.5);
-		pivotY = pads[i]->getY() + (pads[i]->getHeight() * 0.5);
-		
-		//transformation to rotate pads back to original angle
-		pads[i]->setTransform (AffineTransform::rotation ((float) (rotateValue / (180.0 / double_Pi)), pivotX , pivotY));
-    }
 
 }
 
@@ -476,18 +446,6 @@ void GuiPadLayout::modeChange(int padNumber, int modeNumber)
     pads[padNumber]->modeChange(modeNumber);
 }
 
-
-Image GuiPadLayout::snapshot()
-{
-	//returns an image of a complete snapshot of this component, including children
-	
-	s = 1;
-	repaint();
-	s = 0;
-	snap = createComponentSnapshot(Rectangle<int>(0, 0, getWidth(), getHeight()), true);
-	return snap;
-	
-}
 
 AlphaLiveEngine& GuiPadLayout::getAlphaLiveEngine()
 {

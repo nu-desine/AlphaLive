@@ -99,13 +99,8 @@ private:
 	float cos1, cos2, cosN1, cosN2, cos3, cos4, cos5, cos6, cos7, cosN3, cosN4, cosN5, cosN6, cosN7, cos8, cos9, cos10, cos11, cosN8, cosN9, cosN10, cosN11;
 	
 	unsigned char alphaThreshold;
-    
-    
-    
-    bool shouldDisplaySettings;
-	
 
-	
+    bool shouldDisplaySettings;	
 };
 
 

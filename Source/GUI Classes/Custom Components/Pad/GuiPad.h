@@ -73,14 +73,6 @@ public:
 private:
     //==============================================================================
     
-	/*
-     unsigned char alphaThreshold;
-     int imageX, imageY, imageW, imageH;
-     Image image;
-     float normalOpacity, overOpacity, downOpacity, onOpacity;
-	 Colour &normalColour, &overColour, &downColour;
-	 */
-    
     int padNumber;
 	
 	String message, padName;

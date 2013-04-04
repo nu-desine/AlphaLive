@@ -21,7 +21,6 @@
  */
 
 #include "GuiPadLayout.h"
-//#include "../../Views/MainComponent.h"
 
 GuiPadLayout::GuiPadLayout(AlphaLiveEngine &alphaLiveEngineRef_, MainComponent &ref)
                             :   Component ("GuiPadLayout"),
@@ -30,8 +29,6 @@ GuiPadLayout::GuiPadLayout(AlphaLiveEngine &alphaLiveEngineRef_, MainComponent &
                                 
 
 {
-
-    
     //adds buttons to select rows using custom button GuiPadRow
     row6Sb =  new GuiPadRow(40);
     row5Sb =  new GuiPadRow(62);
@@ -42,44 +39,36 @@ GuiPadLayout::GuiPadLayout(AlphaLiveEngine &alphaLiveEngineRef_, MainComponent &
     
     row1Sb->addListener(this);
 	addAndMakeVisible(row1Sb);
-	//row1Sb->toBehind(globalSb);
     row1Sb->addMouseListener(this, true);
 	
 	row2Sb->addListener(this);
 	addAndMakeVisible(row2Sb);
-	//row2Sb->toBehind(row1Sb);
     row2Sb->addMouseListener(this, true);
 	
 	row3Sb->addListener(this);
 	addAndMakeVisible(row3Sb);
-	//row3Sb->toBehind(row2Sb);
     row3Sb->addMouseListener(this, true);
 	
 	row4Sb->addListener(this);
 	addAndMakeVisible(row4Sb);
-	//row4Sb->toBehind(row3Sb);
     row4Sb->addMouseListener(this, true);
 	
 	row5Sb->addListener(this);
 	addAndMakeVisible(row5Sb);
-	//row5Sb->toBehind(row4Sb);
     row5Sb->addMouseListener(this, true);
 	
 	row6Sb->addListener(this);
 	addAndMakeVisible(row6Sb);
-	//row6Sb->toBehind(row5Sb);
     row6Sb->addMouseListener(this, true);
     
     globalSb = new GuiPadRow(58);
 	globalSb->addListener(this);
 	addAndMakeVisible(globalSb);
-	//globalSb->toBehind(pads[0]);
     globalSb->addMouseListener(this, true);
 	
 	row7Sb = new GuiPadRow(65);
 	row7Sb->addListener(this);
 	addAndMakeVisible(row7Sb);
-	//globalSb->toBehind(pads[0]);
     row7Sb->addMouseListener(this, true);
     
 	
@@ -153,9 +142,6 @@ GuiPadLayout::GuiPadLayout(AlphaLiveEngine &alphaLiveEngineRef_, MainComponent &
 	cosN9 = -cos9;
 	cosN10 = -cos10;
 	cosN11 = -cos11;
-	
-    //trigger the global button being clicked to set a default set of selected pads!
-	//globalSb->triggerClick();
     
     shouldDisplaySettings = false;
     //currentlySelectedPad = 99;
@@ -183,7 +169,6 @@ GuiPadLayout::~GuiPadLayout()
 
 void GuiPadLayout::resized()
 {
-	
 	setCentrePosition(384, 295);
 	globalSb->centreWithSize(58, 58);
     
@@ -289,12 +274,9 @@ void GuiPadLayout::paint (Graphics& g)
 		pivotY = pads[i]->getY() + (pads[i]->getHeight() * 0.5);
 		
 		//transformation to rotate pads back to original angle
-		pads[i]->setTransform (AffineTransform::rotation ((float) (rotateValue / (180.0 / double_Pi)), pivotX , pivotY));	
-		
+		pads[i]->setTransform (AffineTransform::rotation ((float) (rotateValue / (180.0 / double_Pi)), pivotX , pivotY));
     }
-	
-	
-	
+
 }
 
 
@@ -470,28 +452,7 @@ void GuiPadLayout::buttonClicked(Button *button)
         for (int i = 0; i <=47; i++)
             turnOff(i);
     }
-    
-    
-    //UPDATE IF THE CODE IS COMMENTED-OUT CLEARLY I DECIDED AGAINST IT AND SORTED OUT ANY PROBLEMS ELSEWHERE!
-    //The below code sorts the pads into numerical order.
-    //Is this how we want to do it?
-    //It improves settings scales and layouts and then transposing them correctly,
-    //but would it be good if users can apply a set of notes to a selected order of
-    //pads, for instance a scale going down instead of up? This could be done manually
-    //but wouldn't be as easy. Maybe there should be an option to sort or unsort?
-    
-    //Places where sorting makes a difference:
-    // - Cmd-clicking on the piano for mutiple pads in midi mode
-    // - alt-clicking piano for midi pads? Or here is it more to do with finding the true 'root' note?
-    // - Applying scales and layouts from the toolbox. For layouts pads have to be sorted though!
-    /*
-    for (int x = selectedPads.size() - 1; x >= 0; x--)
-    {
-        if (selectedPads[x] < selectedPads[x-1])
-            selectedPads.swap(x, x-1);
-    }
-     */
-    
+
     //pass on the selected pads to mainComponent, which then passes it further into the application..
     mainComponentRef.setCurrentlySelectedPad(selectedPads);
 	
@@ -637,7 +598,6 @@ void GuiPadLayout::mouseEnter (const MouseEvent &e)
         mainComponentRef.setInfoTextBoxText(translate("Click here to deselect all pads."));
     }
        
-    
 }
 
 void GuiPadLayout::mouseExit (const MouseEvent &e)
@@ -645,8 +605,6 @@ void GuiPadLayout::mouseExit (const MouseEvent &e)
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty); 
 }
-
-
 
 
 void GuiPadLayout::copyPadSettings()
@@ -661,5 +619,3 @@ void GuiPadLayout::pastePadSettings()
     //this function should only be called if a single pad is selected
     pads[selectedPads[0]]->pastePadSettings();
 }
-
-

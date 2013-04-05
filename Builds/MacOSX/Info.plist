@@ -24,7 +24,7 @@
 	<key>CFBundleIconFile</key>
 	<string>icon.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.nu_desine.AlphaLive</string>
+	<string>com.nu-desine.AlphaLive</string>
 	<key>CFBundleName</key>
 	<string>AlphaLive</string>
 	<key>CFBundlePackageType</key>

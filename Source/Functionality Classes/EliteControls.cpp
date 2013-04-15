@@ -255,6 +255,16 @@ void EliteControls::getInputData(int control, int value)
                 }
             }
             
+            //metronome
+            else if (controlType == 7)
+            {
+                if (eliteControlValue == 1)
+                {
+                    //const MessageManagerLock mmLock;
+                    mainComponent->getGuiGlobalClock()->getMetronomeButton()->triggerClick();
+                }
+            }
+            
             //save
             else if (controlType == 3)
             {

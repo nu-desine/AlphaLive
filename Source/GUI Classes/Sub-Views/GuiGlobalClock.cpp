@@ -318,6 +318,11 @@ Slider* GuiGlobalClock::getTempoSlider()
     return tempoSlider;
 }
 
+Button* GuiGlobalClock::getMetronomeButton()
+{
+    return metronomeButton;
+}
+
 void GuiGlobalClock::mouseEnter (const MouseEvent &e)
 {
     if (tempoSlider->isMouseOver(true))

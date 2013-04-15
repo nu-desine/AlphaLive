@@ -112,6 +112,7 @@ public:
     Toolbox* getToolbox();
     SceneComponent* getSceneComponent();
     GuiPadLayout* getGuiPadLayout();
+    GuiGlobalClock* getGuiGlobalClock();
     
 	
     //==============================================================================

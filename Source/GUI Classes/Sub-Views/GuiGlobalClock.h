@@ -62,6 +62,7 @@ public:
     void triggerTransportButton();
     
     Slider* getTempoSlider();
+    Button* getMetronomeButton();
     
 private:
     MainComponent &mainComponentRef;

@@ -1007,6 +1007,11 @@ GuiPadLayout* MainComponent::getGuiPadLayout()
     return guiPadLayout;
 }
 
+GuiGlobalClock* MainComponent::getGuiGlobalClock()
+{
+    return globalClock;
+}
+
 
 void MainComponent::setInfoTextBoxText (String text)
 {

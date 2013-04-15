@@ -1316,13 +1316,26 @@ void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
     
     //===get slider depending on command value===
     Slider *sliderToChange = nullptr;
+    double incremValue;
     
     //global gain
     if (command == 1)
+    {
         sliderToChange = gainSlider;
+        incremValue = 0.01;
+    }
     //global pan
     else if (command == 2)
+    {
         sliderToChange = panSlider;
+        incremValue = 0.01;
+    }
+    //tempo
+    else if (command == 3)
+    {
+        sliderToChange = globalClock->getTempoSlider();
+        incremValue = 0.1;
+    }
     
     
     //===process slider value===
@@ -1332,7 +1345,6 @@ void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
         double currentVal = sliderToChange->getValue();
         double maxValue = sliderToChange->getMaximum();
         double minValue = sliderToChange->getMinimum();
-        double incremValue = 0.01;
         
         //incremented value
         if (eliteControlValue >= 1 && eliteControlValue <= 63)

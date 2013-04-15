@@ -38,6 +38,7 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     addChildComponent(dialsMenu = new ComboBox());
     dialsMenu->addItem(translate("Global Gain"), 1);
     dialsMenu->addItem(translate("Global Pan"), 2);
+    dialsMenu->addItem(translate("Tempo"), 6);
     dialsMenu->addItem(translate("Scene Switcher"), 3);
     dialsMenu->addItem(translate("MIDI CC"), 4);
     dialsMenu->addItem(translate("OSC"), 5);

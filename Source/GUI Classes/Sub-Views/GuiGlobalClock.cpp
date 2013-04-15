@@ -313,6 +313,11 @@ void GuiGlobalClock::updateDisplay()
 
 }
 
+Slider* GuiGlobalClock::getTempoSlider()
+{
+    return tempoSlider;
+}
+
 void GuiGlobalClock::mouseEnter (const MouseEvent &e)
 {
     if (tempoSlider->isMouseOver(true))

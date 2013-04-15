@@ -61,6 +61,8 @@ public:
     
     void triggerTransportButton();
     
+    Slider* getTempoSlider();
+    
 private:
     MainComponent &mainComponentRef;
     AlphaLiveEngine &alphaLiveEngineRef;

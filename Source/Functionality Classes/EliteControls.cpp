@@ -72,6 +72,12 @@ void EliteControls::getInputData(int control, int value)
                 mainComponent->sendEliteDialCommand (2, eliteControlValue);
             }
             
+            //tempo
+            else if (controlType == 6)
+            {
+                mainComponent->sendEliteDialCommand (3, eliteControlValue);
+            }
+            
             //scene switcher
             else if (controlType == 3)
             {

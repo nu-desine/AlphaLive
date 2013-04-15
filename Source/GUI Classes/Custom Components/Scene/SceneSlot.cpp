@@ -82,6 +82,14 @@ void SceneSlot::paint (Graphics &g)
         g.drawFittedText(slotNumberString, 0, 0, getWidth(), getHeight(), Justification::centred, 1);
     }
     
+    if (status == 2)
+    {
+        //text
+        g.setColour(Colours::black);
+        g.setFont(9);
+        g.drawFittedText(slotNumberString, 0, 0, getWidth(), getHeight(), Justification::centred, 1);
+    }
+    
     
     if (somethingIsBeingDraggedOver == true)
     {

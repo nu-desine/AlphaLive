@@ -24,15 +24,6 @@
 
 AlphaSlider::AlphaSlider()
 {
-	
-	this->setSliderStyle(RotaryVerticalDrag);
-	this->setTextBoxStyle(NoTextBox, false, 80, 40);
-	this->setColour(textBoxBackgroundColourId , Colours::transparentBlack);
-	this->setColour(textBoxOutlineColourId  , Colours::transparentBlack);
-	this->setColour(textBoxHighlightColourId, Colours::white);
-	this->setColour(textBoxTextColourId, Colours::white);
-	addListener(this);
-	
 	addAndMakeVisible(sliderValueLabel = new Label());
 	sliderValueLabel->setFont(Font(11));
 	sliderValueLabel->setText(String(getValue()), false);
@@ -42,9 +33,16 @@ AlphaSlider::AlphaSlider()
     sliderValueLabel->setEditable(false, true, true);
     sliderValueLabel->setInterceptsMouseClicks(false, false);
     sliderValueLabel->addListener(this);
+    
+    setSliderStyle(RotaryVerticalDrag);
+	setTextBoxStyle(NoTextBox, false, 80, 40);
+	setColour(textBoxBackgroundColourId , Colours::transparentBlack);
+	setColour(textBoxOutlineColourId  , Colours::transparentBlack);
+	setColour(textBoxHighlightColourId, Colours::white);
+	setColour(textBoxTextColourId, Colours::white);
+	addListener(this);
 	
 	i = 0;
-	
 	arrowUpColour = arrowDownColour = Colours::grey.withAlpha(0.3f);
 }
 
@@ -55,9 +53,15 @@ AlphaSlider::~AlphaSlider()
     
 }
 
+void AlphaSlider::resized()
+{
+    sliderValueLabel->setBounds((getWidth()*0.15), (getHeight()*0.35), (getWidth()*0.7), (getHeight()*0.3));
+}
 
 void AlphaSlider::paint(Graphics& g)
 {
+    thePath.clear();
+    
 	thePath.addEllipse(0, 0, getWidth(), getHeight());
 	
 	g.setColour(Colours::black);
@@ -81,9 +85,7 @@ void AlphaSlider::paint(Graphics& g)
 		i = 1;
 	}
 	
-	sliderValueLabel->setBounds((getWidth()*0.15), (getHeight()*0.35), (getWidth()*0.7), (getHeight()*0.3));
 	valueStore = getValue();
-
 }
 
 void AlphaSlider::sliderValueChanged (Slider *slider)

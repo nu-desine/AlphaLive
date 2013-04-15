@@ -45,6 +45,7 @@ public:
     AlphaSlider();
     ~AlphaSlider();
 	void paint(Graphics& g);
+    void resized();
 	
 	void sliderValueChanged (Slider *slider);
 	void labelTextChanged (Label* labelThatHasChanged);

@@ -210,6 +210,8 @@ private:
     DeviceStatusComponent *deviceStatusComponent;
     SoftwareUpdateComponent *softwareUpdateComponent;
     
+    Component *mouseOverComponent;
+    
     //==============================================================================
 };
 

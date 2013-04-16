@@ -78,6 +78,12 @@ void EliteControls::getInputData(int control, int value)
                 mainComponent->sendEliteDialCommand (3, eliteControlValue);
             }
             
+            //smart dial
+            else if (controlType == 7)
+            {
+                mainComponent->sendEliteDialCommand (4, eliteControlValue);
+            }
+            
             //scene switcher
             else if (controlType == 3)
             {

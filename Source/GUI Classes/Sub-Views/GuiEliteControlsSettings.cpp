@@ -42,6 +42,7 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     dialsMenu->addItem(translate("Scene Switcher"), 3);
     dialsMenu->addItem(translate("MIDI CC"), 4);
     dialsMenu->addItem(translate("OSC"), 5);
+    dialsMenu->addItem(translate("Smart Dial"), 7);
     dialsMenu->addListener(this);
     dialsMenu->addMouseListener(this, true);
     

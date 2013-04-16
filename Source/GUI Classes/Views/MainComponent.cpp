@@ -73,12 +73,22 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     
     //Mode Gui's
     addChildComponent(guiMidiMode = new GuiMidiMode(*this));
-    addChildComponent(guiSamplerMode = new GuiSamplerMode(*this));
-    addChildComponent(guiSequencerMode = new GuiSequencerMode(*alphaLiveEngineRef.getModeSequencer(), *this, appDocumentStateRef)); 
-    addChildComponent(guiControllerMode = new GuiControllerMode(*this));
-    addChildComponent(guiGlobalPadSettings = new GuiGlobalPadSettings(*this));
-    addChildComponent(eliteControlsSettings = new GuiEliteControlsSettings(*this));
+    guiMidiMode->addMouseListener(this, true);
     
+    addChildComponent(guiSamplerMode = new GuiSamplerMode(*this));
+    guiSamplerMode->addMouseListener(this, true);
+    
+    addChildComponent(guiSequencerMode = new GuiSequencerMode(*alphaLiveEngineRef.getModeSequencer(), *this, appDocumentStateRef)); 
+    guiSequencerMode->addMouseListener(this, true);
+    
+    addChildComponent(guiControllerMode = new GuiControllerMode(*this));
+    guiControllerMode->addMouseListener(this, true);
+    
+    addChildComponent(guiGlobalPadSettings = new GuiGlobalPadSettings(*this));
+    guiGlobalPadSettings->addMouseListener(this, true);
+    
+    addChildComponent(eliteControlsSettings = new GuiEliteControlsSettings(*this));
+    eliteControlsSettings->addMouseListener(this, true);
     
     //Pad Layout
 	addAndMakeVisible(guiPadLayout = new GuiPadLayout(alphaLiveEngineRef, *this));
@@ -140,6 +150,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //Global clock bar
     addAndMakeVisible(globalClock = new GuiGlobalClock(*this, alphaLiveEngineRef));
     globalClock->setInterceptsMouseClicks(false, true);
+    globalClock->addMouseListener(this, true);
 	
     //open/save buttons
 	Image *openImage = new Image(ImageCache::getFromMemory(BinaryDataNew::loadsymbol_png, BinaryDataNew::loadsymbol_pngSize)); 
@@ -182,41 +193,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     gainPanValueLabel->setColour(Label::textColourId, AlphaColours::blue);
     gainPanValueLabel->setFont(Font(12));
     gainPanValueLabel->addMouseListener(this, true);
-    
-    /*
-     
-    //killswitch button
-    addAndMakeVisible(killswitchButton = new TextButton());
-    killswitchButton->setColour(TextButton::buttonColourId, Colours::blue);
-    killswitchButton->setCommandToTrigger(commandManager, CommandIDs::KillSwitch, false);
-    killswitchButton->addMouseListener(this, true);*/
-    
-    
-   
-    /*
-    addAndMakeVisible(autoShowSettingsSwitch = new GuiSwitch());
-    autoShowSettingsSwitch->addListener(this);
-    autoShowSettingsSwitch->setClickingTogglesState(true);
-    autoShowSettingsSwitch->setToggleState(false, false);
-    autoShowSettingsSwitch->addMouseListener(this, true);
-     */
-    
-    
-    /*
-    //'rotate pad display' stuff
-    addAndMakeVisible(padRotate = new Slider);
-	padRotate->setSliderStyle(Slider::Rotary);
-	padRotate->setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
-	padRotate->setRotaryParameters(0.0f, 6.2831f, false);
-	padRotate->addListener(this);
-    padRotate->setOpaque(false);
-	padRotate->setRange(0, 360, 1);
-    padRotate->addMouseListener(this, false);
-	rotateFlag = 0;
-	pivotX = 0;
-	pivotY = 0;
-	offskew = 0;
-     */
     
     //piano
     addAndMakeVisible(midiPiano = new GuiPiano());
@@ -279,6 +255,8 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     else
         eliteControls->setVisible(false);
     
+    mouseOverComponent = nullptr;
+    
 }
 
 
@@ -331,7 +309,6 @@ void MainComponent::resized()
     saveButton->setBounds(180, 38, 30, 30);
     
     sceneComponent->setBounds(5, 10, 20, getHeight());
-    //clearPresetsButton->setBounds(7, 646, 16, 16);
     
     globalClock->setBounds(479, 0, 266, 144);
     
@@ -358,21 +335,8 @@ void MainComponent::resized()
 
 void MainComponent::paint(juce::Graphics &g)
 {
-    //Rectangle<int> rect = g.getClipBounds();
-    //std::cout << "Painting main: " << rect.getX() << " " << rect.getY() << " " << rect.getRight() << " " << rect.getBottom() << std::endl;
-    
     g.setOrigin(0, 0);
 	g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), 0, 0, backgroundImage.getWidth(), backgroundImage.getHeight());
-    
-    
-    //if (rotateFlag == 1)  
-    //{
-	//	g.setOrigin(0, 7);
-	//	g.drawImageTransformed(rotatedPadsImage, (AffineTransform::rotation ((float) (padRotate->getValue() / (180.0 / double_Pi)), getWidth()*0.5, (getHeight()-30/*-30 as the image doesn't go all the way to the bottom of the component, due to the help box now being there*/)*0.5)), false);
-	//	g.setOrigin(0, 0);
-    
-	//}
-	
 	
 	if (noPadsSelected == 1) 
     {
@@ -411,20 +375,7 @@ void MainComponent::paint(juce::Graphics &g)
 	
 	g.setColour(Colours::grey.withAlpha(0.3f));
 	g.drawEllipse(35, 5, 87, 87, 1.0f);
-	
-    //The below code is for the blue circle for the gain/pan control. what was it meant for?
-	//g.setColour(Colours::black);
-	//g.fillEllipse(32, 73, 58, 58);
-	
-	//ColourGradient fillGradient(AlphaColours::blue, 32+(58*0.5), 73+(58*0.6), AlphaColours::lightblue, 32+(58*0.5), 73, false);
-	//g.setGradientFill(fillGradient);
-	
-	//g.fillEllipse((32+(58*0.15)), (73+(58*0.15)), (58*0.7), (58*0.7));
-	
-	//g.setColour(Colours::grey.withAlpha(0.3f));
-	//g.drawEllipse((32+(58*0.1)), (73+(58*0.1)), (58*0.8), (58*0.8), 1.0f);
-
-    
+  
 }
 
 
@@ -1214,6 +1165,9 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     else if (panSlider->isMouseOver(true))
         gainPanValueLabel->setText(String(panSlider->getValue(), 3), false);
     
+    
+    mouseOverComponent = e.eventComponent;
+    
 }
 
 //called whenever a the mouse exits a component which has a MouseListener attached to it
@@ -1339,9 +1293,36 @@ void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
     else if (command == 3)
     {
         sliderToChange = globalClock->getTempoSlider();
-        incremValue = 0.1;
+        incremValue = 1.0;
     }
     
+    //smart dial
+    else if (command == 4)
+    {
+        const bool isSlider = dynamic_cast<juce::Slider *> (mouseOverComponent) != nullptr;
+        
+        if (isSlider)
+        {
+            sliderToChange = dynamic_cast<juce::Slider *> (mouseOverComponent);
+
+            incremValue = sliderToChange->getMaximum() / 100.0;
+            
+//            if (sliderToChange->getMaximum() <= 2.0)
+//                incremValue = 0.01;
+//            else if (sliderToChange->getMaximum() <= 20.0)
+//                incremValue = 0.1;
+//            else if (sliderToChange->getMaximum() <= 200.0)
+//                incremValue = 1;
+//            else if (sliderToChange->getMaximum() <= 2000.0)
+//                incremValue = 10;
+//            else if (sliderToChange->getMaximum() <= 20000.0)
+//                incremValue = 100;
+//            else if (sliderToChange->getMaximum() <= 200000.0)
+//                incremValue = 1000;
+
+        }
+        
+    }
     
     //===process slider value===
     if (sliderToChange != nullptr)

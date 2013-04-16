@@ -26,8 +26,6 @@
 #include "../../../JuceLibraryCode/JuceHeader.h"
 #include "../../Functionality Classes/AlphaLiveEngine.h"
 #include "../Custom Components/General/AlphaSlider.h"
-#include "../../Application/AbstractSubjectAndObserver.h"
-//#include "../Custom Components/General/GuiSwitch.h"
 #include "../Custom Components/General/SettingsButton.h"
 #include "../Custom Components/General/AlphaTextButton.h"
 #include "../Custom Components/General/ModeButton.h"
@@ -35,10 +33,9 @@
 class MainComponent;
 
 class GuiGlobalClock    :   public Component,
-public Slider::Listener,
-public Button::Listener,
-public ComboBox::Listener,
-public Observer //so this class can observe GlobalClock
+                            public Slider::Listener,
+                            public Button::Listener,
+                            public ComboBox::Listener
 {
 public:
     GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2);
@@ -54,8 +51,8 @@ public:
     
     void updateDisplay();
     
-    //override the Observer virtual update function
-    bool update(const Subject& theChangedSubject);
+    void updateClockDisplay (int beatNumber, int barNumber);
+    void updateTransportButtonDisplay (bool status);
     
     void toggleTransportButtonOff();
     

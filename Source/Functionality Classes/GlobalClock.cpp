@@ -25,6 +25,7 @@
 #include "AlphaLiveEngine.h"
 #include "../File and Settings/StoredSettings.h"
 #include "../GUI Classes/Binary Data/BinaryDataNew.h"
+#include "../GUI Classes/Views/MainComponent.h"
 
 GlobalClock::GlobalClock(AlphaLiveEngine &ref) 
             :   Thread("Global Clock"),
@@ -35,7 +36,6 @@ GlobalClock::GlobalClock(AlphaLiveEngine &ref)
     tempo = AppSettings::Instance()->getGlobalTempo();
     timeInterval = (double(15000.0)/tempo);
     beatsPerBar = AppSettings::Instance()->getBeatsPerBar();
-    guiUpdateFlag = 1;
     quantizationValue = AppSettings::Instance()->getQuantizationValue();
     metronomeStatus = AppSettings::Instance()->getMetronomeStatus();
     
@@ -101,6 +101,8 @@ GlobalClock::GlobalClock(AlphaLiveEngine &ref)
     //mix audio sources together
     audioMixer.addInputSource(&tickFileSource, false); //add as inputsource to audioMixer
     audioMixer.addInputSource(&tockFileSource, false); //add as inputsource to audioMixer
+    
+    broadcaster.addActionListener(this);
 }
 
 GlobalClock::~GlobalClock()
@@ -117,8 +119,7 @@ void GlobalClock::run()
 {
     microbeatNumber = beatNumber = barNumber = 1;
     //tell GuiGlobalClock to update its display
-    guiUpdateFlag = 1;
-    triggerAsyncUpdate();
+    broadcaster.sendActionMessage("UPDATE CLOCK DISPLAY");
     
     //set the time that the thread loop will intially sleep for
     currentTime = Time::getMillisecondCounter() + int(timeInterval);
@@ -137,8 +138,7 @@ void GlobalClock::run()
              beatNumber++;
              //tell GuiGlobalClock to update its beat Number display. 
              //Bar number updates according to beat number within GuiGlobalClock
-             guiUpdateFlag = 1;
-             triggerAsyncUpdate();
+             broadcaster.sendActionMessage("UPDATE CLOCK DISPLAY");
 
          }
          if (beatNumber >= beatsPerBar+1) //1 bar
@@ -239,25 +239,28 @@ void GlobalClock::run()
     
 }
 
-void GlobalClock::handleAsyncUpdate()
+void GlobalClock::actionListenerCallback (const String& message)
 {
-    //notify GuiGlobalClock
-    notifyObs();
+    if (message == "UPDATE CLOCK DISPLAY")
+    {
+        mainComponent->getGuiGlobalClock()->updateClockDisplay(beatNumber, barNumber);
+    }
+    
+    else if (message == "UPDATE TRANSPORT BUTTON")
+    {
+        mainComponent->getGuiGlobalClock()->updateTransportButtonDisplay(true);
+    }
 }
 
 
 void GlobalClock::startClock()
 {
-    
     //update the GUI of the start/stop button. 
     //This is only really neccassery when auto started from pressing a pad - check for that here?
     //Here i need to LOCK the message thread and directly call notifyObs() instead of through the AsyncUpdater
     //due to the weirdness where using the hardware to trigger the clock would cause the button to not
     //be updated, but using alt-click would work fine! why?
-    guiUpdateFlag = 2;
-    const MessageManagerLock mmLock; //lock event thread so it is safe to make calls in the message thread
-    //triggerAsyncUpdate();
-    notifyObs();
+    broadcaster.sendActionMessage("UPDATE TRANSPORT BUTTON");
     
     //start the thread
     startThread(6);
@@ -322,9 +325,7 @@ int GlobalClock::getBarNumber()
     return barNumber;
 }
 
-int GlobalClock::getGuiUpdateFlag()
+void GlobalClock::setMainComponent(MainComponent *mainComponent_)
 {
-    return guiUpdateFlag;
+    mainComponent = mainComponent_;
 }
-
-

@@ -31,19 +31,20 @@
 #define H_GLOBALCLOCK
 
 #include "../../JuceLibraryCode/JuceHeader.h"
-#include "../Application/AbstractSubjectAndObserver.h"
 
 class AlphaLiveEngine;
+class MainComponent;
 
 class GlobalClock :     public Thread,
-                        public Subject, //so this class can notify the observer class (GuiGlobalClock)
-                        public AsyncUpdater,
-                        public AudioSource
+                        public AudioSource,
+                        public ActionListener
 {
 public:
     GlobalClock(AlphaLiveEngine &ref);
     ~GlobalClock();
-    void handleAsyncUpdate();
+    
+    void actionListenerCallback (const String& message);
+    
     //Thread callback function
     void run();
     
@@ -63,8 +64,7 @@ public:
     int getBeatNumber();
     int getBarNumber();
     
-    int getGuiUpdateFlag();
-    
+    void setMainComponent(MainComponent *mainComponent_);
     
 private:
     
@@ -76,7 +76,6 @@ private:
     
     int beatsPerBar;
     int microbeatNumber, beatNumber, barNumber;
-    int guiUpdateFlag; //1 - beat indictor, 2 - Toggle start button on
     int quantizationValue;
     bool metronomeStatus;
     
@@ -86,7 +85,8 @@ private:
     ScopedPointer <AudioFormatReaderSource> tickAudioFormatReaderSource, tockAudioFormatReaderSource;
     ScopedPointer <TimeSliceThread> audioTransportSourceThread;
     
-    
+    ActionBroadcaster broadcaster;
+    MainComponent *mainComponent;
 };
 
 #endif //H_GLOBALCLOCK

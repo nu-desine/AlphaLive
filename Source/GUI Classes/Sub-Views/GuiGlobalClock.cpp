@@ -35,8 +35,6 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
 :   mainComponentRef(ref),
     alphaLiveEngineRef(ref2)
 {
-    mainComponentRef.getAlphaLiveEngineRef().getGlobalClock()->attach(this);
-    
     //tempo slider (IncDecButtons)
     addAndMakeVisible(tempoSlider = new AlphaSlider());
     tempoSlider->setRange(60.0, 360.0, 0.1);
@@ -127,10 +125,6 @@ GuiGlobalClock::~GuiGlobalClock()
     quantizationValueButtons.clear();
     
     deleteAllChildren();
-    //delete animator;
-    
-    //detach this class from the subject class
-    mainComponentRef.getAlphaLiveEngineRef().getGlobalClock()->detach(this);
 }
 
 void GuiGlobalClock::resized()
@@ -209,28 +203,24 @@ void GuiGlobalClock::paint (Graphics &g)
 }
 
 
-bool GuiGlobalClock::update(const Subject& theChangedSubject)
+void GuiGlobalClock::updateClockDisplay (int beatNumber, int barNumber)
 {
-    if (&theChangedSubject == mainComponentRef.getAlphaLiveEngineRef().getGlobalClock())
+    currentBeatNumber = (barNumber * beatNumber) + (beatNumber -1);
+    repaint(606-OFFSET_X, 6, 131, 131);
+}
+
+void GuiGlobalClock::updateTransportButtonDisplay (bool status)
+{
+    if (status == true)
     {
-        //if beat indicator needs updating
-        if (mainComponentRef.getAlphaLiveEngineRef().getGlobalClock()->getGuiUpdateFlag() == 1)
-        {
-            int beat = mainComponentRef.getAlphaLiveEngineRef().getGlobalClock()->getBeatNumber();
-            int bar = mainComponentRef.getAlphaLiveEngineRef().getGlobalClock()->getBarNumber();
-			currentBeatNumber = (bar * beat) + (beat -1);
-        
-            repaint(606-OFFSET_X, 6, 131, 131);
-        }
-        //if transport button needs updating
-        else if (mainComponentRef.getAlphaLiveEngineRef().getGlobalClock()->getGuiUpdateFlag() == 2)
-        {
-            transportButton->setToggleState(true, false);
-            transportButton->setButtonText(translate("STOP"));
-        }
+        transportButton->setToggleState(true, false);
+        transportButton->setButtonText(translate("STOP"));
     }
-	
-    return true;
+    else
+    {
+        transportButton->setToggleState(false, false);
+        transportButton->setButtonText(translate("START"));
+    }
 }
 
 void GuiGlobalClock::sliderValueChanged (Slider* slider)

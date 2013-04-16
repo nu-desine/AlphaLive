@@ -2361,6 +2361,11 @@ int GuiSequencerMode::getCurrentSequenceNumber()
     return currentSequenceNumber;
 }
 
+Button* GuiSequencerMode::getRecordButton()
+{
+    return recordButton;
+}
+
 void GuiSequencerMode::setNoteLengthSliderRange (int maxValue)
 {
     //set the range

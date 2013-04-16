@@ -89,6 +89,8 @@ public:
     
     int getCurrentSequenceNumber();
     
+    Button* getRecordButton();
+    
 private:
     
     Array<int> selectedPads;

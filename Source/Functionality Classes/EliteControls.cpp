@@ -271,6 +271,16 @@ void EliteControls::getInputData(int control, int value)
                 }
             }
             
+            //Sequencer record button
+            else if (controlType == 8)
+            {
+                if (eliteControlValue == 1)
+                {
+                    //const MessageManagerLock mmLock;
+                    mainComponent->getGuiSequencerMode()->getRecordButton()->triggerClick();
+                }
+            }
+            
             //save
             else if (controlType == 3)
             {

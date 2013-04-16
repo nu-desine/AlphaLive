@@ -36,7 +36,7 @@ GuiHighPassFilter::GuiHighPassFilter(MainComponent &ref)
 {
     addAndMakeVisible(mixSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
 	mixSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    mixSlider->setRange(0.0, 1.0);
+    mixSlider->setRange(0.0, 1.0, 0.001);
     mixSlider->addListener(this);
     mixSlider->addMouseListener(this, true);
     
@@ -49,7 +49,7 @@ GuiHighPassFilter::GuiHighPassFilter(MainComponent &ref)
     
     addAndMakeVisible(bandwidthSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	bandwidthSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    bandwidthSlider->setRange(1.0, 100.0);
+    bandwidthSlider->setRange(1.0, 100.0, 0.1);
     bandwidthSlider->addListener(this);
     bandwidthSlider->addMouseListener(this, true);
     
@@ -70,7 +70,7 @@ GuiHighPassFilter::GuiHighPassFilter(MainComponent &ref)
     
     addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
 	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    intensitySlider->setRange(0.0, 1.0);
+    intensitySlider->setRange(0.0, 1.0, 0.001);
     intensitySlider->setValue(1.0, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);

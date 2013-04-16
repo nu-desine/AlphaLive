@@ -37,25 +37,25 @@ GuiReverb::GuiReverb(MainComponent &ref)
     
     addAndMakeVisible(mixSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
 	mixSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    mixSlider->setRange(0.0, 1.0);
+    mixSlider->setRange(0.0, 1.0, 0.001);
     mixSlider->addListener(this);
     mixSlider->addMouseListener(this, true);
     
 	addAndMakeVisible(roomSizeSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
 	roomSizeSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    roomSizeSlider->setRange(0, 1.0);
+    roomSizeSlider->setRange(0, 1.0, 0.001);
     roomSizeSlider->addListener(this);
     roomSizeSlider->addMouseListener(this, true);
     
     addAndMakeVisible(dampingSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	dampingSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    dampingSlider->setRange(0.0, 1.0);
+    dampingSlider->setRange(0.0, 1.0, 0.001);
     dampingSlider->addListener(this);
     dampingSlider->addMouseListener(this, true);
     
     addAndMakeVisible(widthSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
 	widthSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    widthSlider->setRange(0.0, 1.0);
+    widthSlider->setRange(0.0, 1.0, 0.001);
     widthSlider->addListener(this);
     widthSlider->addMouseListener(this, true);
     
@@ -79,7 +79,7 @@ GuiReverb::GuiReverb(MainComponent &ref)
     
     addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
 	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    intensitySlider->setRange(0.0, 1.0);
+    intensitySlider->setRange(0.0, 1.0, 0.001);
     intensitySlider->setValue(1.0, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);

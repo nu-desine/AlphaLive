@@ -36,19 +36,19 @@ GuiDelay::GuiDelay(MainComponent &ref)
 {
     addAndMakeVisible(wetMixSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
 	wetMixSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    wetMixSlider->setRange(0.0, 1.0);
+    wetMixSlider->setRange(0.0, 1.0, 0.001);
     wetMixSlider->addListener(this);
     wetMixSlider->addMouseListener(this, true);
     
 	addAndMakeVisible(feedbackSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
 	feedbackSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    feedbackSlider->setRange(0, 1.0);
+    feedbackSlider->setRange(0, 1.0, 0.001);
     feedbackSlider->addListener(this);
     feedbackSlider->addMouseListener(this, true);
     
     addAndMakeVisible(delayTimeSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	delayTimeSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    delayTimeSlider->setRange(0.0, 4000.0);
+    delayTimeSlider->setRange(0.0, 4000.0, 1);
     delayTimeSlider->addListener(this);
     delayTimeSlider->addMouseListener(this, true);
     

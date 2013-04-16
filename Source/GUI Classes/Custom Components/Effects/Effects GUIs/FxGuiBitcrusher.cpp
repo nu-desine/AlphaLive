@@ -37,37 +37,37 @@ GuiBitcrusher::GuiBitcrusher(MainComponent &ref)
 	
 	addAndMakeVisible(wetDryMixSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
 	wetDryMixSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    wetDryMixSlider->setRange(0, 1.0);
+    wetDryMixSlider->setRange(0, 1.0, 0.001);
     wetDryMixSlider->addListener(this);
     wetDryMixSlider->addMouseListener(this, true);
 	
 	addAndMakeVisible(smoothingSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
 	smoothingSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    smoothingSlider->setRange(0.01, 1.0);
+    smoothingSlider->setRange(0.01, 1.0, 0.001);
     smoothingSlider->addListener(this);
     smoothingSlider->addMouseListener(this, true);
 	
 	addAndMakeVisible(crushSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	crushSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    crushSlider->setRange(1, 8, 1.);
+    crushSlider->setRange(1, 8, 1);
     crushSlider->addListener(this);
     crushSlider->addMouseListener(this, true);
 	
 	addAndMakeVisible(downsampleSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
 	downsampleSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    downsampleSlider->setRange(1, 16, 1.);
+    downsampleSlider->setRange(1, 16, 1);
     downsampleSlider->addListener(this);
     downsampleSlider->addMouseListener(this, true);
 	
     addAndMakeVisible(inputGainSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
 	inputGainSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    inputGainSlider->setRange(0.0, 1.0);
+    inputGainSlider->setRange(0.0, 1.0, 0.001);
     inputGainSlider->addListener(this);
     inputGainSlider->addMouseListener(this, true);
     
     addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 230));
 	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    intensitySlider->setRange(0.0, 1.0);
+    intensitySlider->setRange(0.0, 1.0, 0.001);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
     intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);

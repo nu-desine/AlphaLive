@@ -36,19 +36,19 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
 {
     addAndMakeVisible(depthSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
 	depthSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    depthSlider->setRange(0.0, 1.0);
+    depthSlider->setRange(0.0, 1.0, 0.001);
     depthSlider->addListener(this);
     depthSlider->addMouseListener(this, true);
     
 	addAndMakeVisible(rateSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
 	rateSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    rateSlider->setRange(0, 50.0);
+    rateSlider->setRange(0, 50.0, 0.01);
     rateSlider->addListener(this);
     rateSlider->addMouseListener(this, true);
     
     addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    intensitySlider->setRange(0.0, 1.0);
+    intensitySlider->setRange(0.0, 1.0, 0.001);
     intensitySlider->setValue(0.5, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);

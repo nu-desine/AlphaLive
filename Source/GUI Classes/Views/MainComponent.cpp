@@ -172,7 +172,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	//create pan slider
     addAndMakeVisible(panSlider = new AlphaRotarySlider((225 * (M_PI / 180)), (495 * (M_PI / 180)), 65));
 	panSlider->setRotaryParameters((225 * (M_PI / 180)), (495 * (M_PI / 180)),true);
-    panSlider->setRange(0.0, 1.0);
+    panSlider->setRange(0.0, 1.0, 0.001);
     panSlider->addListener(this);
     panSlider->setValue(0.5, dontSendNotification);
     panSlider->addMouseListener(this, false);
@@ -182,7 +182,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	//gainSlider->setRotaryParameters((225 * (M_PI / 180)), (530 * (M_PI / 180)),true);
     addAndMakeVisible(gainSlider = new AlphaRotarySlider((225 * (M_PI / 180)), (495 * (M_PI / 180)), 81));
 	gainSlider->setRotaryParameters((225 * (M_PI / 180)), (495 * (M_PI / 180)),true);
-    gainSlider->setRange(0.0, 2.0);
+    gainSlider->setRange(0.0, 2.0, 0.001);
     gainSlider->addListener(this);
 	gainSlider->setValue(1.0, dontSendNotification);
     gainSlider->addMouseListener(this, true);
@@ -1305,23 +1305,36 @@ void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
         {
             sliderToChange = dynamic_cast<juce::Slider *> (mouseOverComponent);
 
-            incremValue = sliderToChange->getMaximum() / 100.0;
+            //Determine the increm value.
+            //Increm value is set based on the sliders set interval
+            //An increm value of interval * 10 seems appropriate for intervals below 1.
+            //However for intervals of 1 it seems more appropriate to set it using
+            //the sliders maximum value.
             
-//            if (sliderToChange->getMaximum() <= 2.0)
-//                incremValue = 0.01;
-//            else if (sliderToChange->getMaximum() <= 20.0)
-//                incremValue = 0.1;
-//            else if (sliderToChange->getMaximum() <= 200.0)
-//                incremValue = 1;
-//            else if (sliderToChange->getMaximum() <= 2000.0)
-//                incremValue = 10;
-//            else if (sliderToChange->getMaximum() <= 20000.0)
-//                incremValue = 100;
-//            else if (sliderToChange->getMaximum() <= 200000.0)
-//                incremValue = 1000;
-
+            if (sliderToChange->getInterval() < 1.0)
+            {
+                incremValue = sliderToChange->getInterval() * 10;
+            }
+            else
+            {
+                incremValue = sliderToChange->getInterval();
+                
+                if (sliderToChange->getMaximum() >= 10000)
+                {
+                    incremValue *= 100;
+                }
+                else if (sliderToChange->getMaximum() >= 1000)
+                {
+                    incremValue *= 10;
+                }
+            }
+            
+            //just to be safe (this could be caused is a sliders interval isn't set)...
+            if (incremValue == 0)
+                incremValue = 0.1;
+            
         }
-        
+    
     }
     
     //===process slider value===

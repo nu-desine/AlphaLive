@@ -37,25 +37,25 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
 	
 	addAndMakeVisible(wetDryMixSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 130));
 	wetDryMixSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    wetDryMixSlider->setRange(0, 1.0);
+    wetDryMixSlider->setRange(0, 1.0, 0.001);
     wetDryMixSlider->addListener(this);
     wetDryMixSlider->addMouseListener(this, true);
 	
 	addAndMakeVisible(toneSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 150));
 	toneSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    toneSlider->setRange(0., 1.0);
+    toneSlider->setRange(0., 1.0, 0.001);
     toneSlider->addListener(this);
     toneSlider->addMouseListener(this, true);
 	
 	addAndMakeVisible(driveSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 170));
 	driveSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    driveSlider->setRange(0.1, 60);
+    driveSlider->setRange(0.1, 60, 0.1);
     driveSlider->addListener(this);
     driveSlider->addMouseListener(this, true);
     
     addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 190));
 	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    intensitySlider->setRange(0.0, 1.0);
+    intensitySlider->setRange(0.0, 1.0, 0.001);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
     intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
@@ -63,7 +63,7 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
     //below is temporily hidden in resized()!
     addAndMakeVisible(inputGainSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
 	inputGainSlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    inputGainSlider->setRange(0.0, 1.0);
+    inputGainSlider->setRange(0.0, 1.0, 0.001);
     inputGainSlider->addListener(this);
     inputGainSlider->addMouseListener(this, true);
     

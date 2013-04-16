@@ -95,7 +95,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     //--------------- gain slider-------------------
 	addAndMakeVisible(gainSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	gainSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
-	gainSlider->setRange(0.0, 2.0, 0.01);
+	gainSlider->setRange(0.0, 2.0, 0.001);
     gainSlider->addListener(this);
     gainSlider->setValue(1.0, dontSendNotification);
     gainSlider->addMouseListener(this, true);
@@ -103,7 +103,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	//--------------- pan slider -------------------
 	addChildComponent(panSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	panSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
-	panSlider->setRange(0.0, 1.0, 0.01);
+	panSlider->setRange(0.0, 1.0, 0.001);
     panSlider->addListener(this);
     panSlider->setValue(0.5, dontSendNotification);
     panSlider->addMouseListener(this, true);

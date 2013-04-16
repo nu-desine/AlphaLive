@@ -77,7 +77,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	//--------------- audio gain slider-------------------
 	addChildComponent(audioGainSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	audioGainSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
-	audioGainSlider->setRange(0.0, 2.0, 0.01);
+	audioGainSlider->setRange(0.0, 2.0, 0.001);
     audioGainSlider->addListener(this);
     audioGainSlider->setValue(1.0, dontSendNotification);
     audioGainSlider->addMouseListener(this, true);
@@ -85,7 +85,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	//--------------- audio pan slider-------------------
 	addChildComponent(audioPanSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
 	audioPanSlider->setRotaryParameters((240 * (M_PI / 180)), (480 * (M_PI / 180)),true);
-	audioPanSlider->setRange(0.0, 1.0, 0.01);
+	audioPanSlider->setRange(0.0, 1.0, 0.001);
     audioPanSlider->addListener(this);
     audioPanSlider->setValue(0.5, dontSendNotification);
     audioPanSlider->addMouseListener(this, true);

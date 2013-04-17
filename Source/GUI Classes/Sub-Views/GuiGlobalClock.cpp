@@ -30,7 +30,6 @@
 #define OFFSET_X 479
 #define OFFSET_Y 6
 
-
 GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
 :   mainComponentRef(ref),
     alphaLiveEngineRef(ref2)
@@ -55,6 +54,7 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
     }
 	
     beatsPerBarButtons[2]->setToggleState(true, false);
+    beatsPerBar_ = 4;
 	
 	//quantisation buttons
     for (int i = 0; i < 6; i++)
@@ -80,9 +80,7 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
     }
     
     quantizationValueButtons[3]->setToggleState(true, false);
-    
-    
-    
+
     //transport button
 	addAndMakeVisible(transportButton = new AlphaTextButton());
     transportButton->setButtonText(translate("START"));
@@ -99,7 +97,6 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
     autoStartSwitch->setClickingTogglesState(true);
     autoStartSwitch->addMouseListener(this, true);
      
-    
     //metronome button
     Image *metronomeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::metronomeicon_png, BinaryDataNew::metronomeicon_pngSize));
 	addAndMakeVisible(metronomeButton = new ModeButton(metronomeImage));
@@ -107,16 +104,12 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
 	metronomeButton->addListener(this);
 	metronomeButton->addMouseListener(this, true);
     
-	currentBeatNumber = 0;
-	currentBeatStore = 0;
+	currentStepNumber = 0;
 	
 	countGap = (4 * (M_PI / 180));
 	countSeg = 0;
 	segStart = 0;
-	segEnd = 0;
-    
-    
-    
+	segEnd = 0;  
 }
 
 GuiGlobalClock::~GuiGlobalClock()
@@ -143,69 +136,76 @@ void GuiGlobalClock::resized()
 	
     for (int i = 0; i < 6; i++)
         quantizationValueButtons[i]->setBounds(606-OFFSET_X, 6, 131, 131);
-    
-    
 	
 }
 
 void GuiGlobalClock::paint (Graphics &g)
 {
-	
-    quantiseBg.clear(); // <- without this, the CPU level slowly increases.
-	barsBg.clear();
+    Path quantiseBg, barsBg;
     
+    //Draw semi-circle background for quantise buttons
 	quantiseBg.addPieSegment(603-OFFSET_X, 3, 137, 137, (235.5 * (M_PI / 180)), (404 * (M_PI / 180)), 0.5f);
-	
 	g.setColour(Colours::black);
 	g.fillPath(quantiseBg, getTransform());
 	
+    //Draw circle behind clock display segments
 	g.setColour(Colours::grey.withAlpha(0.2f));
 	g.fillEllipse(634-OFFSET_X, 32, 76, 76);
 	
+    //Draw clock display segments background
 	barsBg.addPieSegment(626-OFFSET_X, 24, 93, 93, 0, (90 * (M_PI / 180)), 0.5f);
 	barsBg.addPieSegment(626-OFFSET_X, 24, 93, 93, (180 * (M_PI / 180)), (270 * (M_PI / 180)), 0.5f);
 	g.setColour(Colours::grey.withAlpha(0.2f));
 	g.fillPath(barsBg, getTransform());
 	
+    //Draw circles around the buttons
 	g.setColour(Colours::black);
 	g.fillEllipse(639-OFFSET_X, 37, 66, 66);
 	g.fillEllipse(515-OFFSET_X, 7, 30, 30);
 	g.fillEllipse(486-OFFSET_X, 5, 22, 22);
 	
-    //in the below call should I get the AppSettings::Instance()->getBeatsPerBar() value from a local variable instead
-    //which is set everytime the beats per bar value is changed in order to reduce CPU?
-	countSeg = ((M_PI/2) - (countGap * AppSettings::Instance()->getBeatsPerBar())) / AppSettings::Instance()->getBeatsPerBar();
-	
-	if (currentBeatNumber == 1) 
-    {
-		barCount.clear();
-		
-		segStart = countGap * 0.5;
-		segEnd = segStart + countSeg;
-		
-		barCount.addPieSegment(627-OFFSET_X, 26, 90, 90, segStart, segEnd, 0.9f);
-	}
-	
-	if (currentBeatNumber != currentBeatStore && currentBeatNumber != 1)
-	{
-		segStart = segEnd + countGap;
-		segEnd = segStart + countSeg;
-		
-		barCount.addPieSegment(627-OFFSET_X, 26, 90, 90, segStart, segEnd, 0.9f);
-        
-		currentBeatStore = currentBeatNumber;	
-	}	
-	
-	g.setColour(AlphaColours::blue);
-	g.fillPath(barCount, getTransform());
+    //=====Draw clock display segments=====
+    //We are now drawing each beat/segment every time, using the
+    //currentStepNumber value to determine how many segments to draw.
+    //This is an improvement over the previous method of drawing
+    //one at a time for two reasons:
+    // - If for some reason this class misses a beat (which seems to not
+    // happen so much (if at all?) with this new method), it will now
+    // correct itself on the next beat instead of being one beat for
+    // the duration of the clocks runtime.
+    // - If the beats per bar value is changed, the display is correctly
+    // updated the next time a beat is displayed as opposed to only when
+    // we get back to the beginning of the clock like before.
     
-	
+    barCount.clear();
+    countSeg = ((M_PI/2) - (countGap * beatsPerBar_)) / beatsPerBar_;
+    
+    for (int i = 0; i < currentStepNumber; i++)
+    {
+        if (i == 0)
+        {
+            segStart = countGap * 0.5;
+            segEnd = segStart + countSeg; 
+        }
+        else
+        {
+            segStart = segEnd + countGap;
+            segEnd = segStart + countSeg;
+        }
+        
+        barCount.addPieSegment(627-OFFSET_X, 26, 90, 90, segStart, segEnd, 0.9f);
+    }
+    
+    g.setColour(AlphaColours::blue);
+	g.fillPath(barCount, getTransform());
 }
 
-
-void GuiGlobalClock::updateClockDisplay (int beatNumber, int barNumber)
+void GuiGlobalClock::updateClockDisplay (int beatNumber, int barNumber, int beatsPerBar)
 {
-    currentBeatNumber = (barNumber * beatNumber) + (beatNumber -1);
+    beatsPerBar_ = beatsPerBar;
+    
+    currentStepNumber = (beatsPerBar * barNumber) - (beatsPerBar - beatNumber);
+    
     repaint(606-OFFSET_X, 6, 131, 131);
 }
 
@@ -270,11 +270,6 @@ void GuiGlobalClock::buttonClicked (Button* button)
         AppSettings::Instance()->setAutoStartClock(autoStartSwitch->getToggleState());
     }
      
-}
-
-void GuiGlobalClock::comboBoxChanged(ComboBox *comboBox)
-{
-    
 }
 
 void GuiGlobalClock::toggleTransportButtonOff()
@@ -368,7 +363,6 @@ void GuiGlobalClock::mouseEnter (const MouseEvent &e)
         }
     }
     
-
 }
 
 void GuiGlobalClock::mouseExit (const MouseEvent &e)

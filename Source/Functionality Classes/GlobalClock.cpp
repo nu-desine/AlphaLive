@@ -243,7 +243,7 @@ void GlobalClock::actionListenerCallback (const String& message)
 {
     if (message == "UPDATE CLOCK DISPLAY")
     {
-        mainComponent->getGuiGlobalClock()->updateClockDisplay(beatNumber, barNumber);
+        mainComponent->getGuiGlobalClock()->updateClockDisplay(beatNumber, barNumber, beatsPerBar);
     }
     
     else if (message == "UPDATE TRANSPORT BUTTON")

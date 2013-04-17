@@ -34,8 +34,7 @@ class MainComponent;
 
 class GuiGlobalClock    :   public Component,
                             public Slider::Listener,
-                            public Button::Listener,
-                            public ComboBox::Listener
+                            public Button::Listener
 {
 public:
     GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2);
@@ -47,11 +46,10 @@ public:
     void mouseExit (const MouseEvent &e);
     void sliderValueChanged (Slider* slider);
     void buttonClicked (Button* button);
-    void comboBoxChanged (ComboBox* comboBox);
     
     void updateDisplay();
     
-    void updateClockDisplay (int beatNumber, int barNumber);
+    void updateClockDisplay (int beatNumber, int barNumber, int beatsPerBar);
     void updateTransportButtonDisplay (bool status);
     
     void toggleTransportButtonOff();
@@ -67,11 +65,12 @@ private:
     
     AlphaSlider *tempoSlider;
 	
-	int currentBeatNumber, currentBeatStore;
+	int currentStepNumber;
+    int beatsPerBar_;
 	
 	float countGap, countSeg, segStart, segEnd;
 	
-	Path barCount, quantiseBg, barsBg;
+	Path barCount;
 	
     AlphaTextButton *transportButton;
     
@@ -79,8 +78,6 @@ private:
     OwnedArray <SettingsButton> quantizationValueButtons;
     
     ModeButton *metronomeButton, *autoStartSwitch;
-
-    
 };
 
 #endif //H_GUIGLOBALCLOCK

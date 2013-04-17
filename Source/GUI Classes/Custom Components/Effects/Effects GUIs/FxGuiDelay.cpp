@@ -106,7 +106,7 @@ GuiDelay::GuiDelay(MainComponent &ref)
     
     addAndMakeVisible(intensitySlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 230));
 	intensitySlider->setRotaryParameters((250 * (M_PI / 180)), (470 * (M_PI / 180)),true);
-    intensitySlider->setRange(0.0, 1.0);
+    intensitySlider->setRange(0.0, 1.0, 0.001);
     intensitySlider->setValue(1.0, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);

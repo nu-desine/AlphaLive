@@ -3657,7 +3657,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PRODUCT_NAME = AlphaLive;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.5;
 				WARNING_CFLAGS = "-Wreorder";
 				ZERO_LINK = NO;
 			};
@@ -3681,7 +3681,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PRODUCT_NAME = AlphaLive;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.5;
 				WARNING_CFLAGS = "-Wreorder";
 				ZERO_LINK = NO;
 			};

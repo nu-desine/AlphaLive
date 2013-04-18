@@ -8,15 +8,6 @@
 		rLoc = 142;
 		rType = 1;
 	};
-	0C161CC616E1708D0081716C /* XCBuildMessageTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "Control reaches end of non-void function";
-		fRef = 0C78A2CD15B467900049C0C8 /* AppDocumentState.cpp */;
-		fallbackIsa = XCBuildMessageTextBookmark;
-		rLen = 1;
-		rLoc = 1831;
-		rType = 1;
-	};
 	0C161CC816E174480081716C /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 0C78A2CD15B467900049C0C8 /* AppDocumentState.cpp */;
@@ -70,10 +61,20 @@
 	};
 	0C78A2CD15B467900049C0C8 /* AppDocumentState.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1300, 42393}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1300, 42198}}";
 			sepNavSelRange = "{100507, 0}";
-			sepNavVisRange = "{100129, 443}";
+			sepNavVisRange = "{99172, 2466}";
 		};
+	};
+	0CFDF88C172005010059DB85 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0C78A2CD15B467900049C0C8 /* AppDocumentState.cpp */;
+		name = "AppDocumentState.cpp: 1817";
+		rLen = 0;
+		rLoc = 100507;
+		rType = 0;
+		vrLen = 2466;
+		vrLoc = 99172;
 	};
 	1321578FCA21CAA9DF2E9344 /* Project object */ = {
 		activeBuildConfigurationName = Release;
@@ -89,7 +90,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					714,
+					759,
 					20,
 					48,
 					43,
@@ -106,13 +107,13 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 383872638;
-			PBXWorkspaceStateSaveDate = 383872638;
+			PBXPerProjectTemplateStateSaveDate = 387973390;
+			PBXWorkspaceStateSaveDate = 387973390;
 		};
 		perUserProjectItems = {
 			0C161C6C16E16ACB0081716C /* PBXTextBookmark */ = 0C161C6C16E16ACB0081716C /* PBXTextBookmark */;
-			0C161CC616E1708D0081716C /* XCBuildMessageTextBookmark */ = 0C161CC616E1708D0081716C /* XCBuildMessageTextBookmark */;
 			0C161CC816E174480081716C /* PBXTextBookmark */ = 0C161CC816E174480081716C /* PBXTextBookmark */;
+			0CFDF88C172005010059DB85 /* PBXTextBookmark */ = 0CFDF88C172005010059DB85 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 0C20E04B15EF5FEE00EC3827 /* Source Control */;
 		userBuildSettings = {

@@ -51,6 +51,8 @@ PadSettings::PadSettings(int arrayIndex)
         velocityCurve = 4; //Static
     
     staticVelocity = 100;
+    velocityMinRange = 0;
+    velocityMaxRange = 127;
     
     //midi mode
     midiNote = 60;
@@ -297,6 +299,8 @@ void PadSettings::resetData (int whatToReset)
             setVelocityCurve(4);
         
         setStaticVelocity(100);
+        setVelocityMinRange(0);
+        setVelocityMaxRange(127);
     }
     
     if (whatToReset != 1)
@@ -527,6 +531,16 @@ void PadSettings::setStaticVelocity(int value)
     staticVelocity = value;
 }
 
+void PadSettings::setVelocityMinRange(int value)
+{
+    velocityMinRange = value;
+}
+
+void PadSettings::setVelocityMaxRange(int value)
+{
+    velocityMaxRange = value;
+}
+
 
 #pragma mark Global accessor functions
 
@@ -559,7 +573,14 @@ int PadSettings::getVelocityCurve()
 {
     return velocityCurve;
 }
-
+int PadSettings::getVelocityMinRange()
+{
+    return velocityMinRange;
+}
+int PadSettings::getVelocityMaxRange()
+{
+    return velocityMaxRange;
+}
 
 #pragma mark MIDI mode mutator functions
 //==================================================================

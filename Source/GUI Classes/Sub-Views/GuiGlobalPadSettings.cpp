@@ -60,13 +60,6 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
     exclusiveGroupSlider->addListener(this);
     exclusiveGroupSlider->setValue(1, dontSendNotification);
     exclusiveGroupSlider->addMouseListener(this, true);
-    
-	/*
-    addAndMakeVisible(velocitySlider = new AlphaSlider());
-    velocitySlider->setRange(0, 127, 1);
-    velocitySlider->addListener(this);
-    velocitySlider->setValue(110, false);
-    velocitySlider->addMouseListener(this, true);*/
 	
 	addChildComponent(velocitySlider = new AlphaRotarySlider((220 * (M_PI / 180)), (500 * (M_PI / 180)), 120));
 	velocitySlider->setRotaryParameters((220 * (M_PI / 180)), (500 * (M_PI / 180)),true);
@@ -74,6 +67,20 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
     velocitySlider->addListener(this);
     velocitySlider->setValue(110, dontSendNotification);
     velocitySlider->addMouseListener(this, true);
+    
+    addAndMakeVisible(velocityMinRangeSlider = new AlphaRotarySlider((220 * (M_PI / 180)), (500 * (M_PI / 180)), 140));
+	velocityMinRangeSlider->setRotaryParameters((220 * (M_PI / 180)), (500 * (M_PI / 180)),true);
+    velocityMinRangeSlider->setRange(0, 127, 1);
+    velocityMinRangeSlider->addListener(this);
+    velocityMinRangeSlider->setValue(0, dontSendNotification);
+    velocityMinRangeSlider->addMouseListener(this, true);
+    
+    addAndMakeVisible(velocityMaxRangeSlider = new AlphaRotarySlider((220 * (M_PI / 180)), (500 * (M_PI / 180)), 120));
+	velocityMaxRangeSlider->setRotaryParameters((220 * (M_PI / 180)), (500 * (M_PI / 180)),true);
+    velocityMaxRangeSlider->setRange(0, 127, 1);
+    velocityMaxRangeSlider->addListener(this);
+    velocityMaxRangeSlider->setValue(127, dontSendNotification);
+    velocityMaxRangeSlider->addMouseListener(this, true);
 	
 	addAndMakeVisible(velocityCurveButton = new AlphaPopUpImageButton(linearImage));
     velocityCurveButton->addListener(this);
@@ -113,6 +120,8 @@ void GuiGlobalPadSettings::resized()
     exclusiveGroupSlider->setBounds(816, 393, 58, 58);
 	
     velocitySlider->setBounds(785, 362, 120, 120);
+    velocityMaxRangeSlider->setBounds(785, 362, 120, 120);
+    velocityMinRangeSlider->setBounds(775, 352, 140, 140);
 	
 	 parameterHoverLabel->setBounds(825, 468, 40, 10);
 	
@@ -123,29 +132,21 @@ void GuiGlobalPadSettings::paint (Graphics& g)
 	
 	ColourGradient fillGradient(AlphaColours::nearlyblack,845 , 461, Colours::black, 845 , 383, false);
 	g.setGradientFill(fillGradient);
-	
 	g.fillEllipse(802, 379, 86, 86);
 	
 	g.setColour(Colours::grey.withAlpha(0.3f));
 	
 	Path trianglePath;
-	trianglePath.addTriangle(844, 288, 963, 493, 726, 493);
+	trianglePath.addTriangle(844, 278, 973, 493, 716, 493);
 	g.strokePath(trianglePath, PathStrokeType(1.0f));
 	
 	g.setColour(Colours::black);
-	
 	g.fillEllipse(678,285, 38, 38);
-	//g.fillEllipse(820, 272, 48, 48);
 	g.fillEllipse(815, 267, 58, 58);
-	//g.fillEllipse(816, 393, 58, 58);
 	
 	g.setColour(Colours::grey.withAlpha(0.3f));
-	
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(820, 272, 48, 48, 1.0f);
-	
-	
-	
 	
 }
 
@@ -220,7 +221,6 @@ void GuiGlobalPadSettings::buttonClicked (Button* button)
         {
             switch (result)
             {
-                   
                 case 1: // Exponential
                     
                     velocityCurveButton->setImage(expoImage);
@@ -252,13 +252,33 @@ void GuiGlobalPadSettings::buttonClicked (Button* button)
                 
             }
             
-            if (result == 4 
-                && (AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 1
-                || AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 4))
-                velocitySlider->setVisible(true);
+            if (result == 4)
+            {
+                if (AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 0 ||
+                    AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 1 ||
+                    AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 4)
+                    velocitySlider->setVisible(true);
+                else
+                    velocitySlider->setVisible(false);
+                
+                velocityMinRangeSlider->setVisible(false);
+                velocityMaxRangeSlider->setVisible(false);
+            }
             else
+            {
                 velocitySlider->setVisible(false);
-			
+                
+                if (AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() != 3)
+                {
+                    velocityMinRangeSlider->setVisible(true);
+                    velocityMaxRangeSlider->setVisible(true);
+                }
+                else
+                {
+                    velocityMinRangeSlider->setVisible(false);
+                    velocityMaxRangeSlider->setVisible(false);
+                }
+            }
 			
         }
 		
@@ -278,7 +298,6 @@ void GuiGlobalPadSettings::buttonClicked (Button* button)
         {
             switch (result)
             {
-					
 				case 1: // Exponential
                     
                     pressureCurveButton->setImage(expoImage);
@@ -305,7 +324,6 @@ void GuiGlobalPadSettings::buttonClicked (Button* button)
 				PAD_SETTINGS->setPressureCurve(result);
             }
 			
-			
         }
 		
 	}
@@ -331,6 +349,30 @@ void GuiGlobalPadSettings::sliderValueChanged (Slider* slider)
 			parameterHoverLabel->setText(String(slider->getValue()), false);
         }
     }
+    else if (slider == velocityMinRangeSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setVelocityMinRange(slider->getValue());
+			parameterHoverLabel->setText(String(slider->getValue()), false);
+        }
+        
+        if (slider->getValue() >= velocityMaxRangeSlider->getValue())
+            velocityMaxRangeSlider->setValue(slider->getValue()+2, sendNotification);
+    }
+    else if (slider == velocityMaxRangeSlider)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setVelocityMaxRange(slider->getValue());
+			parameterHoverLabel->setText(String(slider->getValue()), false);
+        }
+        
+        if (slider->getValue() <= velocityMinRangeSlider->getValue())
+            velocityMinRangeSlider->setValue(slider->getValue()-2, sendNotification);
+    }
 }
 
 void GuiGlobalPadSettings::comboBoxChanged (ComboBox* comboBox)
@@ -347,6 +389,8 @@ void GuiGlobalPadSettings::updateDisplay()
         exclusiveGroupSlider->setValue(PAD_SETTINGS->getExclusiveGroup());
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
         velocitySlider->setValue(PAD_SETTINGS->getStaticVelocity());
+        velocityMinRangeSlider->setValue(PAD_SETTINGS->getVelocityMinRange());
+        velocityMaxRangeSlider->setValue(PAD_SETTINGS->getVelocityMaxRange());
 		parameterHoverLabel->setText(String(PAD_SETTINGS->getStaticVelocity()), false);
 		pressureCurveValue = PAD_SETTINGS->getPressureCurve();
         velocityCurveValue = PAD_SETTINGS->getVelocityCurve();
@@ -446,15 +490,42 @@ void GuiGlobalPadSettings::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getStaticVelocity() != velocity_)
             {
-                velocitySlider->setValue(-999);
+                velocitySlider->setValue(100);
                 break;
             }
             if (i == selectedPads.size()-1)
                 velocitySlider->setValue(velocity_);
-			parameterHoverLabel->setText(String(velocity_), false);
+        }
+        //==================================================================================================
+        int minVelocity_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getVelocityMinRange();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getVelocityMinRange() != minVelocity_)
+            {
+                velocityMinRangeSlider->setValue(0);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                velocityMinRangeSlider->setValue(minVelocity_);
+        }
+        //==================================================================================================
+        int maxVelocity_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getVelocityMaxRange();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getVelocityMaxRange() != maxVelocity_)
+            {
+                velocityMaxRangeSlider->setValue(127);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                velocityMaxRangeSlider->setValue(maxVelocity_);
         }
         
     }
+    
+    
     
     if (exclusiveModeButton->getToggleState() == true)
         exclusiveGroupSlider->setVisible(true);
@@ -520,15 +591,32 @@ void GuiGlobalPadSettings::updateDisplay()
     
     
     //static velocity and in MIDI mode or controller mode
-    if (velocityCurveValue == 4 
-        && (AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 1
-        || AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 4))
+    if (velocityCurveValue == 4)
     {
-        velocitySlider->setVisible(true);
+        if (AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 0 ||
+            AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 1 ||
+            AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() == 4)
+            velocitySlider->setVisible(true);
+        else
+            velocitySlider->setVisible(false);
+        
+        velocityMinRangeSlider->setVisible(false);
+        velocityMaxRangeSlider->setVisible(false);
     }
     else
     {
         velocitySlider->setVisible(false);
+        
+        if (AppSettings::Instance()->padSettings[selectedPads[0]]->getMode() != 3)
+        {
+            velocityMinRangeSlider->setVisible(true);
+            velocityMaxRangeSlider->setVisible(true);
+        }
+        else
+        {
+            velocityMinRangeSlider->setVisible(false);
+            velocityMaxRangeSlider->setVisible(false);
+        }
     }
 }
 
@@ -562,6 +650,18 @@ void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
 		parameterHoverLabel->setText(String(velocitySlider->getValue()), false);
 		parameterHoverLabel->setVisible(true);
     }
+    else if (velocityMinRangeSlider->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Velocity Minimum Range Selector. Along with the Maximum Range Selector it sets and displays the MIDI velocity range for the selected pads."));
+		parameterHoverLabel->setText(String(velocityMinRangeSlider->getValue()), false);
+		parameterHoverLabel->setVisible(true);
+    }
+    else if (velocityMaxRangeSlider->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Velocity Maximum Range Selector. Along with the Minimum Range Selector it sets and displays the MIDI velocity range for the selected pads."));
+		parameterHoverLabel->setText(String(velocityMaxRangeSlider->getValue()), false);
+		parameterHoverLabel->setVisible(true);
+    }
 }
 
 void GuiGlobalPadSettings::mouseExit (const MouseEvent &e)
@@ -569,7 +669,9 @@ void GuiGlobalPadSettings::mouseExit (const MouseEvent &e)
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
 	
-	if(e.eventComponent == velocitySlider)
+	if(e.eventComponent == velocitySlider ||
+       e.eventComponent == velocityMinRangeSlider ||
+       e.eventComponent == velocityMaxRangeSlider)
 	{
         parameterHoverLabel->setText(String::empty, false);
 		parameterHoverLabel->setVisible(false);

@@ -67,6 +67,8 @@ public:
     void setQuantizeMode (int value);
     void setVelocityCurve (int value);
     void setStaticVelocity (int value);
+    void setVelocityMinRange (int value);
+    void setVelocityMaxRange (int value);
 
     int getMode();
     int getPressureCurve();
@@ -75,6 +77,8 @@ public:
     int getQuantizeMode();
     int getVelocityCurve();
     int getStaticVelocity();
+    int getVelocityMinRange();
+    int getVelocityMaxRange();
     
     //==================================================================
     //MIDI mode
@@ -400,6 +404,8 @@ private:
     int quantizeMode;
     int velocityCurve;
     int staticVelocity;
+    int velocityMinRange;
+    int velocityMaxRange;
     
     //==================================================================
     //MIDI mode
@@ -569,8 +575,7 @@ private:
 	int padFxBitcrusherAlphaTouch;
 	int padFxBitcrusherAtReverse;
 	int padFxBitcrusherAtIntensity;
-	
-    
+  
 };
 
 

@@ -274,6 +274,10 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
                 recievedVelocity = MAX_VELOCITY;
             if (recievedVelocity > 0 && recievedVelocity < 1) //value 1 = 0.6, which is rounded to 0
                 recievedVelocity = 1;
+            
+            int minValue = PAD_SETTINGS->getVelocityMinRange();
+            int maxValue = PAD_SETTINGS->getVelocityMaxRange();
+            recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
         }
         else if (PAD_SETTINGS->getVelocityCurve() == 3)
         {
@@ -282,9 +286,19 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
             recievedVelocity = recievedVelocity * (MAX_VELOCITY/4.85); // not sure why 4.85 here!
             if (recievedVelocity > MAX_VELOCITY)
                 recievedVelocity = MAX_VELOCITY;
+            
+            int minValue = PAD_SETTINGS->getVelocityMinRange();
+            int maxValue = PAD_SETTINGS->getVelocityMaxRange();
+            recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
         }
-        //else, velocityCurve == 2 which is a linear mapping of velocity,
-        //or 4 which is a static velocity.
+        else if (PAD_SETTINGS->getVelocityCurve() == 2)
+        {
+            //linear mapping of velocity
+            int minValue = PAD_SETTINGS->getVelocityMinRange();
+            int maxValue = PAD_SETTINGS->getVelocityMaxRange();
+            recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
+        }
+        //else, velocityCurve == 4 which is a static velocity.
         
         //std::cout << "Pad: " << recievedPad << " Raw Vel: " << velocity << " Scaled Vel: " << recievedVelocity << std::endl;
         

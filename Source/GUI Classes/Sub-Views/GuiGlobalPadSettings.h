@@ -64,7 +64,7 @@ class GuiGlobalPadSettings :    public Component,
     
     ModeButton *exclusiveModeButton;
     AlphaSlider *exclusiveGroupSlider;
-    AlphaRotarySlider *velocitySlider;
+    AlphaRotarySlider *velocitySlider, *velocityMinRangeSlider, *velocityMaxRangeSlider;
 	AlphaPopUpImageButton *pressureCurveButton, *velocityCurveButton;
     ModeButton *quantiseButton;
 	Label *parameterHoverLabel;

@@ -112,6 +112,8 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
     padData->setAttribute("quantizeMode", PAD_SETTINGS->getQuantizeMode());
     padData->setAttribute("velocityCurve", PAD_SETTINGS->getVelocityCurve());
     padData->setAttribute("velocity", PAD_SETTINGS->getStaticVelocity());
+    padData->setAttribute("velocityMinRange", PAD_SETTINGS->getVelocityMinRange());
+    padData->setAttribute("velocityMaxRange", PAD_SETTINGS->getVelocityMaxRange());
     
     //only save whats necessary
     if (PAD_SETTINGS->getMode() == 1) //midi mode
@@ -366,6 +368,10 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
         PAD_SETTINGS->setVelocityCurve(padData->getIntAttribute("velocityCurve"));
     if (padData->hasAttribute("velocity"))
         PAD_SETTINGS->setStaticVelocity(padData->getIntAttribute("velocity"));
+    if (padData->hasAttribute("velocityMinRange"))
+        PAD_SETTINGS->setVelocityMinRange(padData->getIntAttribute("velocityMinRange"));
+    if (padData->hasAttribute("velocityMaxRange"))
+        PAD_SETTINGS->setVelocityMaxRange(padData->getIntAttribute("velocityMaxRange"));
     
     //only load needed data to reduce loading times and CPU usage, plus
     //can not load settings into seq and sampler modes where the pads player objects don't exist (yet)

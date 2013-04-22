@@ -5,4 +5,5 @@ AlphaLive can run without these files, however features such as Toolbox items, l
 
 Extra files that you will need to add manually:
 * The Audio Library contents - place in "./Library/Audio Library". You will only have access to these audio samples if you have purchased an AlphaSphere.
-* firmwareUpdater executable/application - place is "./Application Data". You can find this within the AlphaLive download bundle available at [???], or you can build it yourself using the source code available at https://github.com/nu-desine/SphereWare/tree/master/Bootloader/HostLoaderApp.
+* firmwareUpdater executable/application - place in "./Application Data". You can find this within the AlphaLive download bundle available at [???], or you can build it yourself using the source code available at https://github.com/nu-desine/SphereWare/tree/master/Bootloader/HostLoaderApp.
+* AlphaLive Updater executable/application - place in "./Application Data". You can find this within the AlphaLive download bundle available at [???], or you can build it yourself using the source code available at [???].

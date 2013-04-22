@@ -16,4 +16,7 @@ language: Chinesecountries: zh zho
 "Finishing installation..." = ""
 "Relaunching AlphaLive..." = ""
 "Update cancelled!" = ""
-"Update complete!" = ""
+"Update complete!" = ""
+"Software Version:" = ""
+"Firmware Version:" = ""
+"Device Serial:" = ""

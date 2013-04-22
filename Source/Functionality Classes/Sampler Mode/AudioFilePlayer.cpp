@@ -49,6 +49,11 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
 	distortion = nullptr;
 	bitcrusher = nullptr;
     
+    //set a default sample rate value here as if we load up a Sampler Pad wth reverb already applied
+    //to it the application will crash otherwise, as the reverb object sample rate will attempt to be set before
+    //prepareToPlay() is called that sets the correct sample rate.
+    sampleRate_ = 44100;
+    
     //grab the setting values (so that if this object is deleted and recreated, it will hold the previous settings)
     //do i need to enter shared memory here?
     

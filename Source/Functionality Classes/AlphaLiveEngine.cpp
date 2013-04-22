@@ -48,6 +48,9 @@ AlphaLiveEngine::AlphaLiveEngine()
     recievedPad = 0;
     recievedValue = 0;
     recievedVelocity = 110;
+    
+    for (int i = 0; i < 48; i++)
+        padVelocity[i] = 0;
 
     playingStatus = 0;
     
@@ -234,14 +237,6 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         recievedPad = pad;
         recievedValue = value;
         
-        //The firmware only sends a velocity value on the initial press, and then a 0 after that.
-        //This will cause issues when converting to OSC messages.
-        //Therefore, never set recievedVelocity to 0.
-        if (velocity > 0)
-        {
-            recievedVelocity = velocity;
-        }
-        
         //===determine pressure curve===
         if (PAD_SETTINGS->getPressureCurve() == 1)
         {
@@ -264,41 +259,59 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         //else, pressureCurve == 2 which is a linear mapping of pressure
         
         
-        //===determine velocity curve===
-        if (PAD_SETTINGS->getVelocityCurve() == 1)
+        if (velocity > 0)
         {
-            //exponential mapping of velocity
-            recievedVelocity = exp((float)recievedVelocity/MAX_VELOCITY)-1;
-            recievedVelocity = recievedVelocity * (MAX_VELOCITY/1.71828);
-            if (recievedVelocity > MAX_VELOCITY)
-                recievedVelocity = MAX_VELOCITY;
-            if (recievedVelocity > 0 && recievedVelocity < 1) //value 1 = 0.6, which is rounded to 0
-                recievedVelocity = 1;
+            recievedVelocity = velocity;
+        }
+        
+        if (recievedVelocity != padVelocity[recievedPad])
+        {
+            padVelocity[recievedPad] = recievedVelocity;
             
-            int minValue = PAD_SETTINGS->getVelocityMinRange();
-            int maxValue = PAD_SETTINGS->getVelocityMaxRange();
-            recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
-        }
-        else if (PAD_SETTINGS->getVelocityCurve() == 3)
-        {
-            //logarithmic mapping of velocity
-            recievedVelocity = log(recievedVelocity+1);
-            recievedVelocity = recievedVelocity * (MAX_VELOCITY/4.85); // not sure why 4.85 here!
-            if (recievedVelocity > MAX_VELOCITY)
-                recievedVelocity = MAX_VELOCITY;
+            //===determine velocity curve===
+            if (PAD_SETTINGS->getVelocityCurve() == 1)
+            {
+                //exponential mapping of velocity
+                recievedVelocity = exp((float)recievedVelocity/MAX_VELOCITY)-1;
+                recievedVelocity = recievedVelocity * (MAX_VELOCITY/1.71828);
+                if (recievedVelocity > MAX_VELOCITY)
+                    recievedVelocity = MAX_VELOCITY;
+                if (recievedVelocity > 0 && recievedVelocity < 1) //value 1 = 0.6, which is rounded to 0
+                    recievedVelocity = 1;
+                
+                int minValue = PAD_SETTINGS->getVelocityMinRange();
+                int maxValue = PAD_SETTINGS->getVelocityMaxRange();
+                recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
+            }
+            else if (PAD_SETTINGS->getVelocityCurve() == 3)
+            {
+                //logarithmic mapping of velocity
+                recievedVelocity = log(recievedVelocity+1);
+                recievedVelocity = recievedVelocity * (MAX_VELOCITY/4.85); // not sure why 4.85 here!
+                if (recievedVelocity > MAX_VELOCITY)
+                    recievedVelocity = MAX_VELOCITY;
+                
+                int minValue = PAD_SETTINGS->getVelocityMinRange();
+                int maxValue = PAD_SETTINGS->getVelocityMaxRange();
+                recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
+            }
+            else if (PAD_SETTINGS->getVelocityCurve() == 2)
+            {
+                //linear mapping of velocity
+                int minValue = PAD_SETTINGS->getVelocityMinRange();
+                int maxValue = PAD_SETTINGS->getVelocityMaxRange();
+                recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
+                std::cout << recievedVelocity << std::endl;
+            }
             
-            int minValue = PAD_SETTINGS->getVelocityMinRange();
-            int maxValue = PAD_SETTINGS->getVelocityMaxRange();
-            recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
+            //static velocity stuff is done in the mode classes,
+            //as each mode handles a static velocity in slight different ways
+            //so doesn't make sense to apply any static values here
         }
-        else if (PAD_SETTINGS->getVelocityCurve() == 2)
-        {
-            //linear mapping of velocity
-            int minValue = PAD_SETTINGS->getVelocityMinRange();
-            int maxValue = PAD_SETTINGS->getVelocityMaxRange();
-            recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
-        }
-        //else, velocityCurve == 4 which is a static velocity.
+        
+        
+     
+        
         
         //std::cout << "Pad: " << recievedPad << " Raw Vel: " << velocity << " Scaled Vel: " << recievedVelocity << std::endl;
         

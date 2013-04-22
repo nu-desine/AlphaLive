@@ -49,6 +49,8 @@ void ModeController::getInputData(int pad, int value, int velocity)
 {
     padNumber = pad;
     padValue = value;
+    if (PAD_SETTINGS->getVelocityCurve() == 4)
+        velocity = PAD_SETTINGS->getStaticVelocity();
     
     if (PAD_SETTINGS->getControllerControl() == 1) //scene switcher
     {

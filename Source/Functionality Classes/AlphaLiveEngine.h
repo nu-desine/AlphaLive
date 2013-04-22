@@ -201,6 +201,7 @@ private:
     
     Array <int> padPressureGuiQueue;
     int padPressure[48];
+    int padVelocity[48];
 };
 
 #endif // H_ALPHALIVEENGINE

@@ -1201,12 +1201,7 @@ void MainComponent::setLocalisation()
     //countryCode will equal ISO 639-1 or ISO 639-2 codes as listed here:
     //http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
     
-    if (countryCode == "de" || countryCode == "deu") //german
-    {
-
-        currentLanguage = "German";
-    }
-    else if (countryCode == "ja" || countryCode == "jpn") //japanese
+    if (countryCode == "ja" || countryCode == "jpn") //japanese
     {
         File transFile (appDir + "Application Data" + File::separatorString + "trans_ja");
         trans = new LocalisedStrings (transFile);

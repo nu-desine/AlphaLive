@@ -95,7 +95,7 @@ void SoftwareUpdateComponent::run()
     {
         AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
                                           translate("Missing file!"),
-                                          translate("The \"AlphaLive Updater\" application appears to be missing from the \"AlphaLive/Application Data\" directory. Please consult the troubleshooting section of the reference manual."));
+                                          translate("The 'AlphaLive Updater' application appears to be missing from the 'AlphaLive/Application Data' directory. Please consult the troubleshooting section of the reference manual."));
         
         signalThreadShouldExit();
     }

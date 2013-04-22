@@ -58,6 +58,7 @@ public:
     virtual void updateFirmware() = 0;
     virtual void setFirmwareUpdateStatus (bool status) = 0;
     virtual void setDeviceStatus() = 0;
+    virtual void setFirmwareDetails (String version, String serial) = 0;
     
     void addMessageToHidOutReport (uint8 message[]);
     

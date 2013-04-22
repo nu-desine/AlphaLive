@@ -339,7 +339,8 @@ void HidComms::addMessageToHidOutReport (uint8 message[])
 void HidComms::connectToDevice()
 {
     struct hid_device_info *devs, *cur_dev;
-    float currentFirmwareNo = 0;
+    double currentFirmwareNo = 0;
+    String serialString, firmwareString;
     
     devs = hid_enumerate(0x1d50, 0x6021);
     cur_dev = devs;	
@@ -353,7 +354,12 @@ void HidComms::connectToDevice()
         printf("  Interface:    %d\n",  cur_dev->interface_number);
         printf("\n");
         
-        currentFirmwareNo = cur_dev->release_number / 100.0; 
+        //will the following algorithm work if the firmware number starts using characters (as it's a hex number)?
+        currentFirmwareNo = String::toHexString(cur_dev->release_number).getIntValue() / 100.0;
+        std::cout << "Firmware Version: " << currentFirmwareNo << std::endl;
+        
+        firmwareString = String (currentFirmwareNo);
+        serialString = String(cur_dev->serial_number);
         
         cur_dev = cur_dev->next;
     }
@@ -381,6 +387,8 @@ void HidComms::connectToDevice()
         
         hidDeviceStatus = 0;
         setDeviceStatus();
+        
+        setFirmwareDetails ("-", "-");
     }
     
     //device found
@@ -455,6 +463,8 @@ void HidComms::connectToDevice()
         
         hidDeviceStatus = 1;
         setDeviceStatus();
+        
+        setFirmwareDetails (firmwareString, serialString);
     }
 }
 

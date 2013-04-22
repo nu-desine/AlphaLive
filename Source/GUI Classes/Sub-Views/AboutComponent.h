@@ -45,10 +45,13 @@ public:
     
     bool keyPressed (const KeyPress &key, Component *originatingComponent);
     
+    void setFirmwareDetails (String version, String serial);
+    
 private:
     MainComponent &mainComponentRef;
     TextButton *closeButton;
-    Label *titleLabel, *versionNumberLabel, *companyLabel, *openSourceLabel, *copyrightLabel, *samplesLabel;
+    Label *titleLabel, *versionNumberLabel, *firmwareNumberLabel, *deviceSerialLabel; 
+    Label *companyLabel, *openSourceLabel, *copyrightLabel, *samplesLabel;
     HyperlinkButton *nuDesineLink, *gnuLicenseLink, *githubLink;
     ImageButton *loopmastersButton, *zeroGButton, *fivePinMediaButton;
     

@@ -38,7 +38,15 @@ AboutComponent::AboutComponent(MainComponent &ref)
     
     addAndMakeVisible(versionNumberLabel = new Label("Version Number"));
     versionNumberLabel->setText(translate("Version") + " " + String(ProjectInfo::versionString), false);
-    titleLabel->setJustificationType(Justification::horizontallyCentred);
+    versionNumberLabel->setJustificationType(Justification::horizontallyCentred);
+    
+    addAndMakeVisible(firmwareNumberLabel = new Label("Firmware Number"));
+    firmwareNumberLabel->setText(translate("Firmware Version:") + " " + " - ", false);
+    firmwareNumberLabel->setJustificationType(Justification::horizontallyCentred);
+    
+    addAndMakeVisible(deviceSerialLabel = new Label("Device Serial"));
+    deviceSerialLabel->setText(translate("Device Serial:") + " " + " - ", false);
+    deviceSerialLabel->setJustificationType(Justification::centredTop);
     
     addAndMakeVisible(companyLabel = new Label("Company"));
     companyLabel->setText(translate("Developed by") + " ", false);
@@ -118,9 +126,11 @@ AboutComponent::~AboutComponent()
 void AboutComponent::resized()
 {
     titleLabel->setBounds((getWidth()/2)-100, (getHeight()/6)+10, 200, 40);
-    versionNumberLabel->setBounds((getWidth()/2)-50, (getHeight()/6)+50, 100, 40);
-    companyLabel->setBounds((getWidth()/2)-110, (getHeight()/6)+120, 150, 40);
-    nuDesineLink->setBounds(((getWidth()/2)-110)+112, (getHeight()/6)+129, 80, 22);
+    versionNumberLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+40, 150, 40);
+    firmwareNumberLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+70, 150, 40);
+    deviceSerialLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+100, 150, 40);
+    companyLabel->setBounds((getWidth()/2)-110, (getHeight()/6)+140, 150, 40);
+    nuDesineLink->setBounds(((getWidth()/2)-110)+112, (getHeight()/6)+149, 80, 22);
     githubLink->setBounds((getWidth()/2)-215, (getHeight()/6)+169, 300, 22);
     openSourceLabel->setBounds((getWidth()/2)-65, (getHeight()/6)+160, 300, 40);
     gnuLicenseLink->setBounds(((getWidth()/2)-155)+45, (getHeight()/6)+185, 220, 22);
@@ -194,4 +204,10 @@ bool AboutComponent::keyPressed (const KeyPress &key, Component *originatingComp
     else
         return false; //incase the keypress is shortcut that MainComponent needs to react to.
 
+}
+
+void AboutComponent::setFirmwareDetails (String version, String serial)
+{
+    firmwareNumberLabel->setText(translate("Firmware Version:") + " " + version, false);
+    deviceSerialLabel->setText(translate("Device Serial:") + " " + serial, false);
 }

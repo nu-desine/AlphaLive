@@ -100,6 +100,7 @@ public:
     void updateFirmware();
     void setFirmwareUpdateStatus (bool status);
     void setDeviceStatus();
+    void setFirmwareDetails (String version, String serial);
     
     void actionListenerCallback (const String& message);
     
@@ -149,6 +150,9 @@ public:
     
     void setRecordingSequencerPadsState (int padNum, int state);
     Array<int> getRecordingPads();
+    
+    String getFirmwareVersion();
+    String getDeviceSerial();
         
 private:
     
@@ -202,6 +206,8 @@ private:
     Array <int> padPressureGuiQueue;
     int padPressure[48];
     int padVelocity[48];
+    
+    String firmwareVersion, deviceSerial;
 };
 
 #endif // H_ALPHALIVEENGINE

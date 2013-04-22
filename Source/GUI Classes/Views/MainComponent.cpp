@@ -1402,6 +1402,12 @@ void MainComponent::editInterfaceFromDeviceConnectivity (int command)
         // 0 - disconnected, 1 - connected, 2 - error
         deviceStatusComponent->setDeviceStatus(alphaLiveEngineRef.getDeviceStatus());
     }
+    
+    //set firmware version and device serial display
+    else if (command == 4)
+    {
+        aboutComponent->setFirmwareDetails (alphaLiveEngineRef.getFirmwareVersion(), alphaLiveEngineRef.getDeviceSerial());
+    }
 }
 
 void MainComponent::setDeviceStatus (int status)

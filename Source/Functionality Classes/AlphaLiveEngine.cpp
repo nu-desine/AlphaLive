@@ -727,6 +727,18 @@ void AlphaLiveEngine::updateFirmware()
     broadcaster.sendActionMessage("UPDATE FIRMWARE");
 }
 
+void AlphaLiveEngine::setFirmwareDetails (String version, String serial)
+{
+    firmwareVersion = version;
+    deviceSerial = serial;
+    
+    if (mainComponent != NULL)
+    {
+        const MessageManagerLock mmLock;
+        mainComponent->editInterfaceFromDeviceConnectivity(4);
+    }
+}
+
 
 void AlphaLiveEngine::actionListenerCallback (const String& message)
 {
@@ -912,6 +924,16 @@ GlobalClock* AlphaLiveEngine::getGlobalClock()
 MainComponent* AlphaLiveEngine::getMainComponent()
 {
     return mainComponent;
+}
+
+String AlphaLiveEngine::getFirmwareVersion()
+{
+    return firmwareVersion;
+}
+
+String AlphaLiveEngine::getDeviceSerial()
+{
+    return deviceSerial;
 }
 
 void AlphaLiveEngine::setMainComponent(MainComponent *mainComponent_)

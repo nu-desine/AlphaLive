@@ -131,9 +131,9 @@ AlphaLiveEngine::AlphaLiveEngine()
     
     //sleep to give the HID thread time to attempt to connect to the device.
     #ifdef WIN32
-    sleep(100); //should this actually be Sleep() which need a windows library defined? See hidtest.
+    sleep(1000);
     #else
-    usleep(100*1000);
+    usleep(1000*1000);
     #endif
     
     if (getDeviceStatus() != 0)

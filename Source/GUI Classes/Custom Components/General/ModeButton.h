@@ -27,42 +27,23 @@
 #include "../../../../JuceLibraryCode/JuceHeader.h"
 
 class ModeButton :	public Button
-
-
 {
 public:
     
-    //==============================================================================
-    /** Creates an imagebutton toggle.
-     
-     @param image               the image to be applied to the button
-     
-     */
     ModeButton(Image* modeSymbol);
-    
-    /** Destructor. */
     ~ModeButton();
 	
-    
 	void resized();
     void paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown);
-    void clicked();
-    void buttonStateChanged();
 	bool hitTest (int x, int y);
-	
     
+    void rotateImage (float angleInRadians, float pivotXOffset = 0, float pivotYOffset = 0);
     
 private:
-    //==============================================================================
-    
     
 	Image *symbol;
-	
 	Path hitPath;
- 
-	
-	
-    
+    float imageRotationAngle, pivotXOffset_, pivotYOffset_;
 };    
 
 

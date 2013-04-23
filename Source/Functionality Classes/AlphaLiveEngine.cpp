@@ -362,6 +362,12 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
     {
         //an elite control has been touched. Do your thang!
         eliteControls->getInputData(pad, value);
+        
+        sharedMemoryGui.enter();
+        eliteControlValue[pad-100] = value;
+        eliteControlGuiQueue.add (pad-100);
+        broadcaster.sendActionMessage("UPDATE ELITE GUI");
+        sharedMemoryGui.exit();
     }
 }
 
@@ -757,6 +763,27 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
         padPressureGuiQueue.clear();
         
         sharedMemoryGui.exit();
+    }
+    
+    else if (message == "UPDATE ELITE GUI")
+    {
+        
+        sharedMemoryGui.enter();
+        
+        for (int i = 0; i < eliteControlGuiQueue.size(); i++)
+        {
+            int eliteControlNum = eliteControlGuiQueue[i];
+            
+            if (mainComponent != NULL)
+                mainComponent->getEliteControlsComponent()->updateDisplay(eliteControlNum, 
+                                                                          eliteControlValue[eliteControlNum]);
+        }
+        
+        eliteControlGuiQueue.clear();
+        
+        sharedMemoryGui.exit();
+        
+        
     }
     
     else if (message == "UPDATE FIRMWARE")

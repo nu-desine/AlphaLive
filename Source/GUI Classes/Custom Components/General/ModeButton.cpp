@@ -32,18 +32,13 @@ ModeButton::ModeButton (Image* modeSymbol)
     symbol(modeSymbol)
 {
 	setClickingTogglesState(true);
-	
-	
+	imageRotationAngle = 0;
 }
 
 ModeButton::~ModeButton()
 {
-    delete symbol;
-	//deleteAllChildren();
-	
+    delete symbol;	
 }
-
-
 
 //==============================================================================
 void ModeButton::resized()
@@ -51,19 +46,13 @@ void ModeButton::resized()
     hitPath.addEllipse (0.0f, 0.0f, getWidth(), getHeight());
 }
 
-
 void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown)
 {
-	
-
-	
-	 
 	switch (getToggleState() ? (isButtonDown ? 5 : (isMouseOverButton ? 4 : 3))
 			: (isButtonDown ? 2 : (isMouseOverButton ? 1 : 0)))
     {
 		case 0:
         {
-            
 			g.setColour(Colours::black);
 			g.fillEllipse(0, 0, getWidth(), getHeight());
 			
@@ -76,16 +65,12 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			g.drawEllipse((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), (getHeight()*0.025));
 			
 			g.setColour(Colours::white.withAlpha(0.8f));
-			g.drawImage (* symbol,
-						 0, 0, getWidth(), getHeight(),
-						 0, 0, symbol->getWidth(), symbol->getHeight(), true);
 			
             break;
         }
 			
 		case 1:
         {
-            
 			g.setColour(Colours::black);
 			g.fillEllipse(0, 0, getWidth(), getHeight());
 			
@@ -99,9 +84,6 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			
 			
 			g.setColour(Colours::white.withAlpha(1.0f));
-			g.drawImage (* symbol,
-						 0, 0, getWidth(), getHeight(),
-						 0, 0, symbol->getWidth(), symbol->getHeight(), true);
 			
             break;
         }
@@ -120,16 +102,12 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			g.drawEllipse((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), (getHeight()*0.025));
 			
 			g.setColour(Colours::white.withAlpha(1.0f));
-			g.drawImage (* symbol,
-						 0, 0, getWidth(), getHeight(),
-						 0, 0, symbol->getWidth(), symbol->getHeight(), true);
 			
             break;
         }
 			
 		case 3:
         {
-			
 			g.setColour(AlphaColours::blue);
 			g.fillEllipse(0, 0, getWidth(), getHeight());
 			
@@ -142,9 +120,6 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			g.drawEllipse((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), (getHeight()*0.025));
 			
 			g.setColour(Colours::white.withAlpha(1.0f));
-			g.drawImage (* symbol,
-						 0, 0, getWidth(), getHeight(),
-						 0, 0, symbol->getWidth(), symbol->getHeight(), true);
 			
             break;
         }
@@ -163,9 +138,6 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			g.drawEllipse((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), (getHeight()*0.025));
 			
 			g.setColour(Colours::white.withAlpha(1.0f));
-			g.drawImage (* symbol,
-						 0, 0, getWidth(), getHeight(),
-						 0, 0, symbol->getWidth(), symbol->getHeight(), true);
 			
             break;
         }
@@ -184,42 +156,38 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			g.drawEllipse((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), (getHeight()*0.025));
 			
 			g.setColour(Colours::white.withAlpha(1.0f));
-			g.drawImage (* symbol,
-						 0, 0, getWidth(), getHeight(),
-						 0, 0, symbol->getWidth(), symbol->getHeight(), true);
 			
             break;
         }
 			
 		default:
 			break;
-    }	 
-	
-}
-
-
-
-void ModeButton::clicked()
-{
-    //[UserCode_clicked] -- Add your code here...
-    //[/UserCode_clicked]
-	
-	
-}
-
-void ModeButton::buttonStateChanged()
-{
-   //
-
+    }
+    
+    
+//    g.drawImage (* symbol,
+//                 0, 0, getWidth(), getHeight(),
+//                 0, 0, symbol->getWidth(), symbol->getHeight(), true);
+    
+    g.drawImageTransformed(symbol->rescaled(getWidth(), 
+                                            getHeight()), 
+                           AffineTransform::rotation(imageRotationAngle, 
+                                                     (getWidth() / 2) + pivotXOffset_, 
+                                                     (getHeight() / 2) + pivotYOffset_));
 }
 
 bool ModeButton::hitTest (int x, int y)
 {
-    
 	return hitPath.contains(x, y);
-	
 }
 
-
-
-
+void ModeButton::rotateImage (float angleInRadians, float pivotXOffset, float pivotYOffset)
+{
+    //rotates the buttons image around the centre point of the button
+    
+    imageRotationAngle = angleInRadians;
+    pivotXOffset_ = pivotXOffset;
+    pivotYOffset_ = pivotYOffset;
+    
+    repaint();
+}

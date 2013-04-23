@@ -71,6 +71,9 @@ EliteControlsComponent::EliteControlsComponent(MainComponent &ref)
 	button3Button->setRadioGroupId (84);
     button3Button->addMouseListener(this, false);
     
+    dialRotationValue[0] = dialRotationValue[1] = 0;
+    buttonStatusValue[0] = buttonStatusValue[1] = buttonStatusValue[2] = 0;
+    
 }
 
 EliteControlsComponent::~EliteControlsComponent()
@@ -106,8 +109,25 @@ void EliteControlsComponent::paint (Graphics& g)
 	g.drawRoundedRectangle(117-X_OFFSET, 590-Y_OFFSET, 26, 26, 2, 1.0f);
 	g.drawEllipse(55-X_OFFSET, 542-Y_OFFSET, 38, 38, 1.0f);
 	g.drawEllipse(99-X_OFFSET, 542-Y_OFFSET, 38,38, 1.0f);
-	
     
+}
+
+void EliteControlsComponent::paintOverChildren (Graphics& g)
+{
+    g.setColour(Colours::white.withAlpha(0.4f));
+    
+    if (buttonStatusValue[0] == 1)
+    {
+        g.fillRoundedRectangle(52-X_OFFSET, 593-Y_OFFSET, 20, 20, 2);
+    }
+    if (buttonStatusValue[1] == 1)
+    {
+        g.fillRoundedRectangle(86-X_OFFSET, 593-Y_OFFSET, 20, 20, 2);
+    }
+    if (buttonStatusValue[2] == 1)
+    {
+        g.fillRoundedRectangle(120-X_OFFSET, 593-Y_OFFSET, 20, 20, 2);
+    }
 }
 
 void EliteControlsComponent::buttonClicked (Button* button)
@@ -141,10 +161,72 @@ void EliteControlsComponent::turnOffButtons()
 	
 }
 
-//void EliteControlsComponent::updateDisplay()
-//{
-//    
-//}
+void EliteControlsComponent::updateDisplay (int control, int value)
+{
+    //dial 1
+    if (control == 0)
+    {
+        if (value > 0 && value < 64)
+        {
+            dialRotationValue[0] += (0.1 * value);
+            
+            if (dialRotationValue[0] >= (M_PI * 2))
+                dialRotationValue[0] = dialRotationValue[0] - (M_PI * 2); 
+        }
+        else
+        {
+            dialRotationValue[0] -= (0.1 * (128 - value));
+            
+            if (dialRotationValue[0] < 0)
+                dialRotationValue[0] = dialRotationValue[0] + (M_PI * 2);
+        }
+        
+        dial1Button->rotateImage (dialRotationValue[0], 0.4, 0.4);
+    }
+    
+    //dial 2
+    else if (control == 1)
+    {
+        if (value > 0 && value < 64)
+        {
+            dialRotationValue[1] += (0.1 * value);
+            
+            if (dialRotationValue[1] >= (M_PI * 2))
+                dialRotationValue[1] = dialRotationValue[1] - (M_PI * 2); 
+        }
+        else
+        {
+            dialRotationValue[1] -= (0.1 * (128 - value));
+            
+            if (dialRotationValue[1] < 0)
+                dialRotationValue[1] = dialRotationValue[1] + (M_PI * 2);
+        }
+        
+        dial2Button->rotateImage (dialRotationValue[1], 0.4, 0.4);
+    }
+    
+    //button 1
+    else if (control == 2)
+    {
+        buttonStatusValue[0] = value;
+        repaint();
+    }
+    
+    //button 2
+    else if (control == 3)
+    {
+        buttonStatusValue[1] = value;
+        repaint();
+    }
+    
+    //button 3
+    else if (control == 4)
+    {
+        buttonStatusValue[2] = value;
+        repaint();
+    }
+    
+}
 
 void EliteControlsComponent::mouseDown (const MouseEvent &e)
 {

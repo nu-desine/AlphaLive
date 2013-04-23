@@ -113,6 +113,7 @@ public:
     SceneComponent* getSceneComponent();
     GuiPadLayout* getGuiPadLayout();
     GuiGlobalClock* getGuiGlobalClock();
+    EliteControlsComponent* getEliteControlsComponent();
     
 	
     //==============================================================================

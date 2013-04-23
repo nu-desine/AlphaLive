@@ -963,6 +963,11 @@ GuiGlobalClock* MainComponent::getGuiGlobalClock()
     return globalClock;
 }
 
+EliteControlsComponent* MainComponent::getEliteControlsComponent()
+{
+    return eliteControls;
+}
+
 
 void MainComponent::setInfoTextBoxText (String text)
 {

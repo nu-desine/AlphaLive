@@ -206,6 +206,8 @@ private:
     Array <int> padPressureGuiQueue;
     int padPressure[48];
     int padVelocity[48];
+    Array <int> eliteControlGuiQueue;
+    int eliteControlValue[5];
     
     String firmwareVersion, deviceSerial;
 };

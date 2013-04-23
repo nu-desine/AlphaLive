@@ -40,22 +40,27 @@ public:
     
     void resized();
 	void paint (Graphics& g);
+    void paintOverChildren (Graphics& g);
     
     void buttonClicked (Button* button);
 	void turnOffButtons();
-    //void updateDisplay();
 	
 	void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);
     
     void mouseDown (const MouseEvent &e);
     void mouseUp (const MouseEvent &e);
+    
+    void updateDisplay (int control, int value);
 	
 private:
     
     MainComponent &mainComponentRef;
     ModeButton *dial1Button, *dial2Button;
 	AlphaSquareButton *button1Button, *button2Button, *button3Button;
+    
+    float dialRotationValue[2];
+    int buttonStatusValue[3];
 	
 };
 

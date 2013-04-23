@@ -41,11 +41,17 @@ AboutComponent::AboutComponent(MainComponent &ref)
     versionNumberLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(firmwareNumberLabel = new Label("Firmware Number"));
-    firmwareNumberLabel->setText(translate("Firmware Version:") + " " + " - ", false);
+    firmwareNumberLabel->setText(translate("Firmware Version:") + 
+                                 " " + 
+                                 mainComponentRef.getAlphaLiveEngineRef().getFirmwareVersion(),
+                                 false);
     firmwareNumberLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(deviceSerialLabel = new Label("Device Serial"));
-    deviceSerialLabel->setText(translate("Device Serial:") + " " + " - ", false);
+    deviceSerialLabel->setText(translate("Device Serial:") + 
+                               " " + 
+                               mainComponentRef.getAlphaLiveEngineRef().getDeviceSerial(),
+                               false);
     deviceSerialLabel->setJustificationType(Justification::centredTop);
     
     addAndMakeVisible(companyLabel = new Label("Company"));

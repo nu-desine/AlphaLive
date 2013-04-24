@@ -129,6 +129,7 @@ OBJECTS := \
   $(OBJDIR)/GuiGlobalPadSettings_90e3f87d.o \
   $(OBJDIR)/PreferencesComponent_7ad04aa.o \
   $(OBJDIR)/ProjectSettingsComponent_5867fbc6.o \
+  $(OBJDIR)/SoftwareUpdateComponent_26b0dc32.o \
   $(OBJDIR)/GuiControllerMode_ef8d52cc.o \
   $(OBJDIR)/GuiMidiMode_729c4751.o \
   $(OBJDIR)/GuiSamplerMode_47e395c8.o \
@@ -623,6 +624,11 @@ $(OBJDIR)/PreferencesComponent_7ad04aa.o: ../../Source/GUI\ Classes/Sub-Views/Pr
 $(OBJDIR)/ProjectSettingsComponent_5867fbc6.o: ../../Source/GUI\ Classes/Sub-Views/ProjectSettingsComponent.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling ProjectSettingsComponent.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/SoftwareUpdateComponent_26b0dc32.o: ../../Source/GUI\ Classes/Sub-Views/SoftwareUpdateComponent.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling SoftwareUpdateComponent.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/GuiControllerMode_ef8d52cc.o: ../../Source/GUI\ Classes/Views/GuiControllerMode.cpp

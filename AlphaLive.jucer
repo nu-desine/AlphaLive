@@ -334,6 +334,10 @@
                 file="Source/GUI Classes/Sub-Views/ProjectSettingsComponent.cpp"/>
           <FILE id="ApdDei" name="ProjectSettingsComponent.h" compile="0" resource="0"
                 file="Source/GUI Classes/Sub-Views/ProjectSettingsComponent.h"/>
+          <FILE id="PPNOCN" name="SoftwareUpdateComponent.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Sub-Views/SoftwareUpdateComponent.cpp"/>
+          <FILE id="MX5ein" name="SoftwareUpdateComponent.h" compile="0" resource="0"
+                file="Source/GUI Classes/Sub-Views/SoftwareUpdateComponent.h"/>
         </GROUP>
         <GROUP id="{CF5779F1-4A40-A694-E569-DED47D9219B7}" name="Views">
           <FILE id="QRYW95" name="GlobalValues.h" compile="0" resource="0" file="Source/GUI Classes/Views/GlobalValues.h"/>
@@ -365,77 +369,6 @@
         <FILE id="RL0xO8" name="OscOutput.h" compile="0" resource="0" file="Source/My IO Classes/OscOutput.h"/>
       </GROUP>
       <GROUP id="{C367D9DC-FF57-76D7-2D11-0440D684A2B6}" name="Third Party Libraries">
-        <GROUP id="{C2707AE2-BB30-F19F-368E-2FFEEE45F27F}" name="ASIOSDK2">
-          <GROUP id="{03BD42DF-E55F-604D-F3BA-2013EA54CF06}" name="asio">
-            <FILE id="ibNX6J" name="asio.dsw" compile="0" resource="1" file="Source/Third Party Libraries/ASIOSDK2/asio/asio.dsw"/>
-            <FILE id="NTfAGy" name="asio.opt" compile="0" resource="1" file="Source/Third Party Libraries/ASIOSDK2/asio/asio.opt"/>
-          </GROUP>
-          <FILE id="mydxw8" name="ASIO SDK 2.2.pdf" compile="0" resource="1"
-                file="Source/Third Party Libraries/ASIOSDK2/ASIO SDK 2.2.pdf"/>
-          <FILE id="o4B5o1" name="changes.txt" compile="0" resource="1" file="Source/Third Party Libraries/ASIOSDK2/changes.txt"/>
-          <GROUP id="{E9172ADF-F3D8-C3FD-39B5-3B9069762D2A}" name="common">
-            <FILE id="MH0SA1" name="asio.cpp" compile="1" resource="0" file="Source/Third Party Libraries/ASIOSDK2/common/asio.cpp"/>
-            <FILE id="xX5fdc" name="asio.h" compile="0" resource="0" file="Source/Third Party Libraries/ASIOSDK2/common/asio.h"/>
-            <FILE id="fQyTRf" name="asiodrvr.cpp" compile="1" resource="0" file="Source/Third Party Libraries/ASIOSDK2/common/asiodrvr.cpp"/>
-            <FILE id="Nf71kj" name="asiodrvr.h" compile="0" resource="0" file="Source/Third Party Libraries/ASIOSDK2/common/asiodrvr.h"/>
-            <FILE id="gk5IGK" name="asiosys.h" compile="0" resource="0" file="Source/Third Party Libraries/ASIOSDK2/common/asiosys.h"/>
-            <FILE id="JytzEN" name="combase.cpp" compile="1" resource="0" file="Source/Third Party Libraries/ASIOSDK2/common/combase.cpp"/>
-            <FILE id="Q7UmjS" name="combase.h" compile="0" resource="0" file="Source/Third Party Libraries/ASIOSDK2/common/combase.h"/>
-            <FILE id="ExGV6j" name="debugmessage.cpp" compile="1" resource="0"
-                  file="Source/Third Party Libraries/ASIOSDK2/common/debugmessage.cpp"/>
-            <FILE id="vGIyV3" name="dllentry.cpp" compile="1" resource="0" file="Source/Third Party Libraries/ASIOSDK2/common/dllentry.cpp"/>
-            <FILE id="mRtdEb" name="iasiodrv.h" compile="0" resource="0" file="Source/Third Party Libraries/ASIOSDK2/common/iasiodrv.h"/>
-            <FILE id="GGL0ZO" name="register.cpp" compile="1" resource="0" file="Source/Third Party Libraries/ASIOSDK2/common/register.cpp"/>
-            <FILE id="MBXWzb" name="wxdebug.h" compile="0" resource="0" file="Source/Third Party Libraries/ASIOSDK2/common/wxdebug.h"/>
-          </GROUP>
-          <GROUP id="{0AA79860-396F-3F4E-C982-E9C66E9D05BD}" name="driver">
-            <GROUP id="{4E6ECDCF-CEC6-F932-150B-753A75B8AA03}" name="asiosample">
-              <GROUP id="{65F0E658-973B-AE9C-0328-F97E2FB6685B}" name="asiosample">
-                <FILE id="WWU5U9" name="asiosample.dsp" compile="0" resource="1" file="Source/Third Party Libraries/ASIOSDK2/driver/asiosample/asiosample/asiosample.dsp"/>
-                <FILE id="XDib4K" name="asiosample.vcproj" compile="0" resource="1"
-                      file="Source/Third Party Libraries/ASIOSDK2/driver/asiosample/asiosample/asiosample.vcproj"/>
-              </GROUP>
-              <FILE id="T4o4F9" name="asiosample.def" compile="0" resource="1" file="Source/Third Party Libraries/ASIOSDK2/driver/asiosample/asiosample.def"/>
-              <FILE id="geEKKt" name="asiosample.txt" compile="0" resource="1" file="Source/Third Party Libraries/ASIOSDK2/driver/asiosample/asiosample.txt"/>
-              <FILE id="ph6b4V" name="asiosmpl.cpp" compile="1" resource="0" file="Source/Third Party Libraries/ASIOSDK2/driver/asiosample/asiosmpl.cpp"/>
-              <FILE id="gTDHWT" name="asiosmpl.h" compile="0" resource="0" file="Source/Third Party Libraries/ASIOSDK2/driver/asiosample/asiosmpl.h"/>
-              <FILE id="r1ausv" name="macnanosecs.cpp" compile="1" resource="0" file="Source/Third Party Libraries/ASIOSDK2/driver/asiosample/macnanosecs.cpp"/>
-              <FILE id="sVmK6C" name="mactimer.cpp" compile="1" resource="0" file="Source/Third Party Libraries/ASIOSDK2/driver/asiosample/mactimer.cpp"/>
-              <FILE id="WysNAC" name="makesamp.cpp" compile="1" resource="0" file="Source/Third Party Libraries/ASIOSDK2/driver/asiosample/makesamp.cpp"/>
-              <FILE id="zSi2da" name="wintimer.cpp" compile="1" resource="0" file="Source/Third Party Libraries/ASIOSDK2/driver/asiosample/wintimer.cpp"/>
-            </GROUP>
-          </GROUP>
-          <GROUP id="{E3BDC2DD-9B57-D1E8-3DD6-E5D03F7A22C1}" name="host">
-            <FILE id="RCRkvm" name="ASIOConvertSamples.cpp" compile="1" resource="0"
-                  file="Source/Third Party Libraries/ASIOSDK2/host/ASIOConvertSamples.cpp"/>
-            <FILE id="h9bcLA" name="ASIOConvertSamples.h" compile="0" resource="0"
-                  file="Source/Third Party Libraries/ASIOSDK2/host/ASIOConvertSamples.h"/>
-            <FILE id="mrZwp3" name="asiodrivers.cpp" compile="1" resource="0" file="Source/Third Party Libraries/ASIOSDK2/host/asiodrivers.cpp"/>
-            <FILE id="um8csp" name="asiodrivers.h" compile="0" resource="0" file="Source/Third Party Libraries/ASIOSDK2/host/asiodrivers.h"/>
-            <FILE id="Tb7TlE" name="ginclude.h" compile="0" resource="0" file="Source/Third Party Libraries/ASIOSDK2/host/ginclude.h"/>
-            <GROUP id="{42BA2731-778F-9A7B-6802-3435F498AFBF}" name="mac">
-              <FILE id="Yc3FWs" name="asioshlib.cpp" compile="1" resource="0" file="Source/Third Party Libraries/ASIOSDK2/host/mac/asioshlib.cpp"/>
-              <FILE id="SEJcNC" name="codefragments.cpp" compile="1" resource="0"
-                    file="Source/Third Party Libraries/ASIOSDK2/host/mac/codefragments.cpp"/>
-              <FILE id="C5FSHr" name="codefragments.hpp" compile="0" resource="0"
-                    file="Source/Third Party Libraries/ASIOSDK2/host/mac/codefragments.hpp"/>
-            </GROUP>
-            <GROUP id="{D18DF6D4-DE69-7DA3-F1E7-E43B29D7EDDE}" name="pc">
-              <FILE id="xCNsdg" name="asiolist.cpp" compile="1" resource="0" file="Source/Third Party Libraries/ASIOSDK2/host/pc/asiolist.cpp"/>
-              <FILE id="YlyIJI" name="asiolist.h" compile="0" resource="0" file="Source/Third Party Libraries/ASIOSDK2/host/pc/asiolist.h"/>
-            </GROUP>
-            <GROUP id="{7FAC691A-5A59-3F47-9496-7665A4F41E39}" name="sample">
-              <FILE id="h1aX9d" name="hostsample.cpp" compile="1" resource="0" file="Source/Third Party Libraries/ASIOSDK2/host/sample/hostsample.cpp"/>
-              <FILE id="IKIM51" name="hostsample.dsp" compile="0" resource="1" file="Source/Third Party Libraries/ASIOSDK2/host/sample/hostsample.dsp"/>
-              <FILE id="v7tZiz" name="hostsample.vcproj" compile="0" resource="1"
-                    file="Source/Third Party Libraries/ASIOSDK2/host/sample/hostsample.vcproj"/>
-            </GROUP>
-          </GROUP>
-          <FILE id="PVEgpS" name="mac.sea.hqx" compile="0" resource="1" file="Source/Third Party Libraries/ASIOSDK2/mac.sea.hqx"/>
-          <FILE id="jTATRm" name="readme.txt" compile="0" resource="1" file="Source/Third Party Libraries/ASIOSDK2/readme.txt"/>
-          <FILE id="kTOEuM" name="Steinberg ASIO Licensing Agreement.pdf" compile="0"
-                resource="1" file="Source/Third Party Libraries/ASIOSDK2/Steinberg ASIO Licensing Agreement.pdf"/>
-        </GROUP>
         <GROUP id="{80CB76BD-4849-CEFB-F3FF-F94C3F8606E6}" name="DspFilters">
           <FILE id="muGu74" name="Bessel.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/Bessel.cpp"/>
           <FILE id="JcPKPN" name="Bessel.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/Bessel.h"/>
@@ -472,7 +405,7 @@
           <FILE id="sPR7Kp" name="PoleFilter.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/PoleFilter.h"/>
           <FILE id="ffc1DB" name="RBJ.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/RBJ.cpp"/>
           <FILE id="fnrRrq" name="RBJ.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/RBJ.h"/>
-          <FILE id="Ro2uxG" name="README.txt" compile="0" resource="1" file="Source/Third Party Libraries/DspFilters/README.txt"/>
+          <FILE id="Ro2uxG" name="README.txt" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/README.txt"/>
           <FILE id="BnWgNS" name="RootFinder.cpp" compile="1" resource="0" file="Source/Third Party Libraries/DspFilters/RootFinder.cpp"/>
           <FILE id="xow6FO" name="RootFinder.h" compile="0" resource="0" file="Source/Third Party Libraries/DspFilters/RootFinder.h"/>
           <FILE id="DKEvFO" name="SmoothedFilter.h" compile="0" resource="0"
@@ -486,10 +419,10 @@
         <GROUP id="{775F53CA-CA59-C7DE-18C1-0405F213D8FB}" name="HIDAPI">
           <FILE id="lzDFwO" name="hid.c" compile="1" resource="0" file="Source/Third Party Libraries/HIDAPI/hid.c"/>
           <FILE id="Qaf57p" name="hidapi.h" compile="0" resource="0" file="Source/Third Party Libraries/HIDAPI/hidapi.h"/>
-          <FILE id="aR3SQ1" name="LICENSE-bsd.txt" compile="0" resource="1" file="Source/Third Party Libraries/HIDAPI/LICENSE-bsd.txt"/>
+          <FILE id="aR3SQ1" name="LICENSE-bsd.txt" compile="0" resource="0" file="Source/Third Party Libraries/HIDAPI/LICENSE-bsd.txt"/>
         </GROUP>
         <GROUP id="{3694AF60-EB5B-80DF-3C02-38E6EE49C427}" name="Juced">
-          <FILE id="oMI3Nh" name="GPL2.txt" compile="0" resource="1" file="Source/Third Party Libraries/Juced/GPL2.txt"/>
+          <FILE id="oMI3Nh" name="GPL2.txt" compile="0" resource="0" file="Source/Third Party Libraries/Juced/GPL2.txt"/>
           <FILE id="whAOCF" name="jucetice_CircularBuffer.h" compile="0" resource="0"
                 file="Source/Third Party Libraries/Juced/jucetice_CircularBuffer.h"/>
         </GROUP>
@@ -511,7 +444,7 @@
             <FILE id="DPO2J1" name="TimerListener.h" compile="0" resource="0" file="Source/Third Party Libraries/oscpack/ip/TimerListener.h"/>
             <FILE id="HwwurT" name="UdpSocket.h" compile="0" resource="0" file="Source/Third Party Libraries/oscpack/ip/UdpSocket.h"/>
           </GROUP>
-          <FILE id="ijvSCx" name="LICENSE.txt" compile="0" resource="1" file="Source/Third Party Libraries/oscpack/LICENSE.txt"/>
+          <FILE id="ijvSCx" name="LICENSE.txt" compile="0" resource="0" file="Source/Third Party Libraries/oscpack/LICENSE.txt"/>
           <GROUP id="{74DE6C29-956C-E6EE-0D2C-D02E03F21D50}" name="osc">
             <FILE id="hBYZd8" name="MessageMappingOscPacketListener.h" compile="0"
                   resource="0" file="Source/Third Party Libraries/oscpack/osc/MessageMappingOscPacketListener.h"/>

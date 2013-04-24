@@ -133,19 +133,22 @@ void AboutComponent::resized()
 {
     titleLabel->setBounds((getWidth()/2)-100, (getHeight()/6)+10, 200, 40);
     versionNumberLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+40, 150, 40);
+    
     firmwareNumberLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+70, 150, 40);
     deviceSerialLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+100, 150, 40);
-    companyLabel->setBounds((getWidth()/2)-110, (getHeight()/6)+140, 150, 40);
-    nuDesineLink->setBounds(((getWidth()/2)-110)+112, (getHeight()/6)+149, 80, 22);
-    githubLink->setBounds((getWidth()/2)-215, (getHeight()/6)+169, 300, 22);
-    openSourceLabel->setBounds((getWidth()/2)-65, (getHeight()/6)+160, 300, 40);
-    gnuLicenseLink->setBounds(((getWidth()/2)-155)+45, (getHeight()/6)+185, 220, 22);
-    copyrightLabel->setBounds(((getWidth()/2)-155)+45, (getHeight()/6)+210, 220, 40);
-    samplesLabel->setBounds(((getWidth()/2)-155)+45, (getHeight()/6)+240, 220, 40);
     
-    loopmastersButton->setBounds((getWidth()/2)-75, (getHeight()/6)+270, 150, 32);
-    zeroGButton->setBounds((getWidth()/2)-75, (getHeight()/6)+300, 150, 32);
-    fivePinMediaButton->setBounds((getWidth()/2)-75, (getHeight()/6)+330, 150, 32);
+    companyLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+130, 150, 40);
+    nuDesineLink->setBounds((getWidth()/2)-40, (getHeight()/6)+155, 80, 22);
+    
+    githubLink->setBounds((getWidth()/2)-150, (getHeight()/6)+185, 300, 22);
+    openSourceLabel->setBounds((getWidth()/2)-150, (getHeight()/6)+193, 300, 40);
+    gnuLicenseLink->setBounds((getWidth()/2)-105, (getHeight()/6)+217, 220, 22);
+    copyrightLabel->setBounds(((getWidth()/2)-155)+45, (getHeight()/6)+225, 220, 40);
+    
+    samplesLabel->setBounds(((getWidth()/2)-155)+45, (getHeight()/6)+260, 220, 40);
+    loopmastersButton->setBounds((getWidth()/2)-75, (getHeight()/6)+290, 150, 32);
+    zeroGButton->setBounds((getWidth()/2)-75, (getHeight()/6)+320, 150, 32);
+    fivePinMediaButton->setBounds((getWidth()/2)-75, (getHeight()/6)+350, 150, 32);
     
     closeButton->setBounds((getWidth()/2)-20, ((getHeight()/6)*5)-70, 40, 35);
 }

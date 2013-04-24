@@ -32,7 +32,7 @@ ModeButton::ModeButton (Image* modeSymbol)
     symbol(modeSymbol)
 {
 	setClickingTogglesState(true);
-	imageRotationAngle = 0;
+	imageRotationAngle =pivotXOffset_ = pivotYOffset_ = 0;
 }
 
 ModeButton::~ModeButton()

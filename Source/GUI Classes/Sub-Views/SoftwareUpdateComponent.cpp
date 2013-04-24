@@ -225,6 +225,9 @@ void SoftwareUpdateComponent::handleAsyncUpdate()
     #if JUCE_WINDOWS
     File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.exe");
     #endif
+    #if JUCE_LINUX
+    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater");
+    #endif
     
     if (alphaliveUpdaterApp.exists())
     {

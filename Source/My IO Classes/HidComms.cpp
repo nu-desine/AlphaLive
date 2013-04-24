@@ -19,6 +19,7 @@
 //
 
 #include "HidComms.h"
+#include <unistd.h>
 
 
 HidComms::HidComms() : Thread("HidThread")

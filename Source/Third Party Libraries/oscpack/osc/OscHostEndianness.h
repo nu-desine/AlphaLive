@@ -59,22 +59,24 @@
 #elif defined(__APPLE__)
 
 #if defined(__LITTLE_ENDIAN__)
+#define OSC_HOST_LITTLE_ENDIAN 1
+#undef OSC_HOST_BIG_ENDIAN
+#else
+#define OSC_HOST_BIG_ENDIAN 1
+#undef OSC_HOST_LITTLE_ENDIAN
+#endif
+
+#else
+
+#define OS_LINUX ((LINUX)) || (__linux__)
+#if OS_LINUX
+#else
+#warning no host endianness defined, assuming little-endian. please edit OSCHostEndianness.h to configure endianness.
+#endif
 
 #define OSC_HOST_LITTLE_ENDIAN 1
 #undef OSC_HOST_BIG_ENDIAN
 
-#elif defined(__BIG_ENDIAN__)
-
-#define OSC_HOST_BIG_ENDIAN 1
-#undef OSC_HOST_LITTLE_ENDIAN
-
-#endif
-
-#endif
-
-#if !defined(OSC_HOST_LITTLE_ENDIAN) && !defined(OSC_HOST_BIG_ENDIAN)
-
-#error please edit OSCHostEndianness.h to configure endianness
 
 #endif
 

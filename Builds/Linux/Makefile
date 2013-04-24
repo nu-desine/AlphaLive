@@ -17,10 +17,10 @@ ifeq ($(CONFIG),Debug)
   LIBDIR := build
   OBJDIR := build/intermediate/Debug
   OUTDIR := build
-  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
+  CPPFLAGS := -fpermissive $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0
   CXXFLAGS += $(CFLAGS) 
-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lGL -lX11 -lXext -lXinerama -lasound -ldl -lfreetype -lpthread -lrt 
+  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lGL -lX11 -lXext -lXinerama -lasound -ldl -lfreetype -lpthread -lrt -ludev
   LDDEPS :=
   RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
   TARGET := AlphaLive
@@ -32,7 +32,7 @@ ifeq ($(CONFIG),Release)
   LIBDIR := build
   OBJDIR := build/intermediate/Release
   OUTDIR := build
-  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
+  CPPFLAGS := -fpermissive $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -Os
   CXXFLAGS += $(CFLAGS) 
   LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lGL -lX11 -lXext -lXinerama -lasound -ldl -lfreetype -lpthread -lrt 
@@ -129,6 +129,7 @@ OBJECTS := \
   $(OBJDIR)/GuiGlobalPadSettings_90e3f87d.o \
   $(OBJDIR)/PreferencesComponent_7ad04aa.o \
   $(OBJDIR)/ProjectSettingsComponent_5867fbc6.o \
+  $(OBJDIR)/SoftwareUpdateComponent_26b0dc32.o \
   $(OBJDIR)/GuiControllerMode_ef8d52cc.o \
   $(OBJDIR)/GuiMidiMode_729c4751.o \
   $(OBJDIR)/GuiSamplerMode_47e395c8.o \
@@ -137,23 +138,6 @@ OBJECTS := \
   $(OBJDIR)/HidComms_b8543e7c.o \
   $(OBJDIR)/OscInput_88f649e3.o \
   $(OBJDIR)/OscOutput_f9e72b52.o \
-  $(OBJDIR)/asio_d823bb2f.o \
-  $(OBJDIR)/asiodrvr_69d128f9.o \
-  $(OBJDIR)/combase_6dcdaea5.o \
-  $(OBJDIR)/debugmessage_8f6f3cab.o \
-  $(OBJDIR)/dllentry_f2fcac65.o \
-  $(OBJDIR)/register_c8e9967a.o \
-  $(OBJDIR)/asiosmpl_30e3ee2b.o \
-  $(OBJDIR)/macnanosecs_3f0b0cb2.o \
-  $(OBJDIR)/mactimer_1f841ed3.o \
-  $(OBJDIR)/makesamp_b358b65c.o \
-  $(OBJDIR)/wintimer_92c206e6.o \
-  $(OBJDIR)/ASIOConvertSamples_3c4848c8.o \
-  $(OBJDIR)/asiodrivers_7fd6a703.o \
-  $(OBJDIR)/asioshlib_cb35b9c8.o \
-  $(OBJDIR)/codefragments_c8f97fe6.o \
-  $(OBJDIR)/asiolist_936af822.o \
-  $(OBJDIR)/hostsample_a9a00a27.o \
   $(OBJDIR)/Bessel_f99b9af7.o \
   $(OBJDIR)/Biquad_dd73553b.o \
   $(OBJDIR)/Butterworth_a95d25cb.o \
@@ -179,7 +163,6 @@ OBJECTS := \
   $(OBJDIR)/OscPrintReceivedElements_c864615f.o \
   $(OBJDIR)/OscReceivedElements_7f52db28.o \
   $(OBJDIR)/OscTypes_fdfe8f13.o \
-  $(OBJDIR)/BinaryData_ce4232d4.o \
   $(OBJDIR)/juce_audio_basics_2442e4ea.o \
   $(OBJDIR)/juce_audio_devices_a4c8a728.o \
   $(OBJDIR)/juce_audio_formats_d349f0c8.o \
@@ -643,6 +626,11 @@ $(OBJDIR)/ProjectSettingsComponent_5867fbc6.o: ../../Source/GUI\ Classes/Sub-Vie
 	@echo "Compiling ProjectSettingsComponent.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
+$(OBJDIR)/SoftwareUpdateComponent_26b0dc32.o: ../../Source/GUI\ Classes/Sub-Views/SoftwareUpdateComponent.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling SoftwareUpdateComponent.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
 $(OBJDIR)/GuiControllerMode_ef8d52cc.o: ../../Source/GUI\ Classes/Views/GuiControllerMode.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling GuiControllerMode.cpp"
@@ -681,91 +669,6 @@ $(OBJDIR)/OscInput_88f649e3.o: ../../Source/My\ IO\ Classes/OscInput.cpp
 $(OBJDIR)/OscOutput_f9e72b52.o: ../../Source/My\ IO\ Classes/OscOutput.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling OscOutput.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/asio_d823bb2f.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/common/asio.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling asio.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/asiodrvr_69d128f9.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/common/asiodrvr.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling asiodrvr.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/combase_6dcdaea5.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/common/combase.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling combase.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/debugmessage_8f6f3cab.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/common/debugmessage.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling debugmessage.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/dllentry_f2fcac65.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/common/dllentry.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling dllentry.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/register_c8e9967a.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/common/register.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling register.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/asiosmpl_30e3ee2b.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/driver/asiosample/asiosmpl.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling asiosmpl.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/macnanosecs_3f0b0cb2.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/driver/asiosample/macnanosecs.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling macnanosecs.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/mactimer_1f841ed3.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/driver/asiosample/mactimer.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling mactimer.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/makesamp_b358b65c.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/driver/asiosample/makesamp.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling makesamp.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/wintimer_92c206e6.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/driver/asiosample/wintimer.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling wintimer.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/ASIOConvertSamples_3c4848c8.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/host/ASIOConvertSamples.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling ASIOConvertSamples.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/asiodrivers_7fd6a703.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/host/asiodrivers.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling asiodrivers.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/asioshlib_cb35b9c8.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/host/mac/asioshlib.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling asioshlib.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/codefragments_c8f97fe6.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/host/mac/codefragments.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling codefragments.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/asiolist_936af822.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/host/pc/asiolist.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling asiolist.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/hostsample_a9a00a27.o: ../../Source/Third\ Party\ Libraries/ASIOSDK2/host/sample/hostsample.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling hostsample.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/Bessel_f99b9af7.o: ../../Source/Third\ Party\ Libraries/DspFilters/Bessel.cpp
@@ -891,11 +794,6 @@ $(OBJDIR)/OscReceivedElements_7f52db28.o: ../../Source/Third\ Party\ Libraries/o
 $(OBJDIR)/OscTypes_fdfe8f13.o: ../../Source/Third\ Party\ Libraries/oscpack/osc/OscTypes.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling OscTypes.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/BinaryData_ce4232d4.o: ../../JuceLibraryCode/BinaryData.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling BinaryData.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/juce_audio_basics_2442e4ea.o: ../../JuceLibraryCode/modules/juce_audio_basics/juce_audio_basics.cpp

@@ -30,7 +30,7 @@
 #define __MAINWINDOW_H_6D70D716__
 
 #include "../../JuceLibraryCode/JuceHeader.h"
-#include "../Gui Classes/Views/MainComponent.h"
+#include "../GUI Classes/Views/MainComponent.h"
 #include "../Functionality Classes/AlphaLiveEngine.h"
 #include "../File and Settings/AppDocumentState.h"
 

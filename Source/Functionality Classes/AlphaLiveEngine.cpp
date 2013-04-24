@@ -238,6 +238,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         
         recievedPad = pad;
         recievedValue = value;
+        recievedVelocity = velocity;
         
         //===determine pressure curve===
         if (PAD_SETTINGS->getPressureCurve() == 1)
@@ -261,10 +262,8 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         //else, pressureCurve == 2 which is a linear mapping of pressure
         
         
-        if (velocity > 0)
-        {
-            recievedVelocity = velocity;
-        }
+        
+        
         
         if (recievedVelocity != padVelocity[recievedPad])
         {

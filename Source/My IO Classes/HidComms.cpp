@@ -119,9 +119,16 @@ void HidComms::run()
                                 int velocity = buf[padIndex] & 127;
                             
                                 //std::cout << i << " : " << pressure << " : " << velocity << std::endl;
-                                hidInputCallback(i, pressure, velocity);
                                 
-                                prevPadPressure[i] = pressure;
+                                //There's a bug with pad 31/32 where the velocity value isn't always
+                                //sent with the first pressure value, which causes pads to not 'trigger'
+                                //within the rest of the application. Therefore, only forward a HID report
+                                //if both the velocity and pressure value is greater than 0.
+                                if (! (pressure > 0 && velocity == 0))
+                                {
+                                    hidInputCallback(i, pressure, velocity);
+                                    prevPadPressure[i] = pressure;
+                                }
                             }
                         }
                         

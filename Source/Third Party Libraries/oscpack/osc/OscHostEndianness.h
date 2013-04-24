@@ -68,7 +68,11 @@
 
 #else
 
+#define OS_LINUX ((LINUX)) || (__linux__)
+#if OS_LINUX
+#else
 #warning no host endianness defined, assuming little-endian. please edit OSCHostEndianness.h to configure endianness.
+#endif
 
 #define OSC_HOST_LITTLE_ENDIAN 1
 #undef OSC_HOST_BIG_ENDIAN

@@ -26,6 +26,8 @@
 #include "../File and Settings/StoredSettings.h"
 #include "../GUI Classes/Views/MainComponent.h"
 
+#include <unistd.h>
+
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[recievedPad]
 #define MAX_VELOCITY 127.0

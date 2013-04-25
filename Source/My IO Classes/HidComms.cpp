@@ -19,7 +19,9 @@
 //
 
 #include "HidComms.h"
+#if JUCE_LINUX
 #include <unistd.h>
+#endif
 
 
 HidComms::HidComms() : Thread("HidThread")

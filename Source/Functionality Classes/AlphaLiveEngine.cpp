@@ -26,7 +26,9 @@
 #include "../File and Settings/StoredSettings.h"
 #include "../GUI Classes/Views/MainComponent.h"
 
+#if JUCE_LINUX
 #include <unistd.h>
+#endif
 
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[recievedPad]

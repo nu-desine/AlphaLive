@@ -1,4 +1,4 @@
-﻿language: Japanese
+language: Japanese
 countries: jp
 
 "Chromatic" = "クロマチック"
@@ -561,7 +561,7 @@ countries: jp
 "2. Unzip the downloaded folder." = "2. ダウンロードしたファイルを解凍します."
 "3. Move it to the AlphaLive directory in 'Applications' on OS X or 'Program Files' on Windows on this computer." = "3. 解凍したフォルダをそれぞれのOSのAlphaLiveフォルダに移動します."
 "4. If the download contains a version of this 'AlphaLive Updater' application in either 'Mac Files', 'Win32 Files' or 'Win64 Files', close this application, move the relevant version to 'AlphaLive/Application Data' to replace the current version." = "4. ダウンロードしたフォルダ'AlphaLive Updater'に'Mac版','Win32',Win64'が含まれている場合、アプリケーションを終了して、現在のバージョンと入れ替えてください."
-"5. Make sure AlphaLive is closed, and relaunch 'AlphaLive Updater' from 'AlphaLive/Application Data'." = "5. AlphaLiveが終了していることを確認し,'AlphaLive Updater'を'AlphaLive/ Application Data'内で起動してください.
+"5. Make sure AlphaLive is closed, and relaunch 'AlphaLive Updater' from 'AlphaLive/Application Data'." = "5. AlphaLiveが終了していることを確認し,'AlphaLive Updater'を 'AlphaLive/Application Data'内で起動してください.
 "Close" = "閉じる"
 "Are you sure?" = "よろしいですか?"
 "Are you sure you want to cancel? The update may not be fully applied if so and may cause problems when running AlphaLive." = "中止しますか? アップデートは不完全となるので、AlphaLive起動時に問題が起きる可能性があります."

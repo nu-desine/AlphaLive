@@ -73,12 +73,16 @@ AboutComponent::AboutComponent(MainComponent &ref)
                                                          URL("http://www.opensource.org/licenses/GPL-2.0")));
     
     addAndMakeVisible(copyrightLabel = new Label("Copyright Label"));
-    copyrightLabel->setText(translate("Copyright 2011-2013 nu desine."), false);
+    copyrightLabel->setText(translate("Copyright 2011-2013 nu desine"), false);
     copyrightLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(samplesLabel = new Label("Samples Label"));
     samplesLabel->setText(translate("Audio samples provided by:"), false);
     samplesLabel->setJustificationType(Justification::horizontallyCentred);
+    
+    nuDesineLink->toFront(true);
+    githubLink->toFront(true);
+    gnuLicenseLink->toFront(true);
     
     //logo buttons
     
@@ -142,8 +146,9 @@ void AboutComponent::resized()
     
     githubLink->setBounds((getWidth()/2)-150, (getHeight()/6)+185, 300, 22);
     openSourceLabel->setBounds((getWidth()/2)-150, (getHeight()/6)+193, 300, 40);
-    gnuLicenseLink->setBounds((getWidth()/2)-105, (getHeight()/6)+217, 220, 22);
-    copyrightLabel->setBounds(((getWidth()/2)-155)+45, (getHeight()/6)+225, 220, 40);
+    gnuLicenseLink->setBounds((getWidth()/2)-110, (getHeight()/6)+217, 220, 22);
+    
+    copyrightLabel->setBounds((getWidth()/2)-110, (getHeight()/6)+235, 220, 40);
     
     samplesLabel->setBounds(((getWidth()/2)-155)+45, (getHeight()/6)+260, 220, 40);
     loopmastersButton->setBounds((getWidth()/2)-75, (getHeight()/6)+290, 150, 32);

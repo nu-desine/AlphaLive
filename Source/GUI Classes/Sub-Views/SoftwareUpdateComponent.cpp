@@ -113,7 +113,7 @@ void SoftwareUpdateComponent::run()
         }
         
         //get AlphaLive zip file from our server
-        URL zipUrl ("http://liamlacey.web44.net/test/AlphaLive_update.zip");
+        URL zipUrl ("http://www.alphasphere.com/AlphaLive_Update.zip");
         InputStream* urlStream = zipUrl.createInputStream (true);
         
         //uncompress zip file

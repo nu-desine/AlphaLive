@@ -1485,7 +1485,7 @@ bool MainComponent::updateSoftware (bool autoCheck)
     bool isUpdating = false;
     
     //get latest AlphaLive version from somewhere online
-    URL versionUrl ("http://liamlacey.web44.net/test/version.php");
+    URL versionUrl ("http://www.alphasphere.com/AlphaLive_Version.php");
     String urlString = versionUrl.readEntireTextStream();
     int startIndex = urlString.indexOf("AlphaLiveVersion=") + 18;
     int endIndex = urlString.indexOf(startIndex, "\"");

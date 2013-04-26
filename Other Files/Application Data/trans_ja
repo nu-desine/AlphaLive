@@ -556,7 +556,7 @@ countries: jp
 "Check for updates..." = "アップデートを確認する..."
 "This application has been designed to be launched directly from AlphaLive. To update AlphaLive, close this application and in AlphaLive go to 'Help -> Check for updates'." = "このアプリケーションはAlphaLiveフォルダ内で起動する必要があります.アプリケーションを終了し,AlphaLiveのヘルプメニューから'アップデートを確認する…'を選択してください."
 "If you would like to update AlphaLive but this computer does not have an internet connection, follow these steps:" = "アップデートを適用するコンピュータがインターネットに接続されていない場合は,次の方法でアップデートを行ってください."
-"1. On a networked computer, manually download the update from http://www.alphasphere.com/AlphaLive_update.zip." = "1. インターネット接続が可能なコンピュータを用意します. http://www.alphasphere.com/AlphaLive_update.zip にアクセスし手動でアップデータをダウンロードします."
+"1. On a networked computer, manually download the update from http://www.alphasphere.com/AlphaLive_Update.zip." = "1. インターネット接続が可能なコンピュータを用意します. http://www.alphasphere.com/AlphaLive_Update.zip にアクセスし手動でアップデータをダウンロードします."
 "2. Unzip the downloaded folder." = "2. ダウンロードしたファイルを解凍します."
 "3. Move it to the AlphaLive directory in 'Applications' on OS X or 'Program Files' on Windows on this computer." = "3. 解凍したフォルダをそれぞれのOSのAlphaLiveフォルダに移動します."
 "4. If the download contains a version of this 'AlphaLive Updater' application in either 'Mac Files', 'Win32 Files' or 'Win64 Files', close this application, move the relevant version to 'AlphaLive/Application Data' to replace the current version." = "4. ダウンロードしたフォルダ'AlphaLive Updater'に'Mac版','Win32',Win64'が含まれている場合、アプリケーションを終了して、現在のバージョンと入れ替えてください."

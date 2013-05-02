@@ -265,11 +265,11 @@ void HidComms::run()
                     
                     // ==== write output report (just MIDI messages?) ====
                     
+                    sharedMemory.enter();
+                    
                     //if report contains messages, send it
                     if (outBuf[2] > 0)
                     {
-                        sharedMemory.enter();
-                        
                         outBuf[0] = 0x00;
                         outBuf[1] = 0x01;
                         hid_write(handle, outBuf, 128);
@@ -281,9 +281,9 @@ void HidComms::run()
                     
                         //reset number of messages byte
                         outBuf[2] = 0x00;
-                        
-                        sharedMemory.exit();
                     }
+                    
+                    sharedMemory.exit();
                     
                 }
                 
@@ -320,12 +320,12 @@ void HidComms::run()
 
 void HidComms::addMessageToHidOutReport (uint8 message[])
 {
+    sharedMemory.enter();
+    
     int noOfMessages = outBuf[2];
     
     if (noOfMessages < 30)
     {
-        sharedMemory.enter();
-        
         //==== append message to out report ====
         
         //get index of the report where the new message should go
@@ -338,9 +338,9 @@ void HidComms::addMessageToHidOutReport (uint8 message[])
         
         //increase number of messages byte value
         outBuf[2] = outBuf[2] + 1;
-        
-        sharedMemory.exit();
     }
+    
+    sharedMemory.exit();
     
 }
 

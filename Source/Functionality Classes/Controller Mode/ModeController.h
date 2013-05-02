@@ -38,7 +38,6 @@ public:
     ~ModeController();
     
     void setMidiOutputDevice (MidiOutput &midiOutput);
-    void sendMidiMessage(MidiMessage midiMessage);
     
     void getInputData(int pad, int value, int velocity);
     

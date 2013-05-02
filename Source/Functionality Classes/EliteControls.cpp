@@ -131,7 +131,7 @@ void EliteControls::getInputData(int control, int value)
                     if (ccValue != prevValue)
                     {
                         message = MidiMessage::controllerEvent(channel, controllerNumber, ccValue);
-                        sendMidiMessage(message);
+                        alphaLiveEngineRef.sendMidiMessage(message);
                     }
                     
                     //update prevValue
@@ -145,7 +145,7 @@ void EliteControls::getInputData(int control, int value)
                     ccValue = eliteControlValue;
                     
                     message = MidiMessage::controllerEvent(channel, controllerNumber, ccValue);
-                    sendMidiMessage(message);
+                    alphaLiveEngineRef.sendMidiMessage(message);
                 }
                 
             }
@@ -305,7 +305,7 @@ void EliteControls::getInputData(int control, int value)
                     ccValue = AppSettings::Instance()->getEliteButtonMidiOnNumber(eliteButtonNumber);
                 
                 message = MidiMessage::controllerEvent(channel, controllerNumber, ccValue);
-                sendMidiMessage(message);
+                alphaLiveEngineRef.sendMidiMessage(message);
                 
             }
             
@@ -337,30 +337,6 @@ void EliteControls::getInputData(int control, int value)
         }
     }
     
-}
-
-void EliteControls::sendMidiMessage(MidiMessage midiMessage)
-{
-    if (alphaLiveEngineRef.getDeviceStatus() != 0)
-    {
-        unsigned char dataToSend[4];
-        
-        uint8 *rawMidiMessage = midiMessage.getRawData();
-        
-        dataToSend[0] = 0x00; //MIDI command ID
-        dataToSend[1] = rawMidiMessage[0]; //midi status byte
-        dataToSend[2] = rawMidiMessage[1]; //midi data byte 1
-        dataToSend[3] = rawMidiMessage[2]; //midi data byte 2
-        
-        alphaLiveEngineRef.addMessageToHidOutReport (dataToSend);
-    }
-    else
-    {
-        if(midiOutputDevice)
-            midiOutputDevice->sendBlockOfMessages(MidiBuffer(midiMessage), Time::getMillisecondCounter(), 44100);
-        else
-            std::cout << "No MIDI output selected\n";
-    }
 }
 
 

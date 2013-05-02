@@ -39,7 +39,6 @@ public:
     void setMainComponent(MainComponent *mainComponent_);
     
     void setMidiOutputDevice (MidiOutput &midiOutput);
-    void sendMidiMessage(MidiMessage midiMessage);
     
     void getInputData(int control, int value);
     

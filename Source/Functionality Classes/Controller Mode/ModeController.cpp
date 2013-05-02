@@ -67,7 +67,7 @@ void ModeController::getInputData(int pad, int value, int velocity)
         if (prevPadValue[padNumber] == 0 && padValue > 0)
         {
             MidiMessage message = MidiMessage::programChange(PAD_SETTINGS->getControllerMidiProgramChangeChannel(), PAD_SETTINGS->getControllerMidiProgramChangeNumber());
-            sendMidiMessage(message);
+            alphaLiveEngineRef.sendMidiMessage(message);
         }
     
     }
@@ -77,7 +77,7 @@ void ModeController::getInputData(int pad, int value, int velocity)
         if (prevPadValue[padNumber] == 0 && padValue > 0)
         {
             MidiMessage message = MidiMessage::programChange(PAD_SETTINGS->getControllerMidiProgramChangeChannel(), PAD_SETTINGS->getControllerMidiProgramChangeNumber());
-            sendMidiMessage(message);
+            alphaLiveEngineRef.sendMidiMessage(message);
             
             changeScene(); 
         }
@@ -103,34 +103,6 @@ void ModeController::changeScene()
         //if there is a 'two clicks' error... it's probably being caused here!
         //how can i fix this?
     }
-
-}
-
-
-//Output the MIDI messages
-void ModeController::sendMidiMessage(MidiMessage midiMessage)
-{
-    if (alphaLiveEngineRef.getDeviceStatus() != 0)
-    {
-        unsigned char dataToSend[4];
-        
-        uint8 *rawMidiMessage = midiMessage.getRawData();
-        
-        dataToSend[0] = 0x00; //MIDI command ID
-        dataToSend[1] = rawMidiMessage[0]; //midi status byte
-        dataToSend[2] = rawMidiMessage[1]; //midi data byte 1
-        dataToSend[3] = rawMidiMessage[2]; //midi data byte 2
-        
-        alphaLiveEngineRef.addMessageToHidOutReport (dataToSend);
-    }
-    else
-    {
-        if(midiOutputDevice)
-            midiOutputDevice->sendBlockOfMessages(MidiBuffer(midiMessage), Time::getMillisecondCounter(), 44100);
-        else
-            std::cout << "No MIDI output selected\n";
-    }
-    
 }
 
 

@@ -126,6 +126,8 @@ public:
                                 int totalNumOutputChannels,
                                 int numSamples);
     
+    
+    void sendMidiMessage (MidiMessage midiMessage);
     void setMidiOutputDevice (int deviceIndex);
     MidiOutput* getMidiOutputDevice();
     

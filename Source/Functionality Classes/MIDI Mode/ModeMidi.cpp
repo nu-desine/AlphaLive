@@ -270,12 +270,12 @@ void ModeMidi::noteOn (int padNumber)
         //this will be called if the 'trigger' triggerMode is selected.
         //must send a note off message first otherwise MIDI notes will hang
         MidiMessage message = MidiMessage::noteOff(channel[padNumber], note[padNumber]);
-        sendMidiMessage(message);
+        alphaLiveEngineRef.sendMidiMessage(message);
         isPlaying[padNumber] = false;
     }
     
     MidiMessage message = MidiMessage::noteOn(channel[padNumber], note[padNumber], (uint8)velocity[padNumber]);
-    sendMidiMessage(message);
+    alphaLiveEngineRef.sendMidiMessage(message);
     isPlaying[padNumber] = true;
     
     //NEW - recording into sequencer pads
@@ -367,7 +367,7 @@ void ModeMidi::noteOff (int padNumber)
     //the pitch will still be bent and won't change until you touch the previous pad again.
     
     MidiMessage message = MidiMessage::noteOff(channel[padNumber], note[padNumber]);
-    sendMidiMessage(message);
+    alphaLiveEngineRef.sendMidiMessage(message);
     isPlaying[padNumber] = false;
     
     //update pad GUI
@@ -434,39 +434,10 @@ void ModeMidi::sendPressureData (int padNumber)
                 break;
         }
         
-        sendMidiMessage(message);
+        alphaLiveEngineRef.sendMidiMessage(message);
     }
 
 }
-
-
-
-//Output the MIDI messages
-void ModeMidi::sendMidiMessage(MidiMessage midiMessage)
-{
-    
-    if (alphaLiveEngineRef.getDeviceStatus() != 0)
-    {
-        unsigned char dataToSend[4];
-        
-        uint8 *rawMidiMessage = midiMessage.getRawData();
-        
-        dataToSend[0] = 0x00; //MIDI command ID
-        dataToSend[1] = rawMidiMessage[0]; //midi status byte
-        dataToSend[2] = rawMidiMessage[1]; //midi data byte 1
-        dataToSend[3] = rawMidiMessage[2]; //midi data byte 2
-        
-        alphaLiveEngineRef.addMessageToHidOutReport (dataToSend);
-    }
-    else
-    {
-        if(midiOutputDevice)
-            midiOutputDevice->sendBlockOfMessages(MidiBuffer(midiMessage), Time::getMillisecondCounter(), 44100);
-        else
-            std::cout << "No MIDI output selected\n";
-    }
-}
-
 
 void ModeMidi::setMidiOutputDevice (MidiOutput &midiOutput)
 {

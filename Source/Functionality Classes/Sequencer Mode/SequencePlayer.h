@@ -61,8 +61,6 @@ public:
     void triggerMidiMessage(int rowNumber, int velocity);
     void triggerMidiNoteOffMessage (int rowNumber);
     void sendMidiPressureData();
-    void sendMidiMessage(MidiMessage midiMessage);
-    
     
     //Audio stuff
     void triggerAudioMessage(int rowNumber, int velocity);

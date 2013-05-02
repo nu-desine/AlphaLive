@@ -36,7 +36,6 @@ public:
     ~ModeMidi();
     
     void getInputData(int padNumber, int padValue, int padVelocity);
-    void sendMidiMessage(MidiMessage midiMessage);
     
     void noteOn (int padNumber);
     void noteOff (int padNumber);

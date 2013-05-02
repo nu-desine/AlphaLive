@@ -129,7 +129,6 @@ public:
     
     void sendMidiMessage (MidiMessage midiMessage);
     void setMidiOutputDevice (int deviceIndex);
-    MidiOutput* getMidiOutputDevice();
     
     void setGain (float value);
     void setPan (float value);
@@ -173,7 +172,7 @@ private:
     
     //audio related
 	AudioDeviceManager audioDeviceManager;	// this wraps the actual audio device
-    CriticalSection sharedMemory, sharedMemoryGui;
+    CriticalSection sharedMemory, sharedMemoryGui, sharedMemoryMidi;
     
     //audio stuff for mixing the modeSampler and modeSequencer objects, which are AudioSources
     MixerAudioSource audioMixer;

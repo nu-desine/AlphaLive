@@ -668,6 +668,7 @@ void AlphaLiveEngine::setDeviceStatus()
 //Output the MIDI messages
 void AlphaLiveEngine::sendMidiMessage(MidiMessage midiMessage)
 {
+    sharedMemoryMidi.enter();
     
     if (getDeviceStatus() != 0)
     {
@@ -689,11 +690,15 @@ void AlphaLiveEngine::sendMidiMessage(MidiMessage midiMessage)
         else
             std::cout << "No MIDI output selected\n";
     }
+    
+    sharedMemoryMidi.exit();
 }
 
 
 void AlphaLiveEngine::removeMidiOut()
 {
+    sharedMemoryMidi.enter();
+    
     std::cout << "removing midi output stuff" << std::endl;
     
     //if currently connected to a midiOutputDevice (either the virtual port on mac/linux
@@ -716,10 +721,14 @@ void AlphaLiveEngine::removeMidiOut()
     
     #endif //JUCE_WINDOWS
     
+    sharedMemoryMidi.exit();
+    
 }
 
 void AlphaLiveEngine::setMidiOutputDevice (int deviceIndex)
 {
+    sharedMemoryMidi.enter();
+    
     if (deviceIndex >= 0)
     {
         std::cout << "Setting MIDI output device! " << std::endl;
@@ -748,6 +757,8 @@ void AlphaLiveEngine::setMidiOutputDevice (int deviceIndex)
         
         midiOutputDevice = NULL;
     } 
+    
+    sharedMemoryMidi.exit();
 }
 
 void AlphaLiveEngine::updateFirmware()
@@ -952,12 +963,6 @@ void AlphaLiveEngine::setFirmwareUpdateStatus (bool status)
 {
     shouldUpdateFirmware = status;
 }
-
-MidiOutput* AlphaLiveEngine::getMidiOutputDevice()
-{
-    return midiOutputDevice;
-}
-
 
 
 AudioDeviceManager& AlphaLiveEngine::getAudioDeviceManager()

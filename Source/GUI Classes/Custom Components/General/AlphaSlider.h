@@ -55,7 +55,7 @@ public:
 private:
 	
     Label *sliderValueLabel;
-	Path thePath, upButtonPath, downButtonPath;
+	Path thePath, upButtonPath, downButtonPath, upButtonPathBig, downButtonPathBig;
 	Colour arrowUpColour, arrowDownColour;
 	double i, valueStore;
 	

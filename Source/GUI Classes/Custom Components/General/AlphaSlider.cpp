@@ -63,6 +63,8 @@ void AlphaSlider::paint(Graphics& g)
     thePath.clear();
     upButtonPath.clear();
     downButtonPath.clear();
+    upButtonPathBig.clear();
+    downButtonPathBig.clear();
     
 	thePath.addEllipse(0, 0, getWidth(), getHeight());
 	
@@ -73,7 +75,7 @@ void AlphaSlider::paint(Graphics& g)
 	g.drawEllipse((getWidth()*0.1), (getHeight()*0.1), (getWidth()*0.8), (getHeight()*0.8), 1.0f);
 	
 	g.setColour(arrowUpColour);;
-	upButtonPath.addTriangle((getWidth()*0.4),(getHeight()*0.25),(getWidth()*0.6),(getHeight()*0.25), (getWidth()*0.5), (getHeight() *0.15));
+	upButtonPath.addTriangle((getWidth()*0.4),(getHeight()*0.3),(getWidth()*0.6),(getHeight()*0.3), (getWidth()*0.5), (getHeight() *0.15));
 	g.fillPath(upButtonPath);
 	
     g.setColour(arrowDownColour);
@@ -89,6 +91,11 @@ void AlphaSlider::paint(Graphics& g)
 	}
 	
 	valueStore = getValue();
+    
+    //invisible paths for the user to click on to control the arrows
+    upButtonPathBig.addTriangle((getWidth()*0.2),(getHeight()*0.4),(getWidth()*0.8),(getHeight()*0.4), (getWidth()*0.5), (getHeight() *0.1));
+    downButtonPathBig = upButtonPathBig;
+    downButtonPathBig.applyTransform(rotatePath);
 }
 
 void AlphaSlider::sliderValueChanged (Slider *slider)
@@ -183,7 +190,7 @@ bool AlphaSlider::hitTest (int x, int y)
 
 void AlphaSlider::mouseDown(const MouseEvent &e)
 {
-    if (upButtonPath.contains(e.x, e.y))
+    if (upButtonPathBig.contains(e.x, e.y))
     {
         Slider::setValue(Slider::getValue() + Slider::getInterval(), sendNotification);
         sliderValueLabel->setText(String(Slider::getValue()), false);
@@ -191,7 +198,7 @@ void AlphaSlider::mouseDown(const MouseEvent &e)
         arrowUpColour = Colours::grey.withAlpha(0.8f);
         repaint();
     }
-    else if (downButtonPath.contains(e.x, e.y))
+    else if (downButtonPathBig.contains(e.x, e.y))
     {
         Slider::setValue(Slider::getValue() - Slider::getInterval(), sendNotification);
         sliderValueLabel->setText(String(Slider::getValue()), false);

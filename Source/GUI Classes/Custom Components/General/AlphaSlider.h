@@ -19,14 +19,9 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+//Current issues with this class:
 
-
-//There seems to be high CPU usage and eventual lagging when using the slider part lots. why? something to do with what it is repainting?
-//It might be better to have arrow buttons that you can paint individually instead of painting the whole component.
-
-//more problems with this class:
-
-//setting the number of decimal places when setting the label text from a float/double (mainly in setValue()).
+//Setting the number of decimal places when setting the label text from a float/double (mainly in setValue()).
 //ideally you'll want to get the step size of the slider (getInterval()) and work out how many decimal place to display from that.
 //I've added a quick fix to setValue() but it's not the best way of handling it.
 
@@ -51,8 +46,6 @@ public:
 	void labelTextChanged (Label* labelThatHasChanged);
 	void sliderDragEnded (Slider *slider);
     
-    void setComponentValue (double value);
-    
     void mouseDown(const MouseEvent &e);
 	bool hitTest (int x, int y);
     
@@ -61,7 +54,7 @@ public:
 private:
 	
     Label *sliderValueLabel;
-	Path thePath;
+	Path thePath, upButtonPath, downButtonPath;
 	Colour arrowUpColour, arrowDownColour;
 	int i, valueStore;
 	

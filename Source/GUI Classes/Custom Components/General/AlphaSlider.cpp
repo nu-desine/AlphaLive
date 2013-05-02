@@ -61,23 +61,26 @@ void AlphaSlider::resized()
 void AlphaSlider::paint(Graphics& g)
 {
     thePath.clear();
+    upButtonPath.clear();
+    downButtonPath.clear();
     
 	thePath.addEllipse(0, 0, getWidth(), getHeight());
 	
 	g.setColour(Colours::black);
-	g.fillPath(thePath, getTransform());
+	g.fillPath(thePath);
 	
 	g.setColour(Colours::grey.withAlpha(0.3f));
 	g.drawEllipse((getWidth()*0.1), (getHeight()*0.1), (getWidth()*0.8), (getHeight()*0.8), 1.0f);
 	
-	g.setColour(arrowUpColour);
-	Path incButtonPath;
-	incButtonPath.addTriangle((getWidth()*0.4),(getHeight()*0.25),(getWidth()*0.6),(getHeight()*0.25), (getWidth()*0.5), (getHeight() *0.15));
-	g.fillPath(incButtonPath, getTransform());
+	g.setColour(arrowUpColour);;
+	upButtonPath.addTriangle((getWidth()*0.4),(getHeight()*0.25),(getWidth()*0.6),(getHeight()*0.25), (getWidth()*0.5), (getHeight() *0.15));
+	g.fillPath(upButtonPath);
 	
+    g.setColour(arrowDownColour);
+    downButtonPath = upButtonPath;
 	AffineTransform rotatePath (AffineTransform::rotation((180 * (M_PI / 180)), (getWidth() * 0.5), (getHeight() * 0.5)));
-	g.setColour(arrowDownColour);
-	g.fillPath(incButtonPath, rotatePath);
+    downButtonPath.applyTransform(rotatePath);
+	g.fillPath(downButtonPath);
 	
 	if (i == 0) 
     {
@@ -148,13 +151,8 @@ void AlphaSlider::labelTextChanged (Label* labelThatHasChanged)
 	
 }
 
-void AlphaSlider::setComponentValue (double value)
-{
-    
-    
-}
 
-void AlphaSlider::setValue (double value, int sendNotification)
+void AlphaSlider::setValue (double value, int sendNotification) //whats the point of sendNotification here? Is it just so the function matches the Slider one?
 {
     if (value != -999)
     {
@@ -184,7 +182,17 @@ bool AlphaSlider::hitTest (int x, int y)
 
 void AlphaSlider::mouseDown(const MouseEvent &e)
 {
-    if (e.getNumberOfClicks() == 2)
+    if (upButtonPath.contains(e.x, e.y))
+    {
+        Slider::setValue(Slider::getValue() + Slider::getInterval(), sendNotification);
+        sliderValueLabel->setText(String(Slider::getValue()), false);
+    }
+    else if (downButtonPath.contains(e.x, e.y))
+    {
+        Slider::setValue(Slider::getValue() - Slider::getInterval(), sendNotification);
+        sliderValueLabel->setText(String(Slider::getValue()), false);
+    }
+    else if (e.getNumberOfClicks() == 2)
     {
         sliderValueLabel->showEditor();
         sliderValueLabel->getCurrentTextEditor()->setInputRestrictions(0, "1234567890.-");

@@ -211,6 +211,7 @@ private:
     int eliteControlValue[5];
     
     String firmwareVersion, deviceSerial;
+    bool hasDisplayedNoMidiDeviceWarning;
 };
 
 #endif // H_ALPHALIVEENGINE

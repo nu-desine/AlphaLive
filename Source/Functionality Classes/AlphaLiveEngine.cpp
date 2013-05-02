@@ -123,6 +123,8 @@ AlphaLiveEngine::AlphaLiveEngine()
     for (int i = 0; i <= 23; i++)
         currentExclusivePad[i] = 100; //'100' here is used to signify an 'empty/NULL' value
     
+    hasDisplayedNoMidiDeviceWarning = false;
+    
     broadcaster.addActionListener(this);
     
 	#if JUCE_MAC
@@ -662,6 +664,9 @@ void AlphaLiveEngine::setDeviceStatus()
         const MessageManagerLock mmLock;
         mainComponent->editInterfaceFromDeviceConnectivity(3);
     }
+    
+    if (getDeviceStatus() != 0)
+        hasDisplayedNoMidiDeviceWarning = false;
 }
 
 
@@ -688,7 +693,24 @@ void AlphaLiveEngine::sendMidiMessage(MidiMessage midiMessage)
         if(midiOutputDevice)
             midiOutputDevice->sendBlockOfMessages(MidiBuffer(midiMessage), Time::getMillisecondCounter(), 44100);
         else
+        {
+            if (hasDisplayedNoMidiDeviceWarning == false)
+            {
+                #if JUCE_MAC || JUCE_LINUX
+                String instructionString = translate("if you would like to use AlphaLive's virtual MIDI port, quit and relaunch AlphaLive.");
+                #endif
+                #if JUCE_WINDOWS
+                String instructionString = translate("if you would like to select an external MIDI output device to use, quit and relaunch AlphaLive.");
+                #endif
+
+                AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
+                                                  translate("No MIDI device available!"),
+                                                  translate("AlphaLive cannot currently send any MIDI messages as the AlphaSphere has been disconnected. To start sending MIDI messages again please reconnected the AlphaSphere, or " + translate(instructionString)));
+                
+                hasDisplayedNoMidiDeviceWarning = true;
+            }
             std::cout << "No MIDI output selected\n";
+        }
     }
     
     sharedMemoryMidi.exit();

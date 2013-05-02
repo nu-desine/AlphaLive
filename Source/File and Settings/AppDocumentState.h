@@ -139,7 +139,7 @@ public:
     int getSceneToUpdate();
     int getSceneStatus();
     
-    void removeUneededAudioFiles(bool closingApp);
+    void cleanUpProject(bool closingApp);
     void importAudioFiles();   
     void setCurrentlySelectedScene(int value);
     

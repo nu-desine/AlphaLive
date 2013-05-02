@@ -193,7 +193,7 @@ public:
                 
                 if (numOfFilesAtClose != appDocumentState->getNumOfFilesAtStart())
                 {
-                    appDocumentState->removeUneededAudioFiles(true);
+                    appDocumentState->cleanUpProject (true);
                 }
             }
             
@@ -329,7 +329,7 @@ public:
         
         else if(info.commandID == CommandIDs::CleanUpProject)
         {
-            appDocumentState->removeUneededAudioFiles(false);
+            appDocumentState->cleanUpProject (false);
         }
 
         return true;

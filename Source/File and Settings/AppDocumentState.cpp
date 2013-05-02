@@ -2868,7 +2868,7 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
 
 
 
-void AppDocumentState::removeUneededAudioFiles (bool closingApp)
+void AppDocumentState::cleanUpProject (bool closingApp)
 {
     
     if (currentProjectFile != File::nonexistent) //if there is currently an open project
@@ -2884,14 +2884,14 @@ void AppDocumentState::removeUneededAudioFiles (bool closingApp)
         {
             //this function must check all the settings of all the sceneData elements,
             //and delete any audio files in the project Audio Files directory that aren't included in these settings.
-            //need to move all the currently used audio files somewhere, delete any that are left, and move the used ones back
-            //Is is the best way to do it?
+            //need to move all the currently used audio files somewhere, delete any that are left, and move the used ones back.
             
             //first must save the current settings into the current scene to prevent missing audio files errors once the clean up has been completed.
             //For example, if you imported in a new audio file and then instantly cleaned up without saving the new settings it might delete the current
             //audio file as a reference to it wouldn't be found in any of the sceneData elements, so when the clean up is complete the audio file would 
             //now be missing.
             //instead of saving, you could load up the scene data for the current scene which would delete the current settings that havent been saved. What would be more natural?
+            
             if (!closingApp)
                 saveToScene(currentlySelectedScene);
             

@@ -26,6 +26,8 @@
 #include "../../../File and Settings/StoredSettings.h"
 #include "../../AlphaLiveLookandFeel.h"
 
+#define PAD_SETTINGS AppSettings::Instance()->padSettings[i]
+
 SceneSlot::SceneSlot (int slotNumber_, SceneComponent &ref)
                     :   slotNumber(slotNumber_),
                         sceneComponentRef(ref)
@@ -241,6 +243,10 @@ void SceneSlot::selectSlot (bool isShiftDown)
         //load data from clicked scene
         sceneComponentRef.getAppDocumentState().loadFromScene(slotNumber);
     }
+    
+    // reset unused mode settings
+    for (int i = 0; i <=47; i++)
+        PAD_SETTINGS->resetData(PAD_SETTINGS->getMode());
     
     sceneComponentRef.configureSelectedSlot (slotNumber, prevStatus);
 }

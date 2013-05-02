@@ -152,11 +152,12 @@ void AlphaSlider::labelTextChanged (Label* labelThatHasChanged)
 }
 
 
-void AlphaSlider::setValue (double value, int sendNotification) //whats the point of sendNotification here? Is it just so the function matches the Slider one?
+void AlphaSlider::setValue (double value, int sendNotification_)    //whats the point of sendNotification here? Is it just so the function matches the Slider one?
+                                                                    //I think i should be use the notification type rather an int so then sendNotification_ can be used below
 {
     if (value != -999)
     {
-        Slider::setValue(value, dontSendNotification);
+        Slider::setValue(value, dontSendNotification); //should we be using sendNotification_ here?
         
         //the below alg. needs changing as what if we want to display things to 2 decimal places? Though will that currently fit?
         if (getInterval() >= 1)
@@ -186,11 +187,17 @@ void AlphaSlider::mouseDown(const MouseEvent &e)
     {
         Slider::setValue(Slider::getValue() + Slider::getInterval(), sendNotification);
         sliderValueLabel->setText(String(Slider::getValue()), false);
+        
+        arrowUpColour = Colours::grey.withAlpha(0.8f);
+        repaint();
     }
     else if (downButtonPath.contains(e.x, e.y))
     {
         Slider::setValue(Slider::getValue() - Slider::getInterval(), sendNotification);
         sliderValueLabel->setText(String(Slider::getValue()), false);
+        
+        arrowDownColour = Colours::grey.withAlpha(0.8f);
+        repaint();
     }
     else if (e.getNumberOfClicks() == 2)
     {
@@ -201,5 +208,13 @@ void AlphaSlider::mouseDown(const MouseEvent &e)
     {
         Slider::mouseDown(e);
     }
+}
+
+void AlphaSlider::mouseUp(const MouseEvent &e)
+{
+    arrowDownColour = Colours::grey.withAlpha(0.3f);
+	arrowUpColour = Colours::grey.withAlpha(0.3f);
+	
+	repaint();
 }
 

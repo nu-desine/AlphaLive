@@ -47,16 +47,17 @@ public:
 	void sliderDragEnded (Slider *slider);
     
     void mouseDown(const MouseEvent &e);
+    void mouseUp(const MouseEvent &e);
 	bool hitTest (int x, int y);
     
-    void setValue (double value, int sendNotification = false);
+    void setValue (double value, int sendNotification_ = false);
 	
 private:
 	
     Label *sliderValueLabel;
 	Path thePath, upButtonPath, downButtonPath;
 	Colour arrowUpColour, arrowDownColour;
-	int i, valueStore;
+	double i, valueStore;
 	
 };
 

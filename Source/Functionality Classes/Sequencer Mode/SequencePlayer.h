@@ -51,7 +51,7 @@ class SequencePlayer :  public Thread,
                         public ActionListener
 {
 public:
-    SequencePlayer(int padNumber_, MidiOutput &midiOutput, ModeSequencer &ref, TimeSliceThread *audioTransportSourceThread_);
+    SequencePlayer(int padNumber_, ModeSequencer &ref, TimeSliceThread *audioTransportSourceThread_);
     ~SequencePlayer();
     
     void processSequence(int padValue);
@@ -67,9 +67,6 @@ public:
 	void prepareToPlay (int samplesPerBlockExpected,double sampleRate);
 	void releaseResources();
 	void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill);
-    
-    void setMidiOutputDevice (MidiOutput &midiOutput);
-    
     
     //Thread callback function
     void run();
@@ -151,9 +148,6 @@ private:
     //create an object of the TriggerModes Class and a variable of the TriggerModeData struct
     TriggerModes triggerModes;
     TriggerModeData triggerModeData;
-    
-    //midi stuff
-    MidiOutput *midiOutputDevice;
 	
 	//audio related
 	SequenceAudioFilePlayer *sequenceAudioFilePlayer[NO_OF_ROWS];

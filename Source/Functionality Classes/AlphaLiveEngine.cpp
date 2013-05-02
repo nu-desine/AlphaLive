@@ -102,11 +102,11 @@ AlphaLiveEngine::AlphaLiveEngine()
     else
         midiOutputDevice = NULL;
 
-    modeMidi = new ModeMidi(*midiOutputDevice, *this);
-    modeSampler = new ModeSampler(*this);
-    modeSequencer = new ModeSequencer(*midiOutputDevice, *this);
-    modeController = new ModeController(*midiOutputDevice, *this);
-    eliteControls = new EliteControls(*midiOutputDevice, *this);
+    modeMidi = new ModeMidi (*this);
+    modeSampler = new ModeSampler (*this);
+    modeSequencer = new ModeSequencer (*this);
+    modeController = new ModeController (*this);
+    eliteControls = new EliteControls (*this);
     
     //global clock stuff
     globalClock = new GlobalClock(*this);
@@ -747,15 +747,7 @@ void AlphaLiveEngine::setMidiOutputDevice (int deviceIndex)
         }
         
         midiOutputDevice = NULL;
-    }
-    
-    //set the MidiOutput objects in the child classes
-    modeMidi->setMidiOutputDevice(*midiOutputDevice);
-    modeSequencer->setMidiOutputDevice(*midiOutputDevice);
-    modeController->setMidiOutputDevice(*midiOutputDevice);
-    eliteControls->setMidiOutputDevice(*midiOutputDevice);
-    
-    
+    } 
 }
 
 void AlphaLiveEngine::updateFirmware()

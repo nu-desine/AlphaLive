@@ -26,9 +26,8 @@
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
 
 
-ModeController::ModeController(MidiOutput &midiOutput, AlphaLiveEngine &ref)
-                    :   midiOutputDevice(&midiOutput),
-                        alphaLiveEngineRef(ref)
+ModeController::ModeController(AlphaLiveEngine &ref)
+                    :   alphaLiveEngineRef(ref)
 {
     for (int i = 0; i <= 47; i++)
     {
@@ -103,12 +102,6 @@ void ModeController::changeScene()
         //if there is a 'two clicks' error... it's probably being caused here!
         //how can i fix this?
     }
-}
-
-
-void ModeController::setMidiOutputDevice (MidiOutput &midiOutput)
-{
-    midiOutputDevice = &midiOutput;
 }
 
 

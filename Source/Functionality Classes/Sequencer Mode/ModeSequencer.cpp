@@ -29,9 +29,8 @@
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
 
 
-ModeSequencer::ModeSequencer(MidiOutput &midiOutput, AlphaLiveEngine &ref)
-                             :  midiOutputDevice(&midiOutput),
-                                alphaLiveEngineRef(ref)
+ModeSequencer::ModeSequencer(AlphaLiveEngine &ref)
+                             : alphaLiveEngineRef(ref)
 {
     //init the sequenceplayer array to be empty
     //needs to be initialised as you cannot dynamcically add an object, say at index 30, if the indexes before it don't exist
@@ -90,7 +89,7 @@ void ModeSequencer::getInputData(int padNumber, int padValue)
 void ModeSequencer::createSequencePlayer (int padNumber)
 {
     padSequencer.remove(padNumber); //remove NULL object
-    padSequencer.insert(padNumber, new SequencePlayer(padNumber, *midiOutputDevice, *this, audioTransportSourceThread)); 
+    padSequencer.insert(padNumber, new SequencePlayer(padNumber, *this, audioTransportSourceThread)); 
     //add SequencePlayer object
     audioMixer.addInputSource(padSequencer[padNumber],false); //add as inputsource to audioMixer
 }
@@ -205,19 +204,6 @@ int ModeSequencer::getCurrentSequenceNumber()
 int ModeSequencer::getWhatShouldUpdateFlag()
 {
     return whatShouldUpdateFlag;
-}
-
-void ModeSequencer::setMidiOutputDevice (MidiOutput &midiOutput)
-{
-    midiOutputDevice = &midiOutput;
-    
-    for (int i = 0; i <= 47; i++)
-    {
-        if (padSequencer[i] != NULL)
-        {
-            padSequencer[i]->setMidiOutputDevice (*midiOutputDevice);
-        }
-    }
 }
 
 AlphaLiveEngine& ModeSequencer::getAlphaLiveEngineRef()

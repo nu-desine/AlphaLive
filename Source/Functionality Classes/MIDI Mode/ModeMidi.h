@@ -32,7 +32,7 @@ class ModeMidi :    public ActionListener
 {
 
 public:
-    ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref);
+    ModeMidi (AlphaLiveEngine &ref);
     ~ModeMidi();
     
     void getInputData(int padNumber, int padValue, int padVelocity);
@@ -48,7 +48,6 @@ public:
     void killPad (int padNum);
     void stopPrevExclusivePad (int padNum);
     
-    void setMidiOutputDevice (MidiOutput &midiOutput);
     void setPadData (int padNumber);
     
     bool isCurrentlyPlaying (int padNum);
@@ -68,8 +67,6 @@ public:
     void setQuantizeMode (int value, int pad);
 
 private:
-    
-    MidiOutput *midiOutputDevice;
     
     bool isPlaying[48];    //set whenever a MIDI note on/off message is triggered within the code
     int currentPlayingStatus[48];   //set when a MIDI note is turned on or off directly by the user, but not when

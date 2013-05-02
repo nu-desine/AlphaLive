@@ -27,9 +27,8 @@
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
 #define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
 
-ModeMidi::ModeMidi(MidiOutput &midiOutput, AlphaLiveEngine &ref)
-                :   midiOutputDevice(&midiOutput),
-                    alphaLiveEngineRef(ref)
+ModeMidi::ModeMidi (AlphaLiveEngine &ref)
+                : alphaLiveEngineRef(ref)
 {
     for (int i = 0; i<= 47; i++)
     {
@@ -437,11 +436,6 @@ void ModeMidi::sendPressureData (int padNumber)
         alphaLiveEngineRef.sendMidiMessage(message);
     }
 
-}
-
-void ModeMidi::setMidiOutputDevice (MidiOutput &midiOutput)
-{
-    midiOutputDevice = &midiOutput;
 }
 
 

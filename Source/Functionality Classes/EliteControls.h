@@ -33,12 +33,10 @@ class MainComponent;
 class EliteControls
 {
 public:
-    EliteControls(MidiOutput &midiOutput, AlphaLiveEngine &ref);
+    EliteControls (AlphaLiveEngine &ref);
     ~EliteControls();
     
     void setMainComponent(MainComponent *mainComponent_);
-    
-    void setMidiOutputDevice (MidiOutput &midiOutput);
     
     void getInputData(int control, int value);
     
@@ -50,7 +48,6 @@ private:
     int eliteControlValue;
     
     OscOutput oscOutput;
-    MidiOutput *midiOutputDevice;
     AlphaLiveEngine &alphaLiveEngineRef;
     
 };

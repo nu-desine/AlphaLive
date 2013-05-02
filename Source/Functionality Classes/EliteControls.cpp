@@ -25,9 +25,8 @@
 #include "../Application/CommandIDs.h"
 #include "../GUI Classes/Views/MainComponent.h"
 
-EliteControls::EliteControls(MidiOutput &midiOutput, AlphaLiveEngine &ref)
-                            :   midiOutputDevice(&midiOutput),
-                                alphaLiveEngineRef(ref)
+EliteControls::EliteControls(AlphaLiveEngine &ref)
+                            : alphaLiveEngineRef(ref)
 {
     
 }
@@ -337,10 +336,4 @@ void EliteControls::getInputData(int control, int value)
         }
     }
     
-}
-
-
-void EliteControls::setMidiOutputDevice (MidiOutput &midiOutput)
-{
-    midiOutputDevice = &midiOutput;
 }

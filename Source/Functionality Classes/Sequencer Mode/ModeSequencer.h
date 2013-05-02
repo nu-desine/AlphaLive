@@ -32,7 +32,7 @@ class ModeSequencer :   public AudioSource,
                         public Subject //so this class can notify observers
 {
 public:
-    ModeSequencer(MidiOutput &midiOutput, AlphaLiveEngine &ref);
+    ModeSequencer (AlphaLiveEngine &ref);
     ~ModeSequencer();
     
     void getInputData(int padNumber, int padValue);
@@ -77,16 +77,11 @@ public:
     //quantization stuff
     void triggerQuantizationPoint (int padNum);
     
-    void setMidiOutputDevice (MidiOutput &midiOutput);
-    
-    
     AlphaLiveEngine& getAlphaLiveEngineRef();
     
 private:
     
     OwnedArray<SequencePlayer> padSequencer;
-    
-    MidiOutput *midiOutputDevice; //this isn't really needed here!
     
     //audio related
 	MixerAudioSource audioMixer;

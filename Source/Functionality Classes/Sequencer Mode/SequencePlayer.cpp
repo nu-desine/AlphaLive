@@ -30,11 +30,10 @@
 //=Constructor=========================================================================
 //=====================================================================================
 
-SequencePlayer::SequencePlayer(int padNumber_,MidiOutput &midiOutput, ModeSequencer &ref, TimeSliceThread* audioTransportSourceThread_) 
+SequencePlayer::SequencePlayer(int padNumber_, ModeSequencer &ref, TimeSliceThread* audioTransportSourceThread_) 
                                 :   Thread("Sequencer " + String(padNumber)),
                                     padNumber(padNumber_),
-                                    modeSequencerRef(ref),
-                                    midiOutputDevice(&midiOutput)
+                                    modeSequencerRef(ref)
 {
     audioTransportSourceThread = audioTransportSourceThread_;
     
@@ -897,13 +896,6 @@ void SequencePlayer::sendMidiPressureData()
     }
     
 }
-
-
-void SequencePlayer::setMidiOutputDevice (MidiOutput &midiOutput)
-{
-    midiOutputDevice = &midiOutput;
-}
-
 
 //called every time an audio file needs playing
 void SequencePlayer::triggerAudioMessage(int rowNumber, int velocity)

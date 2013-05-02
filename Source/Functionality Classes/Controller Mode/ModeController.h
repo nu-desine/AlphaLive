@@ -34,10 +34,8 @@ class ModeController :  public Subject, //so this class can be observed by the s
 {
 
 public:
-    ModeController(MidiOutput &midiOutput, AlphaLiveEngine &ref);
+    ModeController(AlphaLiveEngine &ref);
     ~ModeController();
-    
-    void setMidiOutputDevice (MidiOutput &midiOutput);
     
     void getInputData(int pad, int value, int velocity);
     
@@ -57,7 +55,6 @@ private:
     int prevPadValue[48];
     
     OscOutput oscOutput;
-    MidiOutput *midiOutputDevice;
     AlphaLiveEngine &alphaLiveEngineRef;
     
 };

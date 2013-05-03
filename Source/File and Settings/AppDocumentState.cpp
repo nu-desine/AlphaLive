@@ -175,6 +175,7 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
         padData->setAttribute("sequencerLength", PAD_SETTINGS->getSequencerLength());
         padData->setAttribute("sequencerRelativeTempoMode", PAD_SETTINGS->getSequencerRelativeTempoMode());
         padData->setAttribute("sequencerDynamicMode", PAD_SETTINGS->getSequencerDynamicMode());
+        padData->setAttribute("sequencerRecordEnabled", PAD_SETTINGS->getSequencerRecordEnabled());
         
         if (PAD_SETTINGS->getSequencerMode() == 1) //sequencer midi mode
         {
@@ -504,6 +505,8 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
             PAD_SETTINGS->setSequencerRelativeTempoMode(padData->getIntAttribute("sequencerRelativeTempoMode"));
         if (padData->hasAttribute("sequencerDynamicMode"))
             PAD_SETTINGS->setSequencerDynamicMode(padData->getIntAttribute("sequencerDynamicMode"));
+        if (padData->hasAttribute("sequencerRecordEnabled"))
+            PAD_SETTINGS->setSequencerRecordEnabled(padData->getIntAttribute("sequencerRecordEnabled"));
         
         //sequencer midi mode
         if (padData->getIntAttribute("sequencerMode") == 1)

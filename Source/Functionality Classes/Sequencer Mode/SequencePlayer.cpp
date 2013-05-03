@@ -78,8 +78,6 @@ SequencePlayer::SequencePlayer(int padNumber_, ModeSequencer &ref, TimeSliceThre
     panLeft = panLeftPrev = PanControl::leftChanPan_(PAD_SETTINGS->getSequencerPan());
     panRight = panRightPrev = PanControl::rightChanPan_(PAD_SETTINGS->getSequencerPan());
     
-    recordEnabled = false;
-    
     triggerModeData.playingStatus = 0;
     triggerModeData.moveToNextSeq = false;
     
@@ -133,6 +131,10 @@ SequencePlayer::SequencePlayer(int padNumber_, ModeSequencer &ref, TimeSliceThre
     
     prevPadValue = pressureValue =  0;
     playingLastLoop = false;
+    
+    //if the pad is currently set to be record enabled, add this pad to the recordingPad array
+    if (PAD_SETTINGS->getSequencerRecordEnabled() == 1)
+        modeSequencerRef.getAlphaLiveEngineRef().setRecordingSequencerPadsState(padNumber, 1);
 }
 
 //=====================================================================================
@@ -142,6 +144,10 @@ SequencePlayer::SequencePlayer(int padNumber_, ModeSequencer &ref, TimeSliceThre
 
 SequencePlayer::~SequencePlayer()
 {
+    //if this pad is current set to record enabled, remove this pad from the recordingPads array
+    if (PAD_SETTINGS->getSequencerRecordEnabled() == 1)
+        modeSequencerRef.getAlphaLiveEngineRef().setRecordingSequencerPadsState(padNumber, 0);
+    
     delete gainAndPan;
     delete lowPassFilter;
     delete highPassFilter;
@@ -1510,13 +1516,6 @@ void SequencePlayer::setSamplesPolyphony (int value)
         sequenceAudioFilePlayer[i]->setPolyphony(value);
     }
 }
-
-void SequencePlayer::setRecordEnabled (bool value)
-{
-    recordEnabled = value;
-}
-
-
 
 double SequencePlayer::getTimeInterval()
 {

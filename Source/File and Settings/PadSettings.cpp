@@ -469,12 +469,6 @@ void PadSettings::setMode(int value)
         }
         else if (mode == 3 && value != 3) //to prevent non-existent Sequencer SequencePlayer objects from being deleted
         {
-            //the below has to be called here and not within the sequencePlayer destructor
-            //as on shutdown PadSettings is deleted before the sequencerPlayer objects.
-            //Therefore the app would crash when shutting down as it would try to access
-            //pad settings when it doesn't exist, but for some reason it seems to think it does exist.
-            setSequencerRecordEnabled (false);
-            
             //delete instance of SequencePlayer for pad 'padNumber'
             alphaLiveEngineRef->getModeSequencer()->deleteSequencePlayer(padNumber);
         }
@@ -1361,14 +1355,8 @@ void PadSettings::setSequencerSamplesPolyphony (int value)
 
 void PadSettings::setSequencerRecordEnabled (bool value)
 {
-    
     sequencerRecordEnabled = value;
     alphaLiveEngineRef->setRecordingSequencerPadsState(padNumber, value);
-    
-    if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
-    {
-        alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setRecordEnabled(value);
-    }
 }
 
 

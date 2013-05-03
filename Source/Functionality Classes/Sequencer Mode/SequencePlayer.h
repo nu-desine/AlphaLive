@@ -109,8 +109,6 @@ public:
     void setRelativeTempoMode (int value);
     double getTimeInterval();
     
-    void setRecordEnabled (bool value);
-    
     //called when previewing sequence
     void setSequenceNumber (int value);
     
@@ -200,7 +198,6 @@ private:
     
     float gain, gainPrev, panLeft, panLeftPrev, panRight, panRightPrev;
     int effect;
-    bool recordEnabled;
     
     bool playingLastLoop;
     

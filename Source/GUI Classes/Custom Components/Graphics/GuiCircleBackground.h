@@ -43,9 +43,6 @@ private:
     Path hitPath;
 	int i;
     
-    
 };
-
-
 
 #endif

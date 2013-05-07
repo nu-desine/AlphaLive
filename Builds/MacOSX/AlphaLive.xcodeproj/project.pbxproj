@@ -43,7 +43,6 @@
 		0C78A3D515B467910049C0C8 /* ModeMidi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2DC15B467900049C0C8 /* ModeMidi.cpp */; };
 		0C78A3D615B467910049C0C8 /* AlphaLiveEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2DE15B467900049C0C8 /* AlphaLiveEngine.cpp */; };
 		0C78A3D715B467910049C0C8 /* LayoutsAndScales.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2E115B467900049C0C8 /* LayoutsAndScales.cpp */; };
-		0C78A3D815B467910049C0C8 /* PlayStates.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2E215B467900049C0C8 /* PlayStates.cpp */; };
 		0C78A3D915B467910049C0C8 /* AudioFilePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2E515B467900049C0C8 /* AudioFilePlayer.cpp */; };
 		0C78A3DA15B467910049C0C8 /* ModeSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2E715B467900049C0C8 /* ModeSampler.cpp */; };
 		0C78A3DB15B467910049C0C8 /* ModeSequencer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C78A2EA15B467900049C0C8 /* ModeSequencer.cpp */; };
@@ -282,8 +281,6 @@
 		0C78A2DE15B467900049C0C8 /* AlphaLiveEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlphaLiveEngine.cpp; sourceTree = "<group>"; };
 		0C78A2DF15B467900049C0C8 /* AlphaLiveEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlphaLiveEngine.h; sourceTree = "<group>"; };
 		0C78A2E115B467900049C0C8 /* LayoutsAndScales.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutsAndScales.cpp; sourceTree = "<group>"; };
-		0C78A2E215B467900049C0C8 /* PlayStates.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayStates.cpp; sourceTree = "<group>"; };
-		0C78A2E315B467900049C0C8 /* PlayStates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayStates.h; sourceTree = "<group>"; };
 		0C78A2E515B467900049C0C8 /* AudioFilePlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilePlayer.cpp; sourceTree = "<group>"; };
 		0C78A2E615B467900049C0C8 /* AudioFilePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioFilePlayer.h; sourceTree = "<group>"; };
 		0C78A2E715B467900049C0C8 /* ModeSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModeSampler.cpp; sourceTree = "<group>"; };
@@ -1498,8 +1495,6 @@
 			children = (
 				0CA0A4F915B97E8C001362B3 /* TriggerModes.h */,
 				0CA0A4F815B97E8C001362B3 /* TriggerModes.cpp */,
-				0C78A2E315B467900049C0C8 /* PlayStates.h */,
-				0C78A2E215B467900049C0C8 /* PlayStates.cpp */,
 				0C78A2E115B467900049C0C8 /* LayoutsAndScales.cpp */,
 			);
 			path = Other;
@@ -3536,7 +3531,6 @@
 				0C78A3D515B467910049C0C8 /* ModeMidi.cpp in Sources */,
 				0C78A3D615B467910049C0C8 /* AlphaLiveEngine.cpp in Sources */,
 				0C78A3D715B467910049C0C8 /* LayoutsAndScales.cpp in Sources */,
-				0C78A3D815B467910049C0C8 /* PlayStates.cpp in Sources */,
 				0C78A3D915B467910049C0C8 /* AudioFilePlayer.cpp in Sources */,
 				0C78A3DA15B467910049C0C8 /* ModeSampler.cpp in Sources */,
 				0C78A3DB15B467910049C0C8 /* ModeSequencer.cpp in Sources */,

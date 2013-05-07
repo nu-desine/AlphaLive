@@ -24,22 +24,17 @@
 #include "../../AlphaLiveLookandFeel.h"
 
 SettingsButtonImage::SettingsButtonImage (Image* _theImage, float _startRadians, float _endRadians, float _theWidth, float _imageWidth)
-: Button ("SettingsButtonImage"),
-theImage(_theImage)
-
+                                        :   Button ("SettingsButtonImage"),
+                                            theImage(_theImage)
 
 {
-    
-	
 	setClickingTogglesState(true);
-	
-	
+    
 	startRadians = _startRadians;
 	endRadians = _endRadians;
 	theWidth = _theWidth;
 	
 	imageWidth = _imageWidth;
-	
 	
 	normalOpacity = 1.0f;
     normalOverlay = Colours::transparentBlack;
@@ -49,19 +44,12 @@ theImage(_theImage)
     downOverlay   = Colours::white;
 	onOpacity   = 0.9f;
     onOverlay   = AlphaColours::blue;
-	
-	
-	
-	
 }
 
 SettingsButtonImage::~SettingsButtonImage()
 {
-    
-	delete theImage;
-	
+	delete theImage;	
 }
-
 
 
 //==============================================================================
@@ -111,9 +99,6 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
     {
 		case 0:
         {
-            
-			//ColourGradient fillGradient(Colours::black, (thePath.getBounds().getSmallestIntegerContainer().getX() * 0.5), (thePath.getBounds().getSmallestIntegerContainer().getY() * 0.5), Colours::nearlyblack, 0, 0, true);
-			
 			ColourGradient fillGradient(Colours::black, (getWidth() * 0.5), (getHeight() * 0.5), AlphaColours::nearlyblack, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
@@ -124,13 +109,11 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 			g.setColour(Colours::white.withAlpha(0.5f));
 			g.drawImageTransformed(*theImage, rotateImage, true);
 			
-			
             break;
         }
 			
 		case 1:
         {
-            
 			ColourGradient fillGradient(Colours::black, (getWidth()*0.5), (getHeight()*0.5), AlphaColours::nearlyblack, 0, 0, true);			
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
@@ -142,13 +125,11 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 
 			g.drawImageTransformed(*theImage, rotateImage, true);
 			
-			
             break;
         }
 			
 		case 2:
         {
-			
 			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
@@ -160,14 +141,11 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 
 			g.drawImageTransformed(*theImage, rotateImage, true);
 			
-			
-			
             break;
         }
 			
 		case 3:
         {
-			
 			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
@@ -177,15 +155,12 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 			
 			g.setColour(AlphaColours::blue);
 			g.drawImageTransformed(*theImage, rotateImage, true);
-			
-			
 			
             break;
         }
 			
 		case 4:
         {
-			
 			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
@@ -196,16 +171,12 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 			g.setColour(AlphaColours::blue);
 			
 			g.drawImageTransformed(*theImage, rotateImage, true);
-			
-			
-			
 			
             break;
         }
 			
 		case 5:
         {
-			
 			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
@@ -216,9 +187,6 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 			g.setColour(AlphaColours::blue);
 			
 			g.drawImageTransformed(*theImage, rotateImage, true);
-			
-			
-			
 			
             break;
         }
@@ -226,8 +194,6 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 		default:
 			break;
     }
-	
-	
 }
 
 

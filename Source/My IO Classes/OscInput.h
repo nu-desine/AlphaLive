@@ -28,7 +28,6 @@
 #include "../Third Party Libraries/oscpack/osc/OscPacketListener.h"
 #include "../Third Party Libraries/oscpack/ip/UdpSocket.h"
 
-
 /**
  Inherit from this class so that you can talk to the AlphaSphere and provide implementation for OscCallBack()
  */

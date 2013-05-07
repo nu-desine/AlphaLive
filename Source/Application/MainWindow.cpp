@@ -35,8 +35,7 @@ ScopedPointer<ApplicationCommandManager> commandManager;
 MainAppWindow::MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2, MenuBarModel *menuBar_)
     :               DocumentWindow (JUCEApplication::getInstance()->getApplicationName(),
                     Colours::black,
-                    5/*,
-                    false*/),
+                    5),
                     alphaLiveEngineRef(ref),
                     appDocumentStateRef(ref2),
                     menuBar(menuBar_)
@@ -57,8 +56,6 @@ MainAppWindow::MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2, MenuB
     //use native OS title bar
     setUsingNativeTitleBar(true);
     
-    //addToDesktop(getDesktopWindowStyleFlags());
-    
     //set main component to own the content of the main window
     setContentOwned(mainComponent, false); 
     
@@ -70,14 +67,7 @@ MainAppWindow::MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2, MenuB
 	centreWithSize (1024, 685 + LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight());
     #endif
     
-    // Register all the app commands..
-    //commandManager->registerAllCommandsForTarget (this);
-    //commandManager->registerAllCommandsForTarget (getProjectContentComponent());
-    // use some temporary objects to harvest their commands..
-    //CodeEditorComponent dec (nullptr);
-    //commandManager->registerAllCommandsForTarget (&dec);
-    
-    // update key mappings.. should this be done here??
+    // update key mappings.. should this be done here?? What am I even doing here?
     commandManager->getKeyMappings()->resetToDefaultMappings();
     addKeyListener (commandManager->getKeyMappings());
     
@@ -86,7 +76,6 @@ MainAppWindow::MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2, MenuB
     
     //set visible here once everything else has loaded
     setVisible (true);
-    
 }
 
 MainAppWindow::~MainAppWindow()
@@ -108,34 +97,7 @@ void MainAppWindow::closeButtonPressed()
 }
 
 
-
 MainComponent* MainAppWindow::getMainComponent()
 {
     return mainComponent;
 }
-
-
-
-/*
-//==============================================================================
-ApplicationCommandTarget* MainAppWindow::getNextCommandTarget()
-{
-    return 0;
-}
-
-void MainAppWindow::getAllCommands (Array <CommandID>& commands)
-{
-    
-}
-
-void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationCommandInfo& result)
-{
-
-}
-
-bool MainAppWindow::perform (const InvocationInfo& info)
-{
-    
-    return true;
-}
- */

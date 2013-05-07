@@ -52,7 +52,6 @@ public:
     //override the Observer virtual update function
     bool update(const Subject& theChangedSubject);
     
-    //void setCurrentlySelectedPad (Array<int> selectedPads_); //why did i have this here????!!!!
     void disableSaveAlertWindow();
     
     //access by the scene slots to call the loadSceneToDisk and saveSceneToDisk functions
@@ -74,13 +73,7 @@ private:
     //create a reference to the subject that you want this class to observe
     ModeController &mSubject;
     
-    //int currentlySelectedPad; //why did I have this here???!!!
-    //Array<int> selectedPads;
-    
     bool shouldShowSaveWindow;
-    
-    
 };
-
 
 #endif

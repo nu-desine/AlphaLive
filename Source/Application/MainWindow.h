@@ -34,11 +34,8 @@
 #include "../Functionality Classes/AlphaLiveEngine.h"
 #include "../File and Settings/AppDocumentState.h"
 
-
-
 //==============================================================================
 class MainAppWindow   : public DocumentWindow
-                        //public ApplicationCommandTarget
 {
 public:
     //==============================================================================
@@ -46,24 +43,12 @@ public:
     ~MainAppWindow();
 
     void closeButtonPressed();
-    
     void setTitleBarText (String projectName);
     
     MainComponent* getMainComponent();
 
-
-    //==============================================================================
-    /*
-    ApplicationCommandTarget* getNextCommandTarget();
-    void getAllCommands (Array <CommandID>& commands);
-    void getCommandInfo (CommandID commandID, ApplicationCommandInfo& result);
-    bool perform (const InvocationInfo& info);
-     */
-
 private:
     //==============================================================================
-    //JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainAppWindow)
-    
     MainComponent *mainComponent;
     AlphaLiveEngine &alphaLiveEngineRef;
     AppDocumentState &appDocumentStateRef;
@@ -71,6 +56,5 @@ private:
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainAppWindow)
 };
-
 
 #endif  // __MAINWINDOW_H_6D70D716__

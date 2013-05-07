@@ -24,13 +24,6 @@
 #ifndef H_OSCOUTPUT
 #define H_OSCOUTPUT
 
-/*
- Whats the best way to organise this class?
- Should there be different functions for handling each message we might want to send 
- that takes in the values of the argument/s? PROBABLY THE BEST WAY!
- 
- */
-
 #include "../Third Party Libraries/oscpack/osc/OscOutboundPacketStream.h"
 #include "../Third Party Libraries/oscpack/ip/UdpSocket.h"
 #include "../../JuceLibraryCode/JuceHeader.h"
@@ -44,9 +37,7 @@ public:
     void transmitPadMessage(int padNumber, int padValue, int padVelocity, String address, int port);
     void transmitEliteControlMessage(int controlNumber, float controlValue, String address, int port);
     
-    
 private:
-
 
 };
 

@@ -48,19 +48,6 @@ void FileDropButton::resized()
 	thePath.addEllipse(0, 0, getWidth(), getHeight());
 }
 
-
-/*
-void FileDropButton::paint (Graphics &g)
-{
-    if (somethingIsBeingDraggedOver == true)
-    {
-        //draw a 'highlight' eclipse. Another option would be to draw an image of a downwards arrow signifying 'drop here'?
-        g.setColour(Colours::white.withAlpha(0.3f));
-        g.fillEllipse(0, 0, getWidth(), getHeight());
-    }
-}
- */
-
 bool FileDropButton::hitTest (int x, int y)
 {
 	return thePath.contains(x, y);

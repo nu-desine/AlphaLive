@@ -112,7 +112,7 @@ TriggerModeData TriggerModes::toggle (int padValue)
     return triggerModeData;
 }
 
-TriggerModeData TriggerModes::toggleRelease (int padValue)
+TriggerModeData TriggerModes::toggleRelease (int padValue) //not being used anymore
 {
     //press to play
     //press again and release to stop
@@ -199,7 +199,7 @@ TriggerModeData TriggerModes::latch (int padValue)
     return triggerModeData;
 }
 
-TriggerModeData TriggerModes::latchMax (int padValue)
+TriggerModeData TriggerModes::latchMax (int padValue) //not being used anymore
 {
     //press to play
     //release to stop

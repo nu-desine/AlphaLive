@@ -33,7 +33,6 @@ public:
     FileDropButton(String buttonText, int rowNumber_);
     ~FileDropButton();
 	void resized();
-    //void paint (Graphics &g);
 	bool hitTest (int x, int y);
     
     void setCurrentlySelectedPad (Array<int> selectedPads_);

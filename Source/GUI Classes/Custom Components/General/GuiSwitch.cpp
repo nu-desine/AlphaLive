@@ -112,16 +112,6 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
 	g.setColour(Colours::grey.withAlpha(0.3f));
 	g.drawEllipse((getWidth()*0.1), (getHeight()*0.1), (getWidth()*0.8), (getHeight()*0.8), 1.0f);
 	
-	/*
-	g.setFont (10);
-    g.setColour (Colours::white);
-	
-	
-    g.drawFittedText (getButtonText(),
-                      (getWidth()*0.15), (getHeight()*0.35), (getWidth()*0.7), (getHeight()*0.3),
-                      Justification::centred, 2);
-	*/
-	
 	g.setColour(Colours::white);
 	g.drawImage (theImage,
 				 (getWidth()*0.22), (getHeight()*0.22), (getWidth()*0.6), (getHeight()*0.6),

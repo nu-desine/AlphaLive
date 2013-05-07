@@ -30,7 +30,6 @@ class AlphaSquareButton : public Button
 
 {
 public:
-   
 	AlphaSquareButton(float _theCornerRadius);
 	~AlphaSquareButton();
 	
@@ -38,9 +37,7 @@ public:
 	void paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown);
 	void clicked();
 	bool hitTest (int x, int y);
-	
-	
-	
+    
 private:
 	
 	Path hitPath;

@@ -25,12 +25,11 @@
  -  If the device is connected, don't create the virtual MIDI port on Mac/Linux or the 
     MIDI output port on Windows. If the device is an elite model, display the elite control panel.
  -  If the device is not connected, create the virtual MIDI port or MIDI output port.
-    Only display the standard model interface.
  
  During runtime:
  -  If the device is connected and it didn't exist at launch, delete the virtual MIDI port or
     MIDI output port. If the device is an elite model, display the elite control panel.
- -  If the device is dissconnected DON'T create/recreate the MIDI port or remove the elite controls.
+ -  If the device is dissconnected don't create/recreate the MIDI port or remove the elite controls.
  
  */
 

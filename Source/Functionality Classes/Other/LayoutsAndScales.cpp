@@ -20,7 +20,13 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-//#include "LayoutsAndScales.h"
+/*
+ The only variables here used now are Layouts::ccLayout, and occasionally Layouts::padArrangementLayout when testing/customising.
+ 
+ Other than that, all layouts and scalaes are now part of the external xml files.
+ Though I've left them all here for the time being for reference.
+ 
+ */
 
 namespace Layouts 
 {

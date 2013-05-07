@@ -53,20 +53,6 @@ void DemoThumbnailComp::setZoomFactor (double amount)
     }
 }
 
-/*
- void DemoThumbnailComp::mouseWheelMove (const MouseEvent&, float wheelIncrementX, float wheelIncrementY)
- {
- if (thumbnail.getTotalLength() > 0)
- {
- double newStart = startTime + (wheelIncrementX + wheelIncrementY) * (endTime - startTime) / 10.0;
- newStart = jlimit (0.0, thumbnail.getTotalLength() - (endTime - startTime), newStart);
- endTime = newStart + (endTime - startTime);
- startTime = newStart;
- repaint();
- 
- }
- }
- */
 
 void DemoThumbnailComp::paint (Graphics& g)
 {

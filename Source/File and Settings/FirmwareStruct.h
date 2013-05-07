@@ -16,6 +16,8 @@
 // The final struct (settings) is the main struct which includes
 // 48 instances for the padSettings struct as well as global settings.
 
+//IS THIS FILE STILL NEEDED FOR FUTURE IMPLEMENTATIONS?
+//If so, this file probably needs updating with new parameters (such as velocity range)
 
 struct mode_midi
 {
@@ -32,7 +34,6 @@ struct mode_midi
     bool noteStatus;
     
 };
-
 
 
 struct mode_sequencer
@@ -68,7 +69,6 @@ struct mode_sequencer
 };
 
 
-
 struct mode_controller
 {
     enum modes {sceneChange = 1, midiProgramChange, sceneAndProgramChange, oscOut}; 
@@ -78,7 +78,6 @@ struct mode_controller
     int programChangeNumber; //0-127
     int channel; //1-16
 };
-
 
 
 struct pad_settings 

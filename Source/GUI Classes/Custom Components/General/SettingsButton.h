@@ -25,28 +25,18 @@
 
 #include "../../../../JuceLibraryCode/JuceHeader.h"
 
-
 class SettingsButton :	public Button
-
-
 {
 public:
-    
- 
     SettingsButton(const String& buttonName, float _startRadians, float _endRadians, float _theWidth, float _textRotation, float _textAngle, float _textRadius);
-    
-	
     ~SettingsButton();
 	
-    
 	void resized();
     void paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown);
     void clicked();
     void buttonStateChanged();
 	bool hitTest (int x, int y);
-	
-	
-    
+
 private:
     
 	float normalOpacity, overOpacity, downOpacity, onOpacity;
@@ -59,8 +49,6 @@ private:
 	int i;
 	
 	Path thePath;
-	
 };    
-
 
 #endif //SETTINGSBUTTON_H

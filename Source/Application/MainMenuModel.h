@@ -39,12 +39,7 @@ public:
     
 private:
     AppDocumentState &appDocumentStateRef;
-    
-    
-    
+  
 };
-
-
-
 
 #endif //H_MAINMENUMODEL

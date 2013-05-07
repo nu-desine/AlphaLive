@@ -198,13 +198,6 @@ bool SceneComponent::keyPressed (const KeyPress &key, Component *originatingComp
         return false; //incase the keypress is a shortcut that the parent needs to react to.
 }
 
-/*
-void SceneComponent::setCurrentlySelectedPad (Array<int> selectedPads_)
-{
-    selectedPads = selectedPads_;
-}
- */
-
 AppDocumentState& SceneComponent::getAppDocumentState()
 {
     return appDocumentStateRef;

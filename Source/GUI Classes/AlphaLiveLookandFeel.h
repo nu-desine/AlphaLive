@@ -39,7 +39,6 @@ class AlphaLiveLookandFeel : public LookAndFeel
 public:
 	
 	AlphaLiveLookandFeel();
-	
 	~AlphaLiveLookandFeel();
 	
 	void drawButtonBackground (Graphics& g,
@@ -84,27 +83,6 @@ public:
     
     void drawPopupMenuBackground (Graphics &g, int width, int height);
     
-    /*
-    void drawPopupMenuItem (Graphics& g,
-                            int width, int height,
-                            bool isSeparator,
-                            bool isActive,
-                            bool isHighlighted,
-                            bool isTicked,
-                            bool hasSubMenu,
-                            const String& text,
-                            const String& shortcutKeyText,
-                            Image* image,
-                            const Colour* const textColour);
-    
-    void getIdealPopupMenuItemSize (const String& text,
-                                    bool isSeparator,
-                                    int standardMenuItemHeight,
-                                    int& idealWidth,
-                                    int& idealHeight);
-	
-	
-    */
     
 	int getDefaultScrollbarWidth(); 
 

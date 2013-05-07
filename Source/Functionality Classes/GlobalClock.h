@@ -22,8 +22,8 @@
 
 /*
  This is a Thread class that handles the global clock for triggering loops and sequences (and probably more eventually).
- Preferably AlphaLiveEngine should handle the thread however it already contains a thread that listens for OSC messages (as it derives
- from OscInput) so it couldn't be implemented there (as far as I tried).
+ Preferably AlphaLiveEngine should handle the thread however it already contains a thread that listens for input messages (as it derives
+ from HidComms) so it couldn't be implemented there (as far as I tried).
  There will be an instance of this class within AlphaLiveEngine - is this the best class relationship?
  */
 

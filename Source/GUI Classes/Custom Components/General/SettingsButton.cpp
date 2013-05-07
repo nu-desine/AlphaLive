@@ -24,13 +24,9 @@
 #include "../../AlphaLiveLookandFeel.h"
 
 SettingsButton::SettingsButton (const String& buttonName,float _startRadians, float _endRadians, float _theWidth, float _textRotation, float _textAngle, float _textRadius)
-: Button ("SettingsButton"),
-theText(buttonName)
-
-
+                                :   Button ("SettingsButton"),
+                                    theText(buttonName)
 {
-    
-	
 	setClickingTogglesState(true);
 	
 	startRadians = _startRadians;
@@ -41,7 +37,6 @@ theText(buttonName)
 	textAngle = _textAngle;
 	textRadius = _textRadius;
 
-	
 	normalOpacity = 1.0f;
     normalOverlay = Colours::transparentBlack;
     overOpacity   = 0.5f;
@@ -50,10 +45,6 @@ theText(buttonName)
     downOverlay   = Colours::white;
 	onOpacity   = 0.9f;
     onOverlay   = AlphaColours::blue;
-	
-	
-	
-	
 }
 
 SettingsButton::~SettingsButton()
@@ -61,8 +52,6 @@ SettingsButton::~SettingsButton()
     
 	
 }
-
-
 
 //==============================================================================
 void SettingsButton::resized()
@@ -102,9 +91,6 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
     {
 		case 0:
         {
-            
-			//ColourGradient fillGradient(Colours::black, (thePath.getBounds().getSmallestIntegerContainer().getX() * 0.5), (thePath.getBounds().getSmallestIntegerContainer().getY() * 0.5), Colours::nearlyblack, 0, 0, true);
-
 			ColourGradient fillGradient(Colours::black, (getWidth() * 0.5), (getHeight() * 0.5), AlphaColours::nearlyblack, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
@@ -114,13 +100,11 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			
 			g.drawTextAsPath(theText, rotateText);
 			
-			
             break;
         }
 			
 		case 1:
         {
-            
 			ColourGradient fillGradient(Colours::black, (getWidth()*0.5), (getHeight()*0.5), AlphaColours::nearlyblack, 0, 0, true);			
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
@@ -131,13 +115,11 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			g.setColour(Colours::darkgrey);
 			g.drawTextAsPath(theText, rotateText);
 
-			
             break;
         }
 			
 		case 2:
         {
-			
 			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
@@ -149,13 +131,11 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			g.drawTextAsPath(theText, rotateText);
 
 		
-			
             break;
         }
 			
 		case 3:
         {
-			
 			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
@@ -166,14 +146,12 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			g.setColour(AlphaColours::blue);
 			g.drawTextAsPath(theText, rotateText);
 
-			
 			
             break;
         }
 			
 		case 4:
         {
-			
 			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
@@ -184,16 +162,12 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			g.setColour(AlphaColours::blue);
 
 			g.drawTextAsPath(theText, rotateText);
-
-
-		
-			
+            
             break;
         }
 			
 		case 5:
         {
-			
 			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
@@ -205,9 +179,6 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 
 			g.drawTextAsPath(theText, rotateText);
 
-
-		
-			
             break;
         }
 			
@@ -215,10 +186,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			break;
     }
 	
-	
 }
-
-
 
 void SettingsButton::clicked()
 {

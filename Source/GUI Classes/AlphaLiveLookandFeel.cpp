@@ -600,14 +600,6 @@ void AlphaLiveLookandFeel::drawRotarySlider (Graphics& g,
 }
 
 
-
-
-
-
-
-
-
-
 const Font AlphaLiveLookandFeel::getPopupMenuFont() 
 {
     return Font (13.0f);
@@ -619,157 +611,11 @@ void AlphaLiveLookandFeel::drawPopupMenuBackground (Graphics& g, int width, int 
     
     g.fillAll (background);
     
-    //The below code draws the horrible lines
-    //g.setColour (background.overlaidWith (Colour (0x2badd8e6)));
-    //for (int i = 0; i < height; i += 3)
-        //g.fillRect (0, i, width, 1);
-    
 	//overlays colour/shape
     g.setColour (background.overlaidWith (Colour (AlphaColours::nearlyblack_).withAlpha(1.0f)));
     g.fillRect (0, 0, width, height);
-    
-    //#if ! JUCE_MAC
-	//draws a border
-    //g.setColour (findColour (PopupMenu::textColourId).withAlpha (0.2f));
-    //g.drawRect (0, 0, width, height);
-    //#endif
 }
 
-/*
-void AlphaLiveLookandFeel::getIdealPopupMenuItemSize (const String& text,
-                                                      const bool isSeparator,
-                                                      int standardMenuItemHeight,
-                                                      int& idealWidth,
-                                                      int& idealHeight)
-{
-    if (isSeparator)
-    {
-        idealWidth = 50;
-        idealHeight = standardMenuItemHeight > 0 ? standardMenuItemHeight / 2 : 10;
-    }
-    else
-    {
-        Font font (getPopupMenuFont());
-        
-        if (standardMenuItemHeight > 0 && font.getHeight() > standardMenuItemHeight / 1.3f)
-            font.setHeight (standardMenuItemHeight / 1.3f);
-        
-        idealHeight = standardMenuItemHeight > 0 ? standardMenuItemHeight : roundToInt (font.getHeight() * 1.3f);
-        idealWidth = font.getStringWidth (text) + idealHeight * 2;
-    }
-}
-
-
-void AlphaLiveLookandFeel::drawPopupMenuItem (Graphics& g,
-                                     int width, int height,
-                                     const bool isSeparator,
-                                     const bool isActive,
-                                     const bool isHighlighted,
-                                     const bool isTicked,
-                                     const bool hasSubMenu,
-                                     const String& text,
-                                     const String& shortcutKeyText,
-                                     Image* image,
-                                     const Colour* const textColourToUse)
-{
-    
-    const float halfH = height * 0.5f;
-    
-    if (isSeparator)
-    {
-        const float separatorIndent = 5.5f;
-        
-        g.setColour (Colour (0x33000000));
-        g.drawLine (separatorIndent, halfH, width - separatorIndent, halfH);
-        
-        g.setColour (Colour (0x66ffffff));
-        g.drawLine (separatorIndent, halfH + 1.0f, width - separatorIndent, halfH + 1.0f);
-    }
-    else
-    {
-        Colour textColour (findColour (PopupMenu::textColourId));
-        
-        if (textColourToUse != nullptr)
-            textColour = *textColourToUse;
-        
-        if (isHighlighted)
-        {
-            g.setColour (findColour (PopupMenu::highlightedBackgroundColourId));
-            g.fillRect (1, 1, width - 2, height - 2);
-            
-            g.setColour (findColour (PopupMenu::highlightedTextColourId));
-        }
-        else
-        {
-            g.setColour (textColour);
-        }
-        
-        if (! isActive)
-            g.setOpacity (0.3f);
-        
-        Font font (getPopupMenuFont());
-        
-        if (font.getHeight() > height / 1.3f)
-            font.setHeight (height / 1.3f);
-        
-        g.setFont (font);
-        
-        const int leftBorder = (height * 5) / 4;
-        const int rightBorder = 4;
-        
-        if (image != nullptr)
-        {
-            g.drawImageWithin (*image,
-                               2, 1, leftBorder - 4, height - 2,
-                               RectanglePlacement::centred | RectanglePlacement::onlyReduceInSize, false);
-        }
-        else if (isTicked)
-        {
-            const Path tick (getTickShape (1.0f));
-            const float th = font.getAscent();
-            const float ty = halfH - th * 0.5f;
-            
-            g.fillPath (tick, tick.getTransformToScaleToFit (2.0f, ty, (float) (leftBorder - 4),
-                                                             th, true));
-        }
-        
-        g.drawFittedText (text,
-                          leftBorder, 0,
-                          width - (leftBorder + rightBorder), height,
-                          Justification::centredLeft, 1);
-        
-        if (shortcutKeyText.isNotEmpty())
-        {
-            Font f2 (font);
-            f2.setHeight (f2.getHeight() * 0.75f);
-            f2.setHorizontalScale (0.95f);
-            g.setFont (f2);
-            
-            g.drawText (shortcutKeyText,
-                        leftBorder,
-                        0,
-                        width - (leftBorder + rightBorder + 4),
-                        height,
-                        Justification::centredRight,
-                        true);
-        }
-        
-        if (hasSubMenu)
-        {
-            const float arrowH = 0.6f * getPopupMenuFont().getAscent();
-            const float x = width - height * 0.6f;
-            
-            Path p;
-            p.addTriangle (x, halfH - arrowH * 0.5f,
-                           x, halfH + arrowH * 0.5f,
-                           x + arrowH * 0.6f, halfH);
-            
-            g.fillPath (p);
-        }
-    }
-}
-
-*/
 
 int AlphaLiveLookandFeel::getDefaultScrollbarWidth()
 {
@@ -784,31 +630,10 @@ int AlphaLiveLookandFeel::getDefaultMenuBarHeight()
 void AlphaLiveLookandFeel::drawMenuBarBackground (Graphics& g, int width, int height,
                                          bool, MenuBarComponent& menuBar)
 {
-	ColourGradient barGradient(Colours::darkgrey, 0, 0, Colours::black, 0, /*(height/6)*5*/height, false);
+	ColourGradient barGradient(Colours::darkgrey, 0, 0, Colours::black, 0, height, false);
     g.setGradientFill(barGradient);
-	//g.setColour (Colours::grey);
     g.fillRect (0, 0, width, height);
 
-	/*
-    const Colour baseColour (LookAndFeelHelpers::createBaseColour (menuBar.findColour (AlphaColours::verydarkgrey_), false, false, false));
-
-    if (menuBar.isEnabled())
-    {
-		
-        drawShinyButtonShape (g,
-                              -4.0f, 0.0f,
-                              width + 8.0f, (float) height,
-                              0.0f,
-                              baseColour,
-                              0.4f,
-                              true, true, true, true);
-		
-    }
-    else
-    {
-        g.fillAll (baseColour);
-    }
-	*/
 }
 
 

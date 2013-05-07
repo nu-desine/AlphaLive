@@ -36,20 +36,6 @@ struct TriggerModeData
 
 #endif
 
-//================================================================================
-//=TRIGGER MODES==================================================================
-//================================================================================
-/*  Each of the following functions alters the currentState variable in AppSettings
- of the padNumber parameter in question by using padValue parameter. The bool returned
- determines whether the play state causes the audio to loop.
- 
- To start audio, set the currentState varialble to 1, or set to 0 to stop the audio.
- 
- HOW TO ADD A TRIGGER MODES TO THE APPLICATION:
- [add instruuctions here...]
- 
- */
-//================================================================================
 
 #ifndef H_TRIGGERMODES
 #define H_TRIGGERMODES
@@ -64,9 +50,9 @@ public:
     
     TriggerModeData hold (int padValue);
     TriggerModeData toggle (int padValue);
-    TriggerModeData toggleRelease (int padValue);
+    TriggerModeData toggleRelease (int padValue); //Not being used anymore
     TriggerModeData latch (int padValue);
-    TriggerModeData latchMax (int padValue);
+    TriggerModeData latchMax (int padValue); //Not being used anymore
     TriggerModeData trigger (int padValue);
     
     //sequencer-only trigger modes

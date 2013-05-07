@@ -30,11 +30,6 @@
  The class just contains a set of accessor and mutator meothods for each of the classes variables.
  */
 
-//NOTE: WHEN APPLYING SETTINGS INTO HERE FROM XML FILES (PROBABLY BY CALLING THE MUTATOR METHODS) SOMETIMES IT MIGHT TRY AND SET VALUES IN OBJECTS THAT DON'T EXIST.
-//IN THIS CASE IT MAY BE A GOOD IDEA TO PASS IN DATA FROM SAMPLER MODE AND SEQUENCE MODE TO KEEP THIS CLASS KNOWING AND UPDATED AT WHAT OBJECTS EXIST OR NOT, AND ONLY APPLY THE SETTINGS IF THEY EXIST (IF OBJECT[PAD] != NULL)
-//what settings should be saved into and loaded from xmls files? how should it handle the data on the pads that isn't need yet (e.g. the seq data if the pad is noe set to a sampler)?
-//don;t want unncessary data loaded up when switching between scenes.
-
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "../Functionality Classes/Sampler Mode/ModeSampler.h"
 #include "../Functionality Classes/Sequencer Mode/SequencerValues.h"
@@ -53,10 +48,6 @@ public:
     void setPadNumber (int value);
     void resetData(int whatToReset);
     void setTempo (double value);
-    
-    //==================================================================
-    //==================================================================
-    //==================================================================
     
     //==================================================================
     //Global
@@ -578,8 +569,5 @@ private:
   
 };
 
-
 #endif // H_PADSETTINGS
-
-
 

@@ -22,7 +22,6 @@
 
 #include "OscInput.h"
 #include "../Functionality Classes/Other/LayoutsAndScales.cpp"
-//#include "Main.cpp"
 
 //incoming osc port
 #define PORT 5003
@@ -30,13 +29,10 @@
 
 OscInput::OscInput() :  Thread ("OscThread")
 {
-    
     recieveSocket = new UdpListeningReceiveSocket(IpEndpointName( IpEndpointName::ANY_ADDRESS, PORT), this);
 	
     //start the osc thread
     startThread();
-    
-    
 }
 
 OscInput::~OscInput()
@@ -46,13 +42,11 @@ OscInput::~OscInput()
     delete recieveSocket;
 }
 
-
-
-
 //get OSC message
 void OscInput::ProcessMessage( const osc::ReceivedMessage& m, const IpEndpointName& remoteEndpoint )
 {
-    try{
+    try
+    {
         if( strcmp( m.AddressPattern(), "/alpha" ) == 0 )
         {
             osc::ReceivedMessage::const_iterator arg = m.ArgumentsBegin();
@@ -65,11 +59,9 @@ void OscInput::ProcessMessage( const osc::ReceivedMessage& m, const IpEndpointNa
             
             //call callback function
             oscCallBack(recievedPad, recievedValue);
-    
-            
-            
         }
-    }catch( osc::Exception& e )
+    }
+    catch( osc::Exception& e )
     {
         // any parsing errors such as unexpected argument types, or 
         // missing arguments get thrown as exceptions.
@@ -77,10 +69,6 @@ void OscInput::ProcessMessage( const osc::ReceivedMessage& m, const IpEndpointNa
         << m.AddressPattern() << ": " << e.what() << "\n";
     }
 }
-
-
-
-
 
 //OSC thread
 void OscInput::run()

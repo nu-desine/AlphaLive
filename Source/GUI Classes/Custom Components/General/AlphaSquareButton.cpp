@@ -24,29 +24,21 @@
 #include "../../AlphaLiveLookandFeel.h"
 
 AlphaSquareButton::AlphaSquareButton(float _theCornerRadius)
-: Button ("AlphaSquareButton")
+                        : Button ("AlphaSquareButton")
 
 {
-	
 	theCornerRadius = _theCornerRadius;
 	setClickingTogglesState(true);
-	
- 	
 }
 
 AlphaSquareButton::~AlphaSquareButton()
 {
-	
 	//deleteAllChildren();
-	
 }
 
 void AlphaSquareButton::resized()
 {
-	
 	hitPath.addRoundedRectangle (0.0f, 0.0f, getWidth(), getHeight(), theCornerRadius);
-	
-	
 }
 
 void AlphaSquareButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown)
@@ -57,7 +49,6 @@ void AlphaSquareButton::paintButton (Graphics& g, bool isMouseOverButton, bool i
     {
 		case 0:
         {
-            
 			g.setColour(Colours::black);
 			g.fillRoundedRectangle (0.0f, 0.0f, getWidth(), getHeight(), theCornerRadius);
 			
@@ -68,15 +59,12 @@ void AlphaSquareButton::paintButton (Graphics& g, bool isMouseOverButton, bool i
 			ColourGradient highlightGradient(Colours::transparentBlack, (getWidth()*0.5), (getHeight()*0.8), Colours::silver.withAlpha(0.3f), (getWidth()*0.5), 0, false);
 			g.setGradientFill(highlightGradient);
 			g.drawRoundedRectangle ((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), theCornerRadius, (getHeight()*0.025));
-			
-			
-			
+            
             break;
         }
 			
 		case 1:
         {
-            
 			g.setColour(Colours::black);
 			g.fillRoundedRectangle (0.0f, 0.0f, getWidth(), getHeight(), theCornerRadius);
 			
@@ -88,7 +76,6 @@ void AlphaSquareButton::paintButton (Graphics& g, bool isMouseOverButton, bool i
 			g.setGradientFill(highlightGradient);
 			g.drawRoundedRectangle ((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), theCornerRadius, (getHeight()*0.025));
 			
-		
             break;
         }
 			
@@ -105,13 +92,11 @@ void AlphaSquareButton::paintButton (Graphics& g, bool isMouseOverButton, bool i
 			g.setGradientFill(highlightGradient);
 			g.drawRoundedRectangle ((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), theCornerRadius, (getHeight()*0.025));
 			
-			
             break;
         }
 			
 		case 3:
         {
-			
 			g.setColour(AlphaColours::blue);
 			g.fillRoundedRectangle (0.0f, 0.0f, getWidth(), getHeight(), theCornerRadius);
 			
@@ -122,7 +107,6 @@ void AlphaSquareButton::paintButton (Graphics& g, bool isMouseOverButton, bool i
 			ColourGradient highlightGradient(Colours::transparentBlack, (getWidth()*0.5), (getHeight()*0.8), Colours::silver.withAlpha(0.3f), (getWidth()*0.5), 0, false);
 			g.setGradientFill(highlightGradient);
 			g.drawRoundedRectangle ((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), theCornerRadius, (getHeight()*0.025));
-			
 			
             break;
         }
@@ -140,7 +124,6 @@ void AlphaSquareButton::paintButton (Graphics& g, bool isMouseOverButton, bool i
 			g.setGradientFill(highlightGradient);
 			g.drawRoundedRectangle ((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), theCornerRadius, (getHeight()*0.025));
 			
-			
             break;
         }
 			
@@ -157,18 +140,12 @@ void AlphaSquareButton::paintButton (Graphics& g, bool isMouseOverButton, bool i
 			g.setGradientFill(highlightGradient);
 			g.drawRoundedRectangle ((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), theCornerRadius, (getHeight()*0.025));
 	
-			
             break;
         }
 			
 		default:
 			break;
     }	 
-	
-	/*g.setColour(Colours::white.withAlpha(0.8f));
-	 g.drawImage (* symbol,
-	 0, 0, getWidth(), getHeight(),
-	 0, 0, symbol->getWidth(), symbol->getHeight(), true);*/
 	
 }
 

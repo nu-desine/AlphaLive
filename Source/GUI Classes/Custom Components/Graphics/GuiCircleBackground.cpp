@@ -26,11 +26,9 @@
 
 GuiCircleBackground::GuiCircleBackground()
 {
-    
     image = ImageCache::getFromMemory(BinaryDataNew::statusoff_png, BinaryDataNew::statusoff_pngSize);
     
 	i = 0;
-    
 }
 
 GuiCircleBackground::~GuiCircleBackground()
@@ -40,9 +38,7 @@ GuiCircleBackground::~GuiCircleBackground()
 
 void GuiCircleBackground::resized()
 {
-    
 	hitPath.addEllipse (683, 261, 324, 324);
-    
 }
 
 void GuiCircleBackground::paint (Graphics &g)
@@ -54,7 +50,8 @@ void GuiCircleBackground::paint (Graphics &g)
 	
 	g.fillEllipse(802, 379, 86, 86);
 	
-	if (i == 1) {
+	if (i == 1)
+    {
 		
 		Path linkButtonBg;
 		

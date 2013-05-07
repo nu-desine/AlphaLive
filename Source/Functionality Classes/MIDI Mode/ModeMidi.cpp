@@ -49,7 +49,6 @@ ModeMidi::ModeMidi (AlphaLiveEngine &ref)
         
         //not all members of the TriggerModeData struct are needed for MIDI mode
         triggerModeData[i].playingStatus = 0;
-        //triggerModeData[i].pressureValue = 0;
         
         currentPlayingStatus[i] = 0;
         isPlaying[i] = false;
@@ -92,15 +91,9 @@ void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
         case 2:
             triggerModeData[padNumber] = triggerModes[padNumber].toggle(padValue);
             break;
-        //case 3:
-            //triggerModeData[padNumber] = triggerModes[padNumber].toggleRelease(padValue);
-            //break;
         case 3:
             triggerModeData[padNumber] = triggerModes[padNumber].latch(padValue);
             break;
-        //case 5:
-           // triggerModeData[padNumber] = triggerModes[padNumber].latchMax(padValue);
-           // break;
         case 4:
             triggerModeData[padNumber] = triggerModes[padNumber].trigger(padValue);
             break;
@@ -119,7 +112,7 @@ void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
             //...and triggerModeData signifies to stop midi, DON'T LET IT...MWAHAHAHA! 
             triggerModeData[padNumber].playingStatus = 2; //ignore
         }
-        else if (triggerModeData[padNumber].playingStatus == 1 && currentPlayingStatus[padNumber] == 1 && triggerModeValue[padNumber] != /*6*/4)
+        else if (triggerModeData[padNumber].playingStatus == 1 && currentPlayingStatus[padNumber] == 1 && triggerModeValue[padNumber] != 4)
         {
             //...and triggerModeData signifies to start midi, 
             //but note is already playing and triggerMode does not equal 'trigger'

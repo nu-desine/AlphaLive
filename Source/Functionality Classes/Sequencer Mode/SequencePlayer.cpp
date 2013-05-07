@@ -31,10 +31,11 @@
 //=====================================================================================
 
 SequencePlayer::SequencePlayer(int padNumber_, ModeSequencer &ref, TimeSliceThread* audioTransportSourceThread_) 
-                                :   Thread("Sequencer " + String(padNumber)),
-                                    padNumber(padNumber_),
+                                :   padNumber(padNumber_),
                                     modeSequencerRef(ref)
 {
+    sequenceIsRunning = false;
+    
     audioTransportSourceThread = audioTransportSourceThread_;
     
     //=======get setting values=========
@@ -152,7 +153,7 @@ SequencePlayer::~SequencePlayer()
 	delete distortion;
 	delete bitcrusher;
     
-    stopThread(timeInterval);
+    stopSequence();
     //stopThreadAndReset();
     
     {
@@ -175,10 +176,10 @@ SequencePlayer::~SequencePlayer()
 //=Process input data stuff============================================================
 //=====================================================================================
 
-void SequencePlayer::processSequence(int padValue)
+void SequencePlayer::processInputData(int padValue)
 {
     //this is needed incase audio ends on its own or is stopped via the 'exclusive mode' feature(?) , in order to reset everything so it will trigger again properly
-    if (isThreadRunning() == false && currentPlayingState == 1 && prevPadValue == 0)
+    if (sequenceIsRunning == false && currentPlayingState == 1 && prevPadValue == 0)
     {
         currentPlayingState = 0;
         triggerModes.reset();
@@ -275,7 +276,7 @@ void SequencePlayer::processSequence(int padValue)
             }
             else if (shouldLoop == false)
             {
-                stopThread(timeInterval);
+                stopSequence();
             }
         }
     }
@@ -291,7 +292,7 @@ void SequencePlayer::processSequence(int padValue)
     {
         if (triggerModeData.playingStatus == 1) //play
         {
-            if (isThreadRunning() == true)
+            if (sequenceIsRunning == true)
             {
                 //stopThread(timeInterval); //so that the 'trigger' play states work ()
                 columnNumber = 0; //stopping and starting the thread causes a bigger time delay
@@ -299,7 +300,7 @@ void SequencePlayer::processSequence(int padValue)
             }
             
             sequenceNumber = 0;
-            startThread(7);
+            startSequence();
             currentPlayingState = 1;
             
             //EXCLUSIVE MODE STUFF 
@@ -313,7 +314,7 @@ void SequencePlayer::processSequence(int padValue)
         else if (triggerModeData.playingStatus == 0) //stop
         {
             currentPlayingState = 0;
-            stopThread(timeInterval);
+            stopSequence();
             //stopThreadAndReset();
     
         }
@@ -505,14 +506,14 @@ void SequencePlayer::triggerQuantizationPoint()
 {
     if (currentPlayingState == 2) //waiting to play
     {
-        if (isThreadRunning() == true)
+        if (sequenceIsRunning == true)
         {
             //stopThread(timeInterval); //so that the 'trigger' play states work ()
             columnNumber = 0; //stopping and starting the thread causes a bigger time delay
             broadcaster.sendActionMessage("PLAYING ON");
         }
         
-        startThread(7);
+        startSequence();
           
         currentPlayingState = 1;
         
@@ -527,7 +528,7 @@ void SequencePlayer::triggerQuantizationPoint()
     else if (currentPlayingState == 3) //waiting to stop
     {
         //done via actionMessage so that there is no build up of delays caused by the stopThread() time value
-        broadcaster.sendActionMessage("STOP THREAD");
+        broadcaster.sendActionMessage("STOP SEQ AND RESET");
         
         //tell gui pad that the sequence has finished playing
         broadcaster.sendActionMessage("PLAYING OFF");
@@ -535,17 +536,13 @@ void SequencePlayer::triggerQuantizationPoint()
 }
 
 
-//=====================================================================================
-//=Thread stuff========================================================================
-//=====================================================================================
 
-//called everytime a sequence is played/started
-void SequencePlayer::run()
+
+
+
+void SequencePlayer::startSequence()
 {
-    modeSequencerRef.editRunningSequencersArray(1, padNumber);
-    //===================init stuff before thread loop here!===========================
-    
-    //THREAD TIMING
+    //TIMING
     //Time::waitForMillisecondCounter() takes in an int value, however the value of timeInterval will very likely
     //have a decimal point value (tempo value dependant). Therefore the decimal value would be ignored each time and
     //cause the timing of the thread/sequence to drift out of time.
@@ -555,16 +552,13 @@ void SequencePlayer::run()
     //There's probably a way around this - have a look at the Time class - maybe use ticks not ms. 
     //In that case, what would I use instead of Time::waitForMillisecondCounter()?
     
-    //set the time that the thread loop will intially sleep for
-    currentTime = Time::getMillisecondCounter() + int(timeInterval);
+    currentTime = Time::getMillisecondCounter();
     //get the decimal value of timeInterval
-    float timeIntervalDecimalOffset = timeInterval - int(timeInterval);
+    timeIntervalDecimalOffset = timeInterval - int(timeInterval);
     //set the currently stored offset value (this will change each time the loop is iterated)
-    float currentOffset = timeIntervalDecimalOffset;
-
+    currentOffset = timeIntervalDecimalOffset;
+    
     columnNumber = 0; //counter variable
-    //will this be ok being here?
-    //sequenceNumber = 0;
     
     if (mode == 2)
     {
@@ -583,27 +577,49 @@ void SequencePlayer::run()
             prevSequenceNumber = sequenceNumber;
             broadcaster.sendActionMessage("SEQ DISPLAY");
         }
-        
     }
     
     //tell the pad gui that the sequence is playing
     broadcaster.sendActionMessage("PLAYING ON"); 
     
-    //====================thread loop starts here!====================================
-    while( ! threadShouldExit() && columnNumber < sequenceLength && sequenceNumber < numberOfSequences)
+    sequenceIsRunning = true;
+    
+    //add this pads SequencerPlayer object to the running sequencer array
+    modeSequencerRef.editRunningSequencersArray(1, padNumber);
+    
+}
+
+
+
+
+
+
+
+void SequencePlayer::processSequence()
+{
+    
+    double time_ = Time::getMillisecondCounterHiRes();
+    
+    if (time_ >= currentTime) //can I use Time::getMillisecondCounterHiRes() here and remove the whole offset thing? test it!
     {
-        //in the above while loop statement, the following paramaters cause the thread to end:
-        // - threadShouldExit() becomes true when stopThread is called
-        // - columnNumber becomes greater than sequenceLength when shouldLoop is set to false from the current play state. see bottom of this loop.
-        // - sequenceNumber becomes greater than numberOfSequences when triggerModeData.isLinearCycle is set to true from the autocyclelinear triggerMode. see bottom of this while loop
+        std::cout << "Exact time: " << time_ << " Current time: " << currentTime << " time Interval: " << timeInterval << std::endl; 
+        //adjust current time based on how much bigger time_ is than currentTime
+        //currentTime = currentTime - (time_ - currentTime);
+        currentTime = currentTime + timeInterval;
         
-        
-        //PREVIOUSLY, waitForMillisecondCounter() WAS CALLED HERE, AND currentTime ABOVE WAS SET TO JUST Time::getMillisecondCounter().
-        //HOWEVER NOW IT IS CALLED AT THE END OF THE WHILE LOOP AND THE INTIAL VALUE OF currentTime HAS BEEN CHANGED.
-        //THIS HAS BEEN DONE AS BEFORE THERE WAS A BUG IN THAT WHEN THE THREAD WAS TOLD TO EXIT IT WOULD CUT OFF THE LAST NOTE BEING PLAYED
-        //HOWEVER NOW THIS BUG DOES NOT OCCUR AS THE THREAD PAUSES AFTER THE SOUND HAS BEEN TRIGGER IN THE SAME INTERATION OF THE LOOP, NOT BEFORE.
-        //IT ALSO SEEMS TO MAKE THE TRIGGER TriggerMode BEHAVE BETTER IN TERMS OF TIMING
-        
+//        //add the decimal offset of the time interval to the currently stored offset
+//        currentOffset = currentOffset + timeIntervalDecimalOffset;
+//        //get the offset that needs to be added. This will only make a difference if over than 1, otherwise it will equal 0.
+//        int currentOffsetToAdd = int(currentOffset);
+//        //change the value of currentTime so the next interation of the loop sleeps for the correct time,
+//        //possibly adding a value of 1 (currentlyOffsetToAdd) to make up for decimal values being ignored
+//        
+//        currentTime = currentTime + int(timeInterval) + currentOffsetToAdd;
+//        //if currentOffsetToAdd >= 1, remove from currentOffset as the value of 1 would have been added to currentTime
+//        if (currentOffsetToAdd >= 1)
+//        {
+//            currentOffset = currentOffset-currentOffsetToAdd;
+//        }
         
         if (mode == 1) //midi mode selected
         {
@@ -681,7 +697,7 @@ void SequencePlayer::run()
         }
         
         //=========================================================================
-    
+        
         columnNumber++;
         
         
@@ -690,7 +706,9 @@ void SequencePlayer::run()
         {
             
             if (columnNumber == sequenceLength && playingLastLoop == true)
-                signalThreadShouldExit(); //ends the 'last' loop
+            {
+                broadcaster.sendActionMessage("STOP SEQ"); //ends the 'last' loop
+            }
             
             else if (columnNumber == sequenceLength) //if goes beyond the last column of the sequence
             {
@@ -735,34 +753,26 @@ void SequencePlayer::run()
                 broadcaster.sendActionMessage("PLAYHEAD");
         }
         
-        //==================================================================
-        //== SLEEP LOOP HERE!!! ============================================
-        //==================================================================
-        //sleep for int(timeInterval)
-        Time::waitForMillisecondCounter(currentTime);
-        
-        //SHOULD THE BELOW SECTION OF CODE UP UNTIL currentTime = ... BE ABOVE THE ABOVE SLEEP CALL SO THAT THE REINITIALISATION OF
-        //CURRENTTIME IS SET WITH A SMALLER POSSIBLE DELAY?
-        
-        //add the decimal offset of the time interval to the currently stored offset
-        currentOffset = currentOffset + timeIntervalDecimalOffset;
-        //get the offset that needs to be added. This will only make a difference if over than 1, otherwise it will equal 0.
-        int currentOffsetToAdd = int(currentOffset);
-        //change the value of currentTime so the next interation of the loop sleeps for the correct time,
-        //possibly adding a value of 1 (currentlyOffsetToAdd) to make up for decimal values being ignored
         
         
-        currentTime = currentTime + int(timeInterval) + currentOffsetToAdd;
-        //if currentOffsetToAdd >= 1, remove from currentOffset as the value of 1 would have been added to currentTime
-        if (currentOffsetToAdd >= 1)
+        if (columnNumber > sequenceLength || ! sequenceNumber > numberOfSequences)
         {
-            currentOffset = currentOffset-currentOffsetToAdd;
+            //The following paramaters cause the sequence to end:
+            // - columnNumber becomes greater than sequenceLength when shouldLoop is set to false from the current trigger mode.
+            // - sequenceNumber becomes greater than numberOfSequences when triggerModeData.isLinearCycle is set to true from the autocyclelinear triggerMode.
+            
+            broadcaster.sendActionMessage("STOP SEQ");
         }
-        
     }
     
-    //IF PROGRAM GETS TO THIS POINT THREAD WILL EXIT
-    
+}
+
+
+
+
+
+void SequencePlayer::stopSequence()
+{
     //===============trigger midi notes off here!====================
     //ideally, when the sequence is told to stop, any notes still on should be turned off within the length of time they were set to be on for.
     //That is what I have tried to do with the sendActionMessage call below, but it is still very tempermental.
@@ -798,17 +808,290 @@ void SequencePlayer::run()
     
     modeSequencerRef.editRunningSequencersArray(0, padNumber);
     
+    sequenceIsRunning = false;
 }
 
 
-void SequencePlayer::stopThreadAndReset()
+
+
+
+
+
+
+////=====================================================================================
+////=Thread stuff========================================================================
+////=====================================================================================
+//
+////called everytime a sequence is played/started
+//void SequencePlayer::run()
+//{
+//    modeSequencerRef.editRunningSequencersArray(1, padNumber);
+//    //===================init stuff before thread loop here!===========================
+//    
+//    //THREAD TIMING
+//    //Time::waitForMillisecondCounter() takes in an int value, however the value of timeInterval will very likely
+//    //have a decimal point value (tempo value dependant). Therefore the decimal value would be ignored each time and
+//    //cause the timing of the thread/sequence to drift out of time.
+//    //Therefore an algorithm has been used to store any offset decimal values, and everytime the collection of values
+//    //equal or greater (though it should never be greater) than 1, 1ms is added to the intervalTime value to make up
+//    //for the 'ignored' decimal values. The code is commented below and at the bottom of the thread loop.
+//    //There's probably a way around this - have a look at the Time class - maybe use ticks not ms. 
+//    //In that case, what would I use instead of Time::waitForMillisecondCounter()?
+//    
+//    //set the time that the thread loop will intially sleep for
+//    currentTime = Time::getMillisecondCounter() + int(timeInterval);
+//    //get the decimal value of timeInterval
+//    float timeIntervalDecimalOffset = timeInterval - int(timeInterval);
+//    //set the currently stored offset value (this will change each time the loop is iterated)
+//    float currentOffset = timeIntervalDecimalOffset;
+//
+//    columnNumber = 0; //counter variable
+//    //will this be ok being here?
+//    //sequenceNumber = 0;
+//    
+//    if (mode == 2)
+//    {
+//        //set the state of certain effects
+//        if (effect == 9) //flanger
+//            flanger->restart(); //so the lfo is re-started when the file is started
+//        else if (effect == 10) //tremolo
+//            tremolo->restart(); //so the lfo is re-started when the file is started
+//    }
+//    
+//    //initally reset sequence display
+//    if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
+//    {
+//        if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
+//        {
+//            prevSequenceNumber = sequenceNumber;
+//            broadcaster.sendActionMessage("SEQ DISPLAY");
+//        }
+//        
+//    }
+//    
+//    //tell the pad gui that the sequence is playing
+//    broadcaster.sendActionMessage("PLAYING ON"); 
+//    
+//    //====================thread loop starts here!====================================
+//    while( ! threadShouldExit() && columnNumber < sequenceLength && sequenceNumber < numberOfSequences)
+//    {
+//        //in the above while loop statement, the following paramaters cause the thread to end:
+//        // - threadShouldExit() becomes true when stopThread is called
+//        // - columnNumber becomes greater than sequenceLength when shouldLoop is set to false from the current play state. see bottom of this loop.
+//        // - sequenceNumber becomes greater than numberOfSequences when triggerModeData.isLinearCycle is set to true from the autocyclelinear triggerMode. see bottom of this while loop
+//        
+//        
+//        //PREVIOUSLY, waitForMillisecondCounter() WAS CALLED HERE, AND currentTime ABOVE WAS SET TO JUST Time::getMillisecondCounter().
+//        //HOWEVER NOW IT IS CALLED AT THE END OF THE WHILE LOOP AND THE INTIAL VALUE OF currentTime HAS BEEN CHANGED.
+//        //THIS HAS BEEN DONE AS BEFORE THERE WAS A BUG IN THAT WHEN THE THREAD WAS TOLD TO EXIT IT WOULD CUT OFF THE LAST NOTE BEING PLAYED
+//        //HOWEVER NOW THIS BUG DOES NOT OCCUR AS THE THREAD PAUSES AFTER THE SOUND HAS BEEN TRIGGER IN THE SAME INTERATION OF THE LOOP, NOT BEFORE.
+//        //IT ALSO SEEMS TO MAKE THE TRIGGER TriggerMode BEHAVE BETTER IN TERMS OF TIMING
+//        
+//        
+//        if (mode == 1) //midi mode selected
+//        {
+//            //cycle through each row to look for any note messages
+//            for (int rowNumber = 0; rowNumber <= NO_OF_ROWS-1; rowNumber++)
+//            {
+//                //look for note-off messages before note-on messages,
+//                //as otherwise if you set the note length to be max length,
+//                //the note will be turned off straight away due to how note length
+//                //is implemented below
+//                
+//                //check for any midi notes that need to be turned off
+//                //need to check ALL sequences, not just current one
+//                for (int seq = 0; seq <= numberOfSequences-1; seq++)
+//                {
+//                    if (midiNoteOffTime[seq][rowNumber][columnNumber] == 1)
+//                    {
+//                        triggerMidiNoteOffMessage(rowNumber);
+//                        
+//                        //set a flag that this particular note in the array will be now off
+//                        midiNoteOffTime[seq][rowNumber][columnNumber] = 0;
+//                        midiNoteOnCounter--;
+//                    }
+//                }
+//                
+//                //then check for any midi note-on messages
+//                if (sequenceData[sequenceNumber][rowNumber][columnNumber] >= 1 && 
+//                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == false) //if 'on' and not a 'recently recorded' notes
+//                {
+//                    int velocity = sequenceData[sequenceNumber][rowNumber][columnNumber];
+//                    //trigger note-on message
+//                    triggerMidiMessage(rowNumber, velocity);
+//                    
+//                    //set a flag that this particular note in the array will be on and
+//                    //will need to be 'turned off' at after a certain amount of time
+//                    //set the 'columnNumber' step number that the note will need to be turned off
+//                    int noteOffStep = columnNumber+midiNoteLength;
+//                    
+//                    //if the step number is greater than the number of columns,
+//                    //set it to 'overlap' into the next columnNumber cycle
+//                    if (noteOffStep >= sequenceLength)
+//                    {
+//                        noteOffStep = noteOffStep - sequenceLength;
+//                    }
+//                    midiNoteOffTime[sequenceNumber][rowNumber][noteOffStep] = 1;
+//                    midiNoteOnCounter++;
+//                    
+//                }
+//                else if (recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == true)
+//                {
+//                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] = false;
+//                }
+//            }
+//        }
+//        
+//        //=========================================================================
+//        //=Samples stuff - everything else is for the midi mode!===================
+//        //=========================================================================
+//        else //samples mode selected
+//        {
+//            //cycle through each row to look for any note on messages
+//            for (int rowNumber = 0; rowNumber <= NO_OF_ROWS-1; rowNumber++)
+//            {
+//                if (sequenceData[sequenceNumber][rowNumber][columnNumber] >= 1 &&
+//                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == false) //if 'on' and not a recently recorded note
+//                {
+//                    int velocity = sequenceData[sequenceNumber][rowNumber][columnNumber];
+//                    triggerAudioMessage(rowNumber, velocity);
+//                }
+//                else if (recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == true)
+//                {
+//                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] = false;
+//                }
+//            }
+//        }
+//        
+//        //=========================================================================
+//    
+//        columnNumber++;
+//        
+//        
+//        //for autocycle trigger Mode
+//        if (triggerMode == /*8*/ 6)
+//        {
+//            
+//            if (columnNumber == sequenceLength && playingLastLoop == true)
+//                signalThreadShouldExit(); //ends the 'last' loop
+//            
+//            else if (columnNumber == sequenceLength) //if goes beyond the last column of the sequence
+//            {
+//                sequenceNumber++;
+//                columnNumber = 0; //reset columnNumber here otherwise thread loop will exit and seq will stop
+//                
+//                if (sequenceNumber == numberOfSequences) //if goes beyond the last sequence
+//                {
+//                    if (shouldLoop == true)
+//                        sequenceNumber = 0; //if reached end of seqs and is set to loop, go back to the beginning
+//                    
+//                    //else, sequencer number will greater than the number of sequences, so the while loop will not run next time
+//                }
+//                
+//                //update gui (if this pad's gui is currently being displayed)
+//                if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1
+//                    && sequenceNumber < numberOfSequences)
+//                {
+//                    if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
+//                        broadcaster.sendActionMessage("SEQ DISPLAY");
+//                }
+//            }
+//            
+//        }
+//        
+//        
+//        //if the counter variable reaches the end, and the current play state is set to loop or triggerMode
+//        //is 'cycle' and it is not currently playing the 'last loop',
+//        //restart the counter so that the sequence loops
+//        //otherwise the while loop will exit and the thread will stop on it's own
+//        if ((columnNumber == sequenceLength && shouldLoop == true) || 
+//            (columnNumber == sequenceLength && triggerMode == /*7*/ 5 && playingLastLoop == false))
+//            columnNumber = 0;
+//        
+//        
+//        //===============update sequencer grid GUI here!====================
+//        //if the this instance of SequencePlayer is the one belonging to the pad 
+//        //that is currently selected (and hence currently displayed)
+//        if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
+//        {
+//            if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
+//                broadcaster.sendActionMessage("PLAYHEAD");
+//        }
+//        
+//        //==================================================================
+//        //== SLEEP LOOP HERE!!! ============================================
+//        //==================================================================
+//        //sleep for int(timeInterval)
+//        Time::waitForMillisecondCounter(currentTime);
+//        
+//        //SHOULD THE BELOW SECTION OF CODE UP UNTIL currentTime = ... BE ABOVE THE ABOVE SLEEP CALL SO THAT THE REINITIALISATION OF
+//        //CURRENTTIME IS SET WITH A SMALLER POSSIBLE DELAY?
+//        
+//        //add the decimal offset of the time interval to the currently stored offset
+//        currentOffset = currentOffset + timeIntervalDecimalOffset;
+//        //get the offset that needs to be added. This will only make a difference if over than 1, otherwise it will equal 0.
+//        int currentOffsetToAdd = int(currentOffset);
+//        //change the value of currentTime so the next interation of the loop sleeps for the correct time,
+//        //possibly adding a value of 1 (currentlyOffsetToAdd) to make up for decimal values being ignored
+//        
+//        
+//        currentTime = currentTime + int(timeInterval) + currentOffsetToAdd;
+//        //if currentOffsetToAdd >= 1, remove from currentOffset as the value of 1 would have been added to currentTime
+//        if (currentOffsetToAdd >= 1)
+//        {
+//            currentOffset = currentOffset-currentOffsetToAdd;
+//        }
+//        
+//    }
+//    
+//    //IF PROGRAM GETS TO THIS POINT THREAD WILL EXIT
+//    
+//    //===============trigger midi notes off here!====================
+//    //ideally, when the sequence is told to stop, any notes still on should be turned off within the length of time they were set to be on for.
+//    //That is what I have tried to do with the sendActionMessage call below, but it is still very tempermental.
+//    //So for now, when the sequencer is told to stop, all hanging midi notes are instantly turned off.
+//    //This means sequences can be retriggered quickily without any problems.
+//    //However using a piano roll implementation for MIDI sequences will more-than-likely solve this problem.
+//    
+//    //broadcaster.sendActionMessage("END MIDI SEQ");
+//    
+//    //instantly turn off any hanging notes
+//    for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
+//    {
+//        for (int row = 0; row <= NO_OF_ROWS-1; row++)
+//        {
+//            for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
+//            {
+//                if (midiNoteOffTime[seq][row][column] == 1)
+//                {
+//                    triggerMidiNoteOffMessage(row);
+//                    //set a flag that this particular note in the array will be now off
+//                    midiNoteOffTime[seq][row][column] = 0;
+//                }
+//            }
+//        }
+//    }
+//    
+//    
+//    playingLastLoop = false;
+//    shouldLoop = PAD_SETTINGS->getSequencerShouldLoop();
+//    
+//    //tell gui pad that the sequence has finished playing
+//    broadcaster.sendActionMessage("PLAYING OFF");
+//    
+//    modeSequencerRef.editRunningSequencersArray(0, padNumber);
+//    
+//}
+
+
+void SequencePlayer::stopSequenceAndReset()
 {
-    stopThread(timeInterval*2);
+    stopSequence();
 
     triggerModes.reset();
     currentPlayingState = 0;
     
-    if (isThreadRunning() == false)
+    if (sequenceIsRunning == false)
     {
         //this stuff as also at the bottom of the run() function, which won't be called
         //if the thread isn't running
@@ -1075,9 +1358,14 @@ void SequencePlayer::actionListenerCallback (const String& message)
 
     }
     
-    else if (message == "STOP THREAD")
+    else if (message == "STOP SEQ")
     {
-        stopThread(timeInterval*2);
+        stopSequence();
+    }
+    
+    else if (message == "STOP SEQ AND RESET")
+    {
+        stopSequence();
         currentPlayingState = 0;
         //stopThreadAndReset();
     }
@@ -1131,7 +1419,7 @@ int SequencePlayer::getCurrentPlayingState()
 
 bool SequencePlayer::isCurrentlyPlaying()
 {
-    return isThreadRunning();
+    return sequenceIsRunning;
 }
 
 void SequencePlayer::setSequenceNumber (int value)
@@ -1269,7 +1557,7 @@ void SequencePlayer::setMode(int value)
     
     
     //if previous mode was MIDI, prevent any hanging midi notes
-    if (mode == 1 && mode != value && isThreadRunning() == true)
+    if (mode == 1 && mode != value && sequenceIsRunning == true)
     {
         for (int i = 0; i < NO_OF_ROWS; i++)
         {
@@ -1329,7 +1617,7 @@ void SequencePlayer::setDynamicMode (int value)
 void SequencePlayer::setMidiNote (int row, int value)
 {
 
-    if (midiNote[row] != value && isThreadRunning() == true)
+    if (midiNote[row] != value && sequenceIsRunning == true)
     {
         triggerMidiNoteOffMessage(row);
     }
@@ -1342,7 +1630,7 @@ void SequencePlayer::setMidiChannel (int value)
     //if new channel is different from current channel, 
     //stop MIDI notes if seq is currently playing to prevent hanging notes
     
-    if (midiChannel != value && isThreadRunning() == true)
+    if (midiChannel != value && sequenceIsRunning == true)
     {
         for (int i = 0; i < NO_OF_ROWS; i++)
         {

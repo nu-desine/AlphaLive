@@ -277,7 +277,7 @@ void ModeMidi::noteOn (int padNumber)
         {
             int recordingPad = alphaLiveEngineRef.getRecordingPads()[i];
             
-            if (alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->isThreadRunning()) //if currently playing
+            if (alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(recordingPad)->isCurrentlyPlaying()) //if currently playing
             {
                 if (AppSettings::Instance()->padSettings[recordingPad]->getSequencerMode() == 1) //if MIDI mode
                 {

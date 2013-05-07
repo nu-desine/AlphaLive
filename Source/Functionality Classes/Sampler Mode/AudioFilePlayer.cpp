@@ -493,7 +493,7 @@ void AudioFilePlayer::playAudioFile()
         {
             int recordingPad = modeSamplerRef.getAlphaLiveEngineRef().getRecordingPads()[i];
             
-            if (modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->isThreadRunning()) //if currently playing
+            if (modeSamplerRef.getAlphaLiveEngineRef().getModeSequencer()->getSequencePlayerInstance(recordingPad)->isCurrentlyPlaying()) //if currently playing
             {
                 if (AppSettings::Instance()->padSettings[recordingPad]->getSequencerMode() == 2) //if samples mode
                 {

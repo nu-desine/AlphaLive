@@ -30,7 +30,8 @@
 
 
 ModeSequencer::ModeSequencer(AlphaLiveEngine &ref)
-                             : alphaLiveEngineRef(ref)
+                             :  Thread("sequencerThread"), 
+                                alphaLiveEngineRef(ref)
 {
     //init the sequenceplayer array to be empty
     //needs to be initialised as you cannot dynamcically add an object, say at index 30, if the indexes before it don't exist
@@ -85,6 +86,45 @@ void ModeSequencer::getInputData(int padNumber, int padValue)
     prevPadValue[padNumber] = padValue;
 }
 
+void ModeSequencer::editRunningSequencersArray (int action, int padNumber)
+{
+    if (action == 1)
+    {
+        //if this is the first object added to the array, start the thread
+        if (runningSequencers.size() == 0)
+            startThread(7);
+            
+        //add padSequencer object to array
+        runningSequencers.addIfNotAlreadyThere(padSequencer[padNumber]);
+    }
+    else if (action == 0)
+    {
+        //remove padSequencer object from array
+        runningSequencers.removeFirstMatchingValue(padSequencer[padNumber]);
+        
+        if (runningSequencers.size() == 0)
+        {
+            int setGlobalTimeInterval;
+            stopThread(100);
+        }
+        
+        
+    }
+}
+
+void ModeSequencer::run()
+{
+    std::cout << "Global Sequencer Thread Starting!" << std::endl;
+    
+    while( ! threadShouldExit())
+    {
+        
+        
+    }
+    
+    std::cout << "Global Sequencer Thread Stopped!" << std::endl;
+}
+
 
 void ModeSequencer::createSequencePlayer (int padNumber)
 {
@@ -96,6 +136,9 @@ void ModeSequencer::createSequencePlayer (int padNumber)
 
 void ModeSequencer::deleteSequencePlayer (int padNumber)
 {
+    //this needs to be removed from here
+    editRunningSequencersArray(0, padNumber);
+    
     audioMixer.removeInputSource(padSequencer[padNumber]); //remove as input source
     padSequencer.remove(padNumber); //remove object from array
     padSequencer.insert(padNumber, NULL); //insert a NULL object

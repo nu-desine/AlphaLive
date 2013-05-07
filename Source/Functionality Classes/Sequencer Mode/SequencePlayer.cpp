@@ -542,6 +542,7 @@ void SequencePlayer::triggerQuantizationPoint()
 //called everytime a sequence is played/started
 void SequencePlayer::run()
 {
+    modeSequencerRef.editRunningSequencersArray(1, padNumber);
     //===================init stuff before thread loop here!===========================
     
     //THREAD TIMING
@@ -794,6 +795,8 @@ void SequencePlayer::run()
     
     //tell gui pad that the sequence has finished playing
     broadcaster.sendActionMessage("PLAYING OFF");
+    
+    modeSequencerRef.editRunningSequencersArray(0, padNumber);
     
 }
 

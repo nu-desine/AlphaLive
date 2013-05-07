@@ -704,7 +704,7 @@ void AlphaLiveEngine::sendMidiMessage(MidiMessage midiMessage)
 
                 AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
                                                   translate("No MIDI device available!"),
-                                                  translate("AlphaLive cannot currently send any MIDI messages as the AlphaSphere has been disconnected. To start sending MIDI messages again please reconnected the AlphaSphere, or " + translate(instructionString)));
+                                                  translate("AlphaLive cannot currently send any MIDI messages as the AlphaSphere has been disconnected. To start sending MIDI messages again please reconnect the AlphaSphere, or " + translate(instructionString)));
                 
                 hasDisplayedNoMidiDeviceWarning = true;
             }

@@ -53,7 +53,6 @@ SequencePlayer::SequencePlayer(int padNumber_, ModeSequencer &ref, TimeSliceThre
     relativeTempoMode = PAD_SETTINGS->getSequencerRelativeTempoMode();
     setTempo(AppSettings::Instance()->getGlobalTempo());
     
-    mode = PAD_SETTINGS->getSequencerMode();
     numberOfSequences = PAD_SETTINGS->getSequencerNumberOfSequences();
     triggerMode = PAD_SETTINGS->getSequencerTriggerMode();
     shouldLoop = PAD_SETTINGS->getSequencerShouldLoop();
@@ -99,15 +98,6 @@ SequencePlayer::SequencePlayer(int padNumber_, ModeSequencer &ref, TimeSliceThre
             }
         }
     }
-
-    //audio stuff
-    //init audio file player objects, 1 for each row
-    //LOOK INTO DOING THIS STUFF ONLY WHEN MODE IS SET TO SAMPLES MODE?
-    for (int row = 0; row <= NO_OF_ROWS-1; row++)
-    {
-        sequenceAudioFilePlayer[row] = new SequenceAudioFilePlayer(padNumber, row, audioTransportSourceThread);
-        audioMixer.addInputSource(sequenceAudioFilePlayer[row], false); //add as inputsource to audioMixer
-    }
     
     broadcaster.addActionListener(this);
     
@@ -131,6 +121,9 @@ SequencePlayer::SequencePlayer(int padNumber_, ModeSequencer &ref, TimeSliceThre
     
     prevPadValue = pressureValue =  0;
     playingLastLoop = false;
+    
+    mode = 0;
+    setMode(PAD_SETTINGS->getSequencerMode());
     
     //if the pad is currently set to be record enabled, add this pad to the recordingPad array
     if (PAD_SETTINGS->getSequencerRecordEnabled() == 1)
@@ -167,14 +160,15 @@ SequencePlayer::~SequencePlayer()
         modeSequencerRef.updatePadPlayingStatus(padNumber, 0);
     }
     
-    for (int row = 0; row <= NO_OF_ROWS-1; row++)
+    if (mode == 2)
     {
-        delete sequenceAudioFilePlayer[row];
+        for (int row = 0; row <= NO_OF_ROWS-1; row++)
+        {
+            delete sequenceAudioFilePlayer[row];
+        }
     }
     
     audioMixer.removeAllInputs();
-    audioPlayer.setSource(NULL);
-     
 }
 
 //=====================================================================================
@@ -1248,6 +1242,29 @@ void SequencePlayer::setSequenceData(int seq, int row, int column, int value)
 
 void SequencePlayer::setMode(int value)
 {
+    //if new mode is set to samples mode, create the SequenceAudioFilePlayer objects
+    if (value == 2 && mode != value)
+    {
+        //audio stuff
+        //init audio file player objects, 1 for each row
+        for (int row = 0; row <= NO_OF_ROWS-1; row++)
+        {
+            sequenceAudioFilePlayer[row] = new SequenceAudioFilePlayer(padNumber, row, audioTransportSourceThread);
+            audioMixer.addInputSource(sequenceAudioFilePlayer[row], false); //add as inputsource to audioMixer
+        }
+    }
+    //if was previously set to samples mode but new mode isn't, remove the SequenceAudioFilePlayer objects
+    else if (mode == 2 && value != 2)
+    {
+        for (int row = 0; row <= NO_OF_ROWS-1; row++)
+        {
+            delete sequenceAudioFilePlayer[row];
+        }
+        
+        audioMixer.removeAllInputs();
+    }
+    
+    
     //if previous mode was MIDI, prevent any hanging midi notes
     if (mode == 1 && mode != value && isThreadRunning() == true)
     {

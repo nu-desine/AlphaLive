@@ -166,7 +166,6 @@ private:
     
     //audio stuff for mixing the SequenceAudioFilePlayer objects
 	MixerAudioSource audioMixer;
-	AudioSourcePlayer audioPlayer;
     
     int midiNoteOffTime[NO_OF_SEQS][NO_OF_ROWS][NO_OF_COLUMNS];
     int midiNoteOnCounter;

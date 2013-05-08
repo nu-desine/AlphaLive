@@ -202,8 +202,7 @@ private:
     bool recentlyAddedSequenceData[NO_OF_SEQS][NO_OF_ROWS][NO_OF_COLUMNS]; //[sequence][row][column]
     
     double timeInterval;
-    float timeIntervalDecimalOffset, currentOffset; //<< try making these doubles!
-    bool sequenceIsRunning;
+    bool sequenceIsRunning, sequenceFlaggedToStop;
 };
 
 

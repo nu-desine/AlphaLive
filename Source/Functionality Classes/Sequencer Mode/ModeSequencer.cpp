@@ -114,11 +114,10 @@ void ModeSequencer::editRunningSequencersArray (int action, int padNumber)
 
 void ModeSequencer::run()
 {
-    std::cout << "Global Sequencer Thread Starting!" << std::endl;
+    //std::cout << "Global Sequencer Thread Starting!" << std::endl;
     
     while( ! threadShouldExit())
     {
-        
         for (int i = 0; i < runningSequencers.size(); i++)
         {
             runningSequencers[i]->processSequence();
@@ -127,7 +126,7 @@ void ModeSequencer::run()
         wait(1); 
     }
     
-    std::cout << "Global Sequencer Thread Stopped!" << std::endl;
+    //std::cout << "Global Sequencer Thread Stopped!" << std::endl;
 }
 
 

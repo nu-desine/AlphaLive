@@ -403,8 +403,12 @@ void SequencePlayer::processInputData(int padValue)
     //======create pressure data======
     if (mode == 1) //midi
     {
+        sharedMemoryMidi.enter();
+        
         //create midi pressure data
         sendMidiPressureData();
+        
+        sharedMemoryMidi.exit();
     }
     else if (mode == 2)
     {
@@ -597,6 +601,8 @@ void SequencePlayer::processSequence()
         
         if (mode == 1) //midi mode selected
         {
+            sharedMemoryMidi.enter();
+            
             //cycle through each row to look for any note messages
             for (int rowNumber = 0; rowNumber <= NO_OF_ROWS-1; rowNumber++)
             {
@@ -647,6 +653,8 @@ void SequencePlayer::processSequence()
                     recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] = false;
                 }
             }
+            
+            sharedMemoryMidi.exit();
         }
         
         //=========================================================================
@@ -715,7 +723,7 @@ void SequencePlayer::processSequence()
         //restart the counter so that the sequence loops
         //otherwise the while loop will exit and the thread will stop on it's own
         if ((columnNumber == sequenceLength && shouldLoop == true) || 
-            (columnNumber == sequenceLength && triggerMode == /*7*/ 5 && playingLastLoop == false))
+            (columnNumber == sequenceLength && triggerMode == 5 && playingLastLoop == false))
             columnNumber = 0;
         
         
@@ -758,6 +766,8 @@ void SequencePlayer::stopSequence()
     
     //broadcaster.sendActionMessage("END MIDI SEQ");
     
+    sharedMemoryMidi.enter();
+    
     //instantly turn off any hanging notes
     for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
     {
@@ -774,6 +784,8 @@ void SequencePlayer::stopSequence()
             }
         }
     }
+    
+    sharedMemoryMidi.exit();
     
     
     playingLastLoop = false;
@@ -1324,17 +1336,22 @@ void SequencePlayer::setDynamicMode (int value)
 
 void SequencePlayer::setMidiNote (int row, int value)
 {
-
+    sharedMemoryMidi.enter();
+    
     if (midiNote[row] != value && sequenceIsRunning == true)
     {
         triggerMidiNoteOffMessage(row);
     }
     
     midiNote[row] = value;
+    
+    sharedMemoryMidi.exit();
 }
 
 void SequencePlayer::setMidiChannel (int value)
 {
+    sharedMemoryMidi.enter();
+    
     //if new channel is different from current channel, 
     //stop MIDI notes if seq is currently playing to prevent hanging notes
     
@@ -1347,23 +1364,33 @@ void SequencePlayer::setMidiChannel (int value)
     }
     
     midiChannel = value;
+    
+    sharedMemoryMidi.exit();
 }
 void SequencePlayer::setMidiNoteLength (int value)
 {
+    sharedMemoryMidi.enter();
     midiNoteLength = value;
+    sharedMemoryMidi.exit();
 }
 void SequencePlayer::setMidiMinRange (int value)
 {
+    sharedMemoryMidi.enter();
     midiMinRange = value;
+    sharedMemoryMidi.exit();
 }
 
 void SequencePlayer::setMidiMaxRange (int value)
 {
+    sharedMemoryMidi.enter();
     midiMaxRange = value;
+    sharedMemoryMidi.exit();
 }
 
 void SequencePlayer::setMidiControllerNumber (int value)
 {
+    sharedMemoryMidi.enter();
+    
     //is CC number has changed and pressure is currently > 0, reset the value of the current pressure data
     if (midiControllerNumber != value && pressureValue > 0)
     {
@@ -1372,10 +1399,14 @@ void SequencePlayer::setMidiControllerNumber (int value)
     }
     
     midiControllerNumber = value;
+    
+    sharedMemoryMidi.exit();
 }
 
 void SequencePlayer::setMidiPressureMode (int value)
 {
+    sharedMemoryMidi.enter();
+    
     //if pressure mode has changed and pressure is currently > 0, reset the value of the current pressure data
     if (midiPressureMode != value && pressureValue > 0)
     {
@@ -1384,11 +1415,15 @@ void SequencePlayer::setMidiPressureMode (int value)
     }
     
     midiPressureMode = value;
+    
+    sharedMemoryMidi.exit();
 }
 
 
 void SequencePlayer::setMidiPressureStatus (bool value)
 {
+    sharedMemoryMidi.enter();
+    
     //if pressure status has changed and pressure is currently > 0, reset the value of the current pressure data
     if (midiPressureStatus != value && pressureValue > 0)
     {
@@ -1397,6 +1432,8 @@ void SequencePlayer::setMidiPressureStatus (bool value)
     }
     
     midiPressureStatus = value;
+    
+    sharedMemoryMidi.exit();
 }
 
 

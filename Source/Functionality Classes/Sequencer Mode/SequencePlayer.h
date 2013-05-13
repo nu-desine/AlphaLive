@@ -149,7 +149,7 @@ private:
 	
 	//audio related
 	SequenceAudioFilePlayer *sequenceAudioFilePlayer[NO_OF_ROWS];
-    CriticalSection sharedMemory;
+    CriticalSection sharedMemory, sharedMemoryMidi;
     TimeSliceThread *audioTransportSourceThread;
     GainAndPan *gainAndPan;
     LowpassFilter *lowPassFilter;

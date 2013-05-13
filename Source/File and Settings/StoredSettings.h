@@ -48,7 +48,7 @@ public:
     File appProjectDir;
     int midiNoteDisplayType; // 1 - note number, 2 - note name
     int launchTask; // 1 - Open new project, 2 - open last project
-    int killOnClockStop; // 0 - don't kill, 1 - kill
+    int killOnClockStop; // 1 - don't kill, 2 - kill
     int cleanOnClose; //1 - don't clean, 2 - clean
     int autoSaveScenes; //1 - dont auto save, 2 - do auto save
     String audioSettings; //this will hold the XML element created using createStateXml()

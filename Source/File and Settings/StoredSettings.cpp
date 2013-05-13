@@ -160,6 +160,9 @@ void StoredSettings::setDefaultValues()
     if (cleanOnClose == 0)
         cleanOnClose = 2;
     
+    if (killOnClockStop == 0)
+        killOnClockStop = 2;
+    
     if (autoSaveScenes == 0)
         autoSaveScenes = 2;
     

@@ -468,9 +468,6 @@
     <ClCompile Include="..\..\Source\Functionality Classes\Other\LayoutsAndScales.cpp">
       <Filter>AlphaLive\Source\Functionality Classes\Other</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Functionality Classes\Other\PlayStates.cpp">
-      <Filter>AlphaLive\Source\Functionality Classes\Other</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Functionality Classes\Other\TriggerModes.cpp">
       <Filter>AlphaLive\Source\Functionality Classes\Other</Filter>
     </ClCompile>
@@ -1906,9 +1903,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Functionality Classes\MIDI Mode\ModeMidi.h">
       <Filter>AlphaLive\Source\Functionality Classes\MIDI Mode</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Functionality Classes\Other\PlayStates.h">
-      <Filter>AlphaLive\Source\Functionality Classes\Other</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Functionality Classes\Other\TriggerModes.h">
       <Filter>AlphaLive\Source\Functionality Classes\Other</Filter>

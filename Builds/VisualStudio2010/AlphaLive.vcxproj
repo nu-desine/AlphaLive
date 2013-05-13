@@ -261,7 +261,6 @@
     <ClCompile Include="..\..\Source\Functionality Classes\GlobalClock.cpp" />
     <ClCompile Include="..\..\Source\Functionality Classes\MIDI Mode\ModeMidi.cpp" />
     <ClCompile Include="..\..\Source\Functionality Classes\Other\LayoutsAndScales.cpp" />
-    <ClCompile Include="..\..\Source\Functionality Classes\Other\PlayStates.cpp" />
     <ClCompile Include="..\..\Source\Functionality Classes\Other\TriggerModes.cpp" />
     <ClCompile Include="..\..\Source\Functionality Classes\Sampler Mode\AudioFilePlayer.cpp" />
     <ClCompile Include="..\..\Source\Functionality Classes\Sampler Mode\ModeSampler.cpp" />
@@ -1428,7 +1427,6 @@
     <ClInclude Include="..\..\Source\Functionality Classes\EliteControls.h" />
     <ClInclude Include="..\..\Source\Functionality Classes\GlobalClock.h" />
     <ClInclude Include="..\..\Source\Functionality Classes\MIDI Mode\ModeMidi.h" />
-    <ClInclude Include="..\..\Source\Functionality Classes\Other\PlayStates.h" />
     <ClInclude Include="..\..\Source\Functionality Classes\Other\TriggerModes.h" />
     <ClInclude Include="..\..\Source\Functionality Classes\Sampler Mode\AudioFilePlayer.h" />
     <ClInclude Include="..\..\Source\Functionality Classes\Sampler Mode\ModeSampler.h" />

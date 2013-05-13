@@ -216,7 +216,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     
     addAndMakeVisible(killOnClockStopButton = new TextButton());
     killOnClockStopButton->setClickingTogglesState(true);
-    killOnClockStopButton->setToggleState(StoredSettings::getInstance()->killOnClockStop, false);
+    killOnClockStopButton->setToggleState(StoredSettings::getInstance()->killOnClockStop-1, false);
     if(killOnClockStopButton->getToggleStateValue() == true)
         killOnClockStopButton->setButtonText(translate("On"));
     else
@@ -322,13 +322,13 @@ void GeneralSettingsComponent::buttonClicked (Button* button)
     {
         if(killOnClockStopButton->getToggleStateValue() == true)
         {
-            StoredSettings::getInstance()->killOnClockStop = 1;
+            StoredSettings::getInstance()->killOnClockStop = 2;
             killOnClockStopButton->setButtonText(translate("On"));
         }
         
         else
         {
-            StoredSettings::getInstance()->killOnClockStop = 0;
+            StoredSettings::getInstance()->killOnClockStop = 1;
             killOnClockStopButton->setButtonText(translate("Off"));
         }
         

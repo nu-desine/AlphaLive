@@ -270,7 +270,7 @@ void GlobalClock::startClock()
 
 void GlobalClock::stopClock()
 {
-    if (StoredSettings::getInstance()->killOnClockStop == true)
+    if (StoredSettings::getInstance()->killOnClockStop == 2)
     {
         for (int i = 0; i <= 47; i++)
         {

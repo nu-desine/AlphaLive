@@ -130,7 +130,7 @@ void StoredSettings::setDefaultValues()
         midiNoteDisplayType = 1;
     
     if (launchTask == 0)
-        launchTask = 1;
+        launchTask = 2;
     
     if (cleanOnClose == 0)
         cleanOnClose = 2;

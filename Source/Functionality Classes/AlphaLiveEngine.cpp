@@ -304,7 +304,6 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
                 int minValue = PAD_SETTINGS->getVelocityMinRange();
                 int maxValue = PAD_SETTINGS->getVelocityMaxRange();
                 recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
-                std::cout << recievedVelocity << std::endl;
             }
             
             //static velocity stuff is done in the mode classes,

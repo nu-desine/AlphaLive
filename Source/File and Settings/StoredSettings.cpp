@@ -48,6 +48,7 @@ void StoredSettings::flush()
 {
     if (props != nullptr)
     {
+        props->setValue ("initialLaunch", initialLaunch);
         props->setValue ("recentFiles", recentFiles.toString());
         props->setValue ("appProjectDir", appProjectDir.getFullPathName());
         props->setValue ("audioSettings", audioSettings);
@@ -73,6 +74,8 @@ void StoredSettings::flush()
         props = new PropertiesFile (options);
 
     }
+    
+    initialLaunch = props->getIntValue("initialLaunch");
 
     //recent files...
     recentFiles.restoreFromString (props->getValue ("recentFiles"));
@@ -95,6 +98,28 @@ void StoredSettings::setDefaultValues()
 {
     //effectively most of this function will only run   
     //the first time the app is launched on a computer
+    
+    if (initialLaunch == 0)
+    {  
+        //this statement will only be true when AlphaLive is first run on a computer, in which
+        //we want the Demo Project to be added to the recently opened files list that will
+        //then be automatically launched.
+        
+        File demoProjFile (File::getSpecialLocation(File::userDocumentsDirectory).getFullPathName() + 
+                           File::separatorString + 
+                           "AlphaLive Projects" + 
+                           File::separatorString +  
+                           "Demo Project" + 
+                           File::separatorString + 
+                           "Demo Project.alphalive");
+        
+        if (demoProjFile.exists())
+        {
+            recentFiles.addFile(demoProjFile);
+        }
+        
+        initialLaunch = 1;
+    }
     
     if (appProjectDir == File::nonexistent)
     {

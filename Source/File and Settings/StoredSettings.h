@@ -43,6 +43,7 @@ public:
     void setDefaultValues();
 
     //==============================================================================
+    int initialLaunch; //
     RecentlyOpenedFilesList recentFiles;
     File appProjectDir;
     int midiNoteDisplayType; // 1 - note number, 2 - note name

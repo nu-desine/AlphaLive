@@ -547,7 +547,7 @@ void SequencePlayer::triggerQuantizationPoint()
 
 void SequencePlayer::startSequence()
 {
-    currentTime = Time::getMillisecondCounter();
+    currentTime = Time::getMillisecondCounterHiRes();
     columnNumber = 0; //counter variable
     
     if (mode == 2)

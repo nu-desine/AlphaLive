@@ -132,14 +132,14 @@ void StoredSettings::setDefaultValues()
         {
             //if directory is currently in the previous set location, move the folder to the new default location
             oldProjectDir.moveFileTo (defaultProjectDirectory);
-            StoredSettings::getInstance()->appProjectDir = defaultProjectDirectory;
         }
         else if (defaultProjectDirectory.exists() == false)
         {
             //if there is no directory on the system at all, create a default one
             defaultProjectDirectory.createDirectory();
-            StoredSettings::getInstance()->appProjectDir = defaultProjectDirectory;
         }
+        
+        appProjectDir = defaultProjectDirectory;
     }
     
     if (appProjectDir.exists() == false)

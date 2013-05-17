@@ -30,7 +30,8 @@ HidComms::HidComms() : Thread("HidThread")
     
     appHasInitialised = false;
     sendOutputReport = false;
-    midiOutExists = hidDeviceStatus = reconnectCounter = 0;
+    midiOutExists = hidDeviceStatus = 0;
+	reconnectCounter = 500;
     
     for (int i = 0; i < 48; i++)
         prevPadPressure[i] = 0;
@@ -404,6 +405,10 @@ void HidComms::connectToDevice()
     //device found
     else
     {
+		hidDeviceStatus = 1;
+		setDeviceStatus();
+		setFirmwareDetails (firmwareString, serialString);
+
         if (midiOutExists == true)
         {
             //if the midi output stuff currently exists, which would have been caused
@@ -470,11 +475,6 @@ void HidComms::connectToDevice()
         // Set the hid_read() function to be non-blocking
         // for the rest of the program
         hid_set_nonblocking(handle, 1);
-        
-        hidDeviceStatus = 1;
-        setDeviceStatus();
-        
-        setFirmwareDetails (firmwareString, serialString);
     }
 }
 

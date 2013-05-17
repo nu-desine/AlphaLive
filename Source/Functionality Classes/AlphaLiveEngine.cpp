@@ -40,6 +40,15 @@ AlphaLiveEngine::AlphaLiveEngine()
 	//start HID thread.
 	//For OS X, see bottom of this function.
 	startThread();
+
+	//sleep to give the HID thread time to attempt to connect to the device.
+	//I may be able to reduce the sleep time to 500ms.
+    #ifdef WIN32
+    sleep(1000);
+    #else
+    usleep(1000*1000);
+    #endif
+
 	#endif
 
     mainComponent = NULL;
@@ -136,11 +145,8 @@ AlphaLiveEngine::AlphaLiveEngine()
     startThread();
     
     //sleep to give the HID thread time to attempt to connect to the device.
-    #ifdef WIN32
-    sleep(1000);
-    #else
+	//I may be able to reduce the sleep time to 500ms.
     usleep(1000*1000);
-    #endif
     
     if (getDeviceStatus() != 0)
         removeMidiOut();

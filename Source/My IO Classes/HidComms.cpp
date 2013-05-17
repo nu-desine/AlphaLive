@@ -23,6 +23,7 @@
 #include <unistd.h>
 #endif
 
+#define RECONNECT_TIME 500
 
 HidComms::HidComms() : Thread("HidThread")
 {
@@ -31,7 +32,7 @@ HidComms::HidComms() : Thread("HidThread")
     appHasInitialised = false;
     sendOutputReport = false;
     midiOutExists = hidDeviceStatus = 0;
-	reconnectCounter = 500;
+	reconnectCounter = RECONNECT_TIME;
     
     for (int i = 0; i < 48; i++)
         prevPadPressure[i] = 0;
@@ -300,7 +301,7 @@ void HidComms::run()
         {
             //try and connect to the device
             
-            if (reconnectCounter >= 500)
+            if (reconnectCounter >= RECONNECT_TIME)
             {
                 connectToDevice();
                 reconnectCounter = 0;

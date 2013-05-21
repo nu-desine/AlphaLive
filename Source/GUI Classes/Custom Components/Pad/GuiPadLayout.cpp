@@ -424,7 +424,7 @@ void GuiPadLayout::buttonClicked(Button *button)
     }
 
     //pass on the selected pads to mainComponent, which then passes it further into the application..
-    mainComponentRef.setCurrentlySelectedPad(selectedPads);
+    mainComponentRef.setCurrentlySelectedPad(selectedPads, true);
 	
 }
 
@@ -459,7 +459,7 @@ MainComponent& GuiPadLayout::getMainComponent()
 
 void GuiPadLayout::updateCurrentlySelectedPad()
 {
-    mainComponentRef.setCurrentlySelectedPad(selectedPads);
+    mainComponentRef.setCurrentlySelectedPad(selectedPads, true);
     
 }
 
@@ -475,7 +475,7 @@ void GuiPadLayout::deselectAllPads()
     for (int i = 0; i <=47; i++)
         turnOff(i);
     
-    mainComponentRef.setCurrentlySelectedPad(selectedPads);
+    mainComponentRef.setCurrentlySelectedPad(selectedPads, true);
 }
 
 

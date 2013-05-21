@@ -388,7 +388,7 @@ bool MainComponent::update(const Subject& theChangedSubject)
         if (appDocumentStateRef.getGuiUpdateFlag() == 0)
         {
             //this call effectively updates the GUI display
-            setCurrentlySelectedPad(selectedPads);
+            setCurrentlySelectedPad(selectedPads, false);
             
             //update GUI things (GUI of global settings) which aren't updated by setCurrentlySelectedPad
             //these things could be put in setCurrentlySelectedPad but they'll be updated everytime a pad is selected which would be inefficent
@@ -558,8 +558,9 @@ void MainComponent::buttonClicked(Button *button)
 }
 
 
-//this function is called every time a user selects a pad on the GUI
-void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
+//this function is called every time a user selects a pad on the GUI,
+//or when certain items are selected from the Toolbox
+void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool calledFromMouseClick)
 {
     //is this the best place to call this?
     //One problem is that this will be called when importing from the toolbox,
@@ -653,7 +654,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
             setToMidiMode();
             modeMidiButton->setToggleState(true, false);
             
-            if (selectedPads[0] == prevSelectedPad)
+            if (selectedPads[0] == prevSelectedPad && calledFromMouseClick)
                 guiMidiMode->changeView();
         }
         
@@ -662,7 +663,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
             setToSamplerMode();
             modeSamplerButton->setToggleState(true, false);
             
-            if (selectedPads[0] == prevSelectedPad)
+            if (selectedPads[0] == prevSelectedPad && calledFromMouseClick)
                 guiSamplerMode->changeView();
         }
     
@@ -671,7 +672,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
             setToSequencerMode();
             modeSequencerButton->setToggleState(true, false);
             
-            if (selectedPads[0] == prevSelectedPad)
+            if (selectedPads[0] == prevSelectedPad && calledFromMouseClick)
                 guiSequencerMode->changeView();
         }
         if (PAD_SETTINGS->getMode() == 4) //controller mode

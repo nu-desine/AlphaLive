@@ -794,15 +794,10 @@ void GuiMidiMode::setDisplay(int settingsType)
         if(noteStatusButton->getToggleState()==true)
         {
             notSelected->setVisible(false);
-            
-            mainComponentRef.getGuiPiano()->setActive(true);
-            mainComponentRef.getGuiPiano()->updateDisplay();
         }
         else
         {
             notSelected->setVisible(true);
-            
-            mainComponentRef.getGuiPiano()->setActive(false);
         }
         
         //should we be calling repaint here? Compare with Sampler Mode
@@ -841,6 +836,17 @@ void GuiMidiMode::setDisplay(int settingsType)
             notSelected->setVisible(true);
 
         //should we be calling repaint here? Compare will Sampler Mode
+    }
+    
+    //Set piano display
+    if(noteStatusButton->getToggleState()==true)
+    {
+        mainComponentRef.getGuiPiano()->setActive(true);
+        mainComponentRef.getGuiPiano()->updateDisplay();
+    }
+    else
+    {
+        mainComponentRef.getGuiPiano()->setActive(false);
     }
     
 }

@@ -87,7 +87,7 @@ public:
     //override the Observer virtual update function
     bool update(const Subject& theChangedSubject);
     
-    void setCurrentlySelectedPad (Array <int> selectedPads_);
+    void setCurrentlySelectedPad (Array <int> selectedPads_, bool calledFromMouseClick);
     void setToOffMode();
     void setToMidiMode();
     void setToSamplerMode();

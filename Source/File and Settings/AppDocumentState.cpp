@@ -1133,8 +1133,12 @@ void AppDocumentState::saveProject()
         saveProjectSettings();
         saveToScene(currentlySelectedScene);
         
+        Time creationTime = currentProjectFile.getCreationTime();
+        
         currentProjectFile.deleteFile();
         currentProjectFile.create(); //create the file
+        
+        currentProjectFile.setCreationTime(creationTime);
 
         XmlElement performanceSettings("ALPHALIVE_PROJECT_VERSION_1");
 

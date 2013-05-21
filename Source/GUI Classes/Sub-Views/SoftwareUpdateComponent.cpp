@@ -121,7 +121,7 @@ void SoftwareUpdateComponent::run()
         //should it be downloaded into a temp file instead?
         Result result = zipFile.uncompressTo(alphaLiveDirectory);
         
-        File updateDirectory (alphaLiveDirectory.getFullPathName() + File::separatorString + "AlphaLive_update");
+        File updateDirectory (alphaLiveDirectory.getFullPathName() + File::separatorString + "AlphaLive_Update");
         
         if (result.wasOk() && updateDirectory.exists())
         {
@@ -134,7 +134,7 @@ void SoftwareUpdateComponent::run()
             //http://www.manpagez.com/man/2/chmod/osx-10.4.php
             
             File exe1 (updateDirectory.getFullPathName() + "/Mac Files/AlphaLive.app/Contents/MacOS/AlphaLive");
-            File exe2 (updateDirectory.getFullPathName() + "/Mac Files/AlphaLive Updater");
+            File exe2 (updateDirectory.getFullPathName() + "/Mac Files/AlphaLive Updater.app/Contents/MacOS/AlphaLive Updater");
             File exe3 (updateDirectory.getFullPathName() + "/Mac Files/firmwareUpdater");
             
             chmod (exe1.getFullPathName().toUTF8(), S_IRWXO | S_IRWXU | S_IRWXG);

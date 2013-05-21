@@ -617,6 +617,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
 		repaint();
     }
     
+    int prevSelectedPad = selectedPads[0];
     selectedPads = selectedPads_;
     
     
@@ -651,18 +652,27 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_)
         {
             setToMidiMode();
             modeMidiButton->setToggleState(true, false);
+            
+            if (selectedPads[0] == prevSelectedPad)
+                guiMidiMode->changeView();
         }
         
         if (PAD_SETTINGS->getMode() == 2) //sampler mode
         {
             setToSamplerMode();
             modeSamplerButton->setToggleState(true, false);
+            
+            if (selectedPads[0] == prevSelectedPad)
+                guiSamplerMode->changeView();
         }
     
         if (PAD_SETTINGS->getMode() == 3) //sequencer mode
         {
             setToSequencerMode();
             modeSequencerButton->setToggleState(true, false);
+            
+            if (selectedPads[0] == prevSelectedPad)
+                guiSequencerMode->changeView();
         }
         if (PAD_SETTINGS->getMode() == 4) //controller mode
         {

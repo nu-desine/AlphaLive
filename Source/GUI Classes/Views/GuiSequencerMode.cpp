@@ -2385,7 +2385,15 @@ void GuiSequencerMode::setNoteLengthSliderRange (int maxValue)
     
 }
 
-
+void GuiSequencerMode::changeView()
+{
+    if (sequenceSettingsButton->getToggleState())
+        triggerSettingsButton->triggerClick();
+    else if (triggerSettingsButton->getToggleState())
+        pressureSettingsButton->triggerClick();
+    else if (pressureSettingsButton->getToggleState())
+        sequenceSettingsButton->triggerClick();
+}
 
 void GuiSequencerMode::mouseEnter (const MouseEvent &e)
 {

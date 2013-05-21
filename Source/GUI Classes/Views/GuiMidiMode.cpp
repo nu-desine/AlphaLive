@@ -827,6 +827,14 @@ void GuiMidiMode::setDisplay(int settingsType)
     
 }
 
+void GuiMidiMode::changeView()
+{
+    if (triggerSettingsButton->getToggleState())
+        pressureSettingsButton->triggerClick();
+    else if (pressureSettingsButton->getToggleState())
+        triggerSettingsButton->triggerClick();
+}
+
 
 void GuiMidiMode::mouseEnter (const MouseEvent &e)
 {

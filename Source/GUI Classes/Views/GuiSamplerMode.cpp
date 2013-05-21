@@ -992,6 +992,14 @@ void GuiSamplerMode::setRotaryControlDisplay()
 }
 
 
+void GuiSamplerMode::changeView()
+{
+    if (triggerSettingsButton->getToggleState())
+        pressureSettingsButton->triggerClick();
+    else if (pressureSettingsButton->getToggleState())
+        triggerSettingsButton->triggerClick();
+}
+
 void GuiSamplerMode::mouseEnter (const MouseEvent &e)
 {
     // ======= param label text command =========

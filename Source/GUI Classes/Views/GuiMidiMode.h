@@ -57,6 +57,7 @@ public:
     
     void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
+    void changeView();
     
     //void setScale();
     

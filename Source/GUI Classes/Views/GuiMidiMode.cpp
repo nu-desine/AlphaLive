@@ -461,10 +461,19 @@ void GuiMidiMode::buttonClicked (Button* button)
             PAD_SETTINGS->setMidiNoteStatus(noteStatusButton->getToggleState());
         }
         
-        if(noteStatusButton->getToggleStateValue()==true)
+        if (noteStatusButton->getToggleStateValue()==true)
+        {
             notSelected->setVisible(false);
+            mainComponentRef.getGuiPiano()->setActive(true);
+            mainComponentRef.getGuiPiano()->updateDisplay();
+        }
         else
+        {
             notSelected->setVisible(true);
+            
+            mainComponentRef.getGuiPiano()->setActive(false);
+        }
+        
         
     }
     
@@ -782,12 +791,21 @@ void GuiMidiMode::setDisplay(int settingsType)
         parameterHoverLabel->setVisible(false);
         
         
-        if(noteStatusButton->getToggleStateValue()==true)
+        if(noteStatusButton->getToggleState()==true)
+        {
             notSelected->setVisible(false);
+            
+            mainComponentRef.getGuiPiano()->setActive(true);
+            mainComponentRef.getGuiPiano()->updateDisplay();
+        }
         else
+        {
             notSelected->setVisible(true);
+            
+            mainComponentRef.getGuiPiano()->setActive(false);
+        }
         
-        //should we be calling repaint here? Compare will Sampler Mode
+        //should we be calling repaint here? Compare with Sampler Mode
         
     }
     

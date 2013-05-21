@@ -788,8 +788,9 @@ void MainComponent::setToMidiMode()
     //components invisble or dissabled
     guiMidiMode->updateDisplay();
     
-    midiPiano->setActive(true);
-    midiPiano->updateDisplay();
+    //setting the midi piano state is done within
+    //updateDisplay()/setDisplay() of guiMidiMode,
+    //as it depends on states within that object.
     toolbox->updateDisplay();
 	noModeSelected = 0;
 	repaint();

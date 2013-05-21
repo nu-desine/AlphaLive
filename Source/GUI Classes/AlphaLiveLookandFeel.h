@@ -88,6 +88,15 @@ public:
 
 	int getDefaultMenuBarHeight();
 	void drawMenuBarBackground (Graphics& g, int width, int height, bool, MenuBarComponent& menuBar);
+    
+    void drawFileBrowserRow (Graphics& g, int width, int height,
+                             const String& filename, Image* icon,
+                             const String& fileSizeDescription,
+                             const String& fileTimeDescription,
+                             bool isDirectory,
+                             bool isItemSelected,
+                             int itemIndex,
+                             DirectoryContentsDisplayComponent& component);
                                     
    	
 private:

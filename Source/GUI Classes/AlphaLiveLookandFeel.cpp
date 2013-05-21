@@ -637,5 +637,49 @@ void AlphaLiveLookandFeel::drawMenuBarBackground (Graphics& g, int width, int he
 }
 
 
-
-
+void AlphaLiveLookandFeel::drawFileBrowserRow (Graphics& g, int width, int height,
+                                      const String& filename, Image* /*icon*/,
+                                      const String& /*fileSizeDescription*/,
+                                      const String& /*fileTimeDescription*/,
+                                      const bool isDirectory,
+                                      const bool isItemSelected,
+                                      const int /*itemIndex*/,
+                                      DirectoryContentsDisplayComponent&)
+{
+    if (isItemSelected)
+        g.fillAll (findColour (DirectoryContentsDisplayComponent::highlightColourId));
+    
+    //remove the file extension from the filename String
+    String filenameMod = filename.upToLastOccurrenceOf(".", false, false);
+    
+    //highlight the item if it is a directory
+    if (isDirectory)
+    {
+        g.setColour(Colours::darkgrey.withAlpha(0.3f));
+        g.fillRect(2, 2, width-4, height-4);
+    }
+    
+    const int x = 32;
+    g.setColour (findColour (DirectoryContentsDisplayComponent::textColourId));
+    g.setFont (height * 0.7f);
+    
+    if (width > 450 && ! isDirectory)
+    {
+        const int sizeX = roundToInt (width * 0.7f);
+        
+        g.drawFittedText (filenameMod,
+                          5, 0, sizeX - x, height,
+                          Justification::centredLeft, 1);
+        
+        g.setFont (height * 0.5f);
+        g.setColour (Colours::darkgrey);
+        
+    }
+    else
+    {
+        g.drawFittedText (filenameMod,
+                          5, 0, width - x, height,
+                          Justification::centredLeft, 1);
+        
+    }
+}

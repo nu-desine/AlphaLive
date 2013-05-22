@@ -791,6 +791,17 @@ void SequencePlayer::stopSequence()
     playingLastLoop = false;
     shouldLoop = PAD_SETTINGS->getSequencerShouldLoop();
     
+    //Update sequencer grid
+    //if the this instance of SequencePlayer is the one belonging to the pad 
+    //that is currently selected (and hence currently displayed)
+    if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
+    {
+        columnNumber = -1;
+        
+        if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
+            broadcaster.sendActionMessage("PLAYHEAD");
+    }
+    
     //tell gui pad that the sequence has finished playing
     broadcaster.sendActionMessage("PLAYING OFF");
     

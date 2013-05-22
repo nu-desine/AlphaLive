@@ -2259,8 +2259,7 @@ void GuiSequencerMode::updateDisplay()
     
     fxDial->updateDisplay();
     mainComponentRef.getToolbox()->updateDisplay();
-    
-    //sequencerGrid->setPlayHeadPos(0); //??
+    sequencerGrid->setPlayHeadPos(-1);
     
     if (sequenceSettingsButton->getToggleState() == true)
         setDisplay(3);

@@ -596,148 +596,6 @@ void SequencePlayer::processSequence()
     
     if (Time::getMillisecondCounterHiRes() >= currentTime && sequenceFlaggedToStop == false)
     {
-        //std::cout << "Exact time: " << Time::getMillisecondCounterHiRes() << " Current time: " << currentTime << " time Interval: " << timeInterval << std::endl; 
-        currentTime = currentTime + timeInterval;
-        
-        if (mode == 1) //midi mode selected
-        {
-            sharedMemoryMidi.enter();
-            
-            //cycle through each row to look for any note messages
-            for (int rowNumber = 0; rowNumber <= NO_OF_ROWS-1; rowNumber++)
-            {
-                //look for note-off messages before note-on messages,
-                //as otherwise if you set the note length to be max length,
-                //the note will be turned off straight away due to how note length
-                //is implemented below
-                
-                //check for any midi notes that need to be turned off
-                //need to check ALL sequences, not just current one
-                for (int seq = 0; seq <= numberOfSequences-1; seq++)
-                {
-                    if (midiNoteOffTime[seq][rowNumber][columnNumber] == 1)
-                    {
-                        triggerMidiNoteOffMessage(rowNumber);
-                        
-                        //set a flag that this particular note in the array will be now off
-                        midiNoteOffTime[seq][rowNumber][columnNumber] = 0;
-                        midiNoteOnCounter--;
-                    }
-                }
-                
-                //then check for any midi note-on messages
-                if (sequenceData[sequenceNumber][rowNumber][columnNumber] >= 1 && 
-                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == false) //if 'on' and not a 'recently recorded' notes
-                {
-                    int velocity = sequenceData[sequenceNumber][rowNumber][columnNumber];
-                    //trigger note-on message
-                    triggerMidiMessage(rowNumber, velocity);
-                    
-                    //set a flag that this particular note in the array will be on and
-                    //will need to be 'turned off' at after a certain amount of time
-                    //set the 'columnNumber' step number that the note will need to be turned off
-                    int noteOffStep = columnNumber+midiNoteLength;
-                    
-                    //if the step number is greater than the number of columns,
-                    //set it to 'overlap' into the next columnNumber cycle
-                    if (noteOffStep >= sequenceLength)
-                    {
-                        noteOffStep = noteOffStep - sequenceLength;
-                    }
-                    midiNoteOffTime[sequenceNumber][rowNumber][noteOffStep] = 1;
-                    midiNoteOnCounter++;
-                    
-                }
-                else if (recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == true)
-                {
-                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] = false;
-                }
-            }
-            
-            sharedMemoryMidi.exit();
-        }
-        
-        //=========================================================================
-        //=Samples stuff - everything else is for the midi mode!===================
-        //=========================================================================
-        else //samples mode selected
-        {
-            //cycle through each row to look for any note on messages
-            for (int rowNumber = 0; rowNumber <= NO_OF_ROWS-1; rowNumber++)
-            {
-                if (sequenceData[sequenceNumber][rowNumber][columnNumber] >= 1 &&
-                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == false) //if 'on' and not a recently recorded note
-                {
-                    int velocity = sequenceData[sequenceNumber][rowNumber][columnNumber];
-                    triggerAudioMessage(rowNumber, velocity);
-                }
-                else if (recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == true)
-                {
-                    recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] = false;
-                }
-            }
-        }
-        
-        //=========================================================================
-        
-        columnNumber++;
-        
-        
-        //for autocycle trigger Mode
-        if (triggerMode == 6)
-        {
-            
-            if (columnNumber == sequenceLength && playingLastLoop == true)
-            {
-                sequenceFlaggedToStop = true;
-                broadcaster.sendActionMessage("STOP SEQ"); //ends the 'last' loop
-            }
-            
-            else if (columnNumber == sequenceLength) //if goes beyond the last column of the sequence
-            {
-                sequenceNumber++;
-                columnNumber = 0; //reset columnNumber here otherwise thread loop will exit and seq will stop
-                
-                if (sequenceNumber == numberOfSequences) //if goes beyond the last sequence
-                {
-                    if (shouldLoop == true)
-                        sequenceNumber = 0; //if reached end of seqs and is set to loop, go back to the beginning
-                    
-                    //else, sequencer number will greater than the number of sequences, so the while loop will not run next time
-                }
-                
-                //update gui (if this pad's gui is currently being displayed)
-                if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1
-                    && sequenceNumber < numberOfSequences)
-                {
-                    if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
-                        broadcaster.sendActionMessage("SEQ DISPLAY");
-                }
-            }
-            
-        }
-        
-        
-        //if the counter variable reaches the end, and the current play state is set to loop or triggerMode
-        //is 'cycle' and it is not currently playing the 'last loop',
-        //restart the counter so that the sequence loops
-        //otherwise the while loop will exit and the thread will stop on it's own
-        if ((columnNumber == sequenceLength && shouldLoop == true) || 
-            (columnNumber == sequenceLength && triggerMode == 5 && playingLastLoop == false))
-            columnNumber = 0;
-        
-        
-        //===============update sequencer grid GUI here!====================
-        //if the this instance of SequencePlayer is the one belonging to the pad 
-        //that is currently selected (and hence currently displayed)
-        if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
-        {
-            if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
-                broadcaster.sendActionMessage("PLAYHEAD");
-        }
-        
-        
-        
         if (columnNumber >= sequenceLength || sequenceNumber >= numberOfSequences)
         {
             //The following paramaters cause the sequence to end:
@@ -746,6 +604,150 @@ void SequencePlayer::processSequence()
             
             sequenceFlaggedToStop = true;
             broadcaster.sendActionMessage("STOP SEQ");
+        }
+        else
+        {
+            //play next sequence point....
+            
+            //std::cout << "Exact time: " << Time::getMillisecondCounterHiRes() << " Current time: " << currentTime << " time Interval: " << timeInterval << std::endl; 
+            currentTime = currentTime + timeInterval;
+            
+            if (mode == 1) //midi mode selected
+            {
+                sharedMemoryMidi.enter();
+                
+                //cycle through each row to look for any note messages
+                for (int rowNumber = 0; rowNumber <= NO_OF_ROWS-1; rowNumber++)
+                {
+                    //look for note-off messages before note-on messages,
+                    //as otherwise if you set the note length to be max length,
+                    //the note will be turned off straight away due to how note length
+                    //is implemented below
+                    
+                    //check for any midi notes that need to be turned off
+                    //need to check ALL sequences, not just current one
+                    for (int seq = 0; seq <= numberOfSequences-1; seq++)
+                    {
+                        if (midiNoteOffTime[seq][rowNumber][columnNumber] == 1)
+                        {
+                            triggerMidiNoteOffMessage(rowNumber);
+                            
+                            //set a flag that this particular note in the array will be now off
+                            midiNoteOffTime[seq][rowNumber][columnNumber] = 0;
+                            midiNoteOnCounter--;
+                        }
+                    }
+                    
+                    //then check for any midi note-on messages
+                    if (sequenceData[sequenceNumber][rowNumber][columnNumber] >= 1 && 
+                        recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == false) //if 'on' and not a 'recently recorded' notes
+                    {
+                        int velocity = sequenceData[sequenceNumber][rowNumber][columnNumber];
+                        //trigger note-on message
+                        triggerMidiMessage(rowNumber, velocity);
+                        
+                        //set a flag that this particular note in the array will be on and
+                        //will need to be 'turned off' at after a certain amount of time
+                        //set the 'columnNumber' step number that the note will need to be turned off
+                        int noteOffStep = columnNumber+midiNoteLength;
+                        
+                        //if the step number is greater than the number of columns,
+                        //set it to 'overlap' into the next columnNumber cycle
+                        if (noteOffStep >= sequenceLength)
+                        {
+                            noteOffStep = noteOffStep - sequenceLength;
+                        }
+                        midiNoteOffTime[sequenceNumber][rowNumber][noteOffStep] = 1;
+                        midiNoteOnCounter++;
+                        
+                    }
+                    else if (recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == true)
+                    {
+                        recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] = false;
+                    }
+                }
+                
+                sharedMemoryMidi.exit();
+            }
+            
+            //=========================================================================
+            //=Samples stuff - everything else is for the midi mode!===================
+            //=========================================================================
+            else //samples mode selected
+            {
+                //cycle through each row to look for any note on messages
+                for (int rowNumber = 0; rowNumber <= NO_OF_ROWS-1; rowNumber++)
+                {
+                    if (sequenceData[sequenceNumber][rowNumber][columnNumber] >= 1 &&
+                        recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == false) //if 'on' and not a recently recorded note
+                    {
+                        int velocity = sequenceData[sequenceNumber][rowNumber][columnNumber];
+                        triggerAudioMessage(rowNumber, velocity);
+                    }
+                    else if (recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] == true)
+                    {
+                        recentlyAddedSequenceData[sequenceNumber][rowNumber][columnNumber] = false;
+                    }
+                }
+            }
+            
+            //=========================================================================
+            
+            columnNumber++;
+            
+            
+            //for autocycle trigger Mode
+            if (triggerMode == 6)
+            {
+                
+                if (columnNumber == sequenceLength && playingLastLoop == true)
+                {
+                    sequenceFlaggedToStop = true;
+                    broadcaster.sendActionMessage("STOP SEQ"); //ends the 'last' loop
+                }
+                
+                else if (columnNumber == sequenceLength) //if goes beyond the last column of the sequence
+                {
+                    sequenceNumber++;
+                    columnNumber = 0; //reset columnNumber here otherwise thread loop will exit and seq will stop
+                    
+                    if (sequenceNumber == numberOfSequences) //if goes beyond the last sequence
+                    {
+                        if (shouldLoop == true)
+                            sequenceNumber = 0; //if reached end of seqs and is set to loop, go back to the beginning
+                        
+                        //else, sequencer number will greater than the number of sequences, so the while loop will not run next time
+                    }
+                    
+                    //update gui (if this pad's gui is currently being displayed)
+                    if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1
+                        && sequenceNumber < numberOfSequences)
+                    {
+                        if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
+                            broadcaster.sendActionMessage("SEQ DISPLAY");
+                    }
+                }
+                
+            }
+            
+            
+            //if the counter variable reaches the end, and the current play state is set to loop or triggerMode
+            //is 'cycle' and it is not currently playing the 'last loop',
+            //restart the counter so that the sequence loops
+            //otherwise the while loop will exit and the thread will stop on it's own
+            if ((columnNumber == sequenceLength && shouldLoop == true) || 
+                (columnNumber == sequenceLength && triggerMode == 5 && playingLastLoop == false))
+                columnNumber = 0;
+            
+            
+            //===============update sequencer grid GUI here!====================
+            //if the this instance of SequencePlayer is the one belonging to the pad 
+            //that is currently selected (and hence currently displayed)
+            if (AppSettings::Instance()->getCurrentlySelectedPad().size() == 1)
+            {
+                if (AppSettings::Instance()->getCurrentlySelectedPad()[0] == padNumber)
+                    broadcaster.sendActionMessage("PLAYHEAD");
+            }
         }
     }
     

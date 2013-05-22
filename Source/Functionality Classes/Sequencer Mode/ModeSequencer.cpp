@@ -30,7 +30,8 @@
 
 
 ModeSequencer::ModeSequencer(AlphaLiveEngine &ref)
-                             : alphaLiveEngineRef(ref)
+                             :  Thread("sequencerThread"), 
+                                alphaLiveEngineRef(ref)
 {
     //init the sequenceplayer array to be empty
     //needs to be initialised as you cannot dynamcically add an object, say at index 30, if the indexes before it don't exist
@@ -68,7 +69,7 @@ void ModeSequencer::getInputData(int padNumber, int padValue)
     //process the sequence
     //should i put this in an if statement to make sure the this index of padSequencer actually exists?
     //it should always do, but might be safe to play safe.
-    padSequencer[padNumber]->processSequence(padValue);
+    padSequencer[padNumber]->processInputData(padValue);
     
     //if the incoming message is a 'press'
     if (prevPadValue[padNumber] == 0)
@@ -85,6 +86,49 @@ void ModeSequencer::getInputData(int padNumber, int padValue)
     prevPadValue[padNumber] = padValue;
 }
 
+void ModeSequencer::editRunningSequencersArray (int action, int padNumber)
+{
+    if (action == 1)
+    {
+        //if this is the first object added to the array, start the thread
+        if (runningSequencers.size() == 0)
+            startThread(7);
+            
+        //add padSequencer object to array
+        runningSequencers.addIfNotAlreadyThere(padSequencer[padNumber]);
+    }
+    else if (action == 0)
+    {
+        //remove padSequencer object from array
+        runningSequencers.removeFirstMatchingValue(padSequencer[padNumber]);
+        
+        if (runningSequencers.size() == 0)
+        {
+            int setGlobalTimeInterval;
+            stopThread(100);
+        }
+        
+        
+    }
+}
+
+void ModeSequencer::run()
+{
+    //std::cout << "Global Sequencer Thread Starting!" << std::endl;
+    
+    while( ! threadShouldExit())
+    {
+        for (int i = 0; i < runningSequencers.size(); i++)
+        {
+            runningSequencers[i]->processSequence();
+        }
+        
+        wait(1); 
+    }
+    
+    //std::cout << "Global Sequencer Thread Stopped!" << std::endl;
+}
+
 
 void ModeSequencer::createSequencePlayer (int padNumber)
 {
@@ -96,6 +140,9 @@ void ModeSequencer::createSequencePlayer (int padNumber)
 
 void ModeSequencer::deleteSequencePlayer (int padNumber)
 {
+    //this needs to be removed from here
+    editRunningSequencersArray(0, padNumber);
+    
     audioMixer.removeInputSource(padSequencer[padNumber]); //remove as input source
     padSequencer.remove(padNumber); //remove object from array
     padSequencer.insert(padNumber, NULL); //insert a NULL object
@@ -118,13 +165,13 @@ void ModeSequencer::killPad (int padNum)
     if (padSequencer[padNum] != NULL) //if it exists..
     {
         //should there be a check here to see if the pad is currently playing?
-        padSequencer[padNum]->stopThreadAndReset();
+        padSequencer[padNum]->stopSequenceAndReset();
     }
 }
 
 void ModeSequencer::stopPrevExclusivePad (int padNum)
 {
-    padSequencer[padNum]->stopThread(padSequencer[padNum]->getTimeInterval());
+    padSequencer[padNum]->stopSequence();
 }
 
 void ModeSequencer::setPreviewSequenceNumber (int padNum, int sequenceNumber)
@@ -140,9 +187,9 @@ void ModeSequencer::previewSequence (int padNum, int status)
     //objects for each pad?
     //or not...?
     if (status == 1)
-        padSequencer[padNum]->processSequence(1);
+        padSequencer[padNum]->processInputData(1);
     else
-        padSequencer[padNum]->stopThreadAndReset();
+        padSequencer[padNum]->stopSequenceAndReset();
     
     lastPreviewedSequencePadNum = padNum;
     
@@ -151,9 +198,9 @@ void ModeSequencer::previewSequence (int padNum, int status)
 void ModeSequencer::stopLastPreviewedSequence()
 {
     if (padSequencer[lastPreviewedSequencePadNum] != nullptr &&
-        padSequencer[lastPreviewedSequencePadNum]->isThreadRunning() == true)
+        padSequencer[lastPreviewedSequencePadNum]->isCurrentlyPlaying() == true)
     {
-        padSequencer[lastPreviewedSequencePadNum]->stopThreadAndReset();
+        padSequencer[lastPreviewedSequencePadNum]->stopSequenceAndReset();
         lastPreviewedSequencePadNum = 100; //no sequence default value
     }
 }

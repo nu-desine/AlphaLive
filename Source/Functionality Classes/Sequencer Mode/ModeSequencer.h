@@ -29,13 +29,18 @@
 class AlphaLiveEngine;
 
 class ModeSequencer :   public AudioSource,
-                        public Subject //so this class can notify observers
+                        public Subject, //so this class can notify observers
+                        public Thread
 {
 public:
     ModeSequencer (AlphaLiveEngine &ref);
     ~ModeSequencer();
     
     void getInputData(int padNumber, int padValue);
+    
+    //Thread callback function
+    void run();
+    void editRunningSequencersArray (int action, int padNumber); //Action: 1 - add object, 0 - delete object
     
     void createSequencePlayer (int padNumber);
     void deleteSequencePlayer (int padNumber);
@@ -82,6 +87,7 @@ public:
 private:
     
     OwnedArray<SequencePlayer> padSequencer;
+    Array <SequencePlayer*> runningSequencers;
     
     //audio related
 	MixerAudioSource audioMixer;

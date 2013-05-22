@@ -46,15 +46,14 @@
 
 class ModeSequencer;
 
-class SequencePlayer :  public Thread,
-                        public AudioSource,
+class SequencePlayer :  public AudioSource,
                         public ActionListener
 {
 public:
     SequencePlayer(int padNumber_, ModeSequencer &ref, TimeSliceThread *audioTransportSourceThread_);
     ~SequencePlayer();
     
-    void processSequence(int padValue);
+    void processInputData(int padValue);
     void actionListenerCallback (const String& message);
     
     //Midi stuff
@@ -68,10 +67,11 @@ public:
 	void releaseResources();
 	void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill);
     
-    //Thread callback function
-    void run();
-    
-    void stopThreadAndReset();
+    //Processing sequence stuff
+    void startSequence();
+    void processSequence();
+    void stopSequence();
+    void stopSequenceAndReset();
     
     int getCurrentPlayingState();
     bool isCurrentlyPlaying();
@@ -149,7 +149,7 @@ private:
 	
 	//audio related
 	SequenceAudioFilePlayer *sequenceAudioFilePlayer[NO_OF_ROWS];
-    CriticalSection sharedMemory;
+    CriticalSection sharedMemory, sharedMemoryMidi;
     TimeSliceThread *audioTransportSourceThread;
     GainAndPan *gainAndPan;
     LowpassFilter *lowPassFilter;
@@ -176,7 +176,6 @@ private:
     //settings stuff
     double tempo;
     int relativeTempoMode;
-    double timeInterval;
     int sequenceData[NO_OF_SEQS][NO_OF_ROWS][NO_OF_COLUMNS];
     int mode;
     int numberOfSequences;
@@ -201,6 +200,9 @@ private:
     bool playingLastLoop;
     
     bool recentlyAddedSequenceData[NO_OF_SEQS][NO_OF_ROWS][NO_OF_COLUMNS]; //[sequence][row][column]
+    
+    double timeInterval;
+    bool sequenceIsRunning, sequenceFlaggedToStop;
 };
 
 

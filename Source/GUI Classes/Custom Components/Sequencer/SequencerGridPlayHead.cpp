@@ -25,7 +25,7 @@
 
 SequencerGridPlayHead::SequencerGridPlayHead()
 {
-    linePosition = 0;
+    setLinePostion(0);
     
 }
 
@@ -41,20 +41,34 @@ void SequencerGridPlayHead::resized()
 
 void SequencerGridPlayHead::paint (Graphics &g)
 {
-    playheadPath.clear();
     g.setColour(Colours::grey.withAlpha(0.3f));
-	
-	float theAngle = ((2 * M_PI) / (SEQ_HORIZONTAL_STEPS-1)) * linePosition;
-	float theAngleEnd = ((2 * M_PI) / (SEQ_HORIZONTAL_STEPS-1)) * (linePosition-1);
-	
-	
-	playheadPath.addPieSegment(0, 0, getWidth(), getHeight(), theAngleEnd, theAngle, 0.3f);
-	
 	g.fillPath(playheadPath, getTransform());
 }
 
 void SequencerGridPlayHead::setLinePostion (float position)
 {
+    //we deal with two Paths here:
+    // - playheadPath - the path of the actual playhead that is display
+    // - paintPath - the path of the area that needs to be repainted when
+    // updating the display of the playhead
+    
+    playheadPath.clear();
+    Path paintPath;
+	
+    //add the previous playhead position to paintPath
+	float theAngle = ((2 * M_PI) / (SEQ_HORIZONTAL_STEPS-1)) * linePosition;
+	float theAngleEnd = ((2 * M_PI) / (SEQ_HORIZONTAL_STEPS-1)) * (linePosition-1);
+	paintPath.addPieSegment(0, 0, getWidth(), getHeight(), theAngleEnd, theAngle, 0.3f);
+    
+    //set the new linePosition
     linePosition = position;
-    repaint();
+    
+    //add the new playhead position the both the playheadPath and paintPath
+    theAngle = ((2 * M_PI) / (SEQ_HORIZONTAL_STEPS-1)) * linePosition;
+	theAngleEnd = ((2 * M_PI) / (SEQ_HORIZONTAL_STEPS-1)) * (linePosition-1);
+	playheadPath.addPieSegment(0, 0, getWidth(), getHeight(), theAngleEnd, theAngle, 0.3f);
+    paintPath.addPieSegment(0, 0, getWidth(), getHeight(), theAngleEnd, theAngle, 0.3f);
+    
+    //repaint using the paintPath bounds
+    repaint(paintPath.getBounds().getSmallestIntegerContainer());
 }

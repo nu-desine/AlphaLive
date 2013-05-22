@@ -316,12 +316,14 @@ TriggerModeData TriggerModes::cycle (int padValue)
         pressCount = 1;
         rePressCount = 1;
         maxPressCount = 1;
+        triggerModeData.moveToNextSeq = false;
     }
     else if(currentPlayingStatus == 1 && padValue == 0 && pressCount == 1 && maxPressCount == 1) 
     {
         releaseCount = 1;
         rePressCount = 0;
         triggerModeData.playingStatus = 2;
+        triggerModeData.moveToNextSeq = false;
     }
     else if (currentPlayingStatus == 1 && padValue > 0 && rePressCount == 0 && releaseCount == 1) 
     {
@@ -333,6 +335,7 @@ TriggerModeData TriggerModes::cycle (int padValue)
     {
         maxPressCount = 0;
         triggerModeData.playingStatus = 2;
+        triggerModeData.moveToNextSeq = false;
     }
     else if(currentPlayingStatus == 1 && padValue == 0 && maxPressCount == 0) 
     {
@@ -341,6 +344,7 @@ TriggerModeData TriggerModes::cycle (int padValue)
         pressCount = 0;
         releaseCount = 0;
         rePressCount = 0;
+        triggerModeData.moveToNextSeq = false;
     }
     else
     {

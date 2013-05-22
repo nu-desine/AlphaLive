@@ -47,10 +47,10 @@ void SequencerGridPlayHead::paint (Graphics &g)
 
 void SequencerGridPlayHead::setLinePostion (float position)
 {
-    //we deal with two Paths here:
-    // - playheadPath - the path of the actual playhead that is display
+    // We deal with two Paths here:
+    // - playheadPath - the path of the actual playhead that is displayed
     // - paintPath - the path of the area that needs to be repainted when
-    // updating the display of the playhead
+    //   updating the display of the playhead
     
     playheadPath.clear();
     Path paintPath;

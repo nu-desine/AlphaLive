@@ -48,13 +48,14 @@ public:
     //Thread callback function
     void run();
     
+    void startClock();
+    void stopClock();
+    void processClock();
+    
     //AudioSource Functions
 	void prepareToPlay (int samplesPerBlockExpected,double sampleRate);
 	void releaseResources();
 	void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill);
-    
-    void startClock();
-    void stopClock();
     
     void setTempo (float value);
     void setBeatsPerBar (int value);

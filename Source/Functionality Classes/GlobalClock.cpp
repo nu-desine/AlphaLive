@@ -114,131 +114,6 @@ GlobalClock::~GlobalClock()
     stopThread(timeInterval);
 }
 
-
-void GlobalClock::run()
-{
-    microbeatNumber = beatNumber = barNumber = 1;
-    //tell GuiGlobalClock to update its display
-    broadcaster.sendActionMessage("UPDATE CLOCK DISPLAY");
-    
-    //set the time that the thread loop will intially sleep for
-    currentTime = Time::getMillisecondCounter() + int(timeInterval);
-    //get the decimal value of timeInterval
-    float timeIntervalDecimalOffset = timeInterval - int(timeInterval);
-    //set the currently stored offset value (this will change each time the loop is iterated)
-    float currentOffset = timeIntervalDecimalOffset;
-    
-     //====================thread loop starts here!====================================
-     while( ! threadShouldExit())
-     {
-         //=====get current microbeat, beat, and bar numbers============
-         if (microbeatNumber == 5) //1 beat
-         {
-             microbeatNumber = 1;
-             beatNumber++;
-             //tell GuiGlobalClock to update its beat Number display. 
-             //Bar number updates according to beat number within GuiGlobalClock
-             broadcaster.sendActionMessage("UPDATE CLOCK DISPLAY");
-
-         }
-         if (beatNumber >= beatsPerBar+1) //1 bar
-         {
-             beatNumber = 1;
-             barNumber++;
-         }
-         if (barNumber == 5) 
-         {
-             barNumber = 1;
-         }
-         	
-         //=====send clock info to alphaLiveEngine and beyond based on quantization value=========
-         switch (quantizationValue) 
-         {
-             case 1: //4 bars
-                 if (barNumber == 1 && beatNumber == 1 && microbeatNumber == 1)
-                 {
-                     alphaLiveEngineRef.triggerQuantizationPoint();
-                 }
-                 break;
-             case 2: //2 bars
-                 if ((barNumber == 1 || barNumber == 3) && beatNumber == 1 && microbeatNumber == 1)
-                 {
-                     alphaLiveEngineRef.triggerQuantizationPoint();
-                 }
-                 break;
-             case 3: //1 bar (default)
-                 if (beatNumber == 1 && microbeatNumber == 1)
-                 {
-                     alphaLiveEngineRef.triggerQuantizationPoint();
-                 }
-                 break;
-             case 5: //1 beat
-                 if (microbeatNumber == 1)
-                 {
-                     alphaLiveEngineRef.triggerQuantizationPoint();
-                 }
-                 break;
-             case 6: //half beat
-                 if (microbeatNumber == 1 || microbeatNumber == 3)
-                 {
-                     alphaLiveEngineRef.triggerQuantizationPoint();
-                 }
-                 break;
-             case 7: //quarter beat
-                 //trigger everytime
-                 alphaLiveEngineRef.triggerQuantizationPoint();
-                 break;
-             default: //1 bar
-                 if (beatNumber == 1)
-                 {
-                     alphaLiveEngineRef.triggerQuantizationPoint();
-                 }
-                 break;
-         }
-         
-         //trigger metronome
-         if (metronomeStatus == true)
-         {
-             if (beatNumber == 1 && microbeatNumber == 1) //the start of a bar
-             {
-                 tickFileSource.setPosition (0.0);
-                 tickFileSource.start();
-             }
-             else if (microbeatNumber == 1) //the start of a beat
-             {
-                 tockFileSource.setPosition (0.0);
-                 tockFileSource.start();
-             }
-         }
-         
-         //==================================================================
-         
-        //increment microbeat
-        microbeatNumber++;
-                     
-         //==================================================================
-         //== SLEEP LOOP HERE!!! ============================================
-         //==================================================================
-         //sleep for int(timeInterval)
-         Time::waitForMillisecondCounter(currentTime);
-         
-         //SHOULD THE BELOW SECTION OF CODE UP UNTIL currentTime = ... BE ABOVE THE ABOVE SLEEP CALL SO THAT THE REINITIALISATION OF
-         //CURRENTTIME IS SET WITH A SMALLER POSSIBLE DELAY?
-         //add the decimal offset of the time interval to the currently stored offset
-         currentOffset = currentOffset + timeIntervalDecimalOffset;
-         //get the offset that needs to be added. This will only make a difference if over than 1, otherwise it will equal 0.
-         int currentOffsetToAdd = int(currentOffset);
-         //change the value of currentTime so the next interation of the loop sleeps for the correct time,
-         //possibly adding a value of 1 (currentlyOffsetToAdd) to make up for decimal values being ignored
-         currentTime = currentTime + int(timeInterval) + currentOffsetToAdd;
-         //if currentOffsetToAdd >= 1, remove from currentOffset as the value of 1 would have been added to currentTime
-         if (currentOffsetToAdd >= 1)
-             currentOffset = currentOffset-currentOffsetToAdd;
-     
-     }
-    
-}
-
 void GlobalClock::actionListenerCallback (const String& message)
 {
     if (message == "UPDATE CLOCK DISPLAY")
@@ -262,9 +137,122 @@ void GlobalClock::startClock()
     //be updated, but using alt-click would work fine! why?
     broadcaster.sendActionMessage("UPDATE TRANSPORT BUTTON");
     
+    microbeatNumber = beatNumber = barNumber = 1;
+    //tell GuiGlobalClock to update its display
+    broadcaster.sendActionMessage("UPDATE CLOCK DISPLAY");
+    
+    currentTime = Time::getMillisecondCounterHiRes();
+    
     //start the thread
     startThread(6);
     
+}
+
+void GlobalClock::run()
+{
+    while ( ! threadShouldExit())
+    {
+        //process the internal clock display and quantisation points
+        processClock();
+        
+        //Do MIDI clock send stuff here...
+        
+        wait(1); 
+    }
+}
+
+void GlobalClock::processClock()
+{
+    
+    if (Time::getMillisecondCounterHiRes() >= currentTime)
+    {
+        currentTime = currentTime + timeInterval;
+        
+        //=====get current microbeat, beat, and bar numbers============
+        if (microbeatNumber == 5) //1 beat
+        {
+            microbeatNumber = 1;
+            beatNumber++;
+            //tell GuiGlobalClock to update its beat Number display. 
+            //Bar number updates according to beat number within GuiGlobalClock
+            broadcaster.sendActionMessage("UPDATE CLOCK DISPLAY");
+            
+        }
+        if (beatNumber >= beatsPerBar+1) //1 bar
+        {
+            beatNumber = 1;
+            barNumber++;
+        }
+        if (barNumber == 5) 
+        {
+            barNumber = 1;
+        }
+        
+        //=====send clock info to alphaLiveEngine and beyond based on quantization value=========
+        switch (quantizationValue) 
+        {
+            case 1: //4 bars
+                if (barNumber == 1 && beatNumber == 1 && microbeatNumber == 1)
+                {
+                    alphaLiveEngineRef.triggerQuantizationPoint();
+                }
+                break;
+            case 2: //2 bars
+                if ((barNumber == 1 || barNumber == 3) && beatNumber == 1 && microbeatNumber == 1)
+                {
+                    alphaLiveEngineRef.triggerQuantizationPoint();
+                }
+                break;
+            case 3: //1 bar (default)
+                if (beatNumber == 1 && microbeatNumber == 1)
+                {
+                    alphaLiveEngineRef.triggerQuantizationPoint();
+                }
+                break;
+            case 5: //1 beat
+                if (microbeatNumber == 1)
+                {
+                    alphaLiveEngineRef.triggerQuantizationPoint();
+                }
+                break;
+            case 6: //half beat
+                if (microbeatNumber == 1 || microbeatNumber == 3)
+                {
+                    alphaLiveEngineRef.triggerQuantizationPoint();
+                }
+                break;
+            case 7: //quarter beat
+                //trigger everytime
+                alphaLiveEngineRef.triggerQuantizationPoint();
+                break;
+            default: //1 bar
+                if (beatNumber == 1)
+                {
+                    alphaLiveEngineRef.triggerQuantizationPoint();
+                }
+                break;
+        }
+        
+        //trigger metronome
+        if (metronomeStatus == true)
+        {
+            if (beatNumber == 1 && microbeatNumber == 1) //the start of a bar
+            {
+                tickFileSource.setPosition (0.0);
+                tickFileSource.start();
+            }
+            else if (microbeatNumber == 1) //the start of a beat
+            {
+                tockFileSource.setPosition (0.0);
+                tockFileSource.start();
+            }
+        }
+        
+        //==================================================================
+        
+        //increment microbeat
+        microbeatNumber++;
+    }
     
 }
 
@@ -280,7 +268,7 @@ void GlobalClock::stopClock()
         }
     }
     
-    stopThread(200);
+    stopThread(100);
     
 }
 

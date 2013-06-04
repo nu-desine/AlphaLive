@@ -702,15 +702,15 @@ void AlphaLiveEngine::sendMidiMessage(MidiMessage midiMessage)
             if (hasDisplayedNoMidiDeviceWarning == false)
             {
                 #if JUCE_MAC || JUCE_LINUX
-                String instructionString = translate("if you would like to use AlphaLive's virtual MIDI port, quit and relaunch AlphaLive.");
+                String instructionString = translate("AlphaLive cannot currently send any MIDI messages as the AlphaSphere has been disconnected. To start sending MIDI messages again please reconnect the AlphaSphere, or if you would like to use AlphaLive's virtual MIDI port, quit and relaunch AlphaLive without the AlphaSphere connected.");
                 #endif
                 #if JUCE_WINDOWS
-                String instructionString = translate("if you would like to select an external MIDI output device to use, quit and relaunch AlphaLive.");
+                String instructionString = translate("AlphaLive cannot currently send any MIDI messages as the AlphaSphere has been disconnected or no MIDI output port has be selected. To start sending MIDI messages please reconnect the AlphaSphere, or select an external MIDI output device from the Preferences view (if the option to select a MIDI output port is not available here, quit and relaunch AlphaLive without the AlphaSphere connected).");
                 #endif
 
                 AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
                                                   translate("No MIDI device available!"),
-                                                  translate("AlphaLive cannot currently send any MIDI messages as the AlphaSphere has been disconnected. To start sending MIDI messages again please reconnect the AlphaSphere, or " + translate(instructionString)));
+                                                  translate(instructionString));
                 
                 hasDisplayedNoMidiDeviceWarning = true;
             }

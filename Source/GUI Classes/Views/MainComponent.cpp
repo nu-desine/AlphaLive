@@ -1270,6 +1270,24 @@ void MainComponent::setLocalisation()
         
         currentLanguage = "Chinese";
     }
+    else if (countryCode == "ko" || countryCode == "kor") //Korean
+    {
+        File transFile (appDir + "Application Data" + File::separatorString + "trans_ko");
+        trans = new LocalisedStrings (transFile);
+        LocalisedStrings::setCurrentMappings(trans);
+        
+        String fontToUse = "AppleMyungjo"; // available on OSX 10.5 and above
+        
+        if (availableFonts.contains(fontToUse) == false)
+        {
+            fontToUse = "Batang"; // available on Windows.. XP and above?
+        }
+        
+		alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(fontToUse);
+        infoBoxTextSize = 13.5;
+        
+        currentLanguage = "Korean";
+    }
     else //english
     {
         LocalisedStrings::setCurrentMappings(0);

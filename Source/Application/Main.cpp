@@ -254,7 +254,8 @@ public:
             CommandIDs::Open,
             CommandIDs::Save,
             CommandIDs::SaveAs,
-            CommandIDs::CleanUpProject
+            CommandIDs::CleanUpProject,
+            StandardApplicationCommandIDs::quit
         };
         
         commands.addArray (ids, numElementsInArray (ids));
@@ -304,6 +305,14 @@ public:
                             "Removes any unused audio files from the projects 'Audio Files' directory.",
                             CommandCategories::FileCommands, 0);
         }
+        else if (commandID == StandardApplicationCommandIDs::quit)
+        {
+            result.setInfo (translate("Quit"),
+                            "Quits the application",
+                            CommandCategories::OtherCommands, 0);
+            
+            result.defaultKeypresses.add (KeyPress ('q', cmd, 0));
+        }
     }
     
     bool perform (const InvocationInfo& info)
@@ -330,6 +339,11 @@ public:
         else if(info.commandID == CommandIDs::CleanUpProject)
         {
             appDocumentState->cleanUpProject (false);
+        }
+        if (info.commandID == StandardApplicationCommandIDs::quit)
+        {
+            systemRequestedQuit();
+            return true;
         }
 
         return true;

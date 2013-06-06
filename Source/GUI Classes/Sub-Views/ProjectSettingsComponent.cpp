@@ -285,6 +285,7 @@ GeneralProjSettingsComponent::GeneralProjSettingsComponent(MainComponent &ref, A
     midiClockMenu->addItem(translate("Send MIDI Clock"), 2);
     midiClockMenu->addItem(translate("Sync to External MIDI Clock"), 3);
     midiClockMenu->addListener(this);
+    midiClockMenu->addMouseListener(this, true);
     midiClockMenu->setSelectedId(AppSettings::Instance()->getMidiClockValue());
     
     addAndMakeVisible(midiClockLabel = new Label());
@@ -295,6 +296,7 @@ GeneralProjSettingsComponent::GeneralProjSettingsComponent(MainComponent &ref, A
     clockStartMessageMenu->addItem(translate("Send MIDI Clock Start Message"), 1);
     clockStartMessageMenu->addItem(translate("Send MIDI Clock Continue Message"), 2);
     clockStartMessageMenu->addListener(this);
+    clockStartMessageMenu->addMouseListener(this, true);
     clockStartMessageMenu->setSelectedId(AppSettings::Instance()->getMidiClockStartMessage());
     
     addAndMakeVisible(clockStartMessageLabel = new Label());

@@ -673,7 +673,17 @@ void AlphaLiveEngine::handleIncomingMidiMessage(MidiInput* midiInput, const Midi
 {
     if (midiInput == midiInputDevice)
     {
-        
+        if (AppSettings::Instance()->getMidiClockValue() == 3) // I think I should check a local variable here instead to reduce CPU usage
+        {
+            if (midiMessage.isMidiStart() || midiMessage.isMidiContinue())
+            {
+                globalClock->startClock();
+            }
+            else if (midiMessage.isMidiStop())
+            {
+                globalClock->stopClock();
+            }
+        }
     }
 }
 

@@ -126,6 +126,11 @@ void GlobalClock::actionListenerCallback (const String& message)
     {
         mainComponent->getGuiGlobalClock()->updateTransportButtonDisplay(true);
     }
+    
+    else if (message == "UPDATE TRANSPORT BUTTON TO OFF")
+    {
+        mainComponent->getGuiGlobalClock()->updateTransportButtonDisplay(false);
+    }
 }
 
 
@@ -303,6 +308,8 @@ void GlobalClock::stopClock()
         
         midiClockIsRunning = false;
     }
+    
+    broadcaster.sendActionMessage("UPDATE TRANSPORT BUTTON TO OFF");
     
 }
 

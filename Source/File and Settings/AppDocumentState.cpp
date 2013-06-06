@@ -741,6 +741,8 @@ void AppDocumentState::saveProjectSettings()
         projectData->removeAllAttributes();
     
     projectData->setAttribute("copyExternalFiles", AppSettings::Instance()->getCopyExternalFiles());
+    projectData->setAttribute("midiClockValue", AppSettings::Instance()->getMidiClockValue());
+    projectData->setAttribute("midiClockStartMessage", AppSettings::Instance()->getMidiClockStartMessage());
     
 }
 
@@ -748,8 +750,13 @@ void AppDocumentState::loadProjectSettings()
 {
     if (projectData->hasAttribute("copyExternalFiles") == true)
         AppSettings::Instance()->setCopyExternalFiles(projectData->getIntAttribute("copyExternalFiles"));
-    else
+    else //why do I have this else statement?
         AppSettings::Instance()->setCopyExternalFiles(true); //default value
+    
+    if (projectData->hasAttribute("midiClockValue") == true)
+        AppSettings::Instance()->setMidiClockValue(projectData->getIntAttribute("midiClockValue"));
+    if (projectData->hasAttribute("midiClockStartMessage") == true)
+        AppSettings::Instance()->setMidiClockStartMessage(projectData->getIntAttribute("midiClockStartMessage"));
     
 }
 

@@ -136,7 +136,8 @@ class MainComponent;
 
 class GeneralProjSettingsComponent :    public Component,
                                         public Button::Listener,
-                                        public Slider::Listener
+                                        public Slider::Listener,
+                                        public ComboBox::Listener
 {
 public:
     GeneralProjSettingsComponent(MainComponent &ref, AppDocumentState &ref2);
@@ -147,6 +148,7 @@ public:
     
     void sliderValueChanged (Slider* slider);
     void buttonClicked (Button* button);
+    void comboBoxChanged (ComboBox *comboBox);
     
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);
@@ -160,6 +162,9 @@ private:
     
     TextButton *copyExternalFilesSwitch;
     Label *copyExternalFilesLabel;
+    
+    ComboBox *midiClockMenu, *clockStartMessageMenu;
+    Label *midiClockLabel, *clockStartMessageLabel;
     
 };
 

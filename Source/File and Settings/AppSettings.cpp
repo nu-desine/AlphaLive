@@ -53,6 +53,8 @@ AppSettings::AppSettings()
     metronomeStatus = false;
     
     copyExternalFiles = true;
+    midiClockValue = 1;
+    midiClockStartMessage = 1;
     
     //elite controls stuff
     eliteDial[0].control = 1;
@@ -132,7 +134,10 @@ void AppSettings::resetData()
     setQuantizationValue(3);
     setBeatsPerBar(4);
     setAutoStartClock(0);
+    
     setCopyExternalFiles(true);
+    setMidiClockValue(1);
+    setMidiClockStartMessage(1);
     
     //elite controls stuff
     eliteDial[0].control = 1;
@@ -266,6 +271,14 @@ void AppSettings::setCopyExternalFiles (bool value)
 {
     copyExternalFiles = value;
 }
+void AppSettings::setMidiClockValue (int value)
+{
+    midiClockValue = value;
+}
+void AppSettings::setMidiClockStartMessage (int value)
+{
+    midiClockStartMessage = value;
+}
 
 
 Array<int> AppSettings::getCurrentlySelectedPad()
@@ -315,6 +328,14 @@ bool AppSettings::getMetronomeStatus()
 bool AppSettings::getCopyExternalFiles()
 {
     return copyExternalFiles;
+}
+int AppSettings::getMidiClockValue()
+{
+    return midiClockValue;
+}
+int AppSettings::getMidiClockStartMessage()
+{
+    return midiClockStartMessage;
 }
 
 

@@ -280,6 +280,27 @@ GeneralProjSettingsComponent::GeneralProjSettingsComponent(MainComponent &ref, A
     copyExternalFilesLabel->setText(translate("Copy External Files:"), false);
     copyExternalFilesLabel->setColour(Label::textColourId, Colours::lightgrey);
     
+    addAndMakeVisible(midiClockMenu = new ComboBox());
+    midiClockMenu->addItem(translate("Off"), 1);
+    midiClockMenu->addItem(translate("Send MIDI Clock"), 2);
+    midiClockMenu->addItem(translate("Sync to External MIDI Clock"), 3);
+    midiClockMenu->addListener(this);
+    midiClockMenu->setSelectedId(AppSettings::Instance()->getMidiClockValue());
+    
+    addAndMakeVisible(midiClockLabel = new Label());
+    midiClockLabel->setText(translate("MIDI Clock:"), false);
+    midiClockLabel->setColour(Label::textColourId, Colours::lightgrey);
+    
+    addAndMakeVisible(clockStartMessageMenu = new ComboBox());
+    clockStartMessageMenu->addItem(translate("Send MIDI Clock Start Message"), 1);
+    clockStartMessageMenu->addItem(translate("Send MIDI Clock Continue Message"), 2);
+    clockStartMessageMenu->addListener(this);
+    clockStartMessageMenu->setSelectedId(AppSettings::Instance()->getMidiClockStartMessage());
+    
+    addAndMakeVisible(clockStartMessageLabel = new Label());
+    clockStartMessageLabel->setText(translate("On Clock Start:"), false);
+    clockStartMessageLabel->setColour(Label::textColourId, Colours::lightgrey);
+    
 }
 
 GeneralProjSettingsComponent::~GeneralProjSettingsComponent()
@@ -291,6 +312,12 @@ void GeneralProjSettingsComponent::resized()
 {
     copyExternalFilesLabel->setBounds(160, 10, 120, 20);
     copyExternalFilesSwitch->setBounds(290, 8, 40, 25);
+    
+    midiClockMenu->setBounds(200, 50, 210, 20);
+    midiClockLabel->setBounds(60, 50, 120, 20);
+    
+    clockStartMessageMenu->setBounds(200, 80, 210, 20);
+    clockStartMessageLabel->setBounds(60, 80, 120, 20);
     
 }
 
@@ -347,6 +374,30 @@ void GeneralProjSettingsComponent::buttonClicked (Button* button)
     
 }
 
+void GeneralProjSettingsComponent::comboBoxChanged (ComboBox *comboBox)
+{
+    if (comboBox == midiClockMenu)
+    {
+        AppSettings::Instance()->setMidiClockValue(comboBox->getSelectedId());
+        
+        if (comboBox->getSelectedId() == 2) //send MIDI Clock
+        {
+            clockStartMessageMenu->setVisible(true);
+            clockStartMessageLabel->setVisible(true);
+        }
+        else
+        {
+            clockStartMessageLabel->setVisible(false);
+            clockStartMessageMenu->setVisible(false);
+        }
+    }
+    
+    else if (comboBox == clockStartMessageMenu)
+    {
+        AppSettings::Instance()->setMidiClockStartMessage(comboBox->getSelectedId());
+    }
+}
+
 void GeneralProjSettingsComponent::updateDisplay()
 {
     copyExternalFilesSwitch->setToggleState(AppSettings::Instance()->getCopyExternalFiles(), false);
@@ -354,6 +405,9 @@ void GeneralProjSettingsComponent::updateDisplay()
         copyExternalFilesSwitch->setButtonText(translate("On"));
     else
         copyExternalFilesSwitch->setButtonText(translate("Off"));
+    
+    midiClockMenu->setSelectedId(AppSettings::Instance()->getMidiClockValue(), true);
+    clockStartMessageMenu->setSelectedId(AppSettings::Instance()->getMidiClockStartMessage(), true);
 }
 
 void GeneralProjSettingsComponent::mouseEnter (const MouseEvent &e)
@@ -361,6 +415,14 @@ void GeneralProjSettingsComponent::mouseEnter (const MouseEvent &e)
     if (copyExternalFilesSwitch->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Copy External Audio Files Options. By default when an external audio file is added to an AlphaLive project it is copied into the projects directory. Use this button to turn this option off. Be aware that with this set to off the project will not be able to link to any external audio files if moved onto another computer."));
+    }
+    else if (midiClockMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("MIDI Clock Mode Selector. Sets and displays the MIDI Clock functionality of the current AlphaLive project. AlphaLive can both send and receive MIDI Clock messages in order to synchronize this application with other MIDI applications and devices. Note that when set to sync with an external MIDI Clock, AlphaLive's global clock cannot be controlled directly via AlphaLive."));
+    }
+    else if (clockStartMessageMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Sets and displays what type of MIDI Clock message is sent when AlphaLive's clock is started. A Clock Start message will start the sequence of the external MIDI software/device from the beginning, whereas a Clock Continue message will continue the sequence from its current position."));
     }
 
 }

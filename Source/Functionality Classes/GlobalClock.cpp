@@ -33,11 +33,12 @@ GlobalClock::GlobalClock(AlphaLiveEngine &ref)
 
                             
 {
-    tempo = AppSettings::Instance()->getGlobalTempo();
-    timeInterval = (double(15000.0)/tempo);
+    setTempo (AppSettings::Instance()->getGlobalTempo()); //sets timeInterval and midiClockTimeInterval too
     beatsPerBar = AppSettings::Instance()->getBeatsPerBar();
     quantizationValue = AppSettings::Instance()->getQuantizationValue();
     metronomeStatus = AppSettings::Instance()->getMetronomeStatus();
+    
+    midiClockIsRunning = false;
     
     //=================metronome stuff======================
     
@@ -141,10 +142,27 @@ void GlobalClock::startClock()
     //tell GuiGlobalClock to update its display
     broadcaster.sendActionMessage("UPDATE CLOCK DISPLAY");
     
-    currentTime = Time::getMillisecondCounterHiRes();
+    currentTime = midiClockCurrentTime = Time::getMillisecondCounterHiRes();
     
     //start the thread
     startThread(6);
+    
+    //MIDI Clock stuff
+    if (AppSettings::Instance()->getMidiClockValue() == 2) //send MIDI Clock
+    {
+        if (AppSettings::Instance()->getMidiClockStartMessage() == 1) //'Start' message
+        {
+            MidiMessage message = MidiMessage::midiStart();
+            alphaLiveEngineRef.sendMidiMessage(message);
+        }
+        else if (AppSettings::Instance()->getMidiClockStartMessage() == 2) //'Continue' message
+        {
+            MidiMessage message = MidiMessage::midiContinue();
+            alphaLiveEngineRef.sendMidiMessage(message);
+        }
+        
+        midiClockIsRunning = true;
+    }
     
 }
 
@@ -155,7 +173,14 @@ void GlobalClock::run()
         //process the internal clock display and quantisation points
         processClock();
         
-        //Do MIDI clock send stuff here...
+        //MIDI Clock stuff
+        if (Time::getMillisecondCounterHiRes() >= midiClockCurrentTime)
+        {
+            midiClockCurrentTime += midiClockTimeInterval;
+            
+            MidiMessage message = MidiMessage::midiClock();
+            alphaLiveEngineRef.sendMidiMessage(message);
+        }
         
         wait(1); 
     }
@@ -270,6 +295,15 @@ void GlobalClock::stopClock()
     
     stopThread(100);
     
+    //MIDI Clock stuff
+    if (midiClockIsRunning)
+    {
+        MidiMessage message = MidiMessage::midiStop();
+        alphaLiveEngineRef.sendMidiMessage(message);
+        
+        midiClockIsRunning = false;
+    }
+    
 }
 
 void GlobalClock::prepareToPlay (int samplesPerBlockExpected,double sampleRate)
@@ -290,6 +324,8 @@ void GlobalClock::setTempo (float value)
 {
     tempo = value;
     timeInterval = double(15000.0)/tempo;
+    
+    midiClockTimeInterval = timeInterval / 6.0;
 }
 void GlobalClock::setBeatsPerBar (int value)
 {

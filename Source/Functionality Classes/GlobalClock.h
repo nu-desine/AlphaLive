@@ -88,6 +88,9 @@ private:
     
     ActionBroadcaster broadcaster;
     MainComponent *mainComponent;
+    
+    bool midiClockIsRunning;
+    double midiClockTimeInterval, midiClockCurrentTime;
 };
 
 #endif //H_GLOBALCLOCK

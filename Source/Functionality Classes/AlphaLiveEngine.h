@@ -38,7 +38,8 @@ class MainComponent;
 
 class AlphaLiveEngine :     public AudioIODeviceCallback, //so this class handles the audio output
                             public HidComms,
-                            public ActionListener
+                            public ActionListener,
+                            public MidiInputCallback
 
 {
 public:
@@ -77,6 +78,7 @@ public:
                                 int totalNumOutputChannels,
                                 int numSamples);
     
+    void handleIncomingMidiMessage(MidiInput* midiInput, const MidiMessage& midiMessage);
     
     void sendMidiMessage (MidiMessage midiMessage);
     void setMidiOutputDevice (int deviceIndex);
@@ -118,8 +120,9 @@ private:
     float recievedValue;
     float recievedVelocity;
     
-    //midi output device
-    MidiOutput *midiOutputDevice; //is this actually needed?
+    //midi output and input devices
+    MidiOutput *midiOutputDevice;
+    MidiInput *midiInputDevice;
     
     //audio related
 	AudioDeviceManager audioDeviceManager;	// this wraps the actual audio device

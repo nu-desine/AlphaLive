@@ -86,30 +86,43 @@ AlphaLiveEngine::AlphaLiveEngine()
     delete audioSettingsXml;
     
     
-    //SET UP MIDI OUTPUT if not connected to the HID device
+    //SET UP MIDI OUTPUT AND INPUT if not connected to the HID device
     if (getDeviceStatus() == 0)
     {
         #if JUCE_MAC || JUCE_LINUX
         //==========================================================================
-        //Create new virtual MIDI device
+        //Create a virtual MIDI output device
         midiOutputDevice = MidiOutput::createNewDevice("AlphaLive");
         
         if(midiOutputDevice)
             midiOutputDevice->startBackgroundThread();
         else
-            std::cout << "Failed to create a virtual MIDI device!" << std::endl;
+            std::cout << "Failed to create a virtual MIDI output device!" << std::endl;
+        
+        //Create a virtual MIDI input device
+        midiInputDevice = MidiInput::createNewDevice("AlphaLive", this);
+        
+        if (midiInputDevice)
+            midiInputDevice->start();
+        else
+            std::cout << "Failed to create a virtual MIDI input device!" << std::endl;
         
         //==========================================================================
         #endif //JUCE_MAC || JUCE_LINUX
         
         #if JUCE_WINDOWS
         //==========================================================================
-        //connect to a MIDI device
+        //connect to a MIDI output and input device's
         midiOutputDevice = NULL;
+        midiInputDevice = NULL;
+        
         #endif //JUCE_WINDOWS
     }
     else
+    {
         midiOutputDevice = NULL;
+        midiInputDevice = NULL;
+    }
 
     modeMidi = new ModeMidi (*this);
     modeSampler = new ModeSampler (*this);
@@ -175,6 +188,12 @@ AlphaLiveEngine::~AlphaLiveEngine()
     {
         midiOutputDevice->stopBackgroundThread();
         delete midiOutputDevice;
+    }
+    
+    if (midiInputDevice)
+    {
+        midiInputDevice->stop();
+        delete midiInputDevice;
     }
     
     audioDeviceManager.removeAudioCallback (this);//unregister the audio callback
@@ -650,6 +669,14 @@ void AlphaLiveEngine::audioDeviceStopped()
 	audioPlayer.audioDeviceStopped();
 }
 
+void AlphaLiveEngine::handleIncomingMidiMessage(MidiInput* midiInput, const MidiMessage& midiMessage)
+{
+    if (midiInput == midiInputDevice)
+    {
+        
+    }
+}
+
 void AlphaLiveEngine::setDeviceType (int type)
 {
     StoredSettings::getInstance()->deviceType = type;
@@ -726,16 +753,24 @@ void AlphaLiveEngine::removeMidiOut()
 {
     sharedMemoryMidi.enter();
     
-    std::cout << "removing midi output stuff" << std::endl;
+    std::cout << "removing midi input/output stuff" << std::endl;
     
-    //if currently connected to a midiOutputDevice (either the virtual port on mac/linux
-    //or a hardware port on Windows) delete/dissconnected it.
+    //if currently connected to midiOutputDevice and midiInputDevice (either the virtual ports on mac/linux
+    //or a hardware ports on Windows) delete/dissconnected them.
     if (midiOutputDevice)
     {
         midiOutputDevice->stopBackgroundThread();
         delete midiOutputDevice;
         
         midiOutputDevice = NULL;
+    }
+    
+    if (midiInputDevice)
+    {
+        midiInputDevice->stop();
+        delete midiInputDevice;
+        
+        midiInputDevice = NULL;
     }
     
     #if JUCE_WINDOWS

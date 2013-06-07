@@ -671,8 +671,6 @@ void AlphaLiveEngine::audioDeviceStopped()
 
 void AlphaLiveEngine::handleIncomingMidiMessage(MidiInput* midiInput, const MidiMessage& midiMessage)
 {
-    if (midiInput == midiInputDevice)
-    {
         if (AppSettings::Instance()->getMidiClockValue() == 3) // I think I should check a local variable here instead to reduce CPU usage
         {
             if (midiMessage.isMidiStart() || midiMessage.isMidiContinue())
@@ -684,7 +682,7 @@ void AlphaLiveEngine::handleIncomingMidiMessage(MidiInput* midiInput, const Midi
                 globalClock->stopClock();
             }
         }
-    }
+
 }
 
 void AlphaLiveEngine::setDeviceType (int type)
@@ -784,7 +782,7 @@ void AlphaLiveEngine::removeMidiOut()
     }
     
     #if JUCE_WINDOWS
-    //remove MIDI output selector from the preferences view
+    //remove MIDI output and input selectors from the preferences view
     if (mainComponent != NULL)
     {
         const MessageManagerLock mmLock;

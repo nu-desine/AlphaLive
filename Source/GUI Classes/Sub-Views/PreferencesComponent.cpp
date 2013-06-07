@@ -38,13 +38,13 @@ PreferencesComponent::PreferencesComponent(MainComponent &ref, AlphaLiveEngine &
     #if JUCE_WINDOWS
     if (alphaLiveEngineRef.getDeviceStatus() != 0)
     {
-        //don't display the option to set a MIDI ouput device
+        //don't display the option to set MIDI ouput and input devices
         audioAndMidiSettingsComponent = new AlphaAudioSettingsComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, false, false, true, false, alphaLiveEngineRef);
     }
     else
     {
-        //allow a MIDI output device to be set
-        audioAndMidiSettingsComponent = new AlphaAudioSettingsComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, false, true, true, false, alphaLiveEngineRef);
+        //allow MIDI output and input devices to be set
+        audioAndMidiSettingsComponent = new AlphaAudioSettingsComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, true, true, true, false, alphaLiveEngineRef);
     }
     #endif
     audioAndMidiSettingsComponent->addMouseListener(this, true);

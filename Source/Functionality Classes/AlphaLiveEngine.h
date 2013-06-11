@@ -47,6 +47,7 @@ public:
     ~AlphaLiveEngine();
     
     void hidInputCallback (int pad, int value, int velocity);
+    void processMidiInput (const MidiMessage midiMessage);
     void setDeviceType (int type); //1 - AlphaSphere, 2 - AlphaSphere elite
     void removeMidiOut();
     void updateFirmware();

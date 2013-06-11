@@ -400,6 +400,21 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
     }
 }
 
+void AlphaLiveEngine::processMidiInput (const MidiMessage midiMessage)
+{
+    if (AppSettings::Instance()->getMidiClockValue() == 3) // I think I should check a local variable here instead to reduce CPU usage
+    {
+        if (midiMessage.isMidiStart() || midiMessage.isMidiContinue())
+        {
+            globalClock->startClock();
+        }
+        else if (midiMessage.isMidiStop())
+        {
+            globalClock->stopClock();
+        }
+    }
+}
+
 void AlphaLiveEngine::handleExclusiveMode (int padNum)
 {
 
@@ -671,18 +686,7 @@ void AlphaLiveEngine::audioDeviceStopped()
 
 void AlphaLiveEngine::handleIncomingMidiMessage(MidiInput* midiInput, const MidiMessage& midiMessage)
 {
-        if (AppSettings::Instance()->getMidiClockValue() == 3) // I think I should check a local variable here instead to reduce CPU usage
-        {
-            if (midiMessage.isMidiStart() || midiMessage.isMidiContinue())
-            {
-                globalClock->startClock();
-            }
-            else if (midiMessage.isMidiStop())
-            {
-                globalClock->stopClock();
-            }
-        }
-
+    processMidiInput(midiMessage);
 }
 
 void AlphaLiveEngine::setDeviceType (int type)

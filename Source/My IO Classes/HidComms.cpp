@@ -262,6 +262,53 @@ void HidComms::run()
                                 }
                             }
                         }
+                        
+//                        if (buf[100] > 0)
+//                        {
+//                            //get number of MIDI messages within report
+//                            int noOfMessages = buf[100];
+//                            
+//                            //retrieve each MIDI message from the report
+//                            for (int i = 0; i < noOfMessages; i++)
+//                            {
+//                                //get the first byte index of the message
+//                                int messageIndex  = (i * 3) + 101;
+//
+//                                int message[3];
+//                                message[0] = buf[messageIndex];
+//                                message[1] = buf[messageIndex + 1];
+//                                message[2] = buf[messageIndex + 2];
+//                                
+//                                std::cout << "MIDI message " << noOfMessages << ": " << message[0] << " " << message[1] << " " << message[2] << std::endl;
+//                                
+//                                //send the MIDI message to AlphaLiveEngine
+//                                processMidiInput(message);
+//                                
+//                                
+//                            }
+//                            
+//    
+//                        }
+                        
+                        //process any incoming midi messages
+                        //if the byte 100 is < 128 it is not a correct MIDI message which 
+                        //will cause an asseration failure when creating the MidiMessage object below.
+                        //Though this will probably need to be changed if we start using MIDI SysEx at all.
+                        
+                        if (buf[100] > 127) 
+                        {
+                            int message[3];
+                            message[0] = buf[100];
+                            message[1] = buf[101];
+                            message[2] = buf[102];
+                            
+                            std::cout << "MIDI message: " << message[0] << " " << message[1] << " " << message[2] << std::endl;
+                            
+                            MidiMessage midiMessage (buf[100], buf[101], buf[102]);
+                            
+                            //send the MIDI message to AlphaLiveEngine
+                            processMidiInput(midiMessage);
+                        }
                     }
                     
                     

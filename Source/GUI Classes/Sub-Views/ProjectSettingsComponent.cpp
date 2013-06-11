@@ -453,7 +453,7 @@ void GeneralProjSettingsComponent::mouseEnter (const MouseEvent &e)
     }
     else if (midiClockMessageFilterMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Sets and displays what type of MIDI Clock messages are received and used by AlphaLive. By default any external clock that AlphaLive is syced to will start and stop AlphaLive's clock as well as keep it in perfect sync and adjust its tempo. However if the option to only use Start/Stop messages is selected the external clock will only start and stop AlphaLive's clock."));
+        mainComponentRef.setInfoTextBoxText(translate("Sets and displays what type of MIDI Clock messages are received and used by AlphaLive. By default any external clock that AlphaLive is syced to will start and stop AlphaLive's clock as well as keep it in sync and adjust its tempo. However if the option to only use Start/Stop messages is selected the external clock will only start and stop AlphaLive's clock."));
     }
 
 }

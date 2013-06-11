@@ -412,6 +412,13 @@ void AlphaLiveEngine::processMidiInput (const MidiMessage midiMessage)
         {
             globalClock->stopClock();
         }
+        else if (midiMessage.isMidiClock())
+        {
+            if (AppSettings::Instance()->getMidiClockMessageFilter() == 1)
+            {
+                globalClock->setMidiClockMessageTimestamp();
+            }
+        }
     }
 }
 

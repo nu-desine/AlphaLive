@@ -38,7 +38,7 @@ GlobalClock::GlobalClock(AlphaLiveEngine &ref)
     quantizationValue = AppSettings::Instance()->getQuantizationValue();
     metronomeStatus = AppSettings::Instance()->getMetronomeStatus();
     
-    midiClockIsRunning = false;
+    midiClockOutIsRunning = false;
     
     //=================metronome stuff======================
     
@@ -136,21 +136,11 @@ void GlobalClock::actionListenerCallback (const String& message)
 
 void GlobalClock::startClock()
 {
-    //update the GUI of the start/stop button. 
-    //This is only really neccassery when auto started from pressing a pad - check for that here?
-    //Here i need to LOCK the message thread and directly call notifyObs() instead of through the AsyncUpdater
-    //due to the weirdness where using the hardware to trigger the clock would cause the button to not
-    //be updated, but using alt-click would work fine! why?
-    broadcaster.sendActionMessage("UPDATE TRANSPORT BUTTON");
     
     microbeatNumber = beatNumber = barNumber = 1;
-    //tell GuiGlobalClock to update its display
-    broadcaster.sendActionMessage("UPDATE CLOCK DISPLAY");
-    
     currentTime = midiClockCurrentTime = Time::getMillisecondCounterHiRes();
-    
-    //start the thread
-    startThread(6);
+    midiClockMessageCounter = 6; //so that 'processClock()' will be called instantly
+    midiClockMessageTimestamp = prevMidiClockMessageTimestamp = 0;
     
     //MIDI Clock stuff
     if (AppSettings::Instance()->getMidiClockValue() == 2) //send MIDI Clock
@@ -166,8 +156,21 @@ void GlobalClock::startClock()
             alphaLiveEngineRef.sendMidiMessage(message);
         }
         
-        midiClockIsRunning = true;
+        midiClockOutIsRunning = true;
     }
+    
+    //start the thread
+    startThread(6);
+    
+    //update the GUI of the start/stop button. 
+    //This is only really neccassery when auto started from pressing a pad - check for that here?
+    //Here i need to LOCK the message thread and directly call notifyObs() instead of through the AsyncUpdater
+    //due to the weirdness where using the hardware to trigger the clock would cause the button to not
+    //be updated, but using alt-click would work fine! why?
+    broadcaster.sendActionMessage("UPDATE TRANSPORT BUTTON");
+    
+    //tell GuiGlobalClock to update its display
+    broadcaster.sendActionMessage("UPDATE CLOCK DISPLAY");
     
 }
 
@@ -175,29 +178,59 @@ void GlobalClock::run()
 {
     while ( ! threadShouldExit())
     {
-        //process the internal clock display and quantisation points
-        processClock();
-        
-        //MIDI Clock stuff
-        if (Time::getMillisecondCounterHiRes() >= midiClockCurrentTime)
+        //When not syncing to an external MIDI clock,
+        //or when syncing to an external clock but only for the start/stop controls
+        if (AppSettings::Instance()->getMidiClockValue() != 3 ||
+            (AppSettings::Instance()->getMidiClockValue() == 3 && 
+             AppSettings::Instance()->getMidiClockMessageFilter() == 2)) //I should be checking a local variable here
         {
-            midiClockCurrentTime += midiClockTimeInterval;
+            //process the internal clock display and quantisation points
             
-            MidiMessage message = MidiMessage::midiClock();
-            alphaLiveEngineRef.sendMidiMessage(message);
+            if (Time::getMillisecondCounterHiRes() >= currentTime)
+            {
+                currentTime = currentTime + timeInterval;
+                
+                processClock();
+            }
+            
+            //Sending MIDI Clock stuff
+            if (midiClockOutIsRunning)
+            {
+                if (Time::getMillisecondCounterHiRes() >= midiClockCurrentTime)
+                {
+                    midiClockCurrentTime += midiClockTimeInterval;
+                    
+                    MidiMessage message = MidiMessage::midiClock();
+                    alphaLiveEngineRef.sendMidiMessage(message);
+                }
+            }
         }
         
+        //When syncing to an external MIDI clock and not filtering out clock messages
+        else
+        {
+            sharedMemory.enter();
+            
+            if (midiClockMessageCounter >= 6)
+            {
+                midiClockMessageCounter = 0;
+                
+                processClock();
+            }
+            
+            sharedMemory.exit();
+        }
+        
+        
+        
+        //sleep the thread for 1ms
         wait(1); 
     }
 }
 
 void GlobalClock::processClock()
 {
-    
-    if (Time::getMillisecondCounterHiRes() >= currentTime)
-    {
-        currentTime = currentTime + timeInterval;
-        
+
         //=====get current microbeat, beat, and bar numbers============
         if (microbeatNumber == 5) //1 beat
         {
@@ -282,8 +315,7 @@ void GlobalClock::processClock()
         
         //increment microbeat
         microbeatNumber++;
-    }
-    
+
 }
 
 void GlobalClock::stopClock()
@@ -301,16 +333,29 @@ void GlobalClock::stopClock()
     stopThread(100);
     
     //MIDI Clock stuff
-    if (midiClockIsRunning)
+    if (midiClockOutIsRunning)
     {
         MidiMessage message = MidiMessage::midiStop();
         alphaLiveEngineRef.sendMidiMessage(message);
         
-        midiClockIsRunning = false;
+        midiClockOutIsRunning = false;
     }
     
     broadcaster.sendActionMessage("UPDATE TRANSPORT BUTTON TO OFF");
     
+}
+
+void GlobalClock::setMidiClockMessageTimestamp()
+{
+    sharedMemory.enter();
+    
+    prevMidiClockMessageTimestamp = midiClockMessageTimestamp;
+    midiClockMessageTimestamp = Time::getMillisecondCounterHiRes();
+    midiClockMessageCounter++;
+    
+    std::cout << midiClockMessageCounter << std::endl;
+    
+    sharedMemory.exit();
 }
 
 void GlobalClock::prepareToPlay (int samplesPerBlockExpected,double sampleRate)

@@ -52,6 +52,8 @@ public:
     void stopClock();
     void processClock();
     
+    void setMidiClockMessageTimestamp();
+    
     //AudioSource Functions
 	void prepareToPlay (int samplesPerBlockExpected,double sampleRate);
 	void releaseResources();
@@ -89,8 +91,12 @@ private:
     ActionBroadcaster broadcaster;
     MainComponent *mainComponent;
     
-    bool midiClockIsRunning;
+    bool midiClockOutIsRunning;
     double midiClockTimeInterval, midiClockCurrentTime;
+    double midiClockMessageTimestamp, prevMidiClockMessageTimestamp;
+    int midiClockMessageCounter;
+    
+    CriticalSection sharedMemory;
 };
 
 #endif //H_GLOBALCLOCK

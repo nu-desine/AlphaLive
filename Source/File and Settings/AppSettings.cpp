@@ -55,6 +55,7 @@ AppSettings::AppSettings()
     copyExternalFiles = true;
     midiClockValue = 1;
     midiClockStartMessage = 1;
+    midiClockMessageFilter = 1;
     
     //elite controls stuff
     eliteDial[0].control = 1;
@@ -138,6 +139,7 @@ void AppSettings::resetData()
     setCopyExternalFiles(true);
     setMidiClockValue(1);
     setMidiClockStartMessage(1);
+    setMidiClockMessageFilter(1);
     
     //elite controls stuff
     eliteDial[0].control = 1;
@@ -279,6 +281,10 @@ void AppSettings::setMidiClockStartMessage (int value)
 {
     midiClockStartMessage = value;
 }
+void AppSettings::setMidiClockMessageFilter (int value)
+{
+    midiClockMessageFilter = value;
+}
 
 
 Array<int> AppSettings::getCurrentlySelectedPad()
@@ -336,6 +342,10 @@ int AppSettings::getMidiClockValue()
 int AppSettings::getMidiClockStartMessage()
 {
     return midiClockStartMessage;
+}
+int AppSettings::getMidiClockMessageFilter()
+{
+    return midiClockMessageFilter;
 }
 
 

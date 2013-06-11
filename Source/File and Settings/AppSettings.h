@@ -118,6 +118,7 @@ public:
     void setCopyExternalFiles (bool value);
     void setMidiClockValue (int value);
     void setMidiClockStartMessage (int value);
+    void setMidiClockMessageFilter (int value);
     
     Array<int> getCurrentlySelectedPad();
     int getPadDisplayTextMode();
@@ -134,6 +135,7 @@ public:
     bool getCopyExternalFiles();
     int getMidiClockValue();
     int getMidiClockStartMessage();
+    int getMidiClockMessageFilter();
     
     //Elite Controls Stuff
     void setEliteDialPrevValue(double value, int dialNumber);
@@ -249,7 +251,7 @@ private:
     //========================================================================================================
     
     bool copyExternalFiles;
-    int midiClockValue, midiClockStartMessage;
+    int midiClockValue, midiClockStartMessage, midiClockMessageFilter;
     
     
 };

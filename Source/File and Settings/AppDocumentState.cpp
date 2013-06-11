@@ -743,6 +743,7 @@ void AppDocumentState::saveProjectSettings()
     projectData->setAttribute("copyExternalFiles", AppSettings::Instance()->getCopyExternalFiles());
     projectData->setAttribute("midiClockValue", AppSettings::Instance()->getMidiClockValue());
     projectData->setAttribute("midiClockStartMessage", AppSettings::Instance()->getMidiClockStartMessage());
+    projectData->setAttribute("midiClockMessageFilter", AppSettings::Instance()->getMidiClockMessageFilter());
     
 }
 
@@ -757,6 +758,8 @@ void AppDocumentState::loadProjectSettings()
         AppSettings::Instance()->setMidiClockValue(projectData->getIntAttribute("midiClockValue"));
     if (projectData->hasAttribute("midiClockStartMessage") == true)
         AppSettings::Instance()->setMidiClockStartMessage(projectData->getIntAttribute("midiClockStartMessage"));
+    if (projectData->hasAttribute("midiClockMessageFilter") == true)
+        AppSettings::Instance()->setMidiClockMessageFilter(projectData->getIntAttribute("midiClockMessageFilter"));
     
 }
 

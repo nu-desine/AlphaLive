@@ -163,8 +163,8 @@ private:
     TextButton *copyExternalFilesSwitch;
     Label *copyExternalFilesLabel;
     
-    ComboBox *midiClockMenu, *clockStartMessageMenu;
-    Label *midiClockLabel, *clockStartMessageLabel;
+    ComboBox *midiClockMenu, *clockStartMessageMenu, *midiClockMessageFilterMenu;
+    Label *midiClockLabel, *clockStartMessageLabel, *midiClockMessageFilterLabel;
     
 };
 

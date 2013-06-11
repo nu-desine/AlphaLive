@@ -292,16 +292,27 @@ GeneralProjSettingsComponent::GeneralProjSettingsComponent(MainComponent &ref, A
     midiClockLabel->setText(translate("MIDI Clock:"), false);
     midiClockLabel->setColour(Label::textColourId, Colours::lightgrey);
     
-    addAndMakeVisible(clockStartMessageMenu = new ComboBox());
+    addChildComponent(clockStartMessageMenu = new ComboBox());
     clockStartMessageMenu->addItem(translate("Send MIDI Clock Start Message"), 1);
     clockStartMessageMenu->addItem(translate("Send MIDI Clock Continue Message"), 2);
     clockStartMessageMenu->addListener(this);
     clockStartMessageMenu->addMouseListener(this, true);
     clockStartMessageMenu->setSelectedId(AppSettings::Instance()->getMidiClockStartMessage());
     
-    addAndMakeVisible(clockStartMessageLabel = new Label());
+    addChildComponent(clockStartMessageLabel = new Label());
     clockStartMessageLabel->setText(translate("On Clock Start:"), false);
     clockStartMessageLabel->setColour(Label::textColourId, Colours::lightgrey);
+    
+    addChildComponent(midiClockMessageFilterMenu = new ComboBox());
+    midiClockMessageFilterMenu->addItem(translate("Use All Clock Messages"), 1);
+    midiClockMessageFilterMenu->addItem(translate("Use only Start/Stop Messages"), 2);
+    midiClockMessageFilterMenu->addListener(this);
+    midiClockMessageFilterMenu->addMouseListener(this, true);
+    midiClockMessageFilterMenu->setSelectedId(AppSettings::Instance()->getMidiClockMessageFilter());
+    
+    addChildComponent(midiClockMessageFilterLabel = new Label());
+    midiClockMessageFilterLabel->setText(translate("Message Filter:"), false);
+    midiClockMessageFilterLabel->setColour(Label::textColourId, Colours::lightgrey);
     
 }
 
@@ -320,6 +331,9 @@ void GeneralProjSettingsComponent::resized()
     
     clockStartMessageMenu->setBounds(200, 80, 210, 20);
     clockStartMessageLabel->setBounds(60, 80, 120, 20);
+    
+    midiClockMessageFilterMenu->setBounds(200, 80, 210, 20);
+    midiClockMessageFilterLabel->setBounds(60, 80, 120, 20);
     
 }
 
@@ -382,21 +396,31 @@ void GeneralProjSettingsComponent::comboBoxChanged (ComboBox *comboBox)
     {
         AppSettings::Instance()->setMidiClockValue(comboBox->getSelectedId());
         
+        clockStartMessageLabel->setVisible(false);
+        clockStartMessageMenu->setVisible(false);
+        midiClockMessageFilterLabel->setVisible(false);
+        midiClockMessageFilterMenu->setVisible(false);
+        
         if (comboBox->getSelectedId() == 2) //send MIDI Clock
         {
             clockStartMessageMenu->setVisible(true);
             clockStartMessageLabel->setVisible(true);
         }
-        else
+        else if (comboBox->getSelectedId() == 3) //receive MIDI Clock
         {
-            clockStartMessageLabel->setVisible(false);
-            clockStartMessageMenu->setVisible(false);
+            midiClockMessageFilterLabel->setVisible(true);
+            midiClockMessageFilterMenu->setVisible(true);
         }
     }
     
     else if (comboBox == clockStartMessageMenu)
     {
         AppSettings::Instance()->setMidiClockStartMessage(comboBox->getSelectedId());
+    }
+    
+    else if (comboBox == midiClockMessageFilterMenu)
+    {
+        AppSettings::Instance()->setMidiClockMessageFilter(comboBox->getSelectedId());
     }
 }
 
@@ -410,6 +434,7 @@ void GeneralProjSettingsComponent::updateDisplay()
     
     midiClockMenu->setSelectedId(AppSettings::Instance()->getMidiClockValue(), true);
     clockStartMessageMenu->setSelectedId(AppSettings::Instance()->getMidiClockStartMessage(), true);
+    midiClockMessageFilterMenu->setSelectedId(AppSettings::Instance()->getMidiClockMessageFilter(), true);
 }
 
 void GeneralProjSettingsComponent::mouseEnter (const MouseEvent &e)
@@ -425,6 +450,10 @@ void GeneralProjSettingsComponent::mouseEnter (const MouseEvent &e)
     else if (clockStartMessageMenu->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Sets and displays what type of MIDI Clock message is sent when AlphaLive's clock is started. A Clock Start message will start the sequence of the external MIDI software/device from the beginning, whereas a Clock Continue message will continue the sequence from its current position."));
+    }
+    else if (midiClockMessageFilterMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Sets and displays what type of MIDI Clock messages are received and used by AlphaLive. By default any external clock that AlphaLive is syced to will start and stop AlphaLive's clock as well as keep it in perfect sync and adjust its tempo. However if the option to only use Start/Stop messages is selected the external clock will only start and stop AlphaLive's clock."));
     }
 
 }

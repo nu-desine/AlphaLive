@@ -223,6 +223,11 @@ void GuiGlobalClock::updateTransportButtonDisplay (bool status)
     }
 }
 
+void GuiGlobalClock::updateTempoDisplay (float value)
+{
+    tempoSlider->setValue(value);
+}
+
 void GuiGlobalClock::sliderValueChanged (Slider* slider)
 {
     if (slider == tempoSlider)

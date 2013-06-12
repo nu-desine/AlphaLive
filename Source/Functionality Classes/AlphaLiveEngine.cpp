@@ -419,7 +419,8 @@ void AlphaLiveEngine::processMidiInput (const MidiMessage midiMessage)
         {
             if (midiClockMessageFilter == 1)
             {
-                globalClock->setMidiClockMessageTimestamp();
+                if (globalClock->isThreadRunning())
+                    globalClock->setMidiClockMessageTimestamp();
             }
         }
     }

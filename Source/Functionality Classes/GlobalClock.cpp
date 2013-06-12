@@ -134,6 +134,10 @@ void GlobalClock::actionListenerCallback (const String& message)
     {
         mainComponent->getGuiGlobalClock()->updateTransportButtonDisplay(false);
     }
+    else if (message == "UPDATE TEMPO")
+    {
+        mainComponent->getGuiGlobalClock()->updateTempoDisplay(tempo);
+    }
 }
 
 
@@ -353,6 +357,21 @@ void GlobalClock::setMidiClockMessageTimestamp()
     prevMidiClockMessageTimestamp = midiClockMessageTimestamp;
     midiClockMessageTimestamp = Time::getMillisecondCounterHiRes();
     midiClockMessageCounter++;
+    
+    if (prevMidiClockMessageTimestamp > 0)
+    {
+        //set tempo based on the two timestamps
+        double newTempo = (2500 / (midiClockMessageTimestamp - prevMidiClockMessageTimestamp))*10;
+        newTempo = ceil(newTempo);
+        newTempo = newTempo/10;
+        std::cout << newTempo << std::endl;
+        
+        //its probably worth changing the tempo less frequently than everytime a clock message is recieved,
+        //and set the tempo to the most common value found here.
+        
+        AppSettings::Instance()->setGlobalTempo(newTempo);
+        broadcaster.sendActionMessage("UPDATE TEMPO");
+    }
     
     sharedMemory.exit();
 }

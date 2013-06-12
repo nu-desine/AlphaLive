@@ -51,6 +51,7 @@ public:
     
     void updateClockDisplay (int beatNumber, int barNumber, int beatsPerBar);
     void updateTransportButtonDisplay (bool status);
+    void updateTempoDisplay (float value);
     
     void toggleTransportButtonOff();
     

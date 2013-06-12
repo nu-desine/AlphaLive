@@ -64,6 +64,11 @@ public:
     void setQuantizationValue (int value);
     void setMetronomeStatus (bool value);
     
+    void setMidiClockValue (int value);
+    void setMidiClockStartMessage (int value);
+    void setMidiClockMessageFilter (int value);
+    
+    
     int getBeatNumber();
     int getBarNumber();
     
@@ -81,6 +86,8 @@ private:
     int microbeatNumber, beatNumber, barNumber;
     int quantizationValue;
     bool metronomeStatus;
+    
+    int midiClockValue, midiClockStartMessage, midiClockMessageFilter;
     
     //audio related
     MixerAudioSource audioMixer;

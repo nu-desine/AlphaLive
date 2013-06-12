@@ -276,14 +276,19 @@ void AppSettings::setCopyExternalFiles (bool value)
 void AppSettings::setMidiClockValue (int value)
 {
     midiClockValue = value;
+    alphaLiveEngineRef->getGlobalClock()->setMidiClockValue(value);
+    alphaLiveEngineRef->setMidiClockValue(value);
 }
 void AppSettings::setMidiClockStartMessage (int value)
 {
     midiClockStartMessage = value;
+    alphaLiveEngineRef->getGlobalClock()->setMidiClockStartMessage(value);
 }
 void AppSettings::setMidiClockMessageFilter (int value)
 {
     midiClockMessageFilter = value;
+    alphaLiveEngineRef->getGlobalClock()->setMidiClockMessageFilter(value);
+    alphaLiveEngineRef->setMidiClockMessageFilter(value);
 }
 
 

@@ -58,6 +58,9 @@ AlphaLiveEngine::AlphaLiveEngine()
     panLeft = panLeftPrev = PanControl::leftChanPan_(AppSettings::Instance()->getGlobalPan());
     panRight = panRightPrev = PanControl::rightChanPan_(AppSettings::Instance()->getGlobalPan());
     
+    midiClockValue = AppSettings::Instance()->getMidiClockValue();
+    midiClockMessageFilter = AppSettings::Instance()->getMidiClockMessageFilter();
+    
     recievedPad = 0;
     recievedValue = 0;
     recievedVelocity = 110;
@@ -402,7 +405,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
 
 void AlphaLiveEngine::processMidiInput (const MidiMessage midiMessage)
 {
-    if (AppSettings::Instance()->getMidiClockValue() == 3) // I think I should check a local variable here instead to reduce CPU usage
+    if (midiClockValue == 3)
     {
         if (midiMessage.isMidiStart() || midiMessage.isMidiContinue())
         {
@@ -414,7 +417,7 @@ void AlphaLiveEngine::processMidiInput (const MidiMessage midiMessage)
         }
         else if (midiMessage.isMidiClock())
         {
-            if (AppSettings::Instance()->getMidiClockMessageFilter() == 1)
+            if (midiClockMessageFilter == 1)
             {
                 globalClock->setMidiClockMessageTimestamp();
             }
@@ -633,6 +636,15 @@ void AlphaLiveEngine::setOscIpAddress (String value)
 void AlphaLiveEngine::setOscPortNumber (int value)
 {
     oscPortNumber = value;
+}
+
+void AlphaLiveEngine::setMidiClockValue (int value)
+{
+    midiClockValue = value;
+}
+void AlphaLiveEngine::setMidiClockMessageFilter (int value)
+{
+    midiClockMessageFilter = value;
 }
 
 

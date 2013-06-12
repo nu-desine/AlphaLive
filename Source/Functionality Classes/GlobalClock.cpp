@@ -37,6 +37,9 @@ GlobalClock::GlobalClock(AlphaLiveEngine &ref)
     beatsPerBar = AppSettings::Instance()->getBeatsPerBar();
     quantizationValue = AppSettings::Instance()->getQuantizationValue();
     metronomeStatus = AppSettings::Instance()->getMetronomeStatus();
+    midiClockValue = AppSettings::Instance()->getMidiClockValue();
+    midiClockStartMessage = AppSettings::Instance()->getMidiClockStartMessage();
+    midiClockMessageFilter = AppSettings::Instance()->getMidiClockMessageFilter();
     
     midiClockOutIsRunning = false;
     
@@ -143,14 +146,14 @@ void GlobalClock::startClock()
     midiClockMessageTimestamp = prevMidiClockMessageTimestamp = 0;
     
     //MIDI Clock stuff
-    if (AppSettings::Instance()->getMidiClockValue() == 2) //send MIDI Clock
+    if (midiClockValue == 2) //send MIDI Clock
     {
-        if (AppSettings::Instance()->getMidiClockStartMessage() == 1) //'Start' message
+        if (midiClockStartMessage == 1) //'Start' message
         {
             MidiMessage message = MidiMessage::midiStart();
             alphaLiveEngineRef.sendMidiMessage(message);
         }
-        else if (AppSettings::Instance()->getMidiClockStartMessage() == 2) //'Continue' message
+        else if (midiClockStartMessage == 2) //'Continue' message
         {
             MidiMessage message = MidiMessage::midiContinue();
             alphaLiveEngineRef.sendMidiMessage(message);
@@ -180,9 +183,7 @@ void GlobalClock::run()
     {
         //When not syncing to an external MIDI clock,
         //or when syncing to an external clock but only for the start/stop controls
-        if (AppSettings::Instance()->getMidiClockValue() != 3 ||
-            (AppSettings::Instance()->getMidiClockValue() == 3 && 
-             AppSettings::Instance()->getMidiClockMessageFilter() == 2)) //I should be checking a local variable here
+        if (midiClockValue != 3 || (midiClockValue == 3 && midiClockMessageFilter == 2))
         {
             //process the internal clock display and quantisation points
             
@@ -353,8 +354,6 @@ void GlobalClock::setMidiClockMessageTimestamp()
     midiClockMessageTimestamp = Time::getMillisecondCounterHiRes();
     midiClockMessageCounter++;
     
-    std::cout << midiClockMessageCounter << std::endl;
-    
     sharedMemory.exit();
 }
 
@@ -390,6 +389,18 @@ void GlobalClock::setQuantizationValue(int value)
 void GlobalClock::setMetronomeStatus(bool value)
 {
     metronomeStatus = value;
+}
+void GlobalClock::setMidiClockValue (int value)
+{
+    midiClockValue = value;
+}
+void GlobalClock::setMidiClockStartMessage (int value)
+{
+    midiClockStartMessage = value;
+}
+void GlobalClock::setMidiClockMessageFilter (int value)
+{
+    midiClockMessageFilter = value;
 }
 
 int GlobalClock::getBeatNumber()

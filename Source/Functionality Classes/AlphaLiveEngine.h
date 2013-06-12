@@ -108,6 +108,9 @@ public:
     
     String getFirmwareVersion();
     String getDeviceSerial();
+    
+    void setMidiClockValue (int value);
+    void setMidiClockMessageFilter (int value);
         
 private:
     
@@ -167,6 +170,8 @@ private:
     
     String firmwareVersion, deviceSerial;
     bool hasDisplayedNoMidiDeviceWarning;
+    
+    int midiClockValue, midiClockMessageFilter;
 };
 
 #endif // H_ALPHALIVEENGINE

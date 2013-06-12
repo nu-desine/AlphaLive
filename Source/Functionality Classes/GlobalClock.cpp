@@ -43,6 +43,9 @@ GlobalClock::GlobalClock(AlphaLiveEngine &ref)
     
     midiClockOutIsRunning = false;
     
+    for (int i = 0; i < 6; i++)
+        midiClockTempos.insert(i, 0);
+    
     //=================metronome stuff======================
     
     audioTransportSourceThread = new TimeSliceThread("Metronome Audio Thread");
@@ -147,7 +150,7 @@ void GlobalClock::startClock()
     microbeatNumber = beatNumber = barNumber = 1;
     currentTime = midiClockCurrentTime = Time::getMillisecondCounterHiRes();
     midiClockMessageCounter = 6; //so that 'processClock()' will be called instantly
-    midiClockMessageTimestamp = prevMidiClockMessageTimestamp = 0;
+    prevMidiClockMessageTimestamp = Time::getMillisecondCounterHiRes();
     
     //MIDI Clock stuff
     if (midiClockValue == 2) //send MIDI Clock
@@ -352,18 +355,35 @@ void GlobalClock::stopClock()
 
 void GlobalClock::setMidiClockMessageTimestamp()
 {
+    //need to improve how things work here so the set tempo is more accurate.
+    //also, when the clock is being 'driven' by Midi clock messages, sequences
+    //should also be driven this way, somehow...
+    
     sharedMemory.enter();
     
-    prevMidiClockMessageTimestamp = midiClockMessageTimestamp;
-    midiClockMessageTimestamp = Time::getMillisecondCounterHiRes();
+    midiClockTempos.set(midiClockMessageCounter, 2500 / (Time::getMillisecondCounterHiRes() - prevMidiClockMessageTimestamp));
+    prevMidiClockMessageTimestamp = Time::getMillisecondCounterHiRes();
     midiClockMessageCounter++;
     
-    if (prevMidiClockMessageTimestamp > 0)
+    if (midiClockMessageCounter >= 6)
     {
-        //set tempo based on the two timestamps
-        double newTempo = (2500 / (midiClockMessageTimestamp - prevMidiClockMessageTimestamp))*10;
+        //order the array
+        for (int i = midiClockTempos.size()-1; i >= 0; i--)
+        {
+            if (midiClockTempos[i] < midiClockTempos[i-1])
+            {
+                  midiClockTempos.swap(i, i-1);
+            }
+        }
+        
+        //set tempo based on the median of the midiClockTempos array
+        double newTempo = midiClockTempos[midiClockTempos.size()/2];
+        
+        //round tempo to 1 decimal place
+        newTempo *= 10;
         newTempo = ceil(newTempo);
         newTempo = newTempo/10;
+        
         std::cout << newTempo << std::endl;
         
         //its probably worth changing the tempo less frequently than everytime a clock message is recieved,

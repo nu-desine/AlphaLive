@@ -100,7 +100,8 @@ private:
     
     bool midiClockOutIsRunning;
     double midiClockTimeInterval, midiClockCurrentTime;
-    double midiClockMessageTimestamp, prevMidiClockMessageTimestamp;
+    double prevMidiClockMessageTimestamp;
+    Array <double> midiClockTempos;
     int midiClockMessageCounter;
     
     CriticalSection sharedMemory;

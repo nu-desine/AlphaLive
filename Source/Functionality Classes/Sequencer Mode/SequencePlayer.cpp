@@ -594,6 +594,8 @@ void SequencePlayer::processSequence()
     //called in between calling sendActionMessage and the actual action being carried out, which is not what
     //we want.
     
+    //For the below in statement to be control by the MIDI clock, it should have an extra statement that checks
+    //if a midiClockCounter variable is equal to 6, similar to how the MIDI clock drives the global clock thread 
     if (Time::getMillisecondCounterHiRes() >= currentTime && sequenceFlaggedToStop == false)
     {
         if (columnNumber >= sequenceLength || sequenceNumber >= numberOfSequences)

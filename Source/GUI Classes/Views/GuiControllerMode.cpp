@@ -72,7 +72,7 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
     
     //for some reason using a textEditor was creating gui problems, so using a label instead now
     addChildComponent(oscIpAddressEditor = new Label());
-    oscIpAddressEditor->setText("127.0.0.1", false);
+    oscIpAddressEditor->setText("127.0.0.1", dontSendNotification);
     oscIpAddressEditor->setColour(Label::textColourId, Colours::grey);
     oscIpAddressEditor->setColour(Label::backgroundColourId, Colours::lightgrey);
     oscIpAddressEditor->setJustificationType(Justification::centred);
@@ -364,7 +364,7 @@ void GuiControllerMode::updateDisplay()
         int padNum = selectedPads[0];
         controlButtons[PAD_SETTINGS->getControllerControl()-1]->setToggleState(true, false);
         sceneNumberSlider->setValue(PAD_SETTINGS->getControllerSceneNumber());
-        oscIpAddressEditor->setText(PAD_SETTINGS->getControllerOscIpAddress(), false);
+        oscIpAddressEditor->setText(PAD_SETTINGS->getControllerOscIpAddress(), dontSendNotification);
         oscPortNumberSlider->setValue(PAD_SETTINGS->getControllerOscPort());
         midiProgramChangeNumberSlider->setValue(PAD_SETTINGS->getControllerMidiProgramChangeNumber());
         midiChannelButtons[PAD_SETTINGS->getControllerMidiProgramChangeChannel()-1]->setToggleState(true, false);
@@ -468,11 +468,11 @@ void GuiControllerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getControllerOscIpAddress() != oscIp_)
             {
-                oscIpAddressEditor->setText("-", false);;
+                oscIpAddressEditor->setText("-", dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                oscIpAddressEditor->setText(oscIp_, false);
+                oscIpAddressEditor->setText(oscIp_, dontSendNotification);
         }
         
     }

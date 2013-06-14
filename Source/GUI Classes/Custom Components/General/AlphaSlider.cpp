@@ -26,7 +26,7 @@ AlphaSlider::AlphaSlider()
 {
 	addAndMakeVisible(sliderValueLabel = new Label());
 	sliderValueLabel->setFont(Font(11));
-	sliderValueLabel->setText(String(getValue()), false);
+	sliderValueLabel->setText(String(getValue()), dontSendNotification);
     sliderValueLabel->setColour(Label::textColourId, Colours::white);
     sliderValueLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     sliderValueLabel->setJustificationType(Justification::centred);
@@ -86,7 +86,7 @@ void AlphaSlider::paint(Graphics& g)
 	
 	if (i == 0) 
     {
-		sliderValueLabel->setText(String(getValue()), false);
+		sliderValueLabel->setText(String(getValue()), dontSendNotification);
 		i = 1;
 	}
 	
@@ -101,7 +101,7 @@ void AlphaSlider::paint(Graphics& g)
 void AlphaSlider::sliderValueChanged (Slider *slider)
 {
 	
-	sliderValueLabel->setText(String(getValue()), false);
+	sliderValueLabel->setText(String(getValue()), dontSendNotification);
 	
 	if (getValue() < valueStore) 
     {
@@ -141,12 +141,12 @@ void AlphaSlider::labelTextChanged (Label* labelThatHasChanged)
     if (labelValue < getMinimum())
     {
         labelValue = getMinimum();
-        sliderValueLabel->setText(String(labelValue), false);
+        sliderValueLabel->setText(String(labelValue), dontSendNotification);
     }
     else if (labelValue > getMaximum())
     {
         labelValue = getMaximum();
-        sliderValueLabel->setText(String(labelValue), false);
+        sliderValueLabel->setText(String(labelValue), dontSendNotification);
     }
     
     Slider::setValue(labelValue, sendNotification);
@@ -169,16 +169,16 @@ void AlphaSlider::setValue (double value, int sendNotification_)    //whats the 
         //the below alg. needs changing as what if we want to display things to 2 decimal places? Though will that currently fit?
         if (getInterval() >= 1)
         {
-            sliderValueLabel->setText(String(value), false);
+            sliderValueLabel->setText(String(value), dontSendNotification);
         }
         else
         {
-            sliderValueLabel->setText(String(value, 1), false);
+            sliderValueLabel->setText(String(value, 1), dontSendNotification);
         }
     }
     else //just set a default display without changing the actual slider value
     {
-        sliderValueLabel->setText("-", false);
+        sliderValueLabel->setText("-", dontSendNotification);
     }
 }
 
@@ -193,7 +193,7 @@ void AlphaSlider::mouseDown(const MouseEvent &e)
     if (upButtonPathBig.contains(e.x, e.y))
     {
         Slider::setValue(Slider::getValue() + Slider::getInterval(), sendNotification);
-        sliderValueLabel->setText(String(Slider::getValue()), false);
+        sliderValueLabel->setText(String(Slider::getValue()), dontSendNotification);
         
         arrowUpColour = Colours::grey.withAlpha(0.8f);
         repaint();
@@ -201,7 +201,7 @@ void AlphaSlider::mouseDown(const MouseEvent &e)
     else if (downButtonPathBig.contains(e.x, e.y))
     {
         Slider::setValue(Slider::getValue() - Slider::getInterval(), sendNotification);
-        sliderValueLabel->setText(String(Slider::getValue()), false);
+        sliderValueLabel->setText(String(Slider::getValue()), dontSendNotification);
         
         arrowDownColour = Colours::grey.withAlpha(0.8f);
         repaint();

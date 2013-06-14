@@ -684,7 +684,7 @@ void AlphaLiveEngine::sendMidiMessage(MidiMessage midiMessage)
     {
         unsigned char dataToSend[4];
         
-        uint8 *rawMidiMessage = midiMessage.getRawData();
+        const uint8 *rawMidiMessage = midiMessage.getRawData();
         
         dataToSend[0] = 0x00; //MIDI command ID
         dataToSend[1] = rawMidiMessage[0]; //midi status byte

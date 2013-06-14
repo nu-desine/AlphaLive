@@ -139,7 +139,7 @@ GlobalOscComponent::GlobalOscComponent(MainComponent &ref, AlphaLiveEngine &ref2
 {
     //GLOBAL OSC OUTPUT SETTINGS
     addAndMakeVisible(globalOscLabel = new Label());
-    globalOscLabel->setText(translate("Global OSC Mode:"), false);
+    globalOscLabel->setText(translate("Global OSC Mode:"), dontSendNotification);
     globalOscLabel->setColour(Label::textColourId, Colours::lightgrey);
     
     addAndMakeVisible(globalOscSwitch = new TextButton());
@@ -150,7 +150,7 @@ GlobalOscComponent::GlobalOscComponent(MainComponent &ref, AlphaLiveEngine &ref2
     globalOscSwitch->addMouseListener(this, true);
     
     addAndMakeVisible(oscIpAddressEditor = new Label());
-    oscIpAddressEditor->setText("127.0.0.1", false);
+    oscIpAddressEditor->setText("127.0.0.1", dontSendNotification);
     oscIpAddressEditor->setColour(Label::textColourId, Colours::darkgrey);
     oscIpAddressEditor->setColour(Label::backgroundColourId, Colours::lightgrey);
     oscIpAddressEditor->setJustificationType(Justification::centred);
@@ -277,7 +277,7 @@ GeneralProjSettingsComponent::GeneralProjSettingsComponent(MainComponent &ref, A
     copyExternalFilesSwitch->addMouseListener(this, true);
     
     addAndMakeVisible(copyExternalFilesLabel = new Label());
-    copyExternalFilesLabel->setText(translate("Copy External Files:"), false);
+    copyExternalFilesLabel->setText(translate("Copy External Files:"), dontSendNotification);
     copyExternalFilesLabel->setColour(Label::textColourId, Colours::lightgrey);
     
 }

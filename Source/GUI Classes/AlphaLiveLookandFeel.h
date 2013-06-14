@@ -47,7 +47,7 @@ public:
                                        bool isMouseOverButton,
                                        bool isButtonDown);
 	
-	const Font getFontForTextButton (TextButton& button);
+	Font getTextButtonFont (TextButton& button);
 	
 	void drawButtonText (Graphics& g, TextButton& button,
 						 bool isMouseOverButton, bool isButtonDown);
@@ -79,7 +79,7 @@ public:
     
     
 	
-	const Font getPopupMenuFont();
+	Font getPopupMenuFont();
     
     void drawPopupMenuBackground (Graphics &g, int width, int height);
     

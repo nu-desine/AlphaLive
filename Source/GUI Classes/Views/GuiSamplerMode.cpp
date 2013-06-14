@@ -152,7 +152,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     //---------------------- parameter value label ------------------
     addAndMakeVisible(parameterLabel = new Label());
 	parameterLabel->setFont(Font(9));
-	parameterLabel->setText("1", false);
+	parameterLabel->setText("1", dontSendNotification);
     parameterLabel->setJustificationType(Justification::centred);
     //parameterLabel->setEditable(false, true, true);
     //parameterLabel->addListener(this);
@@ -239,7 +239,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     
     addAndMakeVisible(currentParameterLabel = new Label());
 	currentParameterLabel->setFont(Font(10));
-	currentParameterLabel->setText(translate("TEMPO"), false);
+	currentParameterLabel->setText(translate("TEMPO"), dontSendNotification);
     currentParameterLabel->setColour(Label::textColourId, Colours::white);
     currentParameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     currentParameterLabel->setJustificationType(Justification::centred);
@@ -577,7 +577,7 @@ void GuiSamplerMode::setAudioFileDisplay(File file)
     //can't use 'file' below as this will be the original file, not the copied file in the projects directory
     fileChooser->setCurrentFile (AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerAudioFilePath(), 
                                  true, 
-                                 false);
+                                 dontSendNotification);
 }
 
 void GuiSamplerMode::setDisplay(int settingsType)
@@ -663,7 +663,7 @@ void GuiSamplerMode::updateDisplay()
     {
         int padNum = selectedPads[0];
         
-        fileChooser->setCurrentFile(PAD_SETTINGS->getSamplerAudioFilePath(), true, false);
+        fileChooser->setCurrentFile(PAD_SETTINGS->getSamplerAudioFilePath(), true, dontSendNotification);
 		File audioFile(PAD_SETTINGS->getSamplerAudioFilePath());
 		waveform->setFile (audioFile);
 		
@@ -710,13 +710,13 @@ void GuiSamplerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSamplerAudioFilePath() != file_)
             {
-                fileChooser->setCurrentFile(File::nonexistent, false, false);
+                fileChooser->setCurrentFile(File::nonexistent, false, dontSendNotification);
                 waveform->setFile(File::nonexistent);
                 break;
             }
             if (i == selectedPads.size()-1)
             {
-                fileChooser->setCurrentFile(file_, false, false);
+                fileChooser->setCurrentFile(file_, false, dontSendNotification);
                 waveform->setFile(file_);
             }
         }
@@ -930,7 +930,7 @@ void GuiSamplerMode::setParameterLabelText (String value)
     if (value != String::empty)
     {
         parameterLabel->setColour(Label::textColourId, AlphaColours::lightblue);
-        parameterLabel->setText(value, false);
+        parameterLabel->setText(value, dontSendNotification);
     }
 	
 	else if (value == String::empty)
@@ -939,28 +939,28 @@ void GuiSamplerMode::setParameterLabelText (String value)
 		
 		if (gainSlider->isVisible())
 		{
-            currentParameterLabel->setText(translate("GAIN"), false);
-			parameterLabel->setText(String(gainSlider->getValue()), false);
+            currentParameterLabel->setText(translate("GAIN"), dontSendNotification);
+			parameterLabel->setText(String(gainSlider->getValue()), dontSendNotification);
 		}
 		else if (panSlider->isVisible())
 		{
-            currentParameterLabel->setText(translate("PAN"), false);
-			parameterLabel->setText(String(panSlider->getValue()), false);
+            currentParameterLabel->setText(translate("PAN"), dontSendNotification);
+			parameterLabel->setText(String(panSlider->getValue()), dontSendNotification);
 		}
         else if (attackSlider->isVisible())
 		{
-            currentParameterLabel->setText(translate("ATTACK"), false);
-			parameterLabel->setText(String(attackSlider->getValue()), false);
+            currentParameterLabel->setText(translate("ATTACK"), dontSendNotification);
+			parameterLabel->setText(String(attackSlider->getValue()), dontSendNotification);
 		}
         else if (releaseSlider->isVisible())
 		{
-            currentParameterLabel->setText(translate("RELEASE"), false);
-			parameterLabel->setText(String(releaseSlider->getValue()), false);
+            currentParameterLabel->setText(translate("RELEASE"), dontSendNotification);
+			parameterLabel->setText(String(releaseSlider->getValue()), dontSendNotification);
 		}
         else if (polyphonySlider->isVisible())
 		{
-            currentParameterLabel->setText(translate("POLYPHONY"), false);
-			parameterLabel->setText(String(polyphonySlider->getValue()), false);
+            currentParameterLabel->setText(translate("POLYPHONY"), dontSendNotification);
+			parameterLabel->setText(String(polyphonySlider->getValue()), dontSendNotification);
 		}
 	}
     

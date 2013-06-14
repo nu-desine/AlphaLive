@@ -208,7 +208,7 @@ void GuiTremolo::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxTremoloDepth(depthSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -220,7 +220,7 @@ void GuiTremolo::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxTremoloRate(rateSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -233,7 +233,7 @@ void GuiTremolo::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxTremoloAtIntensity(intensitySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -466,12 +466,12 @@ void GuiTremolo::mouseEnter (const MouseEvent &e)
     if (depthSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Depth/Mix. Sets the depth/mix of the LFO on the selected pads."));
-        parameterHoverLabel->setText(String(depthSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(depthSlider->getValue(), 3), dontSendNotification);
     }
     else if (rateSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("LFO Rate. Sets the rate in Hz for the selected pads. To set the rate based on the tempo, click on the 'Sync' button."));
-        parameterHoverLabel->setText(String(rateSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(rateSlider->getValue(), 3), dontSendNotification);
     }
     else if (rateMenu->isMouseOver(true))
     {
@@ -512,7 +512,7 @@ void GuiTremolo::mouseEnter (const MouseEvent &e)
     else if (intensitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
-        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), dontSendNotification);
     }
     
 }
@@ -521,6 +521,6 @@ void GuiTremolo::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
-    parameterHoverLabel->setText(String::empty, false);
+    parameterHoverLabel->setText(String::empty, dontSendNotification);
     
 }

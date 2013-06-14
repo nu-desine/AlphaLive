@@ -242,14 +242,14 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     
     addAndMakeVisible(parameterLabel = new Label());
 	parameterLabel->setFont(Font(9));
-	parameterLabel->setText("32", false);
+	parameterLabel->setText("32", dontSendNotification);
     parameterLabel->setJustificationType(Justification::centred);
     //parameterLabel->setEditable(false, true, true);
     parameterLabel->addListener(this);
 	
 	addChildComponent(currentParameterLabel = new Label());
 	currentParameterLabel->setFont(Font(10));
-	currentParameterLabel->setText(translate("TEMPO"), false);
+	currentParameterLabel->setText(translate("TEMPO"), dontSendNotification);
     currentParameterLabel->setColour(Label::textColourId, Colours::white);
     currentParameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     currentParameterLabel->setJustificationType(Justification::centred);
@@ -912,7 +912,7 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
             PAD_SETTINGS->setSequencerMidiMinPressureRange(midiPressureMinRangeSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue()), false);
+        parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
     }
     
     
@@ -925,7 +925,7 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
             PAD_SETTINGS->setSequencerMidiMaxPressureRange(midiPressureMaxRangeSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue()), false);
+        parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
     }
 
        
@@ -2287,7 +2287,7 @@ void GuiSequencerMode::setParameterLabelText (String value)
     if (value != String::empty)
     {
 	parameterLabel->setColour(Label::textColourId, AlphaColours::lightblue);
-	parameterLabel->setText(value, false);
+	parameterLabel->setText(value, dontSendNotification);
     }
 	
 	else if (value == String::empty)
@@ -2298,46 +2298,46 @@ void GuiSequencerMode::setParameterLabelText (String value)
 		{
             //here want to display sequenceLength, NOT number of sequences.
             //Is this too convoluted?
-            parameterLabel->setText(String(sequenceLength), false);
+            parameterLabel->setText(String(sequenceLength), dontSendNotification);
             //parameterLabel->setText(String(numberOfSequencesSlider->getValue()), false);
         }
 		
 		else if (relativeTempoSlider->isVisible())
 		{
-			currentParameterLabel->setText(translate("TEMPO"), false);
-			parameterLabel->setText(String(relativeTempoSlider->getValue()), false);
+			currentParameterLabel->setText(translate("TEMPO"), dontSendNotification);
+			parameterLabel->setText(String(relativeTempoSlider->getValue()), dontSendNotification);
 		}
 		
 		else if (noteLengthSlider->isVisible())
 		{
-			currentParameterLabel->setText(translate("N LENGTH"), false);
-			parameterLabel->setText(String(noteLengthSlider->getValue()), false);
+			currentParameterLabel->setText(translate("N LENGTH"), dontSendNotification);
+			parameterLabel->setText(String(noteLengthSlider->getValue()), dontSendNotification);
 		}
 		
 		else if (audioGainSlider->isVisible())
 		{
-			currentParameterLabel->setText(translate("GAIN"), false);
-			parameterLabel->setText(String(audioGainSlider->getValue()), false);
+			currentParameterLabel->setText(translate("GAIN"), dontSendNotification);
+			parameterLabel->setText(String(audioGainSlider->getValue()), dontSendNotification);
 		}
 		
 		else if (audioPanSlider->isVisible())
 		{
-			currentParameterLabel->setText(translate("PAN"), false);
-			parameterLabel->setText(String(audioPanSlider->getValue()), false);
+			currentParameterLabel->setText(translate("PAN"), dontSendNotification);
+			parameterLabel->setText(String(audioPanSlider->getValue()), dontSendNotification);
 			
 		}
         
         else if (audioAttackSlider->isVisible())
 		{
-			currentParameterLabel->setText(translate("ATTACK"), false);
-			parameterLabel->setText(String(audioAttackSlider->getValue()), false);
+			currentParameterLabel->setText(translate("ATTACK"), dontSendNotification);
+			parameterLabel->setText(String(audioAttackSlider->getValue()), dontSendNotification);
 			
 		}
         
         else if (audioPolyphonySlider->isVisible())
 		{
-			currentParameterLabel->setText(translate("POLYPHONY"), false);
-			parameterLabel->setText(String(audioPolyphonySlider->getValue()), false);
+			currentParameterLabel->setText(translate("POLYPHONY"), dontSendNotification);
+			parameterLabel->setText(String(audioPolyphonySlider->getValue()), dontSendNotification);
 			
 		}
 	}
@@ -2418,9 +2418,9 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     
     //update parameterHoverLabel
     if (midiPressureMinRangeSlider->isMouseOver(true))
-        parameterHoverLabel->setText(String(midiPressureMinRangeSlider->getValue()), false);
+        parameterHoverLabel->setText(String(midiPressureMinRangeSlider->getValue()), dontSendNotification);
     else if (midiPressureMaxRangeSlider->isMouseOver(true))
-        parameterHoverLabel->setText(String(midiPressureMaxRangeSlider->getValue()), false);
+        parameterHoverLabel->setText(String(midiPressureMaxRangeSlider->getValue()), dontSendNotification);
      
     
     // ======= info box text command =========
@@ -2661,7 +2661,7 @@ void GuiSequencerMode::mouseExit (const MouseEvent &e)
 		setParameterLabelText(String::empty);
     
     if(e.eventComponent == midiPressureMinRangeSlider || e.eventComponent == midiPressureMaxRangeSlider)
-        parameterHoverLabel->setText(String::empty, false);
+        parameterHoverLabel->setText(String::empty, dontSendNotification);
      
     
     //remove any text

@@ -391,7 +391,7 @@ void GuiMidiMode::sliderValueChanged (Slider* slider)
             PAD_SETTINGS->setMidiMinPressureRange(pressureMinRangeSlider->getValue());
         }
         
-         parameterHoverLabel->setText(String(slider->getValue()), false);
+         parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
         
     }
     //max pressure range slider
@@ -403,7 +403,7 @@ void GuiMidiMode::sliderValueChanged (Slider* slider)
             PAD_SETTINGS->setMidiMaxPressureRange(pressureMaxRangeSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue()), false);
+        parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
     }
         
     //CC Controller Number
@@ -959,9 +959,9 @@ void GuiMidiMode::mouseEnter (const MouseEvent &e)
     
     //update parameterHoverLabel
     if (pressureMinRangeSlider->isMouseOver(true))
-        parameterHoverLabel->setText(String(pressureMinRangeSlider->getValue()), false);
+        parameterHoverLabel->setText(String(pressureMinRangeSlider->getValue()), dontSendNotification);
     else if (pressureMaxRangeSlider->isMouseOver(true))
-        parameterHoverLabel->setText(String(pressureMaxRangeSlider->getValue()), false);
+        parameterHoverLabel->setText(String(pressureMaxRangeSlider->getValue()), dontSendNotification);
 }
 
 void GuiMidiMode::mouseExit (const MouseEvent &e)
@@ -971,7 +971,7 @@ void GuiMidiMode::mouseExit (const MouseEvent &e)
     
     
     if(e.eventComponent == pressureMinRangeSlider || e.eventComponent == pressureMaxRangeSlider)
-        parameterHoverLabel->setText(String::empty, false);
+        parameterHoverLabel->setText(String::empty, dontSendNotification);
 }
 
 

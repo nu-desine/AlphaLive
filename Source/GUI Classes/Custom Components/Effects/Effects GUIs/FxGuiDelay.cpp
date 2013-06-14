@@ -172,7 +172,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayMix(wetMixSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     else if (slider == delayTimeSlider)
@@ -183,7 +183,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayTime(delayTimeSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 2), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 2), dontSendNotification);
     }
     
     else if (slider == feedbackSlider)
@@ -194,7 +194,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayFeedback(feedbackSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     else if (slider == lpfFrequencySlider)
@@ -205,7 +205,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayLpfFreq(lpfFrequencySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 0), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 0), dontSendNotification);
     }
     
     else if (slider == hpfFrequencySlider)
@@ -216,7 +216,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayHpfFreq(hpfFrequencySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 0), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 0), dontSendNotification);
     }
     
     else if (slider == intensitySlider)
@@ -227,7 +227,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayAtIntensity(intensitySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
 
@@ -427,12 +427,12 @@ void GuiDelay::mouseEnter (const MouseEvent &e)
     if (wetMixSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix. Sets the Wet/Dry mix on the selected pads."));
-        parameterHoverLabel->setText(String(wetMixSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(wetMixSlider->getValue(), 3), dontSendNotification);
     }
     else if (delayTimeSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Delay Time. Sets the delay time in milliseconds for the selected pads. To set the delay time based on note length, click the 'Sync' button."));
-        parameterHoverLabel->setText(String(delayTimeSlider->getValue(), 2), false);
+        parameterHoverLabel->setText(String(delayTimeSlider->getValue(), 2), dontSendNotification);
     }
     else if (delayTimeMenu->isMouseOver(true))
     {
@@ -445,17 +445,17 @@ void GuiDelay::mouseEnter (const MouseEvent &e)
     else if (feedbackSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Delay Feedback. Sets the feedback level for the selected pads. Please note that high values cause the delay to continuously feedback and get louder and louder."));
-        parameterHoverLabel->setText(String(feedbackSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(feedbackSlider->getValue(), 3), dontSendNotification);
     }
     else if (lpfFrequencySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Low Pass Filter Frequency. Sets the cutoff frequency of the Low-pass Filter on the selected pads. Please note that when this value is lower than the Hi-pass Filter cutoff frequency the delayed signal will not be audible."));
-        parameterHoverLabel->setText(String(lpfFrequencySlider->getValue(), 0), false);
+        parameterHoverLabel->setText(String(lpfFrequencySlider->getValue(), 0), dontSendNotification);
     }
     else if (hpfFrequencySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("High Pass Filter Frequency. Sets the cutoff frequency of the Hi-pass Filter for the selected pads. Please note that when this value is higher than the Hi-pass Filter cutoff frequency the delayed signal will not be audible."));
-        parameterHoverLabel->setText(String(hpfFrequencySlider->getValue(), 0), false);
+        parameterHoverLabel->setText(String(hpfFrequencySlider->getValue(), 0), dontSendNotification);
     }
     else if (alphaTouchMenu->isMouseOver(true))
     {
@@ -468,7 +468,7 @@ void GuiDelay::mouseEnter (const MouseEvent &e)
     else if (intensitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
-        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), dontSendNotification);
     }
     
 }
@@ -477,6 +477,6 @@ void GuiDelay::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
-    parameterHoverLabel->setText(String::empty, false);
+    parameterHoverLabel->setText(String::empty, dontSendNotification);
     
 }

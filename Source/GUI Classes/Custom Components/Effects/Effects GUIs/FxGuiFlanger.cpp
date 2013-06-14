@@ -166,7 +166,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxFlangerMix(mixSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
 
     else if (slider == rateSlider)
@@ -177,7 +177,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxFlangerRate(rateSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     
@@ -189,7 +189,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxFlangerFeedback(feedbackSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     
@@ -201,7 +201,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxFlangerIntensity(flangerIntensitySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     
@@ -213,7 +213,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxFlangerAtIntensity(intensitySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     
@@ -444,12 +444,12 @@ void GuiFlanger::mouseEnter (const MouseEvent &e)
     if (mixSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix. Sets the Wet/Dry mix of the Flanger effect for the selected pads."));
-        parameterHoverLabel->setText(String(mixSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(mixSlider->getValue(), 3), dontSendNotification);
     }
     else if (rateSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("LFO Rate. Sets the rate in Hz for the selected pads. To set the rate based on the tempo, click on the 'Sync' button."));
-        parameterHoverLabel->setText(String(rateSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(rateSlider->getValue(), 3), dontSendNotification);
     }
     else if (rateMenu->isMouseOver(true))
     {
@@ -462,12 +462,12 @@ void GuiFlanger::mouseEnter (const MouseEvent &e)
     else if (feedbackSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Feedback Selector. Sets the flanger feedback on the selected pads."));
-        parameterHoverLabel->setText(String(feedbackSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(feedbackSlider->getValue(), 3), dontSendNotification);
     }
     else if (flangerIntensitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Flanger Intensity Selector. Sets the intensity of the effect on the selected pads."));
-        parameterHoverLabel->setText(String(flangerIntensitySlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(flangerIntensitySlider->getValue(), 3), dontSendNotification);
     }
     else if (alphaTouchMenu->isMouseOver(true))
     {
@@ -480,7 +480,7 @@ void GuiFlanger::mouseEnter (const MouseEvent &e)
     else if (intensitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
-        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), dontSendNotification);
     }
     
 }
@@ -489,6 +489,6 @@ void GuiFlanger::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
-    parameterHoverLabel->setText(String::empty, false);
+    parameterHoverLabel->setText(String::empty, dontSendNotification);
     
 }

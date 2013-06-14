@@ -37,25 +37,25 @@ AboutComponent::AboutComponent(MainComponent &ref)
     titleLabel->setFont(newFont1);
     
     addAndMakeVisible(versionNumberLabel = new Label("Version Number"));
-    versionNumberLabel->setText(translate("Version") + " " + String(ProjectInfo::versionString), false);
+    versionNumberLabel->setText(translate("Version") + " " + String(ProjectInfo::versionString), dontSendNotification);
     versionNumberLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(firmwareNumberLabel = new Label("Firmware Number"));
     firmwareNumberLabel->setText(translate("Firmware Version:") + 
                                  " " + 
                                  mainComponentRef.getAlphaLiveEngineRef().getFirmwareVersion(),
-                                 false);
+                                 dontSendNotification);
     firmwareNumberLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(deviceSerialLabel = new Label("Device Serial"));
     deviceSerialLabel->setText(translate("Device Serial:") + 
                                " " + 
                                mainComponentRef.getAlphaLiveEngineRef().getDeviceSerial(),
-                               false);
+                               dontSendNotification);
     deviceSerialLabel->setJustificationType(Justification::centredTop);
     
     addAndMakeVisible(companyLabel = new Label("Company"));
-    companyLabel->setText(translate("Developed by") + " ", false);
+    companyLabel->setText(translate("Developed by") + " ", dontSendNotification);
     companyLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(nuDesineLink = new HyperlinkButton("nu desine", URL("http://www.nu-desine.com")));
@@ -66,18 +66,18 @@ AboutComponent::AboutComponent(MainComponent &ref)
                                                            URL("https://github.com/nu-desine/AlphaLive")));
     
     addAndMakeVisible(openSourceLabel = new Label("Open Source Label"));
-    openSourceLabel->setText(translate("released under the") + " ", false);
+    openSourceLabel->setText(translate("released under the") + " ", dontSendNotification);
     openSourceLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(gnuLicenseLink = new HyperlinkButton("GNU General Public License v2.0", 
                                                          URL("http://www.opensource.org/licenses/GPL-2.0")));
     
     addAndMakeVisible(copyrightLabel = new Label("Copyright Label"));
-    copyrightLabel->setText(translate("Copyright 2011-2013 nu desine"), false);
+    copyrightLabel->setText(translate("Copyright 2011-2013 nu desine"), dontSendNotification);
     copyrightLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(samplesLabel = new Label("Samples Label"));
-    samplesLabel->setText(translate("Audio samples provided by:"), false);
+    samplesLabel->setText(translate("Audio samples provided by:"), dontSendNotification);
     samplesLabel->setJustificationType(Justification::horizontallyCentred);
     
     nuDesineLink->toFront(true);
@@ -222,6 +222,6 @@ bool AboutComponent::keyPressed (const KeyPress &key, Component *originatingComp
 
 void AboutComponent::setFirmwareDetails (String version, String serial)
 {
-    firmwareNumberLabel->setText(translate("Firmware Version:") + " " + version, false);
-    deviceSerialLabel->setText(translate("Device Serial:") + " " + serial, false);
+    firmwareNumberLabel->setText(translate("Firmware Version:") + " " + version, dontSendNotification);
+    deviceSerialLabel->setText(translate("Device Serial:") + " " + serial, dontSendNotification);
 }

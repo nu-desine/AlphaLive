@@ -355,7 +355,7 @@ void AlphaLiveLookandFeel::drawButtonBackground (Graphics& g,
 	
 }
 
-const Font AlphaLiveLookandFeel::getFontForTextButton (TextButton& button)
+Font AlphaLiveLookandFeel::getTextButtonFont (TextButton& button)
 {
     return button.getFont();
 }
@@ -363,7 +363,7 @@ const Font AlphaLiveLookandFeel::getFontForTextButton (TextButton& button)
 void AlphaLiveLookandFeel::drawButtonText (Graphics& g, TextButton& button,
                                   bool isMouseOverButton, bool isButtonDown)
 {
-    Font font (getFontForTextButton (button));
+    Font font (getTextButtonFont (button));
     g.setFont (10);
     g.setColour (button.findColour (button.getToggleState() ? TextButton::textColourOnId
 									: TextButton::textColourOffId)
@@ -600,7 +600,7 @@ void AlphaLiveLookandFeel::drawRotarySlider (Graphics& g,
 }
 
 
-const Font AlphaLiveLookandFeel::getPopupMenuFont() 
+Font AlphaLiveLookandFeel::getPopupMenuFont() 
 {
     return Font (13.0f);
 }

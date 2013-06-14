@@ -155,7 +155,7 @@ void GuiDistortion::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDistortionInputGain(inputGainSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -167,7 +167,7 @@ void GuiDistortion::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDistortionDrive(driveSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
 	
@@ -179,7 +179,7 @@ void GuiDistortion::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDistortionTone(toneSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
 	
@@ -191,7 +191,7 @@ void GuiDistortion::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDistortionWetDryMix(wetDryMixSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -203,7 +203,7 @@ void GuiDistortion::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDistortionAtIntensity(intensitySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -355,22 +355,22 @@ void GuiDistortion::mouseEnter (const MouseEvent &e)
     if (inputGainSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Input Gain. Sets the gain of the signal to be distorted."));
-        parameterHoverLabel->setText(String(inputGainSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(inputGainSlider->getValue(), 3), dontSendNotification);
     }
     else if (driveSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Drive. Sets the amount of drive/distortion for the selected pads."));
-        parameterHoverLabel->setText(String(driveSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(driveSlider->getValue(), 3), dontSendNotification);
     }
 	else if (toneSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Tone. Sets the tone/filtering of the distortion on selected pads. Set this control to 0 to bypass the filter."));
-        parameterHoverLabel->setText(String(toneSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(toneSlider->getValue(), 3), dontSendNotification);
     }
 	else if (wetDryMixSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix. Sets the wet/dry mix for the distortion effect on the selected pads."));
-        parameterHoverLabel->setText(String(wetDryMixSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(wetDryMixSlider->getValue(), 3), dontSendNotification);
     }
     else if (distortionTypeMenu->isMouseOver(true))
     {
@@ -388,7 +388,7 @@ void GuiDistortion::mouseEnter (const MouseEvent &e)
     else if (intensitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
-        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), dontSendNotification);
     }
     
 }
@@ -397,6 +397,6 @@ void GuiDistortion::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
-    parameterHoverLabel->setText(String::empty, false);
+    parameterHoverLabel->setText(String::empty, dontSendNotification);
     
 }

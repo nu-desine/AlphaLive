@@ -117,7 +117,7 @@ void GuiBandPassFilter::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxBpfMix(mixSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     
@@ -129,7 +129,7 @@ void GuiBandPassFilter::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxBpfFreq(frequencySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 0), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 0), dontSendNotification);
     }
     
     
@@ -141,7 +141,7 @@ void GuiBandPassFilter::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxBpfBandwidth(bandwidthSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 2), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 2), dontSendNotification);
     }
     
     
@@ -153,7 +153,7 @@ void GuiBandPassFilter::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxBpfAtIntensity(intensitySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     
@@ -224,17 +224,17 @@ void GuiBandPassFilter::mouseEnter (const MouseEvent &e)
     if (mixSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix. Sets the Wet/Dry Mix for the Band-Pass filter on the selected pads."));
-        parameterHoverLabel->setText(String(mixSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(mixSlider->getValue(), 3), dontSendNotification);
     }
     else if (frequencySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Centre Frequency. Sets the centre frequency for the Band-Pass filter on the selected pads."));
-        parameterHoverLabel->setText(String(frequencySlider->getValue(), 0), false);
+        parameterHoverLabel->setText(String(frequencySlider->getValue(), 0), dontSendNotification);
     }
     else if (bandwidthSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Bandwidth. Sets the bandwidth for the Band-Pass filter on the selected pads."));
-        parameterHoverLabel->setText(String(bandwidthSlider->getValue(), 2), false);
+        parameterHoverLabel->setText(String(bandwidthSlider->getValue(), 2), dontSendNotification);
     }
     
     else if (alphaTouchMenu->isMouseOver(true))
@@ -248,7 +248,7 @@ void GuiBandPassFilter::mouseEnter (const MouseEvent &e)
     else if (intensitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
-        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), dontSendNotification);
     }
     
 }
@@ -257,6 +257,6 @@ void GuiBandPassFilter::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
-    parameterHoverLabel->setText(String::empty, false);
+    parameterHoverLabel->setText(String::empty, dontSendNotification);
     
 }

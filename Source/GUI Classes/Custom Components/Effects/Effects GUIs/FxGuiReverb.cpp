@@ -127,7 +127,7 @@ void GuiReverb::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxReverbMix(mixSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     else if (slider == roomSizeSlider)
@@ -138,7 +138,7 @@ void GuiReverb::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxReverbRoomSize(roomSizeSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     else if (slider == dampingSlider)
@@ -149,7 +149,7 @@ void GuiReverb::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxReverbDamping(dampingSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     else if (slider == widthSlider)
@@ -160,7 +160,7 @@ void GuiReverb::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxReverbWidth(widthSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
 
@@ -173,7 +173,7 @@ void GuiReverb::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxReverbAtIntensity(intensitySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
 }
@@ -248,22 +248,22 @@ void GuiReverb::mouseEnter (const MouseEvent &e)
     if (mixSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix. Sets the Wet/Dry mix of the reverb level on the selected pads."));
-        parameterHoverLabel->setText(String(mixSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(mixSlider->getValue(), 3), dontSendNotification);
     }
     else if (roomSizeSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Room Size. Sets the reverb room size of the selected pads. A larger room size will result in a longer reverberation time."));
-        parameterHoverLabel->setText(String(roomSizeSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(roomSizeSlider->getValue(), 3), dontSendNotification);
     }
     else if (dampingSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Damping. Sets the reverb damping level of the selected pads. A larger damping value result in a more subtle reverberation tail."));
-        parameterHoverLabel->setText(String(dampingSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(dampingSlider->getValue(), 3), dontSendNotification);
     }
     else if (widthSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Width. Sets the reverb width of the selected pads. A larger width will result in a wider reverb sound in the stereo spread."));
-        parameterHoverLabel->setText(String(widthSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(widthSlider->getValue(), 3), dontSendNotification);
     }
         
     else if (alphaTouchMenu->isMouseOver(true))
@@ -277,7 +277,7 @@ void GuiReverb::mouseEnter (const MouseEvent &e)
     else if (intensitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
-        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), dontSendNotification);
     }
     
 }
@@ -286,6 +286,6 @@ void GuiReverb::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
-    parameterHoverLabel->setText(String::empty, false);
+    parameterHoverLabel->setText(String::empty, dontSendNotification);
     
 }

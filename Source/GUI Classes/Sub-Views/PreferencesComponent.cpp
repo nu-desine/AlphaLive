@@ -226,7 +226,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     killOnClockStopButton->addMouseListener(this, true);
     
     addAndMakeVisible(killOnClockStopLabel = new Label());
-    killOnClockStopLabel->setText(translate("Stop All Sound On Clock Stop:"), false);
+    killOnClockStopLabel->setText(translate("Stop All Sound On Clock Stop:"), dontSendNotification);
     killOnClockStopLabel->setColour(Label::textColourId, Colours::lightgrey);
     
     
@@ -242,7 +242,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     cleanOnCloseButton->addMouseListener(this, true);
     
     addAndMakeVisible(cleanOnCloseLabel = new Label());
-    cleanOnCloseLabel->setText(translate("Clean Project On Close:"), false);
+    cleanOnCloseLabel->setText(translate("Clean Project On Close:"), dontSendNotification);
     cleanOnCloseLabel->setColour(Label::textColourId, Colours::lightgrey);
     
     
@@ -258,7 +258,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     autoSaveScenesButton->addMouseListener(this, true);
     
     addAndMakeVisible(autoSaveScenesLabel = new Label());
-    autoSaveScenesLabel->setText(translate("Auto-save Scenes:"), false);
+    autoSaveScenesLabel->setText(translate("Auto-save Scenes:"), dontSendNotification);
     autoSaveScenesLabel->setColour(Label::textColourId, Colours::lightgrey);
 
     addAndMakeVisible(autoCheckUpdatesButton = new TextButton());
@@ -272,7 +272,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     autoCheckUpdatesButton->addMouseListener(this, true);
     
     addAndMakeVisible(autoCheckUpdatesLabel = new Label());
-    autoCheckUpdatesLabel->setText(translate("Autocheck for Updates:"), false);
+    autoCheckUpdatesLabel->setText(translate("Autocheck for Updates:"), dontSendNotification);
     autoCheckUpdatesLabel->setColour(Label::textColourId, Colours::lightgrey);
     
 }

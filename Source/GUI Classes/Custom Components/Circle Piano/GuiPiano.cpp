@@ -696,16 +696,16 @@ void GuiPiano::setNoteLabelText (int note)
     {
         if (noteDisplayType == 1)
         {
-            midiNoteLabel->setText(String(note), false);
+            midiNoteLabel->setText(String(note), dontSendNotification);
         }
         else if (noteDisplayType == 2)
         {
-            midiNoteLabel->setText(MidiMessage::getMidiNoteName(note, true, true, 3), false);
+            midiNoteLabel->setText(MidiMessage::getMidiNoteName(note, true, true, 3), dontSendNotification);
         }
     }
     else
     {
-        midiNoteLabel->setText(String::empty, false); 
+        midiNoteLabel->setText(String::empty, dontSendNotification); 
     }
 }
 
@@ -789,7 +789,7 @@ void GuiPiano::setActive (bool value)
     {
         setAlpha(0.3f);
         
-        midiNoteLabel->setText(String::empty, false);
+        midiNoteLabel->setText(String::empty, dontSendNotification);
         
         for (int i = 0; i < 120; i++)
             setKeyDisplay(i, false);

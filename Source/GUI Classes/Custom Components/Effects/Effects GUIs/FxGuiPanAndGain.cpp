@@ -109,7 +109,7 @@ void GuiGainAndPan::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxGainPanGain(gainSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     
@@ -121,7 +121,7 @@ void GuiGainAndPan::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxGainPanPan(panSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }    
     
     if (slider == intensitySlider)
@@ -132,7 +132,7 @@ void GuiGainAndPan::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxGainPanAtIntensity(intensitySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     
@@ -203,12 +203,12 @@ void GuiGainAndPan::mouseEnter (const MouseEvent &e)
     if (gainSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Gain. Sets the gain for the selected pads."));
-        parameterHoverLabel->setText(String(gainSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(gainSlider->getValue(), 3), dontSendNotification);
     }
     else if (panSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Pan. Sets the pan level for the selected pads."));
-        parameterHoverLabel->setText(String(panSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(panSlider->getValue(), 3), dontSendNotification);
     }
     
     else if (alphaTouchMenu->isMouseOver(true))
@@ -222,7 +222,7 @@ void GuiGainAndPan::mouseEnter (const MouseEvent &e)
     else if (intensitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
-        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), dontSendNotification);
     }
     
 }
@@ -231,6 +231,6 @@ void GuiGainAndPan::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
-    parameterHoverLabel->setText(String::empty, false);
+    parameterHoverLabel->setText(String::empty, dontSendNotification);
     
 }

@@ -140,7 +140,7 @@ void GuiBitcrusher::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxBitcrusherInputGain(inputGainSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
 	
@@ -152,7 +152,7 @@ void GuiBitcrusher::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxBitcrusherDownsample(downsampleSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -164,7 +164,7 @@ void GuiBitcrusher::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxBitcrusherCrush(crushSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
 	
@@ -176,7 +176,7 @@ void GuiBitcrusher::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxBitcrusherSmoothing(smoothingSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
 	
@@ -188,7 +188,7 @@ void GuiBitcrusher::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxBitcrusherWetDryMix(wetDryMixSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -200,7 +200,7 @@ void GuiBitcrusher::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxBitcrusherAtIntensity(intensitySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -280,27 +280,27 @@ void GuiBitcrusher::mouseEnter (const MouseEvent &e)
     if (inputGainSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Input Gain. Sets the gain of the signal being bitcrushed on the selected pads."));
-        parameterHoverLabel->setText(String(inputGainSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(inputGainSlider->getValue(), 3), dontSendNotification);
     }
 	else if (downsampleSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Downsample. Sets the amount of downsampling will occur in the bitcrusher on the selected pads. A higher downsampling value reduces the quality of the sound, creating a Lo-Fi distorted sound."));
-        parameterHoverLabel->setText(String(downsampleSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(downsampleSlider->getValue(), 3), dontSendNotification);
     }
     else if (crushSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Crush. Sets the amount of bitcrushing will occur on the selected pads."));
-        parameterHoverLabel->setText(String(crushSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(crushSlider->getValue(), 3), dontSendNotification);
     }
 	else if (smoothingSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Smoothing. Sets the bitcrusher tone/filtering of the selected pads."));
-        parameterHoverLabel->setText(String(smoothingSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(smoothingSlider->getValue(), 3), dontSendNotification);
     }
 	else if (wetDryMixSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix. Sets the wet/dry mix for the bitcrusher effect on the selected pads."));
-        parameterHoverLabel->setText(String(wetDryMixSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(wetDryMixSlider->getValue(), 3), dontSendNotification);
     }
 	
     else if (alphaTouchMenu->isMouseOver(true))
@@ -314,7 +314,7 @@ void GuiBitcrusher::mouseEnter (const MouseEvent &e)
     else if (intensitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
-        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), dontSendNotification);
     }
     
 }
@@ -323,6 +323,6 @@ void GuiBitcrusher::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
-    parameterHoverLabel->setText(String::empty, false);
+    parameterHoverLabel->setText(String::empty, dontSendNotification);
     
 }

@@ -424,13 +424,13 @@ void MainComponent::sliderValueChanged (Slider *slider)
     if (slider == gainSlider)
     {
         AppSettings::Instance()->setGlobalGain(gainSlider->getValue());
-        gainPanValueLabel->setText(String(slider->getValue(), 3), false);
+        gainPanValueLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     else if (slider == panSlider)
     {
         AppSettings::Instance()->setGlobalPan(panSlider->getValue());
-        gainPanValueLabel->setText(String(slider->getValue(), 3), false);
+        gainPanValueLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -1178,9 +1178,9 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     
     //update gainPanValueLabel
     if (gainSlider->isMouseOver(true))
-        gainPanValueLabel->setText(String(gainSlider->getValue(), 3), false);
+        gainPanValueLabel->setText(String(gainSlider->getValue(), 3), dontSendNotification);
     else if (panSlider->isMouseOver(true))
-        gainPanValueLabel->setText(String(panSlider->getValue(), 3), false);
+        gainPanValueLabel->setText(String(panSlider->getValue(), 3), dontSendNotification);
     
     
     mouseOverComponent = e.eventComponent;
@@ -1195,7 +1195,7 @@ void MainComponent::mouseExit (const MouseEvent &e)
     
     
     if(e.eventComponent == gainSlider || e.eventComponent == panSlider)
-        gainPanValueLabel->setText(String::empty, false);
+        gainPanValueLabel->setText(String::empty, dontSendNotification);
         
         
 }
@@ -1221,7 +1221,7 @@ void MainComponent::setLocalisation()
     if (countryCode == "ja" || countryCode == "jpn") //japanese
     {
         File transFile (appDir + "Application Data" + File::separatorString + "trans_ja");
-        trans = new LocalisedStrings (transFile);
+        trans = new LocalisedStrings (transFile, false);
         LocalisedStrings::setCurrentMappings(trans);
         
         String fontToUse = "Arial Unicode MS"; // available on OSX 10.5 and above
@@ -1247,7 +1247,7 @@ void MainComponent::setLocalisation()
     else if (countryCode == "zh" || countryCode == "zho" || countryCode == "zh-Hant" || countryCode == "zh-Hans") //chinese. do i need the first two?
     {
         File transFile (appDir + "Application Data" + File::separatorString + "trans_zh");
-        trans = new LocalisedStrings (transFile);
+        trans = new LocalisedStrings (transFile, false);
         LocalisedStrings::setCurrentMappings(trans);
         
         String fontToUse = "Arial Unicode MS"; // available on OSX 10.5 and above
@@ -1273,7 +1273,7 @@ void MainComponent::setLocalisation()
     else if (countryCode == "ko" || countryCode == "kor") //Korean
     {
         File transFile (appDir + "Application Data" + File::separatorString + "trans_ko");
-        trans = new LocalisedStrings (transFile);
+        trans = new LocalisedStrings (transFile, false);
         LocalisedStrings::setCurrentMappings(trans);
         
         String fontToUse = "AppleMyungjo"; // available on OSX 10.5 and above

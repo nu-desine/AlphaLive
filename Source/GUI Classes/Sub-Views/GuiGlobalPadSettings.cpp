@@ -346,7 +346,7 @@ void GuiGlobalPadSettings::sliderValueChanged (Slider* slider)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setStaticVelocity(slider->getValue());
-			parameterHoverLabel->setText(String(slider->getValue()), false);
+			parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
         }
     }
     else if (slider == velocityMinRangeSlider)
@@ -355,7 +355,7 @@ void GuiGlobalPadSettings::sliderValueChanged (Slider* slider)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setVelocityMinRange(slider->getValue());
-			parameterHoverLabel->setText(String(slider->getValue()), false);
+			parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
         }
         
         if (slider->getValue() >= velocityMaxRangeSlider->getValue())
@@ -367,7 +367,7 @@ void GuiGlobalPadSettings::sliderValueChanged (Slider* slider)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setVelocityMaxRange(slider->getValue());
-			parameterHoverLabel->setText(String(slider->getValue()), false);
+			parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
         }
         
         if (slider->getValue() <= velocityMinRangeSlider->getValue())
@@ -391,7 +391,7 @@ void GuiGlobalPadSettings::updateDisplay()
         velocitySlider->setValue(PAD_SETTINGS->getStaticVelocity());
         velocityMinRangeSlider->setValue(PAD_SETTINGS->getVelocityMinRange());
         velocityMaxRangeSlider->setValue(PAD_SETTINGS->getVelocityMaxRange());
-		parameterHoverLabel->setText(String(PAD_SETTINGS->getStaticVelocity()), false);
+		parameterHoverLabel->setText(String(PAD_SETTINGS->getStaticVelocity()), dontSendNotification);
 		pressureCurveValue = PAD_SETTINGS->getPressureCurve();
         velocityCurveValue = PAD_SETTINGS->getVelocityCurve();
         
@@ -647,19 +647,19 @@ void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
     else if (velocitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Static Velocity Selector. Sets the static velocity for a MIDI note or OSC message."));
-		parameterHoverLabel->setText(String(velocitySlider->getValue()), false);
+		parameterHoverLabel->setText(String(velocitySlider->getValue()), dontSendNotification);
 		parameterHoverLabel->setVisible(true);
     }
     else if (velocityMinRangeSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Velocity Minimum Range Selector. Along with the Maximum Range Selector it sets and displays the MIDI velocity range for the selected pads."));
-		parameterHoverLabel->setText(String(velocityMinRangeSlider->getValue()), false);
+		parameterHoverLabel->setText(String(velocityMinRangeSlider->getValue()), dontSendNotification);
 		parameterHoverLabel->setVisible(true);
     }
     else if (velocityMaxRangeSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Velocity Maximum Range Selector. Along with the Minimum Range Selector it sets and displays the MIDI velocity range for the selected pads."));
-		parameterHoverLabel->setText(String(velocityMaxRangeSlider->getValue()), false);
+		parameterHoverLabel->setText(String(velocityMaxRangeSlider->getValue()), dontSendNotification);
 		parameterHoverLabel->setVisible(true);
     }
 }
@@ -673,7 +673,7 @@ void GuiGlobalPadSettings::mouseExit (const MouseEvent &e)
        e.eventComponent == velocityMinRangeSlider ||
        e.eventComponent == velocityMaxRangeSlider)
 	{
-        parameterHoverLabel->setText(String::empty, false);
+        parameterHoverLabel->setText(String::empty, dontSendNotification);
 		parameterHoverLabel->setVisible(false);
 	}
 }

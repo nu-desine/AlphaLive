@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -77,31 +76,31 @@ int TabBarButton::getBestTabLength (const int depth)
     return getLookAndFeel().getTabButtonBestWidth (*this, depth);
 }
 
-void TabBarButton::calcAreas (Rectangle<int>& extraComp, Rectangle<int>& text) const
+void TabBarButton::calcAreas (Rectangle<int>& extraComp, Rectangle<int>& textArea) const
 {
     LookAndFeel& lf = getLookAndFeel();
-    text = getActiveArea();
+    textArea = getActiveArea();
 
-    const int depth = owner.isVertical() ? text.getWidth() : text.getHeight();
+    const int depth = owner.isVertical() ? textArea.getWidth() : textArea.getHeight();
     const int overlap = lf.getTabButtonOverlap (depth);
 
     if (overlap > 0)
     {
         if (owner.isVertical())
-            text.reduce (0, overlap);
+            textArea.reduce (0, overlap);
         else
-            text.reduce (overlap, 0);
+            textArea.reduce (overlap, 0);
     }
 
     if (extraComponent != nullptr)
-        extraComp = lf.getTabButtonExtraComponentBounds (*this, text, *extraComponent);
+        extraComp = lf.getTabButtonExtraComponentBounds (*this, textArea, *extraComponent);
 }
 
 Rectangle<int> TabBarButton::getTextArea() const
 {
-    Rectangle<int> extraComp, text;
-    calcAreas (extraComp, text);
-    return text;
+    Rectangle<int> extraComp, textArea;
+    calcAreas (extraComp, textArea);
+    return textArea;
 }
 
 Rectangle<int> TabBarButton::getActiveArea() const
@@ -139,8 +138,8 @@ void TabBarButton::resized()
 {
     if (extraComponent != nullptr)
     {
-        Rectangle<int> extraComp, text;
-        calcAreas (extraComp, text);
+        Rectangle<int> extraComp, textArea;
+        calcAreas (extraComp, textArea);
 
         if (! extraComp.isEmpty())
             extraComponent->setBounds (extraComp);

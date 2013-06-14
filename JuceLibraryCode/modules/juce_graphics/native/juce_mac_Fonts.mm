@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -713,58 +712,46 @@ public:
         : Typeface (font.getTypefaceName(), font.getTypefaceStyle())
     {
         JUCE_AUTORELEASEPOOL
-        renderingTransform = CGAffineTransformIdentity;
-
-        NSDictionary* nsDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   juceStringToNS (name), NSFontFamilyAttribute,
-                                   juceStringToNS (style), NSFontFaceAttribute, nil];
-
-        NSFontDescriptor* nsFontDesc = [NSFontDescriptor fontDescriptorWithFontAttributes: nsDict];
-        nsFont = [NSFont fontWithDescriptor: nsFontDesc size: referenceFontSize];
-
-        [nsFont retain];
-
-        ascent = std::abs ((float) [nsFont ascender]);
-        float totalSize = ascent + std::abs ((float) [nsFont descender]);
-        ascent /= totalSize;
-
-        pathTransform = AffineTransform::identity.scale (1.0f / totalSize);
-
-      #if SUPPORT_ONLY_10_4_FONTS
-        ATSFontRef atsFont = ATSFontFindFromName ((CFStringRef) [nsFont fontName], kATSOptionFlagsDefault);
-
-        if (atsFont == 0)
-            atsFont = ATSFontFindFromPostScriptName ((CFStringRef) [nsFont fontName], kATSOptionFlagsDefault);
-
-        fontRef = CGFontCreateWithPlatformFont (&atsFont);
-
-        const float totalHeight = std::abs ([nsFont ascender]) + std::abs ([nsFont descender]);
-        unitsToHeightScaleFactor = 1.0f / totalHeight;
-        fontHeightToPointsFactor = referenceFontSize / totalHeight;
-      #else
-       #if SUPPORT_10_4_FONTS
-        if (NEW_CGFONT_FUNCTIONS_UNAVAILABLE)
         {
-            ATSFontRef atsFont = ATSFontFindFromName ((CFStringRef) [nsFont fontName], kATSOptionFlagsDefault);
+            renderingTransform = CGAffineTransformIdentity;
 
-            if (atsFont == 0)
-                atsFont = ATSFontFindFromPostScriptName ((CFStringRef) [nsFont fontName], kATSOptionFlagsDefault);
+            NSDictionary* nsDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                                       juceStringToNS (name), NSFontFamilyAttribute,
+                                       juceStringToNS (style), NSFontFaceAttribute, nil];
 
-            fontRef = CGFontCreateWithPlatformFont (&atsFont);
+            NSFontDescriptor* nsFontDesc = [NSFontDescriptor fontDescriptorWithFontAttributes: nsDict];
+            nsFont = [NSFont fontWithDescriptor: nsFontDesc size: referenceFontSize];
 
-            const float totalHeight = std::abs ([nsFont ascender]) + std::abs ([nsFont descender]);
-            unitsToHeightScaleFactor = 1.0f / totalHeight;
-            fontHeightToPointsFactor = referenceFontSize / totalHeight;
+            [nsFont retain];
+
+          #if SUPPORT_ONLY_10_4_FONTS
+            initWithATSFont();
+          #else
+           #if SUPPORT_10_4_FONTS
+            if (NEW_CGFONT_FUNCTIONS_UNAVAILABLE)
+            {
+                initWithATSFont();
+            }
+            else
+           #endif
+            {
+                fontRef = CGFontCreateWithFontName ((CFStringRef) [nsFont fontName]);
+
+                const float absAscent = std::abs ((float) CGFontGetAscent (fontRef));
+                const float totalHeight = absAscent + std::abs ((float) CGFontGetDescent (fontRef));
+
+                ascent = absAscent / totalHeight;
+                unitsToHeightScaleFactor = 1.0f / totalHeight;
+
+                const float nsFontAscent  = std::abs ([nsFont ascender]);
+                const float nsFontDescent = std::abs ([nsFont descender]);
+
+                fontHeightToPointsFactor = referenceFontSize / (nsFontAscent + nsFontDescent);
+           }
+          #endif
+
+            pathTransform = AffineTransform::identity.scale (unitsToHeightScaleFactor);
         }
-        else
-       #endif
-        {
-            fontRef = CGFontCreateWithFontName ((CFStringRef) [nsFont fontName]);
-
-            unitsToHeightScaleFactor = 1.0f / getFontTotalHeight (fontRef);
-            fontHeightToPointsFactor = getHeightToPointsFactor (fontRef);
-        }
-      #endif
     }
 
     ~OSXTypeface()
@@ -776,6 +763,27 @@ public:
         if (fontRef != 0)
             CGFontRelease (fontRef);
     }
+
+   #if SUPPORT_10_4_FONTS
+    void initWithATSFont()
+    {
+        ATSFontRef atsFont = ATSFontFindFromName ((CFStringRef) [nsFont fontName], kATSOptionFlagsDefault);
+
+        if (atsFont == 0)
+            atsFont = ATSFontFindFromPostScriptName ((CFStringRef) [nsFont fontName], kATSOptionFlagsDefault);
+
+        fontRef = CGFontCreateWithPlatformFont (&atsFont);
+
+        const float absAscent = std::abs ([nsFont ascender]);
+        const float absDescent = std::abs ([nsFont descender]);
+        const float totalHeight = absAscent + absDescent;
+
+        unitsToHeightScaleFactor = 1.0f / totalHeight;
+        fontHeightToPointsFactor = referenceFontSize / totalHeight;
+        ascent = absAscent / totalHeight;
+    }
+   #endif
+
 
     float getAscent() const                 { return ascent; }
     float getDescent() const                { return 1.0f - ascent; }
@@ -903,28 +911,29 @@ public:
         jassert (path.isEmpty());
 
         JUCE_AUTORELEASEPOOL
-
-        NSBezierPath* bez = [NSBezierPath bezierPath];
-        [bez moveToPoint: NSMakePoint (0, 0)];
-        [bez appendBezierPathWithGlyph: (NSGlyph) glyphNumber
-                                inFont: nsFont];
-
-        for (int i = 0; i < [bez elementCount]; ++i)
         {
-            NSPoint p[3];
-            switch ([bez elementAtIndex: i associatedPoints: p])
-            {
-                case NSMoveToBezierPathElement:     path.startNewSubPath ((float) p[0].x, (float) -p[0].y); break;
-                case NSLineToBezierPathElement:     path.lineTo  ((float) p[0].x, (float) -p[0].y); break;
-                case NSCurveToBezierPathElement:    path.cubicTo ((float) p[0].x, (float) -p[0].y,
-                                                                  (float) p[1].x, (float) -p[1].y,
-                                                                  (float) p[2].x, (float) -p[2].y); break;
-                case NSClosePathBezierPathElement:  path.closeSubPath(); break;
-                default:                            jassertfalse; break;
-            }
-        }
+            NSBezierPath* bez = [NSBezierPath bezierPath];
+            [bez moveToPoint: NSMakePoint (0, 0)];
+            [bez appendBezierPathWithGlyph: (NSGlyph) glyphNumber
+                                    inFont: nsFont];
 
-        path.applyTransform (pathTransform);
+            for (int i = 0; i < [bez elementCount]; ++i)
+            {
+                NSPoint p[3];
+                switch ([bez elementAtIndex: i associatedPoints: p])
+                {
+                    case NSMoveToBezierPathElement:     path.startNewSubPath ((float) p[0].x, (float) -p[0].y); break;
+                    case NSLineToBezierPathElement:     path.lineTo  ((float) p[0].x, (float) -p[0].y); break;
+                    case NSCurveToBezierPathElement:    path.cubicTo ((float) p[0].x, (float) -p[0].y,
+                                                                      (float) p[1].x, (float) -p[1].y,
+                                                                      (float) p[2].x, (float) -p[2].y); break;
+                    case NSClosePathBezierPathElement:  path.closeSubPath(); break;
+                    default:                            jassertfalse; break;
+                }
+            }
+
+            path.applyTransform (pathTransform);
+        }
         return true;
        #endif
     }
@@ -1077,18 +1086,21 @@ private:
 StringArray Font::findAllTypefaceNames()
 {
     StringArray names;
+
     JUCE_AUTORELEASEPOOL
+    {
+       #if JUCE_IOS
+        NSArray* fonts = [UIFont familyNames];
+       #else
+        NSArray* fonts = [[NSFontManager sharedFontManager] availableFontFamilies];
+       #endif
 
-   #if JUCE_IOS
-    NSArray* fonts = [UIFont familyNames];
-   #else
-    NSArray* fonts = [[NSFontManager sharedFontManager] availableFontFamilies];
-   #endif
+        for (unsigned int i = 0; i < [fonts count]; ++i)
+            names.add (nsStringToJuce ((NSString*) [fonts objectAtIndex: i]));
 
-    for (unsigned int i = 0; i < [fonts count]; ++i)
-        names.add (nsStringToJuce ((NSString*) [fonts objectAtIndex: i]));
+        names.sort (true);
+    }
 
-    names.sort (true);
     return names;
 }
 
@@ -1098,14 +1110,16 @@ StringArray Font::findAllTypefaceStyles (const String& family)
         return findAllTypefaceStyles (FontStyleHelpers::getConcreteFamilyNameFromPlaceholder (family));
 
     StringArray results;
+
     JUCE_AUTORELEASEPOOL
-
-    NSArray* styles = [[NSFontManager sharedFontManager] availableMembersOfFontFamily: juceStringToNS (family)];
-
-    for (unsigned int i = 0; i < [styles count]; ++i)
     {
-        NSArray* style = [styles objectAtIndex: i];
-        results.add (nsStringToJuce ((NSString*) [style objectAtIndex: 1]));
+        NSArray* styles = [[NSFontManager sharedFontManager] availableMembersOfFontFamily: juceStringToNS (family)];
+
+        for (unsigned int i = 0; i < [styles count]; ++i)
+        {
+            NSArray* style = [styles objectAtIndex: i];
+            results.add (nsStringToJuce ((NSString*) [style objectAtIndex: 1]));
+        }
     }
 
     return results;
@@ -1117,6 +1131,11 @@ StringArray Font::findAllTypefaceStyles (const String& family)
 Typeface::Ptr Typeface::createSystemTypefaceFor (const Font& font)
 {
     return new OSXTypeface (font);
+}
+
+void Typeface::scanFolderForFonts (const File&)
+{
+    jassertfalse; // not implemented on this platform
 }
 
 struct DefaultFontNames

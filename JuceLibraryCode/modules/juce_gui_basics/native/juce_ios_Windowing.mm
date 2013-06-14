@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -106,9 +105,9 @@ class iOSMessageBox
 public:
     iOSMessageBox (const String& title, const String& message,
                    NSString* button1, NSString* button2, NSString* button3,
-                   ModalComponentManager::Callback* callback_, const bool isAsync_)
+                   ModalComponentManager::Callback* cb, const bool async)
         : result (0), delegate (nil), alert (nil),
-          callback (callback_), isYesNo (button3 != nil), isAsync (isAsync_)
+          callback (cb), isYesNo (button3 != nil), isAsync (async)
     {
         delegate = [[JuceAlertBoxDelegate alloc] init];
         delegate->owner = this;
@@ -131,10 +130,12 @@ public:
     int getResult()
     {
         jassert (callback == nullptr);
-        JUCE_AUTORELEASEPOOL
 
-        while (! alert.hidden && alert.superview != nil)
-            [[NSRunLoop mainRunLoop] runUntilDate: [NSDate dateWithTimeIntervalSinceNow: 0.01]];
+        JUCE_AUTORELEASEPOOL
+        {
+            while (! alert.hidden && alert.superview != nil)
+                [[NSRunLoop mainRunLoop] runUntilDate: [NSDate dateWithTimeIntervalSinceNow: 0.01]];
+        }
 
         return result;
     }
@@ -181,16 +182,18 @@ void JUCE_CALLTYPE NativeMessageBox::showMessageBox (AlertWindow::AlertIconType 
                                                      Component* associatedComponent)
 {
     JUCE_AUTORELEASEPOOL
-    iOSMessageBox mb (title, message, @"OK", nil, nil, 0, false);
-    (void) mb.getResult();
+    {
+        iOSMessageBox mb (title, message, @"OK", nil, nil, nullptr, false);
+        (void) mb.getResult();
+    }
 }
 
 void JUCE_CALLTYPE NativeMessageBox::showMessageBoxAsync (AlertWindow::AlertIconType iconType,
                                                           const String& title, const String& message,
-                                                          Component* associatedComponent)
+                                                          Component* associatedComponent,
+                                                          ModalComponentManager::Callback* callback)
 {
-    JUCE_AUTORELEASEPOOL
-    new iOSMessageBox (title, message, @"OK", nil, nil, 0, true);
+    new iOSMessageBox (title, message, @"OK", nil, nil, callback, true);
 }
 
 bool JUCE_CALLTYPE NativeMessageBox::showOkCancelBox (AlertWindow::AlertIconType iconType,
@@ -198,7 +201,8 @@ bool JUCE_CALLTYPE NativeMessageBox::showOkCancelBox (AlertWindow::AlertIconType
                                                       Component* associatedComponent,
                                                       ModalComponentManager::Callback* callback)
 {
-    ScopedPointer<iOSMessageBox> mb (new iOSMessageBox (title, message, @"Cancel", @"OK", nil, callback, callback != nullptr));
+    ScopedPointer<iOSMessageBox> mb (new iOSMessageBox (title, message, @"Cancel", @"OK",
+                                                        nil, callback, callback != nullptr));
 
     if (callback == nullptr)
         return mb->getResult() == 1;
@@ -273,10 +277,10 @@ String SystemClipboard::getTextFromClipboard()
 }
 
 //==============================================================================
-void Desktop::createMouseInputSources()
+bool Desktop::addMouseInputSource()
 {
-    for (int i = 0; i < 10; ++i)
-        mouseSources.add (new MouseInputSource (i, false));
+    mouseSources.add (new MouseInputSource (mouseSources.size(), false));
+    return true;
 }
 
 bool Desktop::canUseSemiTransparentWindows() noexcept
@@ -289,7 +293,7 @@ Point<int> MouseInputSource::getCurrentMousePosition()
     return juce_lastMousePos;
 }
 
-void Desktop::setMousePosition (const Point<int>&)
+void Desktop::setMousePosition (Point<int>)
 {
 }
 
@@ -301,18 +305,19 @@ Desktop::DisplayOrientation Desktop::getCurrentOrientation() const
 void Desktop::Displays::findDisplays()
 {
     JUCE_AUTORELEASEPOOL
+    {
+        UIScreen* s = [UIScreen mainScreen];
 
-    UIScreen* s = [UIScreen mainScreen];
+        Display d;
+        d.userArea  = UIViewComponentPeer::realScreenPosToRotated (convertToRectInt ([s applicationFrame]));
+        d.totalArea = UIViewComponentPeer::realScreenPosToRotated (convertToRectInt ([s bounds]));
+        d.isMain = true;
 
-    Display d;
-    d.userArea  = UIViewComponentPeer::realScreenPosToRotated (convertToRectInt ([s applicationFrame]));
-    d.totalArea = UIViewComponentPeer::realScreenPosToRotated (convertToRectInt ([s bounds]));
-    d.isMain = true;
+        if ([s respondsToSelector: @selector (scale)])
+            d.scale = s.scale;
+        else
+            d.scale = 1.0;
 
-    if ([s respondsToSelector: @selector (scale)])
-        d.scale = s.scale;
-    else
-        d.scale = 1.0;
-
-    displays.add (d);
+        displays.add (d);
+    }
 }

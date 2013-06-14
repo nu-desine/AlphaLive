@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -87,9 +86,7 @@ public:
             for (int i = propertyComps.size(); --i >= 0;)
                 propertyComps.getUnchecked(i)->setVisible (open);
 
-            PropertyPanel* const pp = findParentComponentOfClass<PropertyPanel>();
-
-            if (pp != nullptr)
+            if (PropertyPanel* const pp = findParentComponentOfClass<PropertyPanel>())
                 pp->resized();
         }
     }
@@ -183,9 +180,8 @@ private:
 
 //==============================================================================
 PropertyPanel::PropertyPanel()
+    : messageWhenEmpty (TRANS("(nothing selected)"))
 {
-    messageWhenEmpty = TRANS("(nothing selected)");
-
     addAndMakeVisible (&viewport);
     viewport.setViewedComponent (propertyHolderComponent = new PropertyHolderComponent());
     viewport.setFocusContainer (true);
@@ -199,7 +195,7 @@ PropertyPanel::~PropertyPanel()
 //==============================================================================
 void PropertyPanel::paint (Graphics& g)
 {
-    if (propertyHolderComponent->getNumSections() == 0)
+    if (isEmpty())
     {
         g.setColour (Colours::black.withAlpha (0.5f));
         g.setFont (14.0f);
@@ -217,16 +213,26 @@ void PropertyPanel::resized()
 //==============================================================================
 void PropertyPanel::clear()
 {
-    if (propertyHolderComponent->getNumSections() > 0)
+    if (! isEmpty())
     {
         propertyHolderComponent->clear();
-        repaint();
+        updatePropHolderLayout();
     }
+}
+
+bool PropertyPanel::isEmpty() const
+{
+    return propertyHolderComponent->getNumSections() == 0;
+}
+
+int PropertyPanel::getTotalContentHeight() const
+{
+    return propertyHolderComponent->getHeight();
 }
 
 void PropertyPanel::addProperties (const Array <PropertyComponent*>& newProperties)
 {
-    if (propertyHolderComponent->getNumSections() == 0)
+    if (isEmpty())
         repaint();
 
     propertyHolderComponent->addSection (new SectionComponent (String::empty, newProperties, true));
@@ -239,7 +245,7 @@ void PropertyPanel::addSection (const String& sectionTitle,
 {
     jassert (sectionTitle.isNotEmpty());
 
-    if (propertyHolderComponent->getNumSections() == 0)
+    if (isEmpty())
         repaint();
 
     propertyHolderComponent->addSection (new SectionComponent (sectionTitle, newProperties, shouldBeOpen));

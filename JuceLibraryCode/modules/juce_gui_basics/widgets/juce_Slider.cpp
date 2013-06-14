@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -109,14 +108,10 @@ public:
     float getPositionOfValue (const double value) const
     {
         if (isHorizontal() || isVertical())
-        {
             return getLinearSliderPos (value);
-        }
-        else
-        {
-            jassertfalse; // not a valid call on a slider that doesn't work linearly!
-            return 0.0f;
-        }
+
+        jassertfalse; // not a valid call on a slider that doesn't work linearly!
+        return 0.0f;
     }
 
     void setRange (const double newMin, const double newMax, const double newInt)
@@ -363,15 +358,24 @@ public:
         listeners.callChecked (checker, &SliderListener::sliderDragEnded, slider);
     }
 
+    struct DragInProgress
+    {
+        DragInProgress (Pimpl& p)  : owner (p)      { owner.sendDragStart(); }
+        ~DragInProgress()                           { owner.sendDragEnd(); }
+
+        Pimpl& owner;
+
+        JUCE_DECLARE_NON_COPYABLE (DragInProgress)
+    };
+
     void buttonClicked (Button* button)
     {
         if (style == IncDecButtons)
         {
             const double delta = (button == incButton) ? interval : -interval;
 
-            sendDragStart();
+            DragInProgress drag (*this);
             setValue (owner.snapValue (getValue() + delta, false), sendNotificationSync);
-            sendDragEnd();
         }
     }
 
@@ -394,9 +398,8 @@ public:
 
         if (newValue != (double) currentValue.getValue())
         {
-            sendDragStart();
+            DragInProgress drag (*this);
             setValue (newValue, sendNotificationSync);
-            sendDragEnd();
         }
 
         updateText(); // force a clean-up of the text, needed in case setValue() hasn't done this.
@@ -405,7 +408,7 @@ public:
     void updateText()
     {
         if (valueBox != nullptr)
-            valueBox->setText (owner.getTextFromValue (currentValue.getValue()), false);
+            valueBox->setText (owner.getTextFromValue (currentValue.getValue()), dontSendNotification);
     }
 
     double constrainedValue (double value) const
@@ -568,7 +571,7 @@ public:
             owner.addAndMakeVisible (valueBox = lf.createSliderTextBox (owner));
 
             valueBox->setWantsKeyboardFocus (false);
-            valueBox->setText (previousTextBoxContent, false);
+            valueBox->setText (previousTextBoxContent, dontSendNotification);
 
             if (valueBox->isEditable() != editableText) // (avoid overriding the single/double click flags unless we have to)
                 valueBox->setEditable (editableText && owner.isEnabled());
@@ -684,7 +687,8 @@ public:
 
             if (normalPosDistance >= minPosDistance && maxPosDistance >= minPosDistance)
                 return 1;
-            else if (normalPosDistance >= maxPosDistance)
+
+            if (normalPosDistance >= maxPosDistance)
                 return 2;
         }
 
@@ -824,6 +828,7 @@ public:
         incDecDragged = false;
         useDragEvents = false;
         mouseDragStartPos = mousePosWhenLastDragged = e.getPosition();
+        currentDrag = nullptr;
 
         if (owner.isEnabled())
         {
@@ -867,7 +872,7 @@ public:
                     popup->setVisible (true);
                 }
 
-                sendDragStart();
+                currentDrag = new DragInProgress (*this);
                 mouseDrag (e);
             }
         }
@@ -947,7 +952,7 @@ public:
             if (sendChangeOnlyOnRelease && valueOnMouseDown != (double) currentValue.getValue())
                 triggerChangeMessage (sendNotificationAsync);
 
-            sendDragEnd();
+            currentDrag = nullptr;
             popupDisplay = nullptr;
 
             if (style == IncDecButtons)
@@ -960,6 +965,8 @@ public:
         {
             popupDisplay->startTimer (2000);
         }
+
+        currentDrag = nullptr;
     }
 
     bool canDoubleClickToValue() const
@@ -974,9 +981,8 @@ public:
     {
         if (canDoubleClickToValue())
         {
-            sendDragStart();
+            DragInProgress drag (*this);
             setValue (doubleClickReturnValue, sendNotificationSync);
-            sendDragEnd();
         }
     }
 
@@ -1001,9 +1007,8 @@ public:
                 if (value > newValue)
                     delta = -delta;
 
-                sendDragStart();
+                DragInProgress drag (*this);
                 setValue (owner.snapValue (value + delta, false), sendNotificationSync);
-                sendDragEnd();
             }
 
             return true;
@@ -1220,6 +1225,7 @@ public:
     int sliderBeingDragged;
     int pixelsForFullDragExtent;
     Rectangle<int> sliderRect;
+    ScopedPointer<DragInProgress> currentDrag;
 
     TextEntryBoxPosition textBoxPos;
     String textSuffix;
@@ -1489,8 +1495,8 @@ String Slider::getTextFromValue (double v)
 {
     if (getNumDecimalPlacesToDisplay() > 0)
         return String (v, getNumDecimalPlacesToDisplay()) + getTextValueSuffix();
-    else
-        return String (roundToInt (v)) + getTextValueSuffix();
+
+    return String (roundToInt (v)) + getTextValueSuffix();
 }
 
 double Slider::getValueFromText (const String& text)

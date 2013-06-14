@@ -69,6 +69,8 @@ public final class JuceAppActivity   extends Activity
 
         viewHolder = new ViewHolder (this);
         setContentView (viewHolder);
+
+        setVolumeControlStream (AudioManager.STREAM_MUSIC);
     }
 
     @Override
@@ -81,6 +83,9 @@ public final class JuceAppActivity   extends Activity
     @Override
     protected final void onPause()
     {
+        if (viewHolder != null)
+            viewHolder.onPause();
+
         suspendApp();
         super.onPause();
     }
@@ -89,6 +94,10 @@ public final class JuceAppActivity   extends Activity
     protected final void onResume()
     {
         super.onResume();
+
+        if (viewHolder != null)
+            viewHolder.onResume();
+
         resumeApp();
     }
 
@@ -166,6 +175,28 @@ public final class JuceAppActivity   extends Activity
                 callAppLauncher();
             }
         }
+
+        public final void onPause()
+        {
+            for (int i = getChildCount(); --i >= 0;)
+            {
+                View v = getChildAt (i);
+
+                if (v instanceof ComponentPeerView)
+                    ((ComponentPeerView) v).onPause();
+            }
+        }
+
+        public final void onResume()
+        {
+            for (int i = getChildCount(); --i >= 0;)
+            {
+                View v = getChildAt (i);
+
+                if (v instanceof ComponentPeerView)
+                    ((ComponentPeerView) v).onResume();
+             }
+         }
 
         private boolean isFirstResize = true;
     }
@@ -435,6 +466,28 @@ public final class JuceAppActivity   extends Activity
         public boolean containsPoint (int x, int y)
         {
             return true; //xxx needs to check overlapping views
+        }
+
+        public final void onPause()
+        {
+            for (int i = getChildCount(); --i >= 0;)
+            {
+                View v = getChildAt (i);
+
+                if (v instanceof OpenGLView)
+                    ((OpenGLView) v).onPause();
+            }
+        }
+
+        public final void onResume()
+        {
+            for (int i = getChildCount(); --i >= 0;)
+            {
+                View v = getChildAt (i);
+
+                if (v instanceof OpenGLView)
+                    ((OpenGLView) v).onResume();
+            }
         }
 
         public OpenGLView createGLView()

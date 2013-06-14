@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -63,6 +62,13 @@
  #define JUCE_USE_MP3AUDIOFORMAT 0
 #endif
 
+/** Config: JUCE_USE_LAME_AUDIO_FORMAT
+    Enables the LameEncoderAudioFormat class.
+*/
+#ifndef JUCE_USE_LAME_AUDIO_FORMAT
+ #define JUCE_USE_LAME_AUDIO_FORMAT 0
+#endif
+
 /** Config: JUCE_USE_WINDOWS_MEDIA_FORMAT
     Enables the Windows Media SDK codecs.
 */
@@ -98,9 +104,16 @@ namespace juce
 #ifndef __JUCE_AUDIOSUBSECTIONREADER_JUCEHEADER__
  #include "format/juce_AudioSubsectionReader.h"
 #endif
+#ifndef __JUCE_BUFFERINGAUDIOFORMATREADER_JUCEHEADER__
+ #include "format/juce_BufferingAudioFormatReader.h"
+#endif
+#ifndef __JUCE_MEMORYMAPPEDAUDIOFORMATREADER_JUCEHEADER__
+ #include "format/juce_MemoryMappedAudioFormatReader.h"
+#endif
 #include "codecs/juce_AiffAudioFormat.h"
 #include "codecs/juce_CoreAudioFormat.h"
 #include "codecs/juce_FlacAudioFormat.h"
+#include "codecs/juce_LAMEEncoderAudioFormat.h"
 #include "codecs/juce_MP3AudioFormat.h"
 #include "codecs/juce_OggVorbisAudioFormat.h"
 #include "codecs/juce_QuickTimeAudioFormat.h"

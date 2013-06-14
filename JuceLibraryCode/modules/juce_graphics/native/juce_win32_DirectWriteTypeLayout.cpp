@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -40,7 +39,8 @@ namespace DirectWriteTypeLayout
 
         JUCE_COMRESULT QueryInterface (REFIID refId, void** result)
         {
-            if (refId == __uuidof (IDWritePixelSnapping))   { AddRef(); *result = dynamic_cast <IDWritePixelSnapping*> (this); return S_OK; }
+            if (refId == __uuidof (IDWritePixelSnapping))
+                return castToType <IDWritePixelSnapping> (result);
 
             return ComBaseClassHelper<IDWriteTextRenderer>::QueryInterface (refId, result);
         }
@@ -219,9 +219,7 @@ namespace DirectWriteTypeLayout
         range.startPosition = attr.range.getStart();
         range.length = jmin (attr.range.getLength(), textLen - attr.range.getStart());
 
-        const Font* const font = attr.getFont();
-
-        if (font != nullptr)
+        if (const Font* const font = attr.getFont())
         {
             BOOL fontFound = false;
             uint32 fontIndex;
@@ -255,13 +253,13 @@ namespace DirectWriteTypeLayout
             textLayout->SetFontSize (font->getHeight() * fontHeightToEmSizeFactor, range);
         }
 
-        if (attr.getColour() != nullptr)
+        if (const Colour* const colour = attr.getColour())
         {
             ComSmartPtr<ID2D1SolidColorBrush> d2dBrush;
-            renderTarget->CreateSolidColorBrush (D2D1::ColorF (D2D1::ColorF (attr.getColour()->getFloatRed(),
-                                                                             attr.getColour()->getFloatGreen(),
-                                                                             attr.getColour()->getFloatBlue(),
-                                                                             attr.getColour()->getFloatAlpha())),
+            renderTarget->CreateSolidColorBrush (D2D1::ColorF (D2D1::ColorF (colour->getFloatRed(),
+                                                                             colour->getFloatGreen(),
+                                                                             colour->getFloatBlue(),
+                                                                             colour->getFloatAlpha())),
                                                  d2dBrush.resetAndGetPointerAddress());
 
             // We need to call SetDrawingEffect with a legimate brush to get DirectWrite to break text based on colours

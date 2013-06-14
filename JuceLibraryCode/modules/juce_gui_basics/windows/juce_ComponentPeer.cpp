@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -27,9 +26,9 @@ static Array <ComponentPeer*> heavyweightPeers;
 static uint32 lastUniqueID = 1;
 
 //==============================================================================
-ComponentPeer::ComponentPeer (Component& component_, const int styleFlags_)
-    : component (component_),
-      styleFlags (styleFlags_),
+ComponentPeer::ComponentPeer (Component& comp, const int flags)
+    : component (comp),
+      styleFlags (flags),
       constrainer (nullptr),
       lastDragAndDropCompUnderMouse (nullptr),
       uniqueID (lastUniqueID += 2), // increment by 2 so that this can never hit 0
@@ -80,22 +79,44 @@ void ComponentPeer::updateCurrentModifiers() noexcept
 }
 
 //==============================================================================
-void ComponentPeer::handleMouseEvent (const int touchIndex, const Point<int>& positionWithinPeer,
-                                      const ModifierKeys& newMods, const int64 time)
+MouseInputSource* ComponentPeer::getOrCreateMouseInputSource (int touchIndex)
 {
-    MouseInputSource* const mouse = Desktop::getInstance().getMouseSource (touchIndex);
-    jassert (mouse != nullptr); // not enough sources!
+    jassert (touchIndex >= 0 && touchIndex < 100); // sanity-check on number of fingers
 
-    mouse->handleEvent (this, positionWithinPeer, time, newMods);
+    Desktop& desktop = Desktop::getInstance();
+
+    for (;;)
+    {
+        if (MouseInputSource* mouse = desktop.getMouseSource (touchIndex))
+            return mouse;
+
+        if (! desktop.addMouseInputSource())
+        {
+            jassertfalse; // not enough mouse sources!
+            return nullptr;
+        }
+    }
 }
 
-void ComponentPeer::handleMouseWheel (const int touchIndex, const Point<int>& positionWithinPeer,
+void ComponentPeer::handleMouseEvent (const int touchIndex, const Point<int> positionWithinPeer,
+                                      const ModifierKeys newMods, const int64 time)
+{
+    if (MouseInputSource* mouse = getOrCreateMouseInputSource (touchIndex))
+        mouse->handleEvent (this, positionWithinPeer, time, newMods);
+}
+
+void ComponentPeer::handleMouseWheel (const int touchIndex, const Point<int> positionWithinPeer,
                                       const int64 time, const MouseWheelDetails& wheel)
 {
-    MouseInputSource* const mouse = Desktop::getInstance().getMouseSource (touchIndex);
-    jassert (mouse != nullptr); // not enough sources!
+    if (MouseInputSource* mouse = getOrCreateMouseInputSource (touchIndex))
+        mouse->handleWheel (this, positionWithinPeer, time, wheel);
+}
 
-    mouse->handleWheel (this, positionWithinPeer, time, wheel);
+void ComponentPeer::handleMagnifyGesture (const int touchIndex, const Point<int> positionWithinPeer,
+                                          const int64 time, const float scaleFactor)
+{
+    if (MouseInputSource* mouse = getOrCreateMouseInputSource (touchIndex))
+        mouse->handleMagnifyGesture (this, positionWithinPeer, time, scaleFactor);
 }
 
 //==============================================================================
@@ -187,7 +208,9 @@ bool ComponentPeer::handleKeyPress (const int keyCode, const juce_wchar textChar
             {
                 currentlyFocused->moveKeyboardFocusToSibling (isTab);
                 keyWasUsed = (currentlyFocused != Component::getCurrentlyFocusedComponent());
-                break;
+
+                if (keyWasUsed || deletionChecker == nullptr)
+                    break;
             }
         }
     }
@@ -535,6 +558,15 @@ void ComponentPeer::handleUserClosingWindow()
 {
     updateCurrentModifiers();
     component.userTriedToCloseWindow();
+}
+
+bool ComponentPeer::setDocumentEditedStatus (bool)
+{
+    return false;
+}
+
+void ComponentPeer::setRepresentedFile (const File&)
+{
 }
 
 //==============================================================================

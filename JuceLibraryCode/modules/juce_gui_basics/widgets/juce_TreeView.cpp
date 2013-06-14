@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -28,8 +27,8 @@ class TreeView::ContentComponent  : public Component,
                                     public AsyncUpdater
 {
 public:
-    ContentComponent (TreeView& owner_)
-        : owner (owner_),
+    ContentComponent (TreeView& tree)
+        : owner (tree),
           buttonUnderMouse (nullptr),
           isDragging (false)
     {
@@ -45,27 +44,30 @@ public:
 
         if (TreeViewItem* const item = findItemAt (e.y, pos))
         {
-            // (if the open/close buttons are hidden, we'll treat clicks to the left of the item
-            // as selection clicks)
-            if (e.x < pos.getX() && owner.openCloseButtonsVisible)
+            if (isEnabled())
             {
-                if (e.x >= pos.getX() - owner.getIndentSize())
-                    item->setOpen (! item->isOpen());
+                // (if the open/close buttons are hidden, we'll treat clicks to the left of the item
+                // as selection clicks)
+                if (e.x < pos.getX() && owner.openCloseButtonsVisible)
+                {
+                    if (e.x >= pos.getX() - owner.getIndentSize())
+                        item->setOpen (! item->isOpen());
 
-                // (clicks to the left of an open/close button are ignored)
-            }
-            else
-            {
-                // mouse-down inside the body of the item..
-                if (! owner.isMultiSelectEnabled())
-                    item->setSelected (true, true);
-                else if (item->isSelected())
-                    needSelectionOnMouseUp = ! e.mods.isPopupMenu();
+                    // (clicks to the left of an open/close button are ignored)
+                }
                 else
-                    selectBasedOnModifiers (item, e.mods);
+                {
+                    // mouse-down inside the body of the item..
+                    if (! owner.isMultiSelectEnabled())
+                        item->setSelected (true, true);
+                    else if (item->isSelected())
+                        needSelectionOnMouseUp = ! e.mods.isPopupMenu();
+                    else
+                        selectBasedOnModifiers (item, e.mods);
 
-                if (e.x >= pos.getX())
-                    item->itemClicked (e.withNewPosition (e.getPosition() - pos.getPosition()));
+                    if (e.x >= pos.getX())
+                        item->itemClicked (e.withNewPosition (e.getPosition() - pos.getPosition()));
+                }
             }
         }
     }
@@ -74,7 +76,7 @@ public:
     {
         updateButtonUnderMouse (e);
 
-        if (needSelectionOnMouseUp && e.mouseWasClicked())
+        if (needSelectionOnMouseUp && e.mouseWasClicked() && isEnabled())
         {
             Rectangle<int> pos;
             if (TreeViewItem* const item = findItemAt (e.y, pos))
@@ -84,7 +86,7 @@ public:
 
     void mouseDoubleClick (const MouseEvent& e)
     {
-        if (e.getNumberOfClicks() != 3)  // ignore triple clicks
+        if (e.getNumberOfClicks() != 3 && isEnabled())  // ignore triple clicks
         {
             Rectangle<int> pos;
             if (TreeViewItem* const item = findItemAt (e.y, pos))
@@ -149,20 +151,21 @@ public:
 
     TreeViewItem* findItemAt (int y, Rectangle<int>& itemPosition) const
     {
-        if (owner.rootItem == nullptr)
-            return nullptr;
+        if (owner.rootItem != nullptr)
+        {
+            owner.recalculateIfNeeded();
 
-        owner.recalculateIfNeeded();
+            if (! owner.rootItemVisible)
+                y += owner.rootItem->itemHeight;
 
-        if (! owner.rootItemVisible)
-            y += owner.rootItem->itemHeight;
+            if (TreeViewItem* const ti = owner.rootItem->findItemRecursively (y))
+            {
+                itemPosition = ti->getItemPosition (false);
+                return ti;
+            }
+        }
 
-        TreeViewItem* const ti = owner.rootItem->findItemRecursively (y);
-
-        if (ti != nullptr)
-            itemPosition = ti->getItemPosition (false);
-
-        return ti;
+        return nullptr;
     }
 
     void updateComponents()
@@ -254,8 +257,8 @@ private:
 
     struct RowItem
     {
-        RowItem (TreeViewItem* const item_, Component* const component_, const int itemUID)
-            : component (component_), item (item_), uid (itemUID), shouldKeep (true)
+        RowItem (TreeViewItem* const it, Component* const c, const int itemUID)
+            : component (c), item (it), uid (itemUID), shouldKeep (true)
         {
         }
 
@@ -275,7 +278,7 @@ private:
     TreeViewItem* buttonUnderMouse;
     bool isDragging, needSelectionOnMouseUp;
 
-    void selectBasedOnModifiers (TreeViewItem* const item, const ModifierKeys& modifiers)
+    void selectBasedOnModifiers (TreeViewItem* const item, const ModifierKeys modifiers)
     {
         TreeViewItem* firstSelected = nullptr;
 
@@ -363,9 +366,11 @@ private:
 
     static bool isMouseDraggingInChildCompOf (Component* const comp)
     {
-        for (int i = Desktop::getInstance().getNumMouseSources(); --i >= 0;)
+        Desktop& desktop = Desktop::getInstance();
+
+        for (int i = desktop.getNumMouseSources(); --i >= 0;)
         {
-            MouseInputSource* const source = Desktop::getInstance().getMouseSource(i);
+            MouseInputSource* const source = desktop.getMouseSource(i);
 
             if (source->isDragging())
                 if (Component* const underMouse = source->getComponentUnderMouse())
@@ -1220,8 +1225,8 @@ bool TreeViewItem::isOpen() const noexcept
 {
     if (openness == opennessDefault)
         return ownerView != nullptr && ownerView->defaultOpenness;
-    else
-        return openness == opennessOpen;
+
+    return openness == opennessOpen;
 }
 
 void TreeViewItem::setOpen (const bool shouldBeOpen)

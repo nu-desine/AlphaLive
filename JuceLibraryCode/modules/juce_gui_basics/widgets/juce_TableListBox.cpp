@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -132,8 +131,9 @@ public:
 
                 const int columnId = owner.getHeader().getColumnIdAtX (e.x);
 
-                if (columnId != 0 && owner.getModel() != nullptr)
-                    owner.getModel()->cellClicked (row, columnId, e);
+                if (columnId != 0)
+                    if (TableListBoxModel* m = owner.getModel())
+                        m->cellClicked (row, columnId, e);
             }
             else
             {
@@ -169,8 +169,9 @@ public:
 
             const int columnId = owner.getHeader().getColumnIdAtX (e.x);
 
-            if (columnId != 0 && owner.getModel() != nullptr)
-                owner.getModel()->cellClicked (row, columnId, e);
+            if (columnId != 0)
+                if (TableListBoxModel* m = owner.getModel())
+                    m->cellClicked (row, columnId, e);
         }
     }
 
@@ -178,16 +179,18 @@ public:
     {
         const int columnId = owner.getHeader().getColumnIdAtX (e.x);
 
-        if (columnId != 0 && owner.getModel() != nullptr)
-            owner.getModel()->cellDoubleClicked (row, columnId, e);
+        if (columnId != 0)
+            if (TableListBoxModel* m = owner.getModel())
+                m->cellDoubleClicked (row, columnId, e);
     }
 
     String getTooltip()
     {
         const int columnId = owner.getHeader().getColumnIdAtX (getMouseXYRelative().getX());
 
-        if (columnId != 0 && owner.getModel() != nullptr)
-            return owner.getModel()->getCellTooltip (row, columnId);
+        if (columnId != 0)
+            if (TableListBoxModel* m = owner.getModel())
+                return m->getCellTooltip (row, columnId);
 
         return String::empty;
     }
@@ -334,15 +337,15 @@ Rectangle<int> TableListBox::getCellPosition (const int columnId, const int rowN
 
 Component* TableListBox::getCellComponent (int columnId, int rowNumber) const
 {
-    RowComp* const rowComp = dynamic_cast <RowComp*> (getComponentForRowNumber (rowNumber));
-    return rowComp != nullptr ? rowComp->findChildComponentForColumn (columnId) : 0;
+    if (RowComp* const rowComp = dynamic_cast <RowComp*> (getComponentForRowNumber (rowNumber)))
+        return rowComp->findChildComponentForColumn (columnId);
+
+    return nullptr;
 }
 
 void TableListBox::scrollToEnsureColumnIsOnscreen (const int columnId)
 {
-    ScrollBar* const scrollbar = getHorizontalScrollBar();
-
-    if (scrollbar != nullptr)
+    if (ScrollBar* const scrollbar = getHorizontalScrollBar())
     {
         const Rectangle<int> pos (header->getColumnPosition (header->getIndexOfColumnId (columnId, true)));
 
@@ -447,12 +450,8 @@ void TableListBox::updateColumnComponents() const
     const int firstRow = getRowContainingPosition (0, 0);
 
     for (int i = firstRow + getNumRowsOnScreen() + 2; --i >= firstRow;)
-    {
-        RowComp* const rowComp = dynamic_cast <RowComp*> (getComponentForRowNumber (i));
-
-        if (rowComp != nullptr)
+        if (RowComp* const rowComp = dynamic_cast <RowComp*> (getComponentForRowNumber (i)))
             rowComp->resized();
-    }
 }
 
 //==============================================================================
@@ -472,6 +471,6 @@ var TableListBoxModel::getDragSourceDescription (const SparseSet<int>&)         
 Component* TableListBoxModel::refreshComponentForCell (int, int, bool, Component* existingComponentToUpdate)
 {
     (void) existingComponentToUpdate;
-    jassert (existingComponentToUpdate == nullptr); // indicates a failure in the code the recycles the components
+    jassert (existingComponentToUpdate == nullptr); // indicates a failure in the code that recycles the components
     return nullptr;
 }

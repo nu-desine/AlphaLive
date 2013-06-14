@@ -1,24 +1,27 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the juce_core module of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission to use, copy, modify, and/or distribute this software for any purpose with
+   or without fee is hereby granted, provided that the above copyright notice and this
+   permission notice appear in all copies.
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD
+   TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN
+   NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL
+   DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER
+   IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+   CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-   JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
-   WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-   A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+   ------------------------------------------------------------------------------
 
-  ------------------------------------------------------------------------------
+   NOTE! This permissive ISC license applies ONLY to files within the juce_core module!
+   All other JUCE modules are covered by a dual GPL/commercial license, so if you are
+   using any other modules, be sure to check that you also comply with their license.
 
-   To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   For more details, visit www.juce.com
 
   ==============================================================================
 */
@@ -392,7 +395,7 @@ public:
         @returns true if it manages to change the file's time.
         @see getLastModificationTime, setLastAccessTime, setCreationTime
     */
-    bool setLastModificationTime (const Time& newTime) const;
+    bool setLastModificationTime (Time newTime) const;
 
     /** Changes the last-access time for this file.
 
@@ -400,7 +403,7 @@ public:
         @returns true if it manages to change the file's time.
         @see getLastAccessTime, setLastModificationTime, setCreationTime
     */
-    bool setLastAccessTime (const Time& newTime) const;
+    bool setLastAccessTime (Time newTime) const;
 
     /** Changes the creation date for this file.
 
@@ -408,7 +411,7 @@ public:
         @returns true if it manages to change the file's time.
         @see getCreationTime, setLastModificationTime, setLastAccessTime
     */
-    bool setCreationTime (const Time& newTime) const;
+    bool setCreationTime (Time newTime) const;
 
     /** If possible, this will try to create a version string for the given file.
 
@@ -571,7 +574,7 @@ public:
     /** Creates a stream to read from this file.
 
         @returns    a stream that will read from this file (initially positioned at the
-                    start of the file), or 0 if the file can't be opened for some reason
+                    start of the file), or nullptr if the file can't be opened for some reason
         @see createOutputStream, loadFileAsData
     */
     FileInputStream* createInputStream() const;
@@ -583,7 +586,7 @@ public:
         to write to an empty file.
 
         @returns    a stream that will write to this file (initially positioned at the
-                    end of the file), or 0 if the file can't be opened for some reason
+                    end of the file), or nullptr if the file can't be opened for some reason
         @see createInputStream, appendData, appendText
     */
     FileOutputStream* createOutputStream (int bufferSize = 0x8000) const;
@@ -623,7 +626,7 @@ public:
         @returns false if it can't write to the file for some reason
     */
     bool appendData (const void* dataToAppend,
-                     int numberOfBytes) const;
+                     size_t numberOfBytes) const;
 
     /** Replaces this file's contents with a given block of data.
 
@@ -640,7 +643,7 @@ public:
         @see appendText
     */
     bool replaceWithData (const void* dataToWrite,
-                          int numberOfBytes) const;
+                          size_t numberOfBytes) const;
 
     /** Appends a string to the end of the file.
 

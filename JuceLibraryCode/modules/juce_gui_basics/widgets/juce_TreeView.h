@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -259,7 +258,7 @@ public:
 
     /** Creates a component that will be used to represent this item.
 
-        You don't have to implement this method - if it returns 0 then no component
+        You don't have to implement this method - if it returns nullptr then no component
         will be used for the item, and you can just draw it using the paintItem()
         callback. But if you do return a component, it will be positioned in the
         treeview so that it can be used to represent this item.
@@ -605,12 +604,11 @@ public:
 
     /** Returns the tree's root item.
 
-        This will be the last object passed to setRootItem(), or 0 if none has been set.
+        This will be the last object passed to setRootItem(), or nullptr if none has been set.
     */
     TreeViewItem* getRootItem() const noexcept                      { return rootItem; }
 
     /** This will remove and delete the current root item.
-
         It's a convenient way of deleting the item and calling setRootItem (nullptr).
     */
     void deleteRootItem();

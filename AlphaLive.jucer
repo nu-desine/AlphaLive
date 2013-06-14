@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="F22pMI" name="AlphaLive" projectType="guiapp" version="1.0.0"
-              jucerVersion="3.0.0" companyName="nu desine" bundleIdentifier="com.nu_desine.AlphaLive">
+              jucerVersion="3.1.0" companyName="nu desine" bundleIdentifier="com.nu_desine.AlphaLive">
   <MAINGROUP id="Xse6xB" name="AlphaLive">
     <GROUP id="{D96C7CCD-D014-601C-6DD6-17BA600E9A71}" name="Source">
       <GROUP id="{D8514422-A9A0-21E1-7B65-ED53B5B2A34D}" name="Application">

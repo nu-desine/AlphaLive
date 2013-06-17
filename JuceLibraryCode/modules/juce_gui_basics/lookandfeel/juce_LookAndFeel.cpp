@@ -2178,12 +2178,6 @@ void LookAndFeel::drawTabButtonText (TabBarButton& button, Graphics& g, bool isM
     Font font (depth * 0.6f);
     font.setUnderline (button.hasKeyboardFocus (false));
 
-    GlyphArrangement textLayout;
-    textLayout.addFittedText (font, button.getButtonText().trim(),
-                              0.0f, 0.0f, (float) length, (float) depth,
-                              Justification::centred,
-                              jmax (1, ((int) depth) / 12));
-
     AffineTransform t;
 
     switch (button.getTabbedButtonBar().getOrientation())
@@ -2209,7 +2203,13 @@ void LookAndFeel::drawTabButtonText (TabBarButton& button, Graphics& g, bool isM
     const float alpha = button.isEnabled() ? ((isMouseOver || isMouseDown) ? 1.0f : 0.8f) : 0.3f;
 
     g.setColour (col.withMultipliedAlpha (alpha));
-    textLayout.draw (g, t);
+    g.setFont (font);
+    g.addTransform (t);
+
+    g.drawFittedText (button.getButtonText().trim(),
+                      0, 0, (int) length, (int) depth,
+                      Justification::centred,
+                      jmax (1, ((int) depth) / 12));
 }
 
 void LookAndFeel::drawTabButton (TabBarButton& button, Graphics& g, bool isMouseOver, bool isMouseDown)
@@ -2490,20 +2490,17 @@ void LookAndFeel::drawCallOutBoxBackground (CallOutBox& box, Graphics& g,
 
 
 //==============================================================================
-void LookAndFeel::createFileChooserHeaderText (const String& title,
-                                               const String& instructions,
-                                               GlyphArrangement& text,
-                                               int width)
+AttributedString LookAndFeel::createFileChooserHeaderText (const String& title,
+                                                           const String& instructions)
 {
-    text.clear();
+    AttributedString s;
+    s.setJustification (Justification::centred);
 
-    text.addJustifiedText (Font (17.0f, Font::bold), title,
-                           8.0f, 22.0f, width - 16.0f,
-                           Justification::centred);
+    const Colour colour (findColour (FileChooserDialogBox::titleTextColourId));
+    s.append (title + "\n\n", Font (17.0f, Font::bold), colour);
+    s.append (instructions, Font (14.0f), colour);
 
-    text.addJustifiedText (Font (14.0f), instructions,
-                           8.0f, 24.0f + 16.0f, width - 16.0f,
-                           Justification::centred);
+    return s;
 }
 
 void LookAndFeel::drawFileBrowserRow (Graphics& g, int width, int height,

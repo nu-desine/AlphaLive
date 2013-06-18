@@ -1181,7 +1181,7 @@ void AppDocumentState::saveProject()
 void AppDocumentState::saveProjectAs()
 {
     //navigate to app directory
-    FileChooser saveFileChooser(translate("Create a AlphaLive project to save..."), 
+    FileChooser saveFileChooser(translate("Create an AlphaLive project to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
                                 "*.alphalive");
     
@@ -1190,28 +1190,15 @@ void AppDocumentState::saveProjectAs()
         //create a project directory
         File savedDirectory (saveFileChooser.getResult());
         
-        //create folder to hold the projects audio files (if it doesn't already exist, which it shouldnt (?))
-        File audioFileDirectory = (savedDirectory.getFullPathName() + File::separatorString + "Audio Files");
-        
-        if (AppSettings::Instance()->getCopyExternalFiles() == true)
-        {
-            //copy current working directory to the audio files directory
-            File::getCurrentWorkingDirectory().copyDirectoryTo(audioFileDirectory);
-        }
-        else
-            audioFileDirectory.createDirectory();  
-        //set the audio files directory as the new working directory so when audio files are imported they go straight into here
-        audioFileDirectory.setAsCurrentWorkingDirectory();
+        std::cout << savedDirectory.getFullPathName() << std::endl;
         
         //create file
         File savedFile (savedDirectory.getFullPathName() + File::separatorString + savedDirectory.getFileName()); //get file that the user has 'saved'
         String stringFile = savedFile.getFullPathName(); //get the filepath name of the file as a string
         stringFile = stringFile + ".alphalive"; //append an extension name to the filepath name
-        savedFile = (stringFile); //set the file to this name
+        savedFile = stringFile; //set the file to this name
         
         bool overwrite = true; //by default true
-        
-        //how do i check for overriding here?
         
         //delete the file if it exists & write the new data
         if (savedFile.exists())
@@ -1221,11 +1208,30 @@ void AppDocumentState::saveProjectAs()
         
         if (overwrite == true)
         {
-            //first, need to save the current project and scene settings
+            savedDirectory.createDirectory();
+            
+            //first, create folder to hold the projects audio files
+            File audioFileDirectory = (savedDirectory.getFullPathName() + File::separatorString + "Audio Files");
+            
+            if (audioFileDirectory.exists()) //this would be true if the user is overwritting an old project
+                audioFileDirectory.deleteRecursively();
+            
+            if (AppSettings::Instance()->getCopyExternalFiles() == true)
+            {
+                //copy current working directory to the audio files directory
+                File::getCurrentWorkingDirectory().copyDirectoryTo(audioFileDirectory);
+            }
+            else
+                audioFileDirectory.createDirectory();  
+            
+            //set the audio files directory as the new working directory so when audio files are imported they go straight into here
+            audioFileDirectory.setAsCurrentWorkingDirectory();
+            
+            
+            //second, need to save the current project and scene settings
             saveToScene(currentlySelectedScene);
             saveProjectSettings();
             
-            savedDirectory.createDirectory();
             savedFile.deleteFile();
             savedFile.create(); //create the file
     
@@ -1255,12 +1261,6 @@ void AppDocumentState::saveProjectAs()
             currentProjectFile = savedFile;
             //change the window title bar text
             mainAppWindowRef->setTitleBarText(currentProjectFile.getFileNameWithoutExtension());
-            
-            /*
-            if (shouldDisplayAlertWindow == true)
-                AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Project Saved", "The project settings have been successfully saved to file");
-            shouldDisplayAlertWindow = true;
-             */
             
             //add the file to the 'recent files' list
             registerRecentFile (currentProjectFile);
@@ -1497,9 +1497,6 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
             //create folder to hold the projects audio files
             File audioFileDirectory = (savedDirectory.getFullPathName() + File::separatorString + "Audio Files");
             audioFileDirectory.createDirectory();
-            
-            
-            
             
             if (AppSettings::Instance()->getCopyExternalFiles() == true)
             {

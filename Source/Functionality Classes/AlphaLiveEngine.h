@@ -94,6 +94,7 @@ public:
     GlobalClock* getGlobalClock(); //used by AppSettings to set the tempo
     void triggerQuantizationPoint(); 
     void addPadToQueue (int padNum);
+    void killQueuedExclusivePads (int padNum);
     
     //exclusive mode stuff
     void handleExclusiveMode (int padNum);

@@ -416,6 +416,10 @@ void AlphaLiveEngine::handleExclusiveMode (int padNum)
     
     //add new pad to the exclusive group array, replacing the old one.
     currentExclusivePad[exclusiveGroup-1] = padNum;
+    
+    //check to see if there are any pads within the same exclive group
+    //that are currently waiting to play or stop, and kill them if so.
+    killQueuedExclusivePads(padNum);
         
 }
 
@@ -434,8 +438,16 @@ void AlphaLiveEngine::addPadToQueue (int padNum)
 
     //If the pad being added is set to exclusive mode,
     //check to see if any of the other queued pads 
-    //are set to exlusive mode with the same exclusive group.
+    //are set to exclusive mode with the same exclusive group.
     //If so they should be removed and the pad gui should be updated
+    killQueuedExclusivePads(padNum);
+    
+}
+
+void AlphaLiveEngine::killQueuedExclusivePads (int padNum)
+{
+    //checks for pads that are set to exclusive mode with the same group number as pad padNum is set to,
+    //and kills and removes any pads that are currently waiting to play or waiting to stop.
     
     if (AppSettings::Instance()->padSettings[padNum]->getExclusiveMode() == 1)
     {
@@ -477,11 +489,9 @@ void AlphaLiveEngine::addPadToQueue (int padNum)
                         }
                         
                         queuedPads.remove(i);
-                        
                     }
                 }
             }
-            
         }
     }
 }

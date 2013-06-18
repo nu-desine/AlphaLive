@@ -26,6 +26,43 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+/*
+ Current bug when launching AlphaLive on Mac via .alphalive file when
+ "open last project on launch" is set to 'on'.
+ 
+ If you launch AlphaLive on Windows by double-clicking a .alphalive file,
+ the commandLine parameter of initialise() is equal to the file path of
+ the file. Therefore when it gets down to the "if (selectedFile.getFileExtension() == ".alphalive")"
+ statement it will load that project into AlphaLive.
+ 
+ However, on mac this is handled different - the file path is passsed into
+ the application using the anotherInstanceStarted() function which is called
+ after initialise(). Therfore When the same is done on Mac, as the commandLine 
+ parameter of initialise() does not equal the file path, when it gets down to
+ the if/else statement it will launch the last opened project first,
+ and then when it calls anotherInstanceStarted() afterwards and tries to load the clicked
+ project it will ask the user if they want to save the last project first, which
+ is not what we want at launch.
+ 
+ This seems like a bug in JUCE to me (why would JUCE puropsely handle this
+ different on different OS's, plus otherwise what would the commandLine parameter
+ of initialise() be used for?), but until this is I need to prevent this problem myself.
+ 
+ To overcome this problem I am using two int variables - one that gets a time
+ value at the end of the initialise() function and another within the anotherInstanceStarted()
+ function. If these two time values are less than a 1000ms apart, it means that
+ anotherInstanceStarted() was most probably called at launch, and in that case
+ we don't want to ask the user if they would like to save first. Else, the function has
+ been called after the initial launch, so it is ok to show this alert to the user.
+ There is still a small annoyance in this method though, in that you will
+ breifly see the last project opened up before it opens the new project.
+ 
+ //NEW OBSERVATION 8/3/13 - 
+ //The if/else statement of init() causes an assertion fail on OS X 10.8. Maybe
+ //the bug only applies to OSX 10.6/10.7 version and below? Worth investigating!
+ 
+ */
+
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "Common.h"
 #include "MainWindow.h"
@@ -103,15 +140,8 @@ public:
         //delete loading window now as everything will be loaded at this point
         loadingWindow = 0;
         
-		//open any requested files/projects
-		
-		//If the app has been lauched by opening a .alphalive file,
-		//get the file path and opent he file.
-		//On Mac this seems to be handled within anotherInstanceStarted() only,
-		//so this won't currently work on mac here which can cause bugs
-        //NEW OBSERVATION 8/3/13 - 
-        //The below code causes an assertion fail on OS X 10.8. Maybe the above
-        //statement only applies to 10.6/10.7 version and below? Worth investigating!
+		//==== open any requested files/projects ====
+		//See the comment at the top of this .cpp file for current issues here
 		File selectedFile(commandLine.unquoted());
         //check to see if the clicked file is a .alphalive file
         if (selectedFile.getFileExtension() == ".alphalive")
@@ -119,7 +149,6 @@ public:
             //load selected file
             appDocumentState->loadProject(false, selectedFile);   
         }
-		//#endif
         else if (StoredSettings::getInstance()->launchTask == 2)
         {
             //Open the last project...
@@ -142,6 +171,8 @@ public:
         //If not currently updating software, check for firmware updates
         if (isUpdating == false)
             alphaLiveEngine->updateFirmware();
+        
+        initTime = Time::getMillisecondCounter();
     }
 
     
@@ -229,10 +260,23 @@ public:
         //check to see if the clicked file is a .alphalive file
         if (selectedFile.getFileExtension() == ".alphalive")
         {
-            //load selected file
-            appDocumentState->loadProject(false, selectedFile);
+            //Figure out if this function was called from app launch on mac,
+            //by comparing the two time values.
+            //If so, don't ask if you want to save the last project.
+            projectLaunchTime = Time::getMillisecondCounter();
             
+            if (projectLaunchTime - initTime < 1000)
+            {
+                //load selected file, not showing 'save?' alert window
+                appDocumentState->loadProject(false, selectedFile, false);
+            }
+            else
+            {
+                //load selected file
+                appDocumentState->loadProject(false, selectedFile);
+            }
         }
+        
     }
     
     
@@ -361,6 +405,13 @@ private:
     
     //ScopedPointer<MainMenuModel> menuModel;
     MainMenuModel *menuModel;
+    
+    //these are used to hackily prevent the bug where
+    //launching AlphaLive using a .alphalive file while
+    //'open last project on launch' is on causes the
+    //new project to not open automatically.
+    //See top comment for more details.
+    int initTime, projectLaunchTime;
 };
 
 //==============================================================================

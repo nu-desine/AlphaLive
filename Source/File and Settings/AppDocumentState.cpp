@@ -1271,7 +1271,7 @@ void AppDocumentState::saveProjectAs()
     
 }
 
-void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
+void AppDocumentState::loadProject (bool openBrowser, File fileToOpen, bool askToSave)
 {
     //openBrower will be true when the 'Load' button is clicked, and false when a .alphalive file is clicked
     //fileToOpen will be equal to File::nonexistent when Load is click, and the file path when a .alphalive
@@ -1281,14 +1281,17 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
     int modeCheck = 0; //don't show 'save?' alert
     int shouldSave = 2; //don't save
     
-    //check to see if the user might want to save anything first by looking for a pad
-    //with a mode set to it
-    //IDEALLY WE NEED A BETTER METHOD OF CHECKING WHETHER THE USER MIGHT WANT TO SAVE
-    for (int i = 0; i <= 47; i++)
+    if (askToSave == true)
     {
-        modeCheck = PAD_SETTINGS->getMode();
-        if (modeCheck > 0)
-            break;
+        //check to see if the user might want to save anything first by looking for a pad
+        //with a mode set to it
+        //IDEALLY WE NEED A BETTER METHOD OF CHECKING WHETHER THE USER MIGHT WANT TO SAVE
+        for (int i = 0; i <= 47; i++)
+        {
+            modeCheck = PAD_SETTINGS->getMode();
+            if (modeCheck > 0)
+                break;
+        }
     }
     
     //if found a pad with a mode set to it, ask if user wants to save first
@@ -1306,6 +1309,7 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
             shouldDisplayAlertWindow = false;
             saveProject();
         }
+        //else, shouldSave == 2 (don't save)
         
         // ========================== 'LOAD PROJECT' CODE ==================================
         

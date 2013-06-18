@@ -1442,6 +1442,15 @@ void GuiSequencerMode::buttonClicked (Button* button)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerIndestructible(button->getToggleState());
         }
+        
+        if (button->getToggleState() == true)
+        {
+            if (finishLoopButton->getToggleState() == true)
+            {
+                //turn off finish Loop mode, as these two modes can't work together
+                finishLoopButton->setToggleState(false, sendNotification);
+            }
+        }
     }
     
     else if (button == finishLoopButton)
@@ -1450,6 +1459,15 @@ void GuiSequencerMode::buttonClicked (Button* button)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerShouldFinishLoop(button->getToggleState());
+        }
+        
+        if (button->getToggleState() == true)
+        {
+            if (indestructibleButton->getToggleState() == true)
+            {
+                //turn off indestructible mode, as these two modes can't work together
+                indestructibleButton->setToggleState(false, sendNotification);
+            }
         }
     }
     else if (button == stickyButton)

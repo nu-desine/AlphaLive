@@ -491,6 +491,15 @@ void GuiSamplerMode::buttonClicked (Button* button)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setSamplerIndestructible(button->getToggleState());
         }
+        
+        if (button->getToggleState() == true)
+        {
+            if (finishLoopButton->getToggleState() == true)
+            {
+                //turn off finish Loop mode, as these two modes can't work together
+                finishLoopButton->setToggleState(false, sendNotification);
+            }
+        }
     }
     
     else if (button == finishLoopButton)
@@ -499,6 +508,15 @@ void GuiSamplerMode::buttonClicked (Button* button)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setSamplerShouldFinishLoop(button->getToggleState());
+        }
+        
+        if (button->getToggleState() == true)
+        {
+            if (indestructibleButton->getToggleState() == true)
+            {
+                //turn off indestructible mode, as these two modes can't work together
+                indestructibleButton->setToggleState(false, sendNotification);
+            }
         }
     }
     else if (button == stickyButton)

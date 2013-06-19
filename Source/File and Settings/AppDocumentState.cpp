@@ -1183,14 +1183,12 @@ void AppDocumentState::saveProjectAs()
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create an AlphaLive project to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.alphalive");
+                                String::empty);
     
     if (saveFileChooser.browseForFileToSave(false))
     {
         //create a project directory
         File savedDirectory (saveFileChooser.getResult());
-        
-        std::cout << savedDirectory.getFullPathName() << std::endl;
         
         //create file
         File savedFile (savedDirectory.getFullPathName() + File::separatorString + savedDirectory.getFileName()); //get file that the user has 'saved'
@@ -1465,7 +1463,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create an AlphaLive Scene file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.alphascene");
+                                String::empty);
     if (saveFileChooser.browseForFileToSave(false))
     {
         //create a project directory
@@ -1934,7 +1932,7 @@ void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int current
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create a single sequence file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.alphaseq");
+                                String::empty);
     
     if (saveFileChooser.browseForFileToSave(false))
     {
@@ -2029,7 +2027,7 @@ void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create a sequence set file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.alphaseqset");
+                                String::empty);
     
     if (saveFileChooser.browseForFileToSave(false))
     {
@@ -2135,7 +2133,7 @@ void AppDocumentState::saveEffect (int currentlySelectedPad)
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create an effect file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.alphapad");
+                                String::empty);
     
     if (saveFileChooser.browseForFileToSave(false))
     {
@@ -2300,7 +2298,7 @@ void AppDocumentState::exportSampleBank (int currentlySelectedPad)
 	//navigate to app directory
     FileChooser saveFileChooser(translate("Create a .alphabank file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.alphabank");
+                                String::empty);
     
     if (saveFileChooser.browseForFileToSave(false))
     {
@@ -2467,7 +2465,7 @@ void AppDocumentState::createMidiFile (int currentlySelectedSeqNumber, int curre
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create a .mid file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.mid");
+                                String::empty);
     
     if (saveFileChooser.browseForFileToSave(false))
     {

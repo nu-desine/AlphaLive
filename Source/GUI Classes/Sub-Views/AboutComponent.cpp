@@ -138,8 +138,9 @@ void AboutComponent::resized()
     titleLabel->setBounds((getWidth()/2)-100, (getHeight()/6)+10, 200, 40);
     versionNumberLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+40, 150, 40);
     
-    firmwareNumberLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+70, 150, 40);
-    deviceSerialLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+100, 150, 40);
+    //firmwareNumberLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+70, 150, 40);
+    //deviceSerialLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+100, 150, 40);
+    firmwareNumberLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+85, 150, 40);
     
     companyLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+130, 150, 40);
     nuDesineLink->setBounds((getWidth()/2)-40, (getHeight()/6)+155, 80, 22);

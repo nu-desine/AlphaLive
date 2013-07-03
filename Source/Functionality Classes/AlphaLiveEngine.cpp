@@ -25,6 +25,7 @@
 #include "Other/LayoutsAndScales.cpp"
 #include "../File and Settings/StoredSettings.h"
 #include "../GUI Classes/Views/MainComponent.h"
+#include "../Application/Common.h"
 
 #if JUCE_LINUX
 #include <unistd.h>
@@ -292,7 +293,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
                 
                 int minValue = PAD_SETTINGS->getVelocityMinRange();
                 int maxValue = PAD_SETTINGS->getVelocityMaxRange();
-                recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
+                recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
             }
             else if (PAD_SETTINGS->getVelocityCurve() == 3)
             {
@@ -304,14 +305,14 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
                 
                 int minValue = PAD_SETTINGS->getVelocityMinRange();
                 int maxValue = PAD_SETTINGS->getVelocityMaxRange();
-                recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
+                recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
             }
             else if (PAD_SETTINGS->getVelocityCurve() == 2)
             {
                 //linear mapping of velocity
                 int minValue = PAD_SETTINGS->getVelocityMinRange();
                 int maxValue = PAD_SETTINGS->getVelocityMaxRange();
-                recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
+                recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
             }
             
             //static velocity stuff is done in the mode classes,

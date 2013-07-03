@@ -2137,8 +2137,8 @@
 		635263471FEBCA78A3550DA4 /* Functionality Classes */ = {
 			isa = PBXGroup;
 			children = (
-				1759B22E62C10E853AE3EE58 /* AlphaLiveEngine.cpp */,
 				67CE02E37C5BB437984363D1 /* AlphaLiveEngine.h */,
+				1759B22E62C10E853AE3EE58 /* AlphaLiveEngine.cpp */,
 				5D6B5072148862425DB231B0 /* Controller Mode */,
 				BA98ADD9EB260121CBBF435E /* EliteControls.cpp */,
 				55A6EB75A97BCCC4A2B532FB /* EliteControls.h */,
@@ -3257,12 +3257,12 @@
 		DEA96418F328607D3E4A21CC /* My IO Classes */ = {
 			isa = PBXGroup;
 			children = (
-				301AC1AA607254E4B59769B3 /* HidComms.cpp */,
 				146C2EA8B959F663D8A3CE9B /* HidComms.h */,
-				25DDE495CAAD7F44AEC1990D /* OscInput.cpp */,
+				301AC1AA607254E4B59769B3 /* HidComms.cpp */,
 				FF369B02A17C62B59838B7D0 /* OscInput.h */,
-				A3EC736FF6D39B971E158EE4 /* OscOutput.cpp */,
+				25DDE495CAAD7F44AEC1990D /* OscInput.cpp */,
 				10D53652BDE2D4426CCDD34C /* OscOutput.h */,
+				A3EC736FF6D39B971E158EE4 /* OscOutput.cpp */,
 			);
 			name = "My IO Classes";
 			sourceTree = "<group>";

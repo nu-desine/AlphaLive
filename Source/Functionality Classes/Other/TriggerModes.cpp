@@ -316,7 +316,10 @@ TriggerModeData TriggerModes::cycle (int padValue)
         pressCount = 1;
         rePressCount = 1;
         maxPressCount = 1;
-        triggerModeData.moveToNextSeq = false;
+        //set triggerModeData.moveToNextSeq to true here incase the pad is set
+        //to non-destructive and the user has pressed the pad to its max depth,
+        //meaning the sequence will actually still be playing here.
+        triggerModeData.moveToNextSeq = true;
     }
     else if(currentPlayingStatus == 1 && padValue == 0 && pressCount == 1 && maxPressCount == 1) 
     {

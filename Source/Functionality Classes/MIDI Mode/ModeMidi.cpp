@@ -23,6 +23,7 @@
 #include "ModeMidi.h"
 #include "../../File and Settings/AppSettings.h"
 #include "../Other/LayoutsAndScales.cpp"
+#include "../../Application/Common.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
 #define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
@@ -208,26 +209,13 @@ void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
     // Pressure stuff
     //==========================================================================================
     
-    //scale 0-MAX_PRESSURE to 0-127
-    //as the value will be scaled down and into an int, padValue could be rounded down to 0 even when it isn't quite 0
-    //therefore we must make sure that it is atleast at the value of 1 untill it is actually set to 0,
-    //so it doesn't mess up how the sticky feature is handled
-
-    float padValueFloat = padValue * (127.0 / MAX_PRESSURE);
-    
-    if (padValueFloat > 0 && padValueFloat < 1)
-        padValue = 1;
-    else
-    padValue = padValueFloat;
-    
-    
+    // === sticky mode ===
     if (sticky[padNumber] == 1) //'on'
     {
         //modify pressure value
         if(prevPadValue[padNumber] == 0)
         {
             pressureValue[padNumber] = 0;
-            
         }
         else
         {
@@ -244,12 +232,10 @@ void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
         pressureValue[padNumber] = padValue; 
     }
     
-    //create pressure MIDI data
+    // === create pressure MIDI data ===
     sendPressureData(padNumber);
     
-    
     prevPadValue[padNumber] = padValue;
-    
 }
 
 
@@ -374,17 +360,18 @@ void ModeMidi::noteOff (int padNumber)
 
 void ModeMidi::sendPressureData (int padNumber)
 {
-    //scale 0-127 to minPressure-maxPressure
-    //this has to be done here and not above with the MAX_PRESSURE to 127 scaling,
+    //scale 0-MAX_PRESSURE to minPressure-maxPressure
+    //this has to be done here and not above with the sticky mode code,
     //as the minRange could be set higher than the maxRange, which would mean
     //the sticky feature wouldn't work how it's meant to. 
     //Also we need to use a new variable here to covert the midi data,
     //so that sticky will still work correctly in all situations
-    int pressureValueScaled = minRange[padNumber] + (pressureValue[padNumber]  
-                            * ((maxRange[padNumber] - minRange[padNumber]) / 127.0));
     
-    
-    //std::cout << "pressureValueScaled: " << pressureValueScaled << std::endl;
+    int pressureValueScaled = scaleValue (pressureValue[padNumber],
+                                          0,
+                                          MAX_PRESSURE,
+                                          minRange[padNumber],
+                                          maxRange[padNumber]);
     
     if (pressureStatus[padNumber] == true) //if pad pressure status is 'off'
     {
@@ -406,14 +393,14 @@ void ModeMidi::sendPressureData (int padNumber)
                 break;
                 
             case 5: //pitch bend up
-                //convert 0-127 to 8191-16383
-                pressureValueScaled = 8192 + (pressureValueScaled * (8191.0/127.0));
+                //convert 0-127 to 8192-16383
+                pressureValueScaled = scaleValue (pressureValueScaled, 0, 127, 8192, 16383);
                 message = MidiMessage::pitchWheel(channel[padNumber], pressureValueScaled);
                 break;
                 
             case 6: //pitch bend down
-                //convert 0-127 to 8191-0
-                pressureValueScaled = 8192 - (pressureValueScaled * (8191.0/127.0));
+                //convert 0-127 to 8192-0
+                pressureValueScaled = scaleValue (pressureValueScaled, 0, 127, 8192, 0);
                 message = MidiMessage::pitchWheel(channel[padNumber], pressureValueScaled);
                 break;
                 

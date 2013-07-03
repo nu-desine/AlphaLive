@@ -28,4 +28,11 @@
 
 extern ScopedPointer<ApplicationCommandManager> commandManager;
 
+static double scaleValue (double value, double minValue, double maxValue, double minRange, double maxRange)
+{
+    return (((maxRange - minRange) * 
+             (value - minValue)) / 
+            (maxValue - minValue)) + minRange;
+}
+
 #endif   // H_COMMON

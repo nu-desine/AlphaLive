@@ -320,12 +320,6 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
             //so doesn't make sense to apply any static values here
         }
         
-        
-     
-        
-        
-        //std::cout << "Pad: " << recievedPad << " Raw Vel: " << velocity << " Scaled Vel: " << recievedVelocity << std::endl;
-        
         //==========================================================================
         //route message to midi mode
         if (PAD_SETTINGS->getMode() == 1) //if the pressed pad is set to Midi mode

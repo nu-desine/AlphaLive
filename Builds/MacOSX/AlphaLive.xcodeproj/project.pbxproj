@@ -1477,9 +1477,9 @@
 		14AA3D1F55FC6E6D799E01AD /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				B59351EC51D9921D462CC4E4 /* LayoutsAndScales.cpp */,
-				91ADB053D205E1C3E79BB1CB /* TriggerModes.cpp */,
 				CC136BC511B794B038785E45 /* TriggerModes.h */,
+				91ADB053D205E1C3E79BB1CB /* TriggerModes.cpp */,
+				B59351EC51D9921D462CC4E4 /* LayoutsAndScales.cpp */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -1623,13 +1623,13 @@
 		20DAA7E8AD3DA7327E68F4CF /* Sequencer Mode */ = {
 			isa = PBXGroup;
 			children = (
-				773B11CC657C643CBDD8409F /* ModeSequencer.cpp */,
-				84264B15CC806AC5E67B1E01 /* ModeSequencer.h */,
-				35AC3B42DA6ED0B7F931CBA6 /* SequenceAudioFilePlayer.cpp */,
-				10A438712F6E163FA14E3953 /* SequenceAudioFilePlayer.h */,
-				0FAA7158E5C7266DF4BE6FB0 /* SequencePlayer.cpp */,
-				80DE8E8CBFA865A8A63ACA81 /* SequencePlayer.h */,
 				A89ECAD73D33DE8839A5F31E /* SequencerValues.h */,
+				84264B15CC806AC5E67B1E01 /* ModeSequencer.h */,
+				773B11CC657C643CBDD8409F /* ModeSequencer.cpp */,
+				80DE8E8CBFA865A8A63ACA81 /* SequencePlayer.h */,
+				0FAA7158E5C7266DF4BE6FB0 /* SequencePlayer.cpp */,
+				10A438712F6E163FA14E3953 /* SequenceAudioFilePlayer.h */,
+				35AC3B42DA6ED0B7F931CBA6 /* SequenceAudioFilePlayer.cpp */,
 			);
 			name = "Sequencer Mode";
 			sourceTree = "<group>";
@@ -1857,10 +1857,10 @@
 		401F452FC5A0FB895020F973 /* Sampler Mode */ = {
 			isa = PBXGroup;
 			children = (
-				58C72316B35C698271AB5C9C /* AudioFilePlayer.cpp */,
-				0E7E5FF6A4FD30AB269C177F /* AudioFilePlayer.h */,
-				48D1E4DA99311E4C8D738672 /* ModeSampler.cpp */,
 				AA0CB9F897371D8928729129 /* ModeSampler.h */,
+				48D1E4DA99311E4C8D738672 /* ModeSampler.cpp */,
+				0E7E5FF6A4FD30AB269C177F /* AudioFilePlayer.h */,
+				58C72316B35C698271AB5C9C /* AudioFilePlayer.cpp */,
 			);
 			name = "Sampler Mode";
 			sourceTree = "<group>";
@@ -2140,10 +2140,10 @@
 				67CE02E37C5BB437984363D1 /* AlphaLiveEngine.h */,
 				1759B22E62C10E853AE3EE58 /* AlphaLiveEngine.cpp */,
 				5D6B5072148862425DB231B0 /* Controller Mode */,
-				BA98ADD9EB260121CBBF435E /* EliteControls.cpp */,
 				55A6EB75A97BCCC4A2B532FB /* EliteControls.h */,
-				3F4BFE86ADE4931CA04DF399 /* GlobalClock.cpp */,
+				BA98ADD9EB260121CBBF435E /* EliteControls.cpp */,
 				2E39370A491849642BBE0C55 /* GlobalClock.h */,
+				3F4BFE86ADE4931CA04DF399 /* GlobalClock.cpp */,
 				D15383BF3D780A574B24D2C4 /* MIDI Mode */,
 				14AA3D1F55FC6E6D799E01AD /* Other */,
 				401F452FC5A0FB895020F973 /* Sampler Mode */,
@@ -3184,8 +3184,8 @@
 		D15383BF3D780A574B24D2C4 /* MIDI Mode */ = {
 			isa = PBXGroup;
 			children = (
-				3C3FFE058813BDC77CECA980 /* ModeMidi.cpp */,
 				9D385FDAA01411BE8B0BDAFA /* ModeMidi.h */,
+				3C3FFE058813BDC77CECA980 /* ModeMidi.cpp */,
 			);
 			name = "MIDI Mode";
 			sourceTree = "<group>";

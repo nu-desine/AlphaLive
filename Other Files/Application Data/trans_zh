@@ -4,3 +4,4 @@ language: Chinesecountries: zh zho"Chromatic" = "半音""Chromatic (Two Row)
 "2. Unzip the downloaded folder, and locate the 'AlphaLive_Update' sub-folder inside of it." = ""
 "3. Move this sub-folder to the 'AlphaLive' directory in the 'Program Files' directory on this computer." = ""
 "4. If the download contains a version of this 'AlphaLive Updater' application in either 'Win32 Files' or 'Win64 Files', close this application and move the new relevant version to 'AlphaLive/Application Data' to replace the current version." = ""
+"Create an AlphaLive project to save..." = ""

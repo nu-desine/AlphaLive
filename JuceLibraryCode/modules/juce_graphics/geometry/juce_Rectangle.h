@@ -305,9 +305,23 @@ public:
     Rectangle operator*= (FloatType scaleFactor) noexcept
     {
         pos *= scaleFactor;
-        w *= scaleFactor;
-        h *= scaleFactor;
+        w = (ValueType) (w * scaleFactor);
+        h = (ValueType) (h * scaleFactor);
         return *this;
+    }
+
+    /** Scales this rectangle by the given amount, centred around the origin. */
+    template <typename FloatType>
+    Rectangle operator/ (FloatType scaleFactor) const noexcept
+    {
+        return operator* (((FloatType) 1) / scaleFactor);
+    }
+
+    /** Scales this rectangle by the given amount, centred around the origin. */
+    template <typename FloatType>
+    Rectangle operator/= (FloatType scaleFactor) noexcept
+    {
+        return operator*= (((FloatType) 1) / scaleFactor);
     }
 
     /** Expands the rectangle by a given amount.

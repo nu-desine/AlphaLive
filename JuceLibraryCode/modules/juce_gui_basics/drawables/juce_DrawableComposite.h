@@ -107,13 +107,13 @@ public:
     /** @internal */
     Rectangle<float> getDrawableBounds() const;
     /** @internal */
-    void childBoundsChanged (Component*);
+    void childBoundsChanged (Component*) override;
     /** @internal */
-    void childrenChanged();
+    void childrenChanged() override;
     /** @internal */
-    void parentHierarchyChanged();
+    void parentHierarchyChanged() override;
     /** @internal */
-    MarkerList* getMarkers (bool xAxis);
+    MarkerList* getMarkers (bool xAxis) override;
 
     //==============================================================================
     /** Internally-used class for wrapping a DrawableComposite's state into a ValueTree. */

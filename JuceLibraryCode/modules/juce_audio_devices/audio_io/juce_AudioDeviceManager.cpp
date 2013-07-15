@@ -51,32 +51,32 @@ public:
     CallbackHandler (AudioDeviceManager& adm) noexcept  : owner (adm) {}
 
 private:
-    void audioDeviceIOCallback (const float** ins, int numIns, float** outs, int numOuts, int numSamples)
+    void audioDeviceIOCallback (const float** ins, int numIns, float** outs, int numOuts, int numSamples) override
     {
         owner.audioDeviceIOCallbackInt (ins, numIns, outs, numOuts, numSamples);
     }
 
-    void audioDeviceAboutToStart (AudioIODevice* device)
+    void audioDeviceAboutToStart (AudioIODevice* device) override
     {
         owner.audioDeviceAboutToStartInt (device);
     }
 
-    void audioDeviceStopped()
+    void audioDeviceStopped() override
     {
         owner.audioDeviceStoppedInt();
     }
 
-    void audioDeviceError (const String& message)
+    void audioDeviceError (const String& message) override
     {
         owner.audioDeviceErrorInt (message);
     }
 
-    void handleIncomingMidiMessage (MidiInput* source, const MidiMessage& message)
+    void handleIncomingMidiMessage (MidiInput* source, const MidiMessage& message) override
     {
         owner.handleIncomingMidiMessageInt (source, message);
     }
 
-    void audioDeviceListChanged()
+    void audioDeviceListChanged() override
     {
         owner.audioDeviceListChanged();
     }
@@ -94,6 +94,7 @@ AudioDeviceManager::AudioDeviceManager()
       listNeedsScanning (true),
       useInputNames (false),
       inputLevel (0),
+      testSoundPosition (0),
       tempBuffer (2, 2),
       cpuUsageMs (0),
       timeToCpuScale (0)

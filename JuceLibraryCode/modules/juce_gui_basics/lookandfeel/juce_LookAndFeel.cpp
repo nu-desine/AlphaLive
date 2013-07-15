@@ -1466,7 +1466,13 @@ void LookAndFeel::drawLinearSlider (Graphics& g,
                                                                  isMouseOver || slider.isMouseButtonDown()));
 
         drawShinyButtonShape (g,
-                              (float) x, (float) y, sliderPos - (float) x, (float) height, 0.0f,
+                              (float) x,
+                              style == Slider::LinearBarVertical ? sliderPos
+                                                                 : (float) y,
+                              style == Slider::LinearBarVertical ? (float) width
+                                                                 : (sliderPos - x),
+                              style == Slider::LinearBarVertical ? (height - sliderPos)
+                                                                 : (float) height, 0.0f,
                               baseColour,
                               slider.isEnabled() ? 0.9f : 0.3f,
                               true, true, true, true);
@@ -1600,6 +1606,19 @@ Label* LookAndFeel::createSliderTextBox (Slider& slider)
 ImageEffectFilter* LookAndFeel::getSliderEffect()
 {
     return nullptr;
+}
+
+Font LookAndFeel::getSliderPopupFont()
+{
+    return Font (15.0f, Font::bold);
+}
+
+int LookAndFeel::getSliderPopupPlacement()
+{
+    return BubbleComponent::above
+            | BubbleComponent::below
+            | BubbleComponent::left
+            | BubbleComponent::right;
 }
 
 //==============================================================================
@@ -1813,7 +1832,7 @@ public:
     }
 
     //==============================================================================
-    void paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown)
+    void paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown) override
     {
         float alpha = isMouseOverButton ? (isButtonDown ? 1.0f : 0.8f) : 0.55f;
 
@@ -2510,10 +2529,13 @@ void LookAndFeel::drawFileBrowserRow (Graphics& g, int width, int height,
                                       const bool isDirectory,
                                       const bool isItemSelected,
                                       const int /*itemIndex*/,
-                                      DirectoryContentsDisplayComponent&)
+                                      DirectoryContentsDisplayComponent& dcc)
 {
+    Component* const fileListComp = dynamic_cast<Component*> (&dcc);
+
     if (isItemSelected)
-        g.fillAll (findColour (DirectoryContentsDisplayComponent::highlightColourId));
+        g.fillAll (fileListComp != nullptr ? fileListComp->findColour (DirectoryContentsDisplayComponent::highlightColourId)
+                                           : findColour (DirectoryContentsDisplayComponent::highlightColourId));
 
     const int x = 32;
     g.setColour (Colours::black);
@@ -2532,7 +2554,8 @@ void LookAndFeel::drawFileBrowserRow (Graphics& g, int width, int height,
                            RectanglePlacement::centred | RectanglePlacement::onlyReduceInSize, 1.0f);
     }
 
-    g.setColour (findColour (DirectoryContentsDisplayComponent::textColourId));
+    g.setColour (fileListComp != nullptr ? fileListComp->findColour (DirectoryContentsDisplayComponent::textColourId)
+                                         : findColour (DirectoryContentsDisplayComponent::textColourId));
     g.setFont (height * 0.7f);
 
     if (width > 450 && ! isDirectory)
@@ -2612,10 +2635,12 @@ void LookAndFeel::layoutFileBrowserComponent (FileBrowserComponent& browserComp,
 
     y += controlsHeight + 4;
 
-    Component* const listAsComp = dynamic_cast <Component*> (fileListComponent);
-    listAsComp->setBounds (x, y, w, browserComp.getHeight() - y - bottomSectionHeight);
+    if (Component* const listAsComp = dynamic_cast <Component*> (fileListComponent))
+    {
+        listAsComp->setBounds (x, y, w, browserComp.getHeight() - y - bottomSectionHeight);
+        y = listAsComp->getBottom() + 4;
+    }
 
-    y = listAsComp->getBottom() + 4;
     filenameBox->setBounds (x + 50, y, w - 50, controlsHeight);
 }
 

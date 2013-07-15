@@ -83,6 +83,16 @@
   #define juce_breakDebugger        { __asm int 3 }
 #endif
 
+#if JUCE_CLANG && defined (__has_feature) && ! defined (JUCE_ANALYZER_NORETURN)
+ #if __has_feature (attribute_analyzer_noreturn)
+  inline void __attribute__((analyzer_noreturn)) juce_assert_noreturn() {}
+  #define JUCE_ANALYZER_NORETURN juce_assert_noreturn();
+ #endif
+#endif
+
+#ifndef JUCE_ANALYZER_NORETURN
+ #define JUCE_ANALYZER_NORETURN
+#endif
 
 //==============================================================================
 #if JUCE_DEBUG || DOXYGEN
@@ -97,7 +107,7 @@
       It is only compiled in a debug build, (unless JUCE_LOG_ASSERTIONS is enabled for your build).
       @see jassert
   */
-  #define jassertfalse              { juce_LogCurrentAssertion; if (juce::juce_isRunningUnderDebugger()) juce_breakDebugger; }
+  #define jassertfalse              { juce_LogCurrentAssertion; if (juce::juce_isRunningUnderDebugger()) juce_breakDebugger; JUCE_ANALYZER_NORETURN }
 
   //==============================================================================
   /** Platform-independent assertion macro.
@@ -261,10 +271,12 @@ namespace juce
 
 //==============================================================================
 // Cross-compiler deprecation macros..
-#if DOXYGEN || (JUCE_MSVC && ! JUCE_NO_DEPRECATION_WARNINGS)
- /** This can be used to wrap a function which has been deprecated. */
+#ifdef DOXYGEN
+ /** This macro can be used to wrap a function which has been deprecated. */
+ #define JUCE_DEPRECATED(functionDef)
+#elif JUCE_MSVC && ! JUCE_NO_DEPRECATION_WARNINGS
  #define JUCE_DEPRECATED(functionDef)     __declspec(deprecated) functionDef
-#elif JUCE_GCC  && ! JUCE_NO_DEPRECATION_WARNINGS
+#elif JUCE_GCC && ! JUCE_NO_DEPRECATION_WARNINGS
  #define JUCE_DEPRECATED(functionDef)     functionDef __attribute__ ((deprecated))
 #else
  #define JUCE_DEPRECATED(functionDef)     functionDef

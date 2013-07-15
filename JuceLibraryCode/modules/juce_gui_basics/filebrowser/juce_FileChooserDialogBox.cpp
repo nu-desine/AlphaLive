@@ -46,13 +46,13 @@ public:
         setInterceptsMouseClicks (false, true);
     }
 
-    void paint (Graphics& g)
+    void paint (Graphics& g) override
     {
         text.draw (g, getLocalBounds().reduced (6)
                         .removeFromTop ((int) text.getHeight()).toFloat());
     }
 
-    void resized()
+    void resized() override
     {
         const int buttonHeight = 26;
 
@@ -91,7 +91,7 @@ FileChooserDialogBox::FileChooserDialogBox (const String& name,
                                             const String& instructions,
                                             FileBrowserComponent& chooserComponent,
                                             const bool warnAboutOverwritingExistingFiles_,
-                                            const Colour& backgroundColour)
+                                            Colour backgroundColour)
     : ResizableWindow (name, backgroundColour, true),
       warnAboutOverwritingExistingFiles (warnAboutOverwritingExistingFiles_)
 {

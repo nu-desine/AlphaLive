@@ -25,8 +25,10 @@
 Desktop::Desktop()
     : mouseClickCounter (0), mouseWheelCounter (0),
       kioskModeComponent (nullptr),
-      allowedOrientations (allOrientations)
+      allowedOrientations (allOrientations),
+      masterScaleFactor (1.0f)
 {
+    displays = new Displays (*this);
     addMouseInputSource();
 }
 
@@ -141,9 +143,26 @@ void Desktop::componentBroughtToFront (Component* const c)
 }
 
 //==============================================================================
+void Desktop::addPeer (ComponentPeer* peer)
+{
+    peers.add (peer);
+}
+
+void Desktop::removePeer (ComponentPeer* peer)
+{
+    peers.removeFirstMatchingValue (peer);
+    triggerFocusCallback();
+}
+
+//==============================================================================
 Point<int> Desktop::getMousePosition()
 {
     return getInstance().getMainMouseSource().getScreenPosition();
+}
+
+void Desktop::setMousePosition (Point<int> newPosition)
+{
+    getInstance().getMainMouseSource().setScreenPosition (newPosition);
 }
 
 Point<int> Desktop::getLastMouseDownPosition()
@@ -186,13 +205,30 @@ MouseInputSource* Desktop::getDraggingMouseSource (int index) const noexcept
     return nullptr;
 }
 
+MouseInputSource* Desktop::getOrCreateMouseInputSource (int touchIndex)
+{
+    jassert (touchIndex >= 0 && touchIndex < 100); // sanity-check on number of fingers
+
+    for (;;)
+    {
+        if (MouseInputSource* mouse = getMouseSource (touchIndex))
+            return mouse;
+
+        if (! addMouseInputSource())
+        {
+            jassertfalse; // not enough mouse sources!
+            return nullptr;
+        }
+    }
+}
+
 //==============================================================================
 class MouseDragAutoRepeater  : public Timer
 {
 public:
     MouseDragAutoRepeater() {}
 
-    void timerCallback()
+    void timerCallback() override
     {
         Desktop& desktop = Desktop::getInstance();
         int numMiceDown = 0;
@@ -318,7 +354,7 @@ void Desktop::sendMouseMove()
 
 
 //==============================================================================
-Desktop::Displays::Displays()   { refresh(); }
+Desktop::Displays::Displays (Desktop& desktop)   { init (desktop); }
 Desktop::Displays::~Displays()  {}
 
 const Desktop::Displays::Display& Desktop::Displays::getMainDisplay() const noexcept
@@ -387,13 +423,18 @@ bool operator!= (const Desktop::Displays::Display& d1, const Desktop::Displays::
     return ! (d1 == d2);
 }
 
+void Desktop::Displays::init (Desktop& desktop)
+{
+    findDisplays (desktop.masterScaleFactor);
+    jassert (displays.size() > 0);
+}
+
 void Desktop::Displays::refresh()
 {
     Array<Display> oldDisplays;
     oldDisplays.swapWithArray (displays);
 
-    findDisplays();
-    jassert (displays.size() > 0);
+    init (Desktop::getInstance());
 
     if (oldDisplays != displays)
     {

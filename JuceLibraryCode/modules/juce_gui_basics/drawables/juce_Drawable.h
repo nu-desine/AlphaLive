@@ -104,7 +104,7 @@ public:
     */
     void drawWithin (Graphics& g,
                      const Rectangle<float>& destArea,
-                     const RectanglePlacement& placement,
+                     RectanglePlacement placement,
                      float opacity) const;
 
 
@@ -117,7 +117,7 @@ public:
     /** Sets a transform for this drawable that will position it within the specified
         area of its parent component.
     */
-    void setTransformToFit (const Rectangle<float>& areaInParent, const RectanglePlacement& placement);
+    void setTransformToFit (const Rectangle<float>& areaInParent, RectanglePlacement placement);
 
     /** Returns the DrawableComposite that contains this object, if there is one. */
     DrawableComposite* getParent() const;
@@ -211,7 +211,7 @@ protected:
     /** @internal */
     void transformContextToCorrectOrigin (Graphics&);
     /** @internal */
-    void parentHierarchyChanged();
+    void parentHierarchyChanged() override;
     /** @internal */
     void setBoundsToEnclose (const Rectangle<float>&);
 
@@ -250,7 +250,7 @@ protected:
   #endif
 
 private:
-    void nonConstDraw (Graphics& g, float opacity, const AffineTransform& transform);
+    void nonConstDraw (Graphics&, float opacity, const AffineTransform&);
 
     Drawable& operator= (const Drawable&);
     JUCE_LEAK_DETECTOR (Drawable)

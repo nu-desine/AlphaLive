@@ -61,8 +61,7 @@ class JUCE_API  Desktop  : private DeletedAtShutdown,
 {
 public:
     //==============================================================================
-    /** There's only one dektop object, and this method will return it.
-    */
+    /** There's only one desktop object, and this method will return it. */
     static Desktop& JUCE_CALLTYPE getInstance();
 
     //==============================================================================
@@ -328,9 +327,17 @@ public:
             Rectangle<int> totalArea;
 
             /** This is the scale-factor of this display.
-                For higher-resolution displays, this may be a value greater than 1.0
+                If you create a component with size 1x1, this scale factor indicates the actual
+                size of the component in terms of physical pixels.
+                For higher-resolution displays, it may be a value greater than 1.0
             */
             double scale;
+
+            /** The DPI of the display.
+                This is the number of physical pixels per inch. To get the number of logical
+                pixels per inch, divide this by the Display::scale value.
+            */
+            double dpi;
 
             /** This will be true if this is the user's main screen. */
             bool isMain;
@@ -360,12 +367,15 @@ public:
 
     private:
         friend class Desktop;
-        Displays();
+        friend class ScopedPointer<Displays>;
+        Displays (Desktop&);
         ~Displays();
-        void findDisplays();
+
+        void init (Desktop&);
+        void findDisplays (float masterScale);
     };
 
-    const Displays& getDisplays() const noexcept       { return displays; }
+    const Displays& getDisplays() const noexcept       { return *displays; }
 
     //==============================================================================
     /** True if the OS supports semitransparent windows */
@@ -389,8 +399,12 @@ private:
     ListenerList <FocusChangeListener> focusListeners;
 
     Array <Component*> desktopComponents;
+    Array <ComponentPeer*> peers;
 
-    Displays displays;
+    void addPeer (ComponentPeer*);
+    void removePeer (ComponentPeer*);
+
+    ScopedPointer<Displays> displays;
 
     Point<int> lastFakeMouseMove;
     void sendMouseMove();
@@ -408,12 +422,14 @@ private:
     Rectangle<int> kioskComponentOriginalBounds;
 
     int allowedOrientations;
+    float masterScaleFactor;
 
     ComponentAnimator animator;
 
-    void timerCallback();
+    void timerCallback() override;
     void resetTimer();
     ListenerList <MouseListener>& getMouseListeners();
+    MouseInputSource* getOrCreateMouseInputSource (int touchIndex);
 
     void addDesktopComponent (Component*);
     void removeDesktopComponent (Component*);
@@ -422,7 +438,7 @@ private:
     void setKioskComponent (Component*, bool enableOrDisable, bool allowMenusAndBars);
 
     void triggerFocusCallback();
-    void handleAsyncUpdate();
+    void handleAsyncUpdate() override;
 
     Desktop();
     ~Desktop();

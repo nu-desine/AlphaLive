@@ -64,7 +64,7 @@ public:
                                     desktop; if false, you can use it as a child component
     */
     DialogWindow (const String& name,
-                  const Colour& backgroundColour,
+                  Colour backgroundColour,
                   bool escapeKeyTriggersCloseButton,
                   bool addToDesktop = true);
 
@@ -192,7 +192,7 @@ public:
     static void showDialog (const String& dialogTitle,
                             Component* contentComponent,
                             Component* componentToCentreAround,
-                            const Colour& backgroundColour,
+                            Colour backgroundColour,
                             bool escapeKeyTriggersCloseButton,
                             bool shouldBeResizable = false,
                             bool useBottomRightCornerResizer = false);
@@ -240,7 +240,7 @@ public:
     static int showModalDialog (const String& dialogTitle,
                                 Component* contentComponent,
                                 Component* componentToCentreAround,
-                                const Colour& backgroundColour,
+                                Colour backgroundColour,
                                 bool escapeKeyTriggersCloseButton,
                                 bool shouldBeResizable = false,
                                 bool useBottomRightCornerResizer = false);
@@ -250,9 +250,9 @@ public:
 protected:
     //==============================================================================
     /** @internal */
-    void resized();
+    void resized() override;
     /** @internal */
-    bool keyPressed (const KeyPress&);
+    bool keyPressed (const KeyPress&) override;
 
 private:
     bool escapeKeyTriggersCloseButton;

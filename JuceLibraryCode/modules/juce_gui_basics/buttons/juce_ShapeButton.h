@@ -46,9 +46,9 @@ public:
         @param downColour       the colour to use when the button is in the pressed-down state
     */
     ShapeButton (const String& name,
-                 const Colour& normalColour,
-                 const Colour& overColour,
-                 const Colour& downColour);
+                 Colour normalColour,
+                 Colour overColour,
+                 Colour downColour);
 
     /** Destructor. */
     ~ShapeButton();
@@ -73,21 +73,20 @@ public:
         @param overColour       the colour to use when the mouse is over the shape
         @param downColour       the colour to use when the button is in the pressed-down state
     */
-    void setColours (const Colour& normalColour,
-                     const Colour& overColour,
-                     const Colour& downColour);
+    void setColours (Colour normalColour,
+                     Colour overColour,
+                     Colour downColour);
 
     /** Sets up an outline to draw around the shape.
 
         @param outlineColour        the colour to use
         @param outlineStrokeWidth   the thickness of line to draw
     */
-    void setOutline (const Colour& outlineColour,
+    void setOutline (Colour outlineColour,
                      float outlineStrokeWidth);
 
-
     /** @internal */
-    void paintButton (Graphics&, bool isMouseOverButton, bool isButtonDown);
+    void paintButton (Graphics&, bool isMouseOverButton, bool isButtonDown) override;
 
 private:
     //==============================================================================

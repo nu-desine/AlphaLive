@@ -25,13 +25,90 @@
 #ifndef __JUCE_IIRFILTER_JUCEHEADER__
 #define __JUCE_IIRFILTER_JUCEHEADER__
 
+class IIRFilter;
+
+//==============================================================================
+/**
+    A set of coefficients for use in an IIRFilter object.
+
+    @see IIRFilter
+*/
+class JUCE_API  IIRCoefficients
+{
+public:
+    //==============================================================================
+    /** Creates a null set of coefficients (which will produce silence). */
+    IIRCoefficients() noexcept;
+
+    /** Directly constructs an object from the raw coefficients.
+        Most people will want to use the static methods instead of this, but
+        the constructor is public to allow tinkerers to create their own custom
+        filters!
+    */
+    IIRCoefficients (double c1, double c2, double c3,
+                     double c4, double c5, double c6) noexcept;
+
+    /** Creates a copy of another filter. */
+    IIRCoefficients (const IIRCoefficients&) noexcept;
+    /** Creates a copy of another filter. */
+    IIRCoefficients& operator= (const IIRCoefficients&) noexcept;
+    /** Destructor. */
+    ~IIRCoefficients() noexcept;
+
+    /** Returns the coefficients for a low-pass filter. */
+    static IIRCoefficients makeLowPass (double sampleRate,
+                                        double frequency) noexcept;
+
+    /** Returns the coefficients for a high-pass filter. */
+    static IIRCoefficients makeHighPass (double sampleRate,
+                                         double frequency) noexcept;
+
+    //==============================================================================
+    /** Returns the coefficients for a low-pass shelf filter with variable Q and gain.
+
+        The gain is a scale factor that the low frequencies are multiplied by, so values
+        greater than 1.0 will boost the low frequencies, values less than 1.0 will
+        attenuate them.
+    */
+    static IIRCoefficients makeLowShelf (double sampleRate,
+                                         double cutOffFrequency,
+                                         double Q,
+                                         float gainFactor) noexcept;
+
+    /** Returns the coefficients for a high-pass shelf filter with variable Q and gain.
+
+        The gain is a scale factor that the high frequencies are multiplied by, so values
+        greater than 1.0 will boost the high frequencies, values less than 1.0 will
+        attenuate them.
+    */
+    static IIRCoefficients makeHighShelf (double sampleRate,
+                                          double cutOffFrequency,
+                                          double Q,
+                                          float gainFactor) noexcept;
+
+    /** Returns the coefficients for a peak filter centred around a
+        given frequency, with a variable Q and gain.
+
+        The gain is a scale factor that the centre frequencies are multiplied by, so
+        values greater than 1.0 will boost the centre frequencies, values less than
+        1.0 will attenuate them.
+    */
+    static IIRCoefficients makePeakFilter (double sampleRate,
+                                           double centreFrequency,
+                                           double Q,
+                                           float gainFactor) noexcept;
+
+private:
+    friend class IIRFilter;
+    float c[5];
+};
 
 //==============================================================================
 /**
     An IIR filter that can perform low, high, or band-pass filtering on an
     audio signal.
 
-    @see IIRFilterAudioSource
+    @see IIRCoefficient, IIRFilterAudioSource
 */
 class JUCE_API  IIRFilter
 {
@@ -40,16 +117,26 @@ public:
     /** Creates a filter.
 
         Initially the filter is inactive, so will have no effect on samples that
-        you process with it. Use the appropriate method to turn it into the type
-        of filter needed.
+        you process with it. Use the setCoefficients() method to turn it into the
+        type of filter needed.
     */
-    IIRFilter();
+    IIRFilter() noexcept;
 
     /** Creates a copy of another filter. */
-    IIRFilter (const IIRFilter& other);
+    IIRFilter (const IIRFilter&) noexcept;
 
     /** Destructor. */
-    ~IIRFilter();
+    ~IIRFilter() noexcept;
+
+    //==============================================================================
+    /** Clears the filter so that any incoming data passes through unchanged. */
+    void makeInactive() noexcept;
+
+    /** Applies a set of coefficients to this filter. */
+    void setCoefficients (const IIRCoefficients& newCoefficients) noexcept;
+
+    /** Returns the coefficients that this filter is using. */
+    IIRCoefficients getCoefficients() const noexcept    { return coefficients; }
 
     //==============================================================================
     /** Resets the filter's processing pipeline, ready to start a new stream of data.
@@ -60,10 +147,8 @@ public:
     */
     void reset() noexcept;
 
-    /** Performs the filter operation on the given set of samples.
-    */
-    void processSamples (float* samples,
-                         int numSamples) noexcept;
+    /** Performs the filter operation on the given set of samples. */
+    void processSamples (float* samples, int numSamples) noexcept;
 
     /** Processes a single sample, without any locking or checking.
 
@@ -72,74 +157,13 @@ public:
     */
     float processSingleSampleRaw (float sample) noexcept;
 
-    //==============================================================================
-    /** Sets the filter up to act as a low-pass filter.
-    */
-    void makeLowPass (double sampleRate,
-                      double frequency) noexcept;
-
-    /** Sets the filter up to act as a high-pass filter.
-    */
-    void makeHighPass (double sampleRate,
-                       double frequency) noexcept;
-
-    //==============================================================================
-    /** Sets the filter up to act as a low-pass shelf filter with variable Q and gain.
-
-        The gain is a scale factor that the low frequencies are multiplied by, so values
-        greater than 1.0 will boost the low frequencies, values less than 1.0 will
-        attenuate them.
-    */
-    void makeLowShelf (double sampleRate,
-                       double cutOffFrequency,
-                       double Q,
-                       float gainFactor) noexcept;
-
-    /** Sets the filter up to act as a high-pass shelf filter with variable Q and gain.
-
-        The gain is a scale factor that the high frequencies are multiplied by, so values
-        greater than 1.0 will boost the high frequencies, values less than 1.0 will
-        attenuate them.
-    */
-    void makeHighShelf (double sampleRate,
-                        double cutOffFrequency,
-                        double Q,
-                        float gainFactor) noexcept;
-
-    /** Sets the filter up to act as a band pass filter centred around a
-        frequency, with a variable Q and gain.
-
-        The gain is a scale factor that the centre frequencies are multiplied by, so
-        values greater than 1.0 will boost the centre frequencies, values less than
-        1.0 will attenuate them.
-    */
-    void makeBandPass (double sampleRate,
-                       double centreFrequency,
-                       double Q,
-                       float gainFactor) noexcept;
-
-    /** Clears the filter's coefficients so that it becomes inactive.
-    */
-    void makeInactive() noexcept;
-
-    //==============================================================================
-    /** Makes this filter duplicate the set-up of another one.
-    */
-    void copyCoefficientsFrom (const IIRFilter& other) noexcept;
-
-
 protected:
     //==============================================================================
     SpinLock processLock;
-
-    void setCoefficients (double c1, double c2, double c3,
-                          double c4, double c5, double c6) noexcept;
-
-    bool active;
-    float coefficients[5];
+    IIRCoefficients coefficients;
     float v1, v2;
+    bool active;
 
-    // (use the copyCoefficientsFrom() method instead of this operator)
     IIRFilter& operator= (const IIRFilter&);
     JUCE_LEAK_DETECTOR (IIRFilter)
 };

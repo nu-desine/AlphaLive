@@ -936,7 +936,7 @@ void Desktop::setKioskComponent (Component* kioskModeComponent, bool enableOrDis
     [[UIApplication sharedApplication] setStatusBarHidden: enableOrDisable
                                             withAnimation: UIStatusBarAnimationSlide];
 
-    displays.refresh();
+    displays->refresh();
 
     if (ComponentPeer* const peer = kioskModeComponent->getPeer())
         peer->setFullScreen (enableOrDisable);
@@ -954,7 +954,7 @@ public:
     {
     }
 
-    void messageCallback()
+    void messageCallback() override
     {
         if (ComponentPeer::isValidPeer (peer))
             peer->repaint (rect);

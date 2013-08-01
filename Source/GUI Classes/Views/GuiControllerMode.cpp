@@ -35,21 +35,25 @@
 GuiControllerMode::GuiControllerMode(MainComponent &ref)
                                             :   mainComponentRef(ref)
 {
+    numOfControlButtons = 5;
     
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < numOfControlButtons; i++)
     {
         if (i == 0)
             controlButtons.insert(i, new SettingsButton(translate("SCENE SWITCH"), (270 * (M_PI / 180)), 
-                                                        (315 * (M_PI / 180)),
+                                                        (306 * (M_PI / 180)),
                                                         0.3f, -90, 0.45, 0.8));
         if (i == 1)
-            controlButtons.insert(i, new SettingsButton(translate("MIDI PROGRAM"), (315 * (M_PI / 180)),
-                                                        (2 * M_PI) , 0.3f, -90, 0.45, 0.8));
+            controlButtons.insert(i, new SettingsButton(translate("MIDI PROGRAM"), (306 * (M_PI / 180)),
+                                                        (342 * (M_PI / 180)) , 0.3f, -90, 0.45, 0.8));
         if (i == 2)
-            controlButtons.insert(i, new SettingsButton(translate("SCENE/PROGRAM"), 0.0f, (45 * (M_PI / 180)), 
-                                                        0.3f, 90, 0.55, 0.2));
+            controlButtons.insert(i, new SettingsButton(translate("SCENE/PROGRAM"), (342 * (M_PI / 180)),
+                                                        (378 * (M_PI / 180)), 0.3f, 90, 0.55, 0.2)); //note I'm not wrapping round
         if (i == 3)
-            controlButtons.insert(i, new SettingsButton(translate("OSC MESSAGE"), (45 * (M_PI / 180)), 
+            controlButtons.insert(i, new SettingsButton(translate("OSC MESSAGE"), (18 * (M_PI / 180)),
+                                                        (58 * (M_PI / 180)), 0.3f, 90, 0.55, 0.3));
+        if (i == 4)
+            controlButtons.insert(i, new SettingsButton(translate("KILLSWITCH"), (56 * (M_PI / 180)),
                                                         (90 * (M_PI / 180)), 0.3f, 90, 0.55, 0.3));
         
         controlButtons[i]->addListener(this);
@@ -127,10 +131,10 @@ GuiControllerMode::~GuiControllerMode()
 void GuiControllerMode::resized()
 {
 	
-	controlButtons[0]->setBounds(684, 261, 322, 322);
-	controlButtons[1]->setBounds(684, 261, 322, 322);
-	controlButtons[2]->setBounds(684, 261, 322, 322);
-	controlButtons[3]->setBounds(684, 261, 322, 322);
+    for (int i = 0; i < numOfControlButtons; i++)
+    {
+        controlButtons[i]->setBounds(684, 261, 322, 322);
+    }
     
     //only one of these (or a group of these) will be displayed at any time depending on the value of control menu
     sceneNumberSlider->setBounds(816, 393, 58, 58);
@@ -318,7 +322,7 @@ void GuiControllerMode::textEditorTextChanged (TextEditor& editor)
 void GuiControllerMode::buttonClicked (Button* button)
 {
     
-    for (int control = 0; control < 4; control++)
+    for (int control = 0; control < numOfControlButtons; control++)
     {
         if (button == controlButtons[control])
         {
@@ -374,17 +378,6 @@ void GuiControllerMode::updateDisplay()
     
     else if(MULTI_PADS)
     {
-        /*
-        controlButtons[0]->setToggleState(true, false);
-        sceneNumberSlider->setValue(1);
-        oscIpAddressEditor->setText("127.0.0.1", false);
-        oscPortNumberSlider->setValue(5004);
-        midiProgramChangeNumberSlider->setValue(1);
-        midiChannelButtons[0]->setToggleState(true, false);
-        
-        setDisplay(0);
-         */
-        
         int controlMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getControllerControl();
         for (int i = 1; i < selectedPads.size(); i++)
         {
@@ -533,15 +526,19 @@ void GuiControllerMode::setDisplay (int controlSelected)
         drawButtons = 0;
         repaint(600, 200, 424, 469); // << SET REPAINT BOUNDS
     }
+    else if(controlSelected == 4) //Killswitch
+    {
+        drawButtons = 0;
+        repaint(600, 200, 424, 469); // << SET REPAINT BOUNDS
+    }
 
-    
 }
 
 
 
 void GuiControllerMode::mouseEnter (const MouseEvent &e)
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < numOfControlButtons; i++)
     {
         if (controlButtons[0]->isMouseOver(true))
         {
@@ -558,6 +555,10 @@ void GuiControllerMode::mouseEnter (const MouseEvent &e)
         else if (controlButtons[3]->isMouseOver(true))
         {
             mainComponentRef.setInfoTextBoxText(translate("OSC Output Mode. This mode enables the selected pads to be used to send Open Sound Control messages."));
+        }
+        else if (controlButtons[4]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate("Killswitch. This mode enables the selected pads to trigger AlphaLive's Killswitch to stop all sounds."));
         }
     }
     

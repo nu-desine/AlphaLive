@@ -1032,4 +1032,5 @@ void AlphaLiveEngine::setMainComponent(MainComponent *mainComponent_)
     mainComponent = mainComponent_;
     eliteControls->setMainComponent(mainComponent_);
     globalClock->setMainComponent(mainComponent_);
+    modeController->setMainComponent(mainComponent_);
 }

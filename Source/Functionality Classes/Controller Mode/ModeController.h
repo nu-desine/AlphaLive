@@ -28,6 +28,7 @@
 #include "../../My IO Classes/OscOutput.h"
 
 class AlphaLiveEngine;
+class MainComponent;
 
 class ModeController :  public Subject, //so this class can be observed by the scene component
                         public AsyncUpdater
@@ -45,6 +46,8 @@ public:
     void handleAsyncUpdate();
     
     int getPadNumber();
+    
+    void setMainComponent(MainComponent *mainComponent_);
 
 private:
     
@@ -57,6 +60,7 @@ private:
     OscOutput oscOutput;
     AlphaLiveEngine &alphaLiveEngineRef;
     
+    MainComponent *mainComponent;
 };
 
 

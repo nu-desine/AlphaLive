@@ -3509,7 +3509,7 @@
 		1321578FCA21CAA9DF2E9344 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = 3E1F5C277D0A94FB4D7A2678 /* Build configuration list for PBXProject "AlphaLive" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -3755,7 +3755,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.5;
 				SDKROOT_ppc = macosx10.5;
 			};
 			name = Release;
@@ -3784,7 +3784,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.5;
 				SDKROOT_ppc = macosx10.5;
 			};
 			name = Debug;

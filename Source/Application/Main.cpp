@@ -142,7 +142,15 @@ public:
         
 		//==== open any requested files/projects ====
 		//See the comment at the top of this .cpp file for current issues here
-		File selectedFile(commandLine.unquoted());
+        
+        File selectedFile;
+        
+        // Without setting selectedFile within the below if statement an assertion failure
+        // is caused on OS X 10.8 when running in debug mode as commandLine will
+        // equal or contain "-NSDocumentRevisionsDebugMode YES"
+        if (File::isAbsolutePath(commandLine.unquoted()))
+            selectedFile = commandLine.unquoted();
+        
         //check to see if the clicked file is a .alphalive file
         if (selectedFile.getFileExtension() == ".alphalive")
         {

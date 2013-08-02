@@ -72,6 +72,7 @@
 #include "../GUI Classes/Initial Loading Window/LoadingWindow.h"
 #include "../File and Settings/StoredSettings.h"
 #include "MainMenuModel.h"
+#include "../GUI Classes/Binary Data/BinaryDataNew.h"
 
 //==============================================================================
 class AlphaSoftApplication  :   public JUCEApplication
@@ -89,6 +90,15 @@ public:
     //==============================================================================
     void initialise (const String& commandLine)
     {
+//        SplashScreen* splash = new SplashScreen();
+//        splash->show (String::empty,
+//                      ImageFileFormat::loadFrom(BinaryDataNew::loading_png, BinaryDataNew::loading_pngSize),
+//                      0, false, false);
+        
+        
+        // Create temporary loading window. think about how to implement a realtime progress bar in here!
+        loadingWindow = new LoadingWindow();
+        
          #if JUCE_MAC || DOXYGEN
          std::cout << "Running on Mac..." << std::endl;
          #endif
@@ -106,9 +116,6 @@ public:
         
         commandManager = new ApplicationCommandManager();
         commandManager->registerAllCommandsForTarget (this);
-         
-        // Create temporary loading window. think about how to implement a realtime progress bar in here!
-        loadingWindow = new LoadingWindow();
    
         //create a single global instance of AppSettings
         p = AppSettings::Instance();
@@ -137,9 +144,6 @@ public:
         MenuBarModel::setMacMainMenu (menuModel, &menu);
         #endif
         
-        //delete loading window now as everything will be loaded at this point
-        loadingWindow = 0;
-        
 		//==== open any requested files/projects ====
 		//See the comment at the top of this .cpp file for current issues here
         
@@ -166,6 +170,11 @@ public:
         
         //Tell the HidComms class that it can start recieving and processing pad and elite control reports.
         alphaLiveEngine->setAppHasInitialised();
+        
+        //set window visible here once everything has initilised and been displayed
+        mainWindow->setVisible(true);
+        //delete loading window now as everything will be loaded at this point
+        loadingWindow = 0;
         
         //If auto-check is on, check for software updates
         bool isUpdating = false;

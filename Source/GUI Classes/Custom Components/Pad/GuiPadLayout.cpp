@@ -148,7 +148,8 @@ GuiPadLayout::GuiPadLayout(AlphaLiveEngine &alphaLiveEngineRef_, MainComponent &
 
 GuiPadLayout::~GuiPadLayout()
 {
-	
+	pads.clear();
+    
 	delete globalSb;
 	delete row1Sb;
 	delete row2Sb;

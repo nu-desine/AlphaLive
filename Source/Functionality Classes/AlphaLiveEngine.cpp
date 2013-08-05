@@ -427,7 +427,7 @@ void AlphaLiveEngine::updatePadPlayingStatus (int padNumber, int status)
 {
     //is this function called from an external actionListenerCallback function every time?
     //If not do we need a MessageManagerLock here?
-    if (mainComponent != NULL)
+    if (mainComponent != nullptr)
         mainComponent->getGuiPadLayout()->setPadPlayingState(padNumber, status);
     
 }

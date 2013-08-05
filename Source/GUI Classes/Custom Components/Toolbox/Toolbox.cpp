@@ -117,12 +117,6 @@ Toolbox::Toolbox(MainComponent &parent) :
     
     thread.startThread();
     
-    //By default FileTreeComponent's and FileListComponent's display file extention, file size, and file modifcation date
-    //To remove these attributes, need to hack FileListTreeItem::paintItem in juce_FileTreeComponent.cpp
-    //and FileListItemComponent::paint() in juce_FileListComponent.cpp
-    //could this be done using LookAndFeel instead?
-    
-    
     treeLists.insert(0, new FileTreeComponent (*contentLists[SAMPLE_BANKS]));
     treeLists.insert(1, new FileTreeComponent (*contentLists[AUDIO_SAMPLES]));
     treeLists.insert(2, new FileTreeComponent (*contentLists[SEQUENCES]));
@@ -132,11 +126,8 @@ Toolbox::Toolbox(MainComponent &parent) :
         treeLists[i]->addListener(this);
         treeLists[i]->setIndentSize(10);
         treeLists[i]->addMouseListener(this, true);
+        treeLists[i]->setItemHeight(16);
     }
-    //to change the row height of a file tree component, need to hack FileTreeListItem::getItemHeight() in juce_FileTreeComponent.cpp
-    //could this be done using LookAndFeel instead?
-    //Update - I think i need to use the TreeViewItem to create my own items and then I can overide getItemHeight()
-    //to set the size. However for now I'm lazy and I'm just going to hack the Juce Library code.
     
     for (int i = 0; i < 6; i++)
     {

@@ -90,14 +90,13 @@ public:
     //==============================================================================
     void initialise (const String& commandLine)
     {
-//        SplashScreen* splash = new SplashScreen();
-//        splash->show (String::empty,
-//                      ImageFileFormat::loadFrom(BinaryDataNew::loading_png, BinaryDataNew::loading_pngSize),
-//                      0, false, false);
+        SplashScreen* splash = new SplashScreen(String::empty,
+                                                ImageFileFormat::loadFrom(BinaryDataNew::loading_png, BinaryDataNew::loading_pngSize),
+                                                false);
         
         
         // Create temporary loading window. think about how to implement a realtime progress bar in here!
-        loadingWindow = new LoadingWindow();
+        //loadingWindow = new LoadingWindow();
         
          #if JUCE_MAC || DOXYGEN
          std::cout << "Running on Mac..." << std::endl;
@@ -174,14 +173,17 @@ public:
         //set window visible here once everything has initilised and been displayed
         mainWindow->setVisible(true);
         //delete loading window now as everything will be loaded at this point
-        loadingWindow = 0;
+        //loadingWindow = 0;
+        splash->deleteAfterDelay (RelativeTime::seconds (0), false);
         
         //If auto-check is on, check for software updates
         bool isUpdating = false;
         
         if (StoredSettings::getInstance()->autoCheckUpdates == 2)
         {
-            //should this be called asyncronously instead?
+            //This needs to be called asyncronously instead, otherwise it will
+            //interfere with anotherInstanceStarted() if called at launch and
+            //not load up the opened project
             isUpdating = mainWindow->getMainComponent()->updateSoftware(true);
         }
         

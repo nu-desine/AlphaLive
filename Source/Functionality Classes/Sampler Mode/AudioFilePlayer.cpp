@@ -172,9 +172,7 @@ void AudioFilePlayer::processAudioFile(int padValue, int padVelocity)
                 break;
         }
         
-        
-        
-        
+
         if (triggerModeData.playingStatus == 0 
             && shouldFinishLoop == 1 
             && indestructible == 0 
@@ -206,12 +204,7 @@ void AudioFilePlayer::processAudioFile(int padValue, int padVelocity)
             currentAudioFileSource->setLooping(shouldLoop);
         }
         
-        
-        
-        
-        
-        
-        
+
         if (indestructible == 1)
         {
             //if set to indestructible...
@@ -259,7 +252,6 @@ void AudioFilePlayer::processAudioFile(int padValue, int padVelocity)
             }
                 
         }
-        
         
         
         if (quantizeMode == 0) //free
@@ -332,8 +324,6 @@ void AudioFilePlayer::processAudioFile(int padValue, int padVelocity)
         {
             pressureValue = padValue; 
         }
-        
-        
         
         //determine what effect and parameter the pressure is controlling
         
@@ -475,14 +465,12 @@ void AudioFilePlayer::playAudioFile()
         nextFileSourceIndex = 0;
     
     //start audio file
-    //std::cout << "Velocity: " << velocity << " Gain : " << velocityGain << std::endl;
     fileSource[nextFileSourceIndex]->setGain(velocityGain);
     fileSource[nextFileSourceIndex]->setPosition (0.0);
     fileSource[nextFileSourceIndex]->start();
     
     //iterate to next index of the FileSource array
     nextFileSourceIndex++;
-    
     
     hasAlertedGui = false;
     
@@ -543,8 +531,6 @@ void AudioFilePlayer::playAudioFile()
         }
     }
 
-     
-    
     if (PAD_SETTINGS->getExclusiveMode() == 1)
     {
         modeSamplerRef.getAlphaLiveEngineRef().handleExclusiveMode(padNumber);

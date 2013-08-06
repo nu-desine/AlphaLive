@@ -1141,6 +1141,7 @@ void AppDocumentState::saveProject()
         currentProjectFile.setCreationTime(creationTime);
 
         XmlElement performanceSettings("ALPHALIVE_PROJECT_VERSION_1");
+        performanceSettings.setAttribute("AlphaLiveVersionNumber", ProjectInfo::versionNumber);
 
         performanceSettings.addChildElement(projectData);
         
@@ -1234,6 +1235,7 @@ void AppDocumentState::saveProjectAs()
             savedFile.create(); //create the file
     
             XmlElement performanceSettings("ALPHALIVE_PROJECT_VERSION_1");
+            performanceSettings.setAttribute("AlphaLiveVersionNumber", ProjectInfo::versionNumber);
             
             performanceSettings.addChildElement(projectData);
             
@@ -1336,108 +1338,126 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen, bool askT
             //parse file into xml file
             ScopedPointer<XmlElement> loadedXml (XmlDocument::parse(loadedFile));
             
-            
             if (loadedXml != nullptr && loadedXml->hasTagName("ALPHALIVE_PROJECT_VERSION_1"))
             {
+                int projectVersionNumber = ProjectInfo::versionNumber;
                 
-                //get the folder that holds the projects audio files
-                File audioFileDirectory = (loadedFile.getParentDirectory().getFullPathName() + File::separatorString + "Audio Files");
+                //if available, get the version number of AlphaLive that the project was saved with
+                if (loadedXml->hasAttribute("AlphaLiveVersionNumber"))
+                    projectVersionNumber = loadedXml->getIntAttribute("AlphaLiveVersionNumber");
                 
-                //if so some strange reason the directory doesn't exist, create it
-                if (audioFileDirectory.exists() == false)
-                    audioFileDirectory.createDirectory();
+                bool shouldContinue = true;
                 
-                //set the Audio Files directory as the new working directory so loaded audio files can be found
-                audioFileDirectory.setAsCurrentWorkingDirectory();
-                
-                //get number of included audio files (for use at close when auto cleaning project)
-                numOfFilesAtStart = File::getCurrentWorkingDirectory().getNumberOfChildFiles(2);
-                
-                //=====================load projectData settings=======================
-                
-                //reset/clear XmlElement.
-                if (projectData != nullptr)
-                    projectData->removeAllAttributes();
-                
-                //put the loaded xml data into the xmlelement for the project settings
-                XmlElement *projSettingsXml = loadedXml->getChildByName("PROJECT_SETTINGS");
-                
-                //check to see if the project settings child element actually exists (it won't within older AlphaLive Projects)
-                if (loadedXml->containsChildElement(projSettingsXml) == true)
-                    projectData = new XmlElement(*projSettingsXml);
-                
-                //apply the settings to AppSettings variables, even if "PROJECT_SETTINGS" doesn't exist (old file format), as default values should then be set
-                loadProjectSettings();
-                
-                
-                //WHY DON'T I NEED TO delete or remove projSettingsXml here?
-                //I think it's because above I created a hard copy of projSettingsXml when applying it to projectData,
-                //therefore when loadedXml goes out of scope and delete's projSettingsXml, it doesn't effect projectData
-                //in anyway.
-                
-                //=========load the child elements of loadedXml and put them in the sceneData objects===========
-                for (int scene = 0; scene <= NO_OF_SCENES-1; scene++)
+                //if the projects version number is greater than the current AlphaLive version number,
+                //alert the user and give them the option to cancel opening the project.
+                if (projectVersionNumber > ProjectInfo::versionNumber)
                 {
-                    //accessed by observer in order to update the relevent scene slot's GUI
-                    sceneToUpdate = scene;
+                    shouldContinue = AlertWindow::showOkCancelBox (AlertWindow::NoIcon,
+                                                                        translate("Warning"),
+                                                                        translate("This AlphaLive project was last modified using a newer version of AlphaLive. Therefore this project may be unstable when opened with this version. Would you like to continue?"));
+                }
+                
+                if (shouldContinue == true)
+                {
+                    //get the folder that holds the projects audio files
+                    File audioFileDirectory = (loadedFile.getParentDirectory().getFullPathName() + File::separatorString + "Audio Files");
                     
-                    //clear the xmlelement for the current scene number
-                    clearScene(scene);
+                    //if so some strange reason the directory doesn't exist, create it
+                    if (audioFileDirectory.exists() == false)
+                        audioFileDirectory.createDirectory();
                     
-                    //put the loaded xml data into the xmlelement for the current scene
-                    XmlElement* childToInsert = loadedXml->getChildByName("SCENE_" + String(scene));
-                    sceneData.insert (scene, childToInsert);
-                    //remove sceneData childelement from loadedXml so it isn't deleted when loadedXml goes out of scope!
-                    loadedXml->removeChildElement (childToInsert, false);
+                    //set the Audio Files directory as the new working directory so loaded audio files can be found
+                    audioFileDirectory.setAsCurrentWorkingDirectory();
                     
-                    //determine the status of the scene
-                    for (int i = 0; i < 48; i++)
+                    //get number of included audio files (for use at close when auto cleaning project)
+                    numOfFilesAtStart = File::getCurrentWorkingDirectory().getNumberOfChildFiles(2);
+                    
+                    //=====================load projectData settings=======================
+                    
+                    //reset/clear XmlElement.
+                    if (projectData != nullptr)
+                        projectData->removeAllAttributes();
+                    
+                    //put the loaded xml data into the xmlelement for the project settings
+                    XmlElement *projSettingsXml = loadedXml->getChildByName("PROJECT_SETTINGS");
+                    
+                    //check to see if the project settings child element actually exists (it won't within older AlphaLive Projects)
+                    if (loadedXml->containsChildElement(projSettingsXml) == true)
+                        projectData = new XmlElement(*projSettingsXml);
+                    
+                    //apply the settings to AppSettings variables, even if "PROJECT_SETTINGS" doesn't exist (old file format), as default values should then be set
+                    loadProjectSettings();
+                    
+                    
+                    //WHY DON'T I NEED TO delete or remove projSettingsXml here?
+                    //I think it's because above I created a hard copy of projSettingsXml when applying it to projectData,
+                    //therefore when loadedXml goes out of scope and delete's projSettingsXml, it doesn't effect projectData
+                    //in anyway.
+                    
+                    //=========load the child elements of loadedXml and put them in the sceneData objects===========
+                    for (int scene = 0; scene <= NO_OF_SCENES-1; scene++)
                     {
-                        sceneStatus = 0;
+                        //accessed by observer in order to update the relevent scene slot's GUI
+                        sceneToUpdate = scene;
                         
-                        if (sceneData[scene]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") != 0)
+                        //clear the xmlelement for the current scene number
+                        clearScene(scene);
+                        
+                        //put the loaded xml data into the xmlelement for the current scene
+                        XmlElement* childToInsert = loadedXml->getChildByName("SCENE_" + String(scene));
+                        sceneData.insert (scene, childToInsert);
+                        //remove sceneData childelement from loadedXml so it isn't deleted when loadedXml goes out of scope!
+                        loadedXml->removeChildElement (childToInsert, false);
+                        
+                        //determine the status of the scene
+                        for (int i = 0; i < 48; i++)
                         {
-                            sceneStatus = 1;
-                            break;
+                            sceneStatus = 0;
+                            
+                            if (sceneData[scene]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") != 0)
+                            {
+                                sceneStatus = 1;
+                                break;
+                            }
                         }
-                    }
-                     
-                    //set the first scene to be display as 'selected'
-                    if (scene == 0)
-                    {
-                        sceneStatus = 2;
-                        setCurrentlySelectedScene(0);
+                        
+                        //set the first scene to be display as 'selected'
+                        if (scene == 0)
+                        {
+                            sceneStatus = 2;
+                            setCurrentlySelectedScene(0);
+                        }
+                        
+                        //update display
+                        notifyObs();
                     }
                     
-                    //update display
-                    notifyObs();
+                    //let the observer know it will need to update the settings display next time it is 'notified'
+                    guiUpdateFlag = 0;
+                    
+                    //call loadFromScene to load the settings of scene 0 into the application
+                    loadFromScene(0);
+                    
+                    currentProjectFile = loadedFile;
+                    
+                    //=====================================================
+                    //==============NEW - reset unused mode settings=======
+                    //=====================================================
+                    /*
+                     Here, the settings of the modes that aren't being used for each pad are reset to their default values.
+                     */
+                    for (int i = 0; i <=47; i++)
+                    {
+                        PAD_SETTINGS->resetData(PAD_SETTINGS->getMode());
+                    }
+                    //=====================================================
+                    
+                    //change the window title bar text
+                    mainAppWindowRef->setTitleBarText(currentProjectFile.getFileNameWithoutExtension());
+                    
+                    //add the file to the 'recent files' list
+                    registerRecentFile (currentProjectFile);
                 }
-                
-                //let the observer know it will need to update the settings display next time it is 'notified'
-                guiUpdateFlag = 0;
-                
-                //call loadFromScene to load the settings of scene 0 into the application
-                loadFromScene(0);
-                
-                currentProjectFile = loadedFile;
-                
-                //=====================================================
-                //==============NEW - reset unused mode settings=======
-                //=====================================================
-                /*
-                 Here, the settings of the modes that aren't being used for each pad are reset to their default values.
-                 */
-                for (int i = 0; i <=47; i++)
-                {
-                    PAD_SETTINGS->resetData(PAD_SETTINGS->getMode());
-                }
-                //=====================================================
-                
-                //change the window title bar text
-                mainAppWindowRef->setTitleBarText(currentProjectFile.getFileNameWithoutExtension());
-                
-                //add the file to the 'recent files' list
-                registerRecentFile (currentProjectFile);
             }
             else if (loadedXml != nullptr && loadedXml->hasTagName("PERFORMANCE"))
             {

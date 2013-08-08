@@ -6,16 +6,10 @@ code you reapply these changes:
 JuceLibraryCode/modules/juce_audio_devices/juce_audio_devices.cpp
 Line 83
 Change to: 
-#include <../Source/Third Party Libraries/ASIOSDK2/common/iasiodrv.h>
+#include <../Source/Third Party Libraries/ASIOSDK/common/iasiodrv.h>
 
 JuceLibraryCode/modules/juce_audio_devices/sources/juce_AudioTransportSource.cpp
 Line 289-290
 Change to:
 info.buffer->applyGain (i, info.startSample, info.numSamples,
                         gain);
-
-JuceLibraryCode/modules/juce_gui_basics/filebrowser/juce_FileTreeComponent.cpp
-Line 71
-Change to:
-int getItemHeight() const                   { return 16; }
-

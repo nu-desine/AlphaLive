@@ -80,7 +80,7 @@
         comes with the SDK. (Only about a handful of the SDK header files are actually
         needed - so to simplify things, you could just copy these into your JUCE directory).
   */
-  #include <../Source/Third Party Libraries/ASIOSDK2/common/iasiodrv.h>
+  #include <../Source/Third Party Libraries/ASIOSDK/common/iasiodrv.h>
  #endif
 
  #if JUCE_USE_CDBURNER

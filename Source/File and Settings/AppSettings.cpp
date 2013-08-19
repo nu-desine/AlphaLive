@@ -107,6 +107,8 @@ AppSettings::AppSettings()
         for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
             copiedSequencerData[row][column] = 0;
     }
+    
+    lastAudioSampleDirectory = File::getSpecialLocation (File::userMusicDirectory);
 }
 
 
@@ -315,6 +317,17 @@ bool AppSettings::getMetronomeStatus()
 bool AppSettings::getCopyExternalFiles()
 {
     return copyExternalFiles;
+}
+
+
+void AppSettings::setLastAudioSampleDirectory (File directory)
+{
+    lastAudioSampleDirectory = directory;
+}
+
+File AppSettings::getLastAudioSampleDirectory()
+{
+    return lastAudioSampleDirectory;
 }
 
 

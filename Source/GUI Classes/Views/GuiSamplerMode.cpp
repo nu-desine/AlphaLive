@@ -89,8 +89,9 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	fileChooser->addListener (this);					
 	fileChooser->setBrowseButtonText ("+");
 	fileChooser->setMaxNumberOfRecentFiles (20);
-	addAndMakeVisible (fileChooser);
+    fileChooser->setDefaultBrowseTarget(AppSettings::Instance()->getLastAudioSampleDirectory());
     fileChooser->addMouseListener(this, true);
+	addAndMakeVisible (fileChooser);
     
     //--------------- gain slider-------------------
 	addAndMakeVisible(gainSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
@@ -440,7 +441,7 @@ void GuiSamplerMode::filenameComponentChanged (FilenameComponent* filenameCompon
             }
             
             setAudioFileDisplay(audioFile);
-            
+            AppSettings::Instance()->setLastAudioSampleDirectory(audioFile.getParentDirectory());
         }
         
         else
@@ -1103,6 +1104,9 @@ void GuiSamplerMode::mouseEnter (const MouseEvent &e)
     if (fileChooser->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Audio File Selector. Set the filepath name of the audio file for selected pads. Click the '+' button to open a File Browser Window, or use the drop-down menu to select from recently used files."));
+        
+        //Doing this here is a hacky way of setting the default browse directory.
+        fileChooser->setDefaultBrowseTarget(AppSettings::Instance()->getLastAudioSampleDirectory());
     }
     
     else if (panSlider->isMouseOver(true))

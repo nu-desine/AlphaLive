@@ -429,7 +429,7 @@ void GuiPad::mouseDown (const MouseEvent &e)
         else if (result == 3)
         {
             FileChooser myChooser (translate("Please select an audio file to load..."),
-                                   File::getSpecialLocation (File::userMusicDirectory),
+                                   AppSettings::Instance()->getLastAudioSampleDirectory(),
                                    "*.wav;*.aif;*.aiff");
             
             if (myChooser.browseForFileToOpen() == true)
@@ -438,6 +438,8 @@ void GuiPad::mouseDown (const MouseEvent &e)
                 PAD_SETTINGS->setSamplerAudioFilePath(selectedAudioFile);
                 
                 guiPadLayoutRef.getMainComponent().getGuiSamplerMode()->setAudioFileDisplay(selectedAudioFile);
+                
+                AppSettings::Instance()->setLastAudioSampleDirectory(selectedAudioFile.getParentDirectory());
             }
         }
                          

@@ -1557,7 +1557,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
         {
         
             FileChooser myChooser (translate("Please select an audio file to load..."),
-                                   File::getSpecialLocation (File::userMusicDirectory),
+                                   AppSettings::Instance()->getLastAudioSampleDirectory(),
                                    "*.wav;*.aif;*.aiff");
             
             if (myChooser.browseForFileToOpen() == true)
@@ -1569,6 +1569,8 @@ void GuiSequencerMode::buttonClicked (Button* button)
                     int padNum = selectedPads[i];
                     PAD_SETTINGS->setSequencerSamplesAudioFilePath(selectedAudioFile, row);
                 }
+                
+                AppSettings::Instance()->setLastAudioSampleDirectory(selectedAudioFile.getParentDirectory());
             }
 			
 		}

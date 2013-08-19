@@ -198,6 +198,9 @@ public:
     void copySequenceData (int value, int row, int column);
     int pasteSequenceData (int row, int column);
     
+    void setLastAudioSampleDirectory (File directory);
+    File getLastAudioSampleDirectory ();
+    
     
     //~AppSettings();
 protected:
@@ -238,6 +241,8 @@ private:
     ScopedPointer<PadSettings> copiedPadSettings;
     
     int copiedSequencerData[NO_OF_ROWS][NO_OF_COLUMNS]; //[row][column]
+    
+    File lastAudioSampleDirectory; //this variable isn't ever saved or reset
     
     //========================================================================================================
     //variables which are global to the whole project (project settings) and aren't changeable between individual scenes.

@@ -80,12 +80,12 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	waveform->setInterceptsMouseClicks(false, false);
     
     
-    fileChooser = new FilenameComponent ("audiofile",
-										 File::nonexistent,
-										 false, false, false,
-										 "*.wav; *.aif; *.aiff",
-										 String::empty,
-										 translate("(choose a WAV or AIFF file)"));
+    fileChooser = new AlphaFilenameComponent ("audiofile",
+                                              File::nonexistent,
+                                              false, false, false,
+                                              "*.wav; *.aif; *.aiff",
+                                              String::empty,
+                                              translate("(choose a WAV or AIFF file)"));
 	fileChooser->addListener (this);					
 	fileChooser->setBrowseButtonText ("+");
 	fileChooser->setMaxNumberOfRecentFiles (20);
@@ -1104,9 +1104,6 @@ void GuiSamplerMode::mouseEnter (const MouseEvent &e)
     if (fileChooser->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Audio File Selector. Set the filepath name of the audio file for selected pads. Click the '+' button to open a File Browser Window, or use the drop-down menu to select from recently used files."));
-        
-        //Doing this here is a hacky way of setting the default browse directory.
-        fileChooser->setDefaultBrowseTarget(AppSettings::Instance()->getLastAudioSampleDirectory());
     }
     
     else if (panSlider->isMouseOver(true))

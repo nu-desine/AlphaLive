@@ -167,7 +167,7 @@ void GuiControllerMode::resized()
 void GuiControllerMode::paint (Graphics& g)
 {
     
-	ColourGradient fillGradient(AlphaColours::nearlyblack,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaColours::colour3,845 , 461, Colours::black, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);

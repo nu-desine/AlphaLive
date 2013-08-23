@@ -44,7 +44,7 @@ SettingsButton::SettingsButton (const String& buttonName,float _startRadians, fl
     downOpacity   = 0.5f;
     downOverlay   = Colours::white;
 	onOpacity   = 0.9f;
-    onOverlay   = AlphaColours::blue;
+    onOverlay   = AlphaColours::colour1;
 }
 
 SettingsButton::~SettingsButton()
@@ -91,7 +91,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
     {
 		case 0:
         {
-			ColourGradient fillGradient(Colours::black, (getWidth() * 0.5), (getHeight() * 0.5), AlphaColours::nearlyblack, 0, 0, true);
+			ColourGradient fillGradient(Colours::black, (getWidth() * 0.5), (getHeight() * 0.5), AlphaColours::colour3, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
@@ -105,7 +105,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			
 		case 1:
         {
-			ColourGradient fillGradient(Colours::black, (getWidth()*0.5), (getHeight()*0.5), AlphaColours::nearlyblack, 0, 0, true);			
+			ColourGradient fillGradient(Colours::black, (getWidth()*0.5), (getHeight()*0.5), AlphaColours::colour3, 0, 0, true);			
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
@@ -120,7 +120,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			
 		case 2:
         {
-			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
+			ColourGradient fillGradient(AlphaColours::colour3, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
@@ -136,14 +136,14 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			
 		case 3:
         {
-			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
+			ColourGradient fillGradient(AlphaColours::colour3, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
 			g.setColour(Colours::darkgrey.withAlpha(0.4f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
-			g.setColour(AlphaColours::blue);
+			g.setColour(AlphaColours::colour1);
 			g.drawTextAsPath(theText, rotateText);
 
 			
@@ -152,14 +152,14 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			
 		case 4:
         {
-			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
+			ColourGradient fillGradient(AlphaColours::colour3, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
 			g.setColour(Colours::darkgrey.withAlpha(0.4f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
-			g.setColour(AlphaColours::blue);
+			g.setColour(AlphaColours::colour1);
 
 			g.drawTextAsPath(theText, rotateText);
             
@@ -168,14 +168,14 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			
 		case 5:
         {
-			ColourGradient fillGradient(AlphaColours::nearlyblack, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
+			ColourGradient fillGradient(AlphaColours::colour3, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 
 			g.setColour(Colours::darkgrey.withAlpha(0.4f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
-			g.setColour(AlphaColours::blue);
+			g.setColour(AlphaColours::colour1);
 
 			g.drawTextAsPath(theText, rotateText);
 

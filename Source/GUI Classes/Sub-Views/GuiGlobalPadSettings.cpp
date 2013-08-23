@@ -93,7 +93,7 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
 	//---------------parameter label -------------------------------------
     addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::colour1);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
 	
@@ -130,7 +130,7 @@ void GuiGlobalPadSettings::resized()
 void GuiGlobalPadSettings::paint (Graphics& g)
 {
 	
-	ColourGradient fillGradient(AlphaColours::nearlyblack,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaColours::colour3,845 , 461, Colours::black, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	g.fillEllipse(802, 379, 86, 86);
 	

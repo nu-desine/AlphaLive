@@ -19,25 +19,23 @@ namespace AlphaColours
     //custom colours for the application here.
     
     //colours as uint32
-    const uint32 blue_ = 0xff1a54ab;
-    const uint32 lightblue_ = 0xff3c76c5;
-	const uint32 nearlyblack_ = 0xff181818;
-	const uint32 verydarkgrey_ = 0xff202020;
+    const uint32 colour1_ = 0xff1a54ab; //blue
+    const uint32 colour2_ = 0xff3c76c5; //light blue
+	const uint32 colour3_ = 0xff181818; //nearly black
+	const uint32 colour4_ = 0xff202020; //very dark grey
     
     //colours as Juce::Colour
-    static Colour blue(blue_);
-    static Colour lightblue(lightblue_);
-	static Colour nearlyblack(nearlyblack_);
-	static Colour verydarkgrey(verydarkgrey_);
+    static Colour colour1 (colour1_); //blue
+    static Colour colour2 (colour2_); //light blue
+	static Colour colour3 (colour3_); //nearly black
+	static Colour colour4 (colour4_); //very dark grey
     
 }
 
 class AlphaLiveLookandFeel : public LookAndFeel
-
-
 {
+    
 public:
-	
 	AlphaLiveLookandFeel();
 	~AlphaLiveLookandFeel();
     

@@ -250,7 +250,7 @@ void GuiPad::toggleChange()
 	else 
     {
 		sb->setClickingTogglesState (false);
-		overlayColour = AlphaColours::blue.withAlpha(0.6f);	
+		overlayColour = AlphaColours::colour1.withAlpha(0.6f);	
 	}
 	repaint();
 }

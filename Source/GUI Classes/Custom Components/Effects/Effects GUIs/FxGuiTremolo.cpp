@@ -52,7 +52,7 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     intensitySlider->setValue(0.5, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
-    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::colour2);
     
     
 	addAndMakeVisible(rateMenu = new AlphaPopUpButton());
@@ -139,7 +139,7 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::colour1);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
     

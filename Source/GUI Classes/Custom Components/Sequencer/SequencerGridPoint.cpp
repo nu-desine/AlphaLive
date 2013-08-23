@@ -67,7 +67,7 @@ void SequencerGridPoint::paint (Graphics &g)
         else if (alphaValue > 1.0)
             alphaValue = 1;
         
-		g.setColour(AlphaColours::blue.withAlpha(alphaValue));
+		g.setColour(AlphaColours::colour1.withAlpha(alphaValue));
     }
 	
     

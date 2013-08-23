@@ -59,6 +59,7 @@ void StoredSettings::flush()
         props->setValue ("autoSaveScenes", autoSaveScenes);
         props->setValue ("deviceType", deviceType);
         props->setValue ("autoCheckUpdates", autoCheckUpdates);
+        props->setValue ("interfaceTheme", interfaceTheme);
     }
 
     props = nullptr;
@@ -91,6 +92,7 @@ void StoredSettings::flush()
     autoSaveScenes = props->getIntValue("autoSaveScenes");
     deviceType = props->getIntValue("deviceType");
     autoCheckUpdates = props->getIntValue("autoCheckUpdates");
+    interfaceTheme = props->getIntValue("interfaceTheme");
 
 }
 
@@ -171,6 +173,9 @@ void StoredSettings::setDefaultValues()
     
     if (autoCheckUpdates == 0)
         autoCheckUpdates = 2;
+    
+    if (interfaceTheme == 0)
+        interfaceTheme = 1;
     
     flush();
 }

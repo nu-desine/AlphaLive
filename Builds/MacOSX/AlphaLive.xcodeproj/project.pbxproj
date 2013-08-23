@@ -2836,15 +2836,15 @@
 		B4037A04C91DCCCAD4F84934 /* File and Settings */ = {
 			isa = PBXGroup;
 			children = (
-				9FEB36AB37D14D200F0C1F85 /* AppDocumentState.cpp */,
 				5C4907032EE0D0AD3476AEED /* AppDocumentState.h */,
-				43ABA3419D29F020D5D8F7EE /* AppSettings.cpp */,
+				9FEB36AB37D14D200F0C1F85 /* AppDocumentState.cpp */,
 				7A1BB1B522B16FB084A90120 /* AppSettings.h */,
+				43ABA3419D29F020D5D8F7EE /* AppSettings.cpp */,
 				14D905371BA175AB4DB3AA21 /* FirmwareStruct.h */,
-				81EA1F96901E2F166C52AFBE /* PadSettings.cpp */,
 				47B321C8D8B007C2CF8D01F6 /* PadSettings.h */,
-				BD62367B594CD7F688BE2985 /* StoredSettings.cpp */,
+				81EA1F96901E2F166C52AFBE /* PadSettings.cpp */,
 				7FC1F2C16538863883A6581D /* StoredSettings.h */,
+				BD62367B594CD7F688BE2985 /* StoredSettings.cpp */,
 			);
 			name = "File and Settings";
 			sourceTree = "<group>";
@@ -2900,8 +2900,8 @@
 		BD6DC61893D4B406CD20D21E /* GUI Classes */ = {
 			isa = PBXGroup;
 			children = (
-				AFEF11425DC9D49419C5F164 /* AlphaLiveLookandFeel.cpp */,
 				EF48BAC0A673ED02211C068C /* AlphaLiveLookandFeel.h */,
+				AFEF11425DC9D49419C5F164 /* AlphaLiveLookandFeel.cpp */,
 				01AB8EC30C2288304A549A6A /* Binary Data */,
 				A73FCF380864BEF71DCA9FDC /* Custom Components */,
 				C78ACAB002CEFC09905840E5 /* Initial Loading Window */,

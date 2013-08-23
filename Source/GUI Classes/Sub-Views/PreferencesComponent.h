@@ -106,11 +106,12 @@ private:
     
     Label *directoryLabel, *midiNoteDisplayTypeLabel, *launchTaskLabel;
     Label *killOnClockStopLabel, *cleanOnCloseLabel, *autoSaveScenesLabel;
-    Label *deviceInterfaceLabel, *autoCheckUpdatesLabel;
+    Label *deviceInterfaceLabel, *autoCheckUpdatesLabel, *interfaceThemeLabel;
     ComboBox *midiNoteDisplayTypeMenu, *launchTaskMenu, *appProjectDirChooser;
     TextButton *killOnClockStopButton, *cleanOnCloseButton, *autoSaveScenesButton;
     TextButton *autoCheckUpdatesButton;
     ComboBox *deviceInterfaceMenu;
+    ComboBox *interfaceThemeMenu;
 
 };
 

@@ -131,7 +131,9 @@ public:
     void editInterfaceFromDeviceConnectivity (int command);
     void setDeviceStatus (int status);
     void openDocumentation (int type);
-    bool updateSoftware (bool autoCheck);    
+    bool updateSoftware (bool autoCheck);
+    
+    void changeLookAndFeel();
     
 private:
     //==============================================================================

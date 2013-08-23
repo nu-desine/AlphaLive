@@ -40,6 +40,12 @@ public:
 	
 	AlphaLiveLookandFeel();
 	~AlphaLiveLookandFeel();
+    
+    //===custom fuctions====
+    
+    void setStandardColours (int theme);
+    
+    //===overridden functions===
 	
 	void drawButtonBackground (Graphics& g,
                                        Button& button,

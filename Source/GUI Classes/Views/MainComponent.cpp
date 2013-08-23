@@ -1865,3 +1865,11 @@ ApplicationCommandManager* MainComponent::getCommandManager()
     return commandManager;
 }
 
+
+void MainComponent::changeLookAndFeel()
+{
+    alphaLiveLookAndFeel.setStandardColours(StoredSettings::getInstance()->interfaceTheme);
+    
+    repaint();
+}
+

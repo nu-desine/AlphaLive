@@ -275,6 +275,17 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     autoCheckUpdatesLabel->setText(translate("Autocheck for Updates:"), dontSendNotification);
     autoCheckUpdatesLabel->setColour(Label::textColourId, Colours::lightgrey);
     
+    addAndMakeVisible(interfaceThemeMenu = new ComboBox());
+    interfaceThemeMenu->addItem(translate("Classic"), 1);
+    interfaceThemeMenu->addItem("Materia", 2);
+    interfaceThemeMenu->addListener(this);
+    interfaceThemeMenu->addMouseListener(this, true);
+    interfaceThemeMenu->setSelectedId(StoredSettings::getInstance()->interfaceTheme, false);
+    
+    addAndMakeVisible(interfaceThemeLabel = new Label());
+    interfaceThemeLabel->setText(translate("Interface Theme:"), dontSendNotification);
+    interfaceThemeLabel->setColour(Label::textColourId, Colours::lightgrey);
+    
 }
 
 GeneralSettingsComponent::~GeneralSettingsComponent()
@@ -309,6 +320,9 @@ void GeneralSettingsComponent::resized()
     
     autoCheckUpdatesButton->setBounds(230, 288, 40, 25);
     autoCheckUpdatesLabel->setBounds(60, 290, 150, 20);
+    
+    interfaceThemeMenu->setBounds(200, 328, 210, 20);
+    interfaceThemeLabel->setBounds(60, 328, 120, 20);
 }
 
 void GeneralSettingsComponent::paint (Graphics& g)
@@ -441,6 +455,14 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
         }
     }
     
+    else if (comboBox == interfaceThemeMenu)
+    {
+        StoredSettings::getInstance()->interfaceTheme = comboBox->getSelectedId();
+        StoredSettings::getInstance()->flush();
+        
+        mainComponentRef.changeLookAndFeel();
+    }
+    
 }
 
 
@@ -477,6 +499,10 @@ void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
     else if (autoCheckUpdatesButton->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("When this option is set to 'on' the application will automatically check online for software updates when the application is launched. You can manually check for updates using the option in the 'Help' item on the menu bar."));
+    }
+    else if (interfaceThemeMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("AlphaLive interface theme selector. This allows you to change the overall interface skin and colour scheme of the application."));
     }
 }
 

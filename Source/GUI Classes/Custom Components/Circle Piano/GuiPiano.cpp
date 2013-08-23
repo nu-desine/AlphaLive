@@ -92,20 +92,20 @@ GuiPiano::GuiPiano() : Component ("GuiPiano")
 				
 		if(noteIndex == 2 || noteIndex == 4 || noteIndex == 7 || noteIndex == 9 || noteIndex == 11)
 		{
-			keys.insert(i, new GuiKeys(keyNumber, Colours::grey, Colours::lightgrey, AlphaColours::colour2));
+			keys.insert(i, new GuiKeys(keyNumber, Colours::grey, Colours::lightgrey, AlphaColours::getInstance()->colour2));
 			keys[i]->setShape(*keysPath[i], true, true, false);
 			addAndMakeVisible(keys[i],(i+200));
 		}
 		else  if (noteIndex == 1)
 		{
-			keys.insert(i, new GuiKeys(keyNumber, AlphaColours::colour3, AlphaColours::colour4, AlphaColours::colour2));
+			keys.insert(i, new GuiKeys(keyNumber, AlphaColours::getInstance()->colour3, AlphaColours::getInstance()->colour4, AlphaColours::getInstance()->colour2));
 			keys[i]->setShape(*keysPath[i], true, true, false);
 			keys[i]->setOutline(Colours::darkgrey.withAlpha(0.5f), 1.0f);
 			addAndMakeVisible(keys[i],i);
 		}
 		else
 		{
-			keys.insert(i, new GuiKeys(keyNumber, Colours::black, AlphaColours::colour4, AlphaColours::colour2));
+			keys.insert(i, new GuiKeys(keyNumber, Colours::black, AlphaColours::getInstance()->colour4, AlphaColours::getInstance()->colour2));
 			keys[i]->setShape(*keysPath[i], true, true, false);
 			keys[i]->setOutline(Colours::darkgrey.withAlpha(0.5f), 1.0f);
 			addAndMakeVisible(keys[i],i);
@@ -674,7 +674,7 @@ void GuiPiano::mouseEnter (const MouseEvent &e)
         //===display note number when hovering mouse over a piano key===
         if (keys[i]->isMouseOver(true))
         {
-            midiNoteLabel->setColour(Label::textColourId, AlphaColours::colour1);
+            midiNoteLabel->setColour(Label::textColourId, AlphaColours::getInstance()->colour1);
             setNoteLabelText(i);
             break;
         }
@@ -727,15 +727,15 @@ void GuiPiano::setKeyDisplay (int keyNumber, bool keyOn)
         //set the key/button colour
         if(noteIndex == 2 || noteIndex == 4 || noteIndex == 7 || noteIndex == 9 || noteIndex == 11)
         {
-            keys[keyNumber]->setColours(Colours::grey, Colours::lightgrey, AlphaColours::colour2);
+            keys[keyNumber]->setColours(Colours::grey, Colours::lightgrey, AlphaColours::getInstance()->colour2);
         }
         else if (noteIndex == 1)
         {
-            keys[keyNumber]->setColours(AlphaColours::colour3, AlphaColours::colour4, AlphaColours::colour2);
+            keys[keyNumber]->setColours(AlphaColours::getInstance()->colour3, AlphaColours::getInstance()->colour4, AlphaColours::getInstance()->colour2);
         }
         else
         {
-            keys[keyNumber]->setColours(Colours::black, AlphaColours::colour4, AlphaColours::colour2);
+            keys[keyNumber]->setColours(Colours::black, AlphaColours::getInstance()->colour4, AlphaColours::getInstance()->colour2);
         }
     }
     
@@ -747,11 +747,11 @@ void GuiPiano::setKeyDisplay (int keyNumber, bool keyOn)
         //set the key/button colour
         if(noteIndex == 2 || noteIndex == 4 || noteIndex == 7 || noteIndex == 9 || noteIndex == 11)
         {
-			keys[keyNumber]->setColours(AlphaColours::colour2, AlphaColours::colour2, AlphaColours::colour2);  
+			keys[keyNumber]->setColours(AlphaColours::getInstance()->colour2, AlphaColours::getInstance()->colour2, AlphaColours::getInstance()->colour2);  
 		}
 		else 
         {
-			keys[keyNumber]->setColours(AlphaColours::colour1, AlphaColours::colour1, AlphaColours::colour2);  
+			keys[keyNumber]->setColours(AlphaColours::getInstance()->colour1, AlphaColours::getInstance()->colour1, AlphaColours::getInstance()->colour2);  
 		}
 
 	}    

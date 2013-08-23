@@ -259,7 +259,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     //---------------hover parameter label -------------------------------------
     addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::colour1);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::getInstance()->colour1);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
     
@@ -416,7 +416,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	previewButton->setClickingTogglesState (true);
 	previewButton->addListener (this);
     previewButton->addMouseListener(this, true);
-	//previewButton->setBackgroundColours (Colours::black, AlphaColours::colour1);
+	//previewButton->setBackgroundColours (Colours::black, AlphaColours::getInstance()->colour1);
 	addAndMakeVisible (previewButton);
 	
 	addAndMakeVisible(nextSequenceButton = new AlphaTextButton());
@@ -591,7 +591,7 @@ void GuiSequencerMode::resized()
 
 void GuiSequencerMode::paint (Graphics& g)
 {
-	ColourGradient fillGradient(AlphaColours::colour3,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaColours::getInstance()->colour3,845 , 461, Colours::black, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	g.fillEllipse(802, 379, 86, 86);
 	g.setColour(Colours::black);
@@ -622,7 +622,7 @@ void GuiSequencerMode::paint (Graphics& g)
 		linkButtonBg.addCentredArc(845, 423, 162, 162, 0, (330 * (M_PI / 180)), (367 * (M_PI / 180)), false);
 		
 		
-		g.setColour(AlphaColours::colour3);
+		g.setColour(AlphaColours::getInstance()->colour3);
 		g.fillPath(linkButtonBg, getTransform());
 		
 		g.setColour(Colours::black);
@@ -671,7 +671,7 @@ void GuiSequencerMode::paint (Graphics& g)
 		
 		g.fillEllipse(816, 393, 58, 58);
 		
-		ColourGradient fillGradient(AlphaColours::colour1, 816+(58*0.5), 393+(58*0.6), AlphaColours::colour2, 816+(58*0.5), 393, false);
+		ColourGradient fillGradient(AlphaColours::getInstance()->colour1, 816+(58*0.5), 393+(58*0.6), AlphaColours::getInstance()->colour2, 816+(58*0.5), 393, false);
 		g.setGradientFill(fillGradient);
         
 		g.fillEllipse((816+(58*0.15)), (393+(58*0.15)), (58*0.7), (58*0.7));
@@ -718,46 +718,46 @@ void GuiSequencerMode::paint (Graphics& g)
 		g.fillEllipse(657, 396, 27, 27);
 		g.fillEllipse(672, 337, 27, 27);
 		
-		g.setColour(AlphaColours::colour3);
+		g.setColour(AlphaColours::getInstance()->colour3);
 		g.fillEllipse(689, 266, 312, 312);
 		
 		g.setColour(Colours::black);
 		g.fillEllipse(698, 275, 294, 294);
 		
-		g.setColour(AlphaColours::colour3);
+		g.setColour(AlphaColours::getInstance()->colour3);
 		g.fillEllipse(707, 284, 276, 276);
 		
 		g.setColour(Colours::black);
 		g.fillEllipse(716, 293, 258, 258);
 		
-		g.setColour(AlphaColours::colour3);
+		g.setColour(AlphaColours::getInstance()->colour3);
 		g.fillEllipse(725, 302, 240, 240);
 		
 		g.setColour(Colours::black);
 		g.fillEllipse(734, 311, 222, 222);
 		
-		g.setColour(AlphaColours::colour3);
+		g.setColour(AlphaColours::getInstance()->colour3);
 		g.fillEllipse(743, 320, 204, 204);
 		
 		g.setColour(Colours::black);
 		g.fillEllipse(752, 329, 186, 186);
 		
-		g.setColour(AlphaColours::colour3);
+		g.setColour(AlphaColours::getInstance()->colour3);
 		g.fillEllipse(761, 338, 168, 168);
 		
 		g.setColour(Colours::black);
 		g.fillEllipse(770, 347, 150, 150);
 		
-		g.setColour(AlphaColours::colour3);
+		g.setColour(AlphaColours::getInstance()->colour3);
 		g.fillEllipse(779, 356, 132, 132);
 		
 		g.setColour(Colours::black);
 		g.fillEllipse(788, 365, 114, 114);
 		
-		g.setColour(AlphaColours::colour3);
+		g.setColour(AlphaColours::getInstance()->colour3);
 		g.drawEllipse(797, 374, 96, 96,1.0);
 		
-		ColourGradient fillGradient(AlphaColours::colour3,845 , 461, Colours::black, 845 , 383, false);
+		ColourGradient fillGradient(AlphaColours::getInstance()->colour3,845 , 461, Colours::black, 845 , 383, false);
 		g.setGradientFill(fillGradient);
 		
 		g.fillEllipse(802, 379, 86, 86);
@@ -2306,7 +2306,7 @@ void GuiSequencerMode::setParameterLabelText (String value)
     
     if (value != String::empty)
     {
-	parameterLabel->setColour(Label::textColourId, AlphaColours::colour2);
+	parameterLabel->setColour(Label::textColourId, AlphaColours::getInstance()->colour2);
 	parameterLabel->setText(value, dontSendNotification);
     }
 	

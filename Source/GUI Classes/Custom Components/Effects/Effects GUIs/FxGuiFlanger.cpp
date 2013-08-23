@@ -104,14 +104,14 @@ GuiFlanger::GuiFlanger(MainComponent &ref)
     intensitySlider->setValue(1.0, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
-    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::colour2);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::getInstance()->colour2);
 
     tempo = AppSettings::Instance()->getGlobalTempo();
     
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::colour1);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::getInstance()->colour1);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
     

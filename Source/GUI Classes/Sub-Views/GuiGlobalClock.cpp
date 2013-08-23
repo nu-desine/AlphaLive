@@ -196,7 +196,7 @@ void GuiGlobalClock::paint (Graphics &g)
         barCount.addPieSegment(627-OFFSET_X, 26, 90, 90, segStart, segEnd, 0.9f);
     }
     
-    g.setColour(AlphaColours::colour1);
+    g.setColour(AlphaColours::getInstance()->colour1);
 	g.fillPath(barCount, getTransform());
 }
 

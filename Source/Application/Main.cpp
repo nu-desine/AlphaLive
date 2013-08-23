@@ -213,6 +213,7 @@ public:
         
         commandManager = nullptr;
         StoredSettings::deleteInstance();
+        AlphaColours::deleteInstance();
     }
 
     //==============================================================================

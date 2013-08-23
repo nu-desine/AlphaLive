@@ -72,7 +72,7 @@ void ProjectSettingsComponent::paint (Graphics& g)
     g.setColour(Colours::black.withAlpha(0.8f));
     g.fillRect(0, 0, getWidth(), getHeight());
     
-    g.setColour(AlphaColours::colour4.withAlpha(1.0f));
+    g.setColour(AlphaColours::getInstance()->colour4.withAlpha(1.0f));
     g.fillRoundedRectangle(getWidth()/4, getHeight()/6, getWidth()/2, ((getHeight()/6)*4)-30, 10);
     
 }

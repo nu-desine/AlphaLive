@@ -7,30 +7,46 @@
  *
  */
 
+#ifndef H_ALPHACOLOURS
+#define H_ALPHACOLOURS
+
+#include "./../JuceLibraryCode/JuceHeader.h"
+
+//==============================================================================
+/**
+ A singleton to hold custom colours for AlphaLive.
+ This used to be a namespace, however I changed it to a singleton
+ so that the colour variables could be dynamically changed
+ to allow for the colour scheme to be changed by the user.
+ I'm using a singleton as it seemed to be the easiest way
+ of integrating changable colours into the application which
+ was originally designed to have static colours. Therefore
+ it is a bit hacky.
+ */
+class AlphaColours
+{
+public:
+    //==============================================================================
+    AlphaColours();
+    ~AlphaColours();
+    
+    juce_DeclareSingleton (AlphaColours, false);
+    
+    uint32 colour1_, colour2_, colour3_, colour4_;
+    Colour colour1, colour2, colour3, colour4;
+    
+private:
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AlphaColours);
+};
+
+#endif
+
 
 #ifndef ALPHALIVELOOKANDFEEL_H
 #define ALPHALIVELOOKANDFEEL_H
 
 #include "../JuceLibraryCode/JuceHeader.h"
-
-namespace AlphaColours
-{
-    //Create a uint32 and a Juce::Colour of any 
-    //custom colours for the application here.
-    
-    //colours as uint32
-    const uint32 colour1_ = 0xff1a54ab; //blue
-    const uint32 colour2_ = 0xff3c76c5; //light blue
-	const uint32 colour3_ = 0xff181818; //nearly black
-	const uint32 colour4_ = 0xff202020; //very dark grey
-    
-    //colours as Juce::Colour
-    static Colour colour1 (colour1_); //blue
-    static Colour colour2 (colour2_); //light blue
-	static Colour colour3 (colour3_); //nearly black
-	static Colour colour4 (colour4_); //very dark grey
-    
-}
 
 class AlphaLiveLookandFeel : public LookAndFeel
 {

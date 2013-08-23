@@ -97,10 +97,10 @@ void AlphaSquareButton::paintButton (Graphics& g, bool isMouseOverButton, bool i
 			
 		case 3:
         {
-			g.setColour(AlphaColours::colour1);
+			g.setColour(AlphaColours::getInstance()->colour1);
 			g.fillRoundedRectangle (0.0f, 0.0f, getWidth(), getHeight(), theCornerRadius);
 			
-			ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.7), AlphaColours::colour1, (getWidth()*0.5), (getHeight()*0.3), false);
+			ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.7), AlphaColours::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
 			g.fillRoundedRectangle (0.0f, 0.0f, getWidth(), getHeight(), theCornerRadius);
 			
@@ -113,10 +113,10 @@ void AlphaSquareButton::paintButton (Graphics& g, bool isMouseOverButton, bool i
 			
 		case 4:
         {
-			g.setColour(AlphaColours::colour1);
+			g.setColour(AlphaColours::getInstance()->colour1);
 			g.fillRoundedRectangle (0.0f, 0.0f, getWidth(), getHeight(), theCornerRadius);
 			
-			ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.7), AlphaColours::colour1, (getWidth()*0.5), (getHeight()*0.3), false);
+			ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.7), AlphaColours::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
 			g.fillRoundedRectangle (0.0f, 0.0f, getWidth(), getHeight(), theCornerRadius);
 			
@@ -129,10 +129,10 @@ void AlphaSquareButton::paintButton (Graphics& g, bool isMouseOverButton, bool i
 			
 		case 5:
         {
-			g.setColour(AlphaColours::colour1);
+			g.setColour(AlphaColours::getInstance()->colour1);
 			g.fillRoundedRectangle (0.0f, 0.0f, getWidth(), getHeight(), theCornerRadius);
 			
-			ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.7), AlphaColours::colour1, (getWidth()*0.5), (getHeight()*0.3), false);
+			ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.7), AlphaColours::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
 			g.fillRoundedRectangle (0.0f, 0.0f, getWidth(), getHeight(), theCornerRadius);
 			

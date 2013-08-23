@@ -58,7 +58,7 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
     intensitySlider->setRange(0.0, 1.0, 0.001);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
-    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::colour2);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::getInstance()->colour2);
     
     //below is temporily hidden in resized()!
     addAndMakeVisible(inputGainSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
@@ -112,7 +112,7 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::colour1);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::getInstance()->colour1);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
         

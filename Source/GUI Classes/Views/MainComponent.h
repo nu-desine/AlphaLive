@@ -140,8 +140,6 @@ private:
     
     AlphaLiveLookandFeel alphaLiveLookAndFeel;
     
-    Image backgroundImage, padsOff, padsOn, modeOff, padsBg;
-    
     ModeButton *openButton, *saveButton;
 
     GuiMidiMode *guiMidiMode;

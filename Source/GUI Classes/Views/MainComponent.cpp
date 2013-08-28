@@ -32,8 +32,6 @@
 #define SINGLE_PAD (selectedPads.size() == 1)
 #define MULTI_PADS (selectedPads.size() > 1)
 
-
-
 //==============================================================================
 MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, DocumentWindow* owner_)
                         :   Thread("Info Box Updater"),
@@ -60,16 +58,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //Look-and-feel stuff
     LookAndFeel::setDefaultLookAndFeel (&alphaLiveLookAndFeel);
     alphaLiveLookAndFeel.setUsingNativeAlertWindows(true);
-    
-    
-    //load Gui Images
-    //load binary data into Image
-    backgroundImage = ImageCache::getFromMemory(BinaryDataNew::interfacemain_png, BinaryDataNew::interfacemain_pngSize);
-	padsOff = ImageCache::getFromMemory(BinaryDataNew::padsoff_png, BinaryDataNew::padsoff_pngSize);
-	padsOn = ImageCache::getFromMemory(BinaryDataNew::padson_png, BinaryDataNew::padson_pngSize);
-	modeOff = ImageCache::getFromMemory(BinaryDataNew::modeoff_png, BinaryDataNew::modeoff_pngSize);
-	padsBg = ImageCache::getFromMemory(BinaryDataNew::padsbg_png, BinaryDataNew::padsbg_pngSize);
-    
     
     //Mode Gui's
     addChildComponent(guiMidiMode = new GuiMidiMode(*this));
@@ -336,18 +324,53 @@ void MainComponent::resized()
 void MainComponent::paint(juce::Graphics &g)
 {
     g.setOrigin(0, 0);
-	g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), 0, 0, backgroundImage.getWidth(), backgroundImage.getHeight());
+    
+	g.drawImage(AlphaColours::getInstance()->mainImage,
+                0,
+                0,
+                getWidth(),
+                getHeight(),
+                0,
+                0,
+                AlphaColours::getInstance()->mainImage.getWidth(),
+                AlphaColours::getInstance()->mainImage.getHeight());
 	
 	if (noPadsSelected == 1) 
     {
-        g.drawImage(padsOff, 0, 0, getWidth(), getHeight(), 0, 0, padsOff.getWidth(), padsOff.getHeight());
+        g.drawImage(AlphaColours::getInstance()->padsOffImage,
+                    0,
+                    0,
+                    getWidth(),
+                    getHeight(),
+                    0,
+                    0,
+                    AlphaColours::getInstance()->padsOffImage.getWidth(),
+                    AlphaColours::getInstance()->padsOffImage.getHeight());
         
         if (eliteControlSelected == 0)
-            g.drawImage(modeOff, 0, 0, getWidth(), getHeight(), 0, 0, modeOff.getWidth(), modeOff.getHeight());
-	}	
+        {
+            g.drawImage(AlphaColours::getInstance()->modeOffImage,
+                        0,
+                        0,
+                        getWidth(),
+                        getHeight(),
+                        0,
+                        0,
+                        AlphaColours::getInstance()->modeOffImage.getWidth(),
+                        AlphaColours::getInstance()->modeOffImage.getHeight());
+        }
+	}
 	else if (noPadsSelected == 0) 
     {
-		g.drawImage(padsOn, 0, 0, getWidth(), getHeight(), 0, 0, padsOn.getWidth(), padsOn.getHeight());
+		g.drawImage(AlphaColours::getInstance()->padsOnImage,
+                    0,
+                    0,
+                    getWidth(),
+                    getHeight(),
+                    0,
+                    0,
+                    AlphaColours::getInstance()->padsOnImage.getWidth(),
+                    AlphaColours::getInstance()->padsOnImage.getHeight());
 		
 		g.setColour(Colours::black);
 		
@@ -363,19 +386,34 @@ void MainComponent::paint(juce::Graphics &g)
 	if (noModeSelected == 1) 
     {
         if (eliteControlSelected == 0)
-            g.drawImage(modeOff, 0, 0, getWidth(), getHeight(), 0, 0, modeOff.getWidth(), modeOff.getHeight());
+        {
+            g.drawImage(AlphaColours::getInstance()->modeOffImage,
+                        0,
+                        0,
+                        getWidth(),
+                        getHeight(),
+                        0,
+                        0,
+                        AlphaColours::getInstance()->modeOffImage.getWidth(),
+                        AlphaColours::getInstance()->modeOffImage.getHeight());
+        }
 	}
 	
-	g.drawImage(padsBg, 0, 0, getWidth(), getHeight(), 0, 0, padsBg.getWidth(), padsBg.getHeight());
+	g.drawImage(AlphaColours::getInstance()->padsBackgroundImage,
+                0,
+                0,
+                getWidth(),
+                getHeight(),
+                0,
+                0,
+                AlphaColours::getInstance()->padsBackgroundImage.getWidth(),
+                AlphaColours::getInstance()->padsBackgroundImage.getHeight());
 	
 	//gain and pan container
-	
 	g.setColour(Colours::black);
 	g.fillEllipse(35, 5, 87, 87);
-	
 	g.setColour(Colours::grey.withAlpha(0.3f));
 	g.drawEllipse(35, 5, 87, 87, 1.0f);
-  
 }
 
 

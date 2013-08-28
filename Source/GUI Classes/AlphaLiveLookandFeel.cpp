@@ -9,6 +9,7 @@
 
 #include "AlphaLiveLookandFeel.h"
 #include "../File and Settings/StoredSettings.h"
+#include "Binary Data/BinaryDataNew.h"
 
 AlphaColours::AlphaColours()
 {
@@ -133,6 +134,20 @@ void AlphaLiveLookandFeel::setStandardColours (int theme)
     
     if (theme == 1) //CLASSIC
     {
+        
+        AlphaColours::getInstance()->mainImage = ImageCache::getFromMemory(BinaryDataNew::interfacemain_png,
+                                                                           BinaryDataNew::interfacemain_pngSize);
+        AlphaColours::getInstance()->padsOffImage = ImageCache::getFromMemory(BinaryDataNew::padsoff_png,
+                                                                              BinaryDataNew::padsoff_pngSize);
+        AlphaColours::getInstance()->padsOnImage = ImageCache::getFromMemory(BinaryDataNew::padson_png,
+                                                                             BinaryDataNew::padson_pngSize);
+        AlphaColours::getInstance()->modeOffImage = ImageCache::getFromMemory(BinaryDataNew::modeoff_png,
+                                                                              BinaryDataNew::modeoff_pngSize);
+        AlphaColours::getInstance()->padsBackgroundImage = ImageCache::getFromMemory(BinaryDataNew::padsbg_png,
+                                                                                     BinaryDataNew::padsbg_pngSize);
+        AlphaColours::getInstance()->settingsOffImage = ImageCache::getFromMemory(BinaryDataNew::statusoff_png,
+                                                                                  BinaryDataNew::statusoff_pngSize);
+        
         //set custom and default AlphaLive colours here...
         
         AlphaColours::getInstance()->colour1_ = 0xff1a54ab; //blue

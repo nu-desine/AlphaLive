@@ -26,8 +26,6 @@
 
 GuiCircleBackground::GuiCircleBackground()
 {
-    image = ImageCache::getFromMemory(BinaryDataNew::statusoff_png, BinaryDataNew::statusoff_pngSize);
-    
 	i = 0;
 }
 
@@ -43,7 +41,15 @@ void GuiCircleBackground::resized()
 
 void GuiCircleBackground::paint (Graphics &g)
 {
-    g.drawImage(image, 0, 0, getWidth(), getHeight(), 0, 0, image.getWidth(), image.getHeight());
+    g.drawImage(AlphaColours::getInstance()->settingsOffImage,
+                0,
+                0,
+                getWidth(),
+                getHeight(),
+                0,
+                0,
+                AlphaColours::getInstance()->settingsOffImage.getWidth(),
+                AlphaColours::getInstance()->settingsOffImage.getHeight());
 	
 	ColourGradient fillGradient(AlphaColours::getInstance()->colour3,845 , 461, Colours::black, 845 , 383, false);
 	g.setGradientFill(fillGradient);

@@ -1129,6 +1129,8 @@ void AppDocumentState::saveProject()
     
     else //replace currentProjectFile
     {
+        if (currentProjectFile.hasWriteAccess() == true)
+        {
         //first, need to save the current project and scene settings
         saveProjectSettings();
         saveToScene(currentlySelectedScene);
@@ -1174,7 +1176,27 @@ void AppDocumentState::saveProject()
         
         //add the file to the 'recent files' list
         registerRecentFile (currentProjectFile);
+        }
         
+        else
+        {
+            bool userSelection;
+            String errorString (translate("The current project is unmodifiable as it is set to read-only. Would you like to save a new copy of this project?"));
+            
+            if (currentProjectFile.isOnCDRomDrive())
+            {
+                errorString = translate("The current project is unmodifiable as it is on a disc. Would you like to save a new copy of this project?");
+            }
+            
+            userSelection = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon,
+                                                         translate("You cannot modify this project!"),
+                                                         translate(errorString));
+            
+            if (userSelection == true)
+            {
+                saveProjectAs();
+            }
+        }
     }
 }
 

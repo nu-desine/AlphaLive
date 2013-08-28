@@ -253,7 +253,7 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
 	//---------------parameter label -------------------------------------
     addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::getInstance()->colour1);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->colour1);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
 	
@@ -350,7 +350,7 @@ void GuiEliteControlsSettings::resized()
 void GuiEliteControlsSettings::paint (Graphics& g)
 {
 	
-	ColourGradient fillGradient(AlphaColours::getInstance()->colour3,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaTheme::getInstance()->colour3,845 , 461, Colours::black, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);

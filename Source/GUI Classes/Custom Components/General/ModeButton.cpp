@@ -108,10 +108,10 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			
 		case 3:
         {
-			g.setColour(AlphaColours::getInstance()->colour1);
+			g.setColour(AlphaTheme::getInstance()->colour1);
 			g.fillEllipse(0, 0, getWidth(), getHeight());
 			
-			ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.7), AlphaColours::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.3), false);
+			ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.7), AlphaTheme::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
 			g.fillEllipse(0, 0, getWidth(), getHeight());
 			
@@ -126,10 +126,10 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			
 		case 4:
         {
-			g.setColour(AlphaColours::getInstance()->colour1);
+			g.setColour(AlphaTheme::getInstance()->colour1);
 			g.fillEllipse(0, 0, getWidth(), getHeight());
 			
-			ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.7), AlphaColours::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.3), false);
+			ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.7), AlphaTheme::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
 			g.fillEllipse(0, 0, getWidth(), getHeight());
 			
@@ -144,10 +144,10 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			
 		case 5:
         {
-			g.setColour(AlphaColours::getInstance()->colour1);
+			g.setColour(AlphaTheme::getInstance()->colour1);
 			g.fillEllipse(0, 0, getWidth(), getHeight());
 			
-			ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.7), AlphaColours::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.3), false);
+			ColourGradient fillGradient(Colours::white.withAlpha(0.1f), (getWidth()*0.5), (getHeight()*0.7), AlphaTheme::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
 			g.fillEllipse(0, 0, getWidth(), getHeight());
 			

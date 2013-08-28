@@ -7,30 +7,30 @@
  *
  */
 
-#ifndef H_ALPHACOLOURS
-#define H_ALPHACOLOURS
+#ifndef H_ALPHATHEME
+#define H_ALPHATHEME
 
 #include "./../JuceLibraryCode/JuceHeader.h"
 
 //==============================================================================
 /**
- A singleton to hold custom colours for AlphaLive.
+ A singleton to hold custom colours and the background images for AlphaLive.
  This used to be a namespace, however I changed it to a singleton
- so that the colour variables could be dynamically changed
- to allow for the colour scheme to be changed by the user.
+ so that the colour and image variables could be dynamically changed
+ to allow for the colour scheme and skin to be changed by the user.
  I'm using a singleton as it seemed to be the easiest way
  of integrating changable colours into the application which
  was originally designed to have static colours. Therefore
  it is a bit hacky.
  */
-class AlphaColours
+class AlphaTheme
 {
 public:
     //==============================================================================
-    AlphaColours();
-    ~AlphaColours();
+    AlphaTheme();
+    ~AlphaTheme();
     
-    juce_DeclareSingleton (AlphaColours, false);
+    juce_DeclareSingleton (AlphaTheme, false);
     
     // custom/default colours
     uint32 colour1_, colour2_, colour3_, colour4_;
@@ -41,10 +41,10 @@ public:
     
 private:
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AlphaColours);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AlphaTheme);
 };
 
-#endif
+#endif //H_ALPHATHEME
 
 
 #ifndef ALPHALIVELOOKANDFEEL_H
@@ -61,7 +61,7 @@ public:
     
     //===custom fuctions====
     
-    void setStandardColours (int theme);
+    void setTheme (int theme);
     
     //===overridden functions===
 	

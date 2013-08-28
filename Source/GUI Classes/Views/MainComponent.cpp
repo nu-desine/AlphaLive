@@ -178,7 +178,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //gain and pan label
     addAndMakeVisible(gainPanValueLabel = new Label("value label", String::empty));
     gainPanValueLabel->setJustificationType(Justification::horizontallyCentred);
-    gainPanValueLabel->setColour(Label::textColourId, AlphaColours::getInstance()->colour1);
+    gainPanValueLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->colour1);
     gainPanValueLabel->setFont(Font(12));
     gainPanValueLabel->addMouseListener(this, true);
     
@@ -325,52 +325,52 @@ void MainComponent::paint(juce::Graphics &g)
 {
     g.setOrigin(0, 0);
     
-	g.drawImage(AlphaColours::getInstance()->mainImage,
+	g.drawImage(AlphaTheme::getInstance()->mainImage,
                 0,
                 0,
                 getWidth(),
                 getHeight(),
                 0,
                 0,
-                AlphaColours::getInstance()->mainImage.getWidth(),
-                AlphaColours::getInstance()->mainImage.getHeight());
+                AlphaTheme::getInstance()->mainImage.getWidth(),
+                AlphaTheme::getInstance()->mainImage.getHeight());
 	
 	if (noPadsSelected == 1) 
     {
-        g.drawImage(AlphaColours::getInstance()->padsOffImage,
+        g.drawImage(AlphaTheme::getInstance()->padsOffImage,
                     0,
                     0,
                     getWidth(),
                     getHeight(),
                     0,
                     0,
-                    AlphaColours::getInstance()->padsOffImage.getWidth(),
-                    AlphaColours::getInstance()->padsOffImage.getHeight());
+                    AlphaTheme::getInstance()->padsOffImage.getWidth(),
+                    AlphaTheme::getInstance()->padsOffImage.getHeight());
         
         if (eliteControlSelected == 0)
         {
-            g.drawImage(AlphaColours::getInstance()->modeOffImage,
+            g.drawImage(AlphaTheme::getInstance()->modeOffImage,
                         0,
                         0,
                         getWidth(),
                         getHeight(),
                         0,
                         0,
-                        AlphaColours::getInstance()->modeOffImage.getWidth(),
-                        AlphaColours::getInstance()->modeOffImage.getHeight());
+                        AlphaTheme::getInstance()->modeOffImage.getWidth(),
+                        AlphaTheme::getInstance()->modeOffImage.getHeight());
         }
 	}
 	else if (noPadsSelected == 0) 
     {
-		g.drawImage(AlphaColours::getInstance()->padsOnImage,
+		g.drawImage(AlphaTheme::getInstance()->padsOnImage,
                     0,
                     0,
                     getWidth(),
                     getHeight(),
                     0,
                     0,
-                    AlphaColours::getInstance()->padsOnImage.getWidth(),
-                    AlphaColours::getInstance()->padsOnImage.getHeight());
+                    AlphaTheme::getInstance()->padsOnImage.getWidth(),
+                    AlphaTheme::getInstance()->padsOnImage.getHeight());
 		
 		g.setColour(Colours::black);
 		
@@ -387,27 +387,27 @@ void MainComponent::paint(juce::Graphics &g)
     {
         if (eliteControlSelected == 0)
         {
-            g.drawImage(AlphaColours::getInstance()->modeOffImage,
+            g.drawImage(AlphaTheme::getInstance()->modeOffImage,
                         0,
                         0,
                         getWidth(),
                         getHeight(),
                         0,
                         0,
-                        AlphaColours::getInstance()->modeOffImage.getWidth(),
-                        AlphaColours::getInstance()->modeOffImage.getHeight());
+                        AlphaTheme::getInstance()->modeOffImage.getWidth(),
+                        AlphaTheme::getInstance()->modeOffImage.getHeight());
         }
 	}
 	
-	g.drawImage(AlphaColours::getInstance()->padsBackgroundImage,
+	g.drawImage(AlphaTheme::getInstance()->padsBackgroundImage,
                 0,
                 0,
                 getWidth(),
                 getHeight(),
                 0,
                 0,
-                AlphaColours::getInstance()->padsBackgroundImage.getWidth(),
-                AlphaColours::getInstance()->padsBackgroundImage.getHeight());
+                AlphaTheme::getInstance()->padsBackgroundImage.getWidth(),
+                AlphaTheme::getInstance()->padsBackgroundImage.getHeight());
 	
 	//gain and pan container
 	g.setColour(Colours::black);
@@ -1906,7 +1906,7 @@ ApplicationCommandManager* MainComponent::getCommandManager()
 
 void MainComponent::changeLookAndFeel()
 {
-    alphaLiveLookAndFeel.setStandardColours(StoredSettings::getInstance()->interfaceTheme);
+    alphaLiveLookAndFeel.setTheme (StoredSettings::getInstance()->interfaceTheme);
     
     repaint();
 }

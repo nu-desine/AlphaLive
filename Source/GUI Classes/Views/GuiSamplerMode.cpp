@@ -302,7 +302,7 @@ void GuiSamplerMode::paint (Graphics& g)
 	float widthBrowseButton = 58;
 	
 	
-	ColourGradient fillGradient(AlphaColours::getInstance()->colour3,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaTheme::getInstance()->colour3,845 , 461, Colours::black, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);
@@ -339,7 +339,7 @@ void GuiSamplerMode::paint (Graphics& g)
         g.setColour(Colours::black);
 		g.fillEllipse(816, 393, 58, 58);
 		
-		ColourGradient fillGradient(AlphaColours::getInstance()->colour1, 816+(58*0.5), 393+(58*0.6), AlphaColours::getInstance()->colour2, 816+(58*0.5), 393, false);
+		ColourGradient fillGradient(AlphaTheme::getInstance()->colour1, 816+(58*0.5), 393+(58*0.6), AlphaTheme::getInstance()->colour2, 816+(58*0.5), 393, false);
 		g.setGradientFill(fillGradient);
         
 		g.fillEllipse((816+(58*0.15)), (393+(58*0.15)), (58*0.7), (58*0.7));
@@ -948,7 +948,7 @@ void GuiSamplerMode::setParameterLabelText (String value)
     
     if (value != String::empty)
     {
-        parameterLabel->setColour(Label::textColourId, AlphaColours::getInstance()->colour2);
+        parameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->colour2);
         parameterLabel->setText(value, dontSendNotification);
     }
 	

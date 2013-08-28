@@ -41,17 +41,17 @@ void GuiCircleBackground::resized()
 
 void GuiCircleBackground::paint (Graphics &g)
 {
-    g.drawImage(AlphaColours::getInstance()->settingsOffImage,
+    g.drawImage(AlphaTheme::getInstance()->settingsOffImage,
                 0,
                 0,
                 getWidth(),
                 getHeight(),
                 0,
                 0,
-                AlphaColours::getInstance()->settingsOffImage.getWidth(),
-                AlphaColours::getInstance()->settingsOffImage.getHeight());
+                AlphaTheme::getInstance()->settingsOffImage.getWidth(),
+                AlphaTheme::getInstance()->settingsOffImage.getHeight());
 	
-	ColourGradient fillGradient(AlphaColours::getInstance()->colour3,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaTheme::getInstance()->colour3,845 , 461, Colours::black, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);

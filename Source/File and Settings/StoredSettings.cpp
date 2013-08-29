@@ -160,7 +160,7 @@ void StoredSettings::setDefaultValues()
         launchTask = 2;
     
     if (cleanOnClose == 0)
-        cleanOnClose = 2;
+        cleanOnClose = 1;
     
     if (killOnClockStop == 0)
         killOnClockStop = 2;

@@ -302,30 +302,30 @@ void AlphaLiveLookandFeel::setTheme (int theme)
     {
         //set background images here...
         
-        AlphaTheme::getInstance()->mainImage = ImageCache::getFromMemory(BinaryDataNew::interfacemain_png,
-                                                                           BinaryDataNew::interfacemain_pngSize);
-        AlphaTheme::getInstance()->padsOffImage = ImageCache::getFromMemory(BinaryDataNew::padsoff_png,
-                                                                              BinaryDataNew::padsoff_pngSize);
-        AlphaTheme::getInstance()->padsOnImage = ImageCache::getFromMemory(BinaryDataNew::padson_png,
-                                                                             BinaryDataNew::padson_pngSize);
-        AlphaTheme::getInstance()->modeOffImage = ImageCache::getFromMemory(BinaryDataNew::modeoff_png,
-                                                                              BinaryDataNew::modeoff_pngSize);
-        AlphaTheme::getInstance()->padsBackgroundImage = ImageCache::getFromMemory(BinaryDataNew::padsbg_png,
-                                                                                     BinaryDataNew::padsbg_pngSize);
-        AlphaTheme::getInstance()->settingsOffImage = ImageCache::getFromMemory(BinaryDataNew::statusoff_png,
-                                                                                  BinaryDataNew::statusoff_pngSize);
+        AlphaTheme::getInstance()->mainImage = ImageCache::getFromMemory(BinaryDataNew::materia_interfacemain_png,
+                                                                           BinaryDataNew::materia_interfacemain_pngSize);
+        AlphaTheme::getInstance()->padsOffImage = ImageCache::getFromMemory(BinaryDataNew::materia_padsoff_png,
+                                                                              BinaryDataNew::materia_padsoff_pngSize);
+        AlphaTheme::getInstance()->padsOnImage = ImageCache::getFromMemory(BinaryDataNew::materia_padson_png,
+                                                                             BinaryDataNew::materia_padson_pngSize);
+        AlphaTheme::getInstance()->modeOffImage = ImageCache::getFromMemory(BinaryDataNew::materia_modeoff_png,
+                                                                              BinaryDataNew::materia_modeoff_pngSize);
+        AlphaTheme::getInstance()->padsBackgroundImage = ImageCache::getFromMemory(BinaryDataNew::materia_padsbg_png,
+                                                                                     BinaryDataNew::materia_padsbg_pngSize);
+        AlphaTheme::getInstance()->settingsOffImage = ImageCache::getFromMemory(BinaryDataNew::materia_statusoff_png,
+                                                                                  BinaryDataNew::materia_statusoff_pngSize);
         
         //set custom and default AlphaLive colours here...
         
-        AlphaTheme::getInstance()->colour1_ = 0xffa52a2a;
-        AlphaTheme::getInstance()->colour2_ = 0xfff5f5dc;
-        AlphaTheme::getInstance()->colour3_ = 0xff181818;
-        AlphaTheme::getInstance()->colour4_ = 0xff202020;
+        AlphaTheme::getInstance()->colour1_ = 0xff1a54ab; //blue
+        AlphaTheme::getInstance()->colour2_ = 0xff3c76c5; //light blue
+        AlphaTheme::getInstance()->colour3_ = 0xff181818; //nearly black
+        AlphaTheme::getInstance()->colour4_ = 0xff202020; //very dark grey
         
-        AlphaTheme::getInstance()->colour1 = Colour(AlphaTheme::getInstance()->colour1_);
-        AlphaTheme::getInstance()->colour2 = Colour(AlphaTheme::getInstance()->colour2_);
-        AlphaTheme::getInstance()->colour3 = Colour(AlphaTheme::getInstance()->colour3_);
-        AlphaTheme::getInstance()->colour4 = Colour(AlphaTheme::getInstance()->colour4_);
+        AlphaTheme::getInstance()->colour1 = Colour(AlphaTheme::getInstance()->colour1_); //blue
+        AlphaTheme::getInstance()->colour2 = Colour(AlphaTheme::getInstance()->colour2_); //light blue
+        AlphaTheme::getInstance()->colour3 = Colour(AlphaTheme::getInstance()->colour3_); //nearly black
+        AlphaTheme::getInstance()->colour4 = Colour(AlphaTheme::getInstance()->colour4_); //very dark grey
         
         // set up the standard set of colours..
         const uint32 textButtonColour      = 0xff000000;
@@ -385,8 +385,8 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             Slider::backgroundColourId,                 0x00000000,
             Slider::thumbColourId,                      textButtonColour,
-            Slider::trackColourId,                      0xffff0000,
-            Slider::rotarySliderFillColourId,           0xffff0000,
+            Slider::trackColourId,                      AlphaTheme::getInstance()->colour1_,
+            Slider::rotarySliderFillColourId,           AlphaTheme::getInstance()->colour1_,
             Slider::rotarySliderOutlineColourId,        0xff2c2c2c, //0xff3c3c3c
             Slider::textBoxTextColourId,                0xffffffff,
             Slider::textBoxBackgroundColourId,          0x00000000,

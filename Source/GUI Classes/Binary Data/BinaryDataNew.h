@@ -95,6 +95,24 @@ namespace BinaryDataNew
     extern const char*  lpficon_png;
     const int           lpficon_pngSize = 3318;
 
+    extern const char*  materia_interfacemain_png;
+    const int           materia_interfacemain_pngSize = 280131;
+
+    extern const char*  materia_modeoff_png;
+    const int           materia_modeoff_pngSize = 84715;
+
+    extern const char*  materia_padsbg_png;
+    const int           materia_padsbg_pngSize = 215485;
+
+    extern const char*  materia_padsoff_png;
+    const int           materia_padsoff_pngSize = 145806;
+
+    extern const char*  materia_padson_png;
+    const int           materia_padson_pngSize = 138929;
+
+    extern const char*  materia_statusoff_png;
+    const int           materia_statusoff_pngSize = 74742;
+
     extern const char*  metronomeicon_png;
     const int           metronomeicon_pngSize = 2978;
 

@@ -742,6 +742,11 @@ void AppDocumentState::saveProjectSettings()
     
     projectData->setAttribute("copyExternalFiles", AppSettings::Instance()->getCopyExternalFiles());
     
+    for (int i = 0; i < NO_OF_SCENES; i++)
+    {
+        projectData->setAttribute("sceneName" + String(i), AppSettings::Instance()->getSceneName(i));
+    }   
+    
 }
 
 void AppDocumentState::loadProjectSettings()
@@ -751,6 +756,11 @@ void AppDocumentState::loadProjectSettings()
     else
         AppSettings::Instance()->setCopyExternalFiles(true); //default value
     
+    for (int i = 0; i < NO_OF_SCENES; i++)
+    {
+        if (projectData->hasAttribute("sceneName" + String(i)) == true)
+            AppSettings::Instance()->setSceneName(i, projectData->getStringAttribute("sceneName" + String(i)));
+    }
 }
 
 
@@ -1065,6 +1075,7 @@ void AppDocumentState::createNewProject()
         //============= reset all settings =================
         
         AppSettings::Instance()->resetData();
+        AppSettings::Instance()->resetProjectSettingsData();
         
         for (int i = 0; i <= 47; i++)
             PAD_SETTINGS->resetData(0);
@@ -1381,6 +1392,9 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen, bool askT
                 
                 if (shouldContinue == true)
                 {
+                    AppSettings::Instance()->resetProjectSettingsData();
+                    AppSettings::Instance()->resetData();
+                    
                     //get the folder that holds the projects audio files
                     File audioFileDirectory = (loadedFile.getParentDirectory().getFullPathName() + File::separatorString + "Audio Files");
                     

@@ -38,7 +38,7 @@ SceneComponent::SceneComponent(AppDocumentState &ref, ModeController &ref2)
     for (int i = 0; i <= NO_OF_SCENES-1; i++)
     {
         addAndMakeVisible(slot[i] = new SceneSlot(i, *this));
-        appDocumentStateRef.saveToScene(i);
+        appDocumentStateRef.saveToScene(i); //should this ideally be called from here?
     }
     
     
@@ -63,7 +63,7 @@ void SceneComponent::resized()
     //draw slots (4 rows of 5)
     for (int i = 0, counter = 0; i <= NO_OF_SCENES-1; i++)
     {
-        slot[i]->setBounds(0, counter, getWidth(), getWidth());
+        slot[i]->setBounds(0, counter, getWidth(), getWidth()/8);
         
         counter = counter + 32;											
 		
@@ -81,6 +81,8 @@ void SceneComponent::clearAll()
     for (int i = 0; i <= 47; i++)
         AppSettings::Instance()->padSettings[i]->resetData(0);
     AppSettings::Instance()->resetData();
+    for (int i = 0; i < NO_OF_SCENES; i++)
+        AppSettings::Instance()->setSceneName(i, "Scene " + String(i+1));
     
     //save reset data to all scenes and set the status of each scene
     for (int i = 0; i < NO_OF_SCENES; i++)
@@ -217,4 +219,3 @@ void SceneComponent::disableSaveAlertWindow()
 {
     shouldShowSaveWindow = false;
 }
-

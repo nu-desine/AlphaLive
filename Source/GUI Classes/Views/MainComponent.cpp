@@ -152,10 +152,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	saveButton->setClickingTogglesState(false);
     saveButton->setCommandToTrigger(commandManager, CommandIDs::Save, false);
     saveButton->addMouseListener(this, false);
-    
-    //scene component
-    addAndMakeVisible(sceneComponent = new SceneComponent(appDocumentStateRef, *alphaLiveEngineRef.getModeController())); //pass in appDocumentStateRef so that appDocumentStateRef function calls can be made within sceneComponent
-    sceneComponent->addMouseListener(this, true);
 	
 	//create pan slider
     addAndMakeVisible(panSlider = new AlphaRotarySlider((225 * (M_PI / 180)), (495 * (M_PI / 180)), 65));
@@ -198,6 +194,11 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //device status component
     addAndMakeVisible(deviceStatusComponent = new DeviceStatusComponent(alphaLiveEngineRef.getDeviceStatus()));
     deviceStatusComponent->addMouseListener(this, false);
+    
+    //scene component
+    addAndMakeVisible(sceneComponent = new SceneComponent(appDocumentStateRef, *alphaLiveEngineRef.getModeController())); //pass in appDocumentStateRef so that appDocumentStateRef function calls can be made within sceneComponent
+    sceneComponent->addMouseListener(this, true);
+    sceneComponent->setInterceptsMouseClicks(false, true);
     
     //pop up views
     addChildComponent(aboutComponent = new AboutComponent(*this));
@@ -254,7 +255,6 @@ MainComponent::~MainComponent()
         stopThread(500);
     
     deleteAllChildren();
-    //delete blackChrome;
     
     //detach this class from the subject class
     //appDocumentStateRef.detach(this);
@@ -296,7 +296,7 @@ void MainComponent::resized()
     openButton->setBounds(153, 7, 30, 30);
     saveButton->setBounds(180, 38, 30, 30);
     
-    sceneComponent->setBounds(5, 10, 20, getHeight());
+    sceneComponent->setBounds(5, 10, 20 * 8, getHeight());
     
     globalClock->setBounds(479, 0, 266, 144);
     

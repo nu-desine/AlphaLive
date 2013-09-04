@@ -102,6 +102,7 @@ public:
 
     void setAlphaLiveEngineRef (AlphaLiveEngine *ref);
     void resetData();
+    void resetProjectSettingsData();
     
     void setCurrentlySelectedPad (Array<int> selectedPads_);
     void setPadDisplayTextMode (int value);
@@ -116,6 +117,7 @@ public:
     void setMetronomeStatus (bool value);
     
     void setCopyExternalFiles (bool value);
+    void setSceneName (int sceneNumber, String value);
     
     Array<int> getCurrentlySelectedPad();
     int getPadDisplayTextMode();
@@ -130,6 +132,7 @@ public:
     bool getMetronomeStatus();
     
     bool getCopyExternalFiles();
+    String getSceneName(int sceneNumber);
     
     //Elite Controls Stuff
     void setEliteDialPrevValue(double value, int dialNumber);
@@ -250,6 +253,7 @@ private:
     //========================================================================================================
     
     bool copyExternalFiles;
+    String sceneName[20];
     
     
 };

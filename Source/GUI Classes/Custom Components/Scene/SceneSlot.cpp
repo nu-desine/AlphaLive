@@ -499,6 +499,10 @@ void SceneSlot::textEditorFocusLost (TextEditor &textEditor)
     if (&textEditor == textBox)
     {
         //get text and apply to AppSettings here!
+        
+        if (textEditor.isEmpty())
+            textEditor.setText("Scene " + slotNumberString, dontSendNotification);
+        
         AppSettings::Instance()->setSceneName(slotNumber, textBox->getText());
         
         textBox->setHighlightedRegion(Range<int>(0,0));

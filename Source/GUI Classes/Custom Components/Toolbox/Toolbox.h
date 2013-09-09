@@ -64,6 +64,7 @@ private:
     //Each set of items (presets, scales, samples etc...) will have its own tree or list component
     OwnedArray <FileTreeComponent> treeLists;
     OwnedArray <FileListComponent> fileLists;
+    int noOfFileLists, noOfTreeLists;
     
     //all fileTree and fileList component need their own of the following object too...
     OwnedArray <DirectoryContentsList> contentLists;

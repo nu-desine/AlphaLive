@@ -39,8 +39,9 @@ enum
     SAMPLE_BANKS,
     AUDIO_SAMPLES,
     SEQUENCES,
-    SCENE_PRESETS
+    SCENE_PRESETS,
     
+    NO_OF_LISTS //essentially this will equal the number of items above
 };
 
 Toolbox::Toolbox(MainComponent &parent) : 
@@ -120,9 +121,12 @@ Toolbox::Toolbox(MainComponent &parent) :
     treeLists.insert(0, new FileTreeComponent (*contentLists[SAMPLE_BANKS]));
     treeLists.insert(1, new FileTreeComponent (*contentLists[AUDIO_SAMPLES]));
     treeLists.insert(2, new FileTreeComponent (*contentLists[SEQUENCES]));
-    treeLists.insert(4, new FileTreeComponent (*contentLists[SCENE_PRESETS]));
+    treeLists.insert(3, new FileTreeComponent (*contentLists[SCENE_PRESETS]));
+    
+    noOfTreeLists = treeLists.size();
+    noOfFileLists = NO_OF_LISTS - noOfTreeLists;
       
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < noOfTreeLists; i++)
     {
         treeLists[i]->addListener(this);
         treeLists[i]->setIndentSize(10);
@@ -130,7 +134,7 @@ Toolbox::Toolbox(MainComponent &parent) :
         treeLists[i]->setItemHeight(16);
     }
     
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < noOfFileLists; i++)
     {
         fileLists.insert(i, new FileListComponent (*contentLists[i]));
         fileLists[i]->addListener(this);
@@ -198,9 +202,9 @@ void Toolbox::setCurrentlySelectedPad (Array<int> selectedPads_)
 void Toolbox::updateDisplay()
 {
     //should I only call deselect on last click component that can be found from currentList?
-//    for (int i = 0; i < 5; i++)
+//    for (int i = 0; i < noOfFileLists; i++)
 //        fileLists[i]->deselectAllFiles();
-//    for (int i = 0; i < 4; i++)
+//    for (int i = 0; i < noOfTreeLists; i++)
 //        treeLists[i]->deselectAllFiles();
 //    layoutsListBox->deselectAllRows();
 //    scalesListBox->deselectAllRows();
@@ -266,10 +270,10 @@ void Toolbox::updateDisplay()
     {
         if (MULTI_PADS)
         {
-            tabbedComponent->addTab(translate("Banks"), Colours::darkgrey, treeLists[SAMPLE_BANKS-5], false);
+            tabbedComponent->addTab(translate("Banks"), Colours::darkgrey, treeLists[SAMPLE_BANKS-noOfFileLists], false);
         }
         
-        tabbedComponent->addTab(translate("Samples"), Colours::darkgrey, treeLists[AUDIO_SAMPLES-5], false);
+        tabbedComponent->addTab(translate("Samples"), Colours::darkgrey, treeLists[AUDIO_SAMPLES-noOfFileLists], false);
         tabbedComponent->addTab(translate("Effects"), Colours::darkgrey, fileLists[EFFECT_PRESETS], false);
         tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[SAMPLER_PRESETS], false);
         
@@ -281,13 +285,13 @@ void Toolbox::updateDisplay()
         
         else if (seqMode == 2)
         {
-            tabbedComponent->addTab(translate("Banks"), Colours::darkgrey, treeLists[SAMPLE_BANKS-5], false);
+            tabbedComponent->addTab(translate("Banks"), Colours::darkgrey, treeLists[SAMPLE_BANKS-noOfFileLists], false);
             //the below will only be useable if we get drag-and-drop working
-            //tabbedComponent->addTab(translate("Samples"), Colours::darkgrey, treeLists[AUDIO_SAMPLES-5], false);
+            //tabbedComponent->addTab(translate("Samples"), Colours::darkgrey, treeLists[AUDIO_SAMPLES-noOfFileLists], false);
             tabbedComponent->addTab(translate("Effects"), Colours::darkgrey, fileLists[EFFECT_PRESETS], false);
         }
         
-        tabbedComponent->addTab(translate("Sequences"), Colours::darkgrey, treeLists[SEQUENCES-5], false);
+        tabbedComponent->addTab(translate("Sequences"), Colours::darkgrey, treeLists[SEQUENCES-noOfFileLists], false);
         tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[SEQUENCER_PRESETS], false);
     
     }
@@ -302,7 +306,7 @@ void Toolbox::updateDisplay()
     }
     
     if (selectedPads.size() == 48)
-        tabbedComponent->addTab(translate("Scene Presets"), Colours::darkgrey, treeLists[SCENE_PRESETS-5], false);
+        tabbedComponent->addTab(translate("Scene Presets"), Colours::darkgrey, treeLists[SCENE_PRESETS-noOfFileLists], false);
     
     int noOfTabs = tabbedComponent->getNumTabs();
     
@@ -323,14 +327,16 @@ void Toolbox::fileClicked (const File& file, const MouseEvent& e)
 {
     //The below is needed so that when fileDoubleClicked is called we know what filebrowser called it
     
-    if (treeLists[SAMPLE_BANKS-5]->isMouseOver(true))
+    if (treeLists[SAMPLE_BANKS-noOfFileLists]->isMouseOver(true))
         currentList = SAMPLE_BANKS;
-    else if (treeLists[AUDIO_SAMPLES-5]->isMouseOver(true))
+    else if (treeLists[AUDIO_SAMPLES-noOfFileLists]->isMouseOver(true))
         currentList = AUDIO_SAMPLES;
-    else if (treeLists[SEQUENCES-5]->isMouseOver(true))
+    else if (treeLists[SEQUENCES-noOfFileLists]->isMouseOver(true))
         currentList = SEQUENCES;
+    else if (treeLists[SCENE_PRESETS-noOfFileLists]->isMouseOver(true))
+        currentList = SCENE_PRESETS;
     
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < noOfFileLists; i++)
     {
         if (fileLists[i]->isMouseOver(true))
             currentList = i;
@@ -564,15 +570,15 @@ void Toolbox::mouseEnter (const MouseEvent &e)
      }
      */
     
-    if (treeLists[AUDIO_SAMPLES-5]->isMouseOver(true))
+    if (treeLists[AUDIO_SAMPLES-noOfFileLists]->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("AlphaLive Sample Library Browser. Double-click any files here to apply them to the selected pads."));
     }
-    else if (treeLists[SAMPLE_BANKS-5]->isMouseOver(true))
+    else if (treeLists[SAMPLE_BANKS-noOfFileLists]->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Sample Banks. Double-click any items here to apply a bank of audio samples to either the sequence grid of Sequencer pads, or to a set of Sampler pads. Banks will be applied to a set of Sampler pads in the order that they were selected. Each bank contains 16 samples."));
     }
-    else if (treeLists[SEQUENCES-5]->isMouseOver(true))
+    else if (treeLists[SEQUENCES-noOfFileLists]->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Sequence Arrangements. Double-click any items here to apply pre-made sequences to the selected pads. These can either be single sequences or sequences sets for each pad."));
     }
@@ -596,7 +602,7 @@ void Toolbox::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText(translate("Effects Presets. Double-click any items here to apply preset effects to the selected pads."));
     }
-    else if (fileLists[SCENE_PRESETS]->isMouseOver(true))
+    else if (treeLists[SCENE_PRESETS-noOfFileLists]->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Scene Presets. Double-click any items here to apply template mappings of settings to the entire set of pads of the currently selected scene."));
     }

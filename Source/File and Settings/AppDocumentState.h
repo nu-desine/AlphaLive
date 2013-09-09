@@ -142,6 +142,7 @@ public:
     void cleanUpProject(bool closingApp);
     void importAudioFiles();   
     void setCurrentlySelectedScene(int value);
+    int getCurrentlySelectedScene();
     
     static void registerRecentFile (const File& file);
     

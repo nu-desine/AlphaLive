@@ -3286,6 +3286,10 @@ void AppDocumentState::setCurrentlySelectedScene(int value)
 {
     currentlySelectedScene = value;
 }
+int AppDocumentState::getCurrentlySelectedScene()
+{
+    return currentlySelectedScene;
+}
 
 
 int AppDocumentState::getGuiUpdateFlag()

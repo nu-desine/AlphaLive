@@ -296,10 +296,12 @@ void Toolbox::updateDisplay()
 //    }
     else
     {
-        //tabbedComponent->addTab(translate("Scene Presets"), Colours::darkgrey, scenePresetsList, false);
-        tabbedComponent->setVisible(false);
-        
+        if (selectedPads.size() != 48)
+            tabbedComponent->setVisible(false);
     }
+    
+    if (selectedPads.size() == 48)
+        tabbedComponent->addTab(translate("Scene Presets"), Colours::darkgrey, fileLists[SCENE_PRESETS], false);
     
     int noOfTabs = tabbedComponent->getNumTabs();
     
@@ -432,6 +434,18 @@ void Toolbox::fileDoubleClicked (const File& file)
         else if (file.getFileExtension() == ".alphapad")
         {
             mainComponentRef.getAppDocumentStateRef().loadPadFromDisk(selectedPads, false, file);
+        }
+        
+        else if (file.getFileExtension() == ".alphascene")
+        {
+            int currentScene = mainComponentRef.getAppDocumentStateRef().getCurrentlySelectedScene();
+            
+            bool shouldLoad = mainComponentRef.getAppDocumentStateRef().loadSceneFromDisk(currentScene, false, file);
+            
+            if (shouldLoad == true)
+            {
+                mainComponentRef.getAppDocumentStateRef().loadFromScene(currentScene);
+            }
         }
     }
 }
@@ -583,7 +597,7 @@ void Toolbox::mouseEnter (const MouseEvent &e)
     }
     else if (fileLists[SCENE_PRESETS]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Scene Presets. Double-click any items here to apply preset settings to all of the pads of the currently selected scene."));
+        mainComponentRef.setInfoTextBoxText(translate("Scene Presets. Double-click any items here to apply template mappings of settings to the entire set of pads of the currently selected scene."));
     }
     
     

@@ -1794,8 +1794,9 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
     
     else if (commandID == CommandIDs::CopyDataToSequencer)
     {
-        // This item should only be active if the user has selected only MIDI pads along with
-        // 1 or more sequencer pads OR only sampler pads along with 1 or more sequencer pads.
+        // This item should only be active if the user has selected only MIDI pads that all have
+        // the same MIDI channel along with 1 or more sequencer pads, OR only sampler pads along
+        // with 1 or more sequencer pads.
         
         bool shouldBeActive = false;
         String itemString (translate("Copy Notes/Samples To Sequencer"));
@@ -1809,18 +1810,34 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
             padModes.insert(i, PAD_SETTINGS->getMode());
         }
         
-        //check to see if the selected pads have the right modes
-        if ((padModes.contains(1) && padModes.contains(3) && !padModes.contains(2)) ||
-            (padModes.contains(2) && padModes.contains(3) && !padModes.contains(1)))
+        //check to see if the selected pads are set to MIDI and sequencer mode only
+        if (padModes.contains(1) && padModes.contains(3) && !padModes.contains(2))
+        {
+            Array<int> midiChannels;
+            
+            //get the MIDI channels of the selected MIDI pads
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                
+                if (PAD_SETTINGS->getMode() == 1)
+                    midiChannels.addIfNotAlreadyThere(PAD_SETTINGS->getMidiChannel());
+            }
+            
+            //check to see if all MIDI pad channels are the same
+            if (midiChannels.size() == 1)
             {
                 shouldBeActive = true;
-                
-                if (padModes.contains(1))
-                    itemString = translate("Copy Selected MIDI Notes To Sequencer");
-                else
-                    itemString = translate("Copy Selected Samples To Sequencer");
-                
+                itemString = translate("Copy Selected MIDI Notes To Sequencer");
             }
+            
+        }
+        //check to see if the selected pads are set to Sampler and Sequencer mode only
+        else if (padModes.contains(2) && padModes.contains(3) && !padModes.contains(1))
+        {
+            shouldBeActive = true;
+            itemString = translate("Copy Selected Samples To Sequencer");
+        }
         
         result.setInfo (translate(itemString),
                         "Applies the notes/samples of the selected pads to the selected sequencer pad.",
@@ -1943,6 +1960,7 @@ bool MainComponent::perform (const InvocationInfo& info)
         if (padModes.contains(1))
         {
             Array <int> midiNotes;
+            int midiChannel;
             
             //get all MIDI notes of the selected MIDI pads
             for (int i = 0; i < selectedPads.size(); i++)
@@ -1956,6 +1974,8 @@ bool MainComponent::perform (const InvocationInfo& info)
                     //the user has selected more than 12 MIDI pads
                     //we want to use the first 12 selected notes not
                     //the first 12 lowest notes.
+                    
+                    midiChannel = PAD_SETTINGS->getMidiChannel();
                 }
            
             }
@@ -1972,6 +1992,7 @@ bool MainComponent::perform (const InvocationInfo& info)
                 if (PAD_SETTINGS->getMode() == 3)
                 {
                     PAD_SETTINGS->setSequencerMode(1);
+                    PAD_SETTINGS->setSequencerMidiChannel(midiChannel);
                     
                     for (int row = 0; row < noOfNotes; row++)
                     {

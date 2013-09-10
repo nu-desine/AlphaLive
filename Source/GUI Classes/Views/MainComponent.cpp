@@ -1656,7 +1656,8 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::StartStopClock,
         CommandIDs::StarterGuide,
         CommandIDs::ReferenceManual,
-        CommandIDs::UpdateSoftware
+        CommandIDs::UpdateSoftware,
+        CommandIDs::CopyDataToSequencer
     };
 	
 	commands.addArray (ids, numElementsInArray (ids));
@@ -1786,9 +1787,46 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
     }
     else if (commandID == CommandIDs::UpdateSoftware)
     {
-        result.setInfo (translate("Check for updates..."),
+        result.setInfo (translate("Check For Updates..."),
                         "Checks online to see if there is an AlphaLive update available, and installs it if so.",
                         CommandCategories::FileCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::CopyDataToSequencer)
+    {
+        // This item should only be active if the user has selected only MIDI pads along with
+        // 1 or more sequencer pads OR only sampler pads along with 1 or more sequencer pads.
+        
+        bool shouldBeActive = false;
+        String itemString (translate("Copy Notes/Samples To Sequencer"));
+        
+        Array <int> padModes;
+        
+        //get the modes of the selected pads
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            padModes.insert(i, PAD_SETTINGS->getMode());
+        }
+        
+        //check to see if the selected pads have the right modes
+        if ((padModes.contains(1) && padModes.contains(3) && !padModes.contains(2)) ||
+            (padModes.contains(2) && padModes.contains(3) && !padModes.contains(1)))
+            {
+                shouldBeActive = true;
+                
+                if (padModes.contains(1))
+                    itemString = translate("Copy Selected MIDI Notes To Sequencer");
+                else
+                    itemString = translate("Copy Selected Samples To Sequencer");
+                
+            }
+        
+        result.setInfo (translate(itemString),
+                        "Applies the notes/samples of the selected pads to the selected sequencer pad.",
+                        CommandCategories::EditCommands, 0);
+        
+        result.setActive(shouldBeActive);
     }
 }
 
@@ -1888,6 +1926,98 @@ bool MainComponent::perform (const InvocationInfo& info)
     else if(info.commandID == CommandIDs::UpdateSoftware)
     {
         updateSoftware(false);
+    }
+    
+    else if(info.commandID == CommandIDs::CopyDataToSequencer)
+    {
+        Array <int> padModes;
+        
+        //get the modes of the selected pads
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            padModes.insert(i, PAD_SETTINGS->getMode());
+        }
+        
+        //applying MIDI notes to sequencer pad/s
+        if (padModes.contains(1))
+        {
+            Array <int> midiNotes;
+            
+            //get all MIDI notes of the selected MIDI pads
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                
+                if (PAD_SETTINGS->getMode() == 1)
+                {
+                    midiNotes.add(PAD_SETTINGS->getMidiNote());
+                    //don't sort the array into note order, as if
+                    //the user has selected more than 12 MIDI pads
+                    //we want to use the first 12 selected notes not
+                    //the first 12 lowest notes.
+                }
+           
+            }
+            
+            int noOfNotes = midiNotes.size();
+            if (noOfNotes > 12)
+                noOfNotes = 12;
+            
+            //apply the selected MIDI notes to the selected sequencer pad/s
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                
+                if (PAD_SETTINGS->getMode() == 3)
+                {
+                    PAD_SETTINGS->setSequencerMode(1);
+                    
+                    for (int row = 0; row < noOfNotes; row++)
+                    {
+                        PAD_SETTINGS->setSequencerMidiNote(midiNotes[row], row);
+                    }
+                }
+            }
+        }
+        
+        //applying samples to sequencer pad/s
+        else if (padModes.contains(2))
+        {
+            Array <File> samples;
+            
+            //get all samples of the selected Sampler pads
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                
+                if (PAD_SETTINGS->getMode() == 2)
+                {
+                    samples.add(PAD_SETTINGS->getSamplerAudioFilePath());
+                }
+                
+            }
+            
+            int noOfSamples = samples.size();
+            if (noOfSamples > 12)
+                noOfSamples = 12;
+            
+            //apply the selected samples to the selected sequencer pad/s
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                
+                if (PAD_SETTINGS->getMode() == 3)
+                {
+                    PAD_SETTINGS->setSequencerMode(2);
+                    
+                    for (int row = 0; row < noOfSamples; row++)
+                    {
+                        PAD_SETTINGS->setSequencerSamplesAudioFilePath(samples[row], row);
+                    }
+                }
+            }
+        }
     }
     
 	//else

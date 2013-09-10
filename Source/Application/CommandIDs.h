@@ -53,6 +53,8 @@ namespace CommandIDs
     static const int StarterGuide           = 0x20019;
     static const int ReferenceManual        = 0x20020;
     
+    static const int CopyDataToSequencer    = 0x20022;
+    
     
 }
 

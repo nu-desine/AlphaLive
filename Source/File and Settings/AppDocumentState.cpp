@@ -2930,18 +2930,32 @@ void AppDocumentState::cleanUpProject (bool closingApp)
         
         if (shouldCleanUp == true)
         {
-            //this function must check all the settings of all the sceneData elements,
+            //This function must check all the settings of all the sceneData elements,
             //and delete any audio files in the project Audio Files directory that aren't included in these settings.
-            //need to move all the currently used audio files somewhere, delete any that are left, and move the used ones back.
+            //Need to move all the currently used audio files somewhere, delete any that are left, and move the used ones back.
             
-            //first must save the current settings into the current scene to prevent missing audio files errors once the clean up has been completed.
-            //For example, if you imported in a new audio file and then instantly cleaned up without saving the new settings it might delete the current
-            //audio file as a reference to it wouldn't be found in any of the sceneData elements, so when the clean up is complete the audio file would 
-            //now be missing.
-            //instead of saving, you could load up the scene data for the current scene which would delete the current settings that havent been saved. What would be more natural?
+            //If this function is being called from the 'Clean Project' menu bar item,
+            //first we must save the current project to prevent missing audio files errors once the clean up has been completed.
+            //For example, if you imported in a new audio file and then instantly cleaned up without saving the new settings it
+            //might delete the current audio file as a reference to it wouldn't be found in any of the sceneData elements, so when
+            //the clean up is complete the audio file would now be missing. We are saving rather than loading here as the user
+            //probably wouldn't want to lose the recently changed settings.
             
-            if (!closingApp)
-                saveToScene(currentlySelectedScene);
+            //However if this function was called when the app is closing, we most load the current project instead
+            //of saving before we clean. Again this is to prevent missing audio file errors. For example, if you clear
+            //a scene containing audio files and then close the app without saving beforehand, without loading the project before
+            //cleaning it will end up removing audio files that are actually needed. We are loading rather than saving here
+            //as the user probably won't want to save the most recent changes.
+            
+            if (closingApp)
+            {
+                loadProject(false, currentProjectFile, false);
+            }
+            else
+            {
+                saveProject();
+            }
+            
             
             File tempAudioDirectory = File::getCurrentWorkingDirectory().getParentDirectory().getFullPathName() + File::separatorString + "tempDir";
             tempAudioDirectory.createDirectory();

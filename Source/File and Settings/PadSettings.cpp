@@ -68,6 +68,12 @@ PadSettings::PadSettings(int arrayIndex)
     //default CC layout
     midiCcController = Layouts::ccLayout[padNumber];
     
+    midiAutoChannelStatus = false;
+    for (int i = 0; i < 8; i++)
+        midiAutoChannels[i] = true;
+    for (int i = 8; i < 16; i++)
+        midiAutoChannels[i] = false;
+    
     //sampler mode
     samplerAudioFilePath = String::empty;
     samplerTriggerMode = 2; 
@@ -316,6 +322,12 @@ void PadSettings::resetData (int whatToReset)
         setMidiPressureStatus (true);
         setMidiNoteStatus (true);
         setMidiCcController (Layouts::ccLayout[padNumber]);
+        
+        setMidiAutoChannelStatus(false);
+        for (int i = 0; i < 8; i++)
+            setMidiAutoChannels(i, true);
+        for (int i = 8; i < 16; i++)
+            setMidiAutoChannels(i, false);
     }
     
     if (whatToReset != 2)
@@ -647,6 +659,16 @@ void PadSettings::setMidiCcController (int value)
     midiCcController = value;
     alphaLiveEngineRef->getModeMidi()->setControllerNumber(value, padNumber);
 }
+void PadSettings::setMidiAutoChannelStatus (bool value)
+{
+    midiAutoChannelStatus = value;
+    //alphaLiveEngineRef->getModeMidi()->setControllerNumber(value, padNumber);
+}
+void PadSettings::setMidiAutoChannels (int channel, bool status)
+{
+    midiAutoChannels[channel] = status;
+    //alphaLiveEngineRef->getModeMidi()->setControllerNumber(value, padNumber);
+}
 
 #pragma mark MIDI mode accessor functions
 
@@ -694,8 +716,14 @@ int PadSettings::getMidiCcController()
 {
     return midiCcController;
 }
-
-
+bool PadSettings::getMidiAutoChannelStatus()
+{
+    return midiAutoChannelStatus;
+}
+bool PadSettings::getMidiAutoChannels (int channel)
+{
+    return midiAutoChannels[channel];
+}
 
 #pragma mark Sampler mode mutator functions
 //==================================================================

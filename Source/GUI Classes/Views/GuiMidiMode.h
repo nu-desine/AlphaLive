@@ -82,6 +82,7 @@ private:
     
     GuiCircleBackground *notSelected;
     
+    AlphaTextButton *autoChannelButton;
     OwnedArray<AlphaTextButton> channelButtons;
     OwnedArray<SettingsButtonImage> triggerModeButtons;
     OwnedArray<SettingsButtonImage> pressureModeButtons;

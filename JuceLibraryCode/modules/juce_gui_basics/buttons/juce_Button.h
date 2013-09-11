@@ -151,7 +151,7 @@ public:
 
         @see getRadioGroupId
     */
-    void setRadioGroupId (int newGroupId);
+    void setRadioGroupId (int newGroupId, const int sendChangeNotification = true);
 
     /** Returns the ID of the group to which this button belongs.
         (See setRadioGroupId() for an explanation of this).

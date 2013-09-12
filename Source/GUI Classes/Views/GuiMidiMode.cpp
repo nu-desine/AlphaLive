@@ -1031,7 +1031,15 @@ void GuiMidiMode::mouseEnter (const MouseEvent &e)
     {
         if (channelButtons[i]->isMouseOver(true))
         {
-            mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::midiChannelButtons) + " " + String(i+1) + ".");
+            if (autoChannelButton->getToggleState() == false) //static MIDI channel
+            {
+                mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::midiChannelButtons) + " " + String(i+1) + ".");
+            }
+            else //auto midi channels
+            {
+                mainComponentRef.setInfoTextBoxText(translate("MIDI Channel Buttons. Sets and displays the group of possible MIDI channels that the selected pads could be applied to. Click an inactive button to add the channel to the group, or click an active button to remove the channel from the group. However these buttons are used to select the pads static MIDI channel when the Auto MIDI Channel Mode is turned off."));
+            }
+            
             break;
         }
     }
@@ -1119,9 +1127,9 @@ void GuiMidiMode::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::stickyButton));
     }
-    else if (autoChannelButton)
+    else if (autoChannelButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Auto MIDI Channel Mode button. Auto MIDI Channel Mode is a feature that allows individual channels to be dynamically applied to each pressed MIDI pad. Channels are applied to pads in the order they are pressed, and when this mode is turned on you can use the 16 MIDI channel buttons to select the possible channels the selected pads could be applied to. This feature is can be used as an alternative to polyphonic aftertouch when it is not available. Turn on this button to activate this mode."));
+        mainComponentRef.setInfoTextBoxText(translate("Auto MIDI Channel Mode button. Auto MIDI Channel Mode is a feature that allows individual channels to be dynamically applied to each pressed MIDI pad. Channels are applied to pads in the order they are pressed, and when this mode is turned on you can use the 16 MIDI channel buttons to select the possible channels that the selected pads could be applied to. This feature can be used as an alternative to polyphonic aftertouch when it is not available. Turn on this button to activate this mode."));
     }
     
     

@@ -33,8 +33,8 @@ public:
     juce_DeclareSingleton (AlphaTheme, false);
     
     // custom/default colours
-    uint32 colour1_, colour2_, colour3_, colour4_;
-    Colour colour1, colour2, colour3, colour4;
+    uint32 colour1_, colour2_, colour3_, colour4_, textColour_;
+    Colour colour1, colour2, colour3, colour4, textColour;
     
     // background images
     Image mainImage, padsOffImage, padsOnImage, modeOffImage, padsBackgroundImage, settingsOffImage;

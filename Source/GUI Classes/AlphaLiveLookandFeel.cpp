@@ -155,11 +155,13 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->colour2_ = 0xff3c76c5; //light blue
         AlphaTheme::getInstance()->colour3_ = 0xff181818; //nearly black
         AlphaTheme::getInstance()->colour4_ = 0xff202020; //very dark grey
+        AlphaTheme::getInstance()->textColour_ = 0xffffffff; //white
         
         AlphaTheme::getInstance()->colour1 = Colour(AlphaTheme::getInstance()->colour1_); //blue
         AlphaTheme::getInstance()->colour2 = Colour(AlphaTheme::getInstance()->colour2_); //light blue
         AlphaTheme::getInstance()->colour3 = Colour(AlphaTheme::getInstance()->colour3_); //nearly black
         AlphaTheme::getInstance()->colour4 = Colour(AlphaTheme::getInstance()->colour4_); //very dark grey
+        AlphaTheme::getInstance()->textColour = Colour(AlphaTheme::getInstance()->textColour_); //white
         
         // set up the standard set of colours..
         
@@ -170,9 +172,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         static const uint32 standardColours[] =
         {
             TextButton::buttonColourId,                 textButtonColour,
-            TextButton::buttonOnColourId,               0xff1a56ab,
-            TextButton::textColourOnId,                 0xffffffff,
-            TextButton::textColourOffId,                0xffffffff,
+            TextButton::buttonOnColourId,               AlphaTheme::getInstance()->colour1_,
+            TextButton::textColourOnId,                 AlphaTheme::getInstance()->textColour_,
+            TextButton::textColourOffId,                AlphaTheme::getInstance()->textColour_,
             
             DrawableButton::backgroundColourId,         0x00000000,
             DrawableButton::backgroundOnColourId,       AlphaTheme::getInstance()->colour1_,
@@ -181,12 +183,12 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             ComboBox::buttonColourId,                   0xffcccccc,
             ComboBox::outlineColourId,                  standardOutlineColour,
             
-            ToggleButton::textColourId,                 0xffffffff,
+            ToggleButton::textColourId,                 AlphaTheme::getInstance()->textColour_,
             
             TextEditor::backgroundColourId,             0x00000000,
             TextEditor::textColourId,                   0xffffffff,
             TextEditor::highlightColourId,              AlphaTheme::getInstance()->colour1_,
-            TextEditor::highlightedTextColourId,        0xffffffff,
+            TextEditor::highlightedTextColourId,        AlphaTheme::getInstance()->textColour_,
             TextEditor::outlineColourId,                0x00000000,
             TextEditor::focusedOutlineColourId,         textButtonColour,
             TextEditor::shadowColourId,                 0x38000000,
@@ -194,36 +196,36 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             CaretComponent::caretColourId,              0xff000000,
             
             Label::backgroundColourId,                  0x00000000,
-            Label::textColourId,                        0xffffffff,
+            Label::textColourId,                        AlphaTheme::getInstance()->textColour_,
             Label::outlineColourId,                     0x00000000,
             
             ScrollBar::backgroundColourId,              0x00000000,
-            ScrollBar::thumbColourId,                   0xffffffff,
+            ScrollBar::thumbColourId,                   AlphaTheme::getInstance()->textColour_,
             
             TreeView::linesColourId,                    0x4c000000,
             TreeView::backgroundColourId,               0xff000000,
             TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
             
             PopupMenu::backgroundColourId,              0x00000000,
-            PopupMenu::textColourId,                    0xffffffff,
+            PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
             PopupMenu::headerTextColourId,              0xff000000,
-            PopupMenu::highlightedTextColourId,         0xffffffff,
+            PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
             PopupMenu::highlightedBackgroundColourId,   AlphaTheme::getInstance()->colour1_,
             
-            ComboBox::textColourId,                     0xffffffff,
+            ComboBox::textColourId,                     AlphaTheme::getInstance()->textColour_,
             ComboBox::backgroundColourId,               0x0fcccccc,
             ComboBox::arrowColourId,                    0xffcccccc,
             
             ListBox::backgroundColourId,                0xff000000,
             ListBox::outlineColourId,                   standardOutlineColour,
-            ListBox::textColourId,                      0xffffffff,
+            ListBox::textColourId,                      AlphaTheme::getInstance()->textColour_,
             
             Slider::backgroundColourId,                 0x00000000,
             Slider::thumbColourId,                      textButtonColour,
             Slider::trackColourId,                      AlphaTheme::getInstance()->colour1_,
             Slider::rotarySliderFillColourId,           AlphaTheme::getInstance()->colour1_,
             Slider::rotarySliderOutlineColourId,        0xff2c2c2c, //0xff3c3c3c
-            Slider::textBoxTextColourId,                0xffffffff,
+            Slider::textBoxTextColourId,                AlphaTheme::getInstance()->textColour_,
             Slider::textBoxBackgroundColourId,          0x00000000,
             Slider::textBoxHighlightColourId,           textHighlightColour,
             Slider::textBoxOutlineColourId,             standardOutlineColour,
@@ -239,7 +241,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             ProgressBar::foregroundColourId,            0xff808080, //grey
             
             TooltipWindow::backgroundColourId,          0x00000000,
-            TooltipWindow::textColourId,                0xffffffff,
+            TooltipWindow::textColourId,                AlphaTheme::getInstance()->textColour_,
             TooltipWindow::outlineColourId,             0x4c000000,
             
             TabbedComponent::backgroundColourId,        0x00000000,
@@ -257,38 +259,15 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             HyperlinkButton::textColourId,              0xcc1111ee,
             
             GroupComponent::outlineColourId,            0x66000000,
-            GroupComponent::textColourId,               0xffffffff,
+            GroupComponent::textColourId,               AlphaTheme::getInstance()->textColour_,
             
             DirectoryContentsDisplayComponent::highlightColourId,   AlphaTheme::getInstance()->colour1_, // <-- used for fileList and fileTree item's
-            DirectoryContentsDisplayComponent::textColourId,        0xffffffff,
-            
-            0x1000440, /*LassoComponent::lassoFillColourId*/        0x66dddddd,
-            0x1000441, /*LassoComponent::lassoOutlineColourId*/     0x99111111,
-            
-            0x1005000, /*MidiKeyboardComponent::whiteNoteColourId*/               0xffffffff,
-            0x1005001, /*MidiKeyboardComponent::blackNoteColourId*/               0xff000000,
-            0x1005002, /*MidiKeyboardComponent::keySeparatorLineColourId*/        0x66000000,
-            0x1005003, /*MidiKeyboardComponent::mouseOverKeyOverlayColourId*/     0x80ffff00,
-            0x1005004, /*MidiKeyboardComponent::keyDownOverlayColourId*/          0xffb6b600,
-            0x1005005, /*MidiKeyboardComponent::textLabelColourId*/               0xff000000,
-            0x1005006, /*MidiKeyboardComponent::upDownButtonBackgroundColourId*/  0xffd3d3d3,
-            0x1005007, /*MidiKeyboardComponent::upDownButtonArrowColourId*/       0xff000000,
-            
-            0x1004500, /*CodeEditorComponent::backgroundColourId*/                0xffffffff,
-            0x1004502, /*CodeEditorComponent::highlightColourId*/                 textHighlightColour,
-            0x1004503, /*CodeEditorComponent::defaultTextColourId*/               0xffffffff,
-            
-            0x1007000, /*ColourSelector::backgroundColourId*/                     0xff000000,
-            0x1007001, /*ColourSelector::labelTextColourId*/                      0xffffffff,
-            
-            0x100ad00, /*KeyMappingEditorComponent::backgroundColourId*/          0x00000000,
-            0x100ad01, /*KeyMappingEditorComponent::textColourId*/                0xff000000,
+            DirectoryContentsDisplayComponent::textColourId,        AlphaTheme::getInstance()->textColour_,
             
             FileSearchPathListComponent::backgroundColourId,        0x00000000,
             
-            FileChooserDialogBox::titleTextColourId,                0xffffffff,
-            
-            DrawableButton::textColourId,                           0xffffffff,
+            FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
+            DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
         };
         
         for (int i = 0; i < numElementsInArray (standardColours); i += 2)
@@ -317,15 +296,17 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         
         //set custom and default AlphaLive colours here...
         
-        AlphaTheme::getInstance()->colour1_ = 0xff1a54ab; //blue
-        AlphaTheme::getInstance()->colour2_ = 0xff3c76c5; //light blue
-        AlphaTheme::getInstance()->colour3_ = 0xff181818; //nearly black
-        AlphaTheme::getInstance()->colour4_ = 0xff202020; //very dark grey
+        AlphaTheme::getInstance()->colour1_ = 0xffff0000; //blue //red
+        AlphaTheme::getInstance()->colour2_ = 0xffffff00; //light blue //yellow
+        AlphaTheme::getInstance()->colour3_ = 0xff008000; //nearly black //green
+        AlphaTheme::getInstance()->colour4_ = 0xffffffff; //very dark grey //white
+        AlphaTheme::getInstance()->textColour_ = 0xffffffff; //white
         
         AlphaTheme::getInstance()->colour1 = Colour(AlphaTheme::getInstance()->colour1_); //blue
         AlphaTheme::getInstance()->colour2 = Colour(AlphaTheme::getInstance()->colour2_); //light blue
         AlphaTheme::getInstance()->colour3 = Colour(AlphaTheme::getInstance()->colour3_); //nearly black
         AlphaTheme::getInstance()->colour4 = Colour(AlphaTheme::getInstance()->colour4_); //very dark grey
+        AlphaTheme::getInstance()->textColour = Colour(AlphaTheme::getInstance()->textColour_); //white
         
         // set up the standard set of colours..
         const uint32 textButtonColour      = 0xff000000;
@@ -335,9 +316,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         static const uint32 standardColours[] =
         {
             TextButton::buttonColourId,                 textButtonColour,
-            TextButton::buttonOnColourId,               0xff1a56ab,
-            TextButton::textColourOnId,                 0xffffffff,
-            TextButton::textColourOffId,                0xffffffff,
+            TextButton::buttonOnColourId,               AlphaTheme::getInstance()->colour1_,
+            TextButton::textColourOnId,                 AlphaTheme::getInstance()->textColour_,
+            TextButton::textColourOffId,                AlphaTheme::getInstance()->textColour_,
             
             DrawableButton::backgroundColourId,         0x00000000,
             DrawableButton::backgroundOnColourId,       AlphaTheme::getInstance()->colour1_,
@@ -346,12 +327,12 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             ComboBox::buttonColourId,                   0xffcccccc,
             ComboBox::outlineColourId,                  standardOutlineColour,
             
-            ToggleButton::textColourId,                 0xffffffff,
+            ToggleButton::textColourId,                 AlphaTheme::getInstance()->textColour_,
             
             TextEditor::backgroundColourId,             0x00000000,
             TextEditor::textColourId,                   0xffffffff,
             TextEditor::highlightColourId,              AlphaTheme::getInstance()->colour1_,
-            TextEditor::highlightedTextColourId,        0xffffffff,
+            TextEditor::highlightedTextColourId,        AlphaTheme::getInstance()->textColour_,
             TextEditor::outlineColourId,                0x00000000,
             TextEditor::focusedOutlineColourId,         textButtonColour,
             TextEditor::shadowColourId,                 0x38000000,
@@ -359,36 +340,36 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             CaretComponent::caretColourId,              0xff000000,
             
             Label::backgroundColourId,                  0x00000000,
-            Label::textColourId,                        0xffffffff,
+            Label::textColourId,                        AlphaTheme::getInstance()->textColour_,
             Label::outlineColourId,                     0x00000000,
             
             ScrollBar::backgroundColourId,              0x00000000,
-            ScrollBar::thumbColourId,                   0xffffffff,
+            ScrollBar::thumbColourId,                   AlphaTheme::getInstance()->textColour_,
             
             TreeView::linesColourId,                    0x4c000000,
             TreeView::backgroundColourId,               0xff000000,
             TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
             
             PopupMenu::backgroundColourId,              0x00000000,
-            PopupMenu::textColourId,                    0xffffffff,
+            PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
             PopupMenu::headerTextColourId,              0xff000000,
-            PopupMenu::highlightedTextColourId,         0xffffffff,
+            PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
             PopupMenu::highlightedBackgroundColourId,   AlphaTheme::getInstance()->colour1_,
             
-            ComboBox::textColourId,                     0xffffffff,
+            ComboBox::textColourId,                     AlphaTheme::getInstance()->textColour_,
             ComboBox::backgroundColourId,               0x0fcccccc,
             ComboBox::arrowColourId,                    0xffcccccc,
             
             ListBox::backgroundColourId,                0xff000000,
             ListBox::outlineColourId,                   standardOutlineColour,
-            ListBox::textColourId,                      0xffffffff,
+            ListBox::textColourId,                      AlphaTheme::getInstance()->textColour_,
             
             Slider::backgroundColourId,                 0x00000000,
             Slider::thumbColourId,                      textButtonColour,
             Slider::trackColourId,                      AlphaTheme::getInstance()->colour1_,
             Slider::rotarySliderFillColourId,           AlphaTheme::getInstance()->colour1_,
             Slider::rotarySliderOutlineColourId,        0xff2c2c2c, //0xff3c3c3c
-            Slider::textBoxTextColourId,                0xffffffff,
+            Slider::textBoxTextColourId,                AlphaTheme::getInstance()->textColour_,
             Slider::textBoxBackgroundColourId,          0x00000000,
             Slider::textBoxHighlightColourId,           textHighlightColour,
             Slider::textBoxOutlineColourId,             standardOutlineColour,
@@ -404,7 +385,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             ProgressBar::foregroundColourId,            0xff808080, //grey
             
             TooltipWindow::backgroundColourId,          0x00000000,
-            TooltipWindow::textColourId,                0xffffffff,
+            TooltipWindow::textColourId,                AlphaTheme::getInstance()->textColour_,
             TooltipWindow::outlineColourId,             0x4c000000,
             
             TabbedComponent::backgroundColourId,        0x00000000,
@@ -422,38 +403,15 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             HyperlinkButton::textColourId,              0xcc1111ee,
             
             GroupComponent::outlineColourId,            0x66000000,
-            GroupComponent::textColourId,               0xffffffff,
+            GroupComponent::textColourId,               AlphaTheme::getInstance()->textColour_,
             
             DirectoryContentsDisplayComponent::highlightColourId,   AlphaTheme::getInstance()->colour1_, // <-- used for fileList and fileTree item's
-            DirectoryContentsDisplayComponent::textColourId,        0xffffffff,
-            
-            0x1000440, /*LassoComponent::lassoFillColourId*/        0x66dddddd,
-            0x1000441, /*LassoComponent::lassoOutlineColourId*/     0x99111111,
-            
-            0x1005000, /*MidiKeyboardComponent::whiteNoteColourId*/               0xffffffff,
-            0x1005001, /*MidiKeyboardComponent::blackNoteColourId*/               0xff000000,
-            0x1005002, /*MidiKeyboardComponent::keySeparatorLineColourId*/        0x66000000,
-            0x1005003, /*MidiKeyboardComponent::mouseOverKeyOverlayColourId*/     0x80ffff00,
-            0x1005004, /*MidiKeyboardComponent::keyDownOverlayColourId*/          0xffb6b600,
-            0x1005005, /*MidiKeyboardComponent::textLabelColourId*/               0xff000000,
-            0x1005006, /*MidiKeyboardComponent::upDownButtonBackgroundColourId*/  0xffd3d3d3,
-            0x1005007, /*MidiKeyboardComponent::upDownButtonArrowColourId*/       0xff000000,
-            
-            0x1004500, /*CodeEditorComponent::backgroundColourId*/                0xffffffff,
-            0x1004502, /*CodeEditorComponent::highlightColourId*/                 textHighlightColour,
-            0x1004503, /*CodeEditorComponent::defaultTextColourId*/               0xffffffff,
-            
-            0x1007000, /*ColourSelector::backgroundColourId*/                     0xff000000,
-            0x1007001, /*ColourSelector::labelTextColourId*/                      0xffffffff,
-            
-            0x100ad00, /*KeyMappingEditorComponent::backgroundColourId*/          0x00000000,
-            0x100ad01, /*KeyMappingEditorComponent::textColourId*/                0xff000000,
+            DirectoryContentsDisplayComponent::textColourId,        AlphaTheme::getInstance()->textColour_,
             
             FileSearchPathListComponent::backgroundColourId,        0x00000000,
             
-            FileChooserDialogBox::titleTextColourId,                0xffffffff,
-            
-            DrawableButton::textColourId,                           0xffffffff,
+            FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
+            DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
         };
         
         for (int i = 0; i < numElementsInArray (standardColours); i += 2)

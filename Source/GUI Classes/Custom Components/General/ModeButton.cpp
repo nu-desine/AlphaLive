@@ -64,7 +64,7 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			g.setGradientFill(highlightGradient);
 			g.drawEllipse((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), (getHeight()*0.025));
 			
-			g.setColour(Colours::white.withAlpha(0.8f));
+			g.setColour(AlphaTheme::getInstance()->iconColour.withAlpha(0.8f));
 			
             break;
         }
@@ -83,7 +83,7 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			g.drawEllipse((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), (getHeight()*0.025));
 			
 			
-			g.setColour(Colours::white.withAlpha(1.0f));
+			g.setColour(AlphaTheme::getInstance()->iconColour.withAlpha(1.0f));
 			
             break;
         }
@@ -101,7 +101,7 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			g.setGradientFill(highlightGradient);
 			g.drawEllipse((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), (getHeight()*0.025));
 			
-			g.setColour(Colours::white.withAlpha(1.0f));
+			g.setColour(AlphaTheme::getInstance()->iconColour.withAlpha(1.0f));
 			
             break;
         }
@@ -119,7 +119,7 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			g.setGradientFill(highlightGradient);
 			g.drawEllipse((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), (getHeight()*0.025));
 			
-			g.setColour(Colours::white.withAlpha(1.0f));
+			g.setColour(AlphaTheme::getInstance()->iconColour.withAlpha(1.0f));
 			
             break;
         }
@@ -137,7 +137,7 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			g.setGradientFill(highlightGradient);
 			g.drawEllipse((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), (getHeight()*0.025));
 			
-			g.setColour(Colours::white.withAlpha(1.0f));
+			g.setColour(AlphaTheme::getInstance()->iconColour.withAlpha(1.0f));
 			
             break;
         }
@@ -155,7 +155,7 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 			g.setGradientFill(highlightGradient);
 			g.drawEllipse((getWidth()* 0.03), (getHeight()* 0.03), (getWidth()*0.94), (getHeight()*0.94), (getHeight()*0.025));
 			
-			g.setColour(Colours::white.withAlpha(1.0f));
+			g.setColour(AlphaTheme::getInstance()->iconColour.withAlpha(1.0f));
 			
             break;
         }
@@ -163,7 +163,6 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
 		default:
 			break;
     }
-    
     
 //    g.drawImage (* symbol,
 //                 0, 0, getWidth(), getHeight(),
@@ -173,7 +172,8 @@ void ModeButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButton
                                             getHeight()), 
                            AffineTransform::rotation(imageRotationAngle, 
                                                      (getWidth() / 2) + pivotXOffset_, 
-                                                     (getHeight() / 2) + pivotYOffset_));
+                                                     (getHeight() / 2) + pivotYOffset_),
+                           true);
 }
 
 bool ModeButton::hitTest (int x, int y)

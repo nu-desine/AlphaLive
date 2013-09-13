@@ -106,7 +106,7 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
 	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse((getWidth()*0.1), (getHeight()*0.1), (getWidth()*0.8), (getHeight()*0.8), 1.0f);
 	
-	g.setColour(Colours::white);
+	g.setColour(AlphaTheme::getInstance()->iconColour);
 	g.drawImage (theImage,
 				 (getWidth()*0.22), (getHeight()*0.22), (getWidth()*0.6), (getHeight()*0.6),
 				 0, 0, theImage.getWidth(), theImage.getHeight(), true);

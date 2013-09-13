@@ -169,6 +169,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->foregroundColour_ = 0xff808080; //grey
         AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffd3d3d3; //light grey
         AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff555555; //dark grey
+        AlphaTheme::getInstance()->iconColour_ = 0xffffffff; //white (same as text colour)
         
         AlphaTheme::getInstance()->mainColour = Colour(AlphaTheme::getInstance()->mainColour_); //blue
         AlphaTheme::getInstance()->mainColourLighter = Colour(AlphaTheme::getInstance()->mainColourLighter_); //light blue
@@ -179,6 +180,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->foregroundColour = Colour(AlphaTheme::getInstance()->foregroundColour_); //grey
         AlphaTheme::getInstance()->foregroundColourLighter = Colour(AlphaTheme::getInstance()->foregroundColourLighter_); //light grey
         AlphaTheme::getInstance()->foregroundColourDarker = Colour(AlphaTheme::getInstance()->foregroundColourDarker_); //dark grey
+        AlphaTheme::getInstance()->iconColour = Colour(AlphaTheme::getInstance()->iconColour_); //white (same as text colour)
         
         // set up the standard set of colours..
         static const uint32 standardColours[] =
@@ -250,7 +252,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             AlertWindow::outlineColourId,               0xff666666,
             
             ProgressBar::backgroundColourId,            AlphaTheme::getInstance()->childBackgroundColourLighter_,
-            ProgressBar::foregroundColourId,            0xff808080, //grey
+            ProgressBar::foregroundColourId,            AlphaTheme::getInstance()->foregroundColour_,
             
             TooltipWindow::backgroundColourId,          0x00000000,
             TooltipWindow::textColourId,                AlphaTheme::getInstance()->textColour_,
@@ -312,21 +314,23 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->mainColourLighter_ = 0xffffff00; //light blue //yellow
         AlphaTheme::getInstance()->childBackgroundColour_ = 0xff008000; //nearly black //green
         AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xffffffff; //very dark grey //white
-        AlphaTheme::getInstance()->textColour_ = 0xffffffff; //white
+        AlphaTheme::getInstance()->textColour_ = 0xff000000; //black
         AlphaTheme::getInstance()->backgroundColour_ = 0xffffa500; //orange
         AlphaTheme::getInstance()->foregroundColour_ = 0xffff69b4; //hot pink
         AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffffa07a; //light salmon
         AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff800000; //dark maroon
+        AlphaTheme::getInstance()->iconColour_ = 0xff000000; //black (same as text colour)
         
         AlphaTheme::getInstance()->mainColour = Colour(AlphaTheme::getInstance()->mainColour_); //blue
         AlphaTheme::getInstance()->mainColourLighter = Colour(AlphaTheme::getInstance()->mainColourLighter_); //light blue
         AlphaTheme::getInstance()->childBackgroundColour = Colour(AlphaTheme::getInstance()->childBackgroundColour_); //nearly black
         AlphaTheme::getInstance()->childBackgroundColourLighter = Colour(AlphaTheme::getInstance()->childBackgroundColourLighter_); //very dark grey
-        AlphaTheme::getInstance()->textColour = Colour(AlphaTheme::getInstance()->textColour_); //white
+        AlphaTheme::getInstance()->textColour = Colour(AlphaTheme::getInstance()->textColour_); //black
         AlphaTheme::getInstance()->backgroundColour = Colour(AlphaTheme::getInstance()->backgroundColour_); //orange
         AlphaTheme::getInstance()->foregroundColour = Colour(AlphaTheme::getInstance()->foregroundColour_); //grey
         AlphaTheme::getInstance()->foregroundColourLighter = Colour(AlphaTheme::getInstance()->foregroundColourLighter_); //light grey
         AlphaTheme::getInstance()->foregroundColourDarker = Colour(AlphaTheme::getInstance()->foregroundColourDarker_); //dark grey
+        AlphaTheme::getInstance()->iconColour = Colour(AlphaTheme::getInstance()->iconColour_); //black (same as text colour)
         
         // set up the standard set of colours..
         static const uint32 standardColours[] =
@@ -398,7 +402,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             AlertWindow::outlineColourId,               0xff666666,
             
             ProgressBar::backgroundColourId,            AlphaTheme::getInstance()->childBackgroundColourLighter_,
-            ProgressBar::foregroundColourId,            0xff808080, //grey
+            ProgressBar::foregroundColourId,            AlphaTheme::getInstance()->foregroundColour_,
             
             TooltipWindow::backgroundColourId,          0x00000000,
             TooltipWindow::textColourId,                AlphaTheme::getInstance()->textColour_,

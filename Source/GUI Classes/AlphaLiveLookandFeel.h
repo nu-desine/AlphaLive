@@ -34,10 +34,10 @@ public:
     
     // custom/default colours
     uint32 mainColour_, mainColourLighter_, childBackgroundColour_, childBackgroundColourLighter_, textColour_;
-    uint32 backgroundColour_, foregroundColour_, foregroundColourLighter_, foregroundColourDarker_;
+    uint32 backgroundColour_, foregroundColour_, foregroundColourLighter_, foregroundColourDarker_, iconColour_;
     
     Colour mainColour, mainColourLighter, childBackgroundColour, childBackgroundColourLighter, textColour;
-    Colour backgroundColour, foregroundColour, foregroundColourLighter, foregroundColourDarker;
+    Colour backgroundColour, foregroundColour, foregroundColourLighter, foregroundColourDarker, iconColour;
     
     // background images
     Image mainImage, padsOffImage, padsOnImage, modeOffImage, padsBackgroundImage, settingsOffImage;

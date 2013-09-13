@@ -102,7 +102,7 @@ namespace BinaryDataNew
     const int           materia_modeoff_pngSize = 83935;
 
     extern const char*  materia_padsbg_png;
-    const int           materia_padsbg_pngSize = 427513;
+    const int           materia_padsbg_pngSize = 447846;
 
     extern const char*  materia_padsoff_png;
     const int           materia_padsoff_pngSize = 109978;

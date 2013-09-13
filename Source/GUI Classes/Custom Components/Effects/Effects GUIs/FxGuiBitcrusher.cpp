@@ -70,7 +70,7 @@ GuiBitcrusher::GuiBitcrusher(MainComponent &ref)
     intensitySlider->setRange(0.0, 1.0, 0.001);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
-    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->colour2);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
     
     addAndMakeVisible(syncButton = new AlphaTextButton(translate("SYNC")));
     syncButton->setClickingTogglesState(true);
@@ -98,7 +98,7 @@ GuiBitcrusher::GuiBitcrusher(MainComponent &ref)
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->colour1);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
 	

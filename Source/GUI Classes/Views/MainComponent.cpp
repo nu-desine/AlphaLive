@@ -178,7 +178,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //gain and pan label
     addAndMakeVisible(gainPanValueLabel = new Label("value label", String::empty));
     gainPanValueLabel->setJustificationType(Justification::horizontallyCentred);
-    gainPanValueLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->colour1);
+    gainPanValueLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
     gainPanValueLabel->setFont(Font(12));
     gainPanValueLabel->addMouseListener(this, true);
     

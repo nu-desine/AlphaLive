@@ -51,7 +51,7 @@ void GuiCircleBackground::paint (Graphics &g)
                 AlphaTheme::getInstance()->settingsOffImage.getWidth(),
                 AlphaTheme::getInstance()->settingsOffImage.getHeight());
 	
-	ColourGradient fillGradient(AlphaTheme::getInstance()->colour3,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, Colours::black, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);

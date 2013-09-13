@@ -74,12 +74,12 @@ GuiHighPassFilter::GuiHighPassFilter(MainComponent &ref)
     intensitySlider->setValue(1.0, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
-    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->colour2);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
     
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->colour1);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
 

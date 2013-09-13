@@ -61,7 +61,7 @@ void AlphaPopUpButton::paintButton (Graphics& g, bool isMouseOverButton, bool is
 		case 0:
         {
             
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->colour2, (getWidth()*0.5), 0, false);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->mainColour, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->mainColourLighter, (getWidth()*0.5), 0, false);
 			g.setGradientFill(fillGradient);
 			
 			
@@ -71,7 +71,7 @@ void AlphaPopUpButton::paintButton (Graphics& g, bool isMouseOverButton, bool is
 		case 1:
         {
             
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour2, (getWidth()*0.5), (getHeight()*0.9), AlphaTheme::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.5), false);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->mainColourLighter, (getWidth()*0.5), (getHeight()*0.9), AlphaTheme::getInstance()->mainColour, (getWidth()*0.5), (getHeight()*0.5), false);
 			g.setGradientFill(fillGradient);
 		
 			
@@ -81,7 +81,7 @@ void AlphaPopUpButton::paintButton (Graphics& g, bool isMouseOverButton, bool is
 		case 2:
         {
             
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour2, (getWidth()*0.5), (getHeight()*0.7), AlphaTheme::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.5), false);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->mainColourLighter, (getWidth()*0.5), (getHeight()*0.7), AlphaTheme::getInstance()->mainColour, (getWidth()*0.5), (getHeight()*0.5), false);
 			g.setGradientFill(fillGradient);
 			
 			
@@ -91,7 +91,7 @@ void AlphaPopUpButton::paintButton (Graphics& g, bool isMouseOverButton, bool is
 		case 3:
         {
             
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->colour2, (getWidth()*0.5), 0, false);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->mainColour, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->mainColourLighter, (getWidth()*0.5), 0, false);
 			g.setGradientFill(fillGradient);
 			
 			
@@ -101,7 +101,7 @@ void AlphaPopUpButton::paintButton (Graphics& g, bool isMouseOverButton, bool is
 		case 4:
         {
             
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour2, (getWidth()*0.5), (getHeight()*0.9), AlphaTheme::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.5), false);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->mainColourLighter, (getWidth()*0.5), (getHeight()*0.9), AlphaTheme::getInstance()->mainColour, (getWidth()*0.5), (getHeight()*0.5), false);
 			g.setGradientFill(fillGradient);
 			
 			
@@ -111,7 +111,7 @@ void AlphaPopUpButton::paintButton (Graphics& g, bool isMouseOverButton, bool is
 		case 5:
         {
             
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour2, (getWidth()*0.5), (getHeight()*0.7), AlphaTheme::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.5), false);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->mainColourLighter, (getWidth()*0.5), (getHeight()*0.7), AlphaTheme::getInstance()->mainColour, (getWidth()*0.5), (getHeight()*0.5), false);
 			g.setGradientFill(fillGradient);
 		
 			

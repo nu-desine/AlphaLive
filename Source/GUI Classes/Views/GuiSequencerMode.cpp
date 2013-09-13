@@ -416,7 +416,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	previewButton->setClickingTogglesState (true);
 	previewButton->addListener (this);
     previewButton->addMouseListener(this, true);
-	//previewButton->setBackgroundColours (Colours::black, AlphaTheme::getInstance()->mainColour);
+	//previewButton->setBackgroundColours (AlphaTheme::getInstance()->backgroundColour, AlphaTheme::getInstance()->mainColour);
 	addAndMakeVisible (previewButton);
 	
 	addAndMakeVisible(nextSequenceButton = new AlphaTextButton());
@@ -591,10 +591,10 @@ void GuiSequencerMode::resized()
 
 void GuiSequencerMode::paint (Graphics& g)
 {
-	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	g.fillEllipse(802, 379, 86, 86);
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	
 	g.fillEllipse(786,218, 48, 48);
 	g.fillEllipse(844,216, 48, 48);
@@ -625,7 +625,7 @@ void GuiSequencerMode::paint (Graphics& g)
 		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.fillPath(linkButtonBg, getTransform());
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(800,265, 38, 38);
 	}
 	
@@ -664,7 +664,7 @@ void GuiSequencerMode::paint (Graphics& g)
 		g.drawEllipse(891,469, 38, 38, 1.0);
 		g.drawEllipse(915,428, 38, 38, 1.0);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		Path pieSeg;
 		pieSeg.addPieSegment(802, 379, 86, 86, (125 * (M_PI / 180)), (235 * (M_PI / 180)), 0.2f);
 		g.fillPath(pieSeg);
@@ -713,7 +713,7 @@ void GuiSequencerMode::paint (Graphics& g)
     if(sequenceSettingsButton->getToggleStateValue()==true)
 	{
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(662, 366, 27, 27);
 		g.fillEllipse(657, 396, 27, 27);
 		g.fillEllipse(672, 337, 27, 27);
@@ -721,48 +721,48 @@ void GuiSequencerMode::paint (Graphics& g)
 		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.fillEllipse(689, 266, 312, 312);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(698, 275, 294, 294);
 		
 		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.fillEllipse(707, 284, 276, 276);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(716, 293, 258, 258);
 		
 		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.fillEllipse(725, 302, 240, 240);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(734, 311, 222, 222);
 		
 		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.fillEllipse(743, 320, 204, 204);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(752, 329, 186, 186);
 		
 		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.fillEllipse(761, 338, 168, 168);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(770, 347, 150, 150);
 		
 		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.fillEllipse(779, 356, 132, 132);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(788, 365, 114, 114);
 		
 		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.drawEllipse(797, 374, 96, 96,1.0);
 		
-		ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, Colours::black, 845 , 383, false);
+		ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 		g.setGradientFill(fillGradient);
 		
 		g.fillEllipse(802, 379, 86, 86);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
         Path pieSeg;
         pieSeg.addPieSegment(802, 379, 86, 86, (125 * (M_PI / 180)), (235 * (M_PI / 180)), 0.2f);
         g.fillPath(pieSeg);

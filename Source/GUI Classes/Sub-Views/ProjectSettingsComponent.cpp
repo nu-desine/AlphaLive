@@ -69,7 +69,7 @@ void ProjectSettingsComponent::resized()
 
 void ProjectSettingsComponent::paint (Graphics& g)
 {
-    g.setColour(Colours::black.withAlpha(0.8f));
+    g.setColour(AlphaTheme::getInstance()->backgroundColour.withAlpha(0.8f));
     g.fillRect(0, 0, getWidth(), getHeight());
     
     g.setColour(AlphaTheme::getInstance()->childBackgroundColourLighter.withAlpha(1.0f));

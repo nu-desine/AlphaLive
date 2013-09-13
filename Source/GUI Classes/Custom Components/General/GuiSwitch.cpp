@@ -33,7 +33,7 @@ void GuiSwitch::resized()
 void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown)
 {
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillPath(hitPath, getTransform());
 	
 	
@@ -43,7 +43,7 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
 		case 0:
         {
             
-			ColourGradient fillGradient(Colours::black, (getWidth()*0.5), (getHeight()*0.6), AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), 0, false);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->backgroundColour, (getWidth()*0.5), (getHeight()*0.6), AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), 0, false);
 			g.setGradientFill(fillGradient);
 
             break;
@@ -52,7 +52,7 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
 		case 1:
         {
             
-			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.9), Colours::black, (getWidth()*0.5), (getHeight()*0.3), false);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.9), AlphaTheme::getInstance()->backgroundColour, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
 
             break;
@@ -61,7 +61,7 @@ void GuiSwitch::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonD
 		case 2:
         {
             
-			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.7), Colours::black, (getWidth()*0.5), (getHeight()*0.3), false);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.7), AlphaTheme::getInstance()->backgroundColour, (getWidth()*0.5), (getHeight()*0.3), false);
 			g.setGradientFill(fillGradient);
 
             break;

@@ -20,6 +20,7 @@
 
 
 #include "AlphaSlider.h"
+#include "../../AlphaLiveLookandFeel.h"
 
 
 AlphaSlider::AlphaSlider()
@@ -68,7 +69,7 @@ void AlphaSlider::paint(Graphics& g)
     
 	thePath.addEllipse(0, 0, getWidth(), getHeight());
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillPath(thePath);
 	
 	g.setColour(Colours::grey.withAlpha(0.3f));

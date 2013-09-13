@@ -307,12 +307,12 @@ void GuiMidiMode::resized()
 void GuiMidiMode::paint (Graphics& g)
 {
     //std::cout << "Paint midi mode... ";
-	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	
 	g.fillEllipse(786,218, 48, 48);
 	g.fillEllipse(844,216, 48, 48);

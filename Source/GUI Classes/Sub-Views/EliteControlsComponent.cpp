@@ -94,7 +94,7 @@ void EliteControlsComponent::resized()
 void EliteControlsComponent::paint (Graphics& g)
 {
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	
 	g.fillRoundedRectangle(49-X_OFFSET, 590-Y_OFFSET, 26, 26, 2);
 	g.fillRoundedRectangle(83-X_OFFSET, 590-Y_OFFSET, 26, 26, 2);

@@ -167,7 +167,7 @@ void GuiControllerMode::resized()
 void GuiControllerMode::paint (Graphics& g)
 {
     
-	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);
@@ -185,7 +185,7 @@ void GuiControllerMode::drawButtonsBackground(Graphics &g)
 {
 	//this draws an outline around the midi channel buttons
     
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	
 	g.fillEllipse(646,436, 27, 27);
 	g.fillEllipse(653,464, 27, 27);

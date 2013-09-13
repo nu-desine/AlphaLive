@@ -153,7 +153,7 @@ void GuiDelay::resized()
 void GuiDelay::paint (Graphics& g)
 {
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(118, 232, 38, 38);
 	
 	g.setColour(Colours::grey.withAlpha(0.3f));

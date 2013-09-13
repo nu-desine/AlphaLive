@@ -51,7 +51,7 @@ void AlphaPopUpImageButton::resized()
 void AlphaPopUpImageButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown)
 {
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillPath(hitPath, getTransform());
 	
 	float imageAlpha = 1.0f;

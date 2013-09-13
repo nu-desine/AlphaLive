@@ -350,12 +350,12 @@ void GuiEliteControlsSettings::resized()
 void GuiEliteControlsSettings::paint (Graphics& g)
 {
 	
-	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	Path pieSeg;
 	pieSeg.addPieSegment(802, 379, 86, 86, (125 * (M_PI / 180)), (235 * (M_PI / 180)), 0.2f);
 	g.fillPath(pieSeg);
@@ -403,7 +403,7 @@ void GuiEliteControlsSettings::paint (Graphics& g)
 	
 //	if(dialMidiChannel[0]->isVisible())
 //	{
-//		g.setColour(Colours::black);
+//		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 //		g.fillEllipse(786,218, 48, 48);
 //	}
     

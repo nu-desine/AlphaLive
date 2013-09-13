@@ -51,7 +51,7 @@ void GuiCircleBackground::paint (Graphics &g)
                 AlphaTheme::getInstance()->settingsOffImage.getWidth(),
                 AlphaTheme::getInstance()->settingsOffImage.getHeight());
 	
-	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);
@@ -65,7 +65,7 @@ void GuiCircleBackground::paint (Graphics &g)
 		linkButtonBg.addCentredArc(845, 423, 162, 162, 0, (330 * (M_PI / 180)), (367 * (M_PI / 180)), false);
 														   
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillPath(linkButtonBg, getTransform());
 		g.fillEllipse(796,261, 46, 46);
 		

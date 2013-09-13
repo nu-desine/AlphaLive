@@ -156,12 +156,15 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->childBackgroundColour_ = 0xff181818; //nearly black
         AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xff202020; //very dark grey
         AlphaTheme::getInstance()->textColour_ = 0xffffffff; //white
+        AlphaTheme::getInstance()->backgroundColour_ = 0xff000000; //black
+        
         
         AlphaTheme::getInstance()->mainColour = Colour(AlphaTheme::getInstance()->mainColour_); //blue
         AlphaTheme::getInstance()->mainColourLighter = Colour(AlphaTheme::getInstance()->mainColourLighter_); //light blue
         AlphaTheme::getInstance()->childBackgroundColour = Colour(AlphaTheme::getInstance()->childBackgroundColour_); //nearly black
         AlphaTheme::getInstance()->childBackgroundColourLighter = Colour(AlphaTheme::getInstance()->childBackgroundColourLighter_); //very dark grey
         AlphaTheme::getInstance()->textColour = Colour(AlphaTheme::getInstance()->textColour_); //white
+        AlphaTheme::getInstance()->backgroundColour = Colour(AlphaTheme::getInstance()->backgroundColour_); //black
         
         // set up the standard set of colours..
         
@@ -301,12 +304,14 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->childBackgroundColour_ = 0xff008000; //nearly black //green
         AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xffffffff; //very dark grey //white
         AlphaTheme::getInstance()->textColour_ = 0xffffffff; //white
+        AlphaTheme::getInstance()->backgroundColour_ = 0xffffa500; //black
         
         AlphaTheme::getInstance()->mainColour = Colour(AlphaTheme::getInstance()->mainColour_); //blue
         AlphaTheme::getInstance()->mainColourLighter = Colour(AlphaTheme::getInstance()->mainColourLighter_); //light blue
         AlphaTheme::getInstance()->childBackgroundColour = Colour(AlphaTheme::getInstance()->childBackgroundColour_); //nearly black
         AlphaTheme::getInstance()->childBackgroundColourLighter = Colour(AlphaTheme::getInstance()->childBackgroundColourLighter_); //very dark grey
         AlphaTheme::getInstance()->textColour = Colour(AlphaTheme::getInstance()->textColour_); //white
+        AlphaTheme::getInstance()->backgroundColour = Colour(AlphaTheme::getInstance()->backgroundColour_); //black
         
         // set up the standard set of colours..
         const uint32 textButtonColour      = 0xff000000;
@@ -818,7 +823,7 @@ int AlphaLiveLookandFeel::getDefaultMenuBarHeight()
 void AlphaLiveLookandFeel::drawMenuBarBackground (Graphics& g, int width, int height,
                                          bool, MenuBarComponent& menuBar)
 {
-	ColourGradient barGradient(Colours::darkgrey, 0, 0, Colours::black, 0, height, false);
+	ColourGradient barGradient(Colours::darkgrey, 0, 0, AlphaTheme::getInstance()->backgroundColour, 0, height, false);
     g.setGradientFill(barGradient);
     g.fillRect (0, 0, width, height);
 

@@ -105,7 +105,7 @@ GuiPiano::GuiPiano() : Component ("GuiPiano")
 		}
 		else
 		{
-			keys.insert(i, new GuiKeys(keyNumber, Colours::black, AlphaTheme::getInstance()->childBackgroundColourLighter, AlphaTheme::getInstance()->mainColourLighter));
+			keys.insert(i, new GuiKeys(keyNumber, AlphaTheme::getInstance()->backgroundColour, AlphaTheme::getInstance()->childBackgroundColourLighter, AlphaTheme::getInstance()->mainColourLighter));
 			keys[i]->setShape(*keysPath[i], true, true, false);
 			keys[i]->setOutline(Colours::darkgrey.withAlpha(0.5f), 1.0f);
 			addAndMakeVisible(keys[i],i);
@@ -149,7 +149,7 @@ void GuiPiano::resized()
 
 void GuiPiano::paint (Graphics& g)
 {
-    g.setColour(Colours::black);
+    g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(540, 560, 55, 55);
     
 	g.setColour(Colours::grey.withAlpha(0.3f));
@@ -735,7 +735,7 @@ void GuiPiano::setKeyDisplay (int keyNumber, bool keyOn)
         }
         else
         {
-            keys[keyNumber]->setColours(Colours::black, AlphaTheme::getInstance()->childBackgroundColourLighter, AlphaTheme::getInstance()->mainColourLighter);
+            keys[keyNumber]->setColours(AlphaTheme::getInstance()->backgroundColour, AlphaTheme::getInstance()->childBackgroundColourLighter, AlphaTheme::getInstance()->mainColourLighter);
         }
     }
     

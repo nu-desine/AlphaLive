@@ -91,7 +91,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
     {
 		case 0:
         {
-			ColourGradient fillGradient(Colours::black, (getWidth() * 0.5), (getHeight() * 0.5), AlphaTheme::getInstance()->childBackgroundColour, 0, 0, true);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->backgroundColour, (getWidth() * 0.5), (getHeight() * 0.5), AlphaTheme::getInstance()->childBackgroundColour, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
@@ -105,7 +105,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			
 		case 1:
         {
-			ColourGradient fillGradient(Colours::black, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->childBackgroundColour, 0, 0, true);			
+			ColourGradient fillGradient(AlphaTheme::getInstance()->backgroundColour, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->childBackgroundColour, 0, 0, true);			
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
@@ -120,7 +120,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			
 		case 2:
         {
-			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->backgroundColour, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
@@ -136,7 +136,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			
 		case 3:
         {
-			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->backgroundColour, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
@@ -152,7 +152,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			
 		case 4:
         {
-			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->backgroundColour, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
@@ -168,7 +168,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			
 		case 5:
         {
-			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->backgroundColour, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 

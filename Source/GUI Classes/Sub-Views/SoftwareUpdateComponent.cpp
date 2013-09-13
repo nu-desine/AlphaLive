@@ -63,7 +63,7 @@ void SoftwareUpdateComponent::resized()
 
 void SoftwareUpdateComponent::paint (Graphics& g)
 {
-    g.setColour(Colours::black.withAlpha(0.8f));
+    g.setColour(AlphaTheme::getInstance()->backgroundColour.withAlpha(0.8f));
     g.fillRect(0, 0, getWidth(), getHeight());
     
     g.setColour(Colours::darkgrey.withAlpha(0.7f));

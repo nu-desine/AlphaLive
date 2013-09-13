@@ -39,7 +39,7 @@ void DeviceStatusComponent::resized()
 }
 void DeviceStatusComponent::paint (Graphics& g)
 {
-    g.setColour(Colours::black);
+    g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillRoundedRectangle(1, 1, getWidth()-2, getHeight()-2, 5);
     g.setColour(Colours::grey);
 	g.drawRoundedRectangle(1, 1, getWidth()-2, getHeight()-2, 5, 1);

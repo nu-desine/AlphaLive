@@ -34,8 +34,8 @@ AlphaRotarySlider::AlphaRotarySlider(const float startAngleRadians,
 	hitPath.addPieSegment (0, 0, theWidth, theWidth, rotaryStart, rotaryEnd, ((1 - 0.2) + (0.2 * (theWidth * 0.5) * 0.003)));
     
     addChildComponent (textBox = new TextEditor());
-    textBox->setColour(TextEditor::textColourId, Colours::darkgrey);
-    textBox->setColour(TextEditor::backgroundColourId, Colours::lightgrey);
+    textBox->setColour(TextEditor::textColourId, AlphaTheme::getInstance()->foregroundColourDarker);
+    textBox->setColour(TextEditor::backgroundColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     textBox->setColour(TextEditor::focusedOutlineColourId, AlphaTheme::getInstance()->childBackgroundColour);
     textBox->setOpaque(true);
     textBox->setSelectAllWhenFocused (true);

@@ -651,7 +651,7 @@ void GuiSequencerMode::paint (Graphics& g)
         g.fillEllipse(981,520, 27, 27);
 	}
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(949,260, 38, 38, 1.0);
@@ -676,7 +676,7 @@ void GuiSequencerMode::paint (Graphics& g)
         
 		g.fillEllipse((816+(58*0.15)), (393+(58*0.15)), (58*0.7), (58*0.7));
 		
-		g.setColour(Colours::grey.withAlpha(0.3f));
+		g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 		g.drawEllipse((816+(58*0.1)), (393+(58*0.1)), (58*0.8), (58*0.8), 1.0f);
 	}
 	

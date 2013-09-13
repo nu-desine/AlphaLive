@@ -149,13 +149,13 @@ void GuiGlobalClock::paint (Graphics &g)
 	g.fillPath(quantiseBg, getTransform());
 	
     //Draw circle behind clock display segments
-	g.setColour(Colours::grey.withAlpha(0.2f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.2f));
 	g.fillEllipse(634-OFFSET_X, 32, 76, 76);
 	
     //Draw clock display segments background
 	barsBg.addPieSegment(626-OFFSET_X, 24, 93, 93, 0, (90 * (M_PI / 180)), 0.5f);
 	barsBg.addPieSegment(626-OFFSET_X, 24, 93, 93, (180 * (M_PI / 180)), (270 * (M_PI / 180)), 0.5f);
-	g.setColour(Colours::grey.withAlpha(0.2f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.2f));
 	g.fillPath(barsBg, getTransform());
 	
     //Draw circles around the buttons

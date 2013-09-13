@@ -69,7 +69,7 @@ void GuiCircleBackground::paint (Graphics &g)
 		g.fillPath(linkButtonBg, getTransform());
 		g.fillEllipse(796,261, 46, 46);
 		
-		g.setColour(Colours::grey.withAlpha(0.3f));
+		g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 		g.drawEllipse(800,265, 38, 38, 1.0f);
 		
 		linkButtonBg.clear();

@@ -113,8 +113,8 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     
     //for some reason using a textEditor was creating gui problems, so using a label instead now
     addChildComponent(dialOscIpAddressEditor = new Label());
-    dialOscIpAddressEditor->setColour(Label::textColourId, Colours::grey);
-    dialOscIpAddressEditor->setColour(Label::backgroundColourId, Colours::lightgrey);
+    dialOscIpAddressEditor->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColour);
+    dialOscIpAddressEditor->setColour(Label::backgroundColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     dialOscIpAddressEditor->setJustificationType(Justification::centred);
     dialOscIpAddressEditor->setEditable(true);
     dialOscIpAddressEditor->addMouseListener(this, true);
@@ -215,8 +215,8 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     
     //for some reason using a textEditor was creating gui problems, so using a label instead now
     addChildComponent(buttonOscIpAddressEditor = new Label());
-    buttonOscIpAddressEditor->setColour(Label::textColourId, Colours::grey);
-    buttonOscIpAddressEditor->setColour(Label::backgroundColourId, Colours::lightgrey);
+    buttonOscIpAddressEditor->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColour);
+    buttonOscIpAddressEditor->setColour(Label::backgroundColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     buttonOscIpAddressEditor->setJustificationType(Justification::centred);
     buttonOscIpAddressEditor->setEditable(true);
     buttonOscIpAddressEditor->addMouseListener(this, true);
@@ -380,7 +380,7 @@ void GuiEliteControlsSettings::paint (Graphics& g)
         g.fillEllipse(962,542, 27, 27);
         g.fillEllipse(981,520, 27, 27);
         
-        g.setColour(Colours::grey.withAlpha(0.3f));
+        g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
         
         g.drawEllipse(646,436, 27, 27, 1.0);
         g.drawEllipse(653,464, 27, 27, 1.0);

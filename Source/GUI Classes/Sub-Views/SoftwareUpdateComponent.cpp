@@ -66,10 +66,10 @@ void SoftwareUpdateComponent::paint (Graphics& g)
     g.setColour(AlphaTheme::getInstance()->backgroundColour.withAlpha(0.8f));
     g.fillRect(0, 0, getWidth(), getHeight());
     
-    g.setColour(Colours::darkgrey.withAlpha(0.7f));
+    g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.7f));
     g.fillRoundedRectangle(BOX_X, BOX_Y, BOX_W, BOX_H, 10);
     
-    g.setColour(Colours::grey.withAlpha(0.6f));
+    g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.6f));
     int border = 5;
     g.fillRoundedRectangle(BOX_X+border, 
                            BOX_Y+border, 

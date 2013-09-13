@@ -21,6 +21,7 @@
 //
 
 #include "SequencerGridEndBlock.h"
+#include "../../AlphaLiveLookandFeel.h"
 
 
 SequencerGridEndBlock::SequencerGridEndBlock()
@@ -41,7 +42,7 @@ void SequencerGridEndBlock::resized()
 
 void SequencerGridEndBlock::paint (Graphics &g)
 {
-    g.setColour(Colours::darkgrey.withAlpha(0.5f));
+    g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.5f));
     g.fillRect(0, 0, getWidth(), getHeight());
     
 }

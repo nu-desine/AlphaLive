@@ -103,7 +103,7 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
-			g.setColour(Colours::darkgrey.withAlpha(0.5f));
+			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.5f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
 			g.setColour(Colours::white.withAlpha(0.5f));
@@ -118,7 +118,7 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
-			g.setColour(Colours::darkgrey.withAlpha(0.7f));
+			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.7f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
 			g.setColour(Colours::white.withAlpha(0.8f));
@@ -134,7 +134,7 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
-			g.setColour(Colours::darkgrey.withAlpha(0.7f));
+			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.7f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
 			g.setColour(Colours::white.withAlpha(0.8f));
@@ -150,7 +150,7 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
-			g.setColour(Colours::darkgrey.withAlpha(0.4f));
+			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.4f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->mainColour);
@@ -165,7 +165,7 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
-			g.setColour(Colours::darkgrey.withAlpha(0.4f));
+			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.4f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->mainColour);
@@ -181,7 +181,7 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
-			g.setColour(Colours::darkgrey.withAlpha(0.4f));
+			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.4f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->mainColour);

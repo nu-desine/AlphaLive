@@ -134,7 +134,7 @@ void GuiGlobalPadSettings::paint (Graphics& g)
 	g.setGradientFill(fillGradient);
 	g.fillEllipse(802, 379, 86, 86);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	
 	Path trianglePath;
 	trianglePath.addTriangle(844, 278, 973, 493, 716, 493);
@@ -144,7 +144,7 @@ void GuiGlobalPadSettings::paint (Graphics& g)
 	g.fillEllipse(678,285, 38, 38);
 	g.fillEllipse(815, 267, 58, 58);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(820, 272, 48, 48, 1.0f);
 	

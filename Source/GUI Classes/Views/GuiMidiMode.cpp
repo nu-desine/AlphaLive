@@ -338,7 +338,7 @@ void GuiMidiMode::paint (Graphics& g)
 	g.fillEllipse(962,542, 27, 27);
 	g.fillEllipse(981,520, 27, 27);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(850,493, 38, 38, 1.0);

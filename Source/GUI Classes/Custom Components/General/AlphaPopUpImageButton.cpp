@@ -120,7 +120,7 @@ void AlphaPopUpImageButton::paintButton (Graphics& g, bool isMouseOverButton, bo
 	
 	g.fillEllipse((getWidth()*0.15), (getHeight()*0.15), (getWidth()*0.7), (getHeight()*0.7));
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse((getWidth()*0.1), (getHeight()*0.1), (getWidth()*0.8), (getHeight()*0.8), 1.0f);
 	
 	

@@ -76,9 +76,9 @@ GuiPad::GuiPad(int padNum, GuiPadLayout &ref)
 	
 	modeOpacity = 0.05f;
 	
-	padColour = Colours::lightgrey.withAlpha(0.6f);
-	padOuterColour = Colours::darkgrey.withAlpha(0.9f);
-    padInnerColour = Colours::darkgrey.withAlpha(0.3f);
+	padColour = AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.6f);
+	padOuterColour = AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.9f);
+    padInnerColour = AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.3f);
     
     somethingIsBeingDraggedOver = false;
 	

@@ -40,9 +40,9 @@ ProjectSettingsComponent::ProjectSettingsComponent(MainComponent &ref, AlphaLive
     
     //create tabbed component and add tabs/child components
     addAndMakeVisible(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
-    tabbedComponent->addTab(translate("General Settings"), Colours::darkgrey, generalSettingsComponent, true);
+    tabbedComponent->addTab(translate("General Settings"), AlphaTheme::getInstance()->foregroundColourDarker, generalSettingsComponent, true);
     //temporarily hide global osc feature/settings
-    //tabbedComponent->addTab(translate("Global OSC Settings"), Colours::darkgrey, globalOscComponent, true);
+    //tabbedComponent->addTab(translate("Global OSC Settings"), AlphaTheme::getInstance()->foregroundColourDarker, globalOscComponent, true);
     
     addAndMakeVisible(closeButton = new TextButton());
     closeButton->setButtonText(translate("Close"));
@@ -140,7 +140,7 @@ GlobalOscComponent::GlobalOscComponent(MainComponent &ref, AlphaLiveEngine &ref2
     //GLOBAL OSC OUTPUT SETTINGS
     addAndMakeVisible(globalOscLabel = new Label());
     globalOscLabel->setText(translate("Global OSC Mode:"), dontSendNotification);
-    globalOscLabel->setColour(Label::textColourId, Colours::lightgrey);
+    globalOscLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     
     addAndMakeVisible(globalOscSwitch = new TextButton());
     globalOscSwitch->setButtonText(translate("Off"));
@@ -151,8 +151,8 @@ GlobalOscComponent::GlobalOscComponent(MainComponent &ref, AlphaLiveEngine &ref2
     
     addAndMakeVisible(oscIpAddressEditor = new Label());
     oscIpAddressEditor->setText("127.0.0.1", dontSendNotification);
-    oscIpAddressEditor->setColour(Label::textColourId, Colours::darkgrey);
-    oscIpAddressEditor->setColour(Label::backgroundColourId, Colours::lightgrey);
+    oscIpAddressEditor->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourDarker);
+    oscIpAddressEditor->setColour(Label::backgroundColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     oscIpAddressEditor->setJustificationType(Justification::centred);
     oscIpAddressEditor->setEditable(true);
     oscIpAddressEditor->addMouseListener(this, true);
@@ -278,7 +278,7 @@ GeneralProjSettingsComponent::GeneralProjSettingsComponent(MainComponent &ref, A
     
     addAndMakeVisible(copyExternalFilesLabel = new Label());
     copyExternalFilesLabel->setText(translate("Copy External Files:"), dontSendNotification);
-    copyExternalFilesLabel->setColour(Label::textColourId, Colours::lightgrey);
+    copyExternalFilesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     
 }
 

@@ -41,7 +41,7 @@ void DeviceStatusComponent::paint (Graphics& g)
 {
     g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillRoundedRectangle(1, 1, getWidth()-2, getHeight()-2, 5);
-    g.setColour(Colours::grey);
+    g.setColour(AlphaTheme::getInstance()->foregroundColour);
 	g.drawRoundedRectangle(1, 1, getWidth()-2, getHeight()-2, 5, 1);
     
     if (deviceStatus == 1)

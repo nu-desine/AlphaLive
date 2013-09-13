@@ -185,9 +185,9 @@ void SequencerGrid::paint (Graphics &g)
         //j is used as a counter to different lines after every 1 regular lines
         
         if (j == 1)
-            g.setColour(Colours::grey.withAlpha(0.9f));
+            g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.9f));
         else
-            g.setColour(Colours::grey.withAlpha(0.3f));
+            g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 		
 		float theAngle = ((2 * M_PI) / (SEQ_HORIZONTAL_STEPS-1)) * i;
 		float sinX = sin(theAngle);
@@ -212,7 +212,7 @@ void SequencerGrid::paint (Graphics &g)
     }
     
     //draw circular lines
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	
 	for (int i = 0, j = 9; i <=SEQ_VERTICAL_STEPS-1; i++)
 	{

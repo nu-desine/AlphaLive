@@ -102,7 +102,7 @@ void EliteControlsComponent::paint (Graphics& g)
 	g.fillEllipse(55-X_OFFSET, 542-Y_OFFSET, 38, 38);
 	g.fillEllipse(99-X_OFFSET, 542-Y_OFFSET, 38, 38);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	
 	g.drawRoundedRectangle(49-X_OFFSET, 590-Y_OFFSET, 26, 26, 2, 1.0f);
 	g.drawRoundedRectangle(83-X_OFFSET, 590-Y_OFFSET, 26, 26, 2, 1.0f);

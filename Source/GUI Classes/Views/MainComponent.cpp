@@ -376,7 +376,7 @@ void MainComponent::paint(juce::Graphics &g)
 		
 		g.fillRect(753, 10, 261, 121);
 		
-		g.setColour(Colours::grey.withAlpha(0.3f));
+		g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 		
 		g.drawRect(753, 10, 261, 121, 2);
 		
@@ -412,7 +412,7 @@ void MainComponent::paint(juce::Graphics &g)
 	//gain and pan container
 	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(35, 5, 87, 87);
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse(35, 5, 87, 87, 1.0f);
 }
 

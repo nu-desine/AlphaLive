@@ -56,7 +56,7 @@ void SequencerGridPoint::paint (Graphics &g)
         g.setColour(Colours::transparentWhite); //off
     else //1-127
     {
-        /*ColourGradient seqGradient(Colours::white.withAlpha(float(status*(1.0/127.0))), (getWidth()*0.5),(getHeight()*0.5), Colours::lightgrey.withAlpha(float(status*(1.0/127.0))), (getWidth()*0.8),(getHeight()*0.8), true);
+        /*ColourGradient seqGradient(Colours::white.withAlpha(float(status*(1.0/127.0))), (getWidth()*0.5),(getHeight()*0.5), AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(float(status*(1.0/127.0))), (getWidth()*0.8),(getHeight()*0.8), true);
          g.setGradientFill(seqGradient);
          //g.fillEllipse((getWidth()*0.05), (getHeight()*0.05), (getWidth()*0.9), (getHeight()*0.9));
          //g.setColour(AlphaTheme::getInstance()->backgroundColour); //on*/

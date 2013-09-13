@@ -329,7 +329,7 @@ void GuiSamplerMode::paint (Graphics& g)
 	
 	g.fillEllipse(xBrowseButton, yBrowseButton, widthBrowseButton, widthBrowseButton);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(850,493, 38, 38, 1.0);
@@ -346,7 +346,7 @@ void GuiSamplerMode::paint (Graphics& g)
 		
 	}
 	
-    g.setColour(Colours::grey.withAlpha(0.3f));
+    g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
     
 	g.drawEllipse((xBrowseButton + (widthBrowseButton * 0.1)), (yBrowseButton + (widthBrowseButton * 0.1)),
 				  (widthBrowseButton * 0.8),(widthBrowseButton * 0.8), 1.0f);

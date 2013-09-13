@@ -184,7 +184,7 @@ void Toolbox::resized()
 
 void Toolbox::paint(Graphics& g)
 {
-    g.setColour(Colours::grey.withAlpha(0.2f));
+    g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.2f));
     g.fillRoundedRectangle(0, 0, getWidth(), getHeight(), 10);
 }
 
@@ -254,49 +254,49 @@ void Toolbox::updateDisplay()
     if (mode == 1)
     {
         if (selectedPads.size() == 48)
-            tabbedComponent->addTab(translate("Layouts"), Colours::darkgrey, layoutsListBox, false);
+            tabbedComponent->addTab(translate("Layouts"), AlphaTheme::getInstance()->foregroundColourDarker, layoutsListBox, false);
             
         if (MULTI_PADS)
-            tabbedComponent->addTab(translate("Scales"), Colours::darkgrey, scalesListBox, false);
+            tabbedComponent->addTab(translate("Scales"), AlphaTheme::getInstance()->foregroundColourDarker, scalesListBox, false);
         
-        tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[MIDI_PRESETS], false);
+        tabbedComponent->addTab(translate("Mode Presets"), AlphaTheme::getInstance()->foregroundColourDarker, fileLists[MIDI_PRESETS], false);
     }
     else if (mode == 2)
     {
         if (MULTI_PADS)
         {
-            tabbedComponent->addTab(translate("Banks"), Colours::darkgrey, treeLists[SAMPLE_BANKS-6], false);
+            tabbedComponent->addTab(translate("Banks"), AlphaTheme::getInstance()->foregroundColourDarker, treeLists[SAMPLE_BANKS-6], false);
         }
         
-        tabbedComponent->addTab(translate("Samples"), Colours::darkgrey, treeLists[AUDIO_SAMPLES-6], false);
-        tabbedComponent->addTab(translate("Effects"), Colours::darkgrey, fileLists[EFFECT_PRESETS], false);
-        tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[SAMPLER_PRESETS], false);
+        tabbedComponent->addTab(translate("Samples"), AlphaTheme::getInstance()->foregroundColourDarker, treeLists[AUDIO_SAMPLES-6], false);
+        tabbedComponent->addTab(translate("Effects"), AlphaTheme::getInstance()->foregroundColourDarker, fileLists[EFFECT_PRESETS], false);
+        tabbedComponent->addTab(translate("Mode Presets"), AlphaTheme::getInstance()->foregroundColourDarker, fileLists[SAMPLER_PRESETS], false);
         
     }
     else if (mode == 3)
     {
         if (seqMode == 1)
-            tabbedComponent->addTab(translate("Scales"), Colours::darkgrey, scalesListBox, false);
+            tabbedComponent->addTab(translate("Scales"), AlphaTheme::getInstance()->foregroundColourDarker, scalesListBox, false);
         
         else if (seqMode == 2)
         {
-            tabbedComponent->addTab(translate("Banks"), Colours::darkgrey, treeLists[SAMPLE_BANKS-6], false);
+            tabbedComponent->addTab(translate("Banks"), AlphaTheme::getInstance()->foregroundColourDarker, treeLists[SAMPLE_BANKS-6], false);
             //the below will only be useable if we get drag-and-drop working
-            //tabbedComponent->addTab(translate("Samples"), Colours::darkgrey, treeLists[AUDIO_SAMPLES-6], false);
-            tabbedComponent->addTab(translate("Effects"), Colours::darkgrey, fileLists[EFFECT_PRESETS], false);
+            //tabbedComponent->addTab(translate("Samples"), AlphaTheme::getInstance()->foregroundColourDarker, treeLists[AUDIO_SAMPLES-6], false);
+            tabbedComponent->addTab(translate("Effects"), AlphaTheme::getInstance()->foregroundColourDarker, fileLists[EFFECT_PRESETS], false);
         }
         
-        tabbedComponent->addTab(translate("Sequences"), Colours::darkgrey, treeLists[SEQUENCES-6], false);
-        tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[SEQUENCER_PRESETS], false);
+        tabbedComponent->addTab(translate("Sequences"), AlphaTheme::getInstance()->foregroundColourDarker, treeLists[SEQUENCES-6], false);
+        tabbedComponent->addTab(translate("Mode Presets"), AlphaTheme::getInstance()->foregroundColourDarker, fileLists[SEQUENCER_PRESETS], false);
     
     }
 //    else if (mode == 4)
 //    {
-//        tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[CONTROLLER_PRESETS], false);
+//        tabbedComponent->addTab(translate("Mode Presets"), AlphaTheme::getInstance()->foregroundColourDarker, fileLists[CONTROLLER_PRESETS], false);
 //    }
     else
     {
-        //tabbedComponent->addTab(translate("Scene Presets"), Colours::darkgrey, scenePresetsList, false);
+        //tabbedComponent->addTab(translate("Scene Presets"), AlphaTheme::getInstance()->foregroundColourDarker, scenePresetsList, false);
         tabbedComponent->setVisible(false);
         
     }

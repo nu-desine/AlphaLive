@@ -157,7 +157,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xff202020; //very dark grey
         AlphaTheme::getInstance()->textColour_ = 0xffffffff; //white
         AlphaTheme::getInstance()->backgroundColour_ = 0xff000000; //black
-        
+        AlphaTheme::getInstance()->foregroundColour_ = 0xff808080; //grey
+        AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffd3d3d3; //light grey
+        AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff555555; //dark grey
         
         AlphaTheme::getInstance()->mainColour = Colour(AlphaTheme::getInstance()->mainColour_); //blue
         AlphaTheme::getInstance()->mainColourLighter = Colour(AlphaTheme::getInstance()->mainColourLighter_); //light blue
@@ -165,16 +167,14 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->childBackgroundColourLighter = Colour(AlphaTheme::getInstance()->childBackgroundColourLighter_); //very dark grey
         AlphaTheme::getInstance()->textColour = Colour(AlphaTheme::getInstance()->textColour_); //white
         AlphaTheme::getInstance()->backgroundColour = Colour(AlphaTheme::getInstance()->backgroundColour_); //black
+        AlphaTheme::getInstance()->foregroundColour = Colour(AlphaTheme::getInstance()->foregroundColour_); //grey
+        AlphaTheme::getInstance()->foregroundColourLighter = Colour(AlphaTheme::getInstance()->foregroundColourLighter_); //light grey
+        AlphaTheme::getInstance()->foregroundColourDarker = Colour(AlphaTheme::getInstance()->foregroundColourDarker_); //dark grey
         
         // set up the standard set of colours..
-        
-        const uint32 textButtonColour      = 0xff000000;
-        const uint32 textHighlightColour   = 0xffcccccc;
-        const uint32 standardOutlineColour = 0xff3c3c3c;
-        
         static const uint32 standardColours[] =
         {
-            TextButton::buttonColourId,                 textButtonColour,
+            TextButton::buttonColourId,                 AlphaTheme::getInstance()->backgroundColour_,
             TextButton::buttonOnColourId,               AlphaTheme::getInstance()->mainColour_,
             TextButton::textColourOnId,                 AlphaTheme::getInstance()->textColour_,
             TextButton::textColourOffId,                AlphaTheme::getInstance()->textColour_,
@@ -184,19 +184,19 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             
             ComboBox::buttonColourId,                   0xffcccccc,
-            ComboBox::outlineColourId,                  standardOutlineColour,
+            ComboBox::outlineColourId,                  AlphaTheme::getInstance()->childBackgroundColourLighter_,
             
             ToggleButton::textColourId,                 AlphaTheme::getInstance()->textColour_,
             
             TextEditor::backgroundColourId,             0x00000000,
-            TextEditor::textColourId,                   0xffffffff,
+            TextEditor::textColourId,                   AlphaTheme::getInstance()->textColour_,
             TextEditor::highlightColourId,              AlphaTheme::getInstance()->mainColour_,
             TextEditor::highlightedTextColourId,        AlphaTheme::getInstance()->textColour_,
             TextEditor::outlineColourId,                0x00000000,
-            TextEditor::focusedOutlineColourId,         textButtonColour,
+            TextEditor::focusedOutlineColourId,         AlphaTheme::getInstance()->backgroundColour_,
             TextEditor::shadowColourId,                 0x38000000,
             
-            CaretComponent::caretColourId,              0xff000000,
+            CaretComponent::caretColourId,              AlphaTheme::getInstance()->backgroundColour_,
             
             Label::backgroundColourId,                  0x00000000,
             Label::textColourId,                        AlphaTheme::getInstance()->textColour_,
@@ -206,12 +206,12 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             ScrollBar::thumbColourId,                   AlphaTheme::getInstance()->textColour_,
             
             TreeView::linesColourId,                    0x4c000000,
-            TreeView::backgroundColourId,               0xff000000,
+            TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
             TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
             
             PopupMenu::backgroundColourId,              0x00000000,
             PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
-            PopupMenu::headerTextColourId,              0xff000000,
+            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->textColour_,
             PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
             PopupMenu::highlightedBackgroundColourId,   AlphaTheme::getInstance()->mainColour_,
             
@@ -219,25 +219,25 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             ComboBox::backgroundColourId,               0x0fcccccc,
             ComboBox::arrowColourId,                    0xffcccccc,
             
-            ListBox::backgroundColourId,                0xff000000,
-            ListBox::outlineColourId,                   standardOutlineColour,
+            ListBox::backgroundColourId,                AlphaTheme::getInstance()->backgroundColour_,
+            ListBox::outlineColourId,                   AlphaTheme::getInstance()->childBackgroundColourLighter_,
             ListBox::textColourId,                      AlphaTheme::getInstance()->textColour_,
             
             Slider::backgroundColourId,                 0x00000000,
-            Slider::thumbColourId,                      textButtonColour,
+            Slider::thumbColourId,                      AlphaTheme::getInstance()->backgroundColour_,
             Slider::trackColourId,                      AlphaTheme::getInstance()->mainColour_,
             Slider::rotarySliderFillColourId,           AlphaTheme::getInstance()->mainColour_,
             Slider::rotarySliderOutlineColourId,        0xff2c2c2c, //0xff3c3c3c
             Slider::textBoxTextColourId,                AlphaTheme::getInstance()->textColour_,
             Slider::textBoxBackgroundColourId,          0x00000000,
-            Slider::textBoxHighlightColourId,           textHighlightColour,
-            Slider::textBoxOutlineColourId,             standardOutlineColour,
+            Slider::textBoxHighlightColourId,           AlphaTheme::getInstance()->mainColour_,
+            Slider::textBoxOutlineColourId,             AlphaTheme::getInstance()->childBackgroundColourLighter_,
             
             ResizableWindow::backgroundColourId,        0xff777777,
             //DocumentWindow::textColourId,               0xff000000, // (this is deliberately not set)
             
-            AlertWindow::backgroundColourId,            0xffededed,
-            AlertWindow::textColourId,                  0xff000000,
+            AlertWindow::backgroundColourId,            AlphaTheme::getInstance()->backgroundColour_,
+            AlertWindow::textColourId,                  AlphaTheme::getInstance()->textColour_,
             AlertWindow::outlineColourId,               0xff666666,
             
             ProgressBar::backgroundColourId,            AlphaTheme::getInstance()->childBackgroundColourLighter_,
@@ -248,7 +248,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TooltipWindow::outlineColourId,             0x4c000000,
             
             TabbedComponent::backgroundColourId,        0x00000000,
-            TabbedComponent::outlineColourId,           0xff000000,
+            TabbedComponent::outlineColourId,           AlphaTheme::getInstance()->backgroundColour_,
             TabbedButtonBar::tabOutlineColourId,        0x80000000,
             TabbedButtonBar::frontOutlineColourId,      0x90000000,
             
@@ -304,23 +304,25 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->childBackgroundColour_ = 0xff008000; //nearly black //green
         AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xffffffff; //very dark grey //white
         AlphaTheme::getInstance()->textColour_ = 0xffffffff; //white
-        AlphaTheme::getInstance()->backgroundColour_ = 0xffffa500; //black
+        AlphaTheme::getInstance()->backgroundColour_ = 0xffffa500; //orange
+        AlphaTheme::getInstance()->foregroundColour_ = 0xffff69b4; //hot pink
+        AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffffa07a; //light salmon
+        AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff800000; //dark maroon
         
         AlphaTheme::getInstance()->mainColour = Colour(AlphaTheme::getInstance()->mainColour_); //blue
         AlphaTheme::getInstance()->mainColourLighter = Colour(AlphaTheme::getInstance()->mainColourLighter_); //light blue
         AlphaTheme::getInstance()->childBackgroundColour = Colour(AlphaTheme::getInstance()->childBackgroundColour_); //nearly black
         AlphaTheme::getInstance()->childBackgroundColourLighter = Colour(AlphaTheme::getInstance()->childBackgroundColourLighter_); //very dark grey
         AlphaTheme::getInstance()->textColour = Colour(AlphaTheme::getInstance()->textColour_); //white
-        AlphaTheme::getInstance()->backgroundColour = Colour(AlphaTheme::getInstance()->backgroundColour_); //black
+        AlphaTheme::getInstance()->backgroundColour = Colour(AlphaTheme::getInstance()->backgroundColour_); //orange
+        AlphaTheme::getInstance()->foregroundColour = Colour(AlphaTheme::getInstance()->foregroundColour_); //grey
+        AlphaTheme::getInstance()->foregroundColourLighter = Colour(AlphaTheme::getInstance()->foregroundColourLighter_); //light grey
+        AlphaTheme::getInstance()->foregroundColourDarker = Colour(AlphaTheme::getInstance()->foregroundColourDarker_); //dark grey
         
         // set up the standard set of colours..
-        const uint32 textButtonColour      = 0xff000000;
-        const uint32 textHighlightColour   = 0xffcccccc;
-        const uint32 standardOutlineColour = 0xff3c3c3c;
-        
         static const uint32 standardColours[] =
         {
-            TextButton::buttonColourId,                 textButtonColour,
+            TextButton::buttonColourId,                 AlphaTheme::getInstance()->backgroundColour_,
             TextButton::buttonOnColourId,               AlphaTheme::getInstance()->mainColour_,
             TextButton::textColourOnId,                 AlphaTheme::getInstance()->textColour_,
             TextButton::textColourOffId,                AlphaTheme::getInstance()->textColour_,
@@ -330,19 +332,19 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             
             ComboBox::buttonColourId,                   0xffcccccc,
-            ComboBox::outlineColourId,                  standardOutlineColour,
+            ComboBox::outlineColourId,                  AlphaTheme::getInstance()->childBackgroundColourLighter_,
             
             ToggleButton::textColourId,                 AlphaTheme::getInstance()->textColour_,
             
             TextEditor::backgroundColourId,             0x00000000,
-            TextEditor::textColourId,                   0xffffffff,
+            TextEditor::textColourId,                   AlphaTheme::getInstance()->textColour_,
             TextEditor::highlightColourId,              AlphaTheme::getInstance()->mainColour_,
             TextEditor::highlightedTextColourId,        AlphaTheme::getInstance()->textColour_,
             TextEditor::outlineColourId,                0x00000000,
-            TextEditor::focusedOutlineColourId,         textButtonColour,
+            TextEditor::focusedOutlineColourId,         AlphaTheme::getInstance()->backgroundColour_,
             TextEditor::shadowColourId,                 0x38000000,
             
-            CaretComponent::caretColourId,              0xff000000,
+            CaretComponent::caretColourId,              AlphaTheme::getInstance()->backgroundColour_,
             
             Label::backgroundColourId,                  0x00000000,
             Label::textColourId,                        AlphaTheme::getInstance()->textColour_,
@@ -352,12 +354,12 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             ScrollBar::thumbColourId,                   AlphaTheme::getInstance()->textColour_,
             
             TreeView::linesColourId,                    0x4c000000,
-            TreeView::backgroundColourId,               0xff000000,
+            TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
             TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
             
             PopupMenu::backgroundColourId,              0x00000000,
             PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
-            PopupMenu::headerTextColourId,              0xff000000,
+            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->textColour_,
             PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
             PopupMenu::highlightedBackgroundColourId,   AlphaTheme::getInstance()->mainColour_,
             
@@ -365,25 +367,25 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             ComboBox::backgroundColourId,               0x0fcccccc,
             ComboBox::arrowColourId,                    0xffcccccc,
             
-            ListBox::backgroundColourId,                0xff000000,
-            ListBox::outlineColourId,                   standardOutlineColour,
+            ListBox::backgroundColourId,                AlphaTheme::getInstance()->backgroundColour_,
+            ListBox::outlineColourId,                   AlphaTheme::getInstance()->childBackgroundColourLighter_,
             ListBox::textColourId,                      AlphaTheme::getInstance()->textColour_,
             
             Slider::backgroundColourId,                 0x00000000,
-            Slider::thumbColourId,                      textButtonColour,
+            Slider::thumbColourId,                      AlphaTheme::getInstance()->backgroundColour_,
             Slider::trackColourId,                      AlphaTheme::getInstance()->mainColour_,
             Slider::rotarySliderFillColourId,           AlphaTheme::getInstance()->mainColour_,
             Slider::rotarySliderOutlineColourId,        0xff2c2c2c, //0xff3c3c3c
             Slider::textBoxTextColourId,                AlphaTheme::getInstance()->textColour_,
             Slider::textBoxBackgroundColourId,          0x00000000,
-            Slider::textBoxHighlightColourId,           textHighlightColour,
-            Slider::textBoxOutlineColourId,             standardOutlineColour,
+            Slider::textBoxHighlightColourId,           AlphaTheme::getInstance()->mainColour_,
+            Slider::textBoxOutlineColourId,             AlphaTheme::getInstance()->childBackgroundColourLighter_,
             
             ResizableWindow::backgroundColourId,        0xff777777,
             //DocumentWindow::textColourId,               0xff000000, // (this is deliberately not set)
             
-            AlertWindow::backgroundColourId,            0xffededed,
-            AlertWindow::textColourId,                  0xff000000,
+            AlertWindow::backgroundColourId,            AlphaTheme::getInstance()->backgroundColour_,
+            AlertWindow::textColourId,                  AlphaTheme::getInstance()->textColour_,
             AlertWindow::outlineColourId,               0xff666666,
             
             ProgressBar::backgroundColourId,            AlphaTheme::getInstance()->childBackgroundColourLighter_,
@@ -394,7 +396,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TooltipWindow::outlineColourId,             0x4c000000,
             
             TabbedComponent::backgroundColourId,        0x00000000,
-            TabbedComponent::outlineColourId,           0xff000000,
+            TabbedComponent::outlineColourId,           AlphaTheme::getInstance()->backgroundColour_,
             TabbedButtonBar::tabOutlineColourId,        0x80000000,
             TabbedButtonBar::frontOutlineColourId,      0x90000000,
             
@@ -823,7 +825,7 @@ int AlphaLiveLookandFeel::getDefaultMenuBarHeight()
 void AlphaLiveLookandFeel::drawMenuBarBackground (Graphics& g, int width, int height,
                                          bool, MenuBarComponent& menuBar)
 {
-	ColourGradient barGradient(Colours::darkgrey, 0, 0, AlphaTheme::getInstance()->backgroundColour, 0, height, false);
+	ColourGradient barGradient(AlphaTheme::getInstance()->foregroundColourDarker, 0, 0, AlphaTheme::getInstance()->backgroundColour, 0, height, false);
     g.setGradientFill(barGradient);
     g.fillRect (0, 0, width, height);
 
@@ -848,7 +850,7 @@ void AlphaLiveLookandFeel::drawFileBrowserRow (Graphics& g, int width, int heigh
     //highlight the item if it is a directory
     if (isDirectory)
     {
-        g.setColour(Colours::darkgrey.withAlpha(0.3f));
+        g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.3f));
         g.fillRect(2, 2, width-4, height-4);
     }
     
@@ -865,7 +867,7 @@ void AlphaLiveLookandFeel::drawFileBrowserRow (Graphics& g, int width, int heigh
                           Justification::centredLeft, 1);
         
         g.setFont (height * 0.5f);
-        g.setColour (Colours::darkgrey);
+        g.setColour (AlphaTheme::getInstance()->foregroundColourDarker);
         
     }
     else

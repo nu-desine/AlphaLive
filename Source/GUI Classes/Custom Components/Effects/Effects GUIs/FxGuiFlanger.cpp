@@ -150,7 +150,7 @@ void GuiFlanger::paint (Graphics& g)
 	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(118, 232, 38, 38);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse(118, 232, 38, 38, 1.0f);
 	
 	

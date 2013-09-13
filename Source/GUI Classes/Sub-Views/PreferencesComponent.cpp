@@ -55,8 +55,8 @@ PreferencesComponent::PreferencesComponent(MainComponent &ref, AlphaLiveEngine &
     
     //create tabbed component and add tabs/child components
     addAndMakeVisible(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
-    tabbedComponent->addTab(translate("Audio Output Settings"), Colours::darkgrey, audioAndMidiSettingsComponent, true);
-    tabbedComponent->addTab(translate("General Settings"), Colours::darkgrey, generalSettingsComponent, true);
+    tabbedComponent->addTab(translate("Audio Output Settings"), AlphaTheme::getInstance()->foregroundColourDarker, audioAndMidiSettingsComponent, true);
+    tabbedComponent->addTab(translate("General Settings"), AlphaTheme::getInstance()->foregroundColourDarker, generalSettingsComponent, true);
     
     addAndMakeVisible(closeButton = new TextButton());
     closeButton->setButtonText(translate("Close"));
@@ -117,7 +117,7 @@ void PreferencesComponent::removeMidiOutputSelector()
     
     //don't display the option to set a MIDI ouput device
     audioAndMidiSettingsComponent = new AlphaAudioSettingsComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, false, false, true, false, alphaLiveEngineRef);
-    tabbedComponent->addTab(translate("Audio Output Settings"), Colours::darkgrey, audioAndMidiSettingsComponent, true);
+    tabbedComponent->addTab(translate("Audio Output Settings"), AlphaTheme::getInstance()->foregroundColourDarker, audioAndMidiSettingsComponent, true);
     
     #endif //JUCE_WINDOWS
 }
@@ -180,7 +180,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     deviceInterfaceMenu->setSelectedId(StoredSettings::getInstance()->deviceType, true);
     
     addAndMakeVisible(deviceInterfaceLabel = new Label("device label", translate("Device Interface:")));
-    deviceInterfaceLabel->setColour(Label::textColourId, Colours::lightgrey);
+    deviceInterfaceLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     
     addAndMakeVisible(appProjectDirChooser = new ComboBox());
     appProjectDirChooser->addItem(StoredSettings::getInstance()->appProjectDir.getFullPathName(), 1);
@@ -191,10 +191,10 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     appProjectDirChooser->setSelectedId(1, true);
     
     addAndMakeVisible(directoryLabel = new Label("directory label", translate("Projects Directory:")));
-    directoryLabel->setColour(Label::textColourId, Colours::lightgrey);
+    directoryLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     
     addAndMakeVisible(midiNoteDisplayTypeLabel = new Label ("midi display label", translate("Note Display Type:")));
-    midiNoteDisplayTypeLabel->setColour(Label::textColourId, Colours::lightgrey);
+    midiNoteDisplayTypeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     
     addAndMakeVisible(midiNoteDisplayTypeMenu = new ComboBox());
     midiNoteDisplayTypeMenu->addItem(translate("MIDI Note Number"), 1);
@@ -204,7 +204,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     midiNoteDisplayTypeMenu->setSelectedId(StoredSettings::getInstance()->midiNoteDisplayType, true);
     
     addAndMakeVisible(launchTaskLabel = new Label ("Launch Task Label", translate("On Launch:")));
-    launchTaskLabel->setColour(Label::textColourId, Colours::lightgrey);
+    launchTaskLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     
     addAndMakeVisible(launchTaskMenu = new ComboBox());
     launchTaskMenu->addItem(translate("Open new project"), 1);
@@ -227,7 +227,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     
     addAndMakeVisible(killOnClockStopLabel = new Label());
     killOnClockStopLabel->setText(translate("Stop All Sound On Clock Stop:"), dontSendNotification);
-    killOnClockStopLabel->setColour(Label::textColourId, Colours::lightgrey);
+    killOnClockStopLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     
     
     addAndMakeVisible(cleanOnCloseButton = new TextButton());
@@ -243,7 +243,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     
     addAndMakeVisible(cleanOnCloseLabel = new Label());
     cleanOnCloseLabel->setText(translate("Clean Project On Close:"), dontSendNotification);
-    cleanOnCloseLabel->setColour(Label::textColourId, Colours::lightgrey);
+    cleanOnCloseLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     
     
     addAndMakeVisible(autoSaveScenesButton = new TextButton());
@@ -259,7 +259,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     
     addAndMakeVisible(autoSaveScenesLabel = new Label());
     autoSaveScenesLabel->setText(translate("Auto-save Scenes:"), dontSendNotification);
-    autoSaveScenesLabel->setColour(Label::textColourId, Colours::lightgrey);
+    autoSaveScenesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
 
     addAndMakeVisible(autoCheckUpdatesButton = new TextButton());
     autoCheckUpdatesButton->setClickingTogglesState(true);
@@ -273,7 +273,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     
     addAndMakeVisible(autoCheckUpdatesLabel = new Label());
     autoCheckUpdatesLabel->setText(translate("Autocheck for Updates:"), dontSendNotification);
-    autoCheckUpdatesLabel->setColour(Label::textColourId, Colours::lightgrey);
+    autoCheckUpdatesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     
     addAndMakeVisible(interfaceThemeMenu = new ComboBox());
     interfaceThemeMenu->addItem(translate("Classic"), 1);
@@ -284,7 +284,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     
     addAndMakeVisible(interfaceThemeLabel = new Label());
     interfaceThemeLabel->setText(translate("Interface Theme:"), dontSendNotification);
-    interfaceThemeLabel->setColour(Label::textColourId, Colours::lightgrey);
+    interfaceThemeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     
 }
 

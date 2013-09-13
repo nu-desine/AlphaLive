@@ -630,6 +630,7 @@ void ModeMidi::setChannel (int value, int pad)
     }
     
     channel[pad] = value;
+    currentChannel[pad] = value;
 }
 
 void ModeMidi::setNote (int value, int pad)

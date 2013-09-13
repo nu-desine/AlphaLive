@@ -68,6 +68,9 @@ AlphaLiveEngine::AlphaLiveEngine()
 
     playingStatus = 0;
     
+    for (int i = 0; i < 16; i++)
+        isMidiChannelActive[i] = false;
+    
     //==========================================================================
     // initialise the device manager
     XmlElement *audioSettingsXml = XmlDocument::parse(StoredSettings::getInstance()->audioSettings);
@@ -723,6 +726,37 @@ void AlphaLiveEngine::sendMidiMessage(MidiMessage midiMessage)
         }
     }
     
+    //==================================================================================
+    //log data about the MIDI channels that is then used by the Auto MIDI Channel Mode
+    
+    if (midiMessage.isNoteOnOrOff())
+    {
+        if (previouslyUsedMidiChannels.contains(midiMessage.getChannel()-1))
+            previouslyUsedMidiChannels.removeAllInstancesOf(midiMessage.getChannel()-1);
+        
+        //put this channel at the end of the array
+        previouslyUsedMidiChannels.add(midiMessage.getChannel()-1);
+        
+        std::cout << "Previously used MIDI Channels:" << std::endl;
+        for (int i = 0; i < previouslyUsedMidiChannels.size(); i++)
+            std::cout << previouslyUsedMidiChannels[i] + 1;
+        std::cout << std::endl;
+        
+        if (midiMessage.isNoteOn())
+            isMidiChannelActive[midiMessage.getChannel()-1] = true;
+        else if (midiMessage.isNoteOff())
+            isMidiChannelActive[midiMessage.getChannel()-1] = false;
+        
+        std::cout << "Channel statuses:" << std::endl;
+        for (int i = 0; i < 16; i++)
+            std::cout << isMidiChannelActive[i];
+        std::cout << std::endl;
+        
+        std::cout << std::endl;
+    }
+    
+    
+    
     sharedMemoryMidi.exit();
 }
 
@@ -1028,4 +1062,14 @@ void AlphaLiveEngine::setMainComponent(MainComponent *mainComponent_)
     eliteControls->setMainComponent(mainComponent_);
     globalClock->setMainComponent(mainComponent_);
     modeController->setMainComponent(mainComponent_);
+}
+
+bool AlphaLiveEngine::getMidiChannelStatus (int channel)
+{
+    return isMidiChannelActive[channel-1];
+}
+
+Array<int> AlphaLiveEngine::getPreviouslyUsedMidiChannels()
+{
+    return previouslyUsedMidiChannels;
 }

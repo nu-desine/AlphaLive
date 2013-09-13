@@ -106,6 +106,9 @@ public:
     
     String getFirmwareVersion();
     String getDeviceSerial();
+    
+    bool getMidiChannelStatus (int channel);
+    Array<int> getPreviouslyUsedMidiChannels();
         
 private:
     
@@ -164,6 +167,14 @@ private:
     
     String firmwareVersion, deviceSerial;
     bool hasDisplayedNoMidiDeviceWarning;
+    
+    //auto MIDI Channel stuff
+    //this stuff needs to be here and not within the MIDI Mode class
+    //as we don't want auto channels to interfere with MIDI from Sequencer Mode
+    bool isMidiChannelActive[16];
+    Array<int> previouslyUsedMidiChannels;  //this array holds all previously used MIDI channels
+                                            //with the oldest used channels at the beginning.
+    
 };
 
 #endif // H_ALPHALIVEENGINE

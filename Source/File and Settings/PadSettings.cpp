@@ -662,12 +662,12 @@ void PadSettings::setMidiCcController (int value)
 void PadSettings::setMidiAutoChannelStatus (bool value)
 {
     midiAutoChannelStatus = value;
-    //alphaLiveEngineRef->getModeMidi()->setControllerNumber(value, padNumber);
+    alphaLiveEngineRef->getModeMidi()->setAutoMidiChannelStatus(value, padNumber);
 }
 void PadSettings::setMidiAutoChannels (int channel, bool status)
 {
     midiAutoChannels[channel] = status;
-    //alphaLiveEngineRef->getModeMidi()->setControllerNumber(value, padNumber);
+    alphaLiveEngineRef->getModeMidi()->setAutoMidiChannels(channel, status, padNumber);
 }
 
 #pragma mark MIDI mode accessor functions

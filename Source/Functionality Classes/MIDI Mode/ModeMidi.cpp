@@ -33,8 +33,7 @@ ModeMidi::ModeMidi (AlphaLiveEngine &ref)
 {
     for (int i = 0; i<= 47; i++)
     {
-        
-        channel[i] = PAD_SETTINGS_i->getMidiChannel();
+        channel[i] = currentChannel[i] = PAD_SETTINGS_i->getMidiChannel();
         note[i] = PAD_SETTINGS_i->getMidiNote();
         velocity[i] = PAD_SETTINGS_i->getStaticVelocity();
         minRange[i] = PAD_SETTINGS_i->getMidiMinPressureRange();
@@ -47,6 +46,9 @@ ModeMidi::ModeMidi (AlphaLiveEngine &ref)
         pressureStatus[i] = PAD_SETTINGS_i->getMidiPressureStatus();
         noteStatus[i] = PAD_SETTINGS_i->getMidiNoteStatus();
         quantizeMode[i] = PAD_SETTINGS_i->getQuantizeMode();
+        autoMidiChannelStatus[i] = PAD_SETTINGS_i->getMidiAutoChannelStatus();
+        for (int chan = 0; chan < 16; chan++)
+            autoMidiChannels[chan][i] = PAD_SETTINGS_i->getMidiAutoChannels(chan);
         
         //not all members of the TriggerModeData struct are needed for MIDI mode
         triggerModeData[i].playingStatus = 0;
@@ -247,12 +249,16 @@ void ModeMidi::noteOn (int padNumber)
     {
         //this will be called if the 'trigger' triggerMode is selected.
         //must send a note off message first otherwise MIDI notes will hang
-        MidiMessage message = MidiMessage::noteOff(channel[padNumber], note[padNumber]);
+        MidiMessage message = MidiMessage::noteOff(currentChannel[padNumber], note[padNumber]);
         alphaLiveEngineRef.sendMidiMessage(message);
         isPlaying[padNumber] = false;
     }
     
-    MidiMessage message = MidiMessage::noteOn(channel[padNumber], note[padNumber], (uint8)velocity[padNumber]);
+    //if auto channel mode is on, only need to dynamically set the channel here when turning
+    //a note on. The following pressure data and note off message must use the same channel.
+    setCurrentChannel(padNumber);
+    
+    MidiMessage message = MidiMessage::noteOn(currentChannel[padNumber], note[padNumber], (uint8)velocity[padNumber]);
     alphaLiveEngineRef.sendMidiMessage(message);
     isPlaying[padNumber] = true;
     
@@ -267,7 +273,7 @@ void ModeMidi::noteOn (int padNumber)
             {
                 if (AppSettings::Instance()->padSettings[recordingPad]->getSequencerMode() == 1) //if MIDI mode
                 {
-                    if (channel[padNumber] == AppSettings::Instance()->padSettings[recordingPad]->getSequencerMidiChannel()) //if MIDI channels match
+                    if (currentChannel[padNumber] == AppSettings::Instance()->padSettings[recordingPad]->getSequencerMidiChannel()) //if MIDI channels match
                     {
                         int seqNote[NO_OF_ROWS];
                         
@@ -344,7 +350,7 @@ void ModeMidi::noteOff (int padNumber)
     //e.g. if you use one pad to pitch bend, and then turn the pad off via exclusive mode
     //the pitch will still be bent and won't change until you touch the previous pad again.
     
-    MidiMessage message = MidiMessage::noteOff(channel[padNumber], note[padNumber]);
+    MidiMessage message = MidiMessage::noteOff(currentChannel[padNumber], note[padNumber]);
     alphaLiveEngineRef.sendMidiMessage(message);
     isPlaying[padNumber] = false;
     
@@ -381,35 +387,35 @@ void ModeMidi::sendPressureData (int padNumber)
         switch (pressureMode[padNumber])
         {
             case 1: //poly aftertouch
-                message = MidiMessage::aftertouchChange(channel[padNumber], note[padNumber], pressureValueScaled);
+                message = MidiMessage::aftertouchChange(currentChannel[padNumber], note[padNumber], pressureValueScaled);
                 break;
                 
             case 4: //CC messages
-                message = MidiMessage::controllerEvent(channel[padNumber], controllerNumber[padNumber], pressureValueScaled);
+                message = MidiMessage::controllerEvent(currentChannel[padNumber], controllerNumber[padNumber], pressureValueScaled);
                 break;
                 
             case 2: //channel aftertouch
-                message = MidiMessage::channelPressureChange(channel[padNumber], pressureValueScaled);
+                message = MidiMessage::channelPressureChange(currentChannel[padNumber], pressureValueScaled);
                 break;
                 
             case 5: //pitch bend up
                 //convert 0-127 to 8192-16383
                 pressureValueScaled = scaleValue (pressureValueScaled, 0, 127, 8192, 16383);
-                message = MidiMessage::pitchWheel(channel[padNumber], pressureValueScaled);
+                message = MidiMessage::pitchWheel(currentChannel[padNumber], pressureValueScaled);
                 break;
                 
             case 6: //pitch bend down
                 //convert 0-127 to 8192-0
                 pressureValueScaled = scaleValue (pressureValueScaled, 0, 127, 8192, 0);
-                message = MidiMessage::pitchWheel(channel[padNumber], pressureValueScaled);
+                message = MidiMessage::pitchWheel(currentChannel[padNumber], pressureValueScaled);
                 break;
                 
             case 3: // mod wheel
-                message = MidiMessage::controllerEvent(channel[padNumber], 1, pressureValueScaled);
+                message = MidiMessage::controllerEvent(currentChannel[padNumber], 1, pressureValueScaled);
                 break;
                 
             default: //poly aftertouch
-                message = MidiMessage::aftertouchChange(channel[padNumber], note[padNumber], pressureValueScaled);
+                message = MidiMessage::aftertouchChange(currentChannel[padNumber], note[padNumber], pressureValueScaled);
                 break;
         }
         
@@ -528,10 +534,95 @@ bool ModeMidi::isCurrentlyPlaying (int padNum)
     return isPlaying[padNum];
 }
 
+void ModeMidi::setCurrentChannel (int padNum)
+{
+    //static MIDI channel
+    if (autoMidiChannelStatus[padNum] == false)
+    {
+        currentChannel[padNum] = channel[padNum];
+    }
+    
+    //auto MIDI channel
+    else if (autoMidiChannelStatus[padNum] == true)
+    {
+        std::cout << "In auto midi mode. Lets dynamically set the channel..." << std::endl;
+        Array <int> channels_;
+        
+        for (int i = 0; i < 16; i++)
+        {
+            //Find all channels that this pad could
+            //be set to that aren't currently active
+            if (autoMidiChannels[i][padNum] == true && alphaLiveEngineRef.getMidiChannelStatus(i) == false)
+            {
+                channels_.addIfNotAlreadyThere(i);
+            }
+        }
+        
+        std::cout << "Channels the pad can be set to that aren't currently active:" << std::endl;
+        for (int i = 0; i < channels_.size(); i++)
+            std::cout << String(channels_[i] + 1);
+        std::cout << std::endl;
+        
+        if (channels_.size() > 0)
+        {
+            //compare the new channels array with the previously used channels array
+            Array <int> channels_Copy = channels_;
+            Array<int> previouslyUsedChannels = alphaLiveEngineRef.getPreviouslyUsedMidiChannels();
+            
+            std::cout << "Previously used channels:" << std::endl;
+            for (int i = 0; i < previouslyUsedChannels.size(); i++)
+                std::cout << String(previouslyUsedChannels[i] + 1);
+            std::cout << std::endl;
+            
+            channels_Copy.removeValuesIn(previouslyUsedChannels);
+            
+            std::cout << "Values in array that aren't in previously channels array:" << std::endl;
+            for (int i = 0; i < channels_Copy.size(); i++)
+                std::cout << String(channels_Copy[i] + 1);
+            std::cout << std::endl;
+            
+            if (channels_Copy.size() > 0)
+            {
+                //find the lowest channel number that doesn't exist in the previously used array
+                currentChannel[padNum] = channels_Copy[0] + 1;
+                
+                std::cout << "Lowest - Current channel set to: " << currentChannel[padNum] << std::endl;
+            }
+            else
+            {
+                //if they all exist in the previously used array, get the oldest on that matches.
+                currentChannel[padNum] = channels_[0] + 1;
+                
+                std::cout << "Oldest - Current channel set to: " << currentChannel[padNum] << std::endl;
+            }
+            
+        }
+        else
+        {
+            //whats best to do here?
+            
+            //for now I will just set the midi channel to the lowest set channel number.
+            for (int i = 0; i < 16; i++)
+            {
+                if (autoMidiChannels[i][padNum] == true)
+                {
+                    currentChannel[padNum] = i + 1;
+                    std::cout << "Lowest but active - Current channel set to: " << currentChannel[padNum] << std::endl;
+                    //dsfhdgjfhg
+                    break;
+                }
+            }
+        }
+        
+        std::cout << std::endl;
+        
+    }
+}
+
 void ModeMidi::setChannel (int value, int pad)
 {
     //if new channel is different from current channel, stop MIDI note if currently playing to prevent hanging notes
-    if (channel[pad] != value && isPlaying[pad] == true)
+    if (currentChannel[pad] != value && isPlaying[pad] == true)
     {
         noteOff(pad);
         triggerModes[pad].reset();
@@ -631,5 +722,15 @@ void ModeMidi::setNoteStatus (bool value, int pad)
 void ModeMidi::setQuantizeMode (int value, int pad)
 {
     quantizeMode[pad] = value;
+}
+
+void ModeMidi::setAutoMidiChannelStatus (bool value, int pad)
+{
+    autoMidiChannelStatus[pad] = value;
+}
+
+void ModeMidi::setAutoMidiChannels (int channel, bool status, int pad)
+{
+    autoMidiChannels[channel][pad] = status;
 }
 

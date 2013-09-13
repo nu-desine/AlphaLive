@@ -250,7 +250,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	addChildComponent(currentParameterLabel = new Label());
 	currentParameterLabel->setFont(Font(10));
 	currentParameterLabel->setText(translate("TEMPO"), dontSendNotification);
-    currentParameterLabel->setColour(Label::textColourId, Colours::white);
+    currentParameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->textColour);
     currentParameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     currentParameterLabel->setJustificationType(Justification::centred);
     currentParameterLabel->setEditable(false, false, false);
@@ -402,12 +402,12 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	Path p;
 	p.addTriangle(0, 0, 0, 4, 4.5, 2);
 	normal.setPath (p);
-	normal.setFill (Colours::white);
+	normal.setFill (AlphaTheme::getInstance()->textColour);
 	
 	p.clear();
 	p.addQuadrilateral(0, 0, 0, 4, 4, 4, 4, 0);
 	down.setPath (p);
-	down.setFill (Colours::white);
+	down.setFill (AlphaTheme::getInstance()->textColour);
 	p.clear();
 	
 	

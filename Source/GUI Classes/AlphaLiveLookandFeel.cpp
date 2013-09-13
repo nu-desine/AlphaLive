@@ -127,6 +127,15 @@ AlphaLiveLookandFeel::~AlphaLiveLookandFeel()
 
 void AlphaLiveLookandFeel::setTheme (int theme)
 {
+    /*
+     Colours that can't be changed here:
+     - All colours within of the pads. You don't want to change the mode/ring colours
+     and changing the background colours would interfere with these colours.
+     - Various whites/silvers that are used for mouse-over highlighting as well as
+     shadowing/highlighting buttons/components. We preferably don't want to change this
+     - record button colour
+     */
+    
     jassert (Colours::white == Colour (0xffffffff));
 	
     //======================================================================

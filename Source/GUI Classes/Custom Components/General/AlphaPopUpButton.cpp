@@ -132,7 +132,7 @@ void AlphaPopUpButton::paintButton (Graphics& g, bool isMouseOverButton, bool is
 	
 	
 	g.setFont (10);
-    g.setColour (Colours::white);
+    g.setColour (AlphaTheme::getInstance()->textColour);
 	
 	
     g.drawFittedText (getButtonText(),

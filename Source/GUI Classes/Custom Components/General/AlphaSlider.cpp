@@ -28,7 +28,7 @@ AlphaSlider::AlphaSlider()
 	addAndMakeVisible(sliderValueLabel = new Label());
 	sliderValueLabel->setFont(Font(11));
 	sliderValueLabel->setText(String(getValue()), dontSendNotification);
-    sliderValueLabel->setColour(Label::textColourId, Colours::white);
+    sliderValueLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->textColour);
     sliderValueLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     sliderValueLabel->setJustificationType(Justification::centred);
     sliderValueLabel->setEditable(false, true, true);
@@ -39,8 +39,8 @@ AlphaSlider::AlphaSlider()
 	setTextBoxStyle(NoTextBox, false, 80, 40);
 	setColour(textBoxBackgroundColourId , Colours::transparentBlack);
 	setColour(textBoxOutlineColourId  , Colours::transparentBlack);
-	setColour(textBoxHighlightColourId, Colours::white);
-	setColour(textBoxTextColourId, Colours::white);
+	setColour(textBoxHighlightColourId, AlphaTheme::getInstance()->textColour);
+	setColour(textBoxTextColourId, AlphaTheme::getInstance()->textColour);
 	addListener(this);
 	
 	i = 0;

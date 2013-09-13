@@ -241,7 +241,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     addAndMakeVisible(currentParameterLabel = new Label());
 	currentParameterLabel->setFont(Font(10));
 	currentParameterLabel->setText(translate("TEMPO"), dontSendNotification);
-    currentParameterLabel->setColour(Label::textColourId, Colours::white);
+    currentParameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->textColour);
     currentParameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     currentParameterLabel->setJustificationType(Justification::centred);
     //currentParameterLabel->setEditable(false, false, false);

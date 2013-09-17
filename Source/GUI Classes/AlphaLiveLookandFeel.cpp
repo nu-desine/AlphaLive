@@ -205,7 +205,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             ScrollBar::backgroundColourId,              0x00000000,
             ScrollBar::thumbColourId,                   AlphaTheme::getInstance()->textColour_,
             
-            TreeView::linesColourId,                    AlphaTheme::getInstance()->foregroundColourDarker_,
+            TreeView::linesColourId,                    0x00000000,
             TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
             TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
             
@@ -346,7 +346,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             ScrollBar::backgroundColourId,              0x00000000,
             ScrollBar::thumbColourId,                   AlphaTheme::getInstance()->textColour_,
             
-            TreeView::linesColourId,                    AlphaTheme::getInstance()->foregroundColourDarker_,
+            TreeView::linesColourId,                    0x00000000,
             TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
             TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
             

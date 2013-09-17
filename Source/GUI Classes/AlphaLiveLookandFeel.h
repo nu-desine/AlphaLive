@@ -21,7 +21,7 @@
  I'm using a singleton as it seemed to be the easiest way
  of integrating changable colours into the application which
  was originally designed to have static colours. Therefore
- it is a bit hacky.
+ it may be a bit hacky.
  */
 class AlphaTheme
 {
@@ -32,13 +32,43 @@ public:
     
     juce_DeclareSingleton (AlphaTheme, false);
     
+    //=============================================
     // custom/default colours
-    uint32 mainColour_, mainColourLighter_, childBackgroundColour_, childBackgroundColourLighter_, textColour_;
-    uint32 backgroundColour_, foregroundColour_, foregroundColourLighter_, foregroundColourDarker_, iconColour_;
+    
+    // colour for selected buttons, sliders, other selected/highlighted components and more
+    uint32 mainColour_;
+    
+    // colour for gradients on buttons amoung a few other things
+    uint32 mainColourLighter_;
+    
+    // background colour of certain child components such as setting buttons
+    uint32 childBackgroundColour_;
+    
+    // mainly used as a component outline colour
+    uint32 childBackgroundColourLighter_;
+    
+    // colour of most text
+    uint32 textColour_;
+    
+    // main background colour for most components and general graphics
+    uint32 backgroundColour_;
+    
+    // main colour for smaller components and various shapes/lines
+    uint32 foregroundColour_;
+    
+    // mainly used as a second text colour. This should be fairly similar to textColour_
+    uint32 foregroundColourLighter_;
+    
+    // used for tab colours as well as background colour for pop up views
+    uint32 foregroundColourDarker_;
+    
+    // colour for button images/icons. Works best when this is the same as textColour_
+    uint32 iconColour_;
     
     Colour mainColour, mainColourLighter, childBackgroundColour, childBackgroundColourLighter, textColour;
     Colour backgroundColour, foregroundColour, foregroundColourLighter, foregroundColourDarker, iconColour;
     
+    //=============================================
     // background images
     Image mainImage, padsOffImage, padsOnImage, modeOffImage, padsBackgroundImage, settingsOffImage;
     

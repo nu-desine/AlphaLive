@@ -171,17 +171,6 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff555555; //dark grey
         AlphaTheme::getInstance()->iconColour_ = 0xffffffff; //white (same as text colour)
         
-        AlphaTheme::getInstance()->mainColour = Colour(AlphaTheme::getInstance()->mainColour_); //blue
-        AlphaTheme::getInstance()->mainColourLighter = Colour(AlphaTheme::getInstance()->mainColourLighter_); //light blue
-        AlphaTheme::getInstance()->childBackgroundColour = Colour(AlphaTheme::getInstance()->childBackgroundColour_); //nearly black
-        AlphaTheme::getInstance()->childBackgroundColourLighter = Colour(AlphaTheme::getInstance()->childBackgroundColourLighter_); //very dark grey
-        AlphaTheme::getInstance()->textColour = Colour(AlphaTheme::getInstance()->textColour_); //white
-        AlphaTheme::getInstance()->backgroundColour = Colour(AlphaTheme::getInstance()->backgroundColour_); //black
-        AlphaTheme::getInstance()->foregroundColour = Colour(AlphaTheme::getInstance()->foregroundColour_); //grey
-        AlphaTheme::getInstance()->foregroundColourLighter = Colour(AlphaTheme::getInstance()->foregroundColourLighter_); //light grey
-        AlphaTheme::getInstance()->foregroundColourDarker = Colour(AlphaTheme::getInstance()->foregroundColourDarker_); //dark grey
-        AlphaTheme::getInstance()->iconColour = Colour(AlphaTheme::getInstance()->iconColour_); //white (same as text colour)
-        
         // set up the standard set of colours..
         static const uint32 standardColours[] =
         {
@@ -321,17 +310,6 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff800000; //dark maroon
         AlphaTheme::getInstance()->iconColour_ = 0xff000000; //black (same as text colour)
         
-        AlphaTheme::getInstance()->mainColour = Colour(AlphaTheme::getInstance()->mainColour_); //blue
-        AlphaTheme::getInstance()->mainColourLighter = Colour(AlphaTheme::getInstance()->mainColourLighter_); //light blue
-        AlphaTheme::getInstance()->childBackgroundColour = Colour(AlphaTheme::getInstance()->childBackgroundColour_); //nearly black
-        AlphaTheme::getInstance()->childBackgroundColourLighter = Colour(AlphaTheme::getInstance()->childBackgroundColourLighter_); //very dark grey
-        AlphaTheme::getInstance()->textColour = Colour(AlphaTheme::getInstance()->textColour_); //black
-        AlphaTheme::getInstance()->backgroundColour = Colour(AlphaTheme::getInstance()->backgroundColour_); //orange
-        AlphaTheme::getInstance()->foregroundColour = Colour(AlphaTheme::getInstance()->foregroundColour_); //grey
-        AlphaTheme::getInstance()->foregroundColourLighter = Colour(AlphaTheme::getInstance()->foregroundColourLighter_); //light grey
-        AlphaTheme::getInstance()->foregroundColourDarker = Colour(AlphaTheme::getInstance()->foregroundColourDarker_); //dark grey
-        AlphaTheme::getInstance()->iconColour = Colour(AlphaTheme::getInstance()->iconColour_); //black (same as text colour)
-        
         // set up the standard set of colours..
         static const uint32 standardColours[] =
         {
@@ -436,8 +414,19 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         
         for (int i = 0; i < numElementsInArray (standardColours); i += 2)
             setColour (standardColours [i], Colour ((uint32) standardColours [i + 1]));
+        
     }
-    
+   
+    AlphaTheme::getInstance()->mainColour = Colour(AlphaTheme::getInstance()->mainColour_);
+    AlphaTheme::getInstance()->mainColourLighter = Colour(AlphaTheme::getInstance()->mainColourLighter_);
+    AlphaTheme::getInstance()->childBackgroundColour = Colour(AlphaTheme::getInstance()->childBackgroundColour_);
+    AlphaTheme::getInstance()->childBackgroundColourLighter = Colour(AlphaTheme::getInstance()->childBackgroundColourLighter_);
+    AlphaTheme::getInstance()->textColour = Colour(AlphaTheme::getInstance()->textColour_);
+    AlphaTheme::getInstance()->backgroundColour = Colour(AlphaTheme::getInstance()->backgroundColour_);
+    AlphaTheme::getInstance()->foregroundColour = Colour(AlphaTheme::getInstance()->foregroundColour_);
+    AlphaTheme::getInstance()->foregroundColourLighter = Colour(AlphaTheme::getInstance()->foregroundColourLighter_);
+    AlphaTheme::getInstance()->foregroundColourDarker = Colour(AlphaTheme::getInstance()->foregroundColourDarker_);
+    AlphaTheme::getInstance()->iconColour = Colour(AlphaTheme::getInstance()->iconColour_);
 }
 
 

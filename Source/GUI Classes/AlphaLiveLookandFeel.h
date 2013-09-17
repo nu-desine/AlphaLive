@@ -59,7 +59,7 @@ public:
     // mainly used as a second text colour. This should be fairly similar to textColour_
     uint32 foregroundColourLighter_;
     
-    // used for tab colours as well as background colour for pop up views
+    // used for tab colours as well as background colour for pop up views and lots of outlines
     uint32 foregroundColourDarker_;
     
     // colour for button images/icons. Works best when this is the same as textColour_

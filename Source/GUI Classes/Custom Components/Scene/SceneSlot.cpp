@@ -59,7 +59,7 @@ void SceneSlot::paint (Graphics &g)
     }
     else if (status == 1) //settings applied but not selected
     {
-        ColourGradient seqGradient(Colours::white.withAlpha(0.5f), (getWidth()*0.5), 0, AlphaTheme::getInstance()->foregroundColour.withAlpha(0.5f), (getWidth()*0.5),(getHeight()), true);
+        ColourGradient seqGradient(AlphaTheme::getInstance()->textColour.withAlpha(0.5f), (getWidth()*0.5), 0, AlphaTheme::getInstance()->foregroundColour.withAlpha(0.5f), (getWidth()*0.5),(getHeight()), true);
         g.setGradientFill(seqGradient);
     }
     else if (status == 2) //selected

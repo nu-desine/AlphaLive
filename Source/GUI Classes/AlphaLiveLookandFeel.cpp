@@ -205,7 +205,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             ScrollBar::backgroundColourId,              0x00000000,
             ScrollBar::thumbColourId,                   AlphaTheme::getInstance()->textColour_,
             
-            TreeView::linesColourId,                    0x4c000000,
+            TreeView::linesColourId,                    AlphaTheme::getInstance()->foregroundColourDarker_,
             TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
             TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
             
@@ -217,7 +217,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             ComboBox::textColourId,                     AlphaTheme::getInstance()->textColour_,
             ComboBox::backgroundColourId,               0x0fcccccc,
-            ComboBox::arrowColourId,                    0xffcccccc,
+            ComboBox::arrowColourId,                    AlphaTheme::getInstance()->textColour_,
             
             ListBox::backgroundColourId,                AlphaTheme::getInstance()->backgroundColour_,
             ListBox::outlineColourId,                   AlphaTheme::getInstance()->childBackgroundColourLighter_,
@@ -251,6 +251,8 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TabbedComponent::outlineColourId,           AlphaTheme::getInstance()->backgroundColour_,
             TabbedButtonBar::tabOutlineColourId,        0x80000000,
             TabbedButtonBar::frontOutlineColourId,      0x90000000,
+            TabbedButtonBar::tabTextColourId,           AlphaTheme::getInstance()->textColour_,
+            TabbedButtonBar::frontTextColourId,         AlphaTheme::getInstance()->textColour_,
             
             Toolbar::backgroundColourId,                0xfff6f8f9,
             Toolbar::separatorColourId,                 0x4c000000,
@@ -299,16 +301,16 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         
         //set custom and default AlphaLive colours here...
         
-        AlphaTheme::getInstance()->mainColour_ = 0xffff0000; //blue //red
-        AlphaTheme::getInstance()->mainColourLighter_ = 0xffffff00; //light blue //yellow
-        AlphaTheme::getInstance()->childBackgroundColour_ = 0xff008000; //nearly black //green
-        AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xffffffff; //very dark grey //white
-        AlphaTheme::getInstance()->textColour_ = 0xff000000; //black
-        AlphaTheme::getInstance()->backgroundColour_ = 0xffffa500; //orange
-        AlphaTheme::getInstance()->foregroundColour_ = 0xffff69b4; //hot pink
-        AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffffa07a; //light salmon
-        AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff800000; //dark maroon
-        AlphaTheme::getInstance()->iconColour_ = 0xff000000; //black (same as text colour)
+        AlphaTheme::getInstance()->mainColour_ = 0xff316491; //blue
+        AlphaTheme::getInstance()->mainColourLighter_ = 0xff448ecf; //light blue
+        AlphaTheme::getInstance()->childBackgroundColour_ = 0xff181818; //nearly black
+        AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xff21212a; //very dark grey
+        AlphaTheme::getInstance()->textColour_ = 0xffb6b797; // materia cream
+        AlphaTheme::getInstance()->backgroundColour_ = 0xff021221; //very dark blue
+        AlphaTheme::getInstance()->foregroundColour_ = 0xff808080; //grey
+        AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffb6b797; //materia cream
+        AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff46505a; //dark blue/grey
+        AlphaTheme::getInstance()->iconColour_ = 0xffb6b797; // materia cream
         
         // set up the standard set of colours..
         static const uint32 standardColours[] =
@@ -344,7 +346,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             ScrollBar::backgroundColourId,              0x00000000,
             ScrollBar::thumbColourId,                   AlphaTheme::getInstance()->textColour_,
             
-            TreeView::linesColourId,                    0x4c000000,
+            TreeView::linesColourId,                    AlphaTheme::getInstance()->foregroundColourDarker_,
             TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
             TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
             
@@ -356,7 +358,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             ComboBox::textColourId,                     AlphaTheme::getInstance()->textColour_,
             ComboBox::backgroundColourId,               0x0fcccccc,
-            ComboBox::arrowColourId,                    0xffcccccc,
+            ComboBox::arrowColourId,                    AlphaTheme::getInstance()->textColour_,
             
             ListBox::backgroundColourId,                AlphaTheme::getInstance()->backgroundColour_,
             ListBox::outlineColourId,                   AlphaTheme::getInstance()->childBackgroundColourLighter_,
@@ -390,6 +392,8 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TabbedComponent::outlineColourId,           AlphaTheme::getInstance()->backgroundColour_,
             TabbedButtonBar::tabOutlineColourId,        0x80000000,
             TabbedButtonBar::frontOutlineColourId,      0x90000000,
+            TabbedButtonBar::tabTextColourId,           AlphaTheme::getInstance()->textColour_,
+            TabbedButtonBar::frontTextColourId,         AlphaTheme::getInstance()->textColour_,
             
             Toolbar::backgroundColourId,                0xfff6f8f9,
             Toolbar::separatorColourId,                 0x4c000000,

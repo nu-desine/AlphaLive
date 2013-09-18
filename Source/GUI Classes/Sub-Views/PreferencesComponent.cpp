@@ -280,7 +280,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     interfaceThemeMenu->addItem("Materia", 2);
     interfaceThemeMenu->addListener(this);
     interfaceThemeMenu->addMouseListener(this, true);
-    interfaceThemeMenu->setSelectedId(StoredSettings::getInstance()->interfaceTheme, false);
+    interfaceThemeMenu->setSelectedId(StoredSettings::getInstance()->interfaceTheme, true);
     
     addAndMakeVisible(interfaceThemeLabel = new Label());
     interfaceThemeLabel->setText(translate("Interface Theme:"), dontSendNotification);

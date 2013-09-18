@@ -34,7 +34,7 @@ ScopedPointer<ApplicationCommandManager> commandManager;
 //==============================================================================
 MainAppWindow::MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2, MenuBarModel *menuBar_)
     :               DocumentWindow (JUCEApplication::getInstance()->getApplicationName(),
-                    AlphaTheme::getInstance()->backgroundColour,
+                    Colours::black,
                     5),
                     alphaLiveEngineRef(ref),
                     appDocumentStateRef(ref2),

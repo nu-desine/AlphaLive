@@ -68,6 +68,7 @@ SceneSlot::SceneSlot (int slotNumber_, SceneComponent &ref)
     textBox->setColour(TextEditor::textColourId, Colours::darkgrey);
     textBox->setColour(TextEditor::backgroundColourId, Colours::lightgrey);
     textBox->setColour(TextEditor::focusedOutlineColourId, AlphaTheme::getInstance()->colour3);
+	textBox->setFont(Font(11));
     textBox->setPopupMenuEnabled(false);
     textBox->setSelectAllWhenFocused (true);
     textBox->addListener(this);

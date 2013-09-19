@@ -52,6 +52,9 @@ AppSettings::AppSettings()
     autoStartClock = 0; //off
     metronomeStatus = false;
     
+    for (int i = 0; i < 20; i++)
+        sceneName[i] = "Scene " + String(i+1);
+    
     copyExternalFiles = true;
     
     //elite controls stuff
@@ -134,7 +137,6 @@ void AppSettings::resetData()
     setQuantizationValue(3);
     setBeatsPerBar(4);
     setAutoStartClock(0);
-    setCopyExternalFiles(true);
     
     //elite controls stuff
     eliteDial[0].control = 1;
@@ -171,6 +173,14 @@ void AppSettings::resetData()
         eliteButton[i].oscOnNumber = 1;
         eliteButton[i].oscIpAddress = "127.0.0.1";
     }
+}
+
+void AppSettings::resetProjectSettingsData()
+{
+    setCopyExternalFiles(true);
+    
+    for (int i = 0; i < 20; i++)
+        setSceneName(i, "Scene " + String(i+1));
 }
 
 void AppSettings::copyPadSettings (int padNumber)
@@ -269,6 +279,11 @@ void AppSettings::setCopyExternalFiles (bool value)
     copyExternalFiles = value;
 }
 
+void AppSettings::setSceneName(int sceneNumber, String value)
+{
+    sceneName[sceneNumber] = value;
+}
+
 
 Array<int> AppSettings::getCurrentlySelectedPad()
 {
@@ -317,6 +332,11 @@ bool AppSettings::getMetronomeStatus()
 bool AppSettings::getCopyExternalFiles()
 {
     return copyExternalFiles;
+}
+
+String AppSettings::getSceneName (int sceneNumber)
+{
+    return sceneName[sceneNumber];
 }
 
 

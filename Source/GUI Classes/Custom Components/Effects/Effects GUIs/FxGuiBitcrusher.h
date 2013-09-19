@@ -39,6 +39,7 @@ public:
     GuiBitcrusher(MainComponent &ref);
     ~GuiBitcrusher();
     
+    void paint (Graphics &g);
     void resized();
     void sliderValueChanged (Slider *slider);
     void comboBoxChanged (ComboBox *comboBox);

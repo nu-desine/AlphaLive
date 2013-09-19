@@ -50,7 +50,10 @@ public:
     
     bool keyPressed (const KeyPress &key, Component *originatingComponent);
     
+    void initAudioSettingsComponent();
     void removeMidiOutputSelector();
+    void redrawAudioSettingsComponent();
+    void setTabColour();
     
 private:
     MainComponent &mainComponentRef;

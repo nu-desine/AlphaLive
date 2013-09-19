@@ -53,6 +53,8 @@ public:
     
     void noteLayoutSelected (String layout, bool isScale);
     
+    void setTabColour();
+    
 private:
     //==============================================================================
     Array<int> selectedPads;

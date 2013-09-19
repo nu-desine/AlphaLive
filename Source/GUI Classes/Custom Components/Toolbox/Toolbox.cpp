@@ -538,6 +538,12 @@ void Toolbox::noteLayoutSelected (String layout, bool isScale)
     
 }
 
+void Toolbox::setTabColour()
+{
+    //This can't be called in paint as it calls repaint and would cause loops and high CPU.
+    for (int i = 0; i < tabbedComponent->getNumTabs(); i++)
+        tabbedComponent->setTabBackgroundColour(i, AlphaTheme::getInstance()->foregroundColourDarker);
+}
 
 
 void Toolbox::mouseEnter (const MouseEvent &e)

@@ -71,7 +71,6 @@ GuiGainAndPan::GuiGainAndPan(MainComponent &ref)
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
     
@@ -97,6 +96,11 @@ void GuiGainAndPan::resized()
     parameterHoverLabel->setBounds(144, 187, 36, 15);
 }
 
+
+void GuiGainAndPan::paint(Graphics &g)
+{
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+}
 
 
 void GuiGainAndPan::sliderValueChanged (Slider *slider)

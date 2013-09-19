@@ -178,7 +178,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //gain and pan label
     addAndMakeVisible(gainPanValueLabel = new Label("value label", String::empty));
     gainPanValueLabel->setJustificationType(Justification::horizontallyCentred);
-    gainPanValueLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
     gainPanValueLabel->setFont(Font(12));
     gainPanValueLabel->addMouseListener(this, true);
     
@@ -212,7 +211,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     addAndMakeVisible(infoTextBox = new TextEditor());
     infoTextBox->setMultiLine(true);
     infoTextBox->setReadOnly(true);
-    infoTextBox->setColour(TextEditor::backgroundColourId, AlphaTheme::getInstance()->backgroundColour.withAlpha(1.0f));
     infoTextBox->setColour(TextEditor::outlineColourId, Colours::transparentBlack);
     infoTextBox->setCaretVisible(false);
     Font infoFont(infoBoxTextSize, Font::plain);
@@ -323,6 +321,9 @@ void MainComponent::resized()
 
 void MainComponent::paint(juce::Graphics &g)
 {
+    infoTextBox->setColour(TextEditor::backgroundColourId, AlphaTheme::getInstance()->backgroundColour);
+    gainPanValueLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+    
     g.setOrigin(0, 0);
     
 	g.drawImage(AlphaTheme::getInstance()->mainImage,
@@ -1908,6 +1909,11 @@ void MainComponent::changeLookAndFeel()
 {
     alphaLiveLookAndFeel.setTheme (StoredSettings::getInstance()->interfaceTheme);
     
-    repaint();
+    toolbox->setTabColour();
+    preferencesComponent->setTabColour();
+    preferencesComponent->redrawAudioSettingsComponent();
+    projectSettingsComponent->setTabColour();
+    
+    sendLookAndFeelChange();
 }
 

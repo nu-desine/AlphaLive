@@ -98,7 +98,6 @@ GuiBitcrusher::GuiBitcrusher(MainComponent &ref)
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
 	
@@ -128,7 +127,10 @@ void GuiBitcrusher::resized()
     
 }
 
-
+void GuiBitcrusher::paint(Graphics &g)
+{
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+}
 
 void GuiBitcrusher::sliderValueChanged (Slider *slider)
 {

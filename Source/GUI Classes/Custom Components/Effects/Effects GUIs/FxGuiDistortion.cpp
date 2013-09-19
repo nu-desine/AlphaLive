@@ -112,7 +112,6 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
         
@@ -124,7 +123,10 @@ GuiDistortion::~GuiDistortion()
     deleteAllChildren();
 }
 
-
+void GuiDistortion::paint(Graphics &g)
+{
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+}
 
 void GuiDistortion::resized()
 {

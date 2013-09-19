@@ -161,10 +161,10 @@ void AboutComponent::resized()
 
 void AboutComponent::paint (Graphics& g)
 {
-    g.setColour(Colours::black.withAlpha(0.8f));
+    g.setColour(AlphaTheme::getInstance()->backgroundColour.withAlpha(0.8f));
     g.fillRect(0, 0, getWidth(), getHeight());
     
-    g.setColour(Colours::grey.withAlpha(1.0f));
+    g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(1.0f));
     //g.fillRoundedRectangle(getWidth()/3, getHeight()/4, getWidth()/3, (getHeight()/2)-30, 10);
     g.fillRoundedRectangle(getWidth()/3, getHeight()/6, getWidth()/3, ((getHeight()/6)*4)-30, 10);
     

@@ -77,8 +77,8 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
     //for some reason using a textEditor was creating gui problems, so using a label instead now
     addChildComponent(oscIpAddressEditor = new Label());
     oscIpAddressEditor->setText("127.0.0.1", dontSendNotification);
-    oscIpAddressEditor->setColour(Label::textColourId, Colours::grey);
-    oscIpAddressEditor->setColour(Label::backgroundColourId, Colours::lightgrey);
+    oscIpAddressEditor->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColour);
+    oscIpAddressEditor->setColour(Label::backgroundColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     oscIpAddressEditor->setJustificationType(Justification::centred);
     oscIpAddressEditor->setEditable(true);
     oscIpAddressEditor->addMouseListener(this, true);
@@ -167,7 +167,7 @@ void GuiControllerMode::resized()
 void GuiControllerMode::paint (Graphics& g)
 {
     
-	ColourGradient fillGradient(AlphaTheme::getInstance()->colour3,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);
@@ -185,7 +185,7 @@ void GuiControllerMode::drawButtonsBackground(Graphics &g)
 {
 	//this draws an outline around the midi channel buttons
     
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	
 	g.fillEllipse(646,436, 27, 27);
 	g.fillEllipse(653,464, 27, 27);
@@ -206,7 +206,7 @@ void GuiControllerMode::drawButtonsBackground(Graphics &g)
 	g.fillEllipse(981,520, 27, 27);
 	
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	
 	
 	g.drawEllipse(646,436, 27, 27, 1.0);

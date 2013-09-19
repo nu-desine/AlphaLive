@@ -20,6 +20,7 @@
 
 
 #include "AlphaSlider.h"
+#include "../../AlphaLiveLookandFeel.h"
 
 
 AlphaSlider::AlphaSlider()
@@ -27,7 +28,6 @@ AlphaSlider::AlphaSlider()
 	addAndMakeVisible(sliderValueLabel = new Label());
 	sliderValueLabel->setFont(Font(11));
 	sliderValueLabel->setText(String(getValue()), dontSendNotification);
-    sliderValueLabel->setColour(Label::textColourId, Colours::white);
     sliderValueLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     sliderValueLabel->setJustificationType(Justification::centred);
     sliderValueLabel->setEditable(false, true, true);
@@ -38,12 +38,10 @@ AlphaSlider::AlphaSlider()
 	setTextBoxStyle(NoTextBox, false, 80, 40);
 	setColour(textBoxBackgroundColourId , Colours::transparentBlack);
 	setColour(textBoxOutlineColourId  , Colours::transparentBlack);
-	setColour(textBoxHighlightColourId, Colours::white);
-	setColour(textBoxTextColourId, Colours::white);
 	addListener(this);
 	
 	i = 0;
-	arrowUpColour = arrowDownColour = Colours::grey.withAlpha(0.3f);
+	arrowUpColour = arrowDownColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f);
 }
 
 AlphaSlider::~AlphaSlider()
@@ -60,6 +58,11 @@ void AlphaSlider::resized()
 
 void AlphaSlider::paint(Graphics& g)
 {
+    setColour(textBoxHighlightColourId, AlphaTheme::getInstance()->textColour);
+	setColour(textBoxTextColourId, AlphaTheme::getInstance()->textColour);
+    sliderValueLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->textColour);
+    arrowUpColour = arrowDownColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f);
+    
     thePath.clear();
     upButtonPath.clear();
     downButtonPath.clear();
@@ -68,10 +71,10 @@ void AlphaSlider::paint(Graphics& g)
     
 	thePath.addEllipse(0, 0, getWidth(), getHeight());
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillPath(thePath);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse((getWidth()*0.1), (getHeight()*0.1), (getWidth()*0.8), (getHeight()*0.8), 1.0f);
 	
 	g.setColour(arrowUpColour);;
@@ -105,13 +108,13 @@ void AlphaSlider::sliderValueChanged (Slider *slider)
 	
 	if (getValue() < valueStore) 
     {
-		arrowUpColour = Colours::grey.withAlpha(0.3f);
-		arrowDownColour = Colours::grey.withAlpha(0.8f);
+		arrowUpColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f);
+		arrowDownColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.8f);
 	}
 	else if (getValue() > valueStore) 
     {
-		arrowUpColour = Colours::grey.withAlpha(0.8f);
-		arrowDownColour = Colours::grey.withAlpha(0.3f);
+		arrowUpColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.8f);
+		arrowDownColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f);
 	}
 	
 	repaint();
@@ -119,8 +122,8 @@ void AlphaSlider::sliderValueChanged (Slider *slider)
 
 void AlphaSlider::sliderDragEnded (Slider *slider)
 {
-	arrowDownColour = Colours::grey.withAlpha(0.3f);
-	arrowUpColour = Colours::grey.withAlpha(0.3f);
+	arrowDownColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f);
+	arrowUpColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f);
 	
 	repaint();
 }
@@ -151,8 +154,8 @@ void AlphaSlider::labelTextChanged (Label* labelThatHasChanged)
     
     Slider::setValue(labelValue, sendNotification);
 	
-	arrowDownColour = Colours::grey.withAlpha(0.3f);
-	arrowUpColour = Colours::grey.withAlpha(0.3f);
+	arrowDownColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f);
+	arrowUpColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f);
 	
 	repaint();
 	
@@ -195,7 +198,7 @@ void AlphaSlider::mouseDown(const MouseEvent &e)
         Slider::setValue(Slider::getValue() + Slider::getInterval(), sendNotification);
         sliderValueLabel->setText(String(Slider::getValue()), dontSendNotification);
         
-        arrowUpColour = Colours::grey.withAlpha(0.8f);
+        arrowUpColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.8f);
         repaint();
     }
     else if (downButtonPathBig.contains(e.x, e.y))
@@ -203,7 +206,7 @@ void AlphaSlider::mouseDown(const MouseEvent &e)
         Slider::setValue(Slider::getValue() - Slider::getInterval(), sendNotification);
         sliderValueLabel->setText(String(Slider::getValue()), dontSendNotification);
         
-        arrowDownColour = Colours::grey.withAlpha(0.8f);
+        arrowDownColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.8f);
         repaint();
     }
     else if (e.getNumberOfClicks() == 2)
@@ -219,8 +222,8 @@ void AlphaSlider::mouseDown(const MouseEvent &e)
 
 void AlphaSlider::mouseUp(const MouseEvent &e)
 {
-    arrowDownColour = Colours::grey.withAlpha(0.3f);
-	arrowUpColour = Colours::grey.withAlpha(0.3f);
+    arrowDownColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f);
+	arrowUpColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f);
 	
 	repaint();
 }

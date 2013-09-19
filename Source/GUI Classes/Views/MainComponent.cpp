@@ -178,7 +178,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //gain and pan label
     addAndMakeVisible(gainPanValueLabel = new Label("value label", String::empty));
     gainPanValueLabel->setJustificationType(Justification::horizontallyCentred);
-    gainPanValueLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->colour1);
     gainPanValueLabel->setFont(Font(12));
     gainPanValueLabel->addMouseListener(this, true);
     
@@ -212,7 +211,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     addAndMakeVisible(infoTextBox = new TextEditor());
     infoTextBox->setMultiLine(true);
     infoTextBox->setReadOnly(true);
-    infoTextBox->setColour(TextEditor::backgroundColourId, Colours::black.withAlpha(1.0f));
     infoTextBox->setColour(TextEditor::outlineColourId, Colours::transparentBlack);
     infoTextBox->setCaretVisible(false);
     Font infoFont(infoBoxTextSize, Font::plain);
@@ -323,6 +321,9 @@ void MainComponent::resized()
 
 void MainComponent::paint(juce::Graphics &g)
 {
+    infoTextBox->setColour(TextEditor::backgroundColourId, AlphaTheme::getInstance()->backgroundColour);
+    gainPanValueLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+    
     g.setOrigin(0, 0);
     
 	g.drawImage(AlphaTheme::getInstance()->mainImage,
@@ -372,15 +373,15 @@ void MainComponent::paint(juce::Graphics &g)
                     AlphaTheme::getInstance()->padsOnImage.getWidth(),
                     AlphaTheme::getInstance()->padsOnImage.getHeight());
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		
 		g.fillRect(753, 10, 261, 121);
 		
-		g.setColour(Colours::grey.withAlpha(0.3f));
+		g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 		
 		g.drawRect(753, 10, 261, 121, 2);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	}
 	
 	if (noModeSelected == 1) 
@@ -410,9 +411,9 @@ void MainComponent::paint(juce::Graphics &g)
                 AlphaTheme::getInstance()->padsBackgroundImage.getHeight());
 	
 	//gain and pan container
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(35, 5, 87, 87);
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse(35, 5, 87, 87, 1.0f);
 }
 
@@ -2059,6 +2060,11 @@ void MainComponent::changeLookAndFeel()
 {
     alphaLiveLookAndFeel.setTheme (StoredSettings::getInstance()->interfaceTheme);
     
-    repaint();
+    toolbox->setTabColour();
+    preferencesComponent->setTabColour();
+    preferencesComponent->redrawAudioSettingsComponent();
+    projectSettingsComponent->setTabColour();
+    
+    sendLookAndFeelChange();
 }
 

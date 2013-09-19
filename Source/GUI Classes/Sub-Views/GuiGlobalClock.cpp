@@ -145,21 +145,21 @@ void GuiGlobalClock::paint (Graphics &g)
     
     //Draw semi-circle background for quantise buttons
 	quantiseBg.addPieSegment(603-OFFSET_X, 3, 137, 137, (235.5 * (M_PI / 180)), (404 * (M_PI / 180)), 0.5f);
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillPath(quantiseBg, getTransform());
 	
     //Draw circle behind clock display segments
-	g.setColour(Colours::grey.withAlpha(0.2f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.2f));
 	g.fillEllipse(634-OFFSET_X, 32, 76, 76);
 	
     //Draw clock display segments background
 	barsBg.addPieSegment(626-OFFSET_X, 24, 93, 93, 0, (90 * (M_PI / 180)), 0.5f);
 	barsBg.addPieSegment(626-OFFSET_X, 24, 93, 93, (180 * (M_PI / 180)), (270 * (M_PI / 180)), 0.5f);
-	g.setColour(Colours::grey.withAlpha(0.2f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.2f));
 	g.fillPath(barsBg, getTransform());
 	
     //Draw circles around the buttons
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(639-OFFSET_X, 37, 66, 66);
 	g.fillEllipse(515-OFFSET_X, 7, 30, 30);
 	g.fillEllipse(486-OFFSET_X, 5, 22, 22);
@@ -196,7 +196,7 @@ void GuiGlobalClock::paint (Graphics &g)
         barCount.addPieSegment(627-OFFSET_X, 26, 90, 90, segStart, segEnd, 0.9f);
     }
     
-    g.setColour(AlphaTheme::getInstance()->colour1);
+    g.setColour(AlphaTheme::getInstance()->mainColour);
 	g.fillPath(barCount, getTransform());
 }
 

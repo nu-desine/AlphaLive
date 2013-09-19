@@ -51,7 +51,7 @@ void AlphaPopUpButton::resized()
 void AlphaPopUpButton::paintButton (Graphics& g, bool isMouseOverButton, bool isButtonDown)
 {
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillPath(hitPath, getTransform());
 	
 	
@@ -61,7 +61,7 @@ void AlphaPopUpButton::paintButton (Graphics& g, bool isMouseOverButton, bool is
 		case 0:
         {
             
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->colour2, (getWidth()*0.5), 0, false);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->mainColour, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->mainColourLighter, (getWidth()*0.5), 0, false);
 			g.setGradientFill(fillGradient);
 			
 			
@@ -71,7 +71,7 @@ void AlphaPopUpButton::paintButton (Graphics& g, bool isMouseOverButton, bool is
 		case 1:
         {
             
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour2, (getWidth()*0.5), (getHeight()*0.9), AlphaTheme::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.5), false);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->mainColourLighter, (getWidth()*0.5), (getHeight()*0.9), AlphaTheme::getInstance()->mainColour, (getWidth()*0.5), (getHeight()*0.5), false);
 			g.setGradientFill(fillGradient);
 		
 			
@@ -81,7 +81,7 @@ void AlphaPopUpButton::paintButton (Graphics& g, bool isMouseOverButton, bool is
 		case 2:
         {
             
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour2, (getWidth()*0.5), (getHeight()*0.7), AlphaTheme::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.5), false);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->mainColourLighter, (getWidth()*0.5), (getHeight()*0.7), AlphaTheme::getInstance()->mainColour, (getWidth()*0.5), (getHeight()*0.5), false);
 			g.setGradientFill(fillGradient);
 			
 			
@@ -91,7 +91,7 @@ void AlphaPopUpButton::paintButton (Graphics& g, bool isMouseOverButton, bool is
 		case 3:
         {
             
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->colour2, (getWidth()*0.5), 0, false);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->mainColour, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->mainColourLighter, (getWidth()*0.5), 0, false);
 			g.setGradientFill(fillGradient);
 			
 			
@@ -101,7 +101,7 @@ void AlphaPopUpButton::paintButton (Graphics& g, bool isMouseOverButton, bool is
 		case 4:
         {
             
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour2, (getWidth()*0.5), (getHeight()*0.9), AlphaTheme::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.5), false);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->mainColourLighter, (getWidth()*0.5), (getHeight()*0.9), AlphaTheme::getInstance()->mainColour, (getWidth()*0.5), (getHeight()*0.5), false);
 			g.setGradientFill(fillGradient);
 			
 			
@@ -111,7 +111,7 @@ void AlphaPopUpButton::paintButton (Graphics& g, bool isMouseOverButton, bool is
 		case 5:
         {
             
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour2, (getWidth()*0.5), (getHeight()*0.7), AlphaTheme::getInstance()->colour1, (getWidth()*0.5), (getHeight()*0.5), false);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->mainColourLighter, (getWidth()*0.5), (getHeight()*0.7), AlphaTheme::getInstance()->mainColour, (getWidth()*0.5), (getHeight()*0.5), false);
 			g.setGradientFill(fillGradient);
 		
 			
@@ -127,12 +127,12 @@ void AlphaPopUpButton::paintButton (Graphics& g, bool isMouseOverButton, bool is
 	
 	g.fillEllipse((getWidth()*0.15), (getHeight()*0.15), (getWidth()*0.7), (getHeight()*0.7));
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse((getWidth()*0.1), (getHeight()*0.1), (getWidth()*0.8), (getHeight()*0.8), 1.0f);
 	
 	
 	g.setFont (10);
-    g.setColour (Colours::white);
+    g.setColour (AlphaTheme::getInstance()->textColour);
 	
 	
     g.drawFittedText (getButtonText(),

@@ -92,22 +92,22 @@ GuiPiano::GuiPiano() : Component ("GuiPiano")
 				
 		if(noteIndex == 2 || noteIndex == 4 || noteIndex == 7 || noteIndex == 9 || noteIndex == 11)
 		{
-			keys.insert(i, new GuiKeys(keyNumber, Colours::grey, Colours::lightgrey, AlphaTheme::getInstance()->colour2));
+			keys.insert(i, new GuiKeys(keyNumber, AlphaTheme::getInstance()->foregroundColour, AlphaTheme::getInstance()->foregroundColourLighter, AlphaTheme::getInstance()->mainColourLighter));
 			keys[i]->setShape(*keysPath[i], true, true, false);
 			addAndMakeVisible(keys[i],(i+200));
 		}
 		else  if (noteIndex == 1)
 		{
-			keys.insert(i, new GuiKeys(keyNumber, AlphaTheme::getInstance()->colour3, AlphaTheme::getInstance()->colour4, AlphaTheme::getInstance()->colour2));
+			keys.insert(i, new GuiKeys(keyNumber, AlphaTheme::getInstance()->childBackgroundColour, AlphaTheme::getInstance()->childBackgroundColourLighter, AlphaTheme::getInstance()->mainColourLighter));
 			keys[i]->setShape(*keysPath[i], true, true, false);
-			keys[i]->setOutline(Colours::darkgrey.withAlpha(0.5f), 1.0f);
+			keys[i]->setOutline(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.5f), 1.0f);
 			addAndMakeVisible(keys[i],i);
 		}
 		else
 		{
-			keys.insert(i, new GuiKeys(keyNumber, Colours::black, AlphaTheme::getInstance()->colour4, AlphaTheme::getInstance()->colour2));
+			keys.insert(i, new GuiKeys(keyNumber, AlphaTheme::getInstance()->backgroundColour, AlphaTheme::getInstance()->childBackgroundColourLighter, AlphaTheme::getInstance()->mainColourLighter));
 			keys[i]->setShape(*keysPath[i], true, true, false);
-			keys[i]->setOutline(Colours::darkgrey.withAlpha(0.5f), 1.0f);
+			keys[i]->setOutline(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.5f), 1.0f);
 			addAndMakeVisible(keys[i],i);
 		}
 
@@ -149,10 +149,10 @@ void GuiPiano::resized()
 
 void GuiPiano::paint (Graphics& g)
 {
-    g.setColour(Colours::black);
+    g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(540, 560, 55, 55);
     
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse(540, 560, 55, 55, 1.0f);
 	
 }
@@ -674,7 +674,7 @@ void GuiPiano::mouseEnter (const MouseEvent &e)
         //===display note number when hovering mouse over a piano key===
         if (keys[i]->isMouseOver(true))
         {
-            midiNoteLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->colour1);
+            midiNoteLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
             setNoteLabelText(i);
             break;
         }
@@ -727,15 +727,15 @@ void GuiPiano::setKeyDisplay (int keyNumber, bool keyOn)
         //set the key/button colour
         if(noteIndex == 2 || noteIndex == 4 || noteIndex == 7 || noteIndex == 9 || noteIndex == 11)
         {
-            keys[keyNumber]->setColours(Colours::grey, Colours::lightgrey, AlphaTheme::getInstance()->colour2);
+            keys[keyNumber]->setColours(AlphaTheme::getInstance()->foregroundColour, AlphaTheme::getInstance()->foregroundColourLighter, AlphaTheme::getInstance()->mainColourLighter);
         }
         else if (noteIndex == 1)
         {
-            keys[keyNumber]->setColours(AlphaTheme::getInstance()->colour3, AlphaTheme::getInstance()->colour4, AlphaTheme::getInstance()->colour2);
+            keys[keyNumber]->setColours(AlphaTheme::getInstance()->childBackgroundColour, AlphaTheme::getInstance()->childBackgroundColourLighter, AlphaTheme::getInstance()->mainColourLighter);
         }
         else
         {
-            keys[keyNumber]->setColours(Colours::black, AlphaTheme::getInstance()->colour4, AlphaTheme::getInstance()->colour2);
+            keys[keyNumber]->setColours(AlphaTheme::getInstance()->backgroundColour, AlphaTheme::getInstance()->childBackgroundColourLighter, AlphaTheme::getInstance()->mainColourLighter);
         }
     }
     
@@ -747,11 +747,11 @@ void GuiPiano::setKeyDisplay (int keyNumber, bool keyOn)
         //set the key/button colour
         if(noteIndex == 2 || noteIndex == 4 || noteIndex == 7 || noteIndex == 9 || noteIndex == 11)
         {
-			keys[keyNumber]->setColours(AlphaTheme::getInstance()->colour2, AlphaTheme::getInstance()->colour2, AlphaTheme::getInstance()->colour2);  
+			keys[keyNumber]->setColours(AlphaTheme::getInstance()->mainColourLighter, AlphaTheme::getInstance()->mainColourLighter, AlphaTheme::getInstance()->mainColourLighter);  
 		}
 		else 
         {
-			keys[keyNumber]->setColours(AlphaTheme::getInstance()->colour1, AlphaTheme::getInstance()->colour1, AlphaTheme::getInstance()->colour2);  
+			keys[keyNumber]->setColours(AlphaTheme::getInstance()->mainColour, AlphaTheme::getInstance()->mainColour, AlphaTheme::getInstance()->mainColourLighter);  
 		}
 
 	}    

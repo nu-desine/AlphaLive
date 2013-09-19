@@ -43,7 +43,7 @@ SettingsButtonImage::SettingsButtonImage (Image* _theImage, float _startRadians,
     downOpacity   = 0.5f;
     downOverlay   = Colours::white;
 	onOpacity   = 0.9f;
-    onOverlay   = AlphaTheme::getInstance()->colour1;
+    onOverlay   = AlphaTheme::getInstance()->mainColour;
 }
 
 SettingsButtonImage::~SettingsButtonImage()
@@ -99,14 +99,14 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
     {
 		case 0:
         {
-			ColourGradient fillGradient(Colours::black, (getWidth() * 0.5), (getHeight() * 0.5), AlphaTheme::getInstance()->colour3, 0, 0, true);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->backgroundColour, (getWidth() * 0.5), (getHeight() * 0.5), AlphaTheme::getInstance()->childBackgroundColour, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
-			g.setColour(Colours::darkgrey.withAlpha(0.5f));
+			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.5f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
-			g.setColour(Colours::white.withAlpha(0.5f));
+			g.setColour(AlphaTheme::getInstance()->iconColour.withAlpha(0.5f));
 			g.drawImageTransformed(*theImage, rotateImage, true);
 			
             break;
@@ -114,15 +114,14 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 			
 		case 1:
         {
-			ColourGradient fillGradient(Colours::black, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->colour3, 0, 0, true);			
+			ColourGradient fillGradient(AlphaTheme::getInstance()->backgroundColour, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->childBackgroundColour, 0, 0, true);			
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
-			g.setColour(Colours::darkgrey.withAlpha(0.7f));
+			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.7f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
-			g.setColour(Colours::white.withAlpha(0.8f));
-
+			g.setColour(AlphaTheme::getInstance()->iconColour.withAlpha(0.8f));
 			g.drawImageTransformed(*theImage, rotateImage, true);
 			
             break;
@@ -130,15 +129,14 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 			
 		case 2:
         {
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour3, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->backgroundColour, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
-			g.setColour(Colours::darkgrey.withAlpha(0.7f));
+			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.7f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
-			g.setColour(Colours::white.withAlpha(0.8f));
-
+			g.setColour(AlphaTheme::getInstance()->iconColour.withAlpha(0.8f));
 			g.drawImageTransformed(*theImage, rotateImage, true);
 			
             break;
@@ -146,14 +144,14 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 			
 		case 3:
         {
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour3, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->backgroundColour, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
-			g.setColour(Colours::darkgrey.withAlpha(0.4f));
+			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.4f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
-			g.setColour(AlphaTheme::getInstance()->colour1);
+			g.setColour(AlphaTheme::getInstance()->mainColour);
 			g.drawImageTransformed(*theImage, rotateImage, true);
 			
             break;
@@ -161,14 +159,14 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 			
 		case 4:
         {
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour3, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->backgroundColour, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
-			g.setColour(Colours::darkgrey.withAlpha(0.4f));
+			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.4f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
-			g.setColour(AlphaTheme::getInstance()->colour1);
+			g.setColour(AlphaTheme::getInstance()->mainColour);
 			
 			g.drawImageTransformed(*theImage, rotateImage, true);
 			
@@ -177,14 +175,14 @@ void SettingsButtonImage::paintButton (Graphics& g, bool isMouseOverButton, bool
 			
 		case 5:
         {
-			ColourGradient fillGradient(AlphaTheme::getInstance()->colour3, (getWidth()*0.5), (getHeight()*0.5), Colours::black, 0, 0, true);
+			ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour, (getWidth()*0.5), (getHeight()*0.5), AlphaTheme::getInstance()->backgroundColour, 0, 0, true);
 			g.setGradientFill(fillGradient);
 			g.fillPath(thePath, getTransform());
 			
-			g.setColour(Colours::darkgrey.withAlpha(0.4f));
+			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.4f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
-			g.setColour(AlphaTheme::getInstance()->colour1);
+			g.setColour(AlphaTheme::getInstance()->mainColour);
 			
 			g.drawImageTransformed(*theImage, rotateImage, true);
 			

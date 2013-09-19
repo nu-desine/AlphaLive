@@ -44,6 +44,7 @@
  */
 
 #include "AlphaAudioSettingsComponent.h"
+#include "../../AlphaLiveLookandFeel.h"
 
 
 //==============================================================================
@@ -166,7 +167,7 @@ public:
         
         if (items.size() == 0)
         {
-            g.setColour (Colours::grey);
+            g.setColour (AlphaTheme::getInstance()->foregroundColour);
             g.setFont (13.0f);
             g.drawText (noItemsMessage,
                         0, 0, getWidth(), getHeight() / 2,
@@ -435,7 +436,7 @@ public:
                                        = new ChannelSelectorListBox (setup, ChannelSelectorListBox::audioOutputType,
                                                                      TRANS("No audio output channels found...")));
                     outputChanLabel = new Label (String::empty, TRANS("Active Output Channels:"));
-                    outputChanLabel->setColour(Label::textColourId, Colours::lightgrey);
+                    outputChanLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
                     outputChanLabel->attachToComponent (outputChanList, true);
                 }
                 
@@ -456,7 +457,7 @@ public:
                                        = new ChannelSelectorListBox (setup, ChannelSelectorListBox::audioInputType,
                                                                      TRANS("No audio input channels found...")));
                     inputChanLabel = new Label (String::empty, TRANS("Active Input Channels:"));
-                    inputChanLabel->setColour(Label::textColourId, Colours::lightgrey);
+                    inputChanLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
                     inputChanLabel->attachToComponent (inputChanList, true);
                 }
                 
@@ -572,7 +573,7 @@ private:
                 outputDeviceLabel = new Label (String::empty,
                                                type->hasSeparateInputsAndOutputs() ? TRANS("Audio Output:")
                                                : TRANS("Device:"));
-                outputDeviceLabel->setColour(Label::textColourId, Colours::lightgrey);
+                outputDeviceLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
                 outputDeviceLabel->attachToComponent (outputDeviceDropDown, true);
                 
                 if (setup.maxNumOutputChannels > 0)
@@ -599,7 +600,7 @@ private:
                 addAndMakeVisible (inputDeviceDropDown);
                 
                 inputDeviceLabel = new Label (String::empty, TRANS("Audio Input:"));
-                inputDeviceLabel->setColour(Label::textColourId, Colours::lightgrey);
+                inputDeviceLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
                 inputDeviceLabel->attachToComponent (inputDeviceDropDown, true);
                 
                 addAndMakeVisible (inputLevelMeter
@@ -619,7 +620,7 @@ private:
             addAndMakeVisible (sampleRateDropDown = new ComboBox (String::empty));
             
             sampleRateLabel = new Label (String::empty, TRANS("Sample Rate:"));
-            sampleRateLabel->setColour(Label::textColourId, Colours::lightgrey);
+            sampleRateLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
             sampleRateLabel->attachToComponent (sampleRateDropDown, true);
         }
         else
@@ -647,7 +648,7 @@ private:
             addAndMakeVisible (bufferSizeDropDown = new ComboBox (String::empty));
             
             bufferSizeLabel = new Label (String::empty, TRANS("Audio Buffer Size:"));
-            bufferSizeLabel->setColour(Label::textColourId, Colours::lightgrey);
+            bufferSizeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
             bufferSizeLabel->attachToComponent (bufferSizeDropDown, true);
         }
         else
@@ -814,7 +815,7 @@ public:
             
             if (items.size() == 0)
             {
-                g.setColour (Colours::grey);
+                g.setColour (AlphaTheme::getInstance()->foregroundColour);
                 g.setFont (13.0f);
                 g.drawText (noItemsMessage,
                             0, 0, getWidth(), getHeight() / 2,
@@ -967,7 +968,7 @@ alphaLiveEngineRef(ref)
         deviceTypeDropDown->addListener (this);
         
         deviceTypeDropDownLabel = new Label (String::empty, TRANS("Audio Device Type:"));
-        deviceTypeDropDownLabel->setColour(Label::textColourId, Colours::lightgrey);
+        deviceTypeDropDownLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
         deviceTypeDropDownLabel->setJustificationType (Justification::centredRight);
         deviceTypeDropDownLabel->attachToComponent (deviceTypeDropDown, true);
     }
@@ -980,7 +981,7 @@ alphaLiveEngineRef(ref)
                                                                     0, 0));
         
         midiInputsLabel = new Label (String::empty, TRANS("Active Midi Inputs:"));
-        midiInputsLabel->setColour(Label::textColourId, Colours::lightgrey);
+        midiInputsLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
         midiInputsLabel->setJustificationType (Justification::topRight);
         midiInputsLabel->attachToComponent (midiInputsList, true);
     }
@@ -996,7 +997,7 @@ alphaLiveEngineRef(ref)
         midiOutputSelector->addListener (this);
         
         midiOutputLabel = new Label ("lm", TRANS("Midi Output:"));
-        midiOutputLabel->setColour(Label::textColourId, Colours::lightgrey);
+        midiOutputLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
         midiOutputLabel->attachToComponent (midiOutputSelector, true);
     }
     else

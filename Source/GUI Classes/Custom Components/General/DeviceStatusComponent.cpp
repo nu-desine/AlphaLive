@@ -39,17 +39,17 @@ void DeviceStatusComponent::resized()
 }
 void DeviceStatusComponent::paint (Graphics& g)
 {
-    g.setColour(Colours::black);
+    g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillRoundedRectangle(1, 1, getWidth()-2, getHeight()-2, 5);
-    g.setColour(Colours::grey);
+    g.setColour(AlphaTheme::getInstance()->foregroundColour);
 	g.drawRoundedRectangle(1, 1, getWidth()-2, getHeight()-2, 5, 1);
     
     if (deviceStatus == 1)
-        g.setColour(AlphaTheme::getInstance()->colour1.withAlpha(0.7f));
+        g.setColour(AlphaTheme::getInstance()->mainColour.withAlpha(0.7f));
     else if (deviceStatus == 2)
         g.setColour(Colours::red.withAlpha(0.7f));
     else
-        g.setColour(AlphaTheme::getInstance()->colour3);
+        g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
     
 	g.fillRoundedRectangle(5, 8, getWidth()-10, getHeight()-12, 1);
 

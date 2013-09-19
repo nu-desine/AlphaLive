@@ -146,14 +146,14 @@ void GuiFxDial::resized()
 
 void GuiFxDial::paint (Graphics& g)
 {
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(208,208, 38, 38);
 	
 	Path pieSeg;
 	pieSeg.addPieSegment(119, 119, 86, 86, (125 * (M_PI / 180)), (235 * (M_PI / 180)), 0.2f);
 	g.fillPath(pieSeg);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse(208,208, 38, 38, 1.0f);
 	
 }

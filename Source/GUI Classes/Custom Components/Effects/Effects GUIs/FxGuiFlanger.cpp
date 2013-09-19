@@ -104,14 +104,13 @@ GuiFlanger::GuiFlanger(MainComponent &ref)
     intensitySlider->setValue(1.0, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
-    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->colour2);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
 
     tempo = AppSettings::Instance()->getGlobalTempo();
     
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->colour1);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
     
@@ -146,14 +145,13 @@ void GuiFlanger::resized()
 
 void GuiFlanger::paint (Graphics& g)
 {
-	
-	g.setColour(Colours::black);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(118, 232, 38, 38);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse(118, 232, 38, 38, 1.0f);
-	
-	
 }
 
 void GuiFlanger::sliderValueChanged (Slider *slider)

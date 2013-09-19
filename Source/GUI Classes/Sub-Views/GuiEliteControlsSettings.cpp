@@ -113,8 +113,8 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     
     //for some reason using a textEditor was creating gui problems, so using a label instead now
     addChildComponent(dialOscIpAddressEditor = new Label());
-    dialOscIpAddressEditor->setColour(Label::textColourId, Colours::grey);
-    dialOscIpAddressEditor->setColour(Label::backgroundColourId, Colours::lightgrey);
+    dialOscIpAddressEditor->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColour);
+    dialOscIpAddressEditor->setColour(Label::backgroundColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     dialOscIpAddressEditor->setJustificationType(Justification::centred);
     dialOscIpAddressEditor->setEditable(true);
     dialOscIpAddressEditor->addMouseListener(this, true);
@@ -215,8 +215,8 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     
     //for some reason using a textEditor was creating gui problems, so using a label instead now
     addChildComponent(buttonOscIpAddressEditor = new Label());
-    buttonOscIpAddressEditor->setColour(Label::textColourId, Colours::grey);
-    buttonOscIpAddressEditor->setColour(Label::backgroundColourId, Colours::lightgrey);
+    buttonOscIpAddressEditor->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColour);
+    buttonOscIpAddressEditor->setColour(Label::backgroundColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     buttonOscIpAddressEditor->setJustificationType(Justification::centred);
     buttonOscIpAddressEditor->setEditable(true);
     buttonOscIpAddressEditor->addMouseListener(this, true);
@@ -253,7 +253,6 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
 	//---------------parameter label -------------------------------------
     addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->colour1);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
 	
@@ -349,13 +348,14 @@ void GuiEliteControlsSettings::resized()
 
 void GuiEliteControlsSettings::paint (Graphics& g)
 {
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
 	
-	ColourGradient fillGradient(AlphaTheme::getInstance()->colour3,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	Path pieSeg;
 	pieSeg.addPieSegment(802, 379, 86, 86, (125 * (M_PI / 180)), (235 * (M_PI / 180)), 0.2f);
 	g.fillPath(pieSeg);
@@ -380,7 +380,7 @@ void GuiEliteControlsSettings::paint (Graphics& g)
         g.fillEllipse(962,542, 27, 27);
         g.fillEllipse(981,520, 27, 27);
         
-        g.setColour(Colours::grey.withAlpha(0.3f));
+        g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
         
         g.drawEllipse(646,436, 27, 27, 1.0);
         g.drawEllipse(653,464, 27, 27, 1.0);
@@ -403,7 +403,7 @@ void GuiEliteControlsSettings::paint (Graphics& g)
 	
 //	if(dialMidiChannel[0]->isVisible())
 //	{
-//		g.setColour(Colours::black);
+//		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 //		g.fillEllipse(786,218, 48, 48);
 //	}
     

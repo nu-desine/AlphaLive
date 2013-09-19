@@ -224,7 +224,6 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     //---------------parameter label -------------------------------------
     addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->colour1);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
     
@@ -306,13 +305,14 @@ void GuiMidiMode::resized()
 
 void GuiMidiMode::paint (Graphics& g)
 {
-    //std::cout << "Paint midi mode... ";
-	ColourGradient fillGradient(AlphaTheme::getInstance()->colour3,845 , 461, Colours::black, 845 , 383, false);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+    
+	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	
 	g.fillEllipse(786,218, 48, 48);
 	g.fillEllipse(844,216, 48, 48);
@@ -338,7 +338,7 @@ void GuiMidiMode::paint (Graphics& g)
 	g.fillEllipse(962,542, 27, 27);
 	g.fillEllipse(981,520, 27, 27);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(850,493, 38, 38, 1.0);

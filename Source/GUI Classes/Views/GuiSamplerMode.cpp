@@ -241,7 +241,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     addAndMakeVisible(currentParameterLabel = new Label());
 	currentParameterLabel->setFont(Font(10));
 	currentParameterLabel->setText(translate("TEMPO"), dontSendNotification);
-    currentParameterLabel->setColour(Label::textColourId, Colours::white);
+    currentParameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->textColour);
     currentParameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     currentParameterLabel->setJustificationType(Justification::centred);
     //currentParameterLabel->setEditable(false, false, false);
@@ -302,12 +302,12 @@ void GuiSamplerMode::paint (Graphics& g)
 	float widthBrowseButton = 58;
 	
 	
-	ColourGradient fillGradient(AlphaTheme::getInstance()->colour3,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	
 	g.fillEllipse(786,218, 48, 48);
 	g.fillEllipse(844,216, 48, 48);
@@ -329,24 +329,24 @@ void GuiSamplerMode::paint (Graphics& g)
 	
 	g.fillEllipse(xBrowseButton, yBrowseButton, widthBrowseButton, widthBrowseButton);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(850,493, 38, 38, 1.0);
 	
 	if(triggerSettingsButton->getToggleStateValue()==true)
 	{
-        g.setColour(Colours::black);
+        g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(816, 393, 58, 58);
 		
-		ColourGradient fillGradient(AlphaTheme::getInstance()->colour1, 816+(58*0.5), 393+(58*0.6), AlphaTheme::getInstance()->colour2, 816+(58*0.5), 393, false);
+		ColourGradient fillGradient(AlphaTheme::getInstance()->mainColour, 816+(58*0.5), 393+(58*0.6), AlphaTheme::getInstance()->mainColourLighter, 816+(58*0.5), 393, false);
 		g.setGradientFill(fillGradient);
         
 		g.fillEllipse((816+(58*0.15)), (393+(58*0.15)), (58*0.7), (58*0.7));
 		
 	}
 	
-    g.setColour(Colours::grey.withAlpha(0.3f));
+    g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
     
 	g.drawEllipse((xBrowseButton + (widthBrowseButton * 0.1)), (yBrowseButton + (widthBrowseButton * 0.1)),
 				  (widthBrowseButton * 0.8),(widthBrowseButton * 0.8), 1.0f);
@@ -948,7 +948,7 @@ void GuiSamplerMode::setParameterLabelText (String value)
     
     if (value != String::empty)
     {
-        parameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->colour2);
+        parameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColourLighter);
         parameterLabel->setText(value, dontSendNotification);
     }
 	

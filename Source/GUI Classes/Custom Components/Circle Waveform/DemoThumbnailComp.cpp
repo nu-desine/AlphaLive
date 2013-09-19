@@ -21,6 +21,7 @@
 //
 
 #include "DemoThumbnailComp.h"
+#include "../../AlphaLiveLookandFeel.h"
 
 
 DemoThumbnailComp::DemoThumbnailComp() :   thumbnailCache (5),
@@ -58,7 +59,7 @@ void DemoThumbnailComp::paint (Graphics& g)
 {
     g.fillAll (Colours::transparentBlack);
     
-    g.setColour (Colours::white.withAlpha(0.5f));
+    g.setColour (AlphaTheme::getInstance()->textColour.withAlpha(0.5f));
     
     if (thumbnail.getTotalLength() > 0)
     {

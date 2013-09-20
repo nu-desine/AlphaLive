@@ -1167,7 +1167,7 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     }
         else if (sceneComponent->isMouseOver(true))
     {
-        setInfoTextBoxText (translate("Scenes. AlphaLive contains 20 'scene' slots, each can hold a full set of pad settings. Click on a scene to load up its settings and pads; right-click to import, export or clear a scene; or shift-click to copy the currently select scene to the clicked scene. AlphaLive scene files (.alphascene) can also be imported via drag-and-drop."));
+        setInfoTextBoxText (translate("Scenes. AlphaLive contains 20 'scene' slots that can each hold a full set of pad settings. Click on a scene to load up its settings; shift-click to copy the currently select scene to the clicked scene; or right-click for more options. Use the text box to name a scene. AlphaLive scene files (.alphascene) can also be imported via drag-and-drop.")); //
     }
     else if (gainSlider->isMouseOver(true)==true)
     {
@@ -1854,6 +1854,9 @@ bool MainComponent::perform (const InvocationInfo& info)
 	{
         projectSettingsComponent->setVisible(false);
 		preferencesComponent->setVisible(false);
+        
+        aboutComponent->toFront(true);
+        infoTextBox->toFront(false);
 		aboutComponent->setVisible(true);
         aboutComponent->grabKeyboardFocus();    //so that the ESC to close works without having to
                                                 //click on the component first
@@ -1864,6 +1867,9 @@ bool MainComponent::perform (const InvocationInfo& info)
 	{
         aboutComponent->setVisible(false);
         projectSettingsComponent->setVisible(false);
+        
+        preferencesComponent->toFront(true);
+        infoTextBox->toFront(false);
 		preferencesComponent->setVisible(true);
         preferencesComponent->grabKeyboardFocus();
 	}
@@ -1872,6 +1878,9 @@ bool MainComponent::perform (const InvocationInfo& info)
 	{
         aboutComponent->setVisible(false);
 		preferencesComponent->setVisible(false);
+        
+        projectSettingsComponent->toFront(true);
+        infoTextBox->toFront(false);
 		projectSettingsComponent->setVisible(true);
         projectSettingsComponent->grabKeyboardFocus();
 	}
@@ -2060,6 +2069,7 @@ void MainComponent::changeLookAndFeel()
 {
     alphaLiveLookAndFeel.setTheme (StoredSettings::getInstance()->interfaceTheme);
     
+    guiSequencerMode->drawDrawableButtons();
     toolbox->setTabColour();
     preferencesComponent->setTabColour();
     preferencesComponent->redrawAudioSettingsComponent();

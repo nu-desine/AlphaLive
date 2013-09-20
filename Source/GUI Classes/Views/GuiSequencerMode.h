@@ -91,6 +91,7 @@ public:
     int getCurrentSequenceNumber();
     
     Button* getRecordButton();
+    void drawDrawableButtons();
     
 private:
     
@@ -129,6 +130,8 @@ private:
     AlphaSlider *ccControllerSlider;
     
     Label *parameterLabel, *currentParameterLabel, *parameterHoverLabel;
+    
+    DrawablePath recordButtonNormalPath, recordButtonDownPath, previewButtonNormalPath, previewButtonDownPath;
     
      
 };

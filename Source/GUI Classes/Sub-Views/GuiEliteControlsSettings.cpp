@@ -113,9 +113,6 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     
     //for some reason using a textEditor was creating gui problems, so using a label instead now
     addChildComponent(dialOscIpAddressEditor = new Label());
-    dialOscIpAddressEditor->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColour);
-    dialOscIpAddressEditor->setColour(Label::backgroundColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    dialOscIpAddressEditor->setJustificationType(Justification::centred);
     dialOscIpAddressEditor->setEditable(true);
     dialOscIpAddressEditor->addMouseListener(this, true);
     dialOscIpAddressEditor->addListener(this);
@@ -215,8 +212,6 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     
     //for some reason using a textEditor was creating gui problems, so using a label instead now
     addChildComponent(buttonOscIpAddressEditor = new Label());
-    buttonOscIpAddressEditor->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColour);
-    buttonOscIpAddressEditor->setColour(Label::backgroundColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     buttonOscIpAddressEditor->setJustificationType(Justification::centred);
     buttonOscIpAddressEditor->setEditable(true);
     buttonOscIpAddressEditor->addMouseListener(this, true);
@@ -348,6 +343,15 @@ void GuiEliteControlsSettings::resized()
 
 void GuiEliteControlsSettings::paint (Graphics& g)
 {
+    dialOscIpAddressEditor->setColour(Label::backgroundColourId,
+                                      LookAndFeel::getDefaultLookAndFeel().findColour(TextEditor::backgroundColourId));
+    dialOscIpAddressEditor->setColour(Label::outlineColourId,
+                                      LookAndFeel::getDefaultLookAndFeel().findColour(TextEditor::outlineColourId));
+    buttonOscIpAddressEditor->setColour(Label::backgroundColourId,
+                                        LookAndFeel::getDefaultLookAndFeel().findColour(TextEditor::backgroundColourId));
+    buttonOscIpAddressEditor->setColour(Label::outlineColourId,
+                                        LookAndFeel::getDefaultLookAndFeel().findColour(TextEditor::outlineColourId));
+    
     parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
 	
 	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);

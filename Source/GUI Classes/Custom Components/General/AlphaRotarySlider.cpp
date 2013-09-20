@@ -51,10 +51,6 @@ AlphaRotarySlider::~AlphaRotarySlider()
 void AlphaRotarySlider::paint (Graphics &g)
 {
     Slider::paint(g);
-    
-    textBox->setColour(TextEditor::textColourId, AlphaTheme::getInstance()->foregroundColourDarker);
-    textBox->setColour(TextEditor::backgroundColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    textBox->setColour(TextEditor::focusedOutlineColourId, AlphaTheme::getInstance()->childBackgroundColour);
 }
 
 

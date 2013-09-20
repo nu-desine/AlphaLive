@@ -58,9 +58,6 @@ void AlphaSlider::resized()
 
 void AlphaSlider::paint(Graphics& g)
 {
-    setColour(textBoxHighlightColourId, AlphaTheme::getInstance()->textColour);
-	setColour(textBoxTextColourId, AlphaTheme::getInstance()->textColour);
-    sliderValueLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->textColour);
     arrowUpColour = arrowDownColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f);
     
     thePath.clear();
@@ -205,13 +202,14 @@ void AlphaSlider::mouseDown(const MouseEvent &e)
     {
         Slider::setValue(Slider::getValue() - Slider::getInterval(), sendNotification);
         sliderValueLabel->setText(String(Slider::getValue()), dontSendNotification);
-        
+    
         arrowDownColour = AlphaTheme::getInstance()->foregroundColour.withAlpha(0.8f);
         repaint();
     }
     else if (e.getNumberOfClicks() == 2)
     {
         sliderValueLabel->showEditor();
+        sliderValueLabel->getCurrentTextEditor()->setColour(TextEditor::focusedOutlineColourId, Colours::transparentBlack);
         sliderValueLabel->getCurrentTextEditor()->setInputRestrictions(0, "1234567890.-");
     }
     else

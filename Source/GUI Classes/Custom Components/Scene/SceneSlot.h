@@ -44,6 +44,7 @@ public:
     SceneSlotTextEditor(SceneSlot &sceneSlotRef_);
     ~SceneSlotTextEditor();
     
+    void paint (Graphics &g);
     void mouseDown (const MouseEvent &e);
     
 private:

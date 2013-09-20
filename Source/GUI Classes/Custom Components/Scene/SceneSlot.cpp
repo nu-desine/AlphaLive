@@ -43,6 +43,11 @@ SceneSlotTextEditor::~SceneSlotTextEditor()
     
 }
 
+void SceneSlotTextEditor::paint (Graphics &g)
+{
+    TextEditor::paint(g);
+}
+
 void SceneSlotTextEditor::mouseDown (const MouseEvent &e)
 {
     sceneSlotRef.setIsEditingTextBox(true);
@@ -83,10 +88,6 @@ void SceneSlot::resized()
 
 void SceneSlot::paint (Graphics &g)
 {
-    textBox->setColour(TextEditor::textColourId, AlphaTheme::getInstance()->foregroundColourDarker);
-    textBox->setColour(TextEditor::backgroundColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    textBox->setColour(TextEditor::focusedOutlineColourId, AlphaTheme::getInstance()->childBackgroundColour);
-    
     //create or clear/recreate paths..
     slotPath.clear();
     slotPath.addEllipse(0, 0, CIRCE_WIDTH, getHeight());
@@ -102,10 +103,20 @@ void SceneSlot::paint (Graphics &g)
     if (mouseIsOver == true)
     {
         //name bar
-        g.setColour(AlphaTheme::getInstance()->foregroundColour);
+        g.setColour(AlphaTheme::getInstance()->foregroundColourDarker);
         g.fillPath(nameBarPath);
+        g.setColour(AlphaTheme::getInstance()->foregroundColour);
+        g.drawRoundedRectangle(0, 0, 150, getHeight(), 10, 1);
         
+        //for some reason text colour won't change after the theme is changed
+        //until the text is change, so I'm hacking that here
+        String currentText = textBox->getText();
+        textBox->setText(".", false);
+        textBox->setText(currentText, false);
+        
+        textBox->setColour(TextEditor::focusedOutlineColourId, AlphaTheme::getInstance()->foregroundColour);
         textBox->setVisible(true);
+        
     }
     
     //set colour/fill

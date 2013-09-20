@@ -77,8 +77,6 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
     //for some reason using a textEditor was creating gui problems, so using a label instead now
     addChildComponent(oscIpAddressEditor = new Label());
     oscIpAddressEditor->setText("127.0.0.1", dontSendNotification);
-    oscIpAddressEditor->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColour);
-    oscIpAddressEditor->setColour(Label::backgroundColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     oscIpAddressEditor->setJustificationType(Justification::centred);
     oscIpAddressEditor->setEditable(true);
     oscIpAddressEditor->addMouseListener(this, true);
@@ -166,6 +164,10 @@ void GuiControllerMode::resized()
 
 void GuiControllerMode::paint (Graphics& g)
 {
+    oscIpAddressEditor->setColour(Label::backgroundColourId,
+                                  LookAndFeel::getDefaultLookAndFeel().findColour(TextEditor::backgroundColourId));
+    oscIpAddressEditor->setColour(Label::outlineColourId,
+                                  LookAndFeel::getDefaultLookAndFeel().findColour(TextEditor::outlineColourId));
     
 	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);

@@ -396,22 +396,8 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     popUpButton->addMouseListener(this, true);
 	
 	//--------------preview button-------------------
-	DrawablePath normal, down;
-	
-	Path p;
-	p.addTriangle(0, 0, 0, 4, 4.5, 2);
-	normal.setPath (p);
-	normal.setFill (AlphaTheme::getInstance()->textColour);
-	
-	p.clear();
-	p.addQuadrilateral(0, 0, 0, 4, 4, 4, 4, 0);
-	down.setPath (p);
-	down.setFill (AlphaTheme::getInstance()->textColour);
-	p.clear();
-	
-	
+    //drawing and setting the images is now done in drawDrawableButtons()
 	previewButton = new DrawableButton ("preview", DrawableButton::ImageOnButtonBackground);
-	previewButton->setImages (&normal, &normal, &normal, 0, &down, &down, &down, 0);
 	previewButton->setClickingTogglesState (true);
 	previewButton->addListener (this);
     previewButton->addMouseListener(this, true);
@@ -429,28 +415,15 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	previousSequenceButton->addMouseListener(this, true);
     
     //record button
-	
-	DrawablePath rnormal, rdown;
-	
-	Path r;
-	r.addEllipse(0, 0, 2, 2);
-	rnormal.setPath (r);
-	rnormal.setFill (Colours::white);
-	
-	r.clear();
-	r.addEllipse(0, 0, 2, 2);
-	rdown.setPath (r);
-	rdown.setFill (Colours::white);
-	r.clear();
-	
-	
-	recordButton = new DrawableButton ("record", DrawableButton::ImageOnButtonBackground);
-	recordButton->setImages (&rnormal, &rnormal, &rnormal, 0, &rdown, &rdown, &rdown, 0);
+	//drawing and setting the images is now done in drawDrawableButtons()
+    recordButton = new DrawableButton ("record", DrawableButton::ImageOnButtonBackground);
     recordButton->setClickingTogglesState(true);	
 	recordButton->addListener(this);
 	recordButton->addMouseListener(this, true);
     recordButton->setColour(TextButton::buttonOnColourId, Colours::red);
 	addAndMakeVisible (recordButton);
+    
+    drawDrawableButtons();
     
     //attach this class to the subject class
     modeSequencerRef.attach(this);
@@ -591,7 +564,7 @@ void GuiSequencerMode::resized()
 void GuiSequencerMode::paint (Graphics& g)
 {
     parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
-    
+
 	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	g.fillEllipse(802, 379, 86, 86);
@@ -2413,6 +2386,50 @@ void GuiSequencerMode::changeView()
         pressureSettingsButton->triggerClick();
     else if (pressureSettingsButton->getToggleState())
         sequenceSettingsButton->triggerClick();
+}
+
+void GuiSequencerMode::drawDrawableButtons()
+{
+    Path r;
+	r.addEllipse(0, 0, 2, 2);
+	recordButtonNormalPath.setPath (r);
+	recordButtonNormalPath.setFill (AlphaTheme::getInstance()->iconColour);
+	
+	r.clear();
+	r.addEllipse(0, 0, 2, 2);
+	recordButtonDownPath.setPath (r);
+	recordButtonDownPath.setFill (AlphaTheme::getInstance()->iconColour);
+	r.clear();
+	
+	
+	recordButton->setImages (&recordButtonNormalPath,
+                             &recordButtonNormalPath,
+                             &recordButtonNormalPath,
+                             0,
+                             &recordButtonDownPath,
+                             &recordButtonDownPath,
+                             &recordButtonDownPath, 0);
+    
+    Path p;
+	p.addTriangle(0, 0, 0, 4, 4.5, 2);
+	previewButtonNormalPath.setPath (p);
+	previewButtonNormalPath.setFill (AlphaTheme::getInstance()->iconColour);
+	
+	p.clear();
+	p.addQuadrilateral(0, 0, 0, 4, 4, 4, 4, 0);
+	previewButtonDownPath.setPath (p);
+	previewButtonDownPath.setFill (AlphaTheme::getInstance()->iconColour);
+	p.clear();
+	
+	
+    
+	previewButton->setImages (&previewButtonNormalPath,
+                              &previewButtonNormalPath,
+                              &previewButtonNormalPath,
+                              0, &previewButtonDownPath,
+                              &previewButtonDownPath,
+                              &previewButtonDownPath,
+                              0);
 }
 
 void GuiSequencerMode::mouseEnter (const MouseEvent &e)

@@ -609,7 +609,7 @@ void Toolbox::mouseEnter (const MouseEvent &e)
     }
     else if (treeLists[SCENE_PRESETS-noOfFileLists]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Scene Presets. Double-click any items here to apply template mappings of settings to the entire set of pads of the currently selected scene."));
+        mainComponentRef.setInfoTextBoxText(translate("Scene Presets. Double-click any items here to apply template mappings or settings to the entire set of pads of the currently selected scene."));
     }
     
     

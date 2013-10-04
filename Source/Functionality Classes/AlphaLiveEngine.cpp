@@ -157,7 +157,7 @@ AlphaLiveEngine::AlphaLiveEngine()
 AlphaLiveEngine::~AlphaLiveEngine()
 {
     killAll();
-    stopThread(100);
+    stopThread(1000);
     
     //save audio output settings to prefs
     XmlElement *audioSettingsXml = audioDeviceManager.createStateXml();

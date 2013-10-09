@@ -114,6 +114,10 @@ void SceneSlot::paint (Graphics &g)
         textBox->setText(".", false);
         textBox->setText(currentText, false);
         
+        //When the text editor is initially shown it will scroll the view to the end
+        //of the text, which is not what we want. Therefore we must prevent this.
+        textBox->moveCaretToStartOfLine(false);
+        
         textBox->setColour(TextEditor::focusedOutlineColourId, AlphaTheme::getInstance()->foregroundColour);
         textBox->setVisible(true);
         

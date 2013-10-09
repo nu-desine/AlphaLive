@@ -41,6 +41,7 @@ public:
     void flush();
     
     void setDefaultValues();
+    void installBasicDemoProj();
 
     //==============================================================================
     int initialLaunch; //

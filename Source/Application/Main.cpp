@@ -110,7 +110,8 @@ public:
         std::cout << "Running on Linux..." << std::endl;
         #endif
         
-        //call this function incase it is the first time the app is run on a computer
+        //Call this function incase it is the first time the app is run on a computer.
+        //This function also calls the function that installs the basic demo project if needed.
         StoredSettings::getInstance()->setDefaultValues();
         
         commandManager = new ApplicationCommandManager();

@@ -20,6 +20,14 @@
 
 #include "StoredSettings.h"
 
+#if JUCE_MAC || JUCE_LINUX
+#include <sys/stat.h>
+#endif
+
+#if JUCE_WINDOWS
+#include <Windows.h>
+#endif
+
 
 //==============================================================================
 StoredSettings::StoredSettings()
@@ -98,44 +106,19 @@ void StoredSettings::flush()
 
 void StoredSettings::setDefaultValues()
 {
-    //effectively most of this function will only run   
+    //effectively most of this function will only run
     //the first time the app is launched on a computer
     
-    if (initialLaunch == 0)
-    {  
-        //this statement will only be true when AlphaLive is first run on a computer, in which
-        //we want the Demo Project to be added to the recently opened files list that will
-        //then be automatically launched.
-        
-        File demoProjFile (File::getSpecialLocation(File::userDocumentsDirectory).getFullPathName() + 
-                           File::separatorString + 
-                           "AlphaLive Projects" + 
-                           File::separatorString +  
-                           "Demo Project" + 
-                           File::separatorString + 
-                           "Demo Project.alphalive");
-        
-        if (demoProjFile.exists())
-        {
-            recentFiles.addFile(demoProjFile);
-        }
-        
-        initialLaunch = 1;
-    }
+    //============================================================================
     
     if (appProjectDir == File::nonexistent)
     {
         //Create the AlphaLive Projects folder 
-        File oldProjectDir = (File::getSpecialLocation(File::userMusicDirectory).getFullPathName()) + File::separatorString + "AlphaLive Projects";
-        File defaultProjectDirectory = (File::getSpecialLocation(File::userDocumentsDirectory).getFullPathName()) + File::separatorString + "AlphaLive Projects";
+        File defaultProjectDirectory = (File::getSpecialLocation(File::userDocumentsDirectory).getFullPathName()) +
+                                        File::separatorString +
+                                        "AlphaLive Projects";
         
-        //UPDATE - CAN NOW PROBABLY REMOVE ALL CODE THAT CHECKS IF THE PROJECT DIR IS IN THE OLD LOCATION
-        if (oldProjectDir.exists() == true)
-        {
-            //if directory is currently in the previous set location, move the folder to the new default location
-            oldProjectDir.moveFileTo (defaultProjectDirectory);
-        }
-        else if (defaultProjectDirectory.exists() == false)
+        if (defaultProjectDirectory.exists() == false)
         {
             //if there is no directory on the system at all, create a default one
             defaultProjectDirectory.createDirectory();
@@ -152,6 +135,54 @@ void StoredSettings::setDefaultValues()
         appProjectDir.createDirectory();
     }
     
+    //============================================================================
+    
+    //If this is the first time the application has been run after downloading it from the
+    //AlphaLive webpage, we must move the Demo Project (Basic) project to the AlphaLive
+    //Projects directory.
+    installBasicDemoProj();
+    
+    //============================================================================
+    
+    if (initialLaunch == 0)
+    {
+        //this statement will only be true when AlphaLive is first run on a computer, in which
+        //we want one of the Demo Projects to be added to the recently opened files list that will
+        //then be automatically launched.
+        
+        File demoProjFile (File::getSpecialLocation(File::userDocumentsDirectory).getFullPathName() +
+                           File::separatorString +
+                           "AlphaLive Projects" +
+                           File::separatorString +
+                           "Demo Project" +
+                           File::separatorString +
+                           "Demo Project.alphalive");
+        
+        if (demoProjFile.exists())
+        {
+            recentFiles.addFile(demoProjFile);
+        }
+        else
+        {
+            //see if the Demo Project (Basic) project exists, and if so load that.
+            File demoProjBasicFile (File::getSpecialLocation(File::userDocumentsDirectory).getFullPathName() +
+                                    File::separatorString +
+                                    "AlphaLive Projects" +
+                                    File::separatorString +
+                                    "Demo Project (Basic)" +
+                                    File::separatorString +
+                                    "Demo Project (Basic).alphalive");
+            
+            if (demoProjBasicFile.exists())
+            {
+                recentFiles.addFile(demoProjBasicFile);
+            }
+        }
+        
+        initialLaunch = 1;
+    }
+    
+    //============================================================================
     
     if (midiNoteDisplayType == 0)
         midiNoteDisplayType = 1;
@@ -180,5 +211,52 @@ void StoredSettings::setDefaultValues()
     flush();
 }
 
-
-
+void StoredSettings::installBasicDemoProj()
+{
+    //This stuff is done here and called from setDefaultValues()
+    //instead of within Main as it needs to be done after the
+    //app project directory is created/set but before the default
+    //project to open at launch is set.
+    
+    File basicDemoProjDir = (File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() +
+                             File::separatorString +
+                             "Demo Project (Basic)");
+    
+    if (basicDemoProjDir.exists())
+    {
+        //move this folder to the appProjectDir
+        
+        File newBasicDemoProjDir (appProjectDir.getFullPathName() +
+                                  File::separatorString +
+                                  "Demo Project (Basic)");
+        
+        if (newBasicDemoProjDir.exists())
+            newBasicDemoProjDir.deleteRecursively();
+        
+        basicDemoProjDir.copyDirectoryTo(newBasicDemoProjDir);
+        basicDemoProjDir.deleteRecursively();
+        
+        // set the project file to read-only.
+        
+        File basicDemoProjFile (newBasicDemoProjDir.getFullPathName() + File::separatorString + "Demo Project (Basic).alphalive");
+        
+        #if JUCE_MAC || JUCE_LINUX
+        //To set the file permissions to read only, you can use the command chmod 555 in terminal
+        //or use th chmod() function as documented here:
+        //http://www.manpagez.com/man/2/chmod/osx-10.4.php
+        
+        chmod (basicDemoProjFile.getFullPathName().toUTF8(), S_IRUSR | S_IRGRP | S_IROTH);
+        
+        #endif
+        
+        #if JUCE_WINDOWS
+        //Use the SetFileAttributes() function here like so:
+        //http://msdn.microsoft.com/en-us/library/windows/desktop/aa365535(v=vs.85).aspx
+        //to get more control over editting file permissions, you can use cacls
+        
+        SetFileAttributes(newBasicDemoProjDir.getFullPathName().toUTF8(), FILE_ATTRIBUTE_READONLY);
+        
+        #endif  
+    }
+    
+}

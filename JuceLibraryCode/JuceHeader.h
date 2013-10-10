@@ -37,8 +37,8 @@
 namespace ProjectInfo
 {
     const char* const  projectName    = "AlphaLive";
-    const char* const  versionString  = "1.1.2";
-    const int          versionNumber  = 0x10102;
+    const char* const  versionString  = "1.2.0";
+    const int          versionNumber  = 0x10200;
 }
 
 #endif   // __APPHEADERFILE_F22PMI__

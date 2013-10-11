@@ -235,7 +235,7 @@ void GuiPadLayout::resized()
 
 void GuiPadLayout::setPadPlayingState (int pad, int state)
 {
-    if (pads[pad] != nullptr)
+    if (pads[pad] != NULL)
         pads[pad]->setPadPlayingState(state);
 }
 

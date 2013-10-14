@@ -591,7 +591,7 @@ void ModeMidi::setCurrentChannel (int padNum)
             else
             {
                 //if they all exist in the previously used array, get the oldest on that matches.
-                currentChannel[padNum] = channels_[0] + 1;
+                currentChannel[padNum] = previouslyUsedChannels[0] + 1;
                 
                 std::cout << "Oldest - Current channel set to: " << currentChannel[padNum] << std::endl;
             }

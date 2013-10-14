@@ -254,7 +254,7 @@ void StoredSettings::installBasicDemoProj()
         //http://msdn.microsoft.com/en-us/library/windows/desktop/aa365535(v=vs.85).aspx
         //to get more control over editting file permissions, you can use cacls
         
-        SetFileAttributes(newBasicDemoProjDir.getFullPathName().toUTF8(), FILE_ATTRIBUTE_READONLY);
+        SetFileAttributes(basicDemoProjFile.getFullPathName().toUTF8(), FILE_ATTRIBUTE_READONLY);
         
         #endif  
     }

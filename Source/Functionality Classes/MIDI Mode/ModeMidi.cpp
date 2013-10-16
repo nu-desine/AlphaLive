@@ -545,61 +545,50 @@ void ModeMidi::setCurrentChannel (int padNum)
     //auto MIDI channel
     else if (autoMidiChannelStatus[padNum] == true)
     {
-        std::cout << "In auto midi mode. Lets dynamically set the channel..." << std::endl;
-        Array <int> channels_;
+        Array<int> previouslyUsedChannels = alphaLiveEngineRef.getPreviouslyUsedMidiChannels();
+        Array <int> availableChannels;
         
         for (int i = 0; i < 16; i++)
         {
-            //Find all channels that this pad could
-            //be set to that aren't currently active
+            //Find all channels that this pad could be set to that aren't currently active
+            
             if (autoMidiChannels[i][padNum] == true && alphaLiveEngineRef.getMidiChannelStatus(i) == false)
             {
-                channels_.addIfNotAlreadyThere(i);
+                availableChannels.addIfNotAlreadyThere(i);
             }
         }
         
-        std::cout << "Channels the pad can be set to that aren't currently active:" << std::endl;
-        for (int i = 0; i < channels_.size(); i++)
-            std::cout << String(channels_[i] + 1);
-        std::cout << std::endl;
+//        std::cout << "Channels the pad can be set to that aren't currently active:" << std::endl;
+//        for (int i = 0; i < availableChannels.size(); i++)
+//            std::cout << String(availableChannels[i] + 1);
+//        std::cout << std::endl;
         
-        if (channels_.size() > 0)
+        if (availableChannels.size() > 0)
         {
-            //compare the new channels array with the previously used channels array
-            Array <int> channels_Copy = channels_;
-            Array<int> previouslyUsedChannels = alphaLiveEngineRef.getPreviouslyUsedMidiChannels();
+            //Find the oldest value in previousUsedChannels (oldest at the start)
+            //that is also in available channels, and set the current channel to that
             
-            std::cout << "Previously used channels:" << std::endl;
             for (int i = 0; i < previouslyUsedChannels.size(); i++)
-                std::cout << String(previouslyUsedChannels[i] + 1);
-            std::cout << std::endl;
-            
-            channels_Copy.removeValuesIn(previouslyUsedChannels);
-            
-            std::cout << "Values in array that aren't in previously channels array:" << std::endl;
-            for (int i = 0; i < channels_Copy.size(); i++)
-                std::cout << String(channels_Copy[i] + 1);
-            std::cout << std::endl;
-            
-            if (channels_Copy.size() > 0)
             {
-                //find the lowest channel number that doesn't exist in the previously used array
-                currentChannel[padNum] = channels_Copy[0] + 1;
-                
-                std::cout << "Lowest - Current channel set to: " << currentChannel[padNum] << std::endl;
+                if (availableChannels.contains(previouslyUsedChannels[i]))
+                {
+                    //this if statement should always be true before it reaches the
+                    //end of the loop. Should I put a check incase it doesn't for some
+                    //strange reason, and what should I do in this situation?
+                    
+                    currentChannel[padNum] = previouslyUsedChannels[i] + 1;
+                    std::cout << "Current channel set to: " << currentChannel[padNum] << std::endl;
+                    
+                    break;
+                }
             }
-            else
-            {
-                //if they all exist in the previously used array, get the oldest on that matches.
-                currentChannel[padNum] = previouslyUsedChannels[0] + 1;
-                
-                std::cout << "Oldest - Current channel set to: " << currentChannel[padNum] << std::endl;
-            }
-            
+   
         }
         else
         {
-            //whats best to do here?
+            //All channels this pad could be set to are currently active.
+            //The best thing to do here would probably be to
+            //set it to the oldest active pad.
             
             //for now I will just set the midi channel to the lowest set channel number.
             for (int i = 0; i < 16; i++)
@@ -608,14 +597,10 @@ void ModeMidi::setCurrentChannel (int padNum)
                 {
                     currentChannel[padNum] = i + 1;
                     std::cout << "Lowest but active - Current channel set to: " << currentChannel[padNum] << std::endl;
-                    //dsfhdgjfhg
                     break;
                 }
             }
         }
-        
-        std::cout << std::endl;
-        
     }
 }
 

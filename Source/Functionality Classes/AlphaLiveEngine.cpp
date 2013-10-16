@@ -69,7 +69,10 @@ AlphaLiveEngine::AlphaLiveEngine()
     playingStatus = 0;
     
     for (int i = 0; i < 16; i++)
+    {
         isMidiChannelActive[i] = false;
+        previouslyUsedMidiChannels.add(i);
+    }
     
     //==========================================================================
     // initialise the device manager
@@ -731,28 +734,30 @@ void AlphaLiveEngine::sendMidiMessage(MidiMessage midiMessage)
     
     if (midiMessage.isNoteOnOrOff())
     {
-        if (previouslyUsedMidiChannels.contains(midiMessage.getChannel()-1))
-            previouslyUsedMidiChannels.removeAllInstancesOf(midiMessage.getChannel()-1);
+        //===============
+        //should this section only be called of the message is a note-on message?
         
-        //put this channel at the end of the array
-        previouslyUsedMidiChannels.add(midiMessage.getChannel()-1);
-        
-        std::cout << "Previously used MIDI Channels:" << std::endl;
-        for (int i = 0; i < previouslyUsedMidiChannels.size(); i++)
-            std::cout << previouslyUsedMidiChannels[i] + 1;
-        std::cout << std::endl;
+        //===============
         
         if (midiMessage.isNoteOn())
+        {
+            //put this channel at the end of the array
+            previouslyUsedMidiChannels.removeAllInstancesOf(midiMessage.getChannel()-1);
+            previouslyUsedMidiChannels.add(midiMessage.getChannel()-1);
+            
+            std::cout << "Previously used MIDI Channels:" ;
+            for (int i = 0; i < previouslyUsedMidiChannels.size(); i++)
+                std::cout << previouslyUsedMidiChannels[i] + 1 << " ";
+            std::cout << std::endl;
+            std::cout << std::endl;
+            
             isMidiChannelActive[midiMessage.getChannel()-1] = true;
+        }
         else if (midiMessage.isNoteOff())
+        {
             isMidiChannelActive[midiMessage.getChannel()-1] = false;
+        }
         
-        std::cout << "Channel statuses:" << std::endl;
-        for (int i = 0; i < 16; i++)
-            std::cout << isMidiChannelActive[i];
-        std::cout << std::endl;
-        
-        std::cout << std::endl;
     }
     
     
@@ -1066,7 +1071,7 @@ void AlphaLiveEngine::setMainComponent(MainComponent *mainComponent_)
 
 bool AlphaLiveEngine::getMidiChannelStatus (int channel)
 {
-    return isMidiChannelActive[channel-1];
+    return isMidiChannelActive[channel];
 }
 
 Array<int> AlphaLiveEngine::getPreviouslyUsedMidiChannels()

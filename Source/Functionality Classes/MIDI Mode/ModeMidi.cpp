@@ -723,6 +723,14 @@ void ModeMidi::setNoteStatus (bool value, int pad)
     }
 
     noteStatus[pad] = value;
+    
+    //If note status has been changed to off, we need to make sure that the channel is set
+    //correctly, as at this point it could have been set to another channel using the
+    //auto channel mode.
+    if (value == false)
+    {
+        currentChannel[pad] = channel[pad];
+    }
 }
 
 void ModeMidi::setQuantizeMode (int value, int pad)

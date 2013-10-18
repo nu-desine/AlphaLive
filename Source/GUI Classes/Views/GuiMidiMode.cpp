@@ -482,7 +482,20 @@ void GuiMidiMode::buttonClicked (Button* button)
             mainComponentRef.getGuiPiano()->setActive(false);
         }
         
-        
+        //if note status is set to off, make sure non of the pads are set to auto
+        //channel mode. Auto channel mode can't work with pressure-only pads, as there is
+        //no way of determining if a channel is 'active' or not if no note data is being used.
+        if (button->getToggleState() == false)
+        {
+            autoChannelButton->setToggleState(false, true);
+            autoChannelButton->setEnabled(false);
+            autoChannelButton->setAlpha(0.4);
+        }
+        else
+        {
+            autoChannelButton->setEnabled(true);
+            autoChannelButton->setAlpha(1.0);
+        }
     }
     
     
@@ -923,6 +936,17 @@ void GuiMidiMode::updateDisplay()
 
     //set visibility of certain components
     
+    if (noteStatusButton->getToggleState() == true)
+    {
+        autoChannelButton->setEnabled(true);
+        autoChannelButton->setAlpha(1.0);
+    }
+    else
+    {
+        autoChannelButton->setEnabled(false);
+        autoChannelButton->setAlpha(0.4);
+    }
+    
     notSelected->setVisible(false);
     
     if (triggerSettingsButton->getToggleState() == true)
@@ -1129,7 +1153,7 @@ void GuiMidiMode::mouseEnter (const MouseEvent &e)
     }
     else if (autoChannelButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Auto MIDI Channel Mode button. Auto MIDI Channel Mode is a feature that allows individual channels to be dynamically applied to each pressed MIDI pad. Channels are applied to pads in the order they are pressed, and when this mode is turned on you can use the 16 MIDI channel buttons to select the possible channels that the selected pads could be applied to. This feature can be used as an alternative to polyphonic aftertouch when it is not available. Turn on this button to activate this mode."));
+        mainComponentRef.setInfoTextBoxText(translate("Auto MIDI Channel Mode button. Auto MIDI Channel Mode is a feature that allows individual channels to be dynamically applied to each pressed MIDI pad. Channels are applied to pads in the order they are pressed, and when this mode is turned on you can use the 16 MIDI channel buttons to select the possible channels that the selected pads could be applied to. This feature can be used as an alternative to polyphonic aftertouch when it is not available. Turn on this button to activate this mode. This feature is not available to pressure-only pads."));
     }
     
     

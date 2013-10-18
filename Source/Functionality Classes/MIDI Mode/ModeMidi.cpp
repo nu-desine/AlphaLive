@@ -554,7 +554,7 @@ void ModeMidi::setCurrentChannel (int padNum)
             
             if (autoMidiChannels[i][padNum] == true && alphaLiveEngineRef.getMidiChannelStatus(i) == false)
             {
-                availableChannels.addIfNotAlreadyThere(i);
+                availableChannels.add(i);
             }
         }
         
@@ -590,16 +590,36 @@ void ModeMidi::setCurrentChannel (int padNum)
             //The best thing to do here would probably be to
             //set it to the oldest active pad.
             
-            //for now I will just set the midi channel to the lowest set channel number.
+            availableChannels.clearQuick();
+            
             for (int i = 0; i < 16; i++)
             {
+                //Find all channels that this pad could be set to
+                
                 if (autoMidiChannels[i][padNum] == true)
                 {
-                    currentChannel[padNum] = i + 1;
-                    std::cout << "Lowest but active - Current channel set to: " << currentChannel[padNum] << std::endl;
+                    availableChannels.add(i);
+                }
+            }
+            
+            //Find the oldest value in previousUsedChannels (oldest at the start)
+            //that is also in available channels, and set the current channel to that
+            
+            for (int i = 0; i < previouslyUsedChannels.size(); i++)
+            {
+                if (availableChannels.contains(previouslyUsedChannels[i]))
+                {
+                    //this if statement should always be true before it reaches the
+                    //end of the loop. Should I put a check incase it doesn't for some
+                    //strange reason, and what should I do in this situation?
+                    
+                    currentChannel[padNum] = previouslyUsedChannels[i] + 1;
+                    std::cout << "No free channels - Current channel set to: " << currentChannel[padNum] << std::endl;
+                    
                     break;
                 }
             }
+            
         }
     }
 }

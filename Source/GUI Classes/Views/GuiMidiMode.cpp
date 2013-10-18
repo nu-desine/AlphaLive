@@ -259,8 +259,7 @@ void GuiMidiMode::resized()
     noteStatusButton->setBounds(816, 393, 58, 58);
 	pressureStatusButton->setBounds(816, 393, 58, 58);
 	
-    autoChannelButton->setBounds(645, 400, 30, 30);
-    //
+    autoChannelButton->setBounds(647, 402, 26, 26);
     
 	channelButtons[0]->setBounds(649,439,21, 21);
 	channelButtons[1]->setBounds(656,467,21, 21);
@@ -270,7 +269,6 @@ void GuiMidiMode::resized()
 	channelButtons[5]->setBounds(722,562,21, 21);
 	channelButtons[6]->setBounds(747,577,21, 21);
 	channelButtons[7]->setBounds(774,589,21, 21);
-	
 	channelButtons[8]->setBounds(803,596,21, 21);
 	channelButtons[9]->setBounds(832,599,21, 21);
 	channelButtons[10]->setBounds(861,597,21, 21);
@@ -330,6 +328,10 @@ void GuiMidiMode::paint (Graphics& g)
 	g.fillEllipse(678,285, 38, 38);
 	g.fillEllipse(850,493, 38, 38);
 	
+    //auto channel button
+    g.fillEllipse(644,399, 32, 32);
+    
+    //channel buttons
 	g.fillEllipse(646,436, 27, 27);
 	g.fillEllipse(653,464, 27, 27);
 	g.fillEllipse(664,492, 27, 27);
@@ -338,7 +340,6 @@ void GuiMidiMode::paint (Graphics& g)
 	g.fillEllipse(719,559, 27, 27);
 	g.fillEllipse(744,574, 27, 27);
 	g.fillEllipse(771,586, 27, 27);
-	
 	g.fillEllipse(800,593, 27, 27);
 	g.fillEllipse(829,596, 27, 27);
 	g.fillEllipse(858,594, 27, 27);
@@ -353,6 +354,10 @@ void GuiMidiMode::paint (Graphics& g)
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(850,493, 38, 38, 1.0);
 	
+    //auto channel button
+    g.drawEllipse(644,399, 32, 32, 1.0);
+    
+    //channel buttons
 	g.drawEllipse(646,436, 27, 27, 1.0);
 	g.drawEllipse(653,464, 27, 27, 1.0);
 	g.drawEllipse(664,492, 27, 27, 1.0);
@@ -361,7 +366,6 @@ void GuiMidiMode::paint (Graphics& g)
 	g.drawEllipse(719,559, 27, 27, 1.0);
 	g.drawEllipse(744,574, 27, 27, 1.0);
 	g.drawEllipse(771,586, 27, 27, 1.0);
-	
 	g.drawEllipse(800,593, 27, 27, 1.0);
 	g.drawEllipse(829,596, 27, 27, 1.0);
 	g.drawEllipse(858,594, 27, 27, 1.0);

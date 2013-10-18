@@ -731,37 +731,21 @@ void AlphaLiveEngine::sendMidiMessage(MidiMessage midiMessage)
     
     //==================================================================================
     //log data about the MIDI channels that is then used by the Auto MIDI Channel Mode
-    
-    if (midiMessage.isNoteOnOrOff())
+    if (midiMessage.isNoteOn())
     {
-        //===============
-        //should this section only be called of the message is a note-on message?
+        //put this channel at the end of the array
+        previouslyUsedMidiChannels.removeAllInstancesOf(midiMessage.getChannel()-1);
+        previouslyUsedMidiChannels.add(midiMessage.getChannel()-1);
         
-        //===============
-        
-        if (midiMessage.isNoteOn())
-        {
-            //put this channel at the end of the array
-            previouslyUsedMidiChannels.removeAllInstancesOf(midiMessage.getChannel()-1);
-            previouslyUsedMidiChannels.add(midiMessage.getChannel()-1);
-            
-            std::cout << "Previously used MIDI Channels:" ;
-            for (int i = 0; i < previouslyUsedMidiChannels.size(); i++)
-                std::cout << previouslyUsedMidiChannels[i] + 1 << " ";
-            std::cout << std::endl;
-            std::cout << std::endl;
-            
-            isMidiChannelActive[midiMessage.getChannel()-1] = true;
-        }
-        else if (midiMessage.isNoteOff())
-        {
-            isMidiChannelActive[midiMessage.getChannel()-1] = false;
-        }
-        
+        //flag that the channel is active
+        isMidiChannelActive[midiMessage.getChannel()-1] = true;
     }
-    
-    
-    
+    else if (midiMessage.isNoteOff())
+    {
+        //flag that the channel is free to use
+        isMidiChannelActive[midiMessage.getChannel()-1] = false;
+    }
+
     sharedMemoryMidi.exit();
 }
 

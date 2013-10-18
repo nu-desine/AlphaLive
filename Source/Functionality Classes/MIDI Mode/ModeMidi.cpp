@@ -558,11 +558,6 @@ void ModeMidi::setCurrentChannel (int padNum)
             }
         }
         
-//        std::cout << "Channels the pad can be set to that aren't currently active:" << std::endl;
-//        for (int i = 0; i < availableChannels.size(); i++)
-//            std::cout << String(availableChannels[i] + 1);
-//        std::cout << std::endl;
-        
         if (availableChannels.size() > 0)
         {
             //Find the oldest value in previousUsedChannels (oldest at the start)
@@ -577,7 +572,7 @@ void ModeMidi::setCurrentChannel (int padNum)
                     //strange reason, and what should I do in this situation?
                     
                     currentChannel[padNum] = previouslyUsedChannels[i] + 1;
-                    std::cout << "Current channel set to: " << currentChannel[padNum] << std::endl;
+                    //std::cout << "Current channel set to: " << currentChannel[padNum] << std::endl;
                     
                     break;
                 }
@@ -614,7 +609,7 @@ void ModeMidi::setCurrentChannel (int padNum)
                     //strange reason, and what should I do in this situation?
                     
                     currentChannel[padNum] = previouslyUsedChannels[i] + 1;
-                    std::cout << "No free channels - Current channel set to: " << currentChannel[padNum] << std::endl;
+                    //std::cout << "No free channels - Current channel set to: " << currentChannel[padNum] << std::endl;
                     
                     break;
                 }

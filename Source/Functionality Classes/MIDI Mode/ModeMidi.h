@@ -65,6 +65,10 @@ public:
     void setPressureStatus (bool value, int pad);
     void setNoteStatus (bool value, int pad);
     void setQuantizeMode (int value, int pad);
+    void setAutoMidiChannelStatus (bool value, int pad);
+    void setAutoMidiChannels (int channel, bool status, int pad);
+    
+    void setCurrentChannel (int padNum);
 
 private:
     
@@ -88,6 +92,8 @@ private:
     bool pressureStatus[48];
     bool noteStatus[48];
     int quantizeMode[48];
+    bool autoMidiChannelStatus[48];
+    int autoMidiChannels[16][48];
     TriggerModeData triggerModeData[48];
     TriggerModes triggerModes[48];
     
@@ -111,6 +117,10 @@ private:
     //for recording notes into sequencers
     int columnNumber, sequenceNumber;
     
+    int currentChannel[48]; //this holds the current or last channel used by each pad.
+                            //this is used in conjunction with auto channel mode so when
+                            //a note off is sent we know what channel it needs to be
+                            //set to.
 };
 
 

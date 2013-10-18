@@ -178,14 +178,14 @@ void Button::valueChanged (Value& value)
         setToggleState (isOn.getValue(), true);
 }
 
-void Button::setRadioGroupId (const int newGroupId)
+void Button::setRadioGroupId (const int newGroupId, const int sendChangeNotification)
 {
     if (radioGroupId != newGroupId)
     {
         radioGroupId = newGroupId;
 
         if (lastToggleState)
-            turnOffOtherButtonsInGroup (true);
+            turnOffOtherButtonsInGroup (sendChangeNotification);
     }
 }
 

@@ -72,7 +72,7 @@
 #include "../GUI Classes/Initial Loading Window/LoadingWindow.h"
 #include "../File and Settings/StoredSettings.h"
 #include "MainMenuModel.h"
-#include "../GUI Classes/Binary Data/BinaryDataNew.h"
+#include "../GUI Classes/Binary Data/MainBinaryData.h"
 
 //==============================================================================
 class AlphaSoftApplication  :   public JUCEApplication
@@ -91,7 +91,7 @@ public:
     void initialise (const String& commandLine)
     {
         SplashScreen* splash = new SplashScreen(String::empty,
-                                                ImageFileFormat::loadFrom(BinaryDataNew::loading_png, BinaryDataNew::loading_pngSize),
+                                                ImageFileFormat::loadFrom(MainBinaryData::loading_png, MainBinaryData::loading_pngSize),
                                                 false);
         
         

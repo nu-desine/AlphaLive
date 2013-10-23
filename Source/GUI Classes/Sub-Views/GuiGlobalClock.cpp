@@ -25,7 +25,7 @@
 #include "../../File and Settings/AppSettings.h"
 #include "../AlphaLiveLookandFeel.h"
 #include "../../Application/CommonInfoBoxText.h"
-#include "../Binary Data/BinaryDataNew.h"
+#include "../Binary Data/MainBinaryData.h"
 
 #define OFFSET_X 479
 #define OFFSET_Y 6
@@ -91,14 +91,14 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
 	
 	
     //auto-start switch
-	Image *audioStartImage = new Image(ImageCache::getFromMemory(BinaryDataNew::autostartsymbol_png, BinaryDataNew::autostartsymbol_pngSize));
+	Image *audioStartImage = new Image(ImageCache::getFromMemory(MainBinaryData::autostartsymbol_png, MainBinaryData::autostartsymbol_pngSize));
 	addAndMakeVisible(autoStartSwitch = new ModeButton(audioStartImage));
     autoStartSwitch->addListener(this);
     autoStartSwitch->setClickingTogglesState(true);
     autoStartSwitch->addMouseListener(this, true);
      
     //metronome button
-    Image *metronomeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::metronomeicon_png, BinaryDataNew::metronomeicon_pngSize));
+    Image *metronomeImage = new Image(ImageCache::getFromMemory(MainBinaryData::metronomeicon_png, MainBinaryData::metronomeicon_pngSize));
 	addAndMakeVisible(metronomeButton = new ModeButton(metronomeImage));
     metronomeButton->setClickingTogglesState(true);	
 	metronomeButton->addListener(this);

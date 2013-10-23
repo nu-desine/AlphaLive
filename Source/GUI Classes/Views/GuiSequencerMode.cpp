@@ -23,7 +23,7 @@
 #include "GuiSequencerMode.h"
 #include "../../Functionality Classes/Sequencer Mode/SequencerValues.h"
 #include "../../File and Settings/AppSettings.h"
-#include "../Binary Data/BinaryDataNew.h"
+#include "../Binary Data/MainBinaryData.h"
 #include "GlobalValues.h"
 #include "../../Application/CommonInfoBoxText.h"
 #include "MainComponent.h"
@@ -114,7 +114,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	fxDial->setVisible(false);
     
     //----------------quantise button-------------------
-	Image *quantiseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::quantiseicon_png, BinaryDataNew::quantiseicon_pngSize));
+	Image *quantiseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::quantiseicon_png, MainBinaryData::quantiseicon_pngSize));
 	addAndMakeVisible(quantiseButton = new ModeButton(quantiseIcon));
 	quantiseButton->setClickingTogglesState(true);
 	quantiseButton->setToggleState(false, false);	
@@ -123,7 +123,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	quantiseButton->setOpaque(false);
 	
     //----------------sequence settings button-------------------
-	Image *sequenceIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::sequenceicon_png, BinaryDataNew::sequenceicon_pngSize));
+	Image *sequenceIcon = new Image(ImageCache::getFromMemory(MainBinaryData::sequenceicon_png, MainBinaryData::sequenceicon_pngSize));
 	addAndMakeVisible(sequenceSettingsButton = new ModeButton(sequenceIcon));
 	sequenceSettingsButton->setRadioGroupId (1234);
 	sequenceSettingsButton->setClickingTogglesState(true);
@@ -134,7 +134,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     sequenceSettingsButton->setToggleState(true, false);
 	
 	//----------------trigger settings button-------------------
-	Image *triggerSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::triggersettingsicon_png, BinaryDataNew::triggersettingsicon_pngSize));
+	Image *triggerSettingsImage = new Image(ImageCache::getFromMemory(MainBinaryData::triggersettingsicon_png, MainBinaryData::triggersettingsicon_pngSize));
 	addAndMakeVisible(triggerSettingsButton = new ModeButton(triggerSettingsImage));
 	triggerSettingsButton->setRadioGroupId (1234);
 	triggerSettingsButton->setClickingTogglesState(true);
@@ -144,7 +144,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	triggerSettingsButton->setOpaque(false);
 	
 	//----------------pressure settings button-------------------
-	Image *pressureSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::pressuresettingsicon_png, BinaryDataNew::pressuresettingsicon_pngSize));
+	Image *pressureSettingsImage = new Image(ImageCache::getFromMemory(MainBinaryData::pressuresettingsicon_png, MainBinaryData::pressuresettingsicon_pngSize));
 	addAndMakeVisible(pressureSettingsButton = new ModeButton(pressureSettingsImage));
 	pressureSettingsButton->setRadioGroupId (1234);
 	pressureSettingsButton->setClickingTogglesState(true);
@@ -154,7 +154,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	pressureSettingsButton->setOpaque(false);
 	
 	//----------------sequence MIDI button-------------------
-	Image *modeMidiIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::midisymbol_png, BinaryDataNew::midisymbol_pngSize));
+	Image *modeMidiIcon = new Image(ImageCache::getFromMemory(MainBinaryData::midisymbol_png, MainBinaryData::midisymbol_pngSize));
 	addAndMakeVisible(modeMidiButton = new ModeButton(modeMidiIcon));
 	modeMidiButton->setRadioGroupId (123);
 	modeMidiButton->setClickingTogglesState(true);
@@ -165,7 +165,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     modeMidiButton->setToggleState(true, false);
 	
 	//----------------sequence Samples button-------------------
-	Image *modeAudioIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::loopsymbol_png, BinaryDataNew::loopsymbol_pngSize));
+	Image *modeAudioIcon = new Image(ImageCache::getFromMemory(MainBinaryData::loopsymbol_png, MainBinaryData::loopsymbol_pngSize));
 	addAndMakeVisible(modeSamplesButton = new ModeButton(modeAudioIcon));
 	modeSamplesButton->setRadioGroupId (123);
 	modeSamplesButton->setClickingTogglesState(true);
@@ -263,12 +263,12 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     parameterHoverLabel->addMouseListener(this, true);
     
     //----------------------Trigger mode buttons------------------
-	Image *standardIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::standardicon_png, BinaryDataNew::standardicon_pngSize));
-	Image *toggleIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::toggleicon_png, BinaryDataNew::toggleicon_pngSize));
-	Image *latchIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::latchicon_png, BinaryDataNew::latchicon_pngSize));
-	Image *triggerIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::triggericon_png, BinaryDataNew::triggericon_pngSize));
-	Image *cycleIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::cycleicon_png, BinaryDataNew::cycleicon_pngSize));
-	Image *autoIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::autocycleicon_png, BinaryDataNew::autocycleicon_pngSize));
+	Image *standardIcon = new Image(ImageCache::getFromMemory(MainBinaryData::standardicon_png, MainBinaryData::standardicon_pngSize));
+	Image *toggleIcon = new Image(ImageCache::getFromMemory(MainBinaryData::toggleicon_png, MainBinaryData::toggleicon_pngSize));
+	Image *latchIcon = new Image(ImageCache::getFromMemory(MainBinaryData::latchicon_png, MainBinaryData::latchicon_pngSize));
+	Image *triggerIcon = new Image(ImageCache::getFromMemory(MainBinaryData::triggericon_png, MainBinaryData::triggericon_pngSize));
+	Image *cycleIcon = new Image(ImageCache::getFromMemory(MainBinaryData::cycleicon_png, MainBinaryData::cycleicon_pngSize));
+	Image *autoIcon = new Image(ImageCache::getFromMemory(MainBinaryData::autocycleicon_png, MainBinaryData::autocycleicon_pngSize));
 	
 	
     for (int i = 0; i < 6; i++)
@@ -303,12 +303,12 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     
     //--------------pressure mode buttons--------------------------
 	
-	//Image *patIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::polyphonicaftertouchicon_png, BinaryDataNew::polyphonicaftertouchicon_pngSize));
-	Image *catIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::channelaftertouchicon_png, BinaryDataNew::channelaftertouchicon_pngSize));
-	Image *mwheelIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::modwheelicon_png, BinaryDataNew::modwheelicon_pngSize));
-	Image *ccIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::ccmessageicon_png, BinaryDataNew::ccmessageicon_pngSize));
-	Image *pbUpIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::pitchbendupicon_png, BinaryDataNew::pitchbendupicon_pngSize));
-	Image *pbDownIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::pitchbenddownicon_png, BinaryDataNew::pitchbenddownicon_pngSize));
+	//Image *patIcon = new Image(ImageCache::getFromMemory(MainBinaryData::polyphonicaftertouchicon_png, MainBinaryData::polyphonicaftertouchicon_pngSize));
+	Image *catIcon = new Image(ImageCache::getFromMemory(MainBinaryData::channelaftertouchicon_png, MainBinaryData::channelaftertouchicon_pngSize));
+	Image *mwheelIcon = new Image(ImageCache::getFromMemory(MainBinaryData::modwheelicon_png, MainBinaryData::modwheelicon_pngSize));
+	Image *ccIcon = new Image(ImageCache::getFromMemory(MainBinaryData::ccmessageicon_png, MainBinaryData::ccmessageicon_pngSize));
+	Image *pbUpIcon = new Image(ImageCache::getFromMemory(MainBinaryData::pitchbendupicon_png, MainBinaryData::pitchbendupicon_pngSize));
+	Image *pbDownIcon = new Image(ImageCache::getFromMemory(MainBinaryData::pitchbenddownicon_png, MainBinaryData::pitchbenddownicon_pngSize));
 	
 	for (int i = 0; i < 5; i++)
     {
@@ -343,26 +343,26 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     numberOfSequencesSlider->addMouseListener(this, true);
      */
     
-	Image *loopIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::loopicon_png, BinaryDataNew::loopicon_pngSize));
+	Image *loopIcon = new Image(ImageCache::getFromMemory(MainBinaryData::loopicon_png, MainBinaryData::loopicon_pngSize));
     addChildComponent(loopButton =new ModeButton(loopIcon));
     loopButton->addListener(this);
     loopButton->addMouseListener(this, true);
     loopButton->setClickingTogglesState(true);
     loopButton->setToggleState(1, false);
     
-    Image *destructIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::indestructableicon_png, BinaryDataNew::indestructableicon_pngSize));
+    Image *destructIcon = new Image(ImageCache::getFromMemory(MainBinaryData::indestructableicon_png, MainBinaryData::indestructableicon_pngSize));
 	addChildComponent(indestructibleButton = new ModeButton(destructIcon));
     indestructibleButton->addListener(this);
     indestructibleButton->addMouseListener(this, true);
     indestructibleButton->setClickingTogglesState(true);
     
-    Image *finishIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::finishicon_png, BinaryDataNew::finishicon_pngSize));
+    Image *finishIcon = new Image(ImageCache::getFromMemory(MainBinaryData::finishicon_png, MainBinaryData::finishicon_pngSize));
     addChildComponent(finishLoopButton =new ModeButton(finishIcon));
     finishLoopButton->addListener(this);
     finishLoopButton->addMouseListener(this, true);
     finishLoopButton->setClickingTogglesState(true);
     
-    Image *stickyIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::stickyicon_png, BinaryDataNew::stickyicon_pngSize));
+    Image *stickyIcon = new Image(ImageCache::getFromMemory(MainBinaryData::stickyicon_png, MainBinaryData::stickyicon_pngSize));
     addChildComponent(stickyButton = new ModeButton(stickyIcon));
     stickyButton->addListener(this);
     stickyButton->addMouseListener(this, true);
@@ -382,7 +382,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     pressureStatusButton->setToggleState(true, false);
     pressureStatusButton->addMouseListener(this, false);
     
-    Image *linkIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::linkicon_png, BinaryDataNew::linkicon_pngSize));
+    Image *linkIcon = new Image(ImageCache::getFromMemory(MainBinaryData::linkicon_png, MainBinaryData::linkicon_pngSize));
     addChildComponent(linkButton = new ModeButton(linkIcon));
     linkButton->addListener(this);
     linkButton->addMouseListener(this, true);

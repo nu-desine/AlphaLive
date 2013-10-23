@@ -24,7 +24,7 @@
 #include "../Views/MainComponent.h"
 #include "../../Application/CommonInfoBoxText.h"
 #include "../AlphaLiveLookandFeel.h"
-#include "../Binary Data/BinaryDataNew.h"
+#include "../Binary Data/MainBinaryData.h"
 
 
 
@@ -89,8 +89,8 @@ AboutComponent::AboutComponent(MainComponent &ref)
     addAndMakeVisible(loopmastersButton = new ImageButton("loopmasters"));
     loopmastersButton->addListener(this);
     Image loopmastersImage = ImageCache::getFromMemory 
-    (BinaryDataNew::logoloopmasterssmall_jpg, 
-     BinaryDataNew::logoloopmasterssmall_jpgSize);
+    (MainBinaryData::logoloopmasterssmall_jpg, 
+     MainBinaryData::logoloopmasterssmall_jpgSize);
     loopmastersButton->setImages (true, false, true,
                                   loopmastersImage, 0.9f, Colours::transparentBlack,
                                   loopmastersImage, 1.0f, Colours::transparentBlack,
@@ -100,8 +100,8 @@ AboutComponent::AboutComponent(MainComponent &ref)
     addAndMakeVisible(zeroGButton = new ImageButton("zero-g"));
     zeroGButton->addListener(this);
     Image zeroGImage = ImageCache::getFromMemory 
-    (BinaryDataNew::logozerogsmall_png, 
-     BinaryDataNew::logozerogsmall_pngSize);
+    (MainBinaryData::logozerogsmall_png, 
+     MainBinaryData::logozerogsmall_pngSize);
     zeroGButton->setImages (true, false, true,
                             zeroGImage, 0.9f, Colours::transparentBlack,
                             zeroGImage, 1.0f, Colours::transparentBlack,
@@ -111,8 +111,8 @@ AboutComponent::AboutComponent(MainComponent &ref)
     addAndMakeVisible(fivePinMediaButton = new ImageButton("5 pin media"));
     fivePinMediaButton->addListener(this);
     Image fivePinImage = ImageCache::getFromMemory 
-    (BinaryDataNew::logo5pinmediasmall_jpg, 
-     BinaryDataNew::logo5pinmediasmall_jpgSize);
+    (MainBinaryData::logo5pinmediasmall_jpg, 
+     MainBinaryData::logo5pinmediasmall_jpgSize);
     fivePinMediaButton->setImages (true, false, true,
                             fivePinImage, 0.9f, Colours::transparentBlack,
                             fivePinImage, 1.0f, Colours::transparentBlack,

@@ -24,7 +24,7 @@
 #include "../File and Settings/AppSettings.h"
 #include "AlphaLiveEngine.h"
 #include "../File and Settings/StoredSettings.h"
-#include "../GUI Classes/Binary Data/BinaryDataNew.h"
+#include "../GUI Classes/Binary Data/MainBinaryData.h"
 #include "../GUI Classes/Views/MainComponent.h"
 
 GlobalClock::GlobalClock(AlphaLiveEngine &ref) 
@@ -52,8 +52,8 @@ GlobalClock::GlobalClock(AlphaLiveEngine &ref)
     
     WavAudioFormat wavFormat;
     
-    AudioFormatReader* reader = wavFormat.createReaderFor(new MemoryInputStream (BinaryDataNew::tock_wav,
-                                                                                 BinaryDataNew::tock_wavSize,
+    AudioFormatReader* reader = wavFormat.createReaderFor(new MemoryInputStream (MainBinaryData::tock_wav,
+                                                                                 MainBinaryData::tock_wavSize,
                                                                                  false), true);
     
     if (reader != 0)
@@ -75,8 +75,8 @@ GlobalClock::GlobalClock(AlphaLiveEngine &ref)
                               reader->sampleRate);
     }
     
-    AudioFormatReader* reader2 = wavFormat.createReaderFor(new MemoryInputStream (BinaryDataNew::tick_wav,
-                                                                                 BinaryDataNew::tick_wavSize,
+    AudioFormatReader* reader2 = wavFormat.createReaderFor(new MemoryInputStream (MainBinaryData::tick_wav,
+                                                                                 MainBinaryData::tick_wavSize,
                                                                                  false), true);
     
     if (reader2 != 0)

@@ -26,7 +26,7 @@
 #include "GlobalValues.h"
 #include "../../Application/CommandIDs.h"
 #include "../../File and Settings/StoredSettings.h"
-#include "../Binary Data/BinaryDataNew.h"
+#include "../Binary Data/MainBinaryData.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
@@ -87,7 +87,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //--------------------------------------------------------------------------
     //Mode Buttons
     //create off mode button
-	Image *offModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::offsymbol_png, BinaryDataNew::offsymbol_pngSize)); 
+	Image *offModeImage = new Image(ImageCache::getFromMemory(MainBinaryData::offsymbol_png, MainBinaryData::offsymbol_pngSize)); 
 	addAndMakeVisible(modeOffButton = new ModeButton(offModeImage));
 	modeOffButton->addListener(this);
     modeOffButton->setOpaque(false);
@@ -95,7 +95,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeOffButton->addMouseListener(this, false);
 	
 	//create global settings button
-	Image *globalSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::padsettingssymbol_png, BinaryDataNew::padsettingssymbol_pngSize)); 
+	Image *globalSettingsImage = new Image(ImageCache::getFromMemory(MainBinaryData::padsettingssymbol_png, MainBinaryData::padsettingssymbol_pngSize)); 
 	addAndMakeVisible(globalSettingsButton = new ModeButton(globalSettingsImage));
 	globalSettingsButton->addListener(this);
     globalSettingsButton->setOpaque(false);
@@ -103,7 +103,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     
     
     //create looper mode button
-	Image *looperModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::loopsymbol_png, BinaryDataNew::loopsymbol_pngSize)); 
+	Image *looperModeImage = new Image(ImageCache::getFromMemory(MainBinaryData::loopsymbol_png, MainBinaryData::loopsymbol_pngSize)); 
 	addAndMakeVisible(modeSamplerButton = new ModeButton(looperModeImage));
 	modeSamplerButton->addListener(this);
     modeSamplerButton->setOpaque(false);
@@ -111,7 +111,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeSamplerButton->addMouseListener(this, false);
 	
 	//create midi mode button
-	Image *midiModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::midisymbol_png, BinaryDataNew::midisymbol_pngSize)); 
+	Image *midiModeImage = new Image(ImageCache::getFromMemory(MainBinaryData::midisymbol_png, MainBinaryData::midisymbol_pngSize)); 
 	addAndMakeVisible(modeMidiButton = new ModeButton(midiModeImage));
 	modeMidiButton->addListener(this);
     modeMidiButton->setOpaque(false);
@@ -119,7 +119,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeMidiButton->addMouseListener(this, false);
 	
 	//create sequencer mode button
-	Image *sequencerModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::sequenceicon_png, BinaryDataNew::sequenceicon_pngSize)); 
+	Image *sequencerModeImage = new Image(ImageCache::getFromMemory(MainBinaryData::sequenceicon_png, MainBinaryData::sequenceicon_pngSize)); 
 	addAndMakeVisible(modeSequencerButton = new ModeButton(sequencerModeImage));
 	modeSequencerButton->addListener(this);
     modeSequencerButton->setOpaque(false);
@@ -127,7 +127,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeSequencerButton->addMouseListener(this, false);
 	
     //createa controller mode button
-	Image *controllerModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::controlsymbol_png, BinaryDataNew::controlsymbol_pngSize)); 
+	Image *controllerModeImage = new Image(ImageCache::getFromMemory(MainBinaryData::controlsymbol_png, MainBinaryData::controlsymbol_pngSize)); 
 	addAndMakeVisible(modeControllerButton = new ModeButton(controllerModeImage));
 	modeControllerButton->addListener(this);
     modeControllerButton->setOpaque(false);
@@ -141,13 +141,13 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     globalClock->addMouseListener(this, true);
 	
     //open/save buttons
-	Image *openImage = new Image(ImageCache::getFromMemory(BinaryDataNew::loadsymbol_png, BinaryDataNew::loadsymbol_pngSize)); 
+	Image *openImage = new Image(ImageCache::getFromMemory(MainBinaryData::loadsymbol_png, MainBinaryData::loadsymbol_pngSize)); 
     addAndMakeVisible(openButton = new ModeButton(openImage));
 	openButton->setClickingTogglesState(false);
     openButton->setCommandToTrigger(commandManager, CommandIDs::Open, false);
     openButton->addMouseListener(this, false);
     
-	Image *saveImage = new Image(ImageCache::getFromMemory(BinaryDataNew::savesymbol_png, BinaryDataNew::savesymbol_pngSize)); 
+	Image *saveImage = new Image(ImageCache::getFromMemory(MainBinaryData::savesymbol_png, MainBinaryData::savesymbol_pngSize)); 
     addAndMakeVisible(saveButton = new ModeButton(saveImage));
 	saveButton->setClickingTogglesState(false);
     saveButton->setCommandToTrigger(commandManager, CommandIDs::Save, false);

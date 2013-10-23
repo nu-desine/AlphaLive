@@ -23,7 +23,7 @@
 #include "FxGuiDelay.h"
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
-#include "../../../Binary Data/BinaryDataNew.h"
+#include "../../../Binary Data/MainBinaryData.h"
 #include "../../../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
@@ -79,7 +79,7 @@ GuiDelay::GuiDelay(MainComponent &ref)
     delayTimeMenu->addItem(translate("Quarter Beat"), 5);
     delayTimeMenu->setSelectedId(4, true);*/
     
-	Image *syncImage = new Image(ImageCache::getFromMemory(BinaryDataNew::syncicon_png, BinaryDataNew::syncicon_pngSize));
+	Image *syncImage = new Image(ImageCache::getFromMemory(MainBinaryData::syncicon_png, MainBinaryData::syncicon_pngSize));
     addAndMakeVisible(syncButton = new ModeButton(syncImage));
     syncButton->setClickingTogglesState(true);
     syncButton->setToggleState(1, false);
@@ -98,7 +98,7 @@ GuiDelay::GuiDelay(MainComponent &ref)
     alphaTouchMenu->addItem(translate("HPF Frequency"), 6);
     alphaTouchMenu->setSelectedId(1, true);
     
-    Image *reverseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::inverticon_png, BinaryDataNew::inverticon_pngSize));
+    Image *reverseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::inverticon_png, MainBinaryData::inverticon_pngSize));
     addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);

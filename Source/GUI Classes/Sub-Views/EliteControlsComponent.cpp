@@ -24,7 +24,7 @@
 #include "../Views/MainComponent.h"
 #include "../AlphaLiveLookandFeel.h"
 #include "../../Application/CommonInfoBoxText.h"
-#include "../Binary Data/BinaryDataNew.h"
+#include "../Binary Data/MainBinaryData.h"
 
 #define X_OFFSET 44
 #define Y_OFFSET 537
@@ -44,13 +44,13 @@ EliteControlsComponent::EliteControlsComponent(MainComponent &ref)
     Path buttonShape;
     buttonShape.addRectangle(0, 0, 30, 30);
 	
-	Image *dial1Image = new Image(ImageCache::getFromMemory(BinaryDataNew::controlsymbol_png, BinaryDataNew::controlsymbol_pngSize)); 
+	Image *dial1Image = new Image(ImageCache::getFromMemory(MainBinaryData::controlsymbol_png, MainBinaryData::controlsymbol_pngSize)); 
 	addAndMakeVisible(dial1Button = new ModeButton(dial1Image));
 	dial1Button->addListener(this);
 	dial1Button->setRadioGroupId (84);
     dial1Button->addMouseListener(this, false);
 	
-	Image *dial2Image = new Image(ImageCache::getFromMemory(BinaryDataNew::controlsymbol_png, BinaryDataNew::controlsymbol_pngSize)); 
+	Image *dial2Image = new Image(ImageCache::getFromMemory(MainBinaryData::controlsymbol_png, MainBinaryData::controlsymbol_pngSize)); 
 	addAndMakeVisible(dial2Button = new ModeButton(dial2Image));
 	dial2Button->addListener(this);
 	dial2Button->setRadioGroupId (84);

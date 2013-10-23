@@ -24,7 +24,7 @@
 #include "GuiGlobalPadSettings.h"
 #include "../../File and Settings/AppSettings.h"
 #include "../Views/MainComponent.h"
-#include "../Binary Data/BinaryDataNew.h"
+#include "../Binary Data/MainBinaryData.h"
 #include "../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
@@ -35,20 +35,20 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
 : mainComponentRef(ref)
 
 {
-	expoImage = new Image(ImageCache::getFromMemory(BinaryDataNew::expoicon_png, BinaryDataNew::expoicon_pngSize));
-	linearImage = new Image(ImageCache::getFromMemory(BinaryDataNew::linearicon_png, BinaryDataNew::linearicon_pngSize));
-	logImage = new Image(ImageCache::getFromMemory(BinaryDataNew::logicon_png, BinaryDataNew::logicon_pngSize));
-	staticImage = new Image(ImageCache::getFromMemory(BinaryDataNew::staticicon_png, BinaryDataNew::staticicon_pngSize));
+	expoImage = new Image(ImageCache::getFromMemory(MainBinaryData::expoicon_png, MainBinaryData::expoicon_pngSize));
+	linearImage = new Image(ImageCache::getFromMemory(MainBinaryData::linearicon_png, MainBinaryData::linearicon_pngSize));
+	logImage = new Image(ImageCache::getFromMemory(MainBinaryData::logicon_png, MainBinaryData::logicon_pngSize));
+	staticImage = new Image(ImageCache::getFromMemory(MainBinaryData::staticicon_png, MainBinaryData::staticicon_pngSize));
     emptyImage = new Image();
 
-	Image *quantiseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::quantiseicon_png, BinaryDataNew::quantiseicon_pngSize));
+	Image *quantiseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::quantiseicon_png, MainBinaryData::quantiseicon_pngSize));
 	addAndMakeVisible(quantiseButton = new ModeButton(quantiseIcon));
 	quantiseButton->setClickingTogglesState(true);
 	quantiseButton->setToggleState(false, false);	
 	quantiseButton->addListener(this);
 	quantiseButton->addMouseListener(this, true);
     
-	Image *exclusiveImage = new Image(ImageCache::getFromMemory(BinaryDataNew::exclusiveicon_png, BinaryDataNew::exclusiveicon_pngSize));
+	Image *exclusiveImage = new Image(ImageCache::getFromMemory(MainBinaryData::exclusiveicon_png, MainBinaryData::exclusiveicon_pngSize));
 	addAndMakeVisible(exclusiveModeButton = new ModeButton(exclusiveImage));
     exclusiveModeButton->addListener(this);
     exclusiveModeButton->addMouseListener(this, true);

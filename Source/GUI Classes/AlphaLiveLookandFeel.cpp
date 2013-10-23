@@ -9,7 +9,9 @@
 
 #include "AlphaLiveLookandFeel.h"
 #include "../File and Settings/StoredSettings.h"
-#include "Binary Data/BinaryDataNew.h"
+#include "Binary Data/MainBinaryData.h"
+#include "Binary Data/ThemeClassicBinaryData.h"
+#include "Binary Data/ThemeMateriaBinaryData.h"
 
 AlphaTheme::AlphaTheme()
 {
@@ -130,30 +132,38 @@ void AlphaLiveLookandFeel::setTheme (int theme)
     /*
      ====== HOW TO CREATE A NEW THEME =====
      
-     1. Put the image files of the theme into the BinaryData folder in the root directory
-        of this project. Name them in the format [themeName]_interfaceMAIN.png, 
-        [themeName]_modeoff.png, etc... (See existing theme image files for examples).
+     1. Put the image files of the theme into a new folder called "Theme_[ThemeName]", and then
+        place that folder into the BinaryData folder in the root directory
+        of this project. Name the images in the format [themeName]_interfaceMAIN.png, 
+        [themeName]_modeoff.png, etc... (See existing theme image folders and files for examples).
      
-     2. Put the theme's images into a NEW BinaryData class using the JUCE binarybuilder command
+     2. Put the theme's images into a NEW binary data class using the JUCE BinaryBuilder command
         line application. Store the class files in "Source/Gui Classes/Binary Data", and give it
-        the following name - [themeName]ThemeBinaryData (see existing theme Binary Data files
+        the following name - Theme[ThemeName]BinaryData (see existing theme binary data files
         for examples).
      
-     3. In the PreferencesComponent.cpp file (Source/GUI Classes/Sub-Views), add a new item
+     3. Add the new binary data files to the IDE project, adding them to the Binary Data group.
+        You may also need to manually link the .cpp file to the compiler if you are getting
+        linker errors when compiling. You do this by adding the file to the "Compile Sources" list
+        under the "Build Phases" section of the "Targets" section.
+     
+     4. #include the .h file in the AlphaLiveLookandFeel.cpp file.
+     
+     5. In the PreferencesComponent.cpp file (Source/GUI Classes/Sub-Views), add a new item
         to the interfaceThemeMenu Combobox with a unique ID.
      
-     4. In this setTheme() function copy the entire contents of the "if (theme == 1)"
-        statement below and put it into a new "if else()" below that which checks if 'theme' is 
+     6. In this setTheme() function below copy the entire contents of the "if (theme == 1)"
+        statement and put it into a new "if else()" below that which checks if "theme" is 
         equal to the new theme's ID.
      
-     5. Change the AlphaTheme image variables to the corresponding new ones within the new
+     7. Change the AlphaTheme image variables to the corresponding new ones within the new
         binary data class.
      
-     6. Change the AlphaTheme uint32 variables that store ARGB colour values. See the AlphaTheme
+     8. Change the AlphaTheme uint32 variables that store ARGB colour values. See the AlphaTheme
         class at the top of AlphaLiveLookandFeel.h to see where each of the colours are used
         throughout the application.
      
-     7. You don't need to change the standardColours[] array; just changing the AlphaTheme
+     9. You don't need to change the standardColours[] array; just changing the AlphaTheme
         colour values should create a sufficent colour scheme. Though there will be no issues
         if you want to change these values.
      
@@ -177,18 +187,18 @@ void AlphaLiveLookandFeel::setTheme (int theme)
     {
         // set background images here...
         
-        AlphaTheme::getInstance()->mainImage = ImageCache::getFromMemory(BinaryDataNew::interfacemain_png,
-                                                                           BinaryDataNew::interfacemain_pngSize);
-        AlphaTheme::getInstance()->padsOffImage = ImageCache::getFromMemory(BinaryDataNew::padsoff_png,
-                                                                              BinaryDataNew::padsoff_pngSize);
-        AlphaTheme::getInstance()->padsOnImage = ImageCache::getFromMemory(BinaryDataNew::padson_png,
-                                                                             BinaryDataNew::padson_pngSize);
-        AlphaTheme::getInstance()->modeOffImage = ImageCache::getFromMemory(BinaryDataNew::modeoff_png,
-                                                                              BinaryDataNew::modeoff_pngSize);
-        AlphaTheme::getInstance()->padsBackgroundImage = ImageCache::getFromMemory(BinaryDataNew::padsbg_png,
-                                                                                     BinaryDataNew::padsbg_pngSize);
-        AlphaTheme::getInstance()->settingsOffImage = ImageCache::getFromMemory(BinaryDataNew::statusoff_png,
-                                                                                  BinaryDataNew::statusoff_pngSize);
+        AlphaTheme::getInstance()->mainImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_interfacemain_png,
+                                                                           ThemeClassicBinaryData::classic_interfacemain_pngSize);
+        AlphaTheme::getInstance()->padsOffImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_padsoff_png,
+                                                                              ThemeClassicBinaryData::classic_padsoff_pngSize);
+        AlphaTheme::getInstance()->padsOnImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_padson_png,
+                                                                             ThemeClassicBinaryData::classic_padson_pngSize);
+        AlphaTheme::getInstance()->modeOffImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_modeoff_png,
+                                                                              ThemeClassicBinaryData::classic_modeoff_pngSize);
+        AlphaTheme::getInstance()->padsBackgroundImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_padsbg_png,
+                                                                                     ThemeClassicBinaryData::classic_padsbg_pngSize);
+        AlphaTheme::getInstance()->settingsOffImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_statusoff_png,
+                                                                                  ThemeClassicBinaryData::classic_statusoff_pngSize);
         
         //set custom and default AlphaLive colours here...
         
@@ -318,18 +328,18 @@ void AlphaLiveLookandFeel::setTheme (int theme)
     {
         //set background images here...
         
-        AlphaTheme::getInstance()->mainImage = ImageCache::getFromMemory(BinaryDataNew::materia_interfacemain_png,
-                                                                           BinaryDataNew::materia_interfacemain_pngSize);
-        AlphaTheme::getInstance()->padsOffImage = ImageCache::getFromMemory(BinaryDataNew::materia_padsoff_png,
-                                                                              BinaryDataNew::materia_padsoff_pngSize);
-        AlphaTheme::getInstance()->padsOnImage = ImageCache::getFromMemory(BinaryDataNew::materia_padson_png,
-                                                                             BinaryDataNew::materia_padson_pngSize);
-        AlphaTheme::getInstance()->modeOffImage = ImageCache::getFromMemory(BinaryDataNew::materia_modeoff_png,
-                                                                              BinaryDataNew::materia_modeoff_pngSize);
-        AlphaTheme::getInstance()->padsBackgroundImage = ImageCache::getFromMemory(BinaryDataNew::materia_padsbg_png,
-                                                                                     BinaryDataNew::materia_padsbg_pngSize);
-        AlphaTheme::getInstance()->settingsOffImage = ImageCache::getFromMemory(BinaryDataNew::materia_statusoff_png,
-                                                                                  BinaryDataNew::materia_statusoff_pngSize);
+        AlphaTheme::getInstance()->mainImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_interfacemain_png,
+                                                                           ThemeMateriaBinaryData::materia_interfacemain_pngSize);
+        AlphaTheme::getInstance()->padsOffImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_padsoff_png,
+                                                                              ThemeMateriaBinaryData::materia_padsoff_pngSize);
+        AlphaTheme::getInstance()->padsOnImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_padson_png,
+                                                                             ThemeMateriaBinaryData::materia_padson_pngSize);
+        AlphaTheme::getInstance()->modeOffImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_modeoff_png,
+                                                                              ThemeMateriaBinaryData::materia_modeoff_pngSize);
+        AlphaTheme::getInstance()->padsBackgroundImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_padsbg_png,
+                                                                                     ThemeMateriaBinaryData::materia_padsbg_pngSize);
+        AlphaTheme::getInstance()->settingsOffImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_statusoff_png,
+                                                                                  ThemeMateriaBinaryData::materia_statusoff_pngSize);
         
         //set custom and default AlphaLive colours here...
         

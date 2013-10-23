@@ -23,7 +23,7 @@
 #include "FxGuiPanAndGain.h"
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
-#include "../../../Binary Data/BinaryDataNew.h"
+#include "../../../Binary Data/MainBinaryData.h"
 #include "../../../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
@@ -54,7 +54,7 @@ GuiGainAndPan::GuiGainAndPan(MainComponent &ref)
     alphaTouchMenu->addItem(translate("Pan"), 3);
     alphaTouchMenu->setSelectedId(1, true);
     
-	Image *reverseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::inverticon_png, BinaryDataNew::inverticon_pngSize));
+	Image *reverseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::inverticon_png, MainBinaryData::inverticon_pngSize));
     addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);

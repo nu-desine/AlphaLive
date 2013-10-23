@@ -7,7 +7,7 @@
 //
 
 #include "Oscillator.h"
-#include "../GUI Classes/Binary Data/BinaryDataNew.h"
+#include "../GUI Classes/Binary Data/MainBinaryData.h"
 
 #ifndef M_PI
 #define M_PI (3.1415926535897932)
@@ -33,8 +33,8 @@ Oscillator::Oscillator (double sampleRate)
 	formatManager.registerBasicFormats();
 	
     ScopedPointer <AudioFormatReader> squareReader 
-    (formatManager.createReaderFor(new MemoryInputStream (BinaryDataNew::squarewave20500_wav,
-                                                          BinaryDataNew::squarewave20500_wavSize,
+    (formatManager.createReaderFor(new MemoryInputStream (MainBinaryData::squarewave20500_wav,
+                                                          MainBinaryData::squarewave20500_wavSize,
                                                           false)));
     
 	squareReader->read(&squareBuffer, 0, squareReader->lengthInSamples, 0, true, false);
@@ -42,15 +42,15 @@ Oscillator::Oscillator (double sampleRate)
     squareNumSamples = squareReader->lengthInSamples;
 	
 	ScopedPointer <AudioFormatReader> sawReader 
-    (formatManager.createReaderFor(new MemoryInputStream (BinaryDataNew::sawwave20500_wav,
-                                                          BinaryDataNew::sawwave20500_wavSize,
+    (formatManager.createReaderFor(new MemoryInputStream (MainBinaryData::sawwave20500_wav,
+                                                          MainBinaryData::sawwave20500_wavSize,
                                                           false)));
     
 	sawReader->read(&sawBuffer, 0, sawReader->lengthInSamples, 0, true, false);
 	
 	ScopedPointer <AudioFormatReader> sawDownReader
-    (formatManager.createReaderFor(new MemoryInputStream (BinaryDataNew::sawdownwave20500_wav,
-                                                          BinaryDataNew::sawdownwave20500_wavSize,
+    (formatManager.createReaderFor(new MemoryInputStream (MainBinaryData::sawdownwave20500_wav,
+                                                          MainBinaryData::sawdownwave20500_wavSize,
                                                           false)));
     
 	sawDownReader->read(&sawDownBuffer, 0, sawDownReader->lengthInSamples, 0, true, false);

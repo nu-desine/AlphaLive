@@ -873,7 +873,6 @@ void AppDocumentState::saveToScene (int sceneNumber)
 
 void AppDocumentState::loadFromScene (int sceneNumber)
 {
-    
     if (sceneData[sceneNumber] != nullptr && sceneData[sceneNumber]->hasTagName("SCENE_"+String(sceneNumber)))
     {
         //===global settings===
@@ -1726,176 +1725,108 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
             loadedXml->removeChildElement (childToInsert, false);
             
             
+            // Look for any applied audio files in the scene and make sure that sceneData[] is given the FULL PATH to
+            // the audio files (at this point sceneData[] will probably just file names or relative paths to the files)
+            // so that everything will work when loadFromScene() is called afterwards which passes these file paths into
+            // PadSettings::setSampleFilePath()/PadSettings::setSequencerSamplesAudioFilePath() and copies the file to
+            // the current projects Audio Files directory if needed.
+            //
+            // Previously we were copying the audio files within this function, however this was stupid because:
+            // 1 -  PadSettings::setSamplerAudioFilePath()/PadSettings::setSequencerSamplesAudioFilePath() are always being
+            //      called after this function which copies the files anyway.
+            // 2 -  The file copying algorithm within the other two functions is a lot better as it checks for duplicate
+            //      file names and file contents, and names the file appropriately.
             
-            //------------
-            if (AppSettings::Instance()->getCopyExternalFiles() == true)
+            //get the folder that holds the scene's audio files
+            File audioFileDirectory = (loadedFile.getParentDirectory().getFullPathName() + File::separatorString + "Audio Files");
+            
+            for (int i = 0; i <= 47; i++)
             {
-                
-                //get the folder that holds the projects audio files
-                File audioFileDirectory = (loadedFile.getParentDirectory().getFullPathName() + File::separatorString + "Audio Files");
-                
-                //copy contents of audioFileDirectory into the working directory's Audio Files folder
-                //This must be done by searching through the loaded data for audio file names and copying the files individually if they exist
-                for (int i = 0; i <= 47; i++)
+                //look for sampler audio files
+                if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
                 {
-                    //look for sampler audio files
-                    if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
+                    const String fileString(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
+                    
+                    if (fileString != String::empty) //if there is 'something'
                     {
-                        String newFileName(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
+                        //Need to check here if the saved file path is a file name, a
+                        //relative path, or the full path, and handle the situation
+                        //appropriatly.
                         
-                        if (newFileName != String::empty) //if there is 'something'
+                        if (File::isAbsolutePath(fileString) == false)
                         {
-                            File originalFile(File::nonexistent);
-                            File newFile(File::nonexistent);
+                            String filePath;
                             
-                            //Need to check here if the saved file path is just the file
-                            //name or the full path, and handle the situation appropriatly
-                            
-                            if (File::isAbsolutePath(newFileName) == false)
+                            if (fileString.contains("/") == false)
                             {
-                                //File should be an internal file
-                                originalFile = audioFileDirectory.getFullPathName()+ File::separatorString + newFileName;
-                                newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + newFileName;
-                            }
-                            
-                            else if (File::isAbsolutePath(newFileName) == true)
-                            {
-                                //file is an external file.
-                                originalFile = newFileName;
-                                newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + originalFile.getFileName();
-                                
-                                //re-set the path name within sceneData from the full path name to just the file name
-                                sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("samplerAudioFilePath", newFile.getFileName());
-                            }
-                            
-                            
-                            if (originalFile.existsAsFile() == true) //if the file exists (which it should)
-                            {
-                                if (newFile.existsAsFile() == false) //if it doesn't already exist
-                                {
-                                    originalFile.copyFileTo(newFile); 
-                                }
+                                //fileString should equal the FILE NAME of an internal file
+                                filePath = audioFileDirectory.getFullPathName()+ File::separatorString + fileString;
                             }
                             else
                             {
-                                AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), newFileName + " " + translate("could not be found."));
-                                //do something here so the loaded data is string::empty and NOT the missing audio file name
+                                //This should be true if loading a SCENE PRESET that contains audio files.
+                                //Here, fileString should be the relative path from the
+                                //current application file parent directory ('AlphaLive').
+                                
+                                File currentAppFile = File::getSpecialLocation(File::currentApplicationFile);
+                                
+                                filePath =      currentAppFile.getParentDirectory().getFullPathName() +
+                                                File::separatorString +
+                                                fileString;
+                                
                             }
+                            
+                            sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("samplerAudioFilePath", filePath);
                         }
+                        
                     }
-                    
-                    
-                    
-                    //look for sequencer audio files
-                    else if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 3)
+                }
+                
+                //look for sequencer audio files
+                else if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 3)
+                {
+                    for (int row = 0; row <= NO_OF_ROWS-1; row++)
                     {
-                        for (int row = 0; row <= NO_OF_ROWS-1; row++)
+                        
+                        const String fileString(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row)));
+                        
+                        if (fileString!= String::empty) //if there is 'something'
                         {
+                            //Need to check here if the saved file path is a file name, a
+                            //relative path, or the full path, and handle the situation
+                            //appropriatly.
                             
-                            String newFileName(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row)));
-                            
-                            if (newFileName != String::empty) //if there is 'something'
+                            if (File::isAbsolutePath(fileString) == false)
                             {
-                                File originalFile(File::nonexistent);
-                                File newFile(File::nonexistent);
+                                String filePath;
                                 
-                                //Need to check here if the saved file path is just the file
-                                //name or the full path, and handle the situation appropriatly
-                                
-                                if (File::isAbsolutePath(newFileName) == false)
+                                if (fileString.contains("/") == false)
                                 {
                                     //File should be an internal file
-                                    originalFile = audioFileDirectory.getFullPathName()+ File::separatorString + newFileName;
-                                    newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + newFileName;
-                                }
-                                
-                                else if (File::isAbsolutePath(newFileName) == true)
-                                {
-                                    //file is an external file.
-                                    originalFile = newFileName;
-                                    newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + originalFile.getFileName();
-                                    
-                                    //re-set the path name within sceneData from the full path name to just the file name
-                                    sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("sequencerSamplesAudioFilePath"+String(row), newFile.getFileName());
-                                }
-                                
-                                
-                                if (originalFile.existsAsFile() == true) //if the file exists (which it should)
-                                {
-                                    if (newFile.existsAsFile() == false) //if it doesn't already exist
-                                    {
-                                        originalFile.copyFileTo(newFile); 
-                                    }
+                                    filePath = audioFileDirectory.getFullPathName()+ File::separatorString + fileString;
                                 }
                                 else
                                 {
-                                    AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), newFileName + " " + translate("could not be found."));
-                                    //do something here so the loaded data is string::empty and NOT the missing audio file name
+                                    //This should be true if loading a SCENE PRESET that contains audio files.
+                                    //Here, newFileName should be the relative path from the
+                                    //current application file parent directory ('AlphaLive').
+                                    
+                                    File currentAppFile = File::getSpecialLocation(File::currentApplicationFile);
+                                    
+                                    filePath =  currentAppFile.getParentDirectory().getFullPathName() +
+                                    File::separatorString +
+                                    fileString;
+                                    
                                 }
                                 
+                                sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("sequencerSamplesAudioFilePath"+String(row), filePath);
                             }
-                        }
-                    }
-                }
-            }
-            else if (AppSettings::Instance()->getCopyExternalFiles() == false)
-            {
-                //This else if statement is needed in case the option to copy 
-                //external files is currently false when importing scenes
-                //which have their audio files stored in the directory 
-                //(and hence only the file NAME (not path) is saved), as the audio files
-                //will not be found once in the new project. The names need 
-                //to be converted from just the file name to the full path to work
-                
-                //get the folder that holds the projects audio files
-                File audioFileDirectory = (loadedFile.getParentDirectory().getFullPathName() + File::separatorString + "Audio Files");
-                
-                for (int i = 0; i <= 47; i++)
-                {
-                    //look for sampler audio files
-                    if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 2)
-                    {
-                        String newFileString(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
-                        
-                        if (newFileString != String::empty) //if there is 'something'
-                        {
-    
-                            if (File::isAbsolutePath(newFileString) == false)
-                            {
-                                //File should be an internal file
-                                File newFile(audioFileDirectory.getFullPathName()+ File::separatorString + newFileString); //should be a String?
-                                
-                                //set the saved file name to be the full path...
-                                sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("samplerAudioFilePath", newFile.getFullPathName()); 
-                            }
-                        }
-                    }
-                    
-                    //look for sequencer audio files
-                    else if (sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") == 3)
-                    {
-                        for (int row = 0; row <= NO_OF_ROWS-1; row++)
-                        {
                             
-                            String newFileString(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row)));
-                            if (newFileString != String::empty) //if there is 'something'
-                            {
-                                //if the string saved is just the file name...
-                                if (File::isAbsolutePath(newFileString) == false)
-                                {
-                                    //... get the full path name of the file...
-                                    File newFile(audioFileDirectory.getFullPathName()+ File::separatorString + newFileString); //should be a String?
-                                    //... a re-set the path name within sceneData, NOT PadSettings as this data hasn't been loaded
-                                    //into PadSettings yet
-                                    sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("sequencerSamplesAudioFilePath"+String(row), newFile.getFullPathName());
-                                }
-                            }
                         }
                     }
                 }
-                
             }
-           
+            
             return true;
         }
         else
@@ -1903,7 +1834,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
             AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, translate("Cannot Open File"), translate("The selected AlphaLive Scene file seems to be corrupt."));
             
             return false;
-        } 
+        }
     }
     
     else // 'cancel' button pressed

@@ -740,6 +740,10 @@ void PadSettings::setSamplerAudioFilePath(File value)
      
      */
     
+    //Within PadSettings (and most of the application) all audio files are stored as absolute file paths.
+    //It is only in AppDocumentState and when the files are saved to XML files that the file can be
+    //stored as just a file name.
+    
     if (value != File::nonexistent)
     {
         if (AppSettings::Instance()->getCopyExternalFiles() == true)
@@ -794,7 +798,7 @@ void PadSettings::setSamplerAudioFilePath(File value)
         samplerAudioFilePath = value.getFullPathName();
     }
     else
-        samplerAudioFilePath = String::empty; 
+        samplerAudioFilePath = String::empty;
     
     //set the audio file within the correct AudioFilePlayer Instance if it exists
     if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
@@ -908,6 +912,10 @@ void PadSettings::setSamplerPolyphony (int value)
 
 File PadSettings::getSamplerAudioFilePath()
 {
+    //Within PadSettings (and most of the application) all audio files are stored as absolute file paths.
+    //It is only in AppDocumentState and when the files are saved to XML files that the file can be
+    //stored as just a file name.
+    
     if (samplerAudioFilePath != String::empty)
     {
         File audioFile = samplerAudioFilePath;
@@ -1266,6 +1274,10 @@ void PadSettings::setSequencerSamplesAudioFilePath(File value, int rowNumber)
      
      */
     
+    //Within PadSettings (and most of the application) all audio files are stored as absolute file paths.
+    //It is only in AppDocumentState and when the files are saved to XML files that the file can be
+    //stored as just a file name.
+    
     if (value != File::nonexistent)
     {
         if (AppSettings::Instance()->getCopyExternalFiles() == true)
@@ -1474,6 +1486,10 @@ int PadSettings::getSequencerMidiCcController()
 
 File PadSettings::getSequencerSamplesAudioFilePath(int rowNumber)
 {
+    //Within PadSettings (and most of the application) all audio files are stored as absolute file paths.
+    //It is only in AppDocumentState and when the files are saved to XML files that the file can be
+    //stored as just a file name.
+    
     if (sequencerSamplesAudioFilePath[rowNumber] != String::empty)
     {
         File audioFile = sequencerSamplesAudioFilePath[rowNumber];

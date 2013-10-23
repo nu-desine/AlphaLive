@@ -128,6 +128,38 @@ AlphaLiveLookandFeel::~AlphaLiveLookandFeel()
 void AlphaLiveLookandFeel::setTheme (int theme)
 {
     /*
+     ====== HOW TO CREATE A NEW THEME =====
+     
+     1. Put the image files of the theme into the BinaryData folder in the root directory
+        of this project. Name them in the format [themeName]_interfaceMAIN.png, 
+        [themeName]_modeoff.png, etc... (See existing theme image files for examples).
+     
+     2. Put the theme's images into a NEW BinaryData class using the JUCE binarybuilder command
+        line application. Store the class files in "Source/Gui Classes/Binary Data", and give it
+        the following name - [themeName]ThemeBinaryData (see existing theme Binary Data files
+        for examples).
+     
+     3. In the PreferencesComponent.cpp file (Source/GUI Classes/Sub-Views), add a new item
+        to the interfaceThemeMenu Combobox with a unique ID.
+     
+     4. In this setTheme() function copy the entire contents of the "if (theme == 1)"
+        statement below and put it into a new "if else()" below that which checks if 'theme' is 
+        equal to the new theme's ID.
+     
+     5. Change the AlphaTheme image variables to the corresponding new ones within the new
+        binary data class.
+     
+     6. Change the AlphaTheme uint32 variables that store ARGB colour values. See the AlphaTheme
+        class at the top of AlphaLiveLookandFeel.h to see where each of the colours are used
+        throughout the application.
+     
+     7. You don't need to change the standardColours[] array; just changing the AlphaTheme
+        colour values should create a sufficent colour scheme. Though there will be no issues
+        if you want to change these values.
+     
+     */
+    
+    /*
      Colours that can't be changed here:
      - All colours within of the pads. You don't want to change the mode/ring colours
      and changing the background colours would interfere with these colours.

@@ -152,9 +152,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
      5. In the PreferencesComponent.cpp file (Source/GUI Classes/Sub-Views), add a new item
         to the interfaceThemeMenu Combobox with a unique ID.
      
-     6. In this setTheme() function below copy the entire contents of the "if (theme == 1)"
-        statement and put it into a new "if else()" below that which checks if "theme" is 
-        equal to the new theme's ID.
+     6. In this setTheme() function below copy the entire contents of the "else" statement
+        (which sets the theme to CLASSIC) and put it into a new "if else()" above that 
+        checks if "theme" is equal to the new theme's ID.
      
      7. Change the AlphaTheme image variables to the corresponding new ones within the new
         binary data class.
@@ -182,36 +182,35 @@ void AlphaLiveLookandFeel::setTheme (int theme)
 	
     //======================================================================
     //======================================================================
-    
-    if (theme == 1) //CLASSIC
+    if (theme == 101) //MATERIA
     {
-        // set background images here...
+        //set background images here...
         
-        AlphaTheme::getInstance()->mainImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_interfacemain_png,
-                                                                           ThemeClassicBinaryData::classic_interfacemain_pngSize);
-        AlphaTheme::getInstance()->padsOffImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_padsoff_png,
-                                                                              ThemeClassicBinaryData::classic_padsoff_pngSize);
-        AlphaTheme::getInstance()->padsOnImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_padson_png,
-                                                                             ThemeClassicBinaryData::classic_padson_pngSize);
-        AlphaTheme::getInstance()->modeOffImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_modeoff_png,
-                                                                              ThemeClassicBinaryData::classic_modeoff_pngSize);
-        AlphaTheme::getInstance()->padsBackgroundImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_padsbg_png,
-                                                                                     ThemeClassicBinaryData::classic_padsbg_pngSize);
-        AlphaTheme::getInstance()->settingsOffImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_statusoff_png,
-                                                                                  ThemeClassicBinaryData::classic_statusoff_pngSize);
+        AlphaTheme::getInstance()->mainImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_interfacemain_png,
+                                                                         ThemeMateriaBinaryData::materia_interfacemain_pngSize);
+        AlphaTheme::getInstance()->padsOffImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_padsoff_png,
+                                                                            ThemeMateriaBinaryData::materia_padsoff_pngSize);
+        AlphaTheme::getInstance()->padsOnImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_padson_png,
+                                                                           ThemeMateriaBinaryData::materia_padson_pngSize);
+        AlphaTheme::getInstance()->modeOffImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_modeoff_png,
+                                                                            ThemeMateriaBinaryData::materia_modeoff_pngSize);
+        AlphaTheme::getInstance()->padsBackgroundImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_padsbg_png,
+                                                                                   ThemeMateriaBinaryData::materia_padsbg_pngSize);
+        AlphaTheme::getInstance()->settingsOffImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_statusoff_png,
+                                                                                ThemeMateriaBinaryData::materia_statusoff_pngSize);
         
         //set custom and default AlphaLive colours here...
         
-        AlphaTheme::getInstance()->mainColour_ = 0xff1a54ab; //blue
-        AlphaTheme::getInstance()->mainColourLighter_ = 0xff3c76c5; //light blue
+        AlphaTheme::getInstance()->mainColour_ = 0xff316491; //blue
+        AlphaTheme::getInstance()->mainColourLighter_ = 0xff448ecf; //light blue
         AlphaTheme::getInstance()->childBackgroundColour_ = 0xff181818; //nearly black
-        AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xff202020; //very dark grey
-        AlphaTheme::getInstance()->textColour_ = 0xffffffff; //white
-        AlphaTheme::getInstance()->backgroundColour_ = 0xff000000; //black
+        AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xff21212a; //very dark grey
+        AlphaTheme::getInstance()->textColour_ = 0xffb6b797; // materia cream
+        AlphaTheme::getInstance()->backgroundColour_ = 0xff021221; //very dark blue
         AlphaTheme::getInstance()->foregroundColour_ = 0xff808080; //grey
-        AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffd3d3d3; //light grey
-        AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff555555; //dark grey
-        AlphaTheme::getInstance()->iconColour_ = 0xffffffff; //white (same as text colour)
+        AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffb6b797; //materia cream
+        AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff46505a; //dark blue/grey
+        AlphaTheme::getInstance()->iconColour_ = 0xffb6b797; // materia cream
         
         
         // set up the standard set of colours..
@@ -321,38 +320,41 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             setColour (standardColours [i], Colour ((uint32) standardColours [i + 1]));
     }
     
+    
     //======================================================================
     //======================================================================
     
-    else if (theme == 2) //MATERIA
+    
+    
+    else //Theme either equals 1 or has an unspecified value, so set it to CLASSIC
     {
-        //set background images here...
+        // set background images here...
         
-        AlphaTheme::getInstance()->mainImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_interfacemain_png,
-                                                                           ThemeMateriaBinaryData::materia_interfacemain_pngSize);
-        AlphaTheme::getInstance()->padsOffImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_padsoff_png,
-                                                                              ThemeMateriaBinaryData::materia_padsoff_pngSize);
-        AlphaTheme::getInstance()->padsOnImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_padson_png,
-                                                                             ThemeMateriaBinaryData::materia_padson_pngSize);
-        AlphaTheme::getInstance()->modeOffImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_modeoff_png,
-                                                                              ThemeMateriaBinaryData::materia_modeoff_pngSize);
-        AlphaTheme::getInstance()->padsBackgroundImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_padsbg_png,
-                                                                                     ThemeMateriaBinaryData::materia_padsbg_pngSize);
-        AlphaTheme::getInstance()->settingsOffImage = ImageCache::getFromMemory(ThemeMateriaBinaryData::materia_statusoff_png,
-                                                                                  ThemeMateriaBinaryData::materia_statusoff_pngSize);
+        AlphaTheme::getInstance()->mainImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_interfacemain_png,
+                                                                           ThemeClassicBinaryData::classic_interfacemain_pngSize);
+        AlphaTheme::getInstance()->padsOffImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_padsoff_png,
+                                                                              ThemeClassicBinaryData::classic_padsoff_pngSize);
+        AlphaTheme::getInstance()->padsOnImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_padson_png,
+                                                                             ThemeClassicBinaryData::classic_padson_pngSize);
+        AlphaTheme::getInstance()->modeOffImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_modeoff_png,
+                                                                              ThemeClassicBinaryData::classic_modeoff_pngSize);
+        AlphaTheme::getInstance()->padsBackgroundImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_padsbg_png,
+                                                                                     ThemeClassicBinaryData::classic_padsbg_pngSize);
+        AlphaTheme::getInstance()->settingsOffImage = ImageCache::getFromMemory(ThemeClassicBinaryData::classic_statusoff_png,
+                                                                                  ThemeClassicBinaryData::classic_statusoff_pngSize);
         
         //set custom and default AlphaLive colours here...
         
-        AlphaTheme::getInstance()->mainColour_ = 0xff316491; //blue
-        AlphaTheme::getInstance()->mainColourLighter_ = 0xff448ecf; //light blue
+        AlphaTheme::getInstance()->mainColour_ = 0xff1a54ab; //blue
+        AlphaTheme::getInstance()->mainColourLighter_ = 0xff3c76c5; //light blue
         AlphaTheme::getInstance()->childBackgroundColour_ = 0xff181818; //nearly black
-        AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xff21212a; //very dark grey
-        AlphaTheme::getInstance()->textColour_ = 0xffb6b797; // materia cream
-        AlphaTheme::getInstance()->backgroundColour_ = 0xff021221; //very dark blue
+        AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xff202020; //very dark grey
+        AlphaTheme::getInstance()->textColour_ = 0xffffffff; //white
+        AlphaTheme::getInstance()->backgroundColour_ = 0xff000000; //black
         AlphaTheme::getInstance()->foregroundColour_ = 0xff808080; //grey
-        AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffb6b797; //materia cream
-        AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff46505a; //dark blue/grey
-        AlphaTheme::getInstance()->iconColour_ = 0xffb6b797; // materia cream
+        AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffd3d3d3; //light grey
+        AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff555555; //dark grey
+        AlphaTheme::getInstance()->iconColour_ = 0xffffffff; //white (same as text colour)
         
         
         // set up the standard set of colours..

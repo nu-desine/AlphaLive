@@ -291,13 +291,28 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     
     addAndMakeVisible(interfaceThemeMenu = new ComboBox());
     interfaceThemeMenu->addItem(translate("Classic"), 1);
-    interfaceThemeMenu->addItem("Materia", 2);
     interfaceThemeMenu->addListener(this);
     interfaceThemeMenu->addMouseListener(this, true);
-    interfaceThemeMenu->setSelectedId(StoredSettings::getInstance()->interfaceTheme, true);
     
     addAndMakeVisible(interfaceThemeLabel = new Label());
     interfaceThemeLabel->setText(translate("Interface Theme:"), dontSendNotification);
+    
+    // ===== Add the Materia theme if the user has the Materia sample pack =====
+    
+    File currentAppParentDir = File::getSpecialLocation(File::currentApplicationFile).getParentDirectory();
+    
+    File materiaDir (currentAppParentDir.getFullPathName() +
+                     File::separatorString +
+                     "Library" +
+                     File::separatorString +
+                     "Audio Library" +
+                     File::separatorString +
+                     "Materia");
+    
+    if (materiaDir.exists())
+        interfaceThemeMenu->addItem("Materia", 101);
+    
+    interfaceThemeMenu->setSelectedId(StoredSettings::getInstance()->interfaceTheme, true);
     
 }
 

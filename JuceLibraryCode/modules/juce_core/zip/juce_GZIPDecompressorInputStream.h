@@ -26,12 +26,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_GZIPDECOMPRESSORINPUTSTREAM_JUCEHEADER__
-#define __JUCE_GZIPDECOMPRESSORINPUTSTREAM_JUCEHEADER__
-
-#include "../streams/juce_InputStream.h"
-#include "../memory/juce_OptionalScopedPointer.h"
-#include "../memory/juce_HeapBlock.h"
+#ifndef JUCE_GZIPDECOMPRESSORINPUTSTREAM_H_INCLUDED
+#define JUCE_GZIPDECOMPRESSORINPUTSTREAM_H_INCLUDED
 
 
 //==============================================================================
@@ -92,10 +88,10 @@ private:
     HeapBlock <uint8> buffer;
 
     class GZIPDecompressHelper;
-    friend class ScopedPointer <GZIPDecompressHelper>;
-    ScopedPointer <GZIPDecompressHelper> helper;
+    friend struct ContainerDeletePolicy<GZIPDecompressHelper>;
+    ScopedPointer<GZIPDecompressHelper> helper;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GZIPDecompressorInputStream)
 };
 
-#endif   // __JUCE_GZIPDECOMPRESSORINPUTSTREAM_JUCEHEADER__
+#endif   // JUCE_GZIPDECOMPRESSORINPUTSTREAM_H_INCLUDED

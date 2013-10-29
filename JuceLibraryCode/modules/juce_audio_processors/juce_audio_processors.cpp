@@ -22,7 +22,7 @@
   ==============================================================================
 */
 
-#if defined (__JUCE_AUDIO_PROCESSORS_JUCEHEADER__) && ! JUCE_AMALGAMATED_INCLUDE
+#if defined (JUCE_AUDIO_PROCESSORS_H_INCLUDED) && ! JUCE_AMALGAMATED_INCLUDE
  /* When you add this cpp file to your project, you mustn't include it in a file where you've
     already included any other headers - just put it inside a file on its own, possibly with your config
     flags preceding it, but don't include anything else. That also includes avoiding any automatic prefix
@@ -71,8 +71,6 @@ static inline bool arrayContainsPlugin (const OwnedArray<PluginDescription>& lis
     return false;
 }
 
-// START_AUTOINCLUDE format/*.cpp, processors/*.cpp, format_types/*.cpp,
-// format_types/*.mm, scanning/*.cpp
 #include "format/juce_AudioPluginFormat.cpp"
 #include "format/juce_AudioPluginFormatManager.cpp"
 #include "processors/juce_AudioProcessor.cpp"
@@ -86,6 +84,5 @@ static inline bool arrayContainsPlugin (const OwnedArray<PluginDescription>& lis
 #include "scanning/juce_KnownPluginList.cpp"
 #include "scanning/juce_PluginDirectoryScanner.cpp"
 #include "scanning/juce_PluginListComponent.cpp"
-// END_AUTOINCLUDE
 
 }

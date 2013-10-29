@@ -22,11 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_PLUGINLISTCOMPONENT_JUCEHEADER__
-#define __JUCE_PLUGINLISTCOMPONENT_JUCEHEADER__
-
-#include "juce_KnownPluginList.h"
-#include "../format/juce_AudioPluginFormat.h"
+#ifndef JUCE_PLUGINLISTCOMPONENT_H_INCLUDED
+#define JUCE_PLUGINLISTCOMPONENT_H_INCLUDED
 
 
 //==============================================================================
@@ -103,7 +100,7 @@ private:
 
     class Scanner;
     friend class Scanner;
-    friend class ScopedPointer<Scanner>;
+    friend struct ContainerDeletePolicy<Scanner>;
     ScopedPointer<Scanner> currentScanner;
 
     void scanFinished (const StringArray&);
@@ -122,4 +119,4 @@ private:
 };
 
 
-#endif   // __JUCE_PLUGINLISTCOMPONENT_JUCEHEADER__
+#endif   // JUCE_PLUGINLISTCOMPONENT_H_INCLUDED

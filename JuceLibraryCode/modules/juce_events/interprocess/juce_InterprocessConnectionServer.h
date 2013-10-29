@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_INTERPROCESSCONNECTIONSERVER_JUCEHEADER__
-#define __JUCE_INTERPROCESSCONNECTIONSERVER_JUCEHEADER__
-
-#include "juce_InterprocessConnection.h"
+#ifndef JUCE_INTERPROCESSCONNECTIONSERVER_H_INCLUDED
+#define JUCE_INTERPROCESSCONNECTIONSERVER_H_INCLUDED
 
 
 //==============================================================================
@@ -92,4 +90,4 @@ private:
 };
 
 
-#endif   // __JUCE_INTERPROCESSCONNECTIONSERVER_JUCEHEADER__
+#endif   // JUCE_INTERPROCESSCONNECTIONSERVER_H_INCLUDED

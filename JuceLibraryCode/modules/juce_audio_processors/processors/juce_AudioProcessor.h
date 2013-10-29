@@ -22,12 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_AUDIOPROCESSOR_JUCEHEADER__
-#define __JUCE_AUDIOPROCESSOR_JUCEHEADER__
-
-#include "juce_AudioProcessorEditor.h"
-#include "juce_AudioProcessorListener.h"
-#include "juce_AudioPlayHead.h"
+#ifndef JUCE_AUDIOPROCESSOR_H_INCLUDED
+#define JUCE_AUDIOPROCESSOR_H_INCLUDED
 
 
 //==============================================================================
@@ -403,6 +399,37 @@ public:
     /** Returns the value of a parameter as a text string. */
     virtual const String getParameterText (int parameterIndex) = 0;
 
+    /** Returns the name of a parameter as a text string with a preferred maximum length.
+        If you want to provide customised short versions of your parameter names that
+        will look better in constrained spaces (e.g. the displays on hardware controller
+        devices or mixing desks) then you should implement this method.
+        If you don't override it, the default implementation will call getParameterText(int),
+        and truncate the result.
+    */
+    virtual String getParameterName (int parameterIndex, int maximumStringLength);
+
+    /** Returns the value of a parameter as a text string with a preferred maximum length.
+        If you want to provide customised short versions of your parameter values that
+        will look better in constrained spaces (e.g. the displays on hardware controller
+        devices or mixing desks) then you should implement this method.
+        If you don't override it, the default implementation will call getParameterText(int),
+        and truncate the result.
+    */
+    virtual String getParameterText (int parameterIndex, int maximumStringLength);
+
+    /** Returns the number of discrete steps that this parameter can represent.
+        The default return value if you don't implement this method is 0x7fffffff.
+        If your parameter is boolean, then you may want to make this return 2.
+        The value that is returned may or may not be used, depending on the host.
+    */
+    virtual int getParameterNumSteps (int parameterIndex);
+
+    /** Returns the default value for the parameter.
+        By default, this just returns 0.
+        The value that is returned may or may not be used, depending on the host.
+    */
+    virtual float getParameterDefaultValue (int parameterIndex);
+
     /** Some plugin types may be able to return a label string for a
         parameter's units.
     */
@@ -564,7 +591,7 @@ public:
         The processor will not take ownership of the object, so the caller must delete it when
         it is no longer being used.
     */
-    void setPlayHead (AudioPlayHead* newPlayHead) noexcept;
+    virtual void setPlayHead (AudioPlayHead* newPlayHead);
 
     //==============================================================================
     /** This is called by the processor to specify its details before being played. */
@@ -593,10 +620,6 @@ public:
     */
     WrapperType wrapperType;
 
-    /** @internal */
-    static void JUCE_CALLTYPE setTypeOfNextNewPlugin (WrapperType);
-
-protected:
     //==============================================================================
     /** Helper function that just converts an xml element into a binary blob.
 
@@ -617,13 +640,17 @@ protected:
     static XmlElement* getXmlFromBinary (const void* data, int sizeInBytes);
 
     /** @internal */
+    static void JUCE_CALLTYPE setTypeOfNextNewPlugin (WrapperType);
+
+protected:
+    /** @internal */
     AudioPlayHead* playHead;
 
     /** @internal */
     void sendParamChangeMessageToListeners (int parameterIndex, float newValue);
 
 private:
-    Array <AudioProcessorListener*> listeners;
+    Array<AudioProcessorListener*> listeners;
     Component::SafePointer<AudioProcessorEditor> activeEditor;
     double sampleRate;
     int blockSize, numInputChannels, numOutputChannels, latencySamples;
@@ -641,4 +668,4 @@ private:
 };
 
 
-#endif   // __JUCE_AUDIOPROCESSOR_JUCEHEADER__
+#endif   // JUCE_AUDIOPROCESSOR_H_INCLUDED

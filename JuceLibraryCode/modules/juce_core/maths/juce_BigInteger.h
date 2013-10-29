@@ -26,12 +26,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_BIGINTEGER_JUCEHEADER__
-#define __JUCE_BIGINTEGER_JUCEHEADER__
-
-#include "../text/juce_String.h"
-#include "../memory/juce_HeapBlock.h"
-class MemoryBlock;
+#ifndef JUCE_BIGINTEGER_H_INCLUDED
+#define JUCE_BIGINTEGER_H_INCLUDED
 
 
 //==============================================================================
@@ -98,10 +94,15 @@ public:
     /** Returns true if the value is 1. */
     bool isOne() const noexcept;
 
-    /** Attempts to get the lowest bits of the value as an integer.
+    /** Attempts to get the lowest 32 bits of the value as an integer.
         If the value is bigger than the integer limits, this will return only the lower bits.
     */
     int toInteger() const noexcept;
+
+    /** Attempts to get the lowest 64 bits of the value as an integer.
+        If the value is bigger than the integer limits, this will return only the lower bits.
+    */
+    int64 toInt64() const noexcept;
 
     //==============================================================================
     /** Resets the value to 0. */
@@ -286,7 +287,7 @@ public:
         Specify a base such as 2 (binary), 8 (octal), 10 (decimal), 16 (hex).
         Any invalid characters will be ignored.
     */
-    void parseString (const String& text, int base);
+    void parseString (StringRef text, int base);
 
     //==============================================================================
     /** Turns the number into a block of binary data.
@@ -331,4 +332,4 @@ OutputStream& JUCE_CALLTYPE operator<< (OutputStream& stream, const BigInteger& 
 #endif
 
 
-#endif   // __JUCE_BIGINTEGER_JUCEHEADER__
+#endif   // JUCE_BIGINTEGER_H_INCLUDED

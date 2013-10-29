@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_VIEWPORT_JUCEHEADER__
-#define __JUCE_VIEWPORT_JUCEHEADER__
-
-#include "juce_ScrollBar.h"
+#ifndef JUCE_VIEWPORT_H_INCLUDED
+#define JUCE_VIEWPORT_H_INCLUDED
 
 
 //==============================================================================
@@ -248,6 +246,8 @@ public:
     void componentMovedOrResized (Component&, bool wasMoved, bool wasResized) override;
     /** @internal */
     bool useMouseWheelMoveIfNeeded (const MouseEvent&, const MouseWheelDetails&);
+    /** @internal */
+    static bool respondsToKey (const KeyPress&);
 
 private:
     //==============================================================================
@@ -273,4 +273,4 @@ private:
 };
 
 
-#endif   // __JUCE_VIEWPORT_JUCEHEADER__
+#endif   // JUCE_VIEWPORT_H_INCLUDED

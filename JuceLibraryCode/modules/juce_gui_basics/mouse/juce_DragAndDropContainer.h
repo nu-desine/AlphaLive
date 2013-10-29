@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_DRAGANDDROPCONTAINER_JUCEHEADER__
-#define __JUCE_DRAGANDDROPCONTAINER_JUCEHEADER__
-
-#include "juce_DragAndDropTarget.h"
+#ifndef JUCE_DRAGANDDROPCONTAINER_H_INCLUDED
+#define JUCE_DRAGANDDROPCONTAINER_H_INCLUDED
 
 
 //==============================================================================
@@ -88,7 +86,7 @@ public:
     */
     void startDragging (const var& sourceDescription,
                         Component* sourceComponent,
-                        const Image& dragImage = Image::null,
+                        Image dragImage = Image::null,
                         bool allowDraggingToOtherJuceWindows = false,
                         const Point<int>* imageOffsetFromMouse = nullptr);
 
@@ -97,12 +95,12 @@ public:
 
     /** Returns the description of the thing that's currently being dragged.
 
-        If nothing's being dragged, this will return an empty string, otherwise it's the
-        string that was passed into startDragging().
+        If nothing's being dragged, this will return a null var, otherwise it'll return
+        the var that was passed into startDragging().
 
         @see startDragging
     */
-    String getCurrentDragDescription() const;
+    var getCurrentDragDescription() const;
 
     /** Utility to find the DragAndDropContainer for a given Component.
 
@@ -172,7 +170,7 @@ private:
     class DragImageComponent;
     friend class DragImageComponent;
     ScopedPointer <Component> dragImageComponent;
-    String currentDragDesc;
+    var currentDragDesc;
 
     JUCE_DEPRECATED (virtual bool shouldDropFilesWhenDraggedExternally (const String&, Component*, StringArray&, bool&)) { return false; }
 
@@ -180,4 +178,4 @@ private:
 };
 
 
-#endif   // __JUCE_DRAGANDDROPCONTAINER_JUCEHEADER__
+#endif   // JUCE_DRAGANDDROPCONTAINER_H_INCLUDED

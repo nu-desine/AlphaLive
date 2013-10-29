@@ -26,10 +26,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_PERFORMANCECOUNTER_JUCEHEADER__
-#define __JUCE_PERFORMANCECOUNTER_JUCEHEADER__
-
-#include "../files/juce_File.h"
+#ifndef JUCE_PERFORMANCECOUNTER_H_INCLUDED
+#define JUCE_PERFORMANCECOUNTER_H_INCLUDED
 
 
 //==============================================================================
@@ -105,4 +103,4 @@ private:
     File outputFile;
 };
 
-#endif   // __JUCE_PERFORMANCECOUNTER_JUCEHEADER__
+#endif   // JUCE_PERFORMANCECOUNTER_H_INCLUDED

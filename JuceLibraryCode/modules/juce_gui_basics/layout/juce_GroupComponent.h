@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_GROUPCOMPONENT_JUCEHEADER__
-#define __JUCE_GROUPCOMPONENT_JUCEHEADER__
-
-#include "../components/juce_Component.h"
+#ifndef JUCE_GROUPCOMPONENT_H_INCLUDED
+#define JUCE_GROUPCOMPONENT_H_INCLUDED
 
 
 //==============================================================================
@@ -85,6 +83,16 @@ public:
     };
 
     //==============================================================================
+    /** This abstract base class is implemented by LookAndFeel classes. */
+    struct JUCE_API  LookAndFeelMethods
+    {
+        virtual ~LookAndFeelMethods() {}
+
+        virtual void drawGroupComponentOutline (Graphics&, int w, int h, const String& text,
+                                                const Justification&, GroupComponent&) = 0;
+    };
+
+    //==============================================================================
     /** @internal */
     void paint (Graphics&) override;
     /** @internal */
@@ -100,4 +108,4 @@ private:
 };
 
 
-#endif   // __JUCE_GROUPCOMPONENT_JUCEHEADER__
+#endif   // JUCE_GROUPCOMPONENT_H_INCLUDED

@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_KEYBOARDFOCUSTRAVERSER_JUCEHEADER__
-#define __JUCE_KEYBOARDFOCUSTRAVERSER_JUCEHEADER__
-
-class Component;
+#ifndef JUCE_KEYBOARDFOCUSTRAVERSER_H_INCLUDED
+#define JUCE_KEYBOARDFOCUSTRAVERSER_H_INCLUDED
 
 
 //==============================================================================
@@ -88,4 +86,4 @@ public:
 };
 
 
-#endif   // __JUCE_KEYBOARDFOCUSTRAVERSER_JUCEHEADER__
+#endif   // JUCE_KEYBOARDFOCUSTRAVERSER_H_INCLUDED

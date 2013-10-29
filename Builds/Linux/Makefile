@@ -1,28 +1,29 @@
 # Automatically generated makefile, created by the Introjucer
 # Don't edit this file! Your changes will be overwritten when you re-save the Introjucer project!
 
+# (this disables dependency generation if multiple architectures are set)
+DEPFLAGS := $(if $(word 2, $(TARGET_ARCH)), , -MMD)
+
 ifndef CONFIG
   CONFIG=Debug
 endif
-
-ifeq ($(TARGET_ARCH),)
-  TARGET_ARCH := -march=native
-endif
-
-# (this disables dependency generation if multiple architectures are set)
-DEPFLAGS := $(if $(word 2, $(TARGET_ARCH)), , -MMD)
 
 ifeq ($(CONFIG),Debug)
   BINDIR := build
   LIBDIR := build
   OBJDIR := build/intermediate/Debug
   OUTDIR := build
-  CPPFLAGS := -fpermissive $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
+
+  ifeq ($(TARGET_ARCH),)
+    TARGET_ARCH := -march=native
+  endif
+
+  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../JuceLibraryCode/modules
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0
-  CXXFLAGS += $(CFLAGS) 
-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lGL -lX11 -lXext -lXinerama -lasound -ldl -lfreetype -lpthread -lrt -ludev
+  CXXFLAGS += $(CFLAGS)
+  LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lGL -lX11 -lXext -lXinerama -lasound -ldl -lfreetype -lpthread -lrt 
   LDDEPS :=
-  RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
+  RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../JuceLibraryCode/modules
   TARGET := AlphaLive
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
 endif
@@ -32,12 +33,17 @@ ifeq ($(CONFIG),Release)
   LIBDIR := build
   OBJDIR := build/intermediate/Release
   OUTDIR := build
-  CPPFLAGS := -fpermissive $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
+
+  ifeq ($(TARGET_ARCH),)
+    TARGET_ARCH := -march=native
+  endif
+
+  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../JuceLibraryCode/modules
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -Os
-  CXXFLAGS += $(CFLAGS) 
-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lGL -lX11 -lXext -lXinerama -lasound -ldl -lfreetype -lpthread -lrt 
+  CXXFLAGS += $(CFLAGS)
+  LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -fvisibility=hidden -L/usr/X11R6/lib/ -lGL -lX11 -lXext -lXinerama -lasound -ldl -lfreetype -lpthread -lrt 
   LDDEPS :=
-  RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
+  RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../JuceLibraryCode/modules
   TARGET := AlphaLive
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
 endif
@@ -68,7 +74,6 @@ OBJECTS := \
   $(OBJDIR)/GlobalClock_43ec288e.o \
   $(OBJDIR)/ModeMidi_a7f7d4b8.o \
   $(OBJDIR)/LayoutsAndScales_ee32a39d.o \
-  $(OBJDIR)/PlayStates_c50a229c.o \
   $(OBJDIR)/TriggerModes_6d09eb5e.o \
   $(OBJDIR)/AudioFilePlayer_99014466.o \
   $(OBJDIR)/ModeSampler_b2754758.o \
@@ -319,11 +324,6 @@ $(OBJDIR)/ModeMidi_a7f7d4b8.o: ../../Source/Functionality\ Classes/MIDI\ Mode/Mo
 $(OBJDIR)/LayoutsAndScales_ee32a39d.o: ../../Source/Functionality\ Classes/Other/LayoutsAndScales.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling LayoutsAndScales.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/PlayStates_c50a229c.o: ../../Source/Functionality\ Classes/Other/PlayStates.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling PlayStates.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/TriggerModes_6d09eb5e.o: ../../Source/Functionality\ Classes/Other/TriggerModes.cpp

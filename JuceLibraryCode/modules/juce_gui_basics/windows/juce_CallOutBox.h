@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_CALLOUTBOX_JUCEHEADER__
-#define __JUCE_CALLOUTBOX_JUCEHEADER__
-
-#include "../components/juce_Component.h"
+#ifndef JUCE_CALLOUTBOX_H_INCLUDED
+#define JUCE_CALLOUTBOX_H_INCLUDED
 
 
 //==============================================================================
@@ -121,6 +119,15 @@ public:
                                              Component* parentComponent);
 
     //==============================================================================
+    /** This abstract base class is implemented by LookAndFeel classes. */
+    struct JUCE_API  LookAndFeelMethods
+    {
+        virtual ~LookAndFeelMethods() {}
+
+        virtual void drawCallOutBoxBackground (CallOutBox&, Graphics&, const Path&, Image& cachedImage) = 0;
+    };
+
+    //==============================================================================
     /** @internal */
     void paint (Graphics&) override;
     /** @internal */
@@ -154,4 +161,4 @@ private:
 };
 
 
-#endif   // __JUCE_CALLOUTBOX_JUCEHEADER__
+#endif   // JUCE_CALLOUTBOX_H_INCLUDED

@@ -22,11 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_PROPERTYPANEL_JUCEHEADER__
-#define __JUCE_PROPERTYPANEL_JUCEHEADER__
-
-#include "juce_PropertyComponent.h"
-#include "../layout/juce_Viewport.h"
+#ifndef JUCE_PROPERTYPANEL_H_INCLUDED
+#define JUCE_PROPERTYPANEL_H_INCLUDED
 
 
 //==============================================================================
@@ -82,7 +79,7 @@ public:
     /** Calls the refresh() method of all PropertyComponents in the panel */
     void refreshAll() const;
 
-    /** Returns true if there no properties have been added. */
+    /** Returns true if the panel contains no properties. */
     bool isEmpty() const;
 
     /** Returns the height that the panel needs in order to display all of its content
@@ -163,4 +160,4 @@ private:
 };
 
 
-#endif   // __JUCE_PROPERTYPANEL_JUCEHEADER__
+#endif   // JUCE_PROPERTYPANEL_H_INCLUDED

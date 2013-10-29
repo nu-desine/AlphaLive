@@ -98,7 +98,8 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.5f));
 			g.strokePath (thePath, 1.0f, getTransform());
 			
-			g.drawTextAsPath(theText, rotateText);
+            g.addTransform(rotateText);
+            g.drawSingleLineText(theText, 0, 0);
 			
             break;
         }
@@ -113,7 +114,9 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			g.strokePath (thePath, 1.0f, getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker);
-			g.drawTextAsPath(theText, rotateText);
+            
+            g.addTransform(rotateText);
+            g.drawSingleLineText(theText, 0, 0);
 
             break;
         }
@@ -128,7 +131,9 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			g.strokePath (thePath, 1.0f, getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker);
-			g.drawTextAsPath(theText, rotateText);
+            
+            g.addTransform(rotateText);
+            g.drawSingleLineText(theText, 0, 0);
 
 		
             break;
@@ -144,7 +149,9 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			g.strokePath (thePath, 1.0f, getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->mainColour);
-			g.drawTextAsPath(theText, rotateText);
+            
+            g.addTransform(rotateText);
+            g.drawSingleLineText(theText, 0, 0);
 
 			
             break;
@@ -161,7 +168,8 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			
 			g.setColour(AlphaTheme::getInstance()->mainColour);
 
-			g.drawTextAsPath(theText, rotateText);
+            g.addTransform(rotateText);
+            g.drawSingleLineText(theText, 0, 0);
             
             break;
         }
@@ -177,7 +185,8 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			
 			g.setColour(AlphaTheme::getInstance()->mainColour);
 
-			g.drawTextAsPath(theText, rotateText);
+            g.addTransform(rotateText);
+            g.drawSingleLineText(theText, 0, 0);
 
             break;
         }

@@ -22,7 +22,7 @@
   ==============================================================================
 */
 
-#if defined (__JUCE_GUI_EXTRA_JUCEHEADER__) && ! JUCE_AMALGAMATED_INCLUDE
+#if defined (JUCE_GUI_EXTRA_H_INCLUDED) && ! JUCE_AMALGAMATED_INCLUDE
  /* When you add this cpp file to your project, you mustn't include it in a file where you've
     already included any other headers - just put it inside a file on its own, possibly with your config
     flags preceding it, but don't include anything else. That also includes avoiding any automatic prefix
@@ -61,7 +61,7 @@
  #include <commdlg.h>
 
  #if JUCE_WEB_BROWSER
-  #include <Exdisp.h>
+  #include <exdisp.h>
   #include <exdispid.h>
  #endif
 
@@ -86,7 +86,6 @@ namespace juce
 #include "code_editor/juce_CodeDocument.cpp"
 #include "code_editor/juce_CodeEditorComponent.cpp"
 #include "code_editor/juce_CPlusPlusCodeTokeniser.cpp"
-#include "lookandfeel/juce_OldSchoolLookAndFeel.cpp"
 #include "misc/juce_BubbleMessageComponent.cpp"
 #include "misc/juce_ColourSelector.cpp"
 #include "misc/juce_KeyMappingEditorComponent.cpp"

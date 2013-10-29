@@ -22,8 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_MIDIKEYBOARDCOMPONENT_JUCEHEADER__
-#define __JUCE_MIDIKEYBOARDCOMPONENT_JUCEHEADER__
+#ifndef JUCE_MIDIKEYBOARDCOMPONENT_H_INCLUDED
+#define JUCE_MIDIKEYBOARDCOMPONENT_H_INCLUDED
 
 
 //==============================================================================
@@ -204,7 +204,7 @@ public:
         Depending on the keyboard's orientation, this may be a horizontal or vertical
         distance, in either direction.
     */
-    int getKeyStartPosition (const int midiNoteNumber) const;
+    int getKeyStartPosition (int midiNoteNumber) const;
 
     //==============================================================================
     /** Deletes all key-mappings.
@@ -387,8 +387,8 @@ private:
     bool canScroll, useMousePositionForVelocity, shouldCheckMousePos;
     ScopedPointer<Button> scrollDown, scrollUp;
 
-    Array <KeyPress> keyPresses;
-    Array <int> keyPressNotes;
+    Array<KeyPress> keyPresses;
+    Array<int> keyPressNotes;
     int keyMappingOctave, octaveNumForMiddleC;
 
     static const uint8 whiteNotes[];
@@ -408,4 +408,4 @@ private:
 };
 
 
-#endif   // __JUCE_MIDIKEYBOARDCOMPONENT_JUCEHEADER__
+#endif   // JUCE_MIDIKEYBOARDCOMPONENT_H_INCLUDED

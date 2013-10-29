@@ -22,11 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_DRAWABLESHAPE_JUCEHEADER__
-#define __JUCE_DRAWABLESHAPE_JUCEHEADER__
-
-#include "juce_Drawable.h"
-#include "../positioning/juce_RelativeCoordinatePositioner.h"
+#ifndef JUCE_DRAWABLESHAPE_H_INCLUDED
+#define JUCE_DRAWABLESHAPE_H_INCLUDED
 
 
 //==============================================================================
@@ -180,4 +177,4 @@ private:
 };
 
 
-#endif   // __JUCE_DRAWABLESHAPE_JUCEHEADER__
+#endif   // JUCE_DRAWABLESHAPE_H_INCLUDED

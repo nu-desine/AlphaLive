@@ -22,8 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_ACTIVEXCONTROLCOMPONENT_JUCEHEADER__
-#define __JUCE_ACTIVEXCONTROLCOMPONENT_JUCEHEADER__
+#ifndef JUCE_ACTIVEXCONTROLCOMPONENT_H_INCLUDED
+#define JUCE_ACTIVEXCONTROLCOMPONENT_H_INCLUDED
 
 #if JUCE_WINDOWS || DOXYGEN
 
@@ -110,8 +110,8 @@ public:
 
 private:
     class Pimpl;
-    friend class ScopedPointer <Pimpl>;
-    ScopedPointer <Pimpl> control;
+    friend struct ContainerDeletePolicy<Pimpl>;
+    ScopedPointer<Pimpl> control;
     bool mouseEventsAllowed;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ActiveXControlComponent)
@@ -119,4 +119,4 @@ private:
 
 #endif
 
-#endif   // __JUCE_ACTIVEXCONTROLCOMPONENT_JUCEHEADER__
+#endif   // JUCE_ACTIVEXCONTROLCOMPONENT_H_INCLUDED

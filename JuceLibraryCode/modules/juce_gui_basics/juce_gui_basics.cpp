@@ -22,7 +22,7 @@
   ==============================================================================
 */
 
-#if defined (__JUCE_GUI_BASICS_JUCEHEADER__) && ! JUCE_AMALGAMATED_INCLUDE
+#if defined (JUCE_GUI_BASICS_H_INCLUDED) && ! JUCE_AMALGAMATED_INCLUDE
  /* When you add this cpp file to your project, you mustn't include it in a file where you've
     already included any other headers - just put it inside a file on its own, possibly with your config
     flags preceding it, but don't include anything else. That also includes avoiding any automatic prefix
@@ -62,7 +62,7 @@
  #include <commdlg.h>
 
  #if JUCE_WEB_BROWSER
-  #include <Exdisp.h>
+  #include <exdisp.h>
   #include <exdispid.h>
  #endif
 
@@ -132,15 +132,12 @@
 //==============================================================================
 namespace juce
 {
-    extern bool juce_areThereAnyAlwaysOnTopWindows();
 
+extern bool juce_areThereAnyAlwaysOnTopWindows();
 
-// START_AUTOINCLUDE components/*.cpp, mouse/*.cpp, keyboard/*.cpp, buttons/*.cpp,
-// drawables/*.cpp, filebrowser/*.cpp, layout/*.cpp, lookandfeel/*.cpp,
-// menus/*.cpp, positioning/*.cpp, properties/*.cpp, widgets/*.cpp,
-// windows/*.cpp, commands/*.cpp, application/*.cpp, misc/*.cpp
 #include "components/juce_Component.cpp"
 #include "components/juce_ComponentListener.cpp"
+#include "mouse/juce_MouseInputSource.cpp"
 #include "components/juce_Desktop.cpp"
 #include "components/juce_ModalComponentManager.cpp"
 #include "mouse/juce_ComponentDragger.cpp"
@@ -148,7 +145,6 @@ namespace juce
 #include "mouse/juce_MouseCursor.cpp"
 #include "mouse/juce_MouseEvent.cpp"
 #include "mouse/juce_MouseInactivityDetector.cpp"
-#include "mouse/juce_MouseInputSource.cpp"
 #include "mouse/juce_MouseListener.cpp"
 #include "keyboard/juce_CaretComponent.cpp"
 #include "keyboard/juce_KeyboardFocusTraverser.cpp"
@@ -202,6 +198,9 @@ namespace juce
 #include "layout/juce_TabbedComponent.cpp"
 #include "layout/juce_Viewport.cpp"
 #include "lookandfeel/juce_LookAndFeel.cpp"
+#include "lookandfeel/juce_LookAndFeel_V2.cpp"
+#include "lookandfeel/juce_LookAndFeel_V1.cpp"
+#include "lookandfeel/juce_LookAndFeel_V3.cpp"
 #include "menus/juce_MenuBarComponent.cpp"
 #include "menus/juce_MenuBarModel.cpp"
 #include "menus/juce_PopupMenu.cpp"
@@ -228,8 +227,8 @@ namespace juce
 #include "widgets/juce_TableHeaderComponent.cpp"
 #include "widgets/juce_TableListBox.cpp"
 #include "widgets/juce_TextEditor.cpp"
-#include "widgets/juce_Toolbar.cpp"
 #include "widgets/juce_ToolbarItemComponent.cpp"
+#include "widgets/juce_Toolbar.cpp"
 #include "widgets/juce_ToolbarItemPalette.cpp"
 #include "widgets/juce_TreeView.cpp"
 #include "windows/juce_AlertWindow.cpp"
@@ -248,15 +247,7 @@ namespace juce
 #include "application/juce_Application.cpp"
 #include "misc/juce_BubbleComponent.cpp"
 #include "misc/juce_DropShadower.cpp"
-// END_AUTOINCLUDE
 
-}
-
-using namespace juce;
-
-//==============================================================================
-namespace juce
-{
 #if JUCE_IOS || JUCE_WINDOWS
  #include "native/juce_MultiTouchMapper.h"
 #endif

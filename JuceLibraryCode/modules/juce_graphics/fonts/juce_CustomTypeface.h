@@ -22,12 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_CUSTOMTYPEFACE_JUCEHEADER__
-#define __JUCE_CUSTOMTYPEFACE_JUCEHEADER__
-
-#include "juce_Typeface.h"
-class InputStream;
-class OutputStream;
+#ifndef JUCE_CUSTOMTYPEFACE_H_INCLUDED
+#define JUCE_CUSTOMTYPEFACE_H_INCLUDED
 
 
 //==============================================================================
@@ -142,8 +138,8 @@ protected:
 private:
     //==============================================================================
     class GlyphInfo;
-    friend class OwnedArray<GlyphInfo>;
-    OwnedArray <GlyphInfo> glyphs;
+    friend struct ContainerDeletePolicy<GlyphInfo>;
+    OwnedArray<GlyphInfo> glyphs;
     short lookupTable [128];
 
     GlyphInfo* findGlyph (const juce_wchar character, bool loadIfNeeded) noexcept;
@@ -151,4 +147,4 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CustomTypeface)
 };
 
-#endif   // __JUCE_CUSTOMTYPEFACE_JUCEHEADER__
+#endif   // JUCE_CUSTOMTYPEFACE_H_INCLUDED

@@ -22,11 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_DRAWABLEIMAGE_JUCEHEADER__
-#define __JUCE_DRAWABLEIMAGE_JUCEHEADER__
-
-#include "juce_Drawable.h"
-#include "../positioning/juce_RelativeParallelogram.h"
+#ifndef JUCE_DRAWABLEIMAGE_H_INCLUDED
+#define JUCE_DRAWABLEIMAGE_H_INCLUDED
 
 
 //==============================================================================
@@ -138,4 +135,4 @@ private:
 };
 
 
-#endif   // __JUCE_DRAWABLEIMAGE_JUCEHEADER__
+#endif   // JUCE_DRAWABLEIMAGE_H_INCLUDED

@@ -22,7 +22,7 @@
   ==============================================================================
 */
 
-#if defined (__JUCE_AUDIO_BASICS_JUCEHEADER__) && ! JUCE_AMALGAMATED_INCLUDE
+#if defined (JUCE_AUDIO_BASICS_H_INCLUDED) && ! JUCE_AMALGAMATED_INCLUDE
  /* When you add this cpp file to your project, you mustn't include it in a file where you've
     already included any other headers - just put it inside a file on its own, possibly with your config
     flags preceding it, but don't include anything else. That also includes avoiding any automatic prefix
@@ -48,15 +48,19 @@
  #include <emmintrin.h>
 #endif
 
-#if JUCE_MAC || JUCE_IOS
+#ifndef JUCE_USE_VDSP_FRAMEWORK
  #define JUCE_USE_VDSP_FRAMEWORK 1
+#endif
+
+#if (JUCE_MAC || JUCE_IOS) && JUCE_USE_VDSP_FRAMEWORK
  #include <Accelerate/Accelerate.h>
+#else
+ #undef JUCE_USE_VDSP_FRAMEWORK
 #endif
 
 namespace juce
 {
 
-// START_AUTOINCLUDE buffers/*.cpp, effects/*.cpp, midi/*.cpp, sources/*.cpp, synthesisers/*.cpp
 #include "buffers/juce_AudioDataConverters.cpp"
 #include "buffers/juce_AudioSampleBuffer.cpp"
 #include "buffers/juce_FloatVectorOperations.cpp"
@@ -75,6 +79,5 @@ namespace juce
 #include "sources/juce_ReverbAudioSource.cpp"
 #include "sources/juce_ToneGeneratorAudioSource.cpp"
 #include "synthesisers/juce_Synthesiser.cpp"
-// END_AUTOINCLUDE
 
 }

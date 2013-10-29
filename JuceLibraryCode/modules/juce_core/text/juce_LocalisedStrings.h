@@ -26,11 +26,9 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_LOCALISEDSTRINGS_JUCEHEADER__
-#define __JUCE_LOCALISEDSTRINGS_JUCEHEADER__
+#ifndef JUCE_LOCALISEDSTRINGS_H_INCLUDED
+#define JUCE_LOCALISEDSTRINGS_H_INCLUDED
 
-#include "juce_StringPairArray.h"
-#include "../files/juce_File.h"
 
 //==============================================================================
 /**
@@ -174,6 +172,17 @@ public:
     /** Provides access to the actual list of mappings. */
     const StringPairArray& getMappings() const            { return translations; }
 
+    //==============================================================================
+    /** Adds and merges another set of translations into this set.
+
+        Note that the language name and country codes of the new LocalisedStrings
+        object must match that of this object - an assertion will be thrown if they
+        don't match.
+
+        Any existing values will have their mappings overwritten by the new ones.
+    */
+    void addStrings (const LocalisedStrings&);
+
 private:
     //==============================================================================
     String languageName;
@@ -218,7 +227,12 @@ String translate (const char* stringLiteral);
 /** Uses the LocalisedStrings class to translate the given string literal.
     @see LocalisedStrings
 */
+String translate (CharPointer_UTF8 stringLiteral);
+
+/** Uses the LocalisedStrings class to translate the given string literal.
+    @see LocalisedStrings
+*/
 String translate (const String& stringLiteral, const String& resultIfNotFound);
 
 
-#endif   // __JUCE_LOCALISEDSTRINGS_JUCEHEADER__
+#endif   // JUCE_LOCALISEDSTRINGS_H_INCLUDED

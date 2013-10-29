@@ -26,14 +26,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_JSON_JUCEHEADER__
-#define __JUCE_JSON_JUCEHEADER__
-
-#include "../misc/juce_Result.h"
-#include "../containers/juce_Variant.h"
-class InputStream;
-class OutputStream;
-class File;
+#ifndef JUCE_JSON_H_INCLUDED
+#define JUCE_JSON_H_INCLUDED
 
 
 //==============================================================================
@@ -109,10 +103,19 @@ public:
                                const var& objectToFormat,
                                bool allOnOneLine = false);
 
+    /** Returns a version of a string with any extended characters escaped. */
+    static String escapeString (StringRef);
+
+    /** Parses a quoted string in JSON format, returning the un-escaped result in the
+        result parameter, and an error message in case the content was illegal.
+        This advances the text parameter, leaving it positioned after the closing quote.
+    */
+    static Result parseQuotedString (String::CharPointerType& text, var& result);
+
 private:
     //==============================================================================
-    JSON(); // This class can't be instantiated - just use its static methods.
+    JSON() JUCE_DELETED_FUNCTION; // This class can't be instantiated - just use its static methods.
 };
 
 
-#endif   // __JUCE_JSON_JUCEHEADER__
+#endif   // JUCE_JSON_H_INCLUDED

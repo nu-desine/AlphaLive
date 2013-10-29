@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_MENUBARCOMPONENT_JUCEHEADER__
-#define __JUCE_MENUBARCOMPONENT_JUCEHEADER__
-
-#include "juce_MenuBarModel.h"
+#ifndef JUCE_MENUBARCOMPONENT_H_INCLUDED
+#define JUCE_MENUBARCOMPONENT_H_INCLUDED
 
 
 //==============================================================================
@@ -118,4 +116,4 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MenuBarComponent)
 };
 
-#endif   // __JUCE_MENUBARCOMPONENT_JUCEHEADER__
+#endif   // JUCE_MENUBARCOMPONENT_H_INCLUDED

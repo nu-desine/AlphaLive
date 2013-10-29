@@ -85,7 +85,7 @@ private:
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-class AlphaLiveLookandFeel : public LookAndFeel
+class AlphaLiveLookandFeel : public LookAndFeel_V2
 {
     
 public:

@@ -26,12 +26,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_EXPRESSION_JUCEHEADER__
-#define __JUCE_EXPRESSION_JUCEHEADER__
-
-#include "../memory/juce_ReferenceCountedObject.h"
-#include "../containers/juce_Array.h"
-#include "../memory/juce_ScopedPointer.h"
+#ifndef JUCE_EXPRESSION_H_INCLUDED
+#define JUCE_EXPRESSION_H_INCLUDED
 
 
 //==============================================================================
@@ -264,11 +260,11 @@ private:
     struct Helpers;
     friend class Term;
     friend struct Helpers;
-    friend class ScopedPointer<Term>;
+    friend struct ContainerDeletePolicy<Term>;
     friend class ReferenceCountedObjectPtr<Term>;
     ReferenceCountedObjectPtr<Term> term;
 
     explicit Expression (Term*);
 };
 
-#endif   // __JUCE_EXPRESSION_JUCEHEADER__
+#endif   // JUCE_EXPRESSION_H_INCLUDED

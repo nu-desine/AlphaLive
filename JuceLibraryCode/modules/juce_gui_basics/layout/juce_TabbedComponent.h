@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_TABBEDCOMPONENT_JUCEHEADER__
-#define __JUCE_TABBEDCOMPONENT_JUCEHEADER__
-
-#include "juce_TabbedButtonBar.h"
+#ifndef JUCE_TABBEDCOMPONENT_H_INCLUDED
+#define JUCE_TABBEDCOMPONENT_H_INCLUDED
 
 
 //==============================================================================
@@ -219,4 +217,4 @@ private:
 };
 
 
-#endif   // __JUCE_TABBEDCOMPONENT_JUCEHEADER__
+#endif   // JUCE_TABBEDCOMPONENT_H_INCLUDED

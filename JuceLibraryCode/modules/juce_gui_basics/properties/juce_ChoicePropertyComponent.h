@@ -22,11 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_CHOICEPROPERTYCOMPONENT_JUCEHEADER__
-#define __JUCE_CHOICEPROPERTYCOMPONENT_JUCEHEADER__
-
-#include "juce_PropertyComponent.h"
-#include "../widgets/juce_ComboBox.h"
+#ifndef JUCE_CHOICEPROPERTYCOMPONENT_H_INCLUDED
+#define JUCE_CHOICEPROPERTYCOMPONENT_H_INCLUDED
 
 
 //==============================================================================
@@ -123,4 +120,4 @@ private:
 
 
 
-#endif   // __JUCE_CHOICEPROPERTYCOMPONENT_JUCEHEADER__
+#endif   // JUCE_CHOICEPROPERTYCOMPONENT_H_INCLUDED

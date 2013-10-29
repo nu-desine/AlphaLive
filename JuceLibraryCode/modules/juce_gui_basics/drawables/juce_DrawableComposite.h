@@ -22,13 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_DRAWABLECOMPOSITE_JUCEHEADER__
-#define __JUCE_DRAWABLECOMPOSITE_JUCEHEADER__
-
-#include "juce_Drawable.h"
-#include "../positioning/juce_MarkerList.h"
-#include "../positioning/juce_RelativeParallelogram.h"
-#include "../positioning/juce_RelativeRectangle.h"
+#ifndef JUCE_DRAWABLECOMPOSITE_H_INCLUDED
+#define JUCE_DRAWABLECOMPOSITE_H_INCLUDED
 
 
 //==============================================================================
@@ -158,4 +153,4 @@ private:
 };
 
 
-#endif   // __JUCE_DRAWABLECOMPOSITE_JUCEHEADER__
+#endif   // JUCE_DRAWABLECOMPOSITE_H_INCLUDED

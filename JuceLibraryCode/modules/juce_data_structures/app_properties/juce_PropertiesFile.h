@@ -22,8 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_PROPERTIESFILE_JUCEHEADER__
-#define __JUCE_PROPERTIESFILE_JUCEHEADER__
+#ifndef JUCE_PROPERTIESFILE_H_INCLUDED
+#define JUCE_PROPERTIESFILE_H_INCLUDED
 
 
 //==============================================================================
@@ -105,6 +105,9 @@ public:
             The default constructor initialises this value to false.
         */
         bool ignoreCaseOfKeyNames;
+
+        /** If set to true, this prevents the file from being written to disk. */
+        bool doNotSave;
 
         /** If this is zero or greater, then after a value is changed, the object will wait
             for this amount of time and then save the file. If this zero, the file will be
@@ -240,4 +243,4 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PropertiesFile)
 };
 
-#endif   // __JUCE_PROPERTIESFILE_JUCEHEADER__
+#endif   // JUCE_PROPERTIESFILE_H_INCLUDED

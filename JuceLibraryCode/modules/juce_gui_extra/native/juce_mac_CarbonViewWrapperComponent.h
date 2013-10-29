@@ -22,8 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_MAC_CARBONVIEWWRAPPERCOMPONENT_JUCEHEADER__
-#define __JUCE_MAC_CARBONVIEWWRAPPERCOMPONENT_JUCEHEADER__
+#ifndef JUCE_MAC_CARBONVIEWWRAPPERCOMPONENT_H_INCLUDED
+#define JUCE_MAC_CARBONVIEWWRAPPERCOMPONENT_H_INCLUDED
 
 
 //==============================================================================
@@ -193,11 +193,14 @@ public:
 
             if (wrapperWindow != 0)
             {
+                jassert (getTopLevelComponent()->getDesktopScaleFactor() == 1.0f);
+                Rectangle<int> screenBounds (getScreenBounds() * Desktop::getInstance().getGlobalScaleFactor());
+
                 Rect wr;
-                wr.left   = (short) getScreenX();
-                wr.top    = (short) getScreenY();
-                wr.right  = (short) (wr.left + getWidth());
-                wr.bottom = (short) (wr.top + getHeight());
+                wr.left   = (short) screenBounds.getX();
+                wr.top    = (short) screenBounds.getY();
+                wr.right  = (short) screenBounds.getRight();
+                wr.bottom = (short) screenBounds.getBottom();
 
                 SetWindowBounds (wrapperWindow, kWindowContentRgn, &wr);
 
@@ -222,6 +225,15 @@ public:
     void componentMovedOrResized (bool /*wasMoved*/, bool /*wasResized*/) override
     {
         setEmbeddedWindowToOurSize();
+    }
+
+    // (overridden to intercept movements of the top-level window)
+    void componentMovedOrResized (Component& component, bool wasMoved, bool wasResized) override
+    {
+        ComponentMovementWatcher::componentMovedOrResized (component, wasMoved, wasResized);
+
+        if (&component == getTopLevelComponent())
+            setEmbeddedWindowToOurSize();
     }
 
     void componentPeerChanged() override
@@ -317,4 +329,4 @@ protected:
     NSWindow* getOwnerWindow() const    { return [((NSView*) getWindowHandle()) window]; }
 };
 
-#endif   // __JUCE_MAC_CARBONVIEWWRAPPERCOMPONENT_JUCEHEADER__
+#endif   // JUCE_MAC_CARBONVIEWWRAPPERCOMPONENT_H_INCLUDED

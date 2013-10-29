@@ -22,11 +22,6 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_VSTPLUGINFORMAT_JUCEHEADER__
-#define __JUCE_VSTPLUGINFORMAT_JUCEHEADER__
-
-#include "../format/juce_AudioPluginFormat.h"
-
 #if JUCE_PLUGINHOST_VST || DOXYGEN
 
 //==============================================================================
@@ -80,9 +75,19 @@ public:
     static void setExtraFunctions (AudioPluginInstance* plugin, ExtraFunctions* functions);
 
     //==============================================================================
+   #if JUCE_64BIT
+    typedef int64 VstIntPtr;
+   #else
+    typedef int32 VstIntPtr;
+   #endif
+
+    /** This simply calls directly to the VST's AEffect::dispatcher() function. */
+    static VstIntPtr JUCE_CALLTYPE dispatcher (AudioPluginInstance*, int32, int32, VstIntPtr, void*, float);
+
+    //==============================================================================
     String getName() const override                { return "VST"; }
-    void findAllTypesForFile (OwnedArray <PluginDescription>&, const String& fileOrIdentifier) override;
-    AudioPluginInstance* createInstanceFromDescription (const PluginDescription&) override;
+    void findAllTypesForFile (OwnedArray<PluginDescription>&, const String& fileOrIdentifier) override;
+    AudioPluginInstance* createInstanceFromDescription (const PluginDescription&, double, int) override;
     bool fileMightContainThisPluginType (const String& fileOrIdentifier) override;
     String getNameOfPluginFromIdentifier (const String& fileOrIdentifier) override;
     bool pluginNeedsRescanning (const PluginDescription&) override;
@@ -99,4 +104,3 @@ private:
 
 
 #endif
-#endif   // __JUCE_VSTPLUGINFORMAT_JUCEHEADER__

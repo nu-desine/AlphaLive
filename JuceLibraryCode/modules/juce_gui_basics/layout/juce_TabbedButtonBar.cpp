@@ -93,7 +93,26 @@ void TabBarButton::calcAreas (Rectangle<int>& extraComp, Rectangle<int>& textAre
     }
 
     if (extraComponent != nullptr)
+    {
         extraComp = lf.getTabButtonExtraComponentBounds (*this, textArea, *extraComponent);
+
+        const TabbedButtonBar::Orientation orientation = owner.getOrientation();
+
+        if (orientation == TabbedButtonBar::TabsAtLeft || orientation == TabbedButtonBar::TabsAtRight)
+        {
+            if (extraComp.getCentreY() > textArea.getCentreY())
+                textArea.setBottom (jmin (textArea.getBottom(), extraComp.getY()));
+            else
+                textArea.setTop (jmax (textArea.getY(), extraComp.getBottom()));
+        }
+        else
+        {
+            if (extraComp.getCentreX() > textArea.getCentreX())
+                textArea.setRight (jmin (textArea.getRight(), extraComp.getX()));
+            else
+                textArea.setLeft (jmax (textArea.getX(), extraComp.getRight()));
+        }
+    }
 }
 
 Rectangle<int> TabBarButton::getTextArea() const
@@ -151,8 +170,7 @@ class TabbedButtonBar::BehindFrontTabComp  : public Component,
                                              public ButtonListener // (can't use Button::Listener due to idiotic VC2005 bug)
 {
 public:
-    BehindFrontTabComp (TabbedButtonBar& owner_)
-        : owner (owner_)
+    BehindFrontTabComp (TabbedButtonBar& tb)  : owner (tb)
     {
         setInterceptsMouseClicks (false, false);
     }
@@ -336,8 +354,10 @@ void TabbedButtonBar::setCurrentTabIndex (int newIndex, const bool sendChangeMes
 
 TabBarButton* TabbedButtonBar::getTabButton (const int index) const
 {
-    TabInfo* const tab = tabs[index];
-    return tab == nullptr ? nullptr : static_cast <TabBarButton*> (tab->button);
+    if (TabInfo* tab = tabs[index])
+        return static_cast<TabBarButton*> (tab->button);
+
+    return nullptr;
 }
 
 int TabbedButtonBar::indexOfTabButton (const TabBarButton* button) const
@@ -353,6 +373,11 @@ void TabbedButtonBar::lookAndFeelChanged()
 {
     extraTabsButton = nullptr;
     resized();
+}
+
+void TabbedButtonBar::paint (Graphics& g)
+{
+    getLookAndFeel().drawTabbedButtonBarBackground (*this, g);
 }
 
 void TabbedButtonBar::resized()
@@ -479,8 +504,10 @@ void TabbedButtonBar::resized()
 //==============================================================================
 Colour TabbedButtonBar::getTabBackgroundColour (const int tabIndex)
 {
-    TabInfo* const tab = tabs [tabIndex];
-    return tab == nullptr ? Colours::white : tab->colour;
+    if (TabInfo* tab = tabs [tabIndex])
+        return tab->colour;
+
+    return Colours::transparentBlack;
 }
 
 void TabbedButtonBar::setTabBackgroundColour (const int tabIndex, Colour newColour)

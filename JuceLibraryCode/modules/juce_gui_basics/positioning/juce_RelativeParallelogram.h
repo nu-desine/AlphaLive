@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_RELATIVEPARALLELOGRAM_JUCEHEADER__
-#define __JUCE_RELATIVEPARALLELOGRAM_JUCEHEADER__
-
-#include "juce_RelativePoint.h"
+#ifndef JUCE_RELATIVEPARALLELOGRAM_H_INCLUDED
+#define JUCE_RELATIVEPARALLELOGRAM_H_INCLUDED
 
 
 //==============================================================================
@@ -49,7 +47,7 @@ public:
     void resolveFourCorners (Point<float>* points, Expression::Scope* scope) const;
     const Rectangle<float> getBounds (Expression::Scope* scope) const;
     void getPath (Path& path, Expression::Scope* scope) const;
-    const AffineTransform resetToPerpendicular (Expression::Scope* scope);
+    AffineTransform resetToPerpendicular (Expression::Scope* scope);
     bool isDynamic() const;
 
     bool operator== (const RelativeParallelogram& other) const noexcept;
@@ -64,4 +62,4 @@ public:
 };
 
 
-#endif   // __JUCE_RELATIVEPARALLELOGRAM_JUCEHEADER__
+#endif   // JUCE_RELATIVEPARALLELOGRAM_H_INCLUDED

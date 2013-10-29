@@ -537,7 +537,7 @@ void GuiMidiMode::buttonClicked (Button* button)
         {
             for (int chan = 0; chan < 16; chan++)
             {
-                channelButtons[chan]->setRadioGroupId(0, false);
+                channelButtons[chan]->setRadioGroupId(0, dontSendNotification);
                 
                 if (SINGLE_PAD)
                 {
@@ -567,7 +567,7 @@ void GuiMidiMode::buttonClicked (Button* button)
         {
             for (int chan = 0; chan < 16; chan++)
             {
-                channelButtons[chan]->setRadioGroupId(12, false);
+                channelButtons[chan]->setRadioGroupId(12, dontSendNotification);
                 channelButtons[chan]->setToggleState(false, dontSendNotification);
             }
             
@@ -716,7 +716,7 @@ void GuiMidiMode::updateDisplay()
         if (autoChannelButton->getToggleState() == false) //static channel
         {
             for (int chan = 0; chan < 16; chan++)
-                channelButtons[chan]->setRadioGroupId(12, false);
+                channelButtons[chan]->setRadioGroupId(12, dontSendNotification);
             
             channelButtons[PAD_SETTINGS->getMidiChannel()-1]->setToggleState(true, dontSendNotification);
         }
@@ -724,7 +724,7 @@ void GuiMidiMode::updateDisplay()
         {
             for (int chan = 0; chan < 16; chan++)
             {
-                channelButtons[chan]->setRadioGroupId(0, false);
+                channelButtons[chan]->setRadioGroupId(0, dontSendNotification);
                 channelButtons[chan]->setToggleState(PAD_SETTINGS->getMidiAutoChannels(chan), dontSendNotification);
             }
         }
@@ -899,7 +899,7 @@ void GuiMidiMode::updateDisplay()
         if (autoChannelButton->getToggleState() == false)
         {
             for (int i = 0; i < 16; i++)
-                channelButtons[i]->setRadioGroupId(12, false);
+                channelButtons[i]->setRadioGroupId(12, dontSendNotification);
             
             int channel_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiChannel();
             for (int i = 1; i < selectedPads.size(); i++)
@@ -921,7 +921,7 @@ void GuiMidiMode::updateDisplay()
         {
             for (int chan = 0; chan < 16; chan++)
             {
-                channelButtons[chan]->setRadioGroupId(0, false);
+                channelButtons[chan]->setRadioGroupId(0, dontSendNotification);
                 
                 int autoChans_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiAutoChannels(chan);
                 for (int i = 1; i < selectedPads.size(); i++)

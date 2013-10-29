@@ -26,10 +26,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_ARRAYALLOCATIONBASE_JUCEHEADER__
-#define __JUCE_ARRAYALLOCATIONBASE_JUCEHEADER__
-
-#include "../memory/juce_HeapBlock.h"
+#ifndef JUCE_ARRAYALLOCATIONBASE_H_INCLUDED
+#define JUCE_ARRAYALLOCATIONBASE_H_INCLUDED
 
 
 //==============================================================================
@@ -137,4 +135,4 @@ private:
 };
 
 
-#endif   // __JUCE_ARRAYALLOCATIONBASE_JUCEHEADER__
+#endif   // JUCE_ARRAYALLOCATIONBASE_H_INCLUDED

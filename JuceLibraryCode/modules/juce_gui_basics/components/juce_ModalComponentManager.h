@@ -22,8 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_MODALCOMPONENTMANAGER_JUCEHEADER__
-#define __JUCE_MODALCOMPONENTMANAGER_JUCEHEADER__
+#ifndef JUCE_MODALCOMPONENTMANAGER_H_INCLUDED
+#define JUCE_MODALCOMPONENTMANAGER_H_INCLUDED
 
 
 //==============================================================================
@@ -135,8 +135,8 @@ private:
     class ReturnValueRetriever;
 
     friend class Component;
-    friend class OwnedArray <ModalItem>;
-    OwnedArray <ModalItem> stack;
+    friend struct ContainerDeletePolicy<ModalItem>;
+    OwnedArray<ModalItem> stack;
 
     void startModal (Component*, bool autoDelete);
     void endModal (Component*, int returnValue);
@@ -361,4 +361,4 @@ private:
 };
 
 
-#endif   // __JUCE_MODALCOMPONENTMANAGER_JUCEHEADER__
+#endif   // JUCE_MODALCOMPONENTMANAGER_H_INCLUDED

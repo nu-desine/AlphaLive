@@ -210,6 +210,7 @@ public:
     void setControllerOscPort (int value);
     void setControllerMidiProgramChangeNumber (int value);
     void setControllerMidiProgramChangeChannel (int value);
+    void setControllerPressureLatchPadNumber (int value);
     
     int getControllerControl();
     int getControllerSceneNumber();
@@ -217,6 +218,7 @@ public:
     int getControllerOscPort();
     int getControllerMidiProgramChangeNumber();
     int getControllerMidiProgramChangeChannel();
+    int getControllerPressureLatchPadNumber();
 
     
     //==================================================================
@@ -478,6 +480,7 @@ private:
     int controllerOscPort;
     int controllerMidiProgramChangeNumber;
     int controllerMidiProgramChangeChannel;
+    int controllerPressureLatchPadNumber;
     
     
     //==================================================================

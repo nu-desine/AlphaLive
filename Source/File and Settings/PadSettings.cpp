@@ -153,6 +153,7 @@ PadSettings::PadSettings(int arrayIndex)
     controllerOscPort = 5004;
     controllerMidiProgramChangeNumber = 1;
     controllerMidiProgramChangeChannel = 1;
+    controllerPressureLatchPadNumber = 1;
     
     
     //----pad effects----
@@ -404,6 +405,7 @@ void PadSettings::resetData (int whatToReset)
         setControllerOscPort(5004);
         setControllerMidiProgramChangeNumber(1);
         setControllerMidiProgramChangeChannel(1);
+        setControllerPressureLatchPadNumber(1);
     }
     
     
@@ -1573,8 +1575,12 @@ void PadSettings::setControllerMidiProgramChangeChannel (int value)
 {
     controllerMidiProgramChangeChannel = value;
 }
+void PadSettings::setControllerPressureLatchPadNumber (int value)
+{
+    controllerPressureLatchPadNumber = value;
+}
 
-#pragma mark Sequencer mode accessor functions
+#pragma mark Controller mode accessor functions
 
 int PadSettings::getControllerControl()
 {
@@ -1599,6 +1605,10 @@ int PadSettings::getControllerMidiProgramChangeNumber()
 int PadSettings::getControllerMidiProgramChangeChannel()
 {
     return controllerMidiProgramChangeChannel;
+}
+int PadSettings::getControllerPressureLatchPadNumber()
+{
+    return controllerPressureLatchPadNumber;
 }
 
 

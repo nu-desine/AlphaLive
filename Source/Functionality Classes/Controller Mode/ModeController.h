@@ -54,8 +54,8 @@ private:
     int padNumber;
     int padValue;
     
-    //scene switcher stuff
     int prevPadValue[48];
+    bool pressureLatchModeStatus[48]; //stores whether each pad is currently latching another pad
     
     OscOutput oscOutput;
     AlphaLiveEngine &alphaLiveEngineRef;

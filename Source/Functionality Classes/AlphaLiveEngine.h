@@ -109,6 +109,8 @@ public:
     
     bool getMidiChannelStatus (int channel);
     Array<int> getPreviouslyUsedMidiChannels();
+    
+    void latchPressureValue (int padNum, bool shouldLatch);
         
 private:
     
@@ -177,6 +179,10 @@ private:
                                             //of active channels - the oldest channel will always
                                             //be at the start of the array with latest played channel
                                             //being at the end.
+    
+    int minPressureValue[48];  //Used to store the start/unpressed pressure value.
+                            //By default and for most of the time each index will equal 0.
+                            //The values can only changed when pads pressure is 'latched'.
     
 };
 

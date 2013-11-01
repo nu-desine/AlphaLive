@@ -226,6 +226,7 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
         padData->setAttribute("controllerOscPortNumber", PAD_SETTINGS->getControllerOscPort());
         padData->setAttribute("controllerMidiProgramChangeNumber", PAD_SETTINGS->getControllerMidiProgramChangeNumber());
         padData->setAttribute("controllerMidiProgramChangeChannel", PAD_SETTINGS->getControllerMidiProgramChangeChannel());
+        padData->setAttribute("pressureLatchPadNumber", PAD_SETTINGS->getControllerPressureLatchPadNumber());
     }
     
     int modeCheck = PAD_SETTINGS->getMode();
@@ -605,6 +606,8 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
             PAD_SETTINGS->setControllerMidiProgramChangeNumber(padData->getIntAttribute("controllerMidiProgramChangeNumber"));
         if (padData->hasAttribute("controllerMidiProgramChangeChannel"))
             PAD_SETTINGS->setControllerMidiProgramChangeChannel(padData->getIntAttribute("controllerMidiProgramChangeChannel"));
+        if (padData->hasAttribute("pressureLatchPadNumber"))
+            PAD_SETTINGS->setControllerPressureLatchPadNumber(padData->getIntAttribute("pressureLatchPadNumber"));
     }
     
     int modeCheck = PAD_SETTINGS->getMode();

@@ -64,7 +64,10 @@ AlphaLiveEngine::AlphaLiveEngine()
     recievedVelocity = 110;
     
     for (int i = 0; i < 48; i++)
+    {
         padVelocity[i] = 0;
+        minPressureValue[i] = 0;
+    }
 
     playingStatus = 0;
     
@@ -249,7 +252,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         //=====TEMPORARY PAD NUMBER REVERSAL======
         //pad = Layouts::padArrangementLayout[pad];
         
-        //At the point the 'value' value is expected to be between 0 and MAX_PRESSURE.
+        //At the point the 'value' value is expected to be between minPressureValue[pad] and MAX_PRESSURE.
         //In the older version this was scaled in the serial input class.
         //This range is also scaled in the Pad.cpp class for emulating pad presses.
         
@@ -267,6 +270,9 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
                 recievedValue = MAX_PRESSURE;
             if (recievedValue > 0 && recievedValue < 1) //value 1 = 0.6, which is rounded to 0
                 recievedValue = 1;
+            
+            if (minPressureValue[pad] > 0)
+                recievedValue = scaleValue (recievedValue, 0, MAX_PRESSURE, minPressureValue[recievedPad], MAX_PRESSURE);
         }
         else if (PAD_SETTINGS->getPressureCurve() == 3)
         {
@@ -275,12 +281,17 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
             recievedValue = recievedValue * (MAX_PRESSURE/6.23832);
             if (recievedValue > MAX_PRESSURE)
                 recievedValue = MAX_PRESSURE;
+            
+            if (minPressureValue[pad] > 0)
+                recievedValue = scaleValue (recievedValue, 0, MAX_PRESSURE, minPressureValue[recievedPad], MAX_PRESSURE);
         }
-        //else, pressureCurve == 2 which is a linear mapping of pressure
-        
-        
-        
-        
+        else if (PAD_SETTINGS->getPressureCurve() == 2)
+        {
+            //linear mapping of pressure
+            if (minPressureValue[pad] > 0)
+                recievedValue = scaleValue (recievedValue, 0, MAX_PRESSURE, minPressureValue[recievedPad], MAX_PRESSURE);
+        }
+
         
         if (recievedVelocity != padVelocity[recievedPad])
         {
@@ -1061,4 +1072,9 @@ bool AlphaLiveEngine::getMidiChannelStatus (int channel)
 Array<int> AlphaLiveEngine::getPreviouslyUsedMidiChannels()
 {
     return previouslyUsedMidiChannels;
+}
+
+void AlphaLiveEngine::latchPressureValue (int padNum, bool shouldLatch)
+{
+    minPressureValue[padNum] = padPressure[padNum];
 }

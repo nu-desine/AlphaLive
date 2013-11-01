@@ -34,6 +34,7 @@ ModeController::ModeController(AlphaLiveEngine &ref)
     for (int i = 0; i <= 47; i++)
     {
         prevPadValue[i] = 0;
+        pressureLatchModeStatus[i] = false;
     }
 
 }
@@ -94,6 +95,27 @@ void ModeController::getInputData(int pad, int value, int velocity)
                                                 //interaction of this pad) while the killswitch command is being
                                                 //carried out. However that wouldn't be as instant.
             mainComponent->perform(CommandIDs::KillSwitch);
+        }
+    }
+    if (PAD_SETTINGS->getControllerControl() == 6) //pressure latch mode
+    {
+        if (prevPadValue[padNumber] == 0 && padValue > 0)
+        {
+            if (pressureLatchModeStatus[padNumber] == false)
+            {
+                //latching a pad
+                int padToLatch = PAD_SETTINGS->getControllerPressureLatchPadNumber();
+                alphaLiveEngineRef.latchPressureValue(padToLatch, true);
+                pressureLatchModeStatus[padNumber] = true;
+            }
+            else
+            {
+                //unlatching a pad
+                int padToLatch = PAD_SETTINGS->getControllerPressureLatchPadNumber();
+                alphaLiveEngineRef.latchPressureValue(padToLatch, false);
+                pressureLatchModeStatus[padNumber] = true;
+            }
+            
         }
     }
 

@@ -24,7 +24,7 @@
 #include "GuiGlobalPadSettings.h"
 #include "../../File and Settings/AppSettings.h"
 #include "../Views/MainComponent.h"
-#include "../Binary Data/BinaryDataNew.h"
+#include "../Binary Data/MainBinaryData.h"
 #include "../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
@@ -35,20 +35,20 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
 : mainComponentRef(ref)
 
 {
-	expoImage = new Image(ImageCache::getFromMemory(BinaryDataNew::expoicon_png, BinaryDataNew::expoicon_pngSize));
-	linearImage = new Image(ImageCache::getFromMemory(BinaryDataNew::linearicon_png, BinaryDataNew::linearicon_pngSize));
-	logImage = new Image(ImageCache::getFromMemory(BinaryDataNew::logicon_png, BinaryDataNew::logicon_pngSize));
-	staticImage = new Image(ImageCache::getFromMemory(BinaryDataNew::staticicon_png, BinaryDataNew::staticicon_pngSize));
+	expoImage = new Image(ImageCache::getFromMemory(MainBinaryData::expoicon_png, MainBinaryData::expoicon_pngSize));
+	linearImage = new Image(ImageCache::getFromMemory(MainBinaryData::linearicon_png, MainBinaryData::linearicon_pngSize));
+	logImage = new Image(ImageCache::getFromMemory(MainBinaryData::logicon_png, MainBinaryData::logicon_pngSize));
+	staticImage = new Image(ImageCache::getFromMemory(MainBinaryData::staticicon_png, MainBinaryData::staticicon_pngSize));
     emptyImage = new Image();
 
-	Image *quantiseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::quantiseicon_png, BinaryDataNew::quantiseicon_pngSize));
+	Image *quantiseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::quantiseicon_png, MainBinaryData::quantiseicon_pngSize));
 	addAndMakeVisible(quantiseButton = new ModeButton(quantiseIcon));
 	quantiseButton->setClickingTogglesState(true);
 	quantiseButton->setToggleState(false, false);	
 	quantiseButton->addListener(this);
 	quantiseButton->addMouseListener(this, true);
     
-	Image *exclusiveImage = new Image(ImageCache::getFromMemory(BinaryDataNew::exclusiveicon_png, BinaryDataNew::exclusiveicon_pngSize));
+	Image *exclusiveImage = new Image(ImageCache::getFromMemory(MainBinaryData::exclusiveicon_png, MainBinaryData::exclusiveicon_pngSize));
 	addAndMakeVisible(exclusiveModeButton = new ModeButton(exclusiveImage));
     exclusiveModeButton->addListener(this);
     exclusiveModeButton->addMouseListener(this, true);
@@ -93,7 +93,6 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
 	//---------------parameter label -------------------------------------
     addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
 	
@@ -129,22 +128,23 @@ void GuiGlobalPadSettings::resized()
 
 void GuiGlobalPadSettings::paint (Graphics& g)
 {
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
 	
-	ColourGradient fillGradient(AlphaColours::nearlyblack,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	g.fillEllipse(802, 379, 86, 86);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	
 	Path trianglePath;
 	trianglePath.addTriangle(844, 278, 973, 493, 716, 493);
 	g.strokePath(trianglePath, PathStrokeType(1.0f));
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(678,285, 38, 38);
 	g.fillEllipse(815, 267, 58, 58);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(820, 272, 48, 48, 1.0f);
 	
@@ -346,7 +346,7 @@ void GuiGlobalPadSettings::sliderValueChanged (Slider* slider)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setStaticVelocity(slider->getValue());
-			parameterHoverLabel->setText(String(slider->getValue()), false);
+			parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
         }
     }
     else if (slider == velocityMinRangeSlider)
@@ -355,7 +355,7 @@ void GuiGlobalPadSettings::sliderValueChanged (Slider* slider)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setVelocityMinRange(slider->getValue());
-			parameterHoverLabel->setText(String(slider->getValue()), false);
+			parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
         }
         
         if (slider->getValue() >= velocityMaxRangeSlider->getValue())
@@ -367,7 +367,7 @@ void GuiGlobalPadSettings::sliderValueChanged (Slider* slider)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setVelocityMaxRange(slider->getValue());
-			parameterHoverLabel->setText(String(slider->getValue()), false);
+			parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
         }
         
         if (slider->getValue() <= velocityMinRangeSlider->getValue())
@@ -391,7 +391,7 @@ void GuiGlobalPadSettings::updateDisplay()
         velocitySlider->setValue(PAD_SETTINGS->getStaticVelocity());
         velocityMinRangeSlider->setValue(PAD_SETTINGS->getVelocityMinRange());
         velocityMaxRangeSlider->setValue(PAD_SETTINGS->getVelocityMaxRange());
-		parameterHoverLabel->setText(String(PAD_SETTINGS->getStaticVelocity()), false);
+		parameterHoverLabel->setText(String(PAD_SETTINGS->getStaticVelocity()), dontSendNotification);
 		pressureCurveValue = PAD_SETTINGS->getPressureCurve();
         velocityCurveValue = PAD_SETTINGS->getVelocityCurve();
         
@@ -647,19 +647,19 @@ void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
     else if (velocitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Static Velocity Selector. Sets the static velocity for a MIDI note or OSC message."));
-		parameterHoverLabel->setText(String(velocitySlider->getValue()), false);
+		parameterHoverLabel->setText(String(velocitySlider->getValue()), dontSendNotification);
 		parameterHoverLabel->setVisible(true);
     }
     else if (velocityMinRangeSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Velocity Minimum Range Selector. Along with the Maximum Range Selector it sets and displays the MIDI velocity range for the selected pads."));
-		parameterHoverLabel->setText(String(velocityMinRangeSlider->getValue()), false);
+		parameterHoverLabel->setText(String(velocityMinRangeSlider->getValue()), dontSendNotification);
 		parameterHoverLabel->setVisible(true);
     }
     else if (velocityMaxRangeSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Velocity Maximum Range Selector. Along with the Minimum Range Selector it sets and displays the MIDI velocity range for the selected pads."));
-		parameterHoverLabel->setText(String(velocityMaxRangeSlider->getValue()), false);
+		parameterHoverLabel->setText(String(velocityMaxRangeSlider->getValue()), dontSendNotification);
 		parameterHoverLabel->setVisible(true);
     }
 }
@@ -673,7 +673,7 @@ void GuiGlobalPadSettings::mouseExit (const MouseEvent &e)
        e.eventComponent == velocityMinRangeSlider ||
        e.eventComponent == velocityMaxRangeSlider)
 	{
-        parameterHoverLabel->setText(String::empty, false);
+        parameterHoverLabel->setText(String::empty, dontSendNotification);
 		parameterHoverLabel->setVisible(false);
 	}
 }

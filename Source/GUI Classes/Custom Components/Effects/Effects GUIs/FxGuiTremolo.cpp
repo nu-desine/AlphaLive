@@ -23,7 +23,7 @@
 #include "FxGuiTremolo.h"
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
-#include "../../../Binary Data/BinaryDataNew.h"
+#include "../../../Binary Data/MainBinaryData.h"
 #include "../../../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
@@ -52,7 +52,7 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     intensitySlider->setValue(0.5, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
-    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
     
     
 	addAndMakeVisible(rateMenu = new AlphaPopUpButton());
@@ -69,7 +69,7 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     //what about other values, such as the d's and t's in Logic's tremolo?
     rateMenu->setSelectedId(3, true);*/
     
-    Image *syncImage = new Image(ImageCache::getFromMemory(BinaryDataNew::syncicon_png, BinaryDataNew::syncicon_pngSize));
+    Image *syncImage = new Image(ImageCache::getFromMemory(MainBinaryData::syncicon_png, MainBinaryData::syncicon_pngSize));
     addAndMakeVisible(syncButton = new ModeButton(syncImage));
     syncButton->setClickingTogglesState(true);
     syncButton->setToggleState(1, false);
@@ -86,11 +86,11 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     shapeMenu->addItem(translate("Falling Sawtooth"), 5);
     shapeMenu->setSelectedId(1, true);*/
 	
-	Image *sineIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::sinesymbol_png, BinaryDataNew::sinesymbol_pngSize));
-	Image *squareIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::squaresymbol_png, BinaryDataNew::squaresymbol_pngSize));
-	Image *triangleIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::trianglesymbol_png, BinaryDataNew::trianglesymbol_pngSize));
-	Image *sawRiseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::sawrisingsymbol_png, BinaryDataNew::sawrisingsymbol_pngSize));
-	Image *sawFallIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::sawfallingsymbol_png, BinaryDataNew::sawfallingsymbol_pngSize));
+	Image *sineIcon = new Image(ImageCache::getFromMemory(MainBinaryData::sinesymbol_png, MainBinaryData::sinesymbol_pngSize));
+	Image *squareIcon = new Image(ImageCache::getFromMemory(MainBinaryData::squaresymbol_png, MainBinaryData::squaresymbol_pngSize));
+	Image *triangleIcon = new Image(ImageCache::getFromMemory(MainBinaryData::trianglesymbol_png, MainBinaryData::trianglesymbol_pngSize));
+	Image *sawRiseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::sawrisingsymbol_png, MainBinaryData::sawrisingsymbol_pngSize));
+	Image *sawFallIcon = new Image(ImageCache::getFromMemory(MainBinaryData::sawfallingsymbol_png, MainBinaryData::sawfallingsymbol_pngSize));
 	
 	
 	for (int i = 0; i < 5; i++)
@@ -130,7 +130,7 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     alphaTouchMenu->addItem(translate("Wave Shape"), 4);
     alphaTouchMenu->setSelectedId(1, true);
     
-    Image *reverseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::inverticon_png, BinaryDataNew::inverticon_pngSize));
+    Image *reverseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::inverticon_png, MainBinaryData::inverticon_pngSize));
     addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);
@@ -139,7 +139,6 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
     
@@ -186,14 +185,13 @@ void GuiTremolo::resized()
 
 void GuiTremolo::paint (Graphics& g)
 {
-	
-	g.setColour(Colours::black);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+    
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(118, 232, 38, 38);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse(118, 232, 38, 38, 1.0f);
-	
-	
 }
 
 
@@ -208,7 +206,7 @@ void GuiTremolo::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxTremoloDepth(depthSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -220,7 +218,7 @@ void GuiTremolo::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxTremoloRate(rateSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -233,7 +231,7 @@ void GuiTremolo::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxTremoloAtIntensity(intensitySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -466,12 +464,12 @@ void GuiTremolo::mouseEnter (const MouseEvent &e)
     if (depthSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Depth/Mix. Sets the depth/mix of the LFO on the selected pads."));
-        parameterHoverLabel->setText(String(depthSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(depthSlider->getValue(), 3), dontSendNotification);
     }
     else if (rateSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("LFO Rate. Sets the rate in Hz for the selected pads. To set the rate based on the tempo, click on the 'Sync' button."));
-        parameterHoverLabel->setText(String(rateSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(rateSlider->getValue(), 3), dontSendNotification);
     }
     else if (rateMenu->isMouseOver(true))
     {
@@ -512,7 +510,7 @@ void GuiTremolo::mouseEnter (const MouseEvent &e)
     else if (intensitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
-        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), dontSendNotification);
     }
     
 }
@@ -521,6 +519,6 @@ void GuiTremolo::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
-    parameterHoverLabel->setText(String::empty, false);
+    parameterHoverLabel->setText(String::empty, dontSendNotification);
     
 }

@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -47,6 +46,7 @@ Graphics::Graphics (const Image& imageToDrawOnto)
       contextToDelete (&context),
       saveStatePending (false)
 {
+    jassert (imageToDrawOnto.isValid()); // Can't draw into a null image!
 }
 
 Graphics::Graphics (LowLevelGraphicsContext* const internalContext) noexcept
@@ -173,7 +173,7 @@ void Graphics::endTransparencyLayer()
 }
 
 //==============================================================================
-void Graphics::setColour (const Colour& newColour)
+void Graphics::setColour (Colour newColour)
 {
     saveStateIfPending();
     context.setFill (newColour);
@@ -368,7 +368,7 @@ void Graphics::fillAll() const
     fillRect (context.getClipBounds());
 }
 
-void Graphics::fillAll (const Colour& colourToUse) const
+void Graphics::fillAll (Colour colourToUse) const
 {
     if (! colourToUse.isTransparent())
     {
@@ -502,7 +502,7 @@ void Graphics::drawArrow (const Line<float>& line, const float lineThickness, co
 
 void Graphics::fillCheckerBoard (const Rectangle<int>& area,
                                  const int checkWidth, const int checkHeight,
-                                 const Colour& colour1, const Colour& colour2) const
+                                 Colour colour1, Colour colour2) const
 {
     jassert (checkWidth > 0 && checkHeight > 0); // can't be zero or less!
 

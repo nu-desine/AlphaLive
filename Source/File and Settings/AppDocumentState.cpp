@@ -745,6 +745,11 @@ void AppDocumentState::saveProjectSettings()
     projectData->setAttribute("midiClockStartMessage", AppSettings::Instance()->getMidiClockStartMessage());
     projectData->setAttribute("midiClockMessageFilter", AppSettings::Instance()->getMidiClockMessageFilter());
     
+    for (int i = 0; i < NO_OF_SCENES; i++)
+    {
+        projectData->setAttribute("sceneName" + String(i), AppSettings::Instance()->getSceneName(i));
+    }   
+    
 }
 
 void AppDocumentState::loadProjectSettings()
@@ -753,14 +758,20 @@ void AppDocumentState::loadProjectSettings()
         AppSettings::Instance()->setCopyExternalFiles(projectData->getIntAttribute("copyExternalFiles"));
     else //why do I have this else statement?
         AppSettings::Instance()->setCopyExternalFiles(true); //default value
-    
+
     if (projectData->hasAttribute("midiClockValue") == true)
         AppSettings::Instance()->setMidiClockValue(projectData->getIntAttribute("midiClockValue"));
     if (projectData->hasAttribute("midiClockStartMessage") == true)
         AppSettings::Instance()->setMidiClockStartMessage(projectData->getIntAttribute("midiClockStartMessage"));
     if (projectData->hasAttribute("midiClockMessageFilter") == true)
         AppSettings::Instance()->setMidiClockMessageFilter(projectData->getIntAttribute("midiClockMessageFilter"));
-    
+
+    for (int i = 0; i < NO_OF_SCENES; i++)
+    {
+        if (projectData->hasAttribute("sceneName" + String(i)) == true)
+            AppSettings::Instance()->setSceneName(i, projectData->getStringAttribute("sceneName" + String(i)));
+    }
+
 }
 
 
@@ -1075,6 +1086,7 @@ void AppDocumentState::createNewProject()
         //============= reset all settings =================
         
         AppSettings::Instance()->resetData();
+        AppSettings::Instance()->resetProjectSettingsData();
         
         for (int i = 0; i <= 47; i++)
             PAD_SETTINGS->resetData(0);
@@ -1139,6 +1151,8 @@ void AppDocumentState::saveProject()
     
     else //replace currentProjectFile
     {
+        if (currentProjectFile.hasWriteAccess() == true)
+        {
         //first, need to save the current project and scene settings
         saveProjectSettings();
         saveToScene(currentlySelectedScene);
@@ -1151,6 +1165,7 @@ void AppDocumentState::saveProject()
         currentProjectFile.setCreationTime(creationTime);
 
         XmlElement performanceSettings("ALPHALIVE_PROJECT_VERSION_1");
+        performanceSettings.setAttribute("AlphaLiveVersionNumber", ProjectInfo::versionNumber);
 
         performanceSettings.addChildElement(projectData);
         
@@ -1183,7 +1198,27 @@ void AppDocumentState::saveProject()
         
         //add the file to the 'recent files' list
         registerRecentFile (currentProjectFile);
+        }
         
+        else
+        {
+            bool userSelection;
+            String errorString (translate("The current project is unmodifiable as it is set to read-only. Would you like to save a new copy of this project?"));
+            
+            if (currentProjectFile.isOnCDRomDrive())
+            {
+                errorString = translate("The current project is unmodifiable as it is on a disc. Would you like to save a new copy of this project?");
+            }
+            
+            userSelection = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon,
+                                                         translate("You cannot modify this project!"),
+                                                         translate(errorString));
+            
+            if (userSelection == true)
+            {
+                saveProjectAs();
+            }
+        }
     }
 }
 
@@ -1191,37 +1226,22 @@ void AppDocumentState::saveProject()
 void AppDocumentState::saveProjectAs()
 {
     //navigate to app directory
-    FileChooser saveFileChooser(translate("Create a AlphaLive project to save..."), 
+    FileChooser saveFileChooser(translate("Create an AlphaLive project to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.alphalive");
+                                String::empty);
     
     if (saveFileChooser.browseForFileToSave(false))
     {
         //create a project directory
         File savedDirectory (saveFileChooser.getResult());
         
-        //create folder to hold the projects audio files (if it doesn't already exist, which it shouldnt (?))
-        File audioFileDirectory = (savedDirectory.getFullPathName() + File::separatorString + "Audio Files");
-        
-        if (AppSettings::Instance()->getCopyExternalFiles() == true)
-        {
-            //copy current working directory to the audio files directory
-            File::getCurrentWorkingDirectory().copyDirectoryTo(audioFileDirectory);
-        }
-        else
-            audioFileDirectory.createDirectory();  
-        //set the audio files directory as the new working directory so when audio files are imported they go straight into here
-        audioFileDirectory.setAsCurrentWorkingDirectory();
-        
         //create file
         File savedFile (savedDirectory.getFullPathName() + File::separatorString + savedDirectory.getFileName()); //get file that the user has 'saved'
         String stringFile = savedFile.getFullPathName(); //get the filepath name of the file as a string
         stringFile = stringFile + ".alphalive"; //append an extension name to the filepath name
-        savedFile = (stringFile); //set the file to this name
+        savedFile = stringFile; //set the file to this name
         
         bool overwrite = true; //by default true
-        
-        //how do i check for overriding here?
         
         //delete the file if it exists & write the new data
         if (savedFile.exists())
@@ -1231,15 +1251,35 @@ void AppDocumentState::saveProjectAs()
         
         if (overwrite == true)
         {
-            //first, need to save the current project and scene settings
+            savedDirectory.createDirectory();
+            
+            //first, create folder to hold the projects audio files
+            File audioFileDirectory = (savedDirectory.getFullPathName() + File::separatorString + "Audio Files");
+            
+            if (audioFileDirectory.exists()) //this would be true if the user is overwritting an old project
+                audioFileDirectory.deleteRecursively();
+            
+            if (AppSettings::Instance()->getCopyExternalFiles() == true)
+            {
+                //copy current working directory to the audio files directory
+                File::getCurrentWorkingDirectory().copyDirectoryTo(audioFileDirectory);
+            }
+            else
+                audioFileDirectory.createDirectory();  
+            
+            //set the audio files directory as the new working directory so when audio files are imported they go straight into here
+            audioFileDirectory.setAsCurrentWorkingDirectory();
+            
+            
+            //second, need to save the current project and scene settings
             saveToScene(currentlySelectedScene);
             saveProjectSettings();
             
-            savedDirectory.createDirectory();
             savedFile.deleteFile();
             savedFile.create(); //create the file
     
             XmlElement performanceSettings("ALPHALIVE_PROJECT_VERSION_1");
+            performanceSettings.setAttribute("AlphaLiveVersionNumber", ProjectInfo::versionNumber);
             
             performanceSettings.addChildElement(projectData);
             
@@ -1266,12 +1306,6 @@ void AppDocumentState::saveProjectAs()
             //change the window title bar text
             mainAppWindowRef->setTitleBarText(currentProjectFile.getFileNameWithoutExtension());
             
-            /*
-            if (shouldDisplayAlertWindow == true)
-                AlertWindow::showMessageBoxAsync(AlertWindow::InfoIcon, "Project Saved", "The project settings have been successfully saved to file");
-            shouldDisplayAlertWindow = true;
-             */
-            
             //add the file to the 'recent files' list
             registerRecentFile (currentProjectFile);
             
@@ -1281,7 +1315,7 @@ void AppDocumentState::saveProjectAs()
     
 }
 
-void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
+void AppDocumentState::loadProject (bool openBrowser, File fileToOpen, bool askToSave)
 {
     //openBrower will be true when the 'Load' button is clicked, and false when a .alphalive file is clicked
     //fileToOpen will be equal to File::nonexistent when Load is click, and the file path when a .alphalive
@@ -1291,14 +1325,17 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
     int modeCheck = 0; //don't show 'save?' alert
     int shouldSave = 2; //don't save
     
-    //check to see if the user might want to save anything first by looking for a pad
-    //with a mode set to it
-    //IDEALLY WE NEED A BETTER METHOD OF CHECKING WHETHER THE USER MIGHT WANT TO SAVE
-    for (int i = 0; i <= 47; i++)
+    if (askToSave == true)
     {
-        modeCheck = PAD_SETTINGS->getMode();
-        if (modeCheck > 0)
-            break;
+        //check to see if the user might want to save anything first by looking for a pad
+        //with a mode set to it
+        //IDEALLY WE NEED A BETTER METHOD OF CHECKING WHETHER THE USER MIGHT WANT TO SAVE
+        for (int i = 0; i <= 47; i++)
+        {
+            modeCheck = PAD_SETTINGS->getMode();
+            if (modeCheck > 0)
+                break;
+        }
     }
     
     //if found a pad with a mode set to it, ask if user wants to save first
@@ -1316,6 +1353,7 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
             shouldDisplayAlertWindow = false;
             saveProject();
         }
+        //else, shouldSave == 2 (don't save)
         
         // ========================== 'LOAD PROJECT' CODE ==================================
         
@@ -1344,108 +1382,129 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen)
             //parse file into xml file
             ScopedPointer<XmlElement> loadedXml (XmlDocument::parse(loadedFile));
             
-            
             if (loadedXml != nullptr && loadedXml->hasTagName("ALPHALIVE_PROJECT_VERSION_1"))
             {
+                int projectVersionNumber = ProjectInfo::versionNumber;
                 
-                //get the folder that holds the projects audio files
-                File audioFileDirectory = (loadedFile.getParentDirectory().getFullPathName() + File::separatorString + "Audio Files");
+                //if available, get the version number of AlphaLive that the project was saved with
+                if (loadedXml->hasAttribute("AlphaLiveVersionNumber"))
+                    projectVersionNumber = loadedXml->getIntAttribute("AlphaLiveVersionNumber");
                 
-                //if so some strange reason the directory doesn't exist, create it
-                if (audioFileDirectory.exists() == false)
-                    audioFileDirectory.createDirectory();
+                bool shouldContinue = true;
                 
-                //set the Audio Files directory as the new working directory so loaded audio files can be found
-                audioFileDirectory.setAsCurrentWorkingDirectory();
-                
-                //get number of included audio files (for use at close when auto cleaning project)
-                numOfFilesAtStart = File::getCurrentWorkingDirectory().getNumberOfChildFiles(2);
-                
-                //=====================load projectData settings=======================
-                
-                //reset/clear XmlElement.
-                if (projectData != nullptr)
-                    projectData->removeAllAttributes();
-                
-                //put the loaded xml data into the xmlelement for the project settings
-                XmlElement *projSettingsXml = loadedXml->getChildByName("PROJECT_SETTINGS");
-                
-                //check to see if the project settings child element actually exists (it won't within older AlphaLive Projects)
-                if (loadedXml->containsChildElement(projSettingsXml) == true)
-                    projectData = new XmlElement(*projSettingsXml);
-                
-                //apply the settings to AppSettings variables, even if "PROJECT_SETTINGS" doesn't exist (old file format), as default values should then be set
-                loadProjectSettings();
-                
-                
-                //WHY DON'T I NEED TO delete or remove projSettingsXml here?
-                //I think it's because above I created a hard copy of projSettingsXml when applying it to projectData,
-                //therefore when loadedXml goes out of scope and delete's projSettingsXml, it doesn't effect projectData
-                //in anyway.
-                
-                //=========load the child elements of loadedXml and put them in the sceneData objects===========
-                for (int scene = 0; scene <= NO_OF_SCENES-1; scene++)
+                //if the projects version number is greater than the current AlphaLive version number,
+                //alert the user and give them the option to cancel opening the project.
+                if (projectVersionNumber > ProjectInfo::versionNumber)
                 {
-                    //accessed by observer in order to update the relevent scene slot's GUI
-                    sceneToUpdate = scene;
+                    shouldContinue = AlertWindow::showOkCancelBox (AlertWindow::NoIcon,
+                                                                        translate("Warning"),
+                                                                        translate("This AlphaLive project was last modified using a newer version of AlphaLive. Therefore this project may be unstable when opened with this version. Would you like to continue?"));
+                }
+                
+                if (shouldContinue == true)
+                {
+                    AppSettings::Instance()->resetProjectSettingsData();
+                    AppSettings::Instance()->resetData();
                     
-                    //clear the xmlelement for the current scene number
-                    clearScene(scene);
+                    //get the folder that holds the projects audio files
+                    File audioFileDirectory = (loadedFile.getParentDirectory().getFullPathName() + File::separatorString + "Audio Files");
                     
-                    //put the loaded xml data into the xmlelement for the current scene
-                    XmlElement* childToInsert = loadedXml->getChildByName("SCENE_" + String(scene));
-                    sceneData.insert (scene, childToInsert);
-                    //remove sceneData childelement from loadedXml so it isn't deleted when loadedXml goes out of scope!
-                    loadedXml->removeChildElement (childToInsert, false);
+                    //if so some strange reason the directory doesn't exist, create it
+                    if (audioFileDirectory.exists() == false)
+                        audioFileDirectory.createDirectory();
                     
-                    //determine the status of the scene
-                    for (int i = 0; i < 48; i++)
+                    //set the Audio Files directory as the new working directory so loaded audio files can be found
+                    audioFileDirectory.setAsCurrentWorkingDirectory();
+                    
+                    //get number of included audio files (for use at close when auto cleaning project)
+                    numOfFilesAtStart = File::getCurrentWorkingDirectory().getNumberOfChildFiles(2);
+                    
+                    //=====================load projectData settings=======================
+                    
+                    //reset/clear XmlElement.
+                    if (projectData != nullptr)
+                        projectData->removeAllAttributes();
+                    
+                    //put the loaded xml data into the xmlelement for the project settings
+                    XmlElement *projSettingsXml = loadedXml->getChildByName("PROJECT_SETTINGS");
+                    
+                    //check to see if the project settings child element actually exists (it won't within older AlphaLive Projects)
+                    if (loadedXml->containsChildElement(projSettingsXml) == true)
+                        projectData = new XmlElement(*projSettingsXml);
+                    
+                    //apply the settings to AppSettings variables, even if "PROJECT_SETTINGS" doesn't exist (old file format), as default values should then be set
+                    loadProjectSettings();
+                    
+                    
+                    //WHY DON'T I NEED TO delete or remove projSettingsXml here?
+                    //I think it's because above I created a hard copy of projSettingsXml when applying it to projectData,
+                    //therefore when loadedXml goes out of scope and delete's projSettingsXml, it doesn't effect projectData
+                    //in anyway.
+                    
+                    //=========load the child elements of loadedXml and put them in the sceneData objects===========
+                    for (int scene = 0; scene <= NO_OF_SCENES-1; scene++)
                     {
-                        sceneStatus = 0;
+                        //accessed by observer in order to update the relevent scene slot's GUI
+                        sceneToUpdate = scene;
                         
-                        if (sceneData[scene]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") != 0)
+                        //clear the xmlelement for the current scene number
+                        clearScene(scene);
+                        
+                        //put the loaded xml data into the xmlelement for the current scene
+                        XmlElement* childToInsert = loadedXml->getChildByName("SCENE_" + String(scene));
+                        sceneData.insert (scene, childToInsert);
+                        //remove sceneData childelement from loadedXml so it isn't deleted when loadedXml goes out of scope!
+                        loadedXml->removeChildElement (childToInsert, false);
+                        
+                        //determine the status of the scene
+                        for (int i = 0; i < 48; i++)
                         {
-                            sceneStatus = 1;
-                            break;
+                            sceneStatus = 0;
+                            
+                            if (sceneData[scene]->getChildByName("PAD_DATA_"+String(i))->getIntAttribute("mode") != 0)
+                            {
+                                sceneStatus = 1;
+                                break;
+                            }
                         }
-                    }
-                     
-                    //set the first scene to be display as 'selected'
-                    if (scene == 0)
-                    {
-                        sceneStatus = 2;
-                        setCurrentlySelectedScene(0);
+                        
+                        //set the first scene to be display as 'selected'
+                        if (scene == 0)
+                        {
+                            sceneStatus = 2;
+                            setCurrentlySelectedScene(0);
+                        }
+                        
+                        //update display
+                        notifyObs();
                     }
                     
-                    //update display
-                    notifyObs();
+                    //let the observer know it will need to update the settings display next time it is 'notified'
+                    guiUpdateFlag = 0;
+                    
+                    //call loadFromScene to load the settings of scene 0 into the application
+                    loadFromScene(0);
+                    
+                    currentProjectFile = loadedFile;
+                    
+                    //=====================================================
+                    //==============NEW - reset unused mode settings=======
+                    //=====================================================
+                    /*
+                     Here, the settings of the modes that aren't being used for each pad are reset to their default values.
+                     */
+                    for (int i = 0; i <=47; i++)
+                    {
+                        PAD_SETTINGS->resetData(PAD_SETTINGS->getMode());
+                    }
+                    //=====================================================
+                    
+                    //change the window title bar text
+                    mainAppWindowRef->setTitleBarText(currentProjectFile.getFileNameWithoutExtension());
+                    
+                    //add the file to the 'recent files' list
+                    registerRecentFile (currentProjectFile);
                 }
-                
-                //let the observer know it will need to update the settings display next time it is 'notified'
-                guiUpdateFlag = 0;
-                
-                //call loadFromScene to load the settings of scene 0 into the application
-                loadFromScene(0);
-                
-                currentProjectFile = loadedFile;
-                
-                //=====================================================
-                //==============NEW - reset unused mode settings=======
-                //=====================================================
-                /*
-                 Here, the settings of the modes that aren't being used for each pad are reset to their default values.
-                 */
-                for (int i = 0; i <=47; i++)
-                {
-                    PAD_SETTINGS->resetData(PAD_SETTINGS->getMode());
-                }
-                //=====================================================
-                
-                //change the window title bar text
-                mainAppWindowRef->setTitleBarText(currentProjectFile.getFileNameWithoutExtension());
-                
-                //add the file to the 'recent files' list
-                registerRecentFile (currentProjectFile);
             }
             else if (loadedXml != nullptr && loadedXml->hasTagName("PERFORMANCE"))
             {
@@ -1471,7 +1530,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create an AlphaLive Scene file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.alphascene");
+                                String::empty);
     if (saveFileChooser.browseForFileToSave(false))
     {
         //create a project directory
@@ -1503,9 +1562,6 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
             //create folder to hold the projects audio files
             File audioFileDirectory = (savedDirectory.getFullPathName() + File::separatorString + "Audio Files");
             audioFileDirectory.createDirectory();
-            
-            
-            
             
             if (AppSettings::Instance()->getCopyExternalFiles() == true)
             {
@@ -1943,7 +1999,7 @@ void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int current
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create a single sequence file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.alphaseq");
+                                String::empty);
     
     if (saveFileChooser.browseForFileToSave(false))
     {
@@ -2038,7 +2094,7 @@ void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create a sequence set file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.alphaseqset");
+                                String::empty);
     
     if (saveFileChooser.browseForFileToSave(false))
     {
@@ -2144,7 +2200,7 @@ void AppDocumentState::saveEffect (int currentlySelectedPad)
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create an effect file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.alphapad");
+                                String::empty);
     
     if (saveFileChooser.browseForFileToSave(false))
     {
@@ -2309,7 +2365,7 @@ void AppDocumentState::exportSampleBank (int currentlySelectedPad)
 	//navigate to app directory
     FileChooser saveFileChooser(translate("Create a .alphabank file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.alphabank");
+                                String::empty);
     
     if (saveFileChooser.browseForFileToSave(false))
     {
@@ -2476,7 +2532,7 @@ void AppDocumentState::createMidiFile (int currentlySelectedSeqNumber, int curre
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create a .mid file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                "*.mid");
+                                String::empty);
     
     if (saveFileChooser.browseForFileToSave(false))
     {
@@ -2899,18 +2955,32 @@ void AppDocumentState::cleanUpProject (bool closingApp)
         
         if (shouldCleanUp == true)
         {
-            //this function must check all the settings of all the sceneData elements,
+            //This function must check all the settings of all the sceneData elements,
             //and delete any audio files in the project Audio Files directory that aren't included in these settings.
-            //need to move all the currently used audio files somewhere, delete any that are left, and move the used ones back.
+            //Need to move all the currently used audio files somewhere, delete any that are left, and move the used ones back.
             
-            //first must save the current settings into the current scene to prevent missing audio files errors once the clean up has been completed.
-            //For example, if you imported in a new audio file and then instantly cleaned up without saving the new settings it might delete the current
-            //audio file as a reference to it wouldn't be found in any of the sceneData elements, so when the clean up is complete the audio file would 
-            //now be missing.
-            //instead of saving, you could load up the scene data for the current scene which would delete the current settings that havent been saved. What would be more natural?
+            //If this function is being called from the 'Clean Project' menu bar item,
+            //first we must save the current project to prevent missing audio files errors once the clean up has been completed.
+            //For example, if you imported in a new audio file and then instantly cleaned up without saving the new settings it
+            //might delete the current audio file as a reference to it wouldn't be found in any of the sceneData elements, so when
+            //the clean up is complete the audio file would now be missing. We are saving rather than loading here as the user
+            //probably wouldn't want to lose the recently changed settings.
             
-            if (!closingApp)
-                saveToScene(currentlySelectedScene);
+            //However if this function was called when the app is closing, we most load the current project instead
+            //of saving before we clean. Again this is to prevent missing audio file errors. For example, if you clear
+            //a scene containing audio files and then close the app without saving beforehand, without loading the project before
+            //cleaning it will end up removing audio files that are actually needed. We are loading rather than saving here
+            //as the user probably won't want to save the most recent changes.
+            
+            if (closingApp)
+            {
+                loadProject(false, currentProjectFile, false);
+            }
+            else
+            {
+                saveProject();
+            }
+            
             
             File tempAudioDirectory = File::getCurrentWorkingDirectory().getParentDirectory().getFullPathName() + File::separatorString + "tempDir";
             tempAudioDirectory.createDirectory();
@@ -3254,6 +3324,10 @@ void AppDocumentState::registerRecentFile (const File& file)
 void AppDocumentState::setCurrentlySelectedScene(int value)
 {
     currentlySelectedScene = value;
+}
+int AppDocumentState::getCurrentlySelectedScene()
+{
+    return currentlySelectedScene;
 }
 
 

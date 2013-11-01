@@ -20,6 +20,45 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+#ifndef H_ALPHAFILENAMECOMPONENT
+#define H_ALPHAFILENAMECOMPONENT
+
+#include "../../../JuceLibraryCode/JuceHeader.h"
+#include "../../File and Settings/AppSettings.h"
+
+class AlphaFilenameComponent: public FilenameComponent
+{
+public:
+    AlphaFilenameComponent(const String& name,
+                           const File& currentFile,
+                           bool canEditFilename,
+                           bool isDirectory,
+                           bool isForSaving,
+                           const String& fileBrowserWildcard,
+                           const String& enforcedSuffix,
+                           const String& textWhenNothingSelected)
+    : FilenameComponent (name,
+                         currentFile,
+                         canEditFilename,
+                         isDirectory,
+                         isForSaving,
+                         fileBrowserWildcard,
+                         enforcedSuffix,
+                         textWhenNothingSelected)
+    {
+
+    }
+
+    File getLocationToBrowse()
+    {
+        return AppSettings::Instance()->getLastAudioSampleDirectory();
+    }
+};
+
+#endif
+
+
+
 #ifndef H_GUISAMPLERMODE
 #define H_GUISAMPLERMODE
 
@@ -76,7 +115,7 @@ private:
     Array<int> selectedPads;
     MainComponent &mainComponentRef;
     
-    ScopedPointer <FilenameComponent> fileChooser;
+    ScopedPointer <AlphaFilenameComponent> fileChooser;
     ScopedPointer <ModeButton> loopButton, indestructibleButton, finishLoopButton, stickyButton;
     ScopedPointer <ModeButton> triggerSettingsButton, pressureSettingsButton, quantiseButton; //quantise button should probably now be global.
 

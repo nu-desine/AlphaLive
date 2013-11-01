@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_SCENE_VERSION_1>
+  <PAD_DATA_0 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+              quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+              velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+              controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+              controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_1 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+              quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+              velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+              controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+              controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_2 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+              quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+              velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+              controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+              controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_3 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+              quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+              velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+              controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+              controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_4 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+              quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+              velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+              controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+              controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_5 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+              quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+              velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+              controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+              controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_6 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+              quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+              velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+              controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+              controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_7 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+              quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+              velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+              controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+              controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_8 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+              quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+              velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+              controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+              controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_9 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+              quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+              velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+              controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+              controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_10 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_11 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_12 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_13 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_14 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_15 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_16 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_17 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_18 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_19 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_20 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_21 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_22 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_23 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_24 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_25 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_26 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_27 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_28 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_29 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_30 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_31 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_32 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_33 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_34 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_35 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_36 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_37 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_38 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_39 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="3" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_40 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="4" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_41 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="4" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_42 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="4" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_43 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="4" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_44 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="4" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_45 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="4" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_46 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="4" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <PAD_DATA_47 mode="4" pressureCurve="2" exclusiveMode="0" exclusiveGroup="1"
+               quantizeMode="0" velocityCurve="4" velocity="100" velocityMinRange="0"
+               velocityMaxRange="127" controllerControl="4" controllerSceneNumber="1"
+               controllerOscIpAddress="127.0.0.1" controllerOscPortNumber="5004"
+               controllerMidiProgramChangeNumber="1" controllerMidiProgramChangeChannel="1"/>
+  <GLOBAL_DATA globalGain="1" globalPan="0.5" globalTempo="120" quantizationValue="3"
+               beatsPerBar="4" autoStartClock="0" eliteDialPrevValue0="90" eliteDialControl0="5"
+               eliteDialStatus0="1" eliteDialOscPortNumber0="5004" eliteDialOscMinRange0="0"
+               eliteDialOscMaxRange0="511" eliteDialOscIpAddress0="127.0.0.1"
+               eliteDialOscStepValue0="1" eliteDialPrevValue1="64" eliteDialControl1="5"
+               eliteDialStatus1="1" eliteDialOscPortNumber1="5004" eliteDialOscMinRange1="0"
+               eliteDialOscMaxRange1="511" eliteDialOscIpAddress1="127.0.0.1"
+               eliteDialOscStepValue1="1" eliteButtonControl0="5" eliteButtonStatus0="1"
+               eliteButtonOscPortNumber0="5004" eliteButtonOscOffNumber0="0"
+               eliteButtonOscOnNumber0="1" eliteButtonOscIpAddress0="127.0.0.1"
+               eliteButtonControl1="5" eliteButtonStatus1="1" eliteButtonOscPortNumber1="5004"
+               eliteButtonOscOffNumber1="0" eliteButtonOscOnNumber1="1" eliteButtonOscIpAddress1="127.0.0.1"
+               eliteButtonControl2="5" eliteButtonStatus2="1" eliteButtonOscPortNumber2="5004"
+               eliteButtonOscOffNumber2="0" eliteButtonOscOnNumber2="1" eliteButtonOscIpAddress2="127.0.0.1"/>
+</ALPHALIVE_SCENE_VERSION_1>

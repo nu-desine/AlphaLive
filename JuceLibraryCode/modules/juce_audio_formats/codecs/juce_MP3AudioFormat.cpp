@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -437,10 +436,7 @@ struct VBRTagData
         vbrScale = -1;
 
         if (flags & 8)
-        {
             vbrScale = ByteOrder::bigEndianInt (data);
-            data += 4;
-        }
 
         headersize = ((type + 1) * 72000 * bitrate) / sampleRate;
         return true;
@@ -1562,7 +1558,8 @@ struct MP3Stream
 
             if (result < 0)
                 return false;
-            else if (result > 0)
+
+            if (result > 0)
                 break;
         }
 
@@ -2957,7 +2954,7 @@ public:
 
     //==============================================================================
     bool readSamples (int** destSamples, int numDestChannels, int startOffsetInDestBuffer,
-                      int64 startSampleInFile, int numSamples)
+                      int64 startSampleInFile, int numSamples) override
     {
         jassert (destSamples != nullptr);
 
@@ -3002,7 +2999,7 @@ public:
         {
             if (decodedEnd <= decodedStart && ! readNextBlock())
             {
-                for (int i = 2; --i >= 0;)
+                for (int i = numDestChannels; --i >= 0;)
                     if (destSamples[i] != nullptr)
                         zeromem (destSamples[i] + startOffsetInDestBuffer, sizeof (float) * numSamples);
 
@@ -3013,7 +3010,7 @@ public:
             float* const* const dst = reinterpret_cast <float**> (destSamples);
             memcpy (dst[0] + startOffsetInDestBuffer, decoded0 + decodedStart, sizeof (float) * numToCopy);
 
-            if (dst[1] != nullptr)
+            if (numDestChannels > 1 && dst[1] != nullptr)
                 memcpy (dst[1] + startOffsetInDestBuffer, (numChannels < 2 ? decoded0 : decoded1) + decodedStart, sizeof (float) * numToCopy);
 
             startOffsetInDestBuffer += numToCopy;
@@ -3052,7 +3049,8 @@ private:
                 createEmptyDecodedData();
                 return true;
             }
-            else if (result <= 0)
+
+            if (result <= 0)
             {
                 decodedStart = 0;
                 decodedEnd = samplesDone;

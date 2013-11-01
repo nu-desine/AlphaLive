@@ -7,39 +7,96 @@
  *
  */
 
+#ifndef H_ALPHATHEME
+#define H_ALPHATHEME
+
+#include "./../JuceLibraryCode/JuceHeader.h"
+
+//==============================================================================
+/**
+ A singleton to hold custom colours and the background images for AlphaLive.
+ This used to be a namespace, however I changed it to a singleton
+ so that the colour and image variables could be dynamically changed
+ to allow for the colour scheme and skin to be changed by the user.
+ I'm using a singleton as it seemed to be the easiest way
+ of integrating changable colours into the application which
+ was originally designed to have static colours. Therefore
+ it may be a bit hacky.
+ */
+class AlphaTheme
+{
+public:
+    //==============================================================================
+    AlphaTheme();
+    ~AlphaTheme();
+    
+    juce_DeclareSingleton (AlphaTheme, false);
+    
+    //=============================================
+    // custom/default colours
+    
+    // colour for selected buttons, sliders, other selected/highlighted components and more
+    uint32 mainColour_;
+    
+    // colour for gradients on buttons amoung a few other things
+    uint32 mainColourLighter_;
+    
+    // background colour of certain child components such as setting buttons
+    uint32 childBackgroundColour_;
+    
+    // mainly used as a component outline colour
+    uint32 childBackgroundColourLighter_;
+    
+    // colour of most text
+    uint32 textColour_;
+    
+    // main background colour for most components and general graphics
+    uint32 backgroundColour_;
+    
+    // main colour for smaller components and various shapes/lines
+    uint32 foregroundColour_;
+    
+    // mainly used as a second text colour. This should be fairly similar to textColour_
+    uint32 foregroundColourLighter_;
+    
+    // used for tab colours as well as background colour for pop up views and lots of outlines
+    uint32 foregroundColourDarker_;
+    
+    // colour for button images/icons. Works best when this is the same as textColour_
+    uint32 iconColour_;
+    
+    Colour mainColour, mainColourLighter, childBackgroundColour, childBackgroundColourLighter, textColour;
+    Colour backgroundColour, foregroundColour, foregroundColourLighter, foregroundColourDarker, iconColour;
+    
+    //=============================================
+    // background images
+    Image mainImage, padsOffImage, padsOnImage, modeOffImage, padsBackgroundImage, settingsOffImage;
+    
+private:
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AlphaTheme);
+};
+
+#endif //H_ALPHATHEME
+
 
 #ifndef ALPHALIVELOOKANDFEEL_H
 #define ALPHALIVELOOKANDFEEL_H
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-namespace AlphaColours
-{
-    //Create a uint32 and a Juce::Colour of any 
-    //custom colours for the application here.
-    
-    //colours as uint32
-    const uint32 blue_ = 0xff1a54ab;
-    const uint32 lightblue_ = 0xff3c76c5;
-	const uint32 nearlyblack_ = 0xff181818;
-	const uint32 verydarkgrey_ = 0xff202020;
-    
-    //colours as Juce::Colour
-    static Colour blue(blue_);
-    static Colour lightblue(lightblue_);
-	static Colour nearlyblack(nearlyblack_);
-	static Colour verydarkgrey(verydarkgrey_);
-    
-}
-
 class AlphaLiveLookandFeel : public LookAndFeel
-
-
 {
+    
 public:
-	
 	AlphaLiveLookandFeel();
 	~AlphaLiveLookandFeel();
+    
+    //===custom fuctions====
+    
+    void setTheme (int theme);
+    
+    //===overridden functions===
 	
 	void drawButtonBackground (Graphics& g,
                                        Button& button,
@@ -47,7 +104,7 @@ public:
                                        bool isMouseOverButton,
                                        bool isButtonDown);
 	
-	const Font getFontForTextButton (TextButton& button);
+	Font getTextButtonFont (TextButton& button);
 	
 	void drawButtonText (Graphics& g, TextButton& button,
 						 bool isMouseOverButton, bool isButtonDown);
@@ -79,7 +136,7 @@ public:
     
     
 	
-	const Font getPopupMenuFont();
+	Font getPopupMenuFont();
     
     void drawPopupMenuBackground (Graphics &g, int width, int height);
     

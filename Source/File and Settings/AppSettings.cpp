@@ -52,6 +52,9 @@ AppSettings::AppSettings()
     autoStartClock = 0; //off
     metronomeStatus = false;
     
+    for (int i = 0; i < 20; i++)
+        sceneName[i] = "Scene " + String(i+1);
+    
     copyExternalFiles = true;
     midiClockValue = 1;
     midiClockStartMessage = 1;
@@ -110,6 +113,8 @@ AppSettings::AppSettings()
         for (int column = 0; column <= NO_OF_COLUMNS-1; column++)
             copiedSequencerData[row][column] = 0;
     }
+    
+    lastAudioSampleDirectory = File::getSpecialLocation (File::userMusicDirectory);
 }
 
 
@@ -176,6 +181,14 @@ void AppSettings::resetData()
         eliteButton[i].oscOnNumber = 1;
         eliteButton[i].oscIpAddress = "127.0.0.1";
     }
+}
+
+void AppSettings::resetProjectSettingsData()
+{
+    setCopyExternalFiles(true);
+    
+    for (int i = 0; i < 20; i++)
+        setSceneName(i, "Scene " + String(i+1));
 }
 
 void AppSettings::copyPadSettings (int padNumber)
@@ -291,6 +304,11 @@ void AppSettings::setMidiClockMessageFilter (int value)
     alphaLiveEngineRef->setMidiClockMessageFilter(value);
 }
 
+void AppSettings::setSceneName(int sceneNumber, String value)
+{
+    sceneName[sceneNumber] = value;
+}
+
 
 Array<int> AppSettings::getCurrentlySelectedPad()
 {
@@ -351,6 +369,22 @@ int AppSettings::getMidiClockStartMessage()
 int AppSettings::getMidiClockMessageFilter()
 {
     return midiClockMessageFilter;
+}
+
+String AppSettings::getSceneName (int sceneNumber)
+{
+    return sceneName[sceneNumber];
+}
+
+
+void AppSettings::setLastAudioSampleDirectory (File directory)
+{
+    lastAudioSampleDirectory = directory;
+}
+
+File AppSettings::getLastAudioSampleDirectory()
+{
+    return lastAudioSampleDirectory;
 }
 
 

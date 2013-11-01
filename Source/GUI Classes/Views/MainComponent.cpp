@@ -26,13 +26,11 @@
 #include "GlobalValues.h"
 #include "../../Application/CommandIDs.h"
 #include "../../File and Settings/StoredSettings.h"
-#include "../Binary Data/BinaryDataNew.h"
+#include "../Binary Data/MainBinaryData.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
 #define MULTI_PADS (selectedPads.size() > 1)
-
-
 
 //==============================================================================
 MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, DocumentWindow* owner_)
@@ -60,16 +58,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //Look-and-feel stuff
     LookAndFeel::setDefaultLookAndFeel (&alphaLiveLookAndFeel);
     alphaLiveLookAndFeel.setUsingNativeAlertWindows(true);
-    
-    
-    //load Gui Images
-    //load binary data into Image
-    backgroundImage = ImageCache::getFromMemory(BinaryDataNew::interfacemain_png, BinaryDataNew::interfacemain_pngSize);
-	padsOff = ImageCache::getFromMemory(BinaryDataNew::padsoff_png, BinaryDataNew::padsoff_pngSize);
-	padsOn = ImageCache::getFromMemory(BinaryDataNew::padson_png, BinaryDataNew::padson_pngSize);
-	modeOff = ImageCache::getFromMemory(BinaryDataNew::modeoff_png, BinaryDataNew::modeoff_pngSize);
-	padsBg = ImageCache::getFromMemory(BinaryDataNew::padsbg_png, BinaryDataNew::padsbg_pngSize);
-    
     
     //Mode Gui's
     addChildComponent(guiMidiMode = new GuiMidiMode(*this));
@@ -99,7 +87,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //--------------------------------------------------------------------------
     //Mode Buttons
     //create off mode button
-	Image *offModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::offsymbol_png, BinaryDataNew::offsymbol_pngSize)); 
+	Image *offModeImage = new Image(ImageCache::getFromMemory(MainBinaryData::offsymbol_png, MainBinaryData::offsymbol_pngSize)); 
 	addAndMakeVisible(modeOffButton = new ModeButton(offModeImage));
 	modeOffButton->addListener(this);
     modeOffButton->setOpaque(false);
@@ -107,7 +95,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeOffButton->addMouseListener(this, false);
 	
 	//create global settings button
-	Image *globalSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::padsettingssymbol_png, BinaryDataNew::padsettingssymbol_pngSize)); 
+	Image *globalSettingsImage = new Image(ImageCache::getFromMemory(MainBinaryData::padsettingssymbol_png, MainBinaryData::padsettingssymbol_pngSize)); 
 	addAndMakeVisible(globalSettingsButton = new ModeButton(globalSettingsImage));
 	globalSettingsButton->addListener(this);
     globalSettingsButton->setOpaque(false);
@@ -115,7 +103,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     
     
     //create looper mode button
-	Image *looperModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::loopsymbol_png, BinaryDataNew::loopsymbol_pngSize)); 
+	Image *looperModeImage = new Image(ImageCache::getFromMemory(MainBinaryData::loopsymbol_png, MainBinaryData::loopsymbol_pngSize)); 
 	addAndMakeVisible(modeSamplerButton = new ModeButton(looperModeImage));
 	modeSamplerButton->addListener(this);
     modeSamplerButton->setOpaque(false);
@@ -123,7 +111,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeSamplerButton->addMouseListener(this, false);
 	
 	//create midi mode button
-	Image *midiModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::midisymbol_png, BinaryDataNew::midisymbol_pngSize)); 
+	Image *midiModeImage = new Image(ImageCache::getFromMemory(MainBinaryData::midisymbol_png, MainBinaryData::midisymbol_pngSize)); 
 	addAndMakeVisible(modeMidiButton = new ModeButton(midiModeImage));
 	modeMidiButton->addListener(this);
     modeMidiButton->setOpaque(false);
@@ -131,7 +119,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeMidiButton->addMouseListener(this, false);
 	
 	//create sequencer mode button
-	Image *sequencerModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::sequenceicon_png, BinaryDataNew::sequenceicon_pngSize)); 
+	Image *sequencerModeImage = new Image(ImageCache::getFromMemory(MainBinaryData::sequenceicon_png, MainBinaryData::sequenceicon_pngSize)); 
 	addAndMakeVisible(modeSequencerButton = new ModeButton(sequencerModeImage));
 	modeSequencerButton->addListener(this);
     modeSequencerButton->setOpaque(false);
@@ -139,7 +127,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeSequencerButton->addMouseListener(this, false);
 	
     //createa controller mode button
-	Image *controllerModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::controlsymbol_png, BinaryDataNew::controlsymbol_pngSize)); 
+	Image *controllerModeImage = new Image(ImageCache::getFromMemory(MainBinaryData::controlsymbol_png, MainBinaryData::controlsymbol_pngSize)); 
 	addAndMakeVisible(modeControllerButton = new ModeButton(controllerModeImage));
 	modeControllerButton->addListener(this);
     modeControllerButton->setOpaque(false);
@@ -153,21 +141,17 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     globalClock->addMouseListener(this, true);
 	
     //open/save buttons
-	Image *openImage = new Image(ImageCache::getFromMemory(BinaryDataNew::loadsymbol_png, BinaryDataNew::loadsymbol_pngSize)); 
+	Image *openImage = new Image(ImageCache::getFromMemory(MainBinaryData::loadsymbol_png, MainBinaryData::loadsymbol_pngSize)); 
     addAndMakeVisible(openButton = new ModeButton(openImage));
 	openButton->setClickingTogglesState(false);
     openButton->setCommandToTrigger(commandManager, CommandIDs::Open, false);
     openButton->addMouseListener(this, false);
     
-	Image *saveImage = new Image(ImageCache::getFromMemory(BinaryDataNew::savesymbol_png, BinaryDataNew::savesymbol_pngSize)); 
+	Image *saveImage = new Image(ImageCache::getFromMemory(MainBinaryData::savesymbol_png, MainBinaryData::savesymbol_pngSize)); 
     addAndMakeVisible(saveButton = new ModeButton(saveImage));
 	saveButton->setClickingTogglesState(false);
     saveButton->setCommandToTrigger(commandManager, CommandIDs::Save, false);
     saveButton->addMouseListener(this, false);
-    
-    //scene component
-    addAndMakeVisible(sceneComponent = new SceneComponent(appDocumentStateRef, *alphaLiveEngineRef.getModeController())); //pass in appDocumentStateRef so that appDocumentStateRef function calls can be made within sceneComponent
-    sceneComponent->addMouseListener(this, true);
 	
 	//create pan slider
     addAndMakeVisible(panSlider = new AlphaRotarySlider((225 * (M_PI / 180)), (495 * (M_PI / 180)), 65));
@@ -190,7 +174,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //gain and pan label
     addAndMakeVisible(gainPanValueLabel = new Label("value label", String::empty));
     gainPanValueLabel->setJustificationType(Justification::horizontallyCentred);
-    gainPanValueLabel->setColour(Label::textColourId, AlphaColours::blue);
     gainPanValueLabel->setFont(Font(12));
     gainPanValueLabel->addMouseListener(this, true);
     
@@ -211,6 +194,11 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     addAndMakeVisible(deviceStatusComponent = new DeviceStatusComponent(alphaLiveEngineRef.getDeviceStatus()));
     deviceStatusComponent->addMouseListener(this, false);
     
+    //scene component
+    addAndMakeVisible(sceneComponent = new SceneComponent(appDocumentStateRef, *alphaLiveEngineRef.getModeController())); //pass in appDocumentStateRef so that appDocumentStateRef function calls can be made within sceneComponent
+    sceneComponent->addMouseListener(this, true);
+    sceneComponent->setInterceptsMouseClicks(false, true);
+    
     //pop up views
     addChildComponent(aboutComponent = new AboutComponent(*this));
     aboutComponent->setAlpha(0.975f);
@@ -224,7 +212,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     addAndMakeVisible(infoTextBox = new TextEditor());
     infoTextBox->setMultiLine(true);
     infoTextBox->setReadOnly(true);
-    infoTextBox->setColour(TextEditor::backgroundColourId, Colours::black.withAlpha(1.0f));
     infoTextBox->setColour(TextEditor::outlineColourId, Colours::transparentBlack);
     infoTextBox->setCaretVisible(false);
     Font infoFont(infoBoxTextSize, Font::plain);
@@ -266,7 +253,6 @@ MainComponent::~MainComponent()
         stopThread(500);
     
     deleteAllChildren();
-    //delete blackChrome;
     
     //detach this class from the subject class
     //appDocumentStateRef.detach(this);
@@ -308,7 +294,7 @@ void MainComponent::resized()
     openButton->setBounds(153, 7, 30, 30);
     saveButton->setBounds(180, 38, 30, 30);
     
-    sceneComponent->setBounds(5, 10, 20, getHeight());
+    sceneComponent->setBounds(5, 10, 20 * 8, getHeight());
     
     globalClock->setBounds(479, 0, 266, 144);
     
@@ -335,47 +321,100 @@ void MainComponent::resized()
 
 void MainComponent::paint(juce::Graphics &g)
 {
+    infoTextBox->setColour(TextEditor::backgroundColourId, AlphaTheme::getInstance()->backgroundColour);
+    gainPanValueLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+    
     g.setOrigin(0, 0);
-	g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), 0, 0, backgroundImage.getWidth(), backgroundImage.getHeight());
+    
+	g.drawImage(AlphaTheme::getInstance()->mainImage,
+                0,
+                0,
+                getWidth(),
+                getHeight(),
+                0,
+                0,
+                AlphaTheme::getInstance()->mainImage.getWidth(),
+                AlphaTheme::getInstance()->mainImage.getHeight());
 	
 	if (noPadsSelected == 1) 
     {
-        g.drawImage(padsOff, 0, 0, getWidth(), getHeight(), 0, 0, padsOff.getWidth(), padsOff.getHeight());
+        g.drawImage(AlphaTheme::getInstance()->padsOffImage,
+                    0,
+                    0,
+                    getWidth(),
+                    getHeight(),
+                    0,
+                    0,
+                    AlphaTheme::getInstance()->padsOffImage.getWidth(),
+                    AlphaTheme::getInstance()->padsOffImage.getHeight());
         
         if (eliteControlSelected == 0)
-            g.drawImage(modeOff, 0, 0, getWidth(), getHeight(), 0, 0, modeOff.getWidth(), modeOff.getHeight());
-	}	
+        {
+            g.drawImage(AlphaTheme::getInstance()->modeOffImage,
+                        0,
+                        0,
+                        getWidth(),
+                        getHeight(),
+                        0,
+                        0,
+                        AlphaTheme::getInstance()->modeOffImage.getWidth(),
+                        AlphaTheme::getInstance()->modeOffImage.getHeight());
+        }
+	}
 	else if (noPadsSelected == 0) 
     {
-		g.drawImage(padsOn, 0, 0, getWidth(), getHeight(), 0, 0, padsOn.getWidth(), padsOn.getHeight());
+		g.drawImage(AlphaTheme::getInstance()->padsOnImage,
+                    0,
+                    0,
+                    getWidth(),
+                    getHeight(),
+                    0,
+                    0,
+                    AlphaTheme::getInstance()->padsOnImage.getWidth(),
+                    AlphaTheme::getInstance()->padsOnImage.getHeight());
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		
 		g.fillRect(753, 10, 261, 121);
 		
-		g.setColour(Colours::grey.withAlpha(0.3f));
+		g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 		
 		g.drawRect(753, 10, 261, 121, 2);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	}
 	
 	if (noModeSelected == 1) 
     {
         if (eliteControlSelected == 0)
-            g.drawImage(modeOff, 0, 0, getWidth(), getHeight(), 0, 0, modeOff.getWidth(), modeOff.getHeight());
+        {
+            g.drawImage(AlphaTheme::getInstance()->modeOffImage,
+                        0,
+                        0,
+                        getWidth(),
+                        getHeight(),
+                        0,
+                        0,
+                        AlphaTheme::getInstance()->modeOffImage.getWidth(),
+                        AlphaTheme::getInstance()->modeOffImage.getHeight());
+        }
 	}
 	
-	g.drawImage(padsBg, 0, 0, getWidth(), getHeight(), 0, 0, padsBg.getWidth(), padsBg.getHeight());
+	g.drawImage(AlphaTheme::getInstance()->padsBackgroundImage,
+                0,
+                0,
+                getWidth(),
+                getHeight(),
+                0,
+                0,
+                AlphaTheme::getInstance()->padsBackgroundImage.getWidth(),
+                AlphaTheme::getInstance()->padsBackgroundImage.getHeight());
 	
 	//gain and pan container
-	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(35, 5, 87, 87);
-	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse(35, 5, 87, 87, 1.0f);
-  
 }
 
 
@@ -424,13 +463,13 @@ void MainComponent::sliderValueChanged (Slider *slider)
     if (slider == gainSlider)
     {
         AppSettings::Instance()->setGlobalGain(gainSlider->getValue());
-        gainPanValueLabel->setText(String(slider->getValue(), 3), false);
+        gainPanValueLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     else if (slider == panSlider)
     {
         AppSettings::Instance()->setGlobalPan(panSlider->getValue());
-        gainPanValueLabel->setText(String(slider->getValue(), 3), false);
+        gainPanValueLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -1128,7 +1167,7 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     }
         else if (sceneComponent->isMouseOver(true))
     {
-        setInfoTextBoxText (translate("Scenes. AlphaLive contains 20 'scene' slots, each can hold a full set of pad settings. Click on a scene to load up its settings and pads; right-click to import, export or clear a scene; or shift-click to copy the currently select scene to the clicked scene. AlphaLive scene files (.alphascene) can also be imported via drag-and-drop."));
+        setInfoTextBoxText (translate("Scenes. AlphaLive contains 20 'scene' slots that can each hold a full set of pad settings. Click on a scene to load up its settings; shift-click to copy the currently select scene to the clicked scene; or right-click for more options. Use the text box to name a scene. AlphaLive scene files (.alphascene) can also be imported via drag-and-drop.")); //
     }
     else if (gainSlider->isMouseOver(true)==true)
     {
@@ -1178,9 +1217,9 @@ void MainComponent::mouseEnter (const MouseEvent &e)
     
     //update gainPanValueLabel
     if (gainSlider->isMouseOver(true))
-        gainPanValueLabel->setText(String(gainSlider->getValue(), 3), false);
+        gainPanValueLabel->setText(String(gainSlider->getValue(), 3), dontSendNotification);
     else if (panSlider->isMouseOver(true))
-        gainPanValueLabel->setText(String(panSlider->getValue(), 3), false);
+        gainPanValueLabel->setText(String(panSlider->getValue(), 3), dontSendNotification);
     
     
     mouseOverComponent = e.eventComponent;
@@ -1195,7 +1234,7 @@ void MainComponent::mouseExit (const MouseEvent &e)
     
     
     if(e.eventComponent == gainSlider || e.eventComponent == panSlider)
-        gainPanValueLabel->setText(String::empty, false);
+        gainPanValueLabel->setText(String::empty, dontSendNotification);
         
         
 }
@@ -1221,7 +1260,7 @@ void MainComponent::setLocalisation()
     if (countryCode == "ja" || countryCode == "jpn") //japanese
     {
         File transFile (appDir + "Application Data" + File::separatorString + "trans_ja");
-        trans = new LocalisedStrings (transFile);
+        trans = new LocalisedStrings (transFile, false);
         LocalisedStrings::setCurrentMappings(trans);
         
         String fontToUse = "Arial Unicode MS"; // available on OSX 10.5 and above
@@ -1247,7 +1286,7 @@ void MainComponent::setLocalisation()
     else if (countryCode == "zh" || countryCode == "zho" || countryCode == "zh-Hant" || countryCode == "zh-Hans") //chinese. do i need the first two?
     {
         File transFile (appDir + "Application Data" + File::separatorString + "trans_zh");
-        trans = new LocalisedStrings (transFile);
+        trans = new LocalisedStrings (transFile, false);
         LocalisedStrings::setCurrentMappings(trans);
         
         String fontToUse = "Arial Unicode MS"; // available on OSX 10.5 and above
@@ -1273,7 +1312,7 @@ void MainComponent::setLocalisation()
     else if (countryCode == "ko" || countryCode == "kor") //Korean
     {
         File transFile (appDir + "Application Data" + File::separatorString + "trans_ko");
-        trans = new LocalisedStrings (transFile);
+        trans = new LocalisedStrings (transFile, false);
         LocalisedStrings::setCurrentMappings(trans);
         
         String fontToUse = "AppleMyungjo"; // available on OSX 10.5 and above
@@ -1618,7 +1657,8 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::StartStopClock,
         CommandIDs::StarterGuide,
         CommandIDs::ReferenceManual,
-        CommandIDs::UpdateSoftware
+        CommandIDs::UpdateSoftware,
+        CommandIDs::CopyDataToSequencer
     };
 	
 	commands.addArray (ids, numElementsInArray (ids));
@@ -1748,9 +1788,63 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
     }
     else if (commandID == CommandIDs::UpdateSoftware)
     {
-        result.setInfo (translate("Check for updates..."),
+        result.setInfo (translate("Check For Updates..."),
                         "Checks online to see if there is an AlphaLive update available, and installs it if so.",
                         CommandCategories::FileCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::CopyDataToSequencer)
+    {
+        // This item should only be active if the user has selected only MIDI pads that all have
+        // the same MIDI channel along with 1 or more sequencer pads, OR only sampler pads along
+        // with 1 or more sequencer pads.
+        
+        bool shouldBeActive = false;
+        String itemString (translate("Copy Notes/Samples To Sequencer"));
+        
+        Array <int> padModes;
+        
+        //get the modes of the selected pads
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            padModes.insert(i, PAD_SETTINGS->getMode());
+        }
+        
+        //check to see if the selected pads are set to MIDI and sequencer mode only
+        if (padModes.contains(1) && padModes.contains(3) && !padModes.contains(2))
+        {
+            Array<int> midiChannels;
+            
+            //get the MIDI channels of the selected MIDI pads
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                
+                if (PAD_SETTINGS->getMode() == 1)
+                    midiChannels.addIfNotAlreadyThere(PAD_SETTINGS->getMidiChannel());
+            }
+            
+            //check to see if all MIDI pad channels are the same
+            if (midiChannels.size() == 1)
+            {
+                shouldBeActive = true;
+                itemString = translate("Copy Selected MIDI Notes To Sequencer");
+            }
+            
+        }
+        //check to see if the selected pads are set to Sampler and Sequencer mode only
+        else if (padModes.contains(2) && padModes.contains(3) && !padModes.contains(1))
+        {
+            shouldBeActive = true;
+            itemString = translate("Copy Selected Samples To Sequencer");
+        }
+        
+        result.setInfo (translate(itemString),
+                        "Applies the notes/samples of the selected pads to the selected sequencer pad.",
+                        CommandCategories::EditCommands, 0);
+        
+        result.setActive(shouldBeActive);
     }
 }
 
@@ -1760,6 +1854,9 @@ bool MainComponent::perform (const InvocationInfo& info)
 	{
         projectSettingsComponent->setVisible(false);
 		preferencesComponent->setVisible(false);
+        
+        aboutComponent->toFront(true);
+        infoTextBox->toFront(false);
 		aboutComponent->setVisible(true);
         aboutComponent->grabKeyboardFocus();    //so that the ESC to close works without having to
                                                 //click on the component first
@@ -1770,6 +1867,9 @@ bool MainComponent::perform (const InvocationInfo& info)
 	{
         aboutComponent->setVisible(false);
         projectSettingsComponent->setVisible(false);
+        
+        preferencesComponent->toFront(true);
+        infoTextBox->toFront(false);
 		preferencesComponent->setVisible(true);
         preferencesComponent->grabKeyboardFocus();
 	}
@@ -1778,6 +1878,9 @@ bool MainComponent::perform (const InvocationInfo& info)
 	{
         aboutComponent->setVisible(false);
 		preferencesComponent->setVisible(false);
+        
+        projectSettingsComponent->toFront(true);
+        infoTextBox->toFront(false);
 		projectSettingsComponent->setVisible(true);
         projectSettingsComponent->grabKeyboardFocus();
 	}
@@ -1852,6 +1955,102 @@ bool MainComponent::perform (const InvocationInfo& info)
         updateSoftware(false);
     }
     
+    else if(info.commandID == CommandIDs::CopyDataToSequencer)
+    {
+        Array <int> padModes;
+        
+        //get the modes of the selected pads
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            padModes.insert(i, PAD_SETTINGS->getMode());
+        }
+        
+        //applying MIDI notes to sequencer pad/s
+        if (padModes.contains(1))
+        {
+            Array <int> midiNotes;
+            int midiChannel;
+            
+            //get all MIDI notes of the selected MIDI pads
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                
+                if (PAD_SETTINGS->getMode() == 1)
+                {
+                    midiNotes.add(PAD_SETTINGS->getMidiNote());
+                    //don't sort the array into note order, as if
+                    //the user has selected more than 12 MIDI pads
+                    //we want to use the first 12 selected notes not
+                    //the first 12 lowest notes.
+                    
+                    midiChannel = PAD_SETTINGS->getMidiChannel();
+                }
+           
+            }
+            
+            int noOfNotes = midiNotes.size();
+            if (noOfNotes > 12)
+                noOfNotes = 12;
+            
+            //apply the selected MIDI notes to the selected sequencer pad/s
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                
+                if (PAD_SETTINGS->getMode() == 3)
+                {
+                    PAD_SETTINGS->setSequencerMode(1);
+                    PAD_SETTINGS->setSequencerMidiChannel(midiChannel);
+                    
+                    for (int row = 0; row < noOfNotes; row++)
+                    {
+                        PAD_SETTINGS->setSequencerMidiNote(midiNotes[row], row);
+                    }
+                }
+            }
+        }
+        
+        //applying samples to sequencer pad/s
+        else if (padModes.contains(2))
+        {
+            Array <File> samples;
+            
+            //get all samples of the selected Sampler pads
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                
+                if (PAD_SETTINGS->getMode() == 2)
+                {
+                    samples.add(PAD_SETTINGS->getSamplerAudioFilePath());
+                }
+                
+            }
+            
+            int noOfSamples = samples.size();
+            if (noOfSamples > 12)
+                noOfSamples = 12;
+            
+            //apply the selected samples to the selected sequencer pad/s
+            for (int i = 0; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                
+                if (PAD_SETTINGS->getMode() == 3)
+                {
+                    PAD_SETTINGS->setSequencerMode(2);
+                    
+                    for (int row = 0; row < noOfSamples; row++)
+                    {
+                        PAD_SETTINGS->setSequencerSamplesAudioFilePath(samples[row], row);
+                    }
+                }
+            }
+        }
+    }
+    
 	//else
 	//	return false;
 	
@@ -1863,5 +2062,19 @@ bool MainComponent::perform (const InvocationInfo& info)
 ApplicationCommandManager* MainComponent::getCommandManager()
 {
     return commandManager;
+}
+
+
+void MainComponent::changeLookAndFeel()
+{
+    alphaLiveLookAndFeel.setTheme (StoredSettings::getInstance()->interfaceTheme);
+    
+    guiSequencerMode->drawDrawableButtons();
+    toolbox->setTabColour();
+    preferencesComponent->setTabColour();
+    preferencesComponent->redrawAudioSettingsComponent();
+    projectSettingsComponent->setTabColour();
+    
+    sendLookAndFeelChange();
 }
 

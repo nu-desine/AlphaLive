@@ -73,9 +73,6 @@ MainAppWindow::MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2, MenuB
     
     // don't want the window to take focus when the title-bar is clicked..
     setWantsKeyboardFocus (false);
-    
-    //set visible here once everything else has loaded
-    setVisible (true);
 }
 
 MainAppWindow::~MainAppWindow()

@@ -113,9 +113,6 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     
     //for some reason using a textEditor was creating gui problems, so using a label instead now
     addChildComponent(dialOscIpAddressEditor = new Label());
-    dialOscIpAddressEditor->setColour(Label::textColourId, Colours::grey);
-    dialOscIpAddressEditor->setColour(Label::backgroundColourId, Colours::lightgrey);
-    dialOscIpAddressEditor->setJustificationType(Justification::centred);
     dialOscIpAddressEditor->setEditable(true);
     dialOscIpAddressEditor->addMouseListener(this, true);
     dialOscIpAddressEditor->addListener(this);
@@ -215,8 +212,6 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     
     //for some reason using a textEditor was creating gui problems, so using a label instead now
     addChildComponent(buttonOscIpAddressEditor = new Label());
-    buttonOscIpAddressEditor->setColour(Label::textColourId, Colours::grey);
-    buttonOscIpAddressEditor->setColour(Label::backgroundColourId, Colours::lightgrey);
     buttonOscIpAddressEditor->setJustificationType(Justification::centred);
     buttonOscIpAddressEditor->setEditable(true);
     buttonOscIpAddressEditor->addMouseListener(this, true);
@@ -253,7 +248,6 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
 	//---------------parameter label -------------------------------------
     addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
 	
@@ -349,13 +343,23 @@ void GuiEliteControlsSettings::resized()
 
 void GuiEliteControlsSettings::paint (Graphics& g)
 {
+    dialOscIpAddressEditor->setColour(Label::backgroundColourId,
+                                      LookAndFeel::getDefaultLookAndFeel().findColour(TextEditor::backgroundColourId));
+    dialOscIpAddressEditor->setColour(Label::outlineColourId,
+                                      LookAndFeel::getDefaultLookAndFeel().findColour(TextEditor::outlineColourId));
+    buttonOscIpAddressEditor->setColour(Label::backgroundColourId,
+                                        LookAndFeel::getDefaultLookAndFeel().findColour(TextEditor::backgroundColourId));
+    buttonOscIpAddressEditor->setColour(Label::outlineColourId,
+                                        LookAndFeel::getDefaultLookAndFeel().findColour(TextEditor::outlineColourId));
+    
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
 	
-	ColourGradient fillGradient(AlphaColours::nearlyblack,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	Path pieSeg;
 	pieSeg.addPieSegment(802, 379, 86, 86, (125 * (M_PI / 180)), (235 * (M_PI / 180)), 0.2f);
 	g.fillPath(pieSeg);
@@ -380,7 +384,7 @@ void GuiEliteControlsSettings::paint (Graphics& g)
         g.fillEllipse(962,542, 27, 27);
         g.fillEllipse(981,520, 27, 27);
         
-        g.setColour(Colours::grey.withAlpha(0.3f));
+        g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
         
         g.drawEllipse(646,436, 27, 27, 1.0);
         g.drawEllipse(653,464, 27, 27, 1.0);
@@ -403,7 +407,7 @@ void GuiEliteControlsSettings::paint (Graphics& g)
 	
 //	if(dialMidiChannel[0]->isVisible())
 //	{
-//		g.setColour(Colours::black);
+//		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 //		g.fillEllipse(786,218, 48, 48);
 //	}
     
@@ -489,7 +493,7 @@ void GuiEliteControlsSettings::sliderValueChanged (Slider* slider)
     else if (slider == dialMidiMinRange)
 	{
         AppSettings::Instance()->setEliteDialMidiMinRange(slider->getValue(), DIAL_NO);
-		parameterHoverLabel->setText(String(slider->getValue()), false);
+		parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
         
         if (slider->getValue() >= dialMidiMaxRange->getValue())
             dialMidiMaxRange->setValue(slider->getValue()+2, sendNotification);
@@ -498,7 +502,7 @@ void GuiEliteControlsSettings::sliderValueChanged (Slider* slider)
     else if (slider == dialMidiMaxRange)
 	{
         AppSettings::Instance()->setEliteDialMidiMaxRange(slider->getValue(), DIAL_NO);
-		parameterHoverLabel->setText(String(slider->getValue()), false);
+		parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
         
         if (slider->getValue() <= dialMidiMinRange->getValue())
             dialMidiMinRange->setValue(slider->getValue()-2, sendNotification);
@@ -508,21 +512,21 @@ void GuiEliteControlsSettings::sliderValueChanged (Slider* slider)
     else if (slider == dialOscMinRange)
 	{
         AppSettings::Instance()->setEliteDialOscMinRange(slider->getValue(), DIAL_NO);
-		parameterHoverLabel->setText(String(slider->getValue()), false);
+		parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
         
         setDialOscStepValueSliderRange(DIAL_NO);
 	}
     else if (slider == dialOscMaxRange)
 	{
         AppSettings::Instance()->setEliteDialOscMaxRange(slider->getValue(), DIAL_NO);
-		parameterHoverLabel->setText(String(slider->getValue()), false);
+		parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
         
         setDialOscStepValueSliderRange(DIAL_NO);
     }
 	else if (slider == dialOscStepSlider)
 	{
         AppSettings::Instance()->setEliteDialOscStepValue(slider->getValue(), DIAL_NO);
-		parameterHoverLabel->setText(String(slider->getValue()), false);
+		parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
     }
     else if (slider == buttonSceneNumber)
         AppSettings::Instance()->setEliteButtonSceneNumber(slider->getValue(), BUTTON_NO);
@@ -533,24 +537,24 @@ void GuiEliteControlsSettings::sliderValueChanged (Slider* slider)
     else if (slider == buttonMidiOffNumber)
 	{
         AppSettings::Instance()->setEliteButtonMidiOffNumber(slider->getValue(), BUTTON_NO);
-		parameterHoverLabel->setText(String(slider->getValue()), false);
+		parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
 	}
     else if (slider == buttonMidiOnNumber)
 	{
         AppSettings::Instance()->setEliteButtonMidiOnNumber(slider->getValue(), BUTTON_NO);
-		parameterHoverLabel->setText(String(slider->getValue()), false);
+		parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
 	}
     else if (slider == buttonOscPortNumber)
         AppSettings::Instance()->setEliteButtonOscPortNumber(slider->getValue(), BUTTON_NO);
     else if (slider == buttonOscOffNumber)
 	{
         AppSettings::Instance()->setEliteButtonOscOffNumber(slider->getValue(), BUTTON_NO);
-		parameterHoverLabel->setText(String(slider->getValue()), false);
+		parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
 	}
     else if (slider == buttonOscOnNumber)
 	{
         AppSettings::Instance()->setEliteButtonOscOnNumber(slider->getValue(), BUTTON_NO);
-		parameterHoverLabel->setText(String(slider->getValue()), false);
+		parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
 	}
     
     
@@ -775,7 +779,7 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
         dialOscMaxRange->setValue(AppSettings::Instance()->getEliteDialOscMaxRange(DIAL_NO));
         setDialOscStepValueSliderRange(DIAL_NO);
 		dialOscStepSlider->setValue(AppSettings::Instance()->getEliteDialOscStepValue(DIAL_NO));
-        dialOscIpAddressEditor->setText(AppSettings::Instance()->getEliteDialOscIpAddress(DIAL_NO), false);
+        dialOscIpAddressEditor->setText(AppSettings::Instance()->getEliteDialOscIpAddress(DIAL_NO), dontSendNotification);
 		
         if (statusButton->getToggleState() == false)
             notSelected->setVisible(true);
@@ -830,7 +834,7 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
         buttonOscPortNumber->setValue(AppSettings::Instance()->getEliteButtonOscPortNumber(BUTTON_NO));
         buttonOscOffNumber->setValue(AppSettings::Instance()->getEliteButtonOscOffNumber(BUTTON_NO));
         buttonOscOnNumber->setValue(AppSettings::Instance()->getEliteButtonOscOnNumber(BUTTON_NO));
-        buttonOscIpAddressEditor->setText(AppSettings::Instance()->getEliteButtonOscIpAddress(BUTTON_NO), false);
+        buttonOscIpAddressEditor->setText(AppSettings::Instance()->getEliteButtonOscIpAddress(BUTTON_NO), dontSendNotification);
 
         if (statusButton->getToggleState() == false)
             notSelected->setVisible(true);
@@ -990,47 +994,47 @@ void GuiEliteControlsSettings::mouseEnter (const MouseEvent &e)
     
 	if (dialMidiMinRange->isMouseOver(true))
 	{
-        parameterHoverLabel->setText(String(dialMidiMinRange->getValue()), false);
+        parameterHoverLabel->setText(String(dialMidiMinRange->getValue()), dontSendNotification);
 		parameterHoverLabel->setVisible(true);
 	}
     else if (dialMidiMaxRange->isMouseOver(true))
 	{
-        parameterHoverLabel->setText(String(dialMidiMaxRange->getValue()), false);
+        parameterHoverLabel->setText(String(dialMidiMaxRange->getValue()), dontSendNotification);
 		parameterHoverLabel->setVisible(true);
 	}
 	else if (buttonMidiOffNumber->isMouseOver(true))
 	{
-        parameterHoverLabel->setText(String(buttonMidiOffNumber->getValue()), false);
+        parameterHoverLabel->setText(String(buttonMidiOffNumber->getValue()), dontSendNotification);
 		parameterHoverLabel->setVisible(true);
 	}
 	else if (buttonMidiOnNumber->isMouseOver(true))
 	{
-        parameterHoverLabel->setText(String(buttonMidiOnNumber->getValue()), false);
+        parameterHoverLabel->setText(String(buttonMidiOnNumber->getValue()), dontSendNotification);
 		parameterHoverLabel->setVisible(true);
 	}
 	else if (dialOscMinRange->isMouseOver(true))
 	{
-        parameterHoverLabel->setText(String(dialOscMinRange->getValue()), false);
+        parameterHoverLabel->setText(String(dialOscMinRange->getValue()), dontSendNotification);
 		parameterHoverLabel->setVisible(true);
 	}
 	else if (dialOscMaxRange->isMouseOver(true))
 	{
-        parameterHoverLabel->setText(String(dialOscMaxRange->getValue()), false);
+        parameterHoverLabel->setText(String(dialOscMaxRange->getValue()), dontSendNotification);
 		parameterHoverLabel->setVisible(true);
 	}
 	else if (dialOscStepSlider->isMouseOver(true))
 	{
-        parameterHoverLabel->setText(String(dialOscStepSlider->getValue()), false);
+        parameterHoverLabel->setText(String(dialOscStepSlider->getValue()), dontSendNotification);
 		parameterHoverLabel->setVisible(true);
 	}
 	else if (buttonOscOffNumber->isMouseOver(true))
 	{
-        parameterHoverLabel->setText(String(buttonOscOffNumber->getValue()), false);
+        parameterHoverLabel->setText(String(buttonOscOffNumber->getValue()), dontSendNotification);
 		parameterHoverLabel->setVisible(true);
 	}
 	else if (buttonOscOnNumber->isMouseOver(true))
 	{
-        parameterHoverLabel->setText(String(buttonOscOnNumber->getValue()), false);
+        parameterHoverLabel->setText(String(buttonOscOnNumber->getValue()), dontSendNotification);
 		parameterHoverLabel->setVisible(true);
 	}
 	
@@ -1047,7 +1051,7 @@ void GuiEliteControlsSettings::mouseExit (const MouseEvent &e)
 	   e.eventComponent == buttonOscOffNumber || e.eventComponent == buttonOscOnNumber
 	   || e.eventComponent == dialOscStepSlider)
 	{
-        parameterHoverLabel->setText(String::empty, false);
+        parameterHoverLabel->setText(String::empty, dontSendNotification);
 		parameterHoverLabel->setVisible(false);
 	}
 }

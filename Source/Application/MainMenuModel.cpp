@@ -115,6 +115,8 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::ClearScene);
         menu.addCommandItem(commandManager, CommandIDs::ClearAllScenes);
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::CopyDataToSequencer);
     }
     else if (topLevelMenuIndex == 2) //Options
     {

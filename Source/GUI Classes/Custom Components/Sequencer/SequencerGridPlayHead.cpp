@@ -21,6 +21,7 @@
 //
 
 #include "SequencerGridPlayHead.h"
+#include "../../AlphaLiveLookandFeel.h"
 
 
 SequencerGridPlayHead::SequencerGridPlayHead()
@@ -41,7 +42,7 @@ void SequencerGridPlayHead::resized()
 
 void SequencerGridPlayHead::paint (Graphics &g)
 {
-    g.setColour(Colours::grey.withAlpha(0.3f));
+    g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.fillPath(playheadPath, getTransform());
 }
 

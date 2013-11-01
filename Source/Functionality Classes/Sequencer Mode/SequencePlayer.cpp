@@ -23,6 +23,7 @@
 #include "SequencePlayer.h"
 #include "../../File and Settings/AppSettings.h"
 #include "ModeSequencer.h"
+#include "../../Application/Common.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
 
@@ -355,34 +356,15 @@ void SequencePlayer::processInputData(int padValue)
     //==========================================================================================
     // Pressure stuff
     //==========================================================================================
-    //the below algorithms will need to change once the pressure predominantly controls midi
-    //continuous data or DSP effects, with the sequence number being a secondary control.
+        
+    //=== sticky mode stuff ===
     
-    if (mode == 1) //midi
-    {
-        //scale 0-MAX_PRESSURE to 0-127
-        //as the value will be scaled down and into an int, padValue could be rounded down to 0 even when it isn't quite 0
-        //therefore we must make sure that it is atleast at the value of 1 untill it is actually set to 0,
-        //so it doesn't mess up how the sticky feature is handled
-        
-        float padValueFloat = padValue * (127.0 / MAX_PRESSURE);
-        
-        if (padValueFloat > 0 && padValueFloat < 1)
-            padValue = 1;
-        else
-            padValue = padValueFloat;
-        
-    }
-    //else if audio mode, no scaling required
-        
-    //sticky stuff
     if (sticky == 1) //'on'
     {
         //modify pressure value
         if(prevPadValue == 0)
         {
             pressureValue = 0;
-            
         }
         else
         {
@@ -392,7 +374,6 @@ void SequencePlayer::processInputData(int padValue)
             }
             //else if it is smaller, don't change the pressure value
         }
-        
     }
     else // 'off'
     {
@@ -401,6 +382,7 @@ void SequencePlayer::processInputData(int padValue)
       
     
     //======create pressure data======
+    
     if (mode == 1) //midi
     {
         sharedMemoryMidi.enter();
@@ -453,33 +435,19 @@ void SequencePlayer::processInputData(int padValue)
     
     
     //==== control sequence arrangement with pressure====
+    
+    //Should this stuff be put BEFORE the sticky mode stuff
+    //so that dynamic mode isn't affected by sticky mode?
+    
     if (dynamicMode == 1)
     {
         if (triggerModeData.ignorePressure == false) //ignore for certain triggerModes
         {
-            //scale 0-MAX_PRESSURE/0-127 to 0-numberOfSequences
+            //scale 0-MAX_PRESSURE to 0-numberOfSequences
             
-            //current problem with sequencer mode which will mean sticky mode might not function properly!!! - 
-            //a pressure value of 0 is sequence number 1, whereas in other modes a pressure value of 0 is 'off'
-            //therefore when using the above scaling algorithm which makes sure 0 isn't set till it is an absolute
-            //0, the first sequence will never be played.
-            //============================================================================================
-            //Actually, if padValue and prevPadValue are never scaled, sticky works!! so ignore the above!!!
-            //============================================================================================
-            
-            
-            if (mode == 1) //midi, scale from 127
-            {
-                sequenceNumber = pressureValue * (numberOfSequences/127.0);
-                if (sequenceNumber > numberOfSequences-1)
-                    sequenceNumber  = numberOfSequences-1;
-            }
-            if (mode == 2) //audio, scale from MAX_PRESSURE
-            {
-                sequenceNumber = pressureValue * (numberOfSequences/MAX_PRESSURE);
-                if (sequenceNumber > numberOfSequences-1)
-                    sequenceNumber  = numberOfSequences-1;
-            }
+            sequenceNumber = scaleValue(pressureValue, 0, MAX_PRESSURE, 0, numberOfSequences);
+            if (sequenceNumber > numberOfSequences-1)
+                sequenceNumber  = numberOfSequences-1;
         }
     }
     
@@ -611,7 +579,6 @@ void SequencePlayer::processSequence()
         {
             //play next sequence point....
             
-            //std::cout << "Exact time: " << Time::getMillisecondCounterHiRes() << " Current time: " << currentTime << " time Interval: " << timeInterval << std::endl; 
             currentTime = currentTime + timeInterval;
             
             if (mode == 1) //midi mode selected
@@ -874,13 +841,18 @@ void SequencePlayer::triggerMidiNoteOffMessage (int rowNumber)
 
 void SequencePlayer::sendMidiPressureData()
 {
-    //scale 0-127 to midiMinPressure-midiMaxPressure
-    //this has to be done here and not above with the MAX_PRESSURE to 127 scaling,
+    //scale 0-MAX_PRESSURE to minPressure-maxPressure
+    //this has to be done here and not above with the sticky mode code,
     //as the minRange could be set higher than the maxRange, which would mean
     //the sticky feature wouldn't work how it's meant to. 
     //Also we need to use a new variable here to covert the midi data,
     //so that sticky will still work correctly in all situations
-    int pressureValueScaled = midiMinRange + (pressureValue * ((midiMaxRange - midiMinRange) / 127.0));
+    
+    int pressureValueScaled = scaleValue (pressureValue,
+                                          0,
+                                          MAX_PRESSURE,
+                                          midiMinRange,
+                                          midiMaxRange);
     
     if (midiPressureStatus == true) //if pad pressure status is 'off'
     {

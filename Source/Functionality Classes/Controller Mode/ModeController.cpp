@@ -22,6 +22,8 @@
 
 #include "ModeController.h"
 #include "../../File and Settings/AppSettings.h"
+#include "../../GUI Classes/Views/MainComponent.h"
+#include "../../Application/CommandIDs.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
 
@@ -83,6 +85,17 @@ void ModeController::getInputData(int pad, int value, int velocity)
         
        
     }
+    if (PAD_SETTINGS->getControllerControl() == 5) //killswitch
+    {
+        if (prevPadValue[padNumber] == 0 && padValue > 0)
+        {
+            const MessageManagerLock mmLock;    //would be good to use an actionListenerCallback here instead
+                                                //so that the GUI doesn't pause (and probably not show the pad
+                                                //interaction of this pad) while the killswitch command is being
+                                                //carried out. However that wouldn't be as instant.
+            mainComponent->perform(CommandIDs::KillSwitch);
+        }
+    }
 
      prevPadValue[padNumber] = padValue;
 }
@@ -113,4 +126,9 @@ void ModeController::handleAsyncUpdate()
 int ModeController::getPadNumber()
 {
     return padNumber;
+}
+
+void ModeController::setMainComponent(MainComponent *mainComponent_)
+{
+    mainComponent = mainComponent_;
 }

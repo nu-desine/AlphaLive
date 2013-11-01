@@ -23,7 +23,7 @@
 #include "FxGuiFlanger.h"
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
-#include "../../../Binary Data/BinaryDataNew.h"
+#include "../../../Binary Data/MainBinaryData.h"
 #include "../../../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
@@ -74,7 +74,7 @@ GuiFlanger::GuiFlanger(MainComponent &ref)
     rateMenu->addItem("1/32", 9);
     rateMenu->setSelectedId(4, true);*/
     
-    Image *syncImage = new Image(ImageCache::getFromMemory(BinaryDataNew::syncicon_png, BinaryDataNew::syncicon_pngSize));
+    Image *syncImage = new Image(ImageCache::getFromMemory(MainBinaryData::syncicon_png, MainBinaryData::syncicon_pngSize));
     addAndMakeVisible(syncButton = new ModeButton(syncImage));
     syncButton->setClickingTogglesState(true);
     syncButton->setToggleState(1, false);
@@ -92,7 +92,7 @@ GuiFlanger::GuiFlanger(MainComponent &ref)
     alphaTouchMenu->addItem(translate("Intensity"), 5);
     alphaTouchMenu->setSelectedId(1, true);
     
-    Image *reverseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::inverticon_png, BinaryDataNew::inverticon_pngSize));
+    Image *reverseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::inverticon_png, MainBinaryData::inverticon_pngSize));
     addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);
@@ -104,14 +104,13 @@ GuiFlanger::GuiFlanger(MainComponent &ref)
     intensitySlider->setValue(1.0, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
-    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
 
     tempo = AppSettings::Instance()->getGlobalTempo();
     
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
     
@@ -146,14 +145,13 @@ void GuiFlanger::resized()
 
 void GuiFlanger::paint (Graphics& g)
 {
-	
-	g.setColour(Colours::black);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(118, 232, 38, 38);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse(118, 232, 38, 38, 1.0f);
-	
-	
 }
 
 void GuiFlanger::sliderValueChanged (Slider *slider)
@@ -166,7 +164,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxFlangerMix(mixSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
 
     else if (slider == rateSlider)
@@ -177,7 +175,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxFlangerRate(rateSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     
@@ -189,7 +187,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxFlangerFeedback(feedbackSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     
@@ -201,7 +199,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxFlangerIntensity(flangerIntensitySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     
@@ -213,7 +211,7 @@ void GuiFlanger::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxFlangerAtIntensity(intensitySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     
@@ -444,12 +442,12 @@ void GuiFlanger::mouseEnter (const MouseEvent &e)
     if (mixSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix. Sets the Wet/Dry mix of the Flanger effect for the selected pads."));
-        parameterHoverLabel->setText(String(mixSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(mixSlider->getValue(), 3), dontSendNotification);
     }
     else if (rateSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("LFO Rate. Sets the rate in Hz for the selected pads. To set the rate based on the tempo, click on the 'Sync' button."));
-        parameterHoverLabel->setText(String(rateSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(rateSlider->getValue(), 3), dontSendNotification);
     }
     else if (rateMenu->isMouseOver(true))
     {
@@ -462,12 +460,12 @@ void GuiFlanger::mouseEnter (const MouseEvent &e)
     else if (feedbackSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Feedback Selector. Sets the flanger feedback on the selected pads."));
-        parameterHoverLabel->setText(String(feedbackSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(feedbackSlider->getValue(), 3), dontSendNotification);
     }
     else if (flangerIntensitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Flanger Intensity Selector. Sets the intensity of the effect on the selected pads."));
-        parameterHoverLabel->setText(String(flangerIntensitySlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(flangerIntensitySlider->getValue(), 3), dontSendNotification);
     }
     else if (alphaTouchMenu->isMouseOver(true))
     {
@@ -480,7 +478,7 @@ void GuiFlanger::mouseEnter (const MouseEvent &e)
     else if (intensitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
-        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), dontSendNotification);
     }
     
 }
@@ -489,6 +487,6 @@ void GuiFlanger::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
-    parameterHoverLabel->setText(String::empty, false);
+    parameterHoverLabel->setText(String::empty, dontSendNotification);
     
 }

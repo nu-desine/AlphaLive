@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -93,9 +92,7 @@ private:
 
     static BOOL prepareTrack (id self, SEL, DRTrack*, DRBurn*, NSDictionary*)
     {
-        AudioSourceHolder* const source = getSource (self);
-
-        if (source != nullptr)
+        if (AudioSourceHolder* const source = getSource (self))
         {
             source->source->prepareToPlay (44100 / 75, 44100);
             source->readPosition = 0;
@@ -106,9 +103,7 @@ private:
 
     static BOOL prepareTrackForVerification (id self, SEL, DRTrack*)
     {
-        AudioSourceHolder* const source = getSource (self);
-
-        if (source != nullptr)
+        if (AudioSourceHolder* const source = getSource (self))
             source->source->prepareToPlay (44100 / 75, 44100);
 
         return true;
@@ -118,9 +113,7 @@ private:
                                          uint32_t bufferLength, uint64_t /*address*/,
                                          uint32_t /*blockSize*/, uint32_t* /*flags*/)
     {
-        AudioSourceHolder* const source = getSource (self);
-
-        if (source != nullptr)
+        if (AudioSourceHolder* const source = getSource (self))
         {
             const int numSamples = jmin ((int) bufferLength / 4,
                                          (source->lengthInFrames * (44100 / 75)) - source->readPosition);
@@ -298,7 +291,7 @@ public:
         stopTimer();
     }
 
-    void timerCallback()
+    void timerCallback() override
     {
         const DiskState state = getDiskState();
 

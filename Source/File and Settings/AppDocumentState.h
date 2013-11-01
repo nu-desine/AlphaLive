@@ -94,7 +94,7 @@ public:
     void createNewProject();
     void saveProject();
     void saveProjectAs();
-    void loadProject(bool openBrowser, File fileToOpen = File::nonexistent);
+    void loadProject(bool openBrowser, File fileToOpen = File::nonexistent, bool askToSave = true);
     
     void saveSceneToDisk (int sceneNumber);
     bool loadSceneFromDisk (int sceneNumber, 
@@ -142,6 +142,7 @@ public:
     void cleanUpProject(bool closingApp);
     void importAudioFiles();   
     void setCurrentlySelectedScene(int value);
+    int getCurrentlySelectedScene();
     
     static void registerRecentFile (const File& file);
     

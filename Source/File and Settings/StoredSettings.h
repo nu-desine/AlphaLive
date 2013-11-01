@@ -41,6 +41,7 @@ public:
     void flush();
     
     void setDefaultValues();
+    void installBasicDemoProj();
 
     //==============================================================================
     int initialLaunch; //
@@ -54,6 +55,7 @@ public:
     String audioSettings; //this will hold the XML element created using createStateXml()
     int deviceType; //1 - AlphaSphere, 2 - AlphaSphere elite 
     int autoCheckUpdates; // 1 - off, 2 - on
+    int interfaceTheme;
     
 private:
     ScopedPointer<PropertiesFile> props;

@@ -23,7 +23,7 @@
 #include "FxGuiLowPassFilter.h"
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
-#include "../../../Binary Data/BinaryDataNew.h"
+#include "../../../Binary Data/MainBinaryData.h"
 #include "../../../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
@@ -62,7 +62,7 @@ GuiLowpassFilter::GuiLowpassFilter(MainComponent &ref)
     alphaTouchMenu->addItem(translate("Bandwidth/Resonance"), 4);
     alphaTouchMenu->setSelectedId(1, true);
     
-    Image *reverseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::inverticon_png, BinaryDataNew::inverticon_pngSize));
+    Image *reverseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::inverticon_png, MainBinaryData::inverticon_pngSize));
     addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);
@@ -74,12 +74,11 @@ GuiLowpassFilter::GuiLowpassFilter(MainComponent &ref)
     intensitySlider->setValue(1.0, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
-    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
     
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
     
@@ -105,7 +104,10 @@ void GuiLowpassFilter::resized()
     parameterHoverLabel->setBounds(144, 187, 36, 15);
 }
 
-
+void GuiLowpassFilter::paint(Graphics &g)
+{
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+}
 
 void GuiLowpassFilter::sliderValueChanged (Slider *slider)
 {
@@ -117,7 +119,7 @@ void GuiLowpassFilter::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxLpfMix(mixSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     
@@ -129,7 +131,7 @@ void GuiLowpassFilter::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxLpfFreq(frequencySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 0), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 0), dontSendNotification);
     }
     
     
@@ -141,7 +143,7 @@ void GuiLowpassFilter::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxLpfBandwidth(bandwidthSlider->getValue());
         }
     
-        parameterHoverLabel->setText(String(slider->getValue(), 2), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 2), dontSendNotification);
     }
     
     
@@ -153,7 +155,7 @@ void GuiLowpassFilter::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxLpfAtIntensity(intensitySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
 
 
@@ -227,17 +229,17 @@ void GuiLowpassFilter::mouseEnter (const MouseEvent &e)
     if (mixSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix. Sets the Wet/Dry mix for the Low-pass filter on the selected pads."));
-        parameterHoverLabel->setText(String(mixSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(mixSlider->getValue(), 3), dontSendNotification);
     }
     else if (frequencySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Cut-Off Frequency. Sets the cut-off frequency for the Low-Pass filter on the selected pads."));
-        parameterHoverLabel->setText(String(frequencySlider->getValue(), 0), false);
+        parameterHoverLabel->setText(String(frequencySlider->getValue(), 0), dontSendNotification);
     }
     else if (bandwidthSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Bandwidth. Sets the bandwidth for the Low-Pass filter on the selected pads."));
-        parameterHoverLabel->setText(String(bandwidthSlider->getValue(), 2), false);
+        parameterHoverLabel->setText(String(bandwidthSlider->getValue(), 2), dontSendNotification);
     }
     
     else if (alphaTouchMenu->isMouseOver(true))
@@ -251,7 +253,7 @@ void GuiLowpassFilter::mouseEnter (const MouseEvent &e)
     else if (intensitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
-        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), dontSendNotification);
     }
     
 }
@@ -260,6 +262,6 @@ void GuiLowpassFilter::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
-    parameterHoverLabel->setText(String::empty, false);
+    parameterHoverLabel->setText(String::empty, dontSendNotification);
     
 }

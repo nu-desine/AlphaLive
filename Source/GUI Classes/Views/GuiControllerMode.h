@@ -71,6 +71,7 @@ private:
     MainComponent &mainComponentRef;
     
     OwnedArray <SettingsButton> controlButtons;
+    int numOfControlButtons;
     
     AlphaSlider *sceneNumberSlider, *oscPortNumberSlider;
     AlphaSlider *midiProgramChangeNumberSlider;

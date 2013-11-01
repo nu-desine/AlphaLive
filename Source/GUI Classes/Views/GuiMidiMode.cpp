@@ -23,7 +23,7 @@
 #include "GuiMidiMode.h"
 #include "../../File and Settings/AppSettings.h"
 #include "../../Functionality Classes/Other/LayoutsAndScales.cpp"
-#include "../Binary Data/BinaryDataNew.h"
+#include "../Binary Data/MainBinaryData.h"
 #include "GlobalValues.h"
 #include "../../Application/CommonInfoBoxText.h"
 #include "MainComponent.h"
@@ -45,7 +45,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
 {
     
     //----------------trigger settings button-------------------
-	Image *triggerSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::triggersettingsicon_png, BinaryDataNew::triggersettingsicon_pngSize));
+	Image *triggerSettingsImage = new Image(ImageCache::getFromMemory(MainBinaryData::triggersettingsicon_png, MainBinaryData::triggersettingsicon_pngSize));
 	addAndMakeVisible(triggerSettingsButton = new ModeButton(triggerSettingsImage));
 	//triggerSettingsButton->setButtonText("TRIGGER");
 	triggerSettingsButton->setRadioGroupId (1234);
@@ -58,7 +58,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
 	
 	//----------------pressure settings button-------------------
 	
-	Image *pressureSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::pressuresettingsicon_png, BinaryDataNew::pressuresettingsicon_pngSize));
+	Image *pressureSettingsImage = new Image(ImageCache::getFromMemory(MainBinaryData::pressuresettingsicon_png, MainBinaryData::pressuresettingsicon_pngSize));
 	addAndMakeVisible(pressureSettingsButton = new ModeButton(pressureSettingsImage));
 	//pressureSettingsButton->setButtonText("PRESSURE");
 	pressureSettingsButton->setRadioGroupId (1234);
@@ -71,10 +71,10 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     
     //----------------------Trigger mode buttons------------------
 	
-	Image *standardIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::standardicon_png, BinaryDataNew::standardicon_pngSize));
-	Image *toggleIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::toggleicon_png, BinaryDataNew::toggleicon_pngSize));
-	Image *latchIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::latchicon_png, BinaryDataNew::latchicon_pngSize));
-	Image *triggerIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::triggericon_png, BinaryDataNew::triggericon_pngSize));
+	Image *standardIcon = new Image(ImageCache::getFromMemory(MainBinaryData::standardicon_png, MainBinaryData::standardicon_pngSize));
+	Image *toggleIcon = new Image(ImageCache::getFromMemory(MainBinaryData::toggleicon_png, MainBinaryData::toggleicon_pngSize));
+	Image *latchIcon = new Image(ImageCache::getFromMemory(MainBinaryData::latchicon_png, MainBinaryData::latchicon_pngSize));
+	Image *triggerIcon = new Image(ImageCache::getFromMemory(MainBinaryData::triggericon_png, MainBinaryData::triggericon_pngSize));
 	
     for (int i = 0; i < 4; i++)
     {
@@ -104,12 +104,12 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     
     //--------------pressure mode buttons--------------------------
 	
-	Image *patIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::polyphonicaftertouchicon_png, BinaryDataNew::polyphonicaftertouchicon_pngSize));
-	Image *catIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::channelaftertouchicon_png, BinaryDataNew::channelaftertouchicon_pngSize));
-	Image *mwheelIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::modwheelicon_png, BinaryDataNew::modwheelicon_pngSize));
-	Image *ccIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::ccmessageicon_png, BinaryDataNew::ccmessageicon_pngSize));
-	Image *pbUpIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::pitchbendupicon_png, BinaryDataNew::pitchbendupicon_pngSize));
-	Image *pbDownIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::pitchbenddownicon_png, BinaryDataNew::pitchbenddownicon_pngSize));
+	Image *patIcon = new Image(ImageCache::getFromMemory(MainBinaryData::polyphonicaftertouchicon_png, MainBinaryData::polyphonicaftertouchicon_pngSize));
+	Image *catIcon = new Image(ImageCache::getFromMemory(MainBinaryData::channelaftertouchicon_png, MainBinaryData::channelaftertouchicon_pngSize));
+	Image *mwheelIcon = new Image(ImageCache::getFromMemory(MainBinaryData::modwheelicon_png, MainBinaryData::modwheelicon_pngSize));
+	Image *ccIcon = new Image(ImageCache::getFromMemory(MainBinaryData::ccmessageicon_png, MainBinaryData::ccmessageicon_pngSize));
+	Image *pbUpIcon = new Image(ImageCache::getFromMemory(MainBinaryData::pitchbendupicon_png, MainBinaryData::pitchbendupicon_pngSize));
+	Image *pbDownIcon = new Image(ImageCache::getFromMemory(MainBinaryData::pitchbenddownicon_png, MainBinaryData::pitchbenddownicon_pngSize));
 
 	for (int i = 0; i < 6; i++)
     {
@@ -161,7 +161,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
 
     //----------------quantise button-------------------
 	
-	Image *quantiseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::quantiseicon_png, BinaryDataNew::quantiseicon_pngSize));
+	Image *quantiseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::quantiseicon_png, MainBinaryData::quantiseicon_pngSize));
 	addAndMakeVisible(quantiseButton = new ModeButton(quantiseIcon));
 	quantiseButton->setClickingTogglesState(true);
 	quantiseButton->setToggleState(false, false);	
@@ -186,14 +186,14 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     pressureMaxRangeSlider->setValue(127, dontSendNotification);
     pressureMaxRangeSlider->addMouseListener(this, true);
     
-	Image *destructIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::indestructableicon_png, BinaryDataNew::indestructableicon_pngSize));
+	Image *destructIcon = new Image(ImageCache::getFromMemory(MainBinaryData::indestructableicon_png, MainBinaryData::indestructableicon_pngSize));
 	addChildComponent(indestructibleButton = new ModeButton(destructIcon));
     indestructibleButton->addListener(this);
     indestructibleButton->addMouseListener(this, true);
     indestructibleButton->setClickingTogglesState(true);
     indestructibleButton->setToggleState(false, false);
     
-	Image *stickyIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::stickyicon_png, BinaryDataNew::stickyicon_pngSize));
+	Image *stickyIcon = new Image(ImageCache::getFromMemory(MainBinaryData::stickyicon_png, MainBinaryData::stickyicon_pngSize));
     addChildComponent(stickyButton = new ModeButton(stickyIcon));
     stickyButton->addListener(this);
     stickyButton->addMouseListener(this, true);
@@ -224,7 +224,6 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     //---------------parameter label -------------------------------------
     addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
     
@@ -306,13 +305,14 @@ void GuiMidiMode::resized()
 
 void GuiMidiMode::paint (Graphics& g)
 {
-    //std::cout << "Paint midi mode... ";
-	ColourGradient fillGradient(AlphaColours::nearlyblack,845 , 461, Colours::black, 845 , 383, false);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+    
+	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	
 	g.fillEllipse(786,218, 48, 48);
 	g.fillEllipse(844,216, 48, 48);
@@ -338,7 +338,7 @@ void GuiMidiMode::paint (Graphics& g)
 	g.fillEllipse(962,542, 27, 27);
 	g.fillEllipse(981,520, 27, 27);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(850,493, 38, 38, 1.0);
@@ -391,7 +391,7 @@ void GuiMidiMode::sliderValueChanged (Slider* slider)
             PAD_SETTINGS->setMidiMinPressureRange(pressureMinRangeSlider->getValue());
         }
         
-         parameterHoverLabel->setText(String(slider->getValue()), false);
+         parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
         
     }
     //max pressure range slider
@@ -403,7 +403,7 @@ void GuiMidiMode::sliderValueChanged (Slider* slider)
             PAD_SETTINGS->setMidiMaxPressureRange(pressureMaxRangeSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue()), false);
+        parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
     }
         
     //CC Controller Number
@@ -959,9 +959,9 @@ void GuiMidiMode::mouseEnter (const MouseEvent &e)
     
     //update parameterHoverLabel
     if (pressureMinRangeSlider->isMouseOver(true))
-        parameterHoverLabel->setText(String(pressureMinRangeSlider->getValue()), false);
+        parameterHoverLabel->setText(String(pressureMinRangeSlider->getValue()), dontSendNotification);
     else if (pressureMaxRangeSlider->isMouseOver(true))
-        parameterHoverLabel->setText(String(pressureMaxRangeSlider->getValue()), false);
+        parameterHoverLabel->setText(String(pressureMaxRangeSlider->getValue()), dontSendNotification);
 }
 
 void GuiMidiMode::mouseExit (const MouseEvent &e)
@@ -971,7 +971,7 @@ void GuiMidiMode::mouseExit (const MouseEvent &e)
     
     
     if(e.eventComponent == pressureMinRangeSlider || e.eventComponent == pressureMaxRangeSlider)
-        parameterHoverLabel->setText(String::empty, false);
+        parameterHoverLabel->setText(String::empty, dontSendNotification);
 }
 
 

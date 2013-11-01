@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -62,8 +61,7 @@ class JUCE_API  Desktop  : private DeletedAtShutdown,
 {
 public:
     //==============================================================================
-    /** There's only one dektop object, and this method will return it.
-    */
+    /** There's only one desktop object, and this method will return it. */
     static Desktop& JUCE_CALLTYPE getInstance();
 
     //==============================================================================
@@ -80,7 +78,7 @@ public:
     /** Makes the mouse pointer jump to a given location.
         The co-ordinates are relative to the top-left of the main monitor.
     */
-    static void setMousePosition (const Point<int>& newPosition);
+    static void setMousePosition (Point<int> newPosition);
 
     /** Returns the last position at which a mouse button was pressed.
 
@@ -175,7 +173,7 @@ public:
     /** Returns the component that is currently being used in kiosk-mode.
 
         This is the component that was last set by setKioskModeComponent(). If none
-        has been set, this returns 0.
+        has been set, this returns nullptr.
     */
     Component* getKioskModeComponent() const noexcept               { return kioskModeComponent; }
 
@@ -201,9 +199,9 @@ public:
         This will drill down into top-level windows to find the child component at
         the given position.
 
-        Returns 0 if the co-ordinates are inside a non-Juce window.
+        Returns nullptr if the co-ordinates are inside a non-Juce window.
     */
-    Component* findComponentAt (const Point<int>& screenPosition) const;
+    Component* findComponentAt (Point<int> screenPosition) const;
 
     /** The Desktop object has a ComponentAnimator instance which can be used for performing
         your animations.
@@ -235,7 +233,8 @@ public:
     //==============================================================================
     /** Returns the number of MouseInputSource objects the system has at its disposal.
         In a traditional single-mouse system, there might be only one object. On a multi-touch
-        system, there could be one input source per potential finger.
+        system, there could be one input source per potential finger. The number of mouse
+        sources returned here may increase dynamically as the program runs.
         To find out how many mouse events are currently happening, use getNumDraggingMouseSources().
         @see getMouseSource
     */
@@ -328,9 +327,17 @@ public:
             Rectangle<int> totalArea;
 
             /** This is the scale-factor of this display.
-                For higher-resolution displays, this may be a value greater than 1.0
+                If you create a component with size 1x1, this scale factor indicates the actual
+                size of the component in terms of physical pixels.
+                For higher-resolution displays, it may be a value greater than 1.0
             */
             double scale;
+
+            /** The DPI of the display.
+                This is the number of physical pixels per inch. To get the number of logical
+                pixels per inch, divide this by the Display::scale value.
+            */
+            double dpi;
 
             /** This will be true if this is the user's main screen. */
             bool isMain;
@@ -342,7 +349,7 @@ public:
         /** Returns the display which contains a particular point.
             If the point lies outside all the displays, the nearest one will be returned.
         */
-        const Display& getDisplayContaining (const Point<int>& position) const noexcept;
+        const Display& getDisplayContaining (Point<int> position) const noexcept;
 
         /** Returns a RectangleList made up of all the displays. */
         RectangleList getRectangleList (bool userAreasOnly) const;
@@ -360,12 +367,15 @@ public:
 
     private:
         friend class Desktop;
-        Displays();
+        friend class ScopedPointer<Displays>;
+        Displays (Desktop&);
         ~Displays();
-        void findDisplays();
+
+        void init (Desktop&);
+        void findDisplays (float masterScale);
     };
 
-    const Displays& getDisplays() const noexcept       { return displays; }
+    const Displays& getDisplays() const noexcept       { return *displays; }
 
     //==============================================================================
     /** True if the OS supports semitransparent windows */
@@ -383,14 +393,18 @@ private:
     friend class TopLevelWindowManager;
 
     OwnedArray <MouseInputSource> mouseSources;
-    void createMouseInputSources();
+    bool addMouseInputSource();
 
     ListenerList <MouseListener> mouseListeners;
     ListenerList <FocusChangeListener> focusListeners;
 
     Array <Component*> desktopComponents;
+    Array <ComponentPeer*> peers;
 
-    Displays displays;
+    void addPeer (ComponentPeer*);
+    void removePeer (ComponentPeer*);
+
+    ScopedPointer<Displays> displays;
 
     Point<int> lastFakeMouseMove;
     void sendMouseMove();
@@ -408,12 +422,14 @@ private:
     Rectangle<int> kioskComponentOriginalBounds;
 
     int allowedOrientations;
+    float masterScaleFactor;
 
     ComponentAnimator animator;
 
-    void timerCallback();
+    void timerCallback() override;
     void resetTimer();
     ListenerList <MouseListener>& getMouseListeners();
+    MouseInputSource* getOrCreateMouseInputSource (int touchIndex);
 
     void addDesktopComponent (Component*);
     void removeDesktopComponent (Component*);
@@ -422,7 +438,7 @@ private:
     void setKioskComponent (Component*, bool enableOrDisable, bool allowMenusAndBars);
 
     void triggerFocusCallback();
-    void handleAsyncUpdate();
+    void handleAsyncUpdate() override;
 
     Desktop();
     ~Desktop();

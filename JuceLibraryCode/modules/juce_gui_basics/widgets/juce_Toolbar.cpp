@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -58,11 +57,11 @@ public:
         return true;
     }
 
-    void paintButtonArea (Graphics&, int, int, bool, bool)
+    void paintButtonArea (Graphics&, int, int, bool, bool) override
     {
     }
 
-    void contentAreaChanged (const Rectangle<int>&)
+    void contentAreaChanged (const Rectangle<int>&) override
     {
     }
 
@@ -71,7 +70,7 @@ public:
         return fixedSize <= 0 ? 0 : 1;
     }
 
-    void paint (Graphics& g)
+    void paint (Graphics& g) override
     {
         const int w = getWidth();
         const int h = getHeight();
@@ -175,9 +174,7 @@ public:
         {
             for (int i = 0; i < getNumChildComponents(); ++i)
             {
-                ToolbarItemComponent* const tc = dynamic_cast <ToolbarItemComponent*> (getChildComponent (i));
-
-                if (tc != nullptr)
+                if (ToolbarItemComponent* const tc = dynamic_cast <ToolbarItemComponent*> (getChildComponent (i)))
                 {
                     tc->setVisible (false);
                     const int index = oldIndexes.remove (i);
@@ -199,9 +196,7 @@ public:
 
         for (int i = 0; i < getNumChildComponents(); ++i)
         {
-            ToolbarItemComponent* const tc = dynamic_cast <ToolbarItemComponent*> (getChildComponent (i));
-
-            if (tc != nullptr)
+            if (ToolbarItemComponent* const tc = dynamic_cast <ToolbarItemComponent*> (getChildComponent (i)))
             {
                 int preferredSize = 1, minSize = 1, maxSize = 1;
 
@@ -273,12 +268,9 @@ void Toolbar::clear()
 
 ToolbarItemComponent* Toolbar::createItem (ToolbarItemFactory& factory, const int itemId)
 {
-    if (itemId == ToolbarItemFactory::separatorBarId)
-        return new Spacer (itemId, 0.1f, true);
-    else if (itemId == ToolbarItemFactory::spacerId)
-        return new Spacer (itemId, 0.5f, false);
-    else if (itemId == ToolbarItemFactory::flexibleSpacerId)
-        return new Spacer (itemId, 0, false);
+    if (itemId == ToolbarItemFactory::separatorBarId)    return new Spacer (itemId, 0.1f, true);
+    if (itemId == ToolbarItemFactory::spacerId)          return new Spacer (itemId, 0.5f, false);
+    if (itemId == ToolbarItemFactory::flexibleSpacerId)  return new Spacer (itemId, 0.0f, false);
 
     return factory.createItem (itemId);
 }
@@ -290,18 +282,16 @@ void Toolbar::addItemInternal (ToolbarItemFactory& factory,
     // An ID can't be zero - this might indicate a mistake somewhere?
     jassert (itemId != 0);
 
-    ToolbarItemComponent* const tc = createItem (factory, itemId);
-
-    if (tc != nullptr)
+    if (ToolbarItemComponent* const tc = createItem (factory, itemId))
     {
-#if JUCE_DEBUG
+       #if JUCE_DEBUG
         Array <int> allowedIds;
         factory.getAllToolbarItemIds (allowedIds);
 
         // If your factory can create an item for a given ID, it must also return
         // that ID from its getAllToolbarItemIds() method!
         jassert (allowedIds.contains (itemId));
-#endif
+       #endif
 
         items.insert (insertIndex, tc);
         addAndMakeVisible (tc, insertIndex);
@@ -342,8 +332,10 @@ int Toolbar::getNumItems() const noexcept
 
 int Toolbar::getItemId (const int itemIndex) const noexcept
 {
-    ToolbarItemComponent* const tc = getItemComponent (itemIndex);
-    return tc != nullptr ? tc->getItemId() : 0;
+    if (ToolbarItemComponent* const tc = getItemComponent (itemIndex))
+        return tc->getItemId();
+
+    return 0;
 }
 
 ToolbarItemComponent* Toolbar::getItemComponent (const int itemIndex) const noexcept
@@ -356,16 +348,17 @@ ToolbarItemComponent* Toolbar::getNextActiveComponent (int index, const int delt
     for (;;)
     {
         index += delta;
-        ToolbarItemComponent* const tc = getItemComponent (index);
 
-        if (tc == nullptr)
-            break;
-
-        if (tc->isActive)
-            return tc;
+        if (ToolbarItemComponent* const tc = getItemComponent (index))
+        {
+            if (tc->isActive)
+                return tc;
+        }
+        else
+        {
+            return nullptr;
+        }
     }
-
-    return nullptr;
 }
 
 void Toolbar::setStyle (const ToolbarItemStyle& newStyle)
@@ -548,17 +541,13 @@ bool Toolbar::isInterestedInDragSource (const SourceDetails& dragSourceDetails)
 
 void Toolbar::itemDragMove (const SourceDetails& dragSourceDetails)
 {
-    ToolbarItemComponent* const tc = dynamic_cast <ToolbarItemComponent*> (dragSourceDetails.sourceComponent.get());
-
-    if (tc != nullptr)
+    if (ToolbarItemComponent* const tc = dynamic_cast <ToolbarItemComponent*> (dragSourceDetails.sourceComponent.get()))
     {
         if (! items.contains (tc))
         {
             if (tc->getEditingMode() == ToolbarItemComponent::editableOnPalette)
             {
-                ToolbarItemPalette* const palette = tc->findParentComponentOfClass<ToolbarItemPalette>();
-
-                if (palette != nullptr)
+                if (ToolbarItemPalette* const palette = tc->findParentComponentOfClass<ToolbarItemPalette>())
                     palette->replaceComponent (tc);
             }
             else
@@ -582,9 +571,8 @@ void Toolbar::itemDragMove (const SourceDetails& dragSourceDetails)
 
             const Rectangle<int> current (Desktop::getInstance().getAnimator()
                                             .getComponentDestination (getChildComponent (newIndex)));
-            ToolbarItemComponent* const prev = getNextActiveComponent (newIndex, -1);
 
-            if (prev != nullptr)
+            if (ToolbarItemComponent* const prev = getNextActiveComponent (newIndex, -1))
             {
                 const Rectangle<int> previousPos (Desktop::getInstance().getAnimator().getComponentDestination (prev));
 
@@ -595,8 +583,7 @@ void Toolbar::itemDragMove (const SourceDetails& dragSourceDetails)
                 }
             }
 
-            ToolbarItemComponent* const next = getNextActiveComponent (newIndex, 1);
-            if (next != nullptr)
+            if (ToolbarItemComponent* const next = getNextActiveComponent (newIndex, 1))
             {
                 const Rectangle<int> nextPos (Desktop::getInstance().getAnimator().getComponentDestination (next));
 
@@ -621,21 +608,20 @@ void Toolbar::itemDragMove (const SourceDetails& dragSourceDetails)
 
 void Toolbar::itemDragExit (const SourceDetails& dragSourceDetails)
 {
-    ToolbarItemComponent* const tc = dynamic_cast <ToolbarItemComponent*> (dragSourceDetails.sourceComponent.get());
-
-    if (tc != nullptr && isParentOf (tc))
+    if (ToolbarItemComponent* const tc = dynamic_cast <ToolbarItemComponent*> (dragSourceDetails.sourceComponent.get()))
     {
-        items.removeObject (tc, false);
-        removeChildComponent (tc);
-        updateAllItemPositions (true);
+        if (isParentOf (tc))
+        {
+            items.removeObject (tc, false);
+            removeChildComponent (tc);
+            updateAllItemPositions (true);
+        }
     }
 }
 
 void Toolbar::itemDropped (const SourceDetails& dragSourceDetails)
 {
-    ToolbarItemComponent* const tc = dynamic_cast <ToolbarItemComponent*> (dragSourceDetails.sourceComponent.get());
-
-    if (tc != nullptr)
+    if (ToolbarItemComponent* const tc = dynamic_cast <ToolbarItemComponent*> (dragSourceDetails.sourceComponent.get()))
         tc->setState (Button::buttonNormal);
 }
 
@@ -666,12 +652,12 @@ public:
         toolbar->setEditingActive (false);
     }
 
-    void closeButtonPressed()
+    void closeButtonPressed() override
     {
         setVisible (false);
     }
 
-    bool canModalEventBeSentToComponent (const Component* comp)
+    bool canModalEventBeSentToComponent (const Component* comp) override
     {
         return toolbar->isParentOf (comp);
     }
@@ -721,8 +707,9 @@ private:
           : factory (factory_),
             toolbar (toolbar_),
             palette (factory_, toolbar_),
-            instructions (String::empty, TRANS ("You can drag the items above and drop them onto a toolbar to add them.\n\n"
-                                                "Items on the toolbar can also be dragged around to change their order, or dragged off the edge to delete them.")),
+            instructions (String::empty, TRANS ("You can drag the items above and drop them onto a toolbar to add them.")
+                                          + "\n\n"
+                                          + TRANS ("Items on the toolbar can also be dragged around to change their order, or dragged off the edge to delete them.")),
             defaultButton (TRANS ("Restore to default set of items"))
         {
             addAndMakeVisible (&palette);
@@ -763,7 +750,7 @@ private:
             setSize (500, 300);
         }
 
-        void comboBoxChanged (ComboBox*)
+        void comboBoxChanged (ComboBox*) override
         {
             switch (styleBox.getSelectedId())
             {
@@ -775,25 +762,23 @@ private:
             palette.resized(); // to make it update the styles
         }
 
-        void buttonClicked (Button*)
+        void buttonClicked (Button*) override
         {
             toolbar->addDefaultItems (factory);
         }
 
-        void paint (Graphics& g)
+        void paint (Graphics& g) override
         {
             Colour background;
 
-            DialogWindow* const dw = findParentComponentOfClass<DialogWindow>();
-
-            if (dw != nullptr)
+            if (DialogWindow* const dw = findParentComponentOfClass<DialogWindow>())
                 background = dw->getBackgroundColour();
 
             g.setColour (background.contrasting().withAlpha (0.3f));
             g.fillRect (palette.getX(), palette.getBottom() - 1, palette.getWidth(), 1);
         }
 
-        void resized()
+        void resized() override
         {
             palette.setBounds (0, 0, getWidth(), getHeight() - 120);
             styleBox.setBounds (10, getHeight() - 110, 200, 22);

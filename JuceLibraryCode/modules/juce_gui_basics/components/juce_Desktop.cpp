@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -26,9 +25,11 @@
 Desktop::Desktop()
     : mouseClickCounter (0), mouseWheelCounter (0),
       kioskModeComponent (nullptr),
-      allowedOrientations (allOrientations)
+      allowedOrientations (allOrientations),
+      masterScaleFactor (1.0f)
 {
-    createMouseInputSources();
+    displays = new Displays (*this);
+    addMouseInputSource();
 }
 
 Desktop::~Desktop()
@@ -64,7 +65,7 @@ Component* Desktop::getComponent (const int index) const noexcept
     return desktopComponents [index];
 }
 
-Component* Desktop::findComponentAt (const Point<int>& screenPosition) const
+Component* Desktop::findComponentAt (Point<int> screenPosition) const
 {
     for (int i = desktopComponents.size(); --i >= 0;)
     {
@@ -101,12 +102,8 @@ void Desktop::setDefaultLookAndFeel (LookAndFeel* newDefaultLookAndFeel)
     currentLookAndFeel = newDefaultLookAndFeel;
 
     for (int i = getNumComponents(); --i >= 0;)
-    {
-        Component* const c = getComponent (i);
-
-        if (c != nullptr)
+        if (Component* const c = getComponent (i))
             c->sendLookAndFeelChange();
-    }
 }
 
 //==============================================================================
@@ -146,9 +143,26 @@ void Desktop::componentBroughtToFront (Component* const c)
 }
 
 //==============================================================================
+void Desktop::addPeer (ComponentPeer* peer)
+{
+    peers.add (peer);
+}
+
+void Desktop::removePeer (ComponentPeer* peer)
+{
+    peers.removeFirstMatchingValue (peer);
+    triggerFocusCallback();
+}
+
+//==============================================================================
 Point<int> Desktop::getMousePosition()
 {
     return getInstance().getMainMouseSource().getScreenPosition();
+}
+
+void Desktop::setMousePosition (Point<int> newPosition)
+{
+    getInstance().getMainMouseSource().setScreenPosition (newPosition);
 }
 
 Point<int> Desktop::getLastMouseDownPosition()
@@ -191,13 +205,30 @@ MouseInputSource* Desktop::getDraggingMouseSource (int index) const noexcept
     return nullptr;
 }
 
+MouseInputSource* Desktop::getOrCreateMouseInputSource (int touchIndex)
+{
+    jassert (touchIndex >= 0 && touchIndex < 100); // sanity-check on number of fingers
+
+    for (;;)
+    {
+        if (MouseInputSource* mouse = getMouseSource (touchIndex))
+            return mouse;
+
+        if (! addMouseInputSource())
+        {
+            jassertfalse; // not enough mouse sources!
+            return nullptr;
+        }
+    }
+}
+
 //==============================================================================
 class MouseDragAutoRepeater  : public Timer
 {
 public:
     MouseDragAutoRepeater() {}
 
-    void timerCallback()
+    void timerCallback() override
     {
         Desktop& desktop = Desktop::getInstance();
         int numMiceDown = 0;
@@ -304,9 +335,7 @@ void Desktop::sendMouseMove()
 
         lastFakeMouseMove = getMousePosition();
 
-        Component* const target = findComponentAt (lastFakeMouseMove);
-
-        if (target != nullptr)
+        if (Component* const target = findComponentAt (lastFakeMouseMove))
         {
             Component::BailOutChecker checker (target);
             const Point<int> pos (target->getLocalPoint (nullptr, lastFakeMouseMove));
@@ -325,7 +354,7 @@ void Desktop::sendMouseMove()
 
 
 //==============================================================================
-Desktop::Displays::Displays()   { refresh(); }
+Desktop::Displays::Displays (Desktop& desktop)   { init (desktop); }
 Desktop::Displays::~Displays()  {}
 
 const Desktop::Displays::Display& Desktop::Displays::getMainDisplay() const noexcept
@@ -334,7 +363,7 @@ const Desktop::Displays::Display& Desktop::Displays::getMainDisplay() const noex
     return displays.getReference(0);
 }
 
-const Desktop::Displays::Display& Desktop::Displays::getDisplayContaining (const Point<int>& position) const noexcept
+const Desktop::Displays::Display& Desktop::Displays::getDisplayContaining (Point<int> position) const noexcept
 {
     const Display* best = &displays.getReference(0);
     double bestDistance = 1.0e10;
@@ -394,22 +423,24 @@ bool operator!= (const Desktop::Displays::Display& d1, const Desktop::Displays::
     return ! (d1 == d2);
 }
 
+void Desktop::Displays::init (Desktop& desktop)
+{
+    findDisplays (desktop.masterScaleFactor);
+    jassert (displays.size() > 0);
+}
+
 void Desktop::Displays::refresh()
 {
     Array<Display> oldDisplays;
     oldDisplays.swapWithArray (displays);
 
-    findDisplays();
-    jassert (displays.size() > 0);
+    init (Desktop::getInstance());
 
     if (oldDisplays != displays)
     {
         for (int i = ComponentPeer::getNumPeers(); --i >= 0;)
-        {
-            ComponentPeer* const p = ComponentPeer::getPeer (i);
-            if (p != nullptr)
-                p->handleScreenSizeChange();
-        }
+            if (ComponentPeer* const peer = ComponentPeer::getPeer (i))
+                peer->handleScreenSizeChange();
     }
 }
 

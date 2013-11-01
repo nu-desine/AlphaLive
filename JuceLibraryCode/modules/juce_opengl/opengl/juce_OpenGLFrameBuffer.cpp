@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -26,16 +25,11 @@
 class OpenGLFrameBuffer::Pimpl
 {
 public:
-    Pimpl (OpenGLContext& context_, const int width_, const int height_,
+    Pimpl (OpenGLContext& c, const int w, const int h,
            const bool wantsDepthBuffer, const bool wantsStencilBuffer)
-        : context (context_),
-          width (width_),
-          height (height_),
-          textureID (0),
-          frameBufferID (0),
-          depthOrStencilBuffer (0),
-          hasDepthBuffer (false),
-          hasStencilBuffer (false)
+        : context (c), width (w), height (h),
+          textureID (0), frameBufferID (0), depthOrStencilBuffer (0),
+          hasDepthBuffer (false), hasStencilBuffer (false)
     {
         // Framebuffer objects can only be created when the current thread has an active OpenGL
         // context. You'll need to create this object in one of the OpenGLContext's callbacks.
@@ -222,7 +216,7 @@ bool OpenGLFrameBuffer::initialise (OpenGLFrameBuffer& other)
         clearGLError();
        #endif
         glBindTexture (GL_TEXTURE_2D, p->textureID);
-        pimpl->context.copyTexture (area, area, area.getWidth(), area.getHeight());
+        pimpl->context.copyTexture (area, area, area.getWidth(), area.getHeight(), false);
         glBindTexture (GL_TEXTURE_2D, 0);
         JUCE_CHECK_OPENGL_ERROR
 
@@ -298,7 +292,7 @@ void OpenGLFrameBuffer::releaseAsRenderingTarget()
         pimpl->context.extensions.glBindFramebuffer (GL_FRAMEBUFFER, 0);
 }
 
-void OpenGLFrameBuffer::clear (const Colour& colour)
+void OpenGLFrameBuffer::clear (Colour colour)
 {
     if (makeCurrentRenderingTarget())
     {
@@ -325,13 +319,14 @@ bool OpenGLFrameBuffer::readPixels (PixelARGB* target, const Rectangle<int>& are
     glReadPixels (area.getX(), area.getY(), area.getWidth(), area.getHeight(),
                   JUCE_RGBA_FORMAT, GL_UNSIGNED_BYTE, target);
     pimpl->context.extensions.glBindFramebuffer (GL_FRAMEBUFFER, 0);
-    glPixelStorei (GL_PACK_ALIGNMENT, 0);
     JUCE_CHECK_OPENGL_ERROR
     return true;
 }
 
 bool OpenGLFrameBuffer::writePixels (const PixelARGB* data, const Rectangle<int>& area)
 {
+    OpenGLTargetSaver ts (pimpl->context);
+
     if (! makeCurrentRenderingTarget())
         return false;
 
@@ -339,10 +334,10 @@ bool OpenGLFrameBuffer::writePixels (const PixelARGB* data, const Rectangle<int>
     glDisable (GL_BLEND);
     JUCE_CHECK_OPENGL_ERROR
 
+   #if JUCE_OPENGL_ES && JUCE_USE_OPENGL_FIXED_FUNCTION
     OpenGLTexture tex;
     tex.loadARGBFlipped (data, area.getWidth(), area.getHeight());
 
-   #if JUCE_OPENGL_ES && JUCE_USE_OPENGL_FIXED_FUNCTION
     const int texH = tex.getHeight();
     tex.bind();
     const GLint cropRect[4] = { 0, texH - area.getHeight(), area.getWidth(), area.getHeight() };
@@ -353,10 +348,15 @@ bool OpenGLFrameBuffer::writePixels (const PixelARGB* data, const Rectangle<int>
     glDrawTexiOES (area.getX(), area.getY(), 1, area.getWidth(), area.getHeight());
     glBindTexture (GL_TEXTURE_2D, 0);
    #else
-    pimpl->context.copyTexture (area, area, pimpl->width, pimpl->height);
+    OpenGLTexture tex;
+    tex.loadARGB (data, area.getWidth(), area.getHeight());
+
+    glViewport (0, 0, pimpl->width, pimpl->height);
+    pimpl->context.copyTexture (area, Rectangle<int> (area.getX(), area.getY(),
+                                                      tex.getWidth(), tex.getHeight()),
+                                pimpl->width, pimpl->height, true);
    #endif
 
-    pimpl->context.extensions.glBindFramebuffer (GL_FRAMEBUFFER, 0);
     JUCE_CHECK_OPENGL_ERROR
     return true;
 }
@@ -366,7 +366,7 @@ void OpenGLFrameBuffer::draw2D (float x1, float y1,
                                 float x2, float y2,
                                 float x3, float y3,
                                 float x4, float y4,
-                                const Colour& colour) const
+                                Colour colour) const
 {
     if (pimpl != nullptr)
     {
@@ -380,7 +380,7 @@ void OpenGLFrameBuffer::draw3D (float x1, float y1, float z1,
                                 float x2, float y2, float z2,
                                 float x3, float y3, float z3,
                                 float x4, float y4, float z4,
-                                const Colour& colour) const
+                                Colour colour) const
 {
     if (pimpl != nullptr)
     {

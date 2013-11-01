@@ -21,7 +21,7 @@
  */
 
 #include "GuiFxDial.h"
-#include "../../Binary Data/BinaryDataNew.h"
+#include "../../Binary Data/MainBinaryData.h"
 #include "../../../File and Settings/AppSettings.h"
 #include "../../Views/MainComponent.h"
 #include "../../../Application/CommonInfoBoxText.h"
@@ -50,16 +50,16 @@ GuiFxDial::GuiFxDial(MainComponent &ref) :  Component ("GuiFxDial"),
     
     
     //----------------------FX buttons------------------
-	Image *gainIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::gainicon_png, BinaryDataNew::gainicon_pngSize));
-	Image *lpfIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::lpficon_png, BinaryDataNew::lpficon_pngSize));
-	Image *hpfIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::hpficon_png, BinaryDataNew::hpficon_pngSize));
-	Image *bpfIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::bpficon_png, BinaryDataNew::bpficon_pngSize));
-	Image *driveIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::overdriveicon_png, BinaryDataNew::overdriveicon_pngSize));
-	Image *crushIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::bitcrushicon_png, BinaryDataNew::bitcrushicon_pngSize));
-	Image *delayIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::delayicon_png, BinaryDataNew::delayicon_pngSize));
-	Image *reverbIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::reverbicon_png, BinaryDataNew::reverbicon_pngSize));
-	Image *flangerIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::flangericon_png, BinaryDataNew::flangericon_pngSize));
-	Image *tremoloIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::tremoloicon_png, BinaryDataNew::tremoloicon_pngSize));
+	Image *gainIcon = new Image(ImageCache::getFromMemory(MainBinaryData::gainicon_png, MainBinaryData::gainicon_pngSize));
+	Image *lpfIcon = new Image(ImageCache::getFromMemory(MainBinaryData::lpficon_png, MainBinaryData::lpficon_pngSize));
+	Image *hpfIcon = new Image(ImageCache::getFromMemory(MainBinaryData::hpficon_png, MainBinaryData::hpficon_pngSize));
+	Image *bpfIcon = new Image(ImageCache::getFromMemory(MainBinaryData::bpficon_png, MainBinaryData::bpficon_pngSize));
+	Image *driveIcon = new Image(ImageCache::getFromMemory(MainBinaryData::overdriveicon_png, MainBinaryData::overdriveicon_pngSize));
+	Image *crushIcon = new Image(ImageCache::getFromMemory(MainBinaryData::bitcrushicon_png, MainBinaryData::bitcrushicon_pngSize));
+	Image *delayIcon = new Image(ImageCache::getFromMemory(MainBinaryData::delayicon_png, MainBinaryData::delayicon_pngSize));
+	Image *reverbIcon = new Image(ImageCache::getFromMemory(MainBinaryData::reverbicon_png, MainBinaryData::reverbicon_pngSize));
+	Image *flangerIcon = new Image(ImageCache::getFromMemory(MainBinaryData::flangericon_png, MainBinaryData::flangericon_pngSize));
+	Image *tremoloIcon = new Image(ImageCache::getFromMemory(MainBinaryData::tremoloicon_png, MainBinaryData::tremoloicon_pngSize));
 		
     for (int i = 0; i < 10; i++)
     {
@@ -146,14 +146,14 @@ void GuiFxDial::resized()
 
 void GuiFxDial::paint (Graphics& g)
 {
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(208,208, 38, 38);
 	
 	Path pieSeg;
 	pieSeg.addPieSegment(119, 119, 86, 86, (125 * (M_PI / 180)), (235 * (M_PI / 180)), 0.2f);
 	g.fillPath(pieSeg);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse(208,208, 38, 38, 1.0f);
 	
 }

@@ -1,66 +1,65 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
 
-static Array <ComponentPeer*> heavyweightPeers;
 static uint32 lastUniqueID = 1;
 
 //==============================================================================
-ComponentPeer::ComponentPeer (Component& component_, const int styleFlags_)
-    : component (component_),
-      styleFlags (styleFlags_),
+ComponentPeer::ComponentPeer (Component& comp, const int flags)
+    : component (comp),
+      styleFlags (flags),
       constrainer (nullptr),
       lastDragAndDropCompUnderMouse (nullptr),
       uniqueID (lastUniqueID += 2), // increment by 2 so that this can never hit 0
       fakeMouseMessageSent (false),
       isWindowMinimised (false)
 {
-    heavyweightPeers.add (this);
+    Desktop::getInstance().addPeer (this);
 }
 
 ComponentPeer::~ComponentPeer()
 {
-    heavyweightPeers.removeFirstMatchingValue (this);
-    Desktop::getInstance().triggerFocusCallback();
+    Desktop::getInstance().removePeer (this);
 }
 
 //==============================================================================
 int ComponentPeer::getNumPeers() noexcept
 {
-    return heavyweightPeers.size();
+    return Desktop::getInstance().peers.size();
 }
 
 ComponentPeer* ComponentPeer::getPeer (const int index) noexcept
 {
-    return heavyweightPeers [index];
+    return Desktop::getInstance().peers [index];
 }
 
 ComponentPeer* ComponentPeer::getPeerFor (const Component* const component) noexcept
 {
-    for (int i = heavyweightPeers.size(); --i >= 0;)
+    const Array<ComponentPeer*>& peers = Desktop::getInstance().peers;
+
+    for (int i = peers.size(); --i >= 0;)
     {
-        ComponentPeer* const peer = heavyweightPeers.getUnchecked(i);
+        ComponentPeer* const peer = peers.getUnchecked(i);
 
         if (&(peer->getComponent()) == component)
             return peer;
@@ -71,36 +70,36 @@ ComponentPeer* ComponentPeer::getPeerFor (const Component* const component) noex
 
 bool ComponentPeer::isValidPeer (const ComponentPeer* const peer) noexcept
 {
-    return heavyweightPeers.contains (const_cast <ComponentPeer*> (peer));
-}
-
-void ComponentPeer::updateCurrentModifiers() noexcept
-{
-    ModifierKeys::updateCurrentModifiers();
+    return Desktop::getInstance().peers.contains (const_cast <ComponentPeer*> (peer));
 }
 
 //==============================================================================
-void ComponentPeer::handleMouseEvent (const int touchIndex, const Point<int>& positionWithinPeer,
-                                      const ModifierKeys& newMods, const int64 time)
+void ComponentPeer::handleMouseEvent (const int touchIndex, const Point<int> positionWithinPeer,
+                                      const ModifierKeys newMods, const int64 time)
 {
-    MouseInputSource* const mouse = Desktop::getInstance().getMouseSource (touchIndex);
-    jassert (mouse != nullptr); // not enough sources!
-
-    mouse->handleEvent (this, positionWithinPeer, time, newMods);
+    if (MouseInputSource* mouse = Desktop::getInstance().getOrCreateMouseInputSource (touchIndex))
+        mouse->handleEvent (*this, positionWithinPeer, time, newMods);
 }
 
-void ComponentPeer::handleMouseWheel (const int touchIndex, const Point<int>& positionWithinPeer,
+void ComponentPeer::handleMouseWheel (const int touchIndex, const Point<int> positionWithinPeer,
                                       const int64 time, const MouseWheelDetails& wheel)
 {
-    MouseInputSource* const mouse = Desktop::getInstance().getMouseSource (touchIndex);
-    jassert (mouse != nullptr); // not enough sources!
+    if (MouseInputSource* mouse = Desktop::getInstance().getOrCreateMouseInputSource (touchIndex))
+        mouse->handleWheel (*this, positionWithinPeer, time, wheel);
+}
 
-    mouse->handleWheel (this, positionWithinPeer, time, wheel);
+void ComponentPeer::handleMagnifyGesture (const int touchIndex, const Point<int> positionWithinPeer,
+                                          const int64 time, const float scaleFactor)
+{
+    if (MouseInputSource* mouse = Desktop::getInstance().getOrCreateMouseInputSource (touchIndex))
+        mouse->handleMagnifyGesture (*this, positionWithinPeer, time, scaleFactor);
 }
 
 //==============================================================================
 void ComponentPeer::handlePaint (LowLevelGraphicsContext& contextToPaintTo)
 {
+    ModifierKeys::updateCurrentModifiers();
+
     Graphics g (&contextToPaintTo);
 
    #if JUCE_ENABLE_REPAINT_DEBUGGING
@@ -149,7 +148,7 @@ Component* ComponentPeer::getTargetForKeyPress()
 
 bool ComponentPeer::handleKeyPress (const int keyCode, const juce_wchar textCharacter)
 {
-    updateCurrentModifiers();
+    ModifierKeys::updateCurrentModifiers();
     bool keyWasUsed = false;
 
     const KeyPress keyInfo (keyCode,
@@ -187,7 +186,9 @@ bool ComponentPeer::handleKeyPress (const int keyCode, const juce_wchar textChar
             {
                 currentlyFocused->moveKeyboardFocusToSibling (isTab);
                 keyWasUsed = (currentlyFocused != Component::getCurrentlyFocusedComponent());
-                break;
+
+                if (keyWasUsed || deletionChecker == nullptr)
+                    break;
             }
         }
     }
@@ -197,7 +198,7 @@ bool ComponentPeer::handleKeyPress (const int keyCode, const juce_wchar textChar
 
 bool ComponentPeer::handleKeyUpOrDown (const bool isKeyDown)
 {
-    updateCurrentModifiers();
+    ModifierKeys::updateCurrentModifiers();
     bool keyWasUsed = false;
 
     for (Component* target = getTargetForKeyPress(); target != nullptr; target = target->getParentComponent())
@@ -228,7 +229,7 @@ bool ComponentPeer::handleKeyUpOrDown (const bool isKeyDown)
 
 void ComponentPeer::handleModifierKeysChange()
 {
-    updateCurrentModifiers();
+    ModifierKeys::updateCurrentModifiers();
 
     Component* target = Desktop::getInstance().getMainMouseSource().getComponentUnderMouse();
 
@@ -259,7 +260,7 @@ void ComponentPeer::dismissPendingTextInput() {}
 //==============================================================================
 void ComponentPeer::handleBroughtToFront()
 {
-    updateCurrentModifiers();
+    ModifierKeys::updateCurrentModifiers();
     component.internalBroughtToFront();
 }
 
@@ -270,7 +271,7 @@ void ComponentPeer::setConstrainer (ComponentBoundsConstrainer* const newConstra
 
 void ComponentPeer::handleMovedOrResized()
 {
-    updateCurrentModifiers();
+    ModifierKeys::updateCurrentModifiers();
 
     const bool nowMinimised = isMinimised();
 
@@ -309,7 +310,7 @@ void ComponentPeer::handleMovedOrResized()
 
 void ComponentPeer::handleFocusGain()
 {
-    updateCurrentModifiers();
+    ModifierKeys::updateCurrentModifiers();
 
     if (component.isParentOf (lastFocusedComponent))
     {
@@ -328,7 +329,7 @@ void ComponentPeer::handleFocusGain()
 
 void ComponentPeer::handleFocusLoss()
 {
-    updateCurrentModifiers();
+    ModifierKeys::updateCurrentModifiers();
 
     if (component.hasKeyboardFocus (true))
     {
@@ -352,7 +353,7 @@ Component* ComponentPeer::getLastFocusedSubcomponent() const noexcept
 
 void ComponentPeer::handleScreenSizeChange()
 {
-    updateCurrentModifiers();
+    ModifierKeys::updateCurrentModifiers();
 
     component.parentSizeChanged();
     handleMovedOrResized();
@@ -414,7 +415,7 @@ namespace DragHelpers
     public:
         AsyncDropMessage (Component* c, const ComponentPeer::DragInfo& d)  : target (c), info (d) {}
 
-        void messageCallback()
+        void messageCallback() override
         {
             if (Component* const c = target.get())
             {
@@ -435,7 +436,7 @@ namespace DragHelpers
 
 bool ComponentPeer::handleDragMove (const ComponentPeer::DragInfo& info)
 {
-    updateCurrentModifiers();
+    ModifierKeys::updateCurrentModifiers();
 
     Component* const compUnderMouse = component.getComponentAt (info.position);
 
@@ -533,8 +534,17 @@ bool ComponentPeer::handleDragDrop (const ComponentPeer::DragInfo& info)
 //==============================================================================
 void ComponentPeer::handleUserClosingWindow()
 {
-    updateCurrentModifiers();
+    ModifierKeys::updateCurrentModifiers();
     component.userTriedToCloseWindow();
+}
+
+bool ComponentPeer::setDocumentEditedStatus (bool)
+{
+    return false;
+}
+
+void ComponentPeer::setRepresentedFile (const File&)
+{
 }
 
 //==============================================================================

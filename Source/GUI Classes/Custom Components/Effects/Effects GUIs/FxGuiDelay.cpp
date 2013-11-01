@@ -23,7 +23,7 @@
 #include "FxGuiDelay.h"
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
-#include "../../../Binary Data/BinaryDataNew.h"
+#include "../../../Binary Data/MainBinaryData.h"
 #include "../../../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
@@ -79,7 +79,7 @@ GuiDelay::GuiDelay(MainComponent &ref)
     delayTimeMenu->addItem(translate("Quarter Beat"), 5);
     delayTimeMenu->setSelectedId(4, true);*/
     
-	Image *syncImage = new Image(ImageCache::getFromMemory(BinaryDataNew::syncicon_png, BinaryDataNew::syncicon_pngSize));
+	Image *syncImage = new Image(ImageCache::getFromMemory(MainBinaryData::syncicon_png, MainBinaryData::syncicon_pngSize));
     addAndMakeVisible(syncButton = new ModeButton(syncImage));
     syncButton->setClickingTogglesState(true);
     syncButton->setToggleState(1, false);
@@ -98,7 +98,7 @@ GuiDelay::GuiDelay(MainComponent &ref)
     alphaTouchMenu->addItem(translate("HPF Frequency"), 6);
     alphaTouchMenu->setSelectedId(1, true);
     
-    Image *reverseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::inverticon_png, BinaryDataNew::inverticon_pngSize));
+    Image *reverseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::inverticon_png, MainBinaryData::inverticon_pngSize));
     addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);
@@ -110,12 +110,11 @@ GuiDelay::GuiDelay(MainComponent &ref)
     intensitySlider->setValue(1.0, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
-    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
     
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
     
@@ -128,7 +127,6 @@ GuiDelay::~GuiDelay()
 {
     deleteAllChildren();
 }
-
 
 
 void GuiDelay::resized()
@@ -152,14 +150,13 @@ void GuiDelay::resized()
 
 void GuiDelay::paint (Graphics& g)
 {
-	
-	g.setColour(Colours::black);
+	parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+    
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(118, 232, 38, 38);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	g.drawEllipse(118, 232, 38, 38, 1.0f);
-	
-	
 }
 
 void GuiDelay::sliderValueChanged (Slider *slider)
@@ -172,7 +169,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayMix(wetMixSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     else if (slider == delayTimeSlider)
@@ -183,7 +180,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayTime(delayTimeSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 2), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 2), dontSendNotification);
     }
     
     else if (slider == feedbackSlider)
@@ -194,7 +191,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayFeedback(feedbackSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
     else if (slider == lpfFrequencySlider)
@@ -205,7 +202,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayLpfFreq(lpfFrequencySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 0), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 0), dontSendNotification);
     }
     
     else if (slider == hpfFrequencySlider)
@@ -216,7 +213,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayHpfFreq(hpfFrequencySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 0), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 0), dontSendNotification);
     }
     
     else if (slider == intensitySlider)
@@ -227,7 +224,7 @@ void GuiDelay::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDelayAtIntensity(intensitySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
     }
     
 
@@ -427,12 +424,12 @@ void GuiDelay::mouseEnter (const MouseEvent &e)
     if (wetMixSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix. Sets the Wet/Dry mix on the selected pads."));
-        parameterHoverLabel->setText(String(wetMixSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(wetMixSlider->getValue(), 3), dontSendNotification);
     }
     else if (delayTimeSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Delay Time. Sets the delay time in milliseconds for the selected pads. To set the delay time based on note length, click the 'Sync' button."));
-        parameterHoverLabel->setText(String(delayTimeSlider->getValue(), 2), false);
+        parameterHoverLabel->setText(String(delayTimeSlider->getValue(), 2), dontSendNotification);
     }
     else if (delayTimeMenu->isMouseOver(true))
     {
@@ -445,17 +442,17 @@ void GuiDelay::mouseEnter (const MouseEvent &e)
     else if (feedbackSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Delay Feedback. Sets the feedback level for the selected pads. Please note that high values cause the delay to continuously feedback and get louder and louder."));
-        parameterHoverLabel->setText(String(feedbackSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(feedbackSlider->getValue(), 3), dontSendNotification);
     }
     else if (lpfFrequencySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Low Pass Filter Frequency. Sets the cutoff frequency of the Low-pass Filter on the selected pads. Please note that when this value is lower than the Hi-pass Filter cutoff frequency the delayed signal will not be audible."));
-        parameterHoverLabel->setText(String(lpfFrequencySlider->getValue(), 0), false);
+        parameterHoverLabel->setText(String(lpfFrequencySlider->getValue(), 0), dontSendNotification);
     }
     else if (hpfFrequencySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("High Pass Filter Frequency. Sets the cutoff frequency of the Hi-pass Filter for the selected pads. Please note that when this value is higher than the Hi-pass Filter cutoff frequency the delayed signal will not be audible."));
-        parameterHoverLabel->setText(String(hpfFrequencySlider->getValue(), 0), false);
+        parameterHoverLabel->setText(String(hpfFrequencySlider->getValue(), 0), dontSendNotification);
     }
     else if (alphaTouchMenu->isMouseOver(true))
     {
@@ -468,7 +465,7 @@ void GuiDelay::mouseEnter (const MouseEvent &e)
     else if (intensitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
-        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), dontSendNotification);
     }
     
 }
@@ -477,6 +474,6 @@ void GuiDelay::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
-    parameterHoverLabel->setText(String::empty, false);
+    parameterHoverLabel->setText(String::empty, dontSendNotification);
     
 }

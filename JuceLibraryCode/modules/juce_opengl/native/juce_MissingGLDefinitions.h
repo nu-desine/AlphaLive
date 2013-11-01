@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -86,29 +85,34 @@ namespace
 {
     enum
     {
-        WGL_NUMBER_PIXEL_FORMATS_ARB    = 0x2000,
-        WGL_DRAW_TO_WINDOW_ARB          = 0x2001,
-        WGL_ACCELERATION_ARB            = 0x2003,
-        WGL_SWAP_METHOD_ARB             = 0x2007,
-        WGL_SUPPORT_OPENGL_ARB          = 0x2010,
-        WGL_PIXEL_TYPE_ARB              = 0x2013,
-        WGL_DOUBLE_BUFFER_ARB           = 0x2011,
-        WGL_COLOR_BITS_ARB              = 0x2014,
-        WGL_RED_BITS_ARB                = 0x2015,
-        WGL_GREEN_BITS_ARB              = 0x2017,
-        WGL_BLUE_BITS_ARB               = 0x2019,
-        WGL_ALPHA_BITS_ARB              = 0x201B,
-        WGL_DEPTH_BITS_ARB              = 0x2022,
-        WGL_STENCIL_BITS_ARB            = 0x2023,
-        WGL_FULL_ACCELERATION_ARB       = 0x2027,
-        WGL_ACCUM_RED_BITS_ARB          = 0x201E,
-        WGL_ACCUM_GREEN_BITS_ARB        = 0x201F,
-        WGL_ACCUM_BLUE_BITS_ARB         = 0x2020,
-        WGL_ACCUM_ALPHA_BITS_ARB        = 0x2021,
-        WGL_STEREO_ARB                  = 0x2012,
-        WGL_SAMPLE_BUFFERS_ARB          = 0x2041,
-        WGL_SAMPLES_ARB                 = 0x2042,
-        WGL_TYPE_RGBA_ARB               = 0x202B,
+        WGL_NUMBER_PIXEL_FORMATS_ARB                = 0x2000,
+        WGL_DRAW_TO_WINDOW_ARB                      = 0x2001,
+        WGL_ACCELERATION_ARB                        = 0x2003,
+        WGL_SWAP_METHOD_ARB                         = 0x2007,
+        WGL_SUPPORT_OPENGL_ARB                      = 0x2010,
+        WGL_PIXEL_TYPE_ARB                          = 0x2013,
+        WGL_DOUBLE_BUFFER_ARB                       = 0x2011,
+        WGL_COLOR_BITS_ARB                          = 0x2014,
+        WGL_RED_BITS_ARB                            = 0x2015,
+        WGL_GREEN_BITS_ARB                          = 0x2017,
+        WGL_BLUE_BITS_ARB                           = 0x2019,
+        WGL_ALPHA_BITS_ARB                          = 0x201B,
+        WGL_DEPTH_BITS_ARB                          = 0x2022,
+        WGL_STENCIL_BITS_ARB                        = 0x2023,
+        WGL_FULL_ACCELERATION_ARB                   = 0x2027,
+        WGL_ACCUM_RED_BITS_ARB                      = 0x201E,
+        WGL_ACCUM_GREEN_BITS_ARB                    = 0x201F,
+        WGL_ACCUM_BLUE_BITS_ARB                     = 0x2020,
+        WGL_ACCUM_ALPHA_BITS_ARB                    = 0x2021,
+        WGL_STEREO_ARB                              = 0x2012,
+        WGL_SAMPLE_BUFFERS_ARB                      = 0x2041,
+        WGL_SAMPLES_ARB                             = 0x2042,
+        WGL_TYPE_RGBA_ARB                           = 0x202B,
+        WGL_CONTEXT_MAJOR_VERSION_ARB               = 0x2091,
+        WGL_CONTEXT_MINOR_VERSION_ARB               = 0x2092,
+        WGL_CONTEXT_PROFILE_MASK_ARB                = 0x9126,
+        WGL_CONTEXT_CORE_PROFILE_BIT_ARB            = 0x0001,
+        WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB   = 0x0002,
 
         GL_OPERAND0_RGB                 = 0x8590,
         GL_OPERAND1_RGB                 = 0x8591,
@@ -133,7 +137,8 @@ namespace
         GL_ARRAY_BUFFER                 = 0x8892,
         GL_ELEMENT_ARRAY_BUFFER         = 0x8893,
         GL_STATIC_DRAW                  = 0x88E4,
-        GL_DYNAMIC_DRAW                 = 0x88E8
+        GL_DYNAMIC_DRAW                 = 0x88E8,
+        GL_STREAM_DRAW                  = 0x88E0
     };
 
     typedef char GLchar;

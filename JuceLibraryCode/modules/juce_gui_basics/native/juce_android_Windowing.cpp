@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -51,15 +50,13 @@ JUCE_JNI_CALLBACK (JUCE_ANDROID_ACTIVITY_CLASSNAME, launchApp, void, (JNIEnv* en
 
 JUCE_JNI_CALLBACK (JUCE_ANDROID_ACTIVITY_CLASSNAME, suspendApp, void, (JNIEnv* env, jobject activity))
 {
-    JUCEApplicationBase* const app = JUCEApplicationBase::getInstance();
-    if (app != nullptr)
+    if (JUCEApplicationBase* const app = JUCEApplicationBase::getInstance())
         app->suspended();
 }
 
 JUCE_JNI_CALLBACK (JUCE_ANDROID_ACTIVITY_CLASSNAME, resumeApp, void, (JNIEnv* env, jobject activity))
 {
-    JUCEApplicationBase* const app = JUCEApplicationBase::getInstance();
-    if (app != nullptr)
+    if (JUCEApplicationBase* const app = JUCEApplicationBase::getInstance())
         app->resumed();
 }
 
@@ -132,7 +129,7 @@ public:
             {
                 ViewDeleter (const GlobalRef& view_) : view (view_) {}
 
-                void messageCallback()
+                void messageCallback() override
                 {
                     android.activity.callVoidMethod (JuceAppActivity.deleteView, view.get());
                 }
@@ -166,7 +163,7 @@ public:
                     : view (view_), shouldBeVisible (shouldBeVisible_)
                 {}
 
-                void messageCallback()
+                void messageCallback() override
                 {
                     view.callVoidMethod (ComponentPeerView.setVisible, shouldBeVisible);
                 }
@@ -185,50 +182,33 @@ public:
         view.callVoidMethod (ComponentPeerView.setViewName, javaString (title).get());
     }
 
-    void setPosition (int x, int y)
-    {
-        const Rectangle<int> pos (getBounds());
-        setBounds (x, y, pos.getWidth(), pos.getHeight(), false);
-    }
-
-    void setSize (int w, int h)
-    {
-        const Rectangle<int> pos (getBounds());
-        setBounds (pos.getX(), pos.getY(), w, h, false);
-    }
-
-    void setBounds (int x, int y, int w, int h, bool isNowFullScreen)
+    void setBounds (const Rectangle<int>& r, bool isNowFullScreen)
     {
         if (MessageManager::getInstance()->isThisTheMessageThread())
         {
             fullScreen = isNowFullScreen;
-            w = jmax (0, w);
-            h = jmax (0, h);
-
-            view.callVoidMethod (ComponentPeerView.layout, x, y, x + w, y + h);
+            view.callVoidMethod (ComponentPeerView.layout,
+                                 r.getX(), r.getY(), r.getRight(), r.getBottom());
         }
         else
         {
             class ViewMover  : public CallbackMessage
             {
             public:
-                ViewMover (const GlobalRef& view_, int x_, int y_, int w_, int h_)
-                    : view (view_), x (x_), y (y_), w (w_), h (h_)
-                {
-                    post();
-                }
+                ViewMover (const GlobalRef& v, const Rectangle<int>& r)  : view (v), bounds (r) {}
 
-                void messageCallback()
+                void messageCallback() override
                 {
-                    view.callVoidMethod (ComponentPeerView.layout, x, y, x + w, y + h);
+                    view.callVoidMethod (ComponentPeerView.layout,
+                                         bounds.getX(), bounds.getY(), bounds.getRight(), bounds.getBottom());
                 }
 
             private:
                 GlobalRef view;
-                int x, y, w, h;
+                Rectangle<int> bounds;
             };
 
-            new ViewMover (view, x, y, w, h);
+            (new ViewMover (view, r))->post();
         }
     }
 
@@ -284,7 +264,7 @@ public:
 
         // (can't call the component's setBounds method because that'll reset our fullscreen flag)
         if (! r.isEmpty())
-            setBounds (r.getX(), r.getY(), r.getWidth(), r.getHeight(), shouldBeFullScreen);
+            setBounds (r, shouldBeFullScreen);
 
         component.repaint();
     }
@@ -415,9 +395,7 @@ public:
             buffer = GlobalRef (env->NewIntArray (sizeNeeded));
         }
 
-        jint* dest = env->GetIntArrayElements ((jintArray) buffer.get(), 0);
-
-        if (dest != nullptr)
+        if (jint* dest = env->GetIntArrayElements ((jintArray) buffer.get(), 0))
         {
             {
                 Image temp (new PreallocatedImage (clip.getWidth(), clip.getHeight(),
@@ -451,7 +429,7 @@ public:
                 ViewRepainter (const GlobalRef& view_, const Rectangle<int>& area_)
                     : view (view_), area (area_) {}
 
-                void messageCallback()
+                void messageCallback() override
                 {
                     view.callVoidMethod (ComponentPeerView.invalidate, area.getX(), area.getY(),
                                          area.getRight(), area.getBottom());
@@ -600,20 +578,18 @@ Desktop::DisplayOrientation Desktop::getCurrentOrientation() const
     return upright;
 }
 
-void Desktop::createMouseInputSources()
+bool Desktop::addMouseInputSource()
 {
-    // This creates a mouse input source for each possible finger
-
-    for (int i = 0; i < 10; ++i)
-        mouseSources.add (new MouseInputSource (i, false));
+    mouseSources.add (new MouseInputSource (mouseSources.size(), false));
+    return true;
 }
 
-Point<int> MouseInputSource::getCurrentMousePosition()
+Point<int> MouseInputSource::getCurrentRawMousePosition()
 {
     return AndroidComponentPeer::lastMousePos;
 }
 
-void Desktop::setMousePosition (const Point<int>& newPosition)
+void MouseInputSource::setRawMousePosition (Point<int>)
 {
     // not needed
 }
@@ -648,9 +624,11 @@ void Process::makeForegroundProcess()
 //==============================================================================
 void JUCE_CALLTYPE NativeMessageBox::showMessageBoxAsync (AlertWindow::AlertIconType iconType,
                                                           const String& title, const String& message,
-                                                          Component* associatedComponent)
+                                                          Component* associatedComponent,
+                                                          ModalComponentManager::Callback* callback)
 {
-    android.activity.callVoidMethod (JuceAppActivity.showMessageBox, javaString (title).get(), javaString (message).get(), (jlong) 0);
+    android.activity.callVoidMethod (JuceAppActivity.showMessageBox, javaString (title).get(),
+                                     javaString (message).get(), (jlong) (pointer_sized_int) callback);
 }
 
 bool JUCE_CALLTYPE NativeMessageBox::showOkCancelBox (AlertWindow::AlertIconType iconType,
@@ -658,10 +636,10 @@ bool JUCE_CALLTYPE NativeMessageBox::showOkCancelBox (AlertWindow::AlertIconType
                                                       Component* associatedComponent,
                                                       ModalComponentManager::Callback* callback)
 {
-    jassert (callback != 0); // on android, all alerts must be non-modal!!
+    jassert (callback != nullptr); // on android, all alerts must be non-modal!!
 
-    android.activity.callVoidMethod (JuceAppActivity.showOkCancelBox, javaString (title).get(), javaString (message).get(),
-                                     (jlong) (pointer_sized_int) callback);
+    android.activity.callVoidMethod (JuceAppActivity.showOkCancelBox, javaString (title).get(),
+                                     javaString (message).get(), (jlong) (pointer_sized_int) callback);
     return false;
 }
 
@@ -670,19 +648,17 @@ int JUCE_CALLTYPE NativeMessageBox::showYesNoCancelBox (AlertWindow::AlertIconTy
                                                         Component* associatedComponent,
                                                         ModalComponentManager::Callback* callback)
 {
-    jassert (callback != 0); // on android, all alerts must be non-modal!!
+    jassert (callback != nullptr); // on android, all alerts must be non-modal!!
 
-    android.activity.callVoidMethod (JuceAppActivity.showYesNoCancelBox, javaString (title).get(), javaString (message).get(),
-                                     (jlong) (pointer_sized_int) callback);
+    android.activity.callVoidMethod (JuceAppActivity.showYesNoCancelBox, javaString (title).get(),
+                                     javaString (message).get(), (jlong) (pointer_sized_int) callback);
     return 0;
 }
 
 JUCE_JNI_CALLBACK (JUCE_ANDROID_ACTIVITY_CLASSNAME, alertDismissed, void, (JNIEnv* env, jobject activity,
                                                                            jlong callbackAsLong, jint result))
 {
-    ModalComponentManager::Callback* callback = (ModalComponentManager::Callback*) callbackAsLong;
-
-    if (callback != 0)
+    if (ModalComponentManager::Callback* callback = (ModalComponentManager::Callback*) callbackAsLong)
         callback->modalStateFinished (result);
 }
 
@@ -710,22 +686,25 @@ bool juce_areThereAnyAlwaysOnTopWindows()
 }
 
 //==============================================================================
-void Desktop::Displays::findDisplays()
+void Desktop::Displays::findDisplays (float masterScale)
 {
     Display d;
-    d.userArea = d.totalArea = Rectangle<int> (android.screenWidth, android.screenHeight);
+    d.userArea = d.totalArea = Rectangle<int> (android.screenWidth,
+                                               android.screenHeight) / masterScale;
     d.isMain = true;
-    d.scale = 1.0;
+    d.scale = masterScale;
 
     displays.add (d);
 }
 
 JUCE_JNI_CALLBACK (JUCE_ANDROID_ACTIVITY_CLASSNAME, setScreenSize, void, (JNIEnv* env, jobject activity,
-                                                                          jint screenWidth, jint screenHeight))
+                                                                          jint screenWidth, jint screenHeight,
+                                                                          jint dpi))
 {
     const bool isSystemInitialised = android.screenWidth != 0;
     android.screenWidth = screenWidth;
     android.screenHeight = screenHeight;
+    android.dpi = dpi;
 
     const_cast <Desktop::Displays&> (Desktop::getInstance().getDisplays()).refresh();
 }

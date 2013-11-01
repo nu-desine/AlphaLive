@@ -38,6 +38,8 @@ public:
     AlphaRotarySlider(const float startAngleRadians,
 					  const float endAngleRadians, const float _theWidth);
     ~AlphaRotarySlider();
+    
+    void paint (Graphics &g);
 		
     void textEditorFocusLost (TextEditor &textEditor);
     void textEditorReturnKeyPressed (TextEditor &textEditor);

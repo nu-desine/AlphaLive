@@ -148,7 +148,8 @@ GuiPadLayout::GuiPadLayout(AlphaLiveEngine &alphaLiveEngineRef_, MainComponent &
 
 GuiPadLayout::~GuiPadLayout()
 {
-	
+	//pads.clear();
+    
 	delete globalSb;
 	delete row1Sb;
 	delete row2Sb;
@@ -234,7 +235,7 @@ void GuiPadLayout::resized()
 
 void GuiPadLayout::setPadPlayingState (int pad, int state)
 {
-    if (pads[pad] != nullptr)
+    if (pads[pad] != NULL)
         pads[pad]->setPadPlayingState(state);
 }
 

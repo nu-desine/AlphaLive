@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -42,46 +41,45 @@ class JUCE_API  LowLevelGraphicsSoftwareRenderer    : public LowLevelGraphicsCon
 public:
     //==============================================================================
     LowLevelGraphicsSoftwareRenderer (const Image& imageToRenderOnto);
-    LowLevelGraphicsSoftwareRenderer (const Image& imageToRenderOnto, const Point<int>& origin,
+    LowLevelGraphicsSoftwareRenderer (const Image& imageToRenderOnto, Point<int> origin,
                                       const RectangleList& initialClip);
     ~LowLevelGraphicsSoftwareRenderer();
 
-    bool isVectorDevice() const;
-    void setOrigin (int x, int y);
-    void addTransform (const AffineTransform&);
-    float getScaleFactor();
-    bool clipToRectangle (const Rectangle<int>&);
-    bool clipToRectangleList (const RectangleList&);
-    void excludeClipRectangle (const Rectangle<int>&);
-    void clipToPath (const Path&, const AffineTransform&);
-    void clipToImageAlpha (const Image&, const AffineTransform&);
-    bool clipRegionIntersects (const Rectangle<int>&);
-    Rectangle<int> getClipBounds() const;
-    bool isClipEmpty() const;
+    bool isVectorDevice() const override;
+    void setOrigin (int x, int y) override;
+    void addTransform (const AffineTransform&) override;
+    float getScaleFactor() override;
+    bool clipToRectangle (const Rectangle<int>&) override;
+    bool clipToRectangleList (const RectangleList&) override;
+    void excludeClipRectangle (const Rectangle<int>&) override;
+    void clipToPath (const Path&, const AffineTransform&) override;
+    void clipToImageAlpha (const Image&, const AffineTransform&) override;
+    bool clipRegionIntersects (const Rectangle<int>&) override;
+    Rectangle<int> getClipBounds() const override;
+    bool isClipEmpty() const override;
 
-    void saveState();
-    void restoreState();
+    void saveState() override;
+    void restoreState() override;
 
-    void beginTransparencyLayer (float opacity);
-    void endTransparencyLayer();
+    void beginTransparencyLayer (float opacity) override;
+    void endTransparencyLayer() override;
 
-    void setFill (const FillType&);
-    void setOpacity (float opacity);
-    void setInterpolationQuality (Graphics::ResamplingQuality);
+    void setFill (const FillType&) override;
+    void setOpacity (float opacity) override;
+    void setInterpolationQuality (Graphics::ResamplingQuality) override;
 
-    void fillRect (const Rectangle<int>&, bool replaceExistingContents);
-    void fillPath (const Path&, const AffineTransform&);
+    void fillRect (const Rectangle<int>&, bool replaceExistingContents) override;
+    void fillPath (const Path&, const AffineTransform&) override;
 
-    void drawImage (const Image&, const AffineTransform&);
+    void drawImage (const Image&, const AffineTransform&) override;
 
-    void drawLine (const Line <float>&);
-    void drawVerticalLine (int x, float top, float bottom);
-    void drawHorizontalLine (int x, float top, float bottom);
+    void drawLine (const Line <float>&) override;
+    void drawVerticalLine (int x, float top, float bottom) override;
+    void drawHorizontalLine (int x, float top, float bottom) override;
 
-    void setFont (const Font&);
-    const Font& getFont();
-    void drawGlyph (int glyphNumber, float x, float y);
-    void drawGlyph (int glyphNumber, const AffineTransform&);
+    void setFont (const Font&) override;
+    const Font& getFont() override;
+    void drawGlyph (int glyphNumber, const AffineTransform&) override;
 
     const Image& getImage() const noexcept                                          { return savedState->image; }
     const RenderingHelpers::TranslationOrTransform& getTransform() const noexcept   { return savedState->transform; }

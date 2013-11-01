@@ -39,10 +39,8 @@ public:
     
 private:
     
-    Image image;
     Path hitPath;
 	int i;
-    
 };
 
 #endif

@@ -23,7 +23,7 @@
 #include "FxGuiDistortion.h"
 #include "../../../../File and Settings/AppSettings.h"
 #include "../../../Views/MainComponent.h"
-#include "../../../Binary Data/BinaryDataNew.h"
+#include "../../../Binary Data/MainBinaryData.h"
 #include "../../../../Application/CommonInfoBoxText.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
@@ -58,7 +58,7 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
     intensitySlider->setRange(0.0, 1.0, 0.001);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
-    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaColours::lightblue);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
     
     //below is temporily hidden in resized()!
     addAndMakeVisible(inputGainSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
@@ -103,7 +103,7 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
 	alphaTouchMenu->addItem(translate("Wet/Dry Mix"), 5);
     alphaTouchMenu->setSelectedId(1, true);
     
-    Image *reverseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::inverticon_png, BinaryDataNew::inverticon_pngSize));
+    Image *reverseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::inverticon_png, MainBinaryData::inverticon_pngSize));
     addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
     reverseButton->setClickingTogglesState(true);
     reverseButton->addListener(this);
@@ -112,7 +112,6 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
         
@@ -124,7 +123,10 @@ GuiDistortion::~GuiDistortion()
     deleteAllChildren();
 }
 
-
+void GuiDistortion::paint(Graphics &g)
+{
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+}
 
 void GuiDistortion::resized()
 {
@@ -155,7 +157,7 @@ void GuiDistortion::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDistortionInputGain(inputGainSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -167,7 +169,7 @@ void GuiDistortion::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDistortionDrive(driveSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
 	
@@ -179,7 +181,7 @@ void GuiDistortion::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDistortionTone(toneSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
 	
@@ -191,7 +193,7 @@ void GuiDistortion::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDistortionWetDryMix(wetDryMixSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -203,7 +205,7 @@ void GuiDistortion::sliderValueChanged (Slider *slider)
             PAD_SETTINGS->setPadFxDistortionAtIntensity(intensitySlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(slider->getValue(), 3), dontSendNotification);
         
     }
     
@@ -355,22 +357,22 @@ void GuiDistortion::mouseEnter (const MouseEvent &e)
     if (inputGainSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Input Gain. Sets the gain of the signal to be distorted."));
-        parameterHoverLabel->setText(String(inputGainSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(inputGainSlider->getValue(), 3), dontSendNotification);
     }
     else if (driveSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Drive. Sets the amount of drive/distortion for the selected pads."));
-        parameterHoverLabel->setText(String(driveSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(driveSlider->getValue(), 3), dontSendNotification);
     }
 	else if (toneSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Tone. Sets the tone/filtering of the distortion on selected pads. Set this control to 0 to bypass the filter."));
-        parameterHoverLabel->setText(String(toneSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(toneSlider->getValue(), 3), dontSendNotification);
     }
 	else if (wetDryMixSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Wet/Dry Mix. Sets the wet/dry mix for the distortion effect on the selected pads."));
-        parameterHoverLabel->setText(String(wetDryMixSlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(wetDryMixSlider->getValue(), 3), dontSendNotification);
     }
     else if (distortionTypeMenu->isMouseOver(true))
     {
@@ -388,7 +390,7 @@ void GuiDistortion::mouseEnter (const MouseEvent &e)
     else if (intensitySlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::intensitySlider));
-        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), false);
+        parameterHoverLabel->setText(String(intensitySlider->getValue(), 3), dontSendNotification);
     }
     
 }
@@ -397,6 +399,6 @@ void GuiDistortion::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
-    parameterHoverLabel->setText(String::empty, false);
+    parameterHoverLabel->setText(String::empty, dontSendNotification);
     
 }

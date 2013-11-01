@@ -22,7 +22,7 @@
 
 #include "GuiSamplerMode.h"
 #include "../../File and Settings/AppSettings.h"
-#include "../Binary Data/BinaryDataNew.h"
+#include "../Binary Data/MainBinaryData.h"
 #include "GlobalValues.h"
 #include "../../Application/CommonInfoBoxText.h"
 #include "MainComponent.h"
@@ -43,7 +43,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     
     //----------------quantise button-------------------
 	
-	Image *quantiseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::quantiseicon_png, BinaryDataNew::quantiseicon_pngSize));
+	Image *quantiseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::quantiseicon_png, MainBinaryData::quantiseicon_pngSize));
 	addAndMakeVisible(quantiseButton = new ModeButton(quantiseIcon));
 	quantiseButton->setClickingTogglesState(true);
 	quantiseButton->setToggleState(false, false);	
@@ -54,7 +54,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	
 	//----------------trigger settings button-------------------
 	
-	Image *triggerSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::triggersettingsicon_png, BinaryDataNew::triggersettingsicon_pngSize));
+	Image *triggerSettingsImage = new Image(ImageCache::getFromMemory(MainBinaryData::triggersettingsicon_png, MainBinaryData::triggersettingsicon_pngSize));
 	addAndMakeVisible(triggerSettingsButton = new ModeButton(triggerSettingsImage));
 	triggerSettingsButton->setRadioGroupId (1234);
 	triggerSettingsButton->setClickingTogglesState(true);
@@ -66,7 +66,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	
 	//----------------pressure settings button-------------------
 	
-	Image *pressureSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::pressuresettingsicon_png, BinaryDataNew::pressuresettingsicon_pngSize));
+	Image *pressureSettingsImage = new Image(ImageCache::getFromMemory(MainBinaryData::pressuresettingsicon_png, MainBinaryData::pressuresettingsicon_pngSize));
 	addAndMakeVisible(pressureSettingsButton = new ModeButton(pressureSettingsImage));
 	pressureSettingsButton->setRadioGroupId (1234);
 	pressureSettingsButton->setClickingTogglesState(true);
@@ -80,17 +80,18 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	waveform->setInterceptsMouseClicks(false, false);
     
     
-    fileChooser = new FilenameComponent ("audiofile",
-										 File::nonexistent,
-										 false, false, false,
-										 "*.wav; *.aif; *.aiff",
-										 String::empty,
-										 translate("(choose a WAV or AIFF file)"));
+    fileChooser = new AlphaFilenameComponent ("audiofile",
+                                              File::nonexistent,
+                                              false, false, false,
+                                              "*.wav; *.aif; *.aiff",
+                                              String::empty,
+                                              translate("(choose a WAV or AIFF file)"));
 	fileChooser->addListener (this);					
 	fileChooser->setBrowseButtonText ("+");
 	fileChooser->setMaxNumberOfRecentFiles (20);
-	addAndMakeVisible (fileChooser);
+    fileChooser->setDefaultBrowseTarget(AppSettings::Instance()->getLastAudioSampleDirectory());
     fileChooser->addMouseListener(this, true);
+	addAndMakeVisible (fileChooser);
     
     //--------------- gain slider-------------------
 	addAndMakeVisible(gainSlider = new AlphaRotarySlider((240 * (M_PI / 180)), (480 * (M_PI / 180)), 82));
@@ -152,17 +153,17 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     //---------------------- parameter value label ------------------
     addAndMakeVisible(parameterLabel = new Label());
 	parameterLabel->setFont(Font(9));
-	parameterLabel->setText("1", false);
+	parameterLabel->setText("1", dontSendNotification);
     parameterLabel->setJustificationType(Justification::centred);
     //parameterLabel->setEditable(false, true, true);
     //parameterLabel->addListener(this);
 
     
     //----------------------Trigger mode buttons------------------
-    Image *standardIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::standardicon_png, BinaryDataNew::standardicon_pngSize));
-	Image *toggleIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::toggleicon_png, BinaryDataNew::toggleicon_pngSize));
-	Image *latchIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::latchicon_png, BinaryDataNew::latchicon_pngSize));
-	Image *triggerIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::triggericon_png, BinaryDataNew::triggericon_pngSize));
+    Image *standardIcon = new Image(ImageCache::getFromMemory(MainBinaryData::standardicon_png, MainBinaryData::standardicon_pngSize));
+	Image *toggleIcon = new Image(ImageCache::getFromMemory(MainBinaryData::toggleicon_png, MainBinaryData::toggleicon_pngSize));
+	Image *latchIcon = new Image(ImageCache::getFromMemory(MainBinaryData::latchicon_png, MainBinaryData::latchicon_pngSize));
+	Image *triggerIcon = new Image(ImageCache::getFromMemory(MainBinaryData::triggericon_png, MainBinaryData::triggericon_pngSize));
 	
     for (int i = 0; i < 4; i++)
     {
@@ -190,21 +191,21 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     
     triggerModeButtons[1]->setToggleState(true, false);
     
-	Image *loopIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::loopicon_png, BinaryDataNew::loopicon_pngSize));
+	Image *loopIcon = new Image(ImageCache::getFromMemory(MainBinaryData::loopicon_png, MainBinaryData::loopicon_pngSize));
     addAndMakeVisible(loopButton =new ModeButton(loopIcon));
     loopButton->addListener(this);
     loopButton->addMouseListener(this, true);
     loopButton->setClickingTogglesState(true);
     loopButton->setToggleState(1, false);
     
-    Image *destructIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::indestructableicon_png, BinaryDataNew::indestructableicon_pngSize));
+    Image *destructIcon = new Image(ImageCache::getFromMemory(MainBinaryData::indestructableicon_png, MainBinaryData::indestructableicon_pngSize));
 	addChildComponent(indestructibleButton = new ModeButton(destructIcon));
     indestructibleButton->addListener(this);
     indestructibleButton->addMouseListener(this, true);
     indestructibleButton->setClickingTogglesState(true);
     indestructibleButton->setToggleState(0, false);
     
-	Image *finishIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::finishicon_png, BinaryDataNew::finishicon_pngSize));
+	Image *finishIcon = new Image(ImageCache::getFromMemory(MainBinaryData::finishicon_png, MainBinaryData::finishicon_pngSize));
     addAndMakeVisible(finishLoopButton =new ModeButton(finishIcon));
     finishLoopButton->addListener(this);
     finishLoopButton->addMouseListener(this, true);
@@ -215,7 +216,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	fxDial->setInterceptsMouseClicks(false, true);
     fxDial->addMouseListener(this, false);
     
-	Image *stickyIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::stickyicon_png, BinaryDataNew::stickyicon_pngSize));
+	Image *stickyIcon = new Image(ImageCache::getFromMemory(MainBinaryData::stickyicon_png, MainBinaryData::stickyicon_pngSize));
     addChildComponent(stickyButton = new ModeButton(stickyIcon));
     stickyButton->addListener(this);
     stickyButton->addMouseListener(this, true);
@@ -239,8 +240,8 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     
     addAndMakeVisible(currentParameterLabel = new Label());
 	currentParameterLabel->setFont(Font(10));
-	currentParameterLabel->setText(translate("TEMPO"), false);
-    currentParameterLabel->setColour(Label::textColourId, Colours::white);
+	currentParameterLabel->setText(translate("TEMPO"), dontSendNotification);
+    currentParameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->textColour);
     currentParameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     currentParameterLabel->setJustificationType(Justification::centred);
     //currentParameterLabel->setEditable(false, false, false);
@@ -301,12 +302,12 @@ void GuiSamplerMode::paint (Graphics& g)
 	float widthBrowseButton = 58;
 	
 	
-	ColourGradient fillGradient(AlphaColours::nearlyblack,845 , 461, Colours::black, 845 , 383, false);
+	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);
 	
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	
 	g.fillEllipse(786,218, 48, 48);
 	g.fillEllipse(844,216, 48, 48);
@@ -328,24 +329,24 @@ void GuiSamplerMode::paint (Graphics& g)
 	
 	g.fillEllipse(xBrowseButton, yBrowseButton, widthBrowseButton, widthBrowseButton);
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(850,493, 38, 38, 1.0);
 	
 	if(triggerSettingsButton->getToggleStateValue()==true)
 	{
-        g.setColour(Colours::black);
+        g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(816, 393, 58, 58);
 		
-		ColourGradient fillGradient(AlphaColours::blue, 816+(58*0.5), 393+(58*0.6), AlphaColours::lightblue, 816+(58*0.5), 393, false);
+		ColourGradient fillGradient(AlphaTheme::getInstance()->mainColour, 816+(58*0.5), 393+(58*0.6), AlphaTheme::getInstance()->mainColourLighter, 816+(58*0.5), 393, false);
 		g.setGradientFill(fillGradient);
         
 		g.fillEllipse((816+(58*0.15)), (393+(58*0.15)), (58*0.7), (58*0.7));
 		
 	}
 	
-    g.setColour(Colours::grey.withAlpha(0.3f));
+    g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
     
 	g.drawEllipse((xBrowseButton + (widthBrowseButton * 0.1)), (yBrowseButton + (widthBrowseButton * 0.1)),
 				  (widthBrowseButton * 0.8),(widthBrowseButton * 0.8), 1.0f);
@@ -440,7 +441,7 @@ void GuiSamplerMode::filenameComponentChanged (FilenameComponent* filenameCompon
             }
             
             setAudioFileDisplay(audioFile);
-            
+            AppSettings::Instance()->setLastAudioSampleDirectory(audioFile.getParentDirectory());
         }
         
         else
@@ -491,6 +492,15 @@ void GuiSamplerMode::buttonClicked (Button* button)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setSamplerIndestructible(button->getToggleState());
         }
+        
+        if (button->getToggleState() == true)
+        {
+            if (finishLoopButton->getToggleState() == true)
+            {
+                //turn off finish Loop mode, as these two modes can't work together
+                finishLoopButton->setToggleState(false, sendNotification);
+            }
+        }
     }
     
     else if (button == finishLoopButton)
@@ -499,6 +509,15 @@ void GuiSamplerMode::buttonClicked (Button* button)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setSamplerShouldFinishLoop(button->getToggleState());
+        }
+        
+        if (button->getToggleState() == true)
+        {
+            if (indestructibleButton->getToggleState() == true)
+            {
+                //turn off indestructible mode, as these two modes can't work together
+                indestructibleButton->setToggleState(false, sendNotification);
+            }
         }
     }
     else if (button == stickyButton)
@@ -577,7 +596,7 @@ void GuiSamplerMode::setAudioFileDisplay(File file)
     //can't use 'file' below as this will be the original file, not the copied file in the projects directory
     fileChooser->setCurrentFile (AppSettings::Instance()->padSettings[selectedPads[0]]->getSamplerAudioFilePath(), 
                                  true, 
-                                 false);
+                                 dontSendNotification);
 }
 
 void GuiSamplerMode::setDisplay(int settingsType)
@@ -663,7 +682,7 @@ void GuiSamplerMode::updateDisplay()
     {
         int padNum = selectedPads[0];
         
-        fileChooser->setCurrentFile(PAD_SETTINGS->getSamplerAudioFilePath(), true, false);
+        fileChooser->setCurrentFile(PAD_SETTINGS->getSamplerAudioFilePath(), true, dontSendNotification);
 		File audioFile(PAD_SETTINGS->getSamplerAudioFilePath());
 		waveform->setFile (audioFile);
 		
@@ -710,13 +729,13 @@ void GuiSamplerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSamplerAudioFilePath() != file_)
             {
-                fileChooser->setCurrentFile(File::nonexistent, false, false);
+                fileChooser->setCurrentFile(File::nonexistent, false, dontSendNotification);
                 waveform->setFile(File::nonexistent);
                 break;
             }
             if (i == selectedPads.size()-1)
             {
-                fileChooser->setCurrentFile(file_, false, false);
+                fileChooser->setCurrentFile(file_, false, dontSendNotification);
                 waveform->setFile(file_);
             }
         }
@@ -929,8 +948,8 @@ void GuiSamplerMode::setParameterLabelText (String value)
     
     if (value != String::empty)
     {
-        parameterLabel->setColour(Label::textColourId, AlphaColours::lightblue);
-        parameterLabel->setText(value, false);
+        parameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColourLighter);
+        parameterLabel->setText(value, dontSendNotification);
     }
 	
 	else if (value == String::empty)
@@ -939,28 +958,28 @@ void GuiSamplerMode::setParameterLabelText (String value)
 		
 		if (gainSlider->isVisible())
 		{
-            currentParameterLabel->setText(translate("GAIN"), false);
-			parameterLabel->setText(String(gainSlider->getValue()), false);
+            currentParameterLabel->setText(translate("GAIN"), dontSendNotification);
+			parameterLabel->setText(String(gainSlider->getValue()), dontSendNotification);
 		}
 		else if (panSlider->isVisible())
 		{
-            currentParameterLabel->setText(translate("PAN"), false);
-			parameterLabel->setText(String(panSlider->getValue()), false);
+            currentParameterLabel->setText(translate("PAN"), dontSendNotification);
+			parameterLabel->setText(String(panSlider->getValue()), dontSendNotification);
 		}
         else if (attackSlider->isVisible())
 		{
-            currentParameterLabel->setText(translate("ATTACK"), false);
-			parameterLabel->setText(String(attackSlider->getValue()), false);
+            currentParameterLabel->setText(translate("ATTACK"), dontSendNotification);
+			parameterLabel->setText(String(attackSlider->getValue()), dontSendNotification);
 		}
         else if (releaseSlider->isVisible())
 		{
-            currentParameterLabel->setText(translate("RELEASE"), false);
-			parameterLabel->setText(String(releaseSlider->getValue()), false);
+            currentParameterLabel->setText(translate("RELEASE"), dontSendNotification);
+			parameterLabel->setText(String(releaseSlider->getValue()), dontSendNotification);
 		}
         else if (polyphonySlider->isVisible())
 		{
-            currentParameterLabel->setText(translate("POLYPHONY"), false);
-			parameterLabel->setText(String(polyphonySlider->getValue()), false);
+            currentParameterLabel->setText(translate("POLYPHONY"), dontSendNotification);
+			parameterLabel->setText(String(polyphonySlider->getValue()), dontSendNotification);
 		}
 	}
     

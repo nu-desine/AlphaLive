@@ -23,7 +23,7 @@
 #include "GuiSequencerMode.h"
 #include "../../Functionality Classes/Sequencer Mode/SequencerValues.h"
 #include "../../File and Settings/AppSettings.h"
-#include "../Binary Data/BinaryDataNew.h"
+#include "../Binary Data/MainBinaryData.h"
 #include "GlobalValues.h"
 #include "../../Application/CommonInfoBoxText.h"
 #include "MainComponent.h"
@@ -114,7 +114,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	fxDial->setVisible(false);
     
     //----------------quantise button-------------------
-	Image *quantiseIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::quantiseicon_png, BinaryDataNew::quantiseicon_pngSize));
+	Image *quantiseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::quantiseicon_png, MainBinaryData::quantiseicon_pngSize));
 	addAndMakeVisible(quantiseButton = new ModeButton(quantiseIcon));
 	quantiseButton->setClickingTogglesState(true);
 	quantiseButton->setToggleState(false, false);	
@@ -123,7 +123,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	quantiseButton->setOpaque(false);
 	
     //----------------sequence settings button-------------------
-	Image *sequenceIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::sequenceicon_png, BinaryDataNew::sequenceicon_pngSize));
+	Image *sequenceIcon = new Image(ImageCache::getFromMemory(MainBinaryData::sequenceicon_png, MainBinaryData::sequenceicon_pngSize));
 	addAndMakeVisible(sequenceSettingsButton = new ModeButton(sequenceIcon));
 	sequenceSettingsButton->setRadioGroupId (1234);
 	sequenceSettingsButton->setClickingTogglesState(true);
@@ -134,7 +134,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     sequenceSettingsButton->setToggleState(true, false);
 	
 	//----------------trigger settings button-------------------
-	Image *triggerSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::triggersettingsicon_png, BinaryDataNew::triggersettingsicon_pngSize));
+	Image *triggerSettingsImage = new Image(ImageCache::getFromMemory(MainBinaryData::triggersettingsicon_png, MainBinaryData::triggersettingsicon_pngSize));
 	addAndMakeVisible(triggerSettingsButton = new ModeButton(triggerSettingsImage));
 	triggerSettingsButton->setRadioGroupId (1234);
 	triggerSettingsButton->setClickingTogglesState(true);
@@ -144,7 +144,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	triggerSettingsButton->setOpaque(false);
 	
 	//----------------pressure settings button-------------------
-	Image *pressureSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::pressuresettingsicon_png, BinaryDataNew::pressuresettingsicon_pngSize));
+	Image *pressureSettingsImage = new Image(ImageCache::getFromMemory(MainBinaryData::pressuresettingsicon_png, MainBinaryData::pressuresettingsicon_pngSize));
 	addAndMakeVisible(pressureSettingsButton = new ModeButton(pressureSettingsImage));
 	pressureSettingsButton->setRadioGroupId (1234);
 	pressureSettingsButton->setClickingTogglesState(true);
@@ -154,7 +154,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	pressureSettingsButton->setOpaque(false);
 	
 	//----------------sequence MIDI button-------------------
-	Image *modeMidiIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::midisymbol_png, BinaryDataNew::midisymbol_pngSize));
+	Image *modeMidiIcon = new Image(ImageCache::getFromMemory(MainBinaryData::midisymbol_png, MainBinaryData::midisymbol_pngSize));
 	addAndMakeVisible(modeMidiButton = new ModeButton(modeMidiIcon));
 	modeMidiButton->setRadioGroupId (123);
 	modeMidiButton->setClickingTogglesState(true);
@@ -165,7 +165,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     modeMidiButton->setToggleState(true, false);
 	
 	//----------------sequence Samples button-------------------
-	Image *modeAudioIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::loopsymbol_png, BinaryDataNew::loopsymbol_pngSize));
+	Image *modeAudioIcon = new Image(ImageCache::getFromMemory(MainBinaryData::loopsymbol_png, MainBinaryData::loopsymbol_pngSize));
 	addAndMakeVisible(modeSamplesButton = new ModeButton(modeAudioIcon));
 	modeSamplesButton->setRadioGroupId (123);
 	modeSamplesButton->setClickingTogglesState(true);
@@ -242,15 +242,15 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     
     addAndMakeVisible(parameterLabel = new Label());
 	parameterLabel->setFont(Font(9));
-	parameterLabel->setText("32", false);
+	parameterLabel->setText("32", dontSendNotification);
     parameterLabel->setJustificationType(Justification::centred);
     //parameterLabel->setEditable(false, true, true);
     parameterLabel->addListener(this);
 	
 	addChildComponent(currentParameterLabel = new Label());
 	currentParameterLabel->setFont(Font(10));
-	currentParameterLabel->setText(translate("TEMPO"), false);
-    currentParameterLabel->setColour(Label::textColourId, Colours::white);
+	currentParameterLabel->setText(translate("TEMPO"), dontSendNotification);
+    currentParameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->textColour);
     currentParameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     currentParameterLabel->setJustificationType(Justification::centred);
     currentParameterLabel->setEditable(false, false, false);
@@ -259,17 +259,16 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     //---------------hover parameter label -------------------------------------
     addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setColour(Label::textColourId, AlphaColours::blue);
     parameterHoverLabel->setFont(Font(9));
     parameterHoverLabel->addMouseListener(this, true);
     
     //----------------------Trigger mode buttons------------------
-	Image *standardIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::standardicon_png, BinaryDataNew::standardicon_pngSize));
-	Image *toggleIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::toggleicon_png, BinaryDataNew::toggleicon_pngSize));
-	Image *latchIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::latchicon_png, BinaryDataNew::latchicon_pngSize));
-	Image *triggerIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::triggericon_png, BinaryDataNew::triggericon_pngSize));
-	Image *cycleIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::cycleicon_png, BinaryDataNew::cycleicon_pngSize));
-	Image *autoIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::autocycleicon_png, BinaryDataNew::autocycleicon_pngSize));
+	Image *standardIcon = new Image(ImageCache::getFromMemory(MainBinaryData::standardicon_png, MainBinaryData::standardicon_pngSize));
+	Image *toggleIcon = new Image(ImageCache::getFromMemory(MainBinaryData::toggleicon_png, MainBinaryData::toggleicon_pngSize));
+	Image *latchIcon = new Image(ImageCache::getFromMemory(MainBinaryData::latchicon_png, MainBinaryData::latchicon_pngSize));
+	Image *triggerIcon = new Image(ImageCache::getFromMemory(MainBinaryData::triggericon_png, MainBinaryData::triggericon_pngSize));
+	Image *cycleIcon = new Image(ImageCache::getFromMemory(MainBinaryData::cycleicon_png, MainBinaryData::cycleicon_pngSize));
+	Image *autoIcon = new Image(ImageCache::getFromMemory(MainBinaryData::autocycleicon_png, MainBinaryData::autocycleicon_pngSize));
 	
 	
     for (int i = 0; i < 6; i++)
@@ -304,12 +303,12 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     
     //--------------pressure mode buttons--------------------------
 	
-	//Image *patIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::polyphonicaftertouchicon_png, BinaryDataNew::polyphonicaftertouchicon_pngSize));
-	Image *catIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::channelaftertouchicon_png, BinaryDataNew::channelaftertouchicon_pngSize));
-	Image *mwheelIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::modwheelicon_png, BinaryDataNew::modwheelicon_pngSize));
-	Image *ccIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::ccmessageicon_png, BinaryDataNew::ccmessageicon_pngSize));
-	Image *pbUpIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::pitchbendupicon_png, BinaryDataNew::pitchbendupicon_pngSize));
-	Image *pbDownIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::pitchbenddownicon_png, BinaryDataNew::pitchbenddownicon_pngSize));
+	//Image *patIcon = new Image(ImageCache::getFromMemory(MainBinaryData::polyphonicaftertouchicon_png, MainBinaryData::polyphonicaftertouchicon_pngSize));
+	Image *catIcon = new Image(ImageCache::getFromMemory(MainBinaryData::channelaftertouchicon_png, MainBinaryData::channelaftertouchicon_pngSize));
+	Image *mwheelIcon = new Image(ImageCache::getFromMemory(MainBinaryData::modwheelicon_png, MainBinaryData::modwheelicon_pngSize));
+	Image *ccIcon = new Image(ImageCache::getFromMemory(MainBinaryData::ccmessageicon_png, MainBinaryData::ccmessageicon_pngSize));
+	Image *pbUpIcon = new Image(ImageCache::getFromMemory(MainBinaryData::pitchbendupicon_png, MainBinaryData::pitchbendupicon_pngSize));
+	Image *pbDownIcon = new Image(ImageCache::getFromMemory(MainBinaryData::pitchbenddownicon_png, MainBinaryData::pitchbenddownicon_pngSize));
 	
 	for (int i = 0; i < 5; i++)
     {
@@ -344,26 +343,26 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     numberOfSequencesSlider->addMouseListener(this, true);
      */
     
-	Image *loopIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::loopicon_png, BinaryDataNew::loopicon_pngSize));
+	Image *loopIcon = new Image(ImageCache::getFromMemory(MainBinaryData::loopicon_png, MainBinaryData::loopicon_pngSize));
     addChildComponent(loopButton =new ModeButton(loopIcon));
     loopButton->addListener(this);
     loopButton->addMouseListener(this, true);
     loopButton->setClickingTogglesState(true);
     loopButton->setToggleState(1, false);
     
-    Image *destructIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::indestructableicon_png, BinaryDataNew::indestructableicon_pngSize));
+    Image *destructIcon = new Image(ImageCache::getFromMemory(MainBinaryData::indestructableicon_png, MainBinaryData::indestructableicon_pngSize));
 	addChildComponent(indestructibleButton = new ModeButton(destructIcon));
     indestructibleButton->addListener(this);
     indestructibleButton->addMouseListener(this, true);
     indestructibleButton->setClickingTogglesState(true);
     
-    Image *finishIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::finishicon_png, BinaryDataNew::finishicon_pngSize));
+    Image *finishIcon = new Image(ImageCache::getFromMemory(MainBinaryData::finishicon_png, MainBinaryData::finishicon_pngSize));
     addChildComponent(finishLoopButton =new ModeButton(finishIcon));
     finishLoopButton->addListener(this);
     finishLoopButton->addMouseListener(this, true);
     finishLoopButton->setClickingTogglesState(true);
     
-    Image *stickyIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::stickyicon_png, BinaryDataNew::stickyicon_pngSize));
+    Image *stickyIcon = new Image(ImageCache::getFromMemory(MainBinaryData::stickyicon_png, MainBinaryData::stickyicon_pngSize));
     addChildComponent(stickyButton = new ModeButton(stickyIcon));
     stickyButton->addListener(this);
     stickyButton->addMouseListener(this, true);
@@ -383,7 +382,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     pressureStatusButton->setToggleState(true, false);
     pressureStatusButton->addMouseListener(this, false);
     
-    Image *linkIcon = new Image(ImageCache::getFromMemory(BinaryDataNew::linkicon_png, BinaryDataNew::linkicon_pngSize));
+    Image *linkIcon = new Image(ImageCache::getFromMemory(MainBinaryData::linkicon_png, MainBinaryData::linkicon_pngSize));
     addChildComponent(linkButton = new ModeButton(linkIcon));
     linkButton->addListener(this);
     linkButton->addMouseListener(this, true);
@@ -397,26 +396,12 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     popUpButton->addMouseListener(this, true);
 	
 	//--------------preview button-------------------
-	DrawablePath normal, down;
-	
-	Path p;
-	p.addTriangle(0, 0, 0, 4, 4.5, 2);
-	normal.setPath (p);
-	normal.setFill (Colours::white);
-	
-	p.clear();
-	p.addQuadrilateral(0, 0, 0, 4, 4, 4, 4, 0);
-	down.setPath (p);
-	down.setFill (Colours::white);
-	p.clear();
-	
-	
+    //drawing and setting the images is now done in drawDrawableButtons()
 	previewButton = new DrawableButton ("preview", DrawableButton::ImageOnButtonBackground);
-	previewButton->setImages (&normal, &normal, &normal, 0, &down, &down, &down, 0);
 	previewButton->setClickingTogglesState (true);
 	previewButton->addListener (this);
     previewButton->addMouseListener(this, true);
-	//previewButton->setBackgroundColours (Colours::black, AlphaColours::blue);
+	//previewButton->setBackgroundColours (AlphaTheme::getInstance()->backgroundColour, AlphaTheme::getInstance()->mainColour);
 	addAndMakeVisible (previewButton);
 	
 	addAndMakeVisible(nextSequenceButton = new AlphaTextButton());
@@ -430,28 +415,15 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	previousSequenceButton->addMouseListener(this, true);
     
     //record button
-	
-	DrawablePath rnormal, rdown;
-	
-	Path r;
-	r.addEllipse(0, 0, 2, 2);
-	rnormal.setPath (r);
-	rnormal.setFill (Colours::white);
-	
-	r.clear();
-	r.addEllipse(0, 0, 2, 2);
-	rdown.setPath (r);
-	rdown.setFill (Colours::white);
-	r.clear();
-	
-	
-	recordButton = new DrawableButton ("record", DrawableButton::ImageOnButtonBackground);
-	recordButton->setImages (&rnormal, &rnormal, &rnormal, 0, &rdown, &rdown, &rdown, 0);
+	//drawing and setting the images is now done in drawDrawableButtons()
+    recordButton = new DrawableButton ("record", DrawableButton::ImageOnButtonBackground);
     recordButton->setClickingTogglesState(true);	
 	recordButton->addListener(this);
 	recordButton->addMouseListener(this, true);
     recordButton->setColour(TextButton::buttonOnColourId, Colours::red);
 	addAndMakeVisible (recordButton);
+    
+    drawDrawableButtons();
     
     //attach this class to the subject class
     modeSequencerRef.attach(this);
@@ -591,10 +563,12 @@ void GuiSequencerMode::resized()
 
 void GuiSequencerMode::paint (Graphics& g)
 {
-	ColourGradient fillGradient(AlphaColours::nearlyblack,845 , 461, Colours::black, 845 , 383, false);
+    parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+
+	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	g.fillEllipse(802, 379, 86, 86);
-	g.setColour(Colours::black);
+	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	
 	g.fillEllipse(786,218, 48, 48);
 	g.fillEllipse(844,216, 48, 48);
@@ -622,10 +596,10 @@ void GuiSequencerMode::paint (Graphics& g)
 		linkButtonBg.addCentredArc(845, 423, 162, 162, 0, (330 * (M_PI / 180)), (367 * (M_PI / 180)), false);
 		
 		
-		g.setColour(AlphaColours::nearlyblack);
+		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.fillPath(linkButtonBg, getTransform());
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(800,265, 38, 38);
 	}
 	
@@ -651,7 +625,7 @@ void GuiSequencerMode::paint (Graphics& g)
         g.fillEllipse(981,520, 27, 27);
 	}
 	
-	g.setColour(Colours::grey.withAlpha(0.3f));
+	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(949,260, 38, 38, 1.0);
@@ -664,19 +638,19 @@ void GuiSequencerMode::paint (Graphics& g)
 		g.drawEllipse(891,469, 38, 38, 1.0);
 		g.drawEllipse(915,428, 38, 38, 1.0);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		Path pieSeg;
 		pieSeg.addPieSegment(802, 379, 86, 86, (125 * (M_PI / 180)), (235 * (M_PI / 180)), 0.2f);
 		g.fillPath(pieSeg);
 		
 		g.fillEllipse(816, 393, 58, 58);
 		
-		ColourGradient fillGradient(AlphaColours::blue, 816+(58*0.5), 393+(58*0.6), AlphaColours::lightblue, 816+(58*0.5), 393, false);
+		ColourGradient fillGradient(AlphaTheme::getInstance()->mainColour, 816+(58*0.5), 393+(58*0.6), AlphaTheme::getInstance()->mainColourLighter, 816+(58*0.5), 393, false);
 		g.setGradientFill(fillGradient);
         
 		g.fillEllipse((816+(58*0.15)), (393+(58*0.15)), (58*0.7), (58*0.7));
 		
-		g.setColour(Colours::grey.withAlpha(0.3f));
+		g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 		g.drawEllipse((816+(58*0.1)), (393+(58*0.1)), (58*0.8), (58*0.8), 1.0f);
 	}
 	
@@ -713,56 +687,56 @@ void GuiSequencerMode::paint (Graphics& g)
     if(sequenceSettingsButton->getToggleStateValue()==true)
 	{
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(662, 366, 27, 27);
 		g.fillEllipse(657, 396, 27, 27);
 		g.fillEllipse(672, 337, 27, 27);
 		
-		g.setColour(AlphaColours::nearlyblack);
+		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.fillEllipse(689, 266, 312, 312);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(698, 275, 294, 294);
 		
-		g.setColour(AlphaColours::nearlyblack);
+		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.fillEllipse(707, 284, 276, 276);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(716, 293, 258, 258);
 		
-		g.setColour(AlphaColours::nearlyblack);
+		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.fillEllipse(725, 302, 240, 240);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(734, 311, 222, 222);
 		
-		g.setColour(AlphaColours::nearlyblack);
+		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.fillEllipse(743, 320, 204, 204);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(752, 329, 186, 186);
 		
-		g.setColour(AlphaColours::nearlyblack);
+		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.fillEllipse(761, 338, 168, 168);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(770, 347, 150, 150);
 		
-		g.setColour(AlphaColours::nearlyblack);
+		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.fillEllipse(779, 356, 132, 132);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(788, 365, 114, 114);
 		
-		g.setColour(AlphaColours::nearlyblack);
+		g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
 		g.drawEllipse(797, 374, 96, 96,1.0);
 		
-		ColourGradient fillGradient(AlphaColours::nearlyblack,845 , 461, Colours::black, 845 , 383, false);
+		ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 		g.setGradientFill(fillGradient);
 		
 		g.fillEllipse(802, 379, 86, 86);
 		
-		g.setColour(Colours::black);
+		g.setColour(AlphaTheme::getInstance()->backgroundColour);
         Path pieSeg;
         pieSeg.addPieSegment(802, 379, 86, 86, (125 * (M_PI / 180)), (235 * (M_PI / 180)), 0.2f);
         g.fillPath(pieSeg);
@@ -912,7 +886,7 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
             PAD_SETTINGS->setSequencerMidiMinPressureRange(midiPressureMinRangeSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue()), false);
+        parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
     }
     
     
@@ -925,7 +899,7 @@ void GuiSequencerMode::sliderValueChanged (Slider* slider)
             PAD_SETTINGS->setSequencerMidiMaxPressureRange(midiPressureMaxRangeSlider->getValue());
         }
         
-        parameterHoverLabel->setText(String(slider->getValue()), false);
+        parameterHoverLabel->setText(String(slider->getValue()), dontSendNotification);
     }
 
        
@@ -1442,6 +1416,15 @@ void GuiSequencerMode::buttonClicked (Button* button)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerIndestructible(button->getToggleState());
         }
+        
+        if (button->getToggleState() == true)
+        {
+            if (finishLoopButton->getToggleState() == true)
+            {
+                //turn off finish Loop mode, as these two modes can't work together
+                finishLoopButton->setToggleState(false, sendNotification);
+            }
+        }
     }
     
     else if (button == finishLoopButton)
@@ -1450,6 +1433,15 @@ void GuiSequencerMode::buttonClicked (Button* button)
         {
             int padNum = selectedPads[i];
             PAD_SETTINGS->setSequencerShouldFinishLoop(button->getToggleState());
+        }
+        
+        if (button->getToggleState() == true)
+        {
+            if (indestructibleButton->getToggleState() == true)
+            {
+                //turn off indestructible mode, as these two modes can't work together
+                indestructibleButton->setToggleState(false, sendNotification);
+            }
         }
     }
     else if (button == stickyButton)
@@ -1539,7 +1531,7 @@ void GuiSequencerMode::buttonClicked (Button* button)
         {
         
             FileChooser myChooser (translate("Please select an audio file to load..."),
-                                   File::getSpecialLocation (File::userMusicDirectory),
+                                   AppSettings::Instance()->getLastAudioSampleDirectory(),
                                    "*.wav;*.aif;*.aiff");
             
             if (myChooser.browseForFileToOpen() == true)
@@ -1551,6 +1543,8 @@ void GuiSequencerMode::buttonClicked (Button* button)
                     int padNum = selectedPads[i];
                     PAD_SETTINGS->setSequencerSamplesAudioFilePath(selectedAudioFile, row);
                 }
+                
+                AppSettings::Instance()->setLastAudioSampleDirectory(selectedAudioFile.getParentDirectory());
             }
 			
 		}
@@ -2286,8 +2280,8 @@ void GuiSequencerMode::setParameterLabelText (String value)
     
     if (value != String::empty)
     {
-	parameterLabel->setColour(Label::textColourId, AlphaColours::lightblue);
-	parameterLabel->setText(value, false);
+	parameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColourLighter);
+	parameterLabel->setText(value, dontSendNotification);
     }
 	
 	else if (value == String::empty)
@@ -2298,46 +2292,46 @@ void GuiSequencerMode::setParameterLabelText (String value)
 		{
             //here want to display sequenceLength, NOT number of sequences.
             //Is this too convoluted?
-            parameterLabel->setText(String(sequenceLength), false);
+            parameterLabel->setText(String(sequenceLength), dontSendNotification);
             //parameterLabel->setText(String(numberOfSequencesSlider->getValue()), false);
         }
 		
 		else if (relativeTempoSlider->isVisible())
 		{
-			currentParameterLabel->setText(translate("TEMPO"), false);
-			parameterLabel->setText(String(relativeTempoSlider->getValue()), false);
+			currentParameterLabel->setText(translate("TEMPO"), dontSendNotification);
+			parameterLabel->setText(String(relativeTempoSlider->getValue()), dontSendNotification);
 		}
 		
 		else if (noteLengthSlider->isVisible())
 		{
-			currentParameterLabel->setText(translate("N LENGTH"), false);
-			parameterLabel->setText(String(noteLengthSlider->getValue()), false);
+			currentParameterLabel->setText(translate("N LENGTH"), dontSendNotification);
+			parameterLabel->setText(String(noteLengthSlider->getValue()), dontSendNotification);
 		}
 		
 		else if (audioGainSlider->isVisible())
 		{
-			currentParameterLabel->setText(translate("GAIN"), false);
-			parameterLabel->setText(String(audioGainSlider->getValue()), false);
+			currentParameterLabel->setText(translate("GAIN"), dontSendNotification);
+			parameterLabel->setText(String(audioGainSlider->getValue()), dontSendNotification);
 		}
 		
 		else if (audioPanSlider->isVisible())
 		{
-			currentParameterLabel->setText(translate("PAN"), false);
-			parameterLabel->setText(String(audioPanSlider->getValue()), false);
+			currentParameterLabel->setText(translate("PAN"), dontSendNotification);
+			parameterLabel->setText(String(audioPanSlider->getValue()), dontSendNotification);
 			
 		}
         
         else if (audioAttackSlider->isVisible())
 		{
-			currentParameterLabel->setText(translate("ATTACK"), false);
-			parameterLabel->setText(String(audioAttackSlider->getValue()), false);
+			currentParameterLabel->setText(translate("ATTACK"), dontSendNotification);
+			parameterLabel->setText(String(audioAttackSlider->getValue()), dontSendNotification);
 			
 		}
         
         else if (audioPolyphonySlider->isVisible())
 		{
-			currentParameterLabel->setText(translate("POLYPHONY"), false);
-			parameterLabel->setText(String(audioPolyphonySlider->getValue()), false);
+			currentParameterLabel->setText(translate("POLYPHONY"), dontSendNotification);
+			parameterLabel->setText(String(audioPolyphonySlider->getValue()), dontSendNotification);
 			
 		}
 	}
@@ -2394,6 +2388,50 @@ void GuiSequencerMode::changeView()
         sequenceSettingsButton->triggerClick();
 }
 
+void GuiSequencerMode::drawDrawableButtons()
+{
+    Path r;
+	r.addEllipse(0, 0, 2, 2);
+	recordButtonNormalPath.setPath (r);
+	recordButtonNormalPath.setFill (AlphaTheme::getInstance()->iconColour);
+	
+	r.clear();
+	r.addEllipse(0, 0, 2, 2);
+	recordButtonDownPath.setPath (r);
+	recordButtonDownPath.setFill (AlphaTheme::getInstance()->iconColour);
+	r.clear();
+	
+	
+	recordButton->setImages (&recordButtonNormalPath,
+                             &recordButtonNormalPath,
+                             &recordButtonNormalPath,
+                             0,
+                             &recordButtonDownPath,
+                             &recordButtonDownPath,
+                             &recordButtonDownPath, 0);
+    
+    Path p;
+	p.addTriangle(0, 0, 0, 4, 4.5, 2);
+	previewButtonNormalPath.setPath (p);
+	previewButtonNormalPath.setFill (AlphaTheme::getInstance()->iconColour);
+	
+	p.clear();
+	p.addQuadrilateral(0, 0, 0, 4, 4, 4, 4, 0);
+	previewButtonDownPath.setPath (p);
+	previewButtonDownPath.setFill (AlphaTheme::getInstance()->iconColour);
+	p.clear();
+	
+	
+    
+	previewButton->setImages (&previewButtonNormalPath,
+                              &previewButtonNormalPath,
+                              &previewButtonNormalPath,
+                              0, &previewButtonDownPath,
+                              &previewButtonDownPath,
+                              &previewButtonDownPath,
+                              0);
+}
+
 void GuiSequencerMode::mouseEnter (const MouseEvent &e)
 {
     
@@ -2418,9 +2456,9 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
     
     //update parameterHoverLabel
     if (midiPressureMinRangeSlider->isMouseOver(true))
-        parameterHoverLabel->setText(String(midiPressureMinRangeSlider->getValue()), false);
+        parameterHoverLabel->setText(String(midiPressureMinRangeSlider->getValue()), dontSendNotification);
     else if (midiPressureMaxRangeSlider->isMouseOver(true))
-        parameterHoverLabel->setText(String(midiPressureMaxRangeSlider->getValue()), false);
+        parameterHoverLabel->setText(String(midiPressureMaxRangeSlider->getValue()), dontSendNotification);
      
     
     // ======= info box text command =========
@@ -2661,7 +2699,7 @@ void GuiSequencerMode::mouseExit (const MouseEvent &e)
 		setParameterLabelText(String::empty);
     
     if(e.eventComponent == midiPressureMinRangeSlider || e.eventComponent == midiPressureMaxRangeSlider)
-        parameterHoverLabel->setText(String::empty, false);
+        parameterHoverLabel->setText(String::empty, dontSendNotification);
      
     
     //remove any text

@@ -24,7 +24,7 @@
 #include "../Views/MainComponent.h"
 #include "../../Application/CommonInfoBoxText.h"
 #include "../AlphaLiveLookandFeel.h"
-#include "../Binary Data/BinaryDataNew.h"
+#include "../Binary Data/MainBinaryData.h"
 
 
 
@@ -37,25 +37,25 @@ AboutComponent::AboutComponent(MainComponent &ref)
     titleLabel->setFont(newFont1);
     
     addAndMakeVisible(versionNumberLabel = new Label("Version Number"));
-    versionNumberLabel->setText(translate("Version") + " " + String(ProjectInfo::versionString), false);
+    versionNumberLabel->setText(translate("Version") + " " + String(ProjectInfo::versionString), dontSendNotification);
     versionNumberLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(firmwareNumberLabel = new Label("Firmware Number"));
     firmwareNumberLabel->setText(translate("Firmware Version:") + 
                                  " " + 
                                  mainComponentRef.getAlphaLiveEngineRef().getFirmwareVersion(),
-                                 false);
+                                 dontSendNotification);
     firmwareNumberLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(deviceSerialLabel = new Label("Device Serial"));
     deviceSerialLabel->setText(translate("Device Serial:") + 
                                " " + 
                                mainComponentRef.getAlphaLiveEngineRef().getDeviceSerial(),
-                               false);
+                               dontSendNotification);
     deviceSerialLabel->setJustificationType(Justification::centredTop);
     
     addAndMakeVisible(companyLabel = new Label("Company"));
-    companyLabel->setText(translate("Developed by") + " ", false);
+    companyLabel->setText(translate("Developed by") + " ", dontSendNotification);
     companyLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(nuDesineLink = new HyperlinkButton("nu desine", URL("http://www.nu-desine.com")));
@@ -66,18 +66,18 @@ AboutComponent::AboutComponent(MainComponent &ref)
                                                            URL("https://github.com/nu-desine/AlphaLive")));
     
     addAndMakeVisible(openSourceLabel = new Label("Open Source Label"));
-    openSourceLabel->setText(translate("released under the") + " ", false);
+    openSourceLabel->setText(translate("released under the") + " ", dontSendNotification);
     openSourceLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(gnuLicenseLink = new HyperlinkButton("GNU General Public License v2.0", 
                                                          URL("http://www.opensource.org/licenses/GPL-2.0")));
     
     addAndMakeVisible(copyrightLabel = new Label("Copyright Label"));
-    copyrightLabel->setText(translate("Copyright 2011-2013 nu desine"), false);
+    copyrightLabel->setText(translate("Copyright 2011-2013 nu desine"), dontSendNotification);
     copyrightLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(samplesLabel = new Label("Samples Label"));
-    samplesLabel->setText(translate("Audio samples provided by:"), false);
+    samplesLabel->setText(translate("Audio samples provided by:"), dontSendNotification);
     samplesLabel->setJustificationType(Justification::horizontallyCentred);
     
     nuDesineLink->toFront(true);
@@ -89,8 +89,8 @@ AboutComponent::AboutComponent(MainComponent &ref)
     addAndMakeVisible(loopmastersButton = new ImageButton("loopmasters"));
     loopmastersButton->addListener(this);
     Image loopmastersImage = ImageCache::getFromMemory 
-    (BinaryDataNew::logoloopmasterssmall_jpg, 
-     BinaryDataNew::logoloopmasterssmall_jpgSize);
+    (MainBinaryData::logoloopmasterssmall_jpg, 
+     MainBinaryData::logoloopmasterssmall_jpgSize);
     loopmastersButton->setImages (true, false, true,
                                   loopmastersImage, 0.9f, Colours::transparentBlack,
                                   loopmastersImage, 1.0f, Colours::transparentBlack,
@@ -100,8 +100,8 @@ AboutComponent::AboutComponent(MainComponent &ref)
     addAndMakeVisible(zeroGButton = new ImageButton("zero-g"));
     zeroGButton->addListener(this);
     Image zeroGImage = ImageCache::getFromMemory 
-    (BinaryDataNew::logozerogsmall_png, 
-     BinaryDataNew::logozerogsmall_pngSize);
+    (MainBinaryData::logozerogsmall_png, 
+     MainBinaryData::logozerogsmall_pngSize);
     zeroGButton->setImages (true, false, true,
                             zeroGImage, 0.9f, Colours::transparentBlack,
                             zeroGImage, 1.0f, Colours::transparentBlack,
@@ -111,8 +111,8 @@ AboutComponent::AboutComponent(MainComponent &ref)
     addAndMakeVisible(fivePinMediaButton = new ImageButton("5 pin media"));
     fivePinMediaButton->addListener(this);
     Image fivePinImage = ImageCache::getFromMemory 
-    (BinaryDataNew::logo5pinmediasmall_jpg, 
-     BinaryDataNew::logo5pinmediasmall_jpgSize);
+    (MainBinaryData::logo5pinmediasmall_jpg, 
+     MainBinaryData::logo5pinmediasmall_jpgSize);
     fivePinMediaButton->setImages (true, false, true,
                             fivePinImage, 0.9f, Colours::transparentBlack,
                             fivePinImage, 1.0f, Colours::transparentBlack,
@@ -138,8 +138,9 @@ void AboutComponent::resized()
     titleLabel->setBounds((getWidth()/2)-100, (getHeight()/6)+10, 200, 40);
     versionNumberLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+40, 150, 40);
     
-    firmwareNumberLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+70, 150, 40);
-    deviceSerialLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+100, 150, 40);
+    //firmwareNumberLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+70, 150, 40);
+    //deviceSerialLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+100, 150, 40);
+    firmwareNumberLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+85, 150, 40);
     
     companyLabel->setBounds((getWidth()/2)-75, (getHeight()/6)+130, 150, 40);
     nuDesineLink->setBounds((getWidth()/2)-40, (getHeight()/6)+155, 80, 22);
@@ -160,10 +161,10 @@ void AboutComponent::resized()
 
 void AboutComponent::paint (Graphics& g)
 {
-    g.setColour(Colours::black.withAlpha(0.8f));
+    g.setColour(AlphaTheme::getInstance()->backgroundColour.withAlpha(0.8f));
     g.fillRect(0, 0, getWidth(), getHeight());
     
-    g.setColour(Colours::grey.withAlpha(1.0f));
+    g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(1.0f));
     //g.fillRoundedRectangle(getWidth()/3, getHeight()/4, getWidth()/3, (getHeight()/2)-30, 10);
     g.fillRoundedRectangle(getWidth()/3, getHeight()/6, getWidth()/3, ((getHeight()/6)*4)-30, 10);
     
@@ -222,6 +223,6 @@ bool AboutComponent::keyPressed (const KeyPress &key, Component *originatingComp
 
 void AboutComponent::setFirmwareDetails (String version, String serial)
 {
-    firmwareNumberLabel->setText(translate("Firmware Version:") + " " + version, false);
-    deviceSerialLabel->setText(translate("Device Serial:") + " " + serial, false);
+    firmwareNumberLabel->setText(translate("Firmware Version:") + " " + version, dontSendNotification);
+    deviceSerialLabel->setText(translate("Device Serial:") + " " + serial, dontSendNotification);
 }

@@ -30,17 +30,18 @@
 
 enum
 {
-    DRUM_BANKS = 0,
-    MIDI_PRESETS,
+    MIDI_PRESETS = 0,
     SAMPLER_PRESETS,
     SEQUENCER_PRESETS,
     CONTROLLER_PRESETS,
     EFFECT_PRESETS,
+    
+    SAMPLE_BANKS,
+    AUDIO_SAMPLES,
+    SEQUENCES,
     SCENE_PRESETS,
     
-    AUDIO_SAMPLES,
-    SEQUENCES
-    
+    NO_OF_LISTS //essentially this will equal the number of items above
 };
 
 Toolbox::Toolbox(MainComponent &parent) : 
@@ -51,11 +52,11 @@ Toolbox::Toolbox(MainComponent &parent) :
 
     currentList = 0;
     
-    bankFileFilter = new WildcardFileFilter("*alphabank", String::empty, "Audio bank files");
+    bankFileFilter = new WildcardFileFilter("*alphabank", "Drum Kits;Instruments", "Audio bank files");
     padFileFilter = new WildcardFileFilter("*alphapad", String::empty, "Pad settings files");
     seqFileFilter = new WildcardFileFilter("*alphaseq;*alphaseqset", "*", "AlphaLive sequencer files");
     audioFileFilter = new WildcardFileFilter("*wav;*aiff;*aif", "*", "Audio files");
-    sceneFileFilter = new WildcardFileFilter("*alphascene", String::empty, "Scene files");
+    sceneFileFilter = new WildcardFileFilter("*alphascene", "*", "Scene files");
      
     String appDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString);
     
@@ -87,9 +88,6 @@ Toolbox::Toolbox(MainComponent &parent) :
     if (sequencesFile.exists() == false)
         sequencesFile = File::nonexistent;
     
-    contentLists.insert(DRUM_BANKS, new DirectoryContentsList(bankFileFilter, thread));
-    contentLists[DRUM_BANKS]->setDirectory (banksFile, false, true);
-    
     contentLists.insert(MIDI_PRESETS, new DirectoryContentsList(padFileFilter, thread));
     contentLists[MIDI_PRESETS]->setDirectory (midiPresetsFile, false, true);
     
@@ -105,10 +103,9 @@ Toolbox::Toolbox(MainComponent &parent) :
     contentLists.insert(EFFECT_PRESETS, new DirectoryContentsList(padFileFilter, thread));
     contentLists[EFFECT_PRESETS]->setDirectory (effectPresetsFile, false, true);
     
-    contentLists.insert(SCENE_PRESETS, new DirectoryContentsList(sceneFileFilter, thread));
-    contentLists[SCENE_PRESETS]->setDirectory (scenePresetsFile, false, true);
     
-    
+    contentLists.insert(SAMPLE_BANKS, new DirectoryContentsList(bankFileFilter, thread));
+    contentLists[SAMPLE_BANKS]->setDirectory (banksFile, true, true);
     
     contentLists.insert(AUDIO_SAMPLES, new DirectoryContentsList(audioFileFilter, thread));
     contentLists[AUDIO_SAMPLES]->setDirectory (audioSamplesFile, true, true);
@@ -116,29 +113,28 @@ Toolbox::Toolbox(MainComponent &parent) :
     contentLists.insert(SEQUENCES, new DirectoryContentsList(seqFileFilter, thread));
     contentLists[SEQUENCES]->setDirectory (sequencesFile, true, true);
     
+    contentLists.insert(SCENE_PRESETS, new DirectoryContentsList(sceneFileFilter, thread));
+    contentLists[SCENE_PRESETS]->setDirectory (scenePresetsFile, true, true);
+    
     thread.startThread();
     
-    //By default FileTreeComponent's and FileListComponent's display file extention, file size, and file modifcation date
-    //To remove these attributes, need to hack FileListTreeItem::paintItem in juce_FileTreeComponent.cpp
-    //and FileListItemComponent::paint() in juce_FileListComponent.cpp
-    //could this be done using LookAndFeel instead?
+    treeLists.insert(0, new FileTreeComponent (*contentLists[SAMPLE_BANKS]));
+    treeLists.insert(1, new FileTreeComponent (*contentLists[AUDIO_SAMPLES]));
+    treeLists.insert(2, new FileTreeComponent (*contentLists[SEQUENCES]));
+    treeLists.insert(3, new FileTreeComponent (*contentLists[SCENE_PRESETS]));
     
-    
-    treeLists.insert(0, new FileTreeComponent (*contentLists[AUDIO_SAMPLES]));
-    treeLists.insert(1, new FileTreeComponent (*contentLists[SEQUENCES]));
+    noOfTreeLists = treeLists.size();
+    noOfFileLists = NO_OF_LISTS - noOfTreeLists;
       
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < noOfTreeLists; i++)
     {
         treeLists[i]->addListener(this);
         treeLists[i]->setIndentSize(10);
         treeLists[i]->addMouseListener(this, true);
+        treeLists[i]->setItemHeight(16);
     }
-    //to change the row height of a file tree component, need to hack FileTreeListItem::getItemHeight() in juce_FileTreeComponent.cpp
-    //could this be done using LookAndFeel instead?
-    //Update - I think i need to use the TreeViewItem to create my own items and then I can overide getItemHeight()
-    //to set the size. However for now I'm lazy and I'm just going to hack the Juce Library code.
     
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i < noOfFileLists; i++)
     {
         fileLists.insert(i, new FileListComponent (*contentLists[i]));
         fileLists[i]->addListener(this);
@@ -193,7 +189,7 @@ void Toolbox::resized()
 
 void Toolbox::paint(Graphics& g)
 {
-    g.setColour(Colours::grey.withAlpha(0.2f));
+    g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.2f));
     g.fillRoundedRectangle(0, 0, getWidth(), getHeight(), 10);
 }
 
@@ -206,9 +202,9 @@ void Toolbox::setCurrentlySelectedPad (Array<int> selectedPads_)
 void Toolbox::updateDisplay()
 {
     //should I only call deselect on last click component that can be found from currentList?
-//    for (int i = 0; i < 7; i++)
+//    for (int i = 0; i < noOfFileLists; i++)
 //        fileLists[i]->deselectAllFiles();
-//    for (int i = 0; i < 2; i++)
+//    for (int i = 0; i < noOfTreeLists; i++)
 //        treeLists[i]->deselectAllFiles();
 //    layoutsListBox->deselectAllRows();
 //    scalesListBox->deselectAllRows();
@@ -263,52 +259,53 @@ void Toolbox::updateDisplay()
     if (mode == 1)
     {
         if (selectedPads.size() == 48)
-            tabbedComponent->addTab(translate("Layouts"), Colours::darkgrey, layoutsListBox, false);
+            tabbedComponent->addTab(translate("Layouts"), AlphaTheme::getInstance()->foregroundColourDarker, layoutsListBox, false);
             
         if (MULTI_PADS)
-            tabbedComponent->addTab(translate("Scales"), Colours::darkgrey, scalesListBox, false);
+            tabbedComponent->addTab(translate("Scales"), AlphaTheme::getInstance()->foregroundColourDarker, scalesListBox, false);
         
-        tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[MIDI_PRESETS], false);
+        tabbedComponent->addTab(translate("Mode Presets"), AlphaTheme::getInstance()->foregroundColourDarker, fileLists[MIDI_PRESETS], false);
     }
     else if (mode == 2)
     {
         if (MULTI_PADS)
         {
-            tabbedComponent->addTab(translate("Banks"), Colours::darkgrey, fileLists[DRUM_BANKS], false);
+            tabbedComponent->addTab(translate("Banks"), AlphaTheme::getInstance()->foregroundColourDarker, treeLists[SAMPLE_BANKS-noOfFileLists], false);
         }
         
-        tabbedComponent->addTab(translate("Samples"), Colours::darkgrey, treeLists[AUDIO_SAMPLES-7], false);
-        tabbedComponent->addTab(translate("Effects"), Colours::darkgrey, fileLists[EFFECT_PRESETS], false);
-        tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[SAMPLER_PRESETS], false);
-        
+        tabbedComponent->addTab(translate("Samples"), AlphaTheme::getInstance()->foregroundColourDarker, treeLists[AUDIO_SAMPLES-noOfFileLists], false);
+        tabbedComponent->addTab(translate("Effects"), AlphaTheme::getInstance()->foregroundColourDarker, fileLists[EFFECT_PRESETS], false);
+        tabbedComponent->addTab(translate("Mode Presets"), AlphaTheme::getInstance()->foregroundColourDarker, fileLists[SAMPLER_PRESETS], false);
+
     }
     else if (mode == 3)
     {
         if (seqMode == 1)
-            tabbedComponent->addTab(translate("Scales"), Colours::darkgrey, scalesListBox, false);
+            tabbedComponent->addTab(translate("Scales"), AlphaTheme::getInstance()->foregroundColourDarker, scalesListBox, false);
         
         else if (seqMode == 2)
         {
-            tabbedComponent->addTab(translate("Banks"), Colours::darkgrey, fileLists[DRUM_BANKS], false);
+            tabbedComponent->addTab(translate("Banks"), AlphaTheme::getInstance()->foregroundColourDarker, treeLists[SAMPLE_BANKS-noOfFileLists], false);
             //the below will only be useable if we get drag-and-drop working
-            //tabbedComponent->addTab(translate("Samples"), Colours::darkgrey, treeLists[AUDIO_SAMPLES-7], false);
-            tabbedComponent->addTab(translate("Effects"), Colours::darkgrey, fileLists[EFFECT_PRESETS], false);
+            //tabbedComponent->addTab(translate("Samples"), Colours::darkgrey, treeLists[AUDIO_SAMPLES-noOfFileLists], false);
+            tabbedComponent->addTab(translate("Effects"), AlphaTheme::getInstance()->foregroundColourDarker, fileLists[EFFECT_PRESETS], false);
         }
         
-        tabbedComponent->addTab(translate("Sequences"), Colours::darkgrey, treeLists[SEQUENCES-7], false);
-        tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[SEQUENCER_PRESETS], false);
-    
+        tabbedComponent->addTab(translate("Sequences"), AlphaTheme::getInstance()->foregroundColourDarker, treeLists[SEQUENCES-noOfFileLists], false);
+        tabbedComponent->addTab(translate("Mode Presets"), AlphaTheme::getInstance()->foregroundColourDarker, fileLists[SEQUENCER_PRESETS], false);
     }
 //    else if (mode == 4)
 //    {
-//        tabbedComponent->addTab(translate("Mode Presets"), Colours::darkgrey, fileLists[CONTROLLER_PRESETS], false);
+//        tabbedComponent->addTab(translate("Mode Presets"), AlphaTheme::getInstance()->foregroundColourDarker, fileLists[CONTROLLER_PRESETS], false);
 //    }
     else
     {
-        //tabbedComponent->addTab(translate("Scene Presets"), Colours::darkgrey, scenePresetsList, false);
-        tabbedComponent->setVisible(false);
-        
+        if (selectedPads.size() != 48)
+            tabbedComponent->setVisible(false);
     }
+    
+    if (selectedPads.size() == 48)
+        tabbedComponent->addTab(translate("Scene Presets"), AlphaTheme::getInstance()->foregroundColourDarker, treeLists[SCENE_PRESETS-noOfFileLists], false);
     
     int noOfTabs = tabbedComponent->getNumTabs();
     
@@ -329,12 +326,16 @@ void Toolbox::fileClicked (const File& file, const MouseEvent& e)
 {
     //The below is needed so that when fileDoubleClicked is called we know what filebrowser called it
     
-    if (treeLists[AUDIO_SAMPLES-7]->isMouseOver(true))
+    if (treeLists[SAMPLE_BANKS-noOfFileLists]->isMouseOver(true))
+        currentList = SAMPLE_BANKS;
+    else if (treeLists[AUDIO_SAMPLES-noOfFileLists]->isMouseOver(true))
         currentList = AUDIO_SAMPLES;
-    else if (treeLists[SEQUENCES-7]->isMouseOver(true))
+    else if (treeLists[SEQUENCES-noOfFileLists]->isMouseOver(true))
         currentList = SEQUENCES;
+    else if (treeLists[SCENE_PRESETS-noOfFileLists]->isMouseOver(true))
+        currentList = SCENE_PRESETS;
     
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i < noOfFileLists; i++)
     {
         if (fileLists[i]->isMouseOver(true))
             currentList = i;
@@ -369,7 +370,7 @@ void Toolbox::fileDoubleClicked (const File& file)
         //====================================================================================
         //====================================================================================
 
-        else if (currentList == DRUM_BANKS)
+        else if (currentList == SAMPLE_BANKS)
         {
             if (file.getFileExtension() == ".alphabank")
             {
@@ -439,6 +440,18 @@ void Toolbox::fileDoubleClicked (const File& file)
         else if (file.getFileExtension() == ".alphapad")
         {
             mainComponentRef.getAppDocumentStateRef().loadPadFromDisk(selectedPads, false, file);
+        }
+        
+        else if (file.getFileExtension() == ".alphascene")
+        {
+            int currentScene = mainComponentRef.getAppDocumentStateRef().getCurrentlySelectedScene();
+            
+            bool shouldLoad = mainComponentRef.getAppDocumentStateRef().loadSceneFromDisk(currentScene, false, file);
+            
+            if (shouldLoad == true)
+            {
+                mainComponentRef.getAppDocumentStateRef().loadFromScene(currentScene);
+            }
         }
     }
 }
@@ -545,6 +558,12 @@ void Toolbox::noteLayoutSelected (String layout, bool isScale)
     
 }
 
+void Toolbox::setTabColour()
+{
+    //This can't be called in paint as it calls repaint and would cause loops and high CPU.
+    for (int i = 0; i < tabbedComponent->getNumTabs(); i++)
+        tabbedComponent->setTabBackgroundColour(i, AlphaTheme::getInstance()->foregroundColourDarker);
+}
 
 
 void Toolbox::mouseEnter (const MouseEvent &e)
@@ -556,15 +575,15 @@ void Toolbox::mouseEnter (const MouseEvent &e)
      }
      */
     
-    if (treeLists[AUDIO_SAMPLES-7]->isMouseOver(true))
+    if (treeLists[AUDIO_SAMPLES-noOfFileLists]->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("AlphaLive Sample Library Browser. Double-click any files here to apply them to the selected pads."));
     }
-    else if (fileLists[DRUM_BANKS]->isMouseOver(true))
+    else if (treeLists[SAMPLE_BANKS-noOfFileLists]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Drum Banks. Double-click any items here to apply a bank of audio samples to either the sequence grid of Sequencer pads, or to a set of Sampler pads. Banks will be applied to a set of Sampler pads in the order that they were selected."));
+        mainComponentRef.setInfoTextBoxText(translate("Sample Banks. Double-click any items here to apply a bank of audio samples to either the sequence grid of Sequencer pads, or to a set of Sampler pads. Banks will be applied to a set of Sampler pads in the order that they were selected. Each bank contains 16 samples."));
     }
-    else if (treeLists[SEQUENCES-7]->isMouseOver(true))
+    else if (treeLists[SEQUENCES-noOfFileLists]->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Sequence Arrangements. Double-click any items here to apply pre-made sequences to the selected pads. These can either be single sequences or sequences sets for each pad."));
     }
@@ -588,9 +607,9 @@ void Toolbox::mouseEnter (const MouseEvent &e)
     {
         mainComponentRef.setInfoTextBoxText(translate("Effects Presets. Double-click any items here to apply preset effects to the selected pads."));
     }
-    else if (fileLists[SCENE_PRESETS]->isMouseOver(true))
+    else if (treeLists[SCENE_PRESETS-noOfFileLists]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Scene Presets. Double-click any items here to apply preset settings to all of the pads of the currently selected scene."));
+        mainComponentRef.setInfoTextBoxText(translate("Scene Presets. Double-click any items here to apply template mappings or settings to the entire set of pads of the currently selected scene."));
     }
     
     

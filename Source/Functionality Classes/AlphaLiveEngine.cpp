@@ -25,6 +25,7 @@
 #include "Other/LayoutsAndScales.cpp"
 #include "../File and Settings/StoredSettings.h"
 #include "../GUI Classes/Views/MainComponent.h"
+#include "../Application/Common.h"
 
 #if JUCE_LINUX
 #include <unistd.h>
@@ -172,7 +173,7 @@ AlphaLiveEngine::AlphaLiveEngine()
 AlphaLiveEngine::~AlphaLiveEngine()
 {
     killAll();
-    stopThread(100);
+    stopThread(1000);
     
     //save audio output settings to prefs
     XmlElement *audioSettingsXml = audioDeviceManager.createStateXml();
@@ -314,7 +315,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
                 
                 int minValue = PAD_SETTINGS->getVelocityMinRange();
                 int maxValue = PAD_SETTINGS->getVelocityMaxRange();
-                recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
+                recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
             }
             else if (PAD_SETTINGS->getVelocityCurve() == 3)
             {
@@ -326,26 +327,20 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
                 
                 int minValue = PAD_SETTINGS->getVelocityMinRange();
                 int maxValue = PAD_SETTINGS->getVelocityMaxRange();
-                recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
+                recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
             }
             else if (PAD_SETTINGS->getVelocityCurve() == 2)
             {
                 //linear mapping of velocity
                 int minValue = PAD_SETTINGS->getVelocityMinRange();
                 int maxValue = PAD_SETTINGS->getVelocityMaxRange();
-                recievedVelocity = minValue + (recievedVelocity * ((maxValue - minValue) / 127.0));
+                recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
             }
             
             //static velocity stuff is done in the mode classes,
             //as each mode handles a static velocity in slight different ways
             //so doesn't make sense to apply any static values here
         }
-        
-        
-     
-        
-        
-        //std::cout << "Pad: " << recievedPad << " Raw Vel: " << velocity << " Scaled Vel: " << recievedVelocity << std::endl;
         
         //==========================================================================
         //route message to midi mode
@@ -461,6 +456,10 @@ void AlphaLiveEngine::handleExclusiveMode (int padNum)
     
     //add new pad to the exclusive group array, replacing the old one.
     currentExclusivePad[exclusiveGroup-1] = padNum;
+    
+    //check to see if there are any pads within the same exclive group
+    //that are currently waiting to play or stop, and kill them if so.
+    killQueuedExclusivePads(padNum);
         
 }
 
@@ -479,8 +478,16 @@ void AlphaLiveEngine::addPadToQueue (int padNum)
 
     //If the pad being added is set to exclusive mode,
     //check to see if any of the other queued pads 
-    //are set to exlusive mode with the same exclusive group.
+    //are set to exclusive mode with the same exclusive group.
     //If so they should be removed and the pad gui should be updated
+    killQueuedExclusivePads(padNum);
+    
+}
+
+void AlphaLiveEngine::killQueuedExclusivePads (int padNum)
+{
+    //checks for pads that are set to exclusive mode with the same group number as pad padNum is set to,
+    //and kills and removes any pads that are currently waiting to play or waiting to stop.
     
     if (AppSettings::Instance()->padSettings[padNum]->getExclusiveMode() == 1)
     {
@@ -522,11 +529,9 @@ void AlphaLiveEngine::addPadToQueue (int padNum)
                         }
                         
                         queuedPads.remove(i);
-                        
                     }
                 }
             }
-            
         }
     }
 }
@@ -743,7 +748,7 @@ void AlphaLiveEngine::sendMidiMessage(MidiMessage midiMessage)
     {
         unsigned char dataToSend[4];
         
-        uint8 *rawMidiMessage = midiMessage.getRawData();
+        const uint8 *rawMidiMessage = midiMessage.getRawData();
         
         dataToSend[0] = 0x00; //MIDI command ID
         dataToSend[1] = rawMidiMessage[0]; //midi status byte
@@ -1089,4 +1094,5 @@ void AlphaLiveEngine::setMainComponent(MainComponent *mainComponent_)
     mainComponent = mainComponent_;
     eliteControls->setMainComponent(mainComponent_);
     globalClock->setMainComponent(mainComponent_);
+    modeController->setMainComponent(mainComponent_);
 }

@@ -1,24 +1,23 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library - "Jules' Utility Class Extensions"
-   Copyright 2004-11 by Raw Material Software Ltd.
+   This file is part of the JUCE library.
+   Copyright (c) 2013 - Raw Material Software Ltd.
 
-  ------------------------------------------------------------------------------
+   Permission is granted to use this software under the terms of either:
+   a) the GPL v2 (or any later version)
+   b) the Affero GPL v3
 
-   JUCE can be redistributed and/or modified under the terms of the GNU General
-   Public License (Version 2), as published by the Free Software Foundation.
-   A copy of the license is included in the JUCE distribution, or can be found
-   online at www.gnu.org/licenses.
+   Details of these licenses can be found at: www.gnu.org/licenses
 
    JUCE is distributed in the hope that it will be useful, but WITHOUT ANY
    WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
    A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  ------------------------------------------------------------------------------
+   ------------------------------------------------------------------------------
 
    To release a closed-source product which uses JUCE, commercial licenses are
-   available: visit www.rawmaterialsoftware.com/juce for more information.
+   available: visit www.juce.com for more information.
 
   ==============================================================================
 */
@@ -422,8 +421,7 @@ public:
         {
             static_jassert (Constness::isConst == 0); // trying to write to a const pointer! For a writeable one, use AudioData::NonConst instead!
 
-            Pointer dest (*this);
-            while (--numSamples >= 0)
+            for (Pointer dest (*this); --numSamples >= 0;)
             {
                 dest.data.copyFromSameType (source.data);
                 dest.advance();
@@ -465,6 +463,55 @@ public:
         {
             Pointer dest (*this);
             dest.clear (dest.data, numSamples);
+        }
+
+        /** Scans a block of data, returning the lowest and highest levels as floats */
+        void findMinAndMax (size_t numSamples, float& minValue, float& maxValue) const noexcept
+        {
+            if (numSamples == 0)
+            {
+                minValue = maxValue = 0;
+                return;
+            }
+
+            Pointer dest (*this);
+
+            if (isFloatingPoint())
+            {
+                float mn = dest.getAsFloat();
+                dest.advance();
+                float mx = mn;
+
+                while (--numSamples > 0)
+                {
+                    const float v = dest.getAsFloat();
+                    dest.advance();
+
+                    if (mx < v)  mx = v;
+                    if (v < mn)  mn = v;
+                }
+
+                minValue = mn;
+                maxValue = mx;
+            }
+            else
+            {
+                int32 mn = dest.getAsInt32();
+                dest.advance();
+                int32 mx = mn;
+
+                while (--numSamples > 0)
+                {
+                    const int v = dest.getAsInt32();
+                    dest.advance();
+
+                    if (mx < v)  mx = v;
+                    if (v < mn)  mn = v;
+                }
+
+                minValue = mn * (float) (1.0 / (1.0 + Int32::maxValue));
+                maxValue = mx * (float) (1.0 / (1.0 + Int32::maxValue));
+            }
         }
 
         /** Returns true if the pointer is using a floating-point format. */

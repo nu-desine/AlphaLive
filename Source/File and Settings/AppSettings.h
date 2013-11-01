@@ -102,6 +102,7 @@ public:
 
     void setAlphaLiveEngineRef (AlphaLiveEngine *ref);
     void resetData();
+    void resetProjectSettingsData();
     
     void setCurrentlySelectedPad (Array<int> selectedPads_);
     void setPadDisplayTextMode (int value);
@@ -119,6 +120,8 @@ public:
     void setMidiClockValue (int value);
     void setMidiClockStartMessage (int value);
     void setMidiClockMessageFilter (int value);
+
+    void setSceneName (int sceneNumber, String value);
     
     Array<int> getCurrentlySelectedPad();
     int getPadDisplayTextMode();
@@ -136,6 +139,8 @@ public:
     int getMidiClockValue();
     int getMidiClockStartMessage();
     int getMidiClockMessageFilter();
+    
+    String getSceneName(int sceneNumber);
     
     //Elite Controls Stuff
     void setEliteDialPrevValue(double value, int dialNumber);
@@ -204,6 +209,9 @@ public:
     void copySequenceData (int value, int row, int column);
     int pasteSequenceData (int row, int column);
     
+    void setLastAudioSampleDirectory (File directory);
+    File getLastAudioSampleDirectory ();
+    
     
     //~AppSettings();
 protected:
@@ -245,6 +253,8 @@ private:
     
     int copiedSequencerData[NO_OF_ROWS][NO_OF_COLUMNS]; //[row][column]
     
+    File lastAudioSampleDirectory; //this variable isn't ever saved or reset
+    
     //========================================================================================================
     //variables which are global to the whole project (project settings) and aren't changeable between individual scenes.
     //Would it make more sense to not have them in AppSettings?
@@ -253,6 +263,7 @@ private:
     bool copyExternalFiles;
     int midiClockValue, midiClockStartMessage, midiClockMessageFilter;
     
+    String sceneName[20];
     
 };
 

@@ -41,6 +41,7 @@ public:
     ~GuiDistortion();
     
     void resized();
+    void paint (Graphics &g);
     void sliderValueChanged (Slider *slider);
     void comboBoxChanged (ComboBox *comboBox);
     void buttonClicked (Button *button);

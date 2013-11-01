@@ -51,6 +51,7 @@ public:
     bool keyPressed (const KeyPress &key, Component *originatingComponent);
     
     void updateDisplay();
+    void setTabColour();
     
 private:
     MainComponent &mainComponentRef;

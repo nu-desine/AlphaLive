@@ -400,6 +400,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
 
 void AlphaLiveEngine::processMidiInput (const MidiMessage midiMessage)
 {
+    //==== MIDI Clock stuff ====
     if (midiClockValue == 3)
     {
         if (midiMessage.isMidiStart() || midiMessage.isMidiContinue())
@@ -417,6 +418,18 @@ void AlphaLiveEngine::processMidiInput (const MidiMessage midiMessage)
                 if (globalClock->isThreadRunning())
                     globalClock->setMidiClockMessageTimestamp();
             }
+        }
+    }
+    
+    //==== MIDI Program Change stuff (to change scenes) ====
+    
+    if (midiMessage.isProgramChange())
+    {
+        int programNumber = midiMessage.getProgramChangeNumber();
+        
+        if (programNumber >= 0 && programNumber < NO_OF_SCENES)
+        {
+            mainComponent->getSceneComponent()->selectSlot(programNumber);
         }
     }
 }

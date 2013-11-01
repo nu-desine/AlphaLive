@@ -120,6 +120,8 @@ public:
     void setMidiClockValue (int value);
     void setMidiClockStartMessage (int value);
     void setMidiClockMessageFilter (int value);
+    
+    void setReceiveMidiProgramChangeMessages (bool value);
 
     void setSceneName (int sceneNumber, String value);
     
@@ -139,6 +141,8 @@ public:
     int getMidiClockValue();
     int getMidiClockStartMessage();
     int getMidiClockMessageFilter();
+    
+    bool getReceiveMidiProgramChangeMessages();
     
     String getSceneName(int sceneNumber);
     
@@ -262,6 +266,7 @@ private:
     
     bool copyExternalFiles;
     int midiClockValue, midiClockStartMessage, midiClockMessageFilter;
+    bool receiveMidiProgramChangeMessages;
     
     String sceneName[20];
     

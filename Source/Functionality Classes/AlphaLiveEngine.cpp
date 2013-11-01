@@ -61,6 +61,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     
     midiClockValue = AppSettings::Instance()->getMidiClockValue();
     midiClockMessageFilter = AppSettings::Instance()->getMidiClockMessageFilter();
+    receiveMidiProgramChanngeMessages = AppSettings::Instance()->getReceiveMidiProgramChangeMessages();
     
     recievedPad = 0;
     recievedValue = 0;
@@ -401,29 +402,26 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
 void AlphaLiveEngine::processMidiInput (const MidiMessage midiMessage)
 {
     //==== MIDI Clock stuff ====
-    if (midiClockValue == 3)
+    if ((midiMessage.isMidiStart() || midiMessage.isMidiContinue()) && midiClockValue == 3)
     {
-        if (midiMessage.isMidiStart() || midiMessage.isMidiContinue())
+        globalClock->startClock();
+    }
+    else if (midiMessage.isMidiStop() && midiClockValue == 3)
+    {
+        globalClock->stopClock();
+    }
+    else if (midiMessage.isMidiClock() && midiClockValue == 3)
+    {
+        if (midiClockMessageFilter == 1)
         {
-            globalClock->startClock();
-        }
-        else if (midiMessage.isMidiStop())
-        {
-            globalClock->stopClock();
-        }
-        else if (midiMessage.isMidiClock())
-        {
-            if (midiClockMessageFilter == 1)
-            {
-                if (globalClock->isThreadRunning())
-                    globalClock->setMidiClockMessageTimestamp();
-            }
+            if (globalClock->isThreadRunning())
+                globalClock->setMidiClockMessageTimestamp();
         }
     }
     
     //==== MIDI Program Change stuff (to change scenes) ====
     
-    if (midiMessage.isProgramChange())
+    else if (midiMessage.isProgramChange() && receiveMidiProgramChanngeMessages == true)
     {
         int programNumber = midiMessage.getProgramChangeNumber();
         
@@ -664,6 +662,10 @@ void AlphaLiveEngine::setMidiClockValue (int value)
 void AlphaLiveEngine::setMidiClockMessageFilter (int value)
 {
     midiClockMessageFilter = value;
+}
+void AlphaLiveEngine::setReceiveMidiProgramChangeMessages(bool value)
+{
+    receiveMidiProgramChanngeMessages = value;
 }
 
 

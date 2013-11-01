@@ -745,6 +745,9 @@ void AppDocumentState::saveProjectSettings()
     projectData->setAttribute("midiClockStartMessage", AppSettings::Instance()->getMidiClockStartMessage());
     projectData->setAttribute("midiClockMessageFilter", AppSettings::Instance()->getMidiClockMessageFilter());
     
+    projectData->setAttribute("receiveMidiProgramChangeMessages",
+                              AppSettings::Instance()->getReceiveMidiProgramChangeMessages());
+    
     for (int i = 0; i < NO_OF_SCENES; i++)
     {
         projectData->setAttribute("sceneName" + String(i), AppSettings::Instance()->getSceneName(i));
@@ -765,6 +768,9 @@ void AppDocumentState::loadProjectSettings()
         AppSettings::Instance()->setMidiClockStartMessage(projectData->getIntAttribute("midiClockStartMessage"));
     if (projectData->hasAttribute("midiClockMessageFilter") == true)
         AppSettings::Instance()->setMidiClockMessageFilter(projectData->getIntAttribute("midiClockMessageFilter"));
+    
+    if (projectData->hasAttribute("receiveMidiProgramChangeMessages") == true)
+        AppSettings::Instance()->setReceiveMidiProgramChangeMessages(projectData->getBoolAttribute("receiveMidiProgramChangeMessages"));
 
     for (int i = 0; i < NO_OF_SCENES; i++)
     {

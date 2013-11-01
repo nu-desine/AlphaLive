@@ -317,6 +317,16 @@ GeneralProjSettingsComponent::GeneralProjSettingsComponent(MainComponent &ref, A
     addChildComponent(midiClockMessageFilterLabel = new Label());
     midiClockMessageFilterLabel->setText(translate("Message Filter:"), dontSendNotification);
     
+    addAndMakeVisible(receiveMidiProgramChangeMessagesMenu = new ComboBox());
+    receiveMidiProgramChangeMessagesMenu->addItem(translate("Off"), 1);
+    receiveMidiProgramChangeMessagesMenu->addItem(translate("On"), 2);
+    receiveMidiProgramChangeMessagesMenu->addListener(this);
+    receiveMidiProgramChangeMessagesMenu->addMouseListener(this, true);
+    receiveMidiProgramChangeMessagesMenu->setSelectedId(AppSettings::Instance()->getReceiveMidiProgramChangeMessages());
+    
+    addAndMakeVisible(receiveMidiProgramChangeMessagesLabel = new Label());
+    receiveMidiProgramChangeMessagesLabel->setText(translate("Receive Program Change Messages:"), dontSendNotification);
+    
 }
 
 GeneralProjSettingsComponent::~GeneralProjSettingsComponent()
@@ -337,6 +347,9 @@ void GeneralProjSettingsComponent::resized()
     
     midiClockMessageFilterMenu->setBounds(200, 80, 210, 20);
     midiClockMessageFilterLabel->setBounds(60, 80, 120, 20);
+    
+    receiveMidiProgramChangeMessagesMenu->setBounds(290, 110, 120, 20);
+    receiveMidiProgramChangeMessagesLabel->setBounds(60, 110, 210, 20);
     
 }
 
@@ -425,6 +438,10 @@ void GeneralProjSettingsComponent::comboBoxChanged (ComboBox *comboBox)
     {
         AppSettings::Instance()->setMidiClockMessageFilter(comboBox->getSelectedId());
     }
+    else if (comboBox == receiveMidiProgramChangeMessagesMenu)
+    {
+        AppSettings::Instance()->setReceiveMidiProgramChangeMessages(comboBox->getSelectedId()-1);
+    }
 }
 
 void GeneralProjSettingsComponent::updateDisplay()
@@ -438,6 +455,8 @@ void GeneralProjSettingsComponent::updateDisplay()
     midiClockMenu->setSelectedId(AppSettings::Instance()->getMidiClockValue(), true);
     clockStartMessageMenu->setSelectedId(AppSettings::Instance()->getMidiClockStartMessage(), true);
     midiClockMessageFilterMenu->setSelectedId(AppSettings::Instance()->getMidiClockMessageFilter(), true);
+    receiveMidiProgramChangeMessagesMenu->setSelectedId(AppSettings::Instance()->getReceiveMidiProgramChangeMessages()+1,
+                                                        true);
 }
 
 void GeneralProjSettingsComponent::mouseEnter (const MouseEvent &e)
@@ -457,6 +476,10 @@ void GeneralProjSettingsComponent::mouseEnter (const MouseEvent &e)
     else if (midiClockMessageFilterMenu->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Sets and displays what type of MIDI Clock messages are received and used by AlphaLive. By default any external clock that AlphaLive is syced to will start and stop AlphaLive's clock as well as keep it in sync and adjust its tempo. However if the option to only use Start/Stop messages is selected the external clock will only start and stop AlphaLive's clock."));
+    }
+    else if (receiveMidiProgramChangeMessagesMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("AlphaLive is able to receive MIDI Program Change Messages from external MIDI devices/software to trigger scene switching within AlphaLive. Send a Program Change message on any MIDI channel with a Program Change number in the range of 1 - 20 (or 0 - 19 if given 127 available programs instead of 128) to change to the corresponding scene number. Use this menu to disable this feature for the current project."));
     }
 
 }

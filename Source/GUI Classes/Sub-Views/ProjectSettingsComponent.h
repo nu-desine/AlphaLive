@@ -166,6 +166,8 @@ private:
     
     ComboBox *midiClockMenu, *clockStartMessageMenu, *midiClockMessageFilterMenu;
     Label *midiClockLabel, *clockStartMessageLabel, *midiClockMessageFilterLabel;
+    ComboBox *receiveMidiProgramChangeMessagesMenu;
+    Label *receiveMidiProgramChangeMessagesLabel;
     
 };
 

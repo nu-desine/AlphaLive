@@ -112,6 +112,7 @@ public:
     
     void setMidiClockValue (int value);
     void setMidiClockMessageFilter (int value);
+    void setReceiveMidiProgramChangeMessages (bool value);
         
 private:
     
@@ -173,6 +174,7 @@ private:
     bool hasDisplayedNoMidiDeviceWarning;
     
     int midiClockValue, midiClockMessageFilter;
+    bool receiveMidiProgramChanngeMessages;
 };
 
 #endif // H_ALPHALIVEENGINE

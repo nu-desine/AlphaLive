@@ -60,6 +60,8 @@ AppSettings::AppSettings()
     midiClockStartMessage = 1;
     midiClockMessageFilter = 1;
     
+    receiveMidiProgramChangeMessages = true;
+    
     //elite controls stuff
     eliteDial[0].control = 1;
     eliteDial[1].control = 2;
@@ -145,6 +147,8 @@ void AppSettings::resetData()
     setMidiClockValue(1);
     setMidiClockStartMessage(1);
     setMidiClockMessageFilter(1);
+    
+    setReceiveMidiProgramChangeMessages(true);
     
     //elite controls stuff
     eliteDial[0].control = 1;
@@ -304,6 +308,12 @@ void AppSettings::setMidiClockMessageFilter (int value)
     alphaLiveEngineRef->setMidiClockMessageFilter(value);
 }
 
+void AppSettings::setReceiveMidiProgramChangeMessages(bool value)
+{
+    receiveMidiProgramChangeMessages = value;
+    alphaLiveEngineRef->setReceiveMidiProgramChangeMessages(value);
+}
+
 void AppSettings::setSceneName(int sceneNumber, String value)
 {
     sceneName[sceneNumber] = value;
@@ -369,6 +379,11 @@ int AppSettings::getMidiClockStartMessage()
 int AppSettings::getMidiClockMessageFilter()
 {
     return midiClockMessageFilter;
+}
+
+bool AppSettings::getReceiveMidiProgramChangeMessages()
+{
+    return receiveMidiProgramChangeMessages;
 }
 
 String AppSettings::getSceneName (int sceneNumber)

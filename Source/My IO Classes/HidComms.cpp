@@ -281,8 +281,27 @@ void HidComms::run()
 //                                
 //                                std::cout << "MIDI message " << noOfMessages << ": " << message[0] << " " << message[1] << " " << message[2] << std::endl;
 //                                
-//                                //send the MIDI message to AlphaLiveEngine
-//                                processMidiInput(message);
+//                                if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 1)
+//                                {
+//                                    MidiMessage midiMessage (buf[100]);
+//                                    
+//                                    //send the MIDI message to AlphaLiveEngine
+//                                    processMidiInput(midiMessage);
+//                                }
+//                                else if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 2)
+//                                {
+//                                    MidiMessage midiMessage (buf[100], buf[101]);
+//                                    
+//                                    //send the MIDI message to AlphaLiveEngine
+//                                    processMidiInput(midiMessage);
+//                                }
+//                                else if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 3)
+//                                {
+//                                    MidiMessage midiMessage (buf[100], buf[101], buf[102]);
+//                                    
+//                                    //send the MIDI message to AlphaLiveEngine
+//                                    processMidiInput(midiMessage);
+//                                }
 //                                
 //                                
 //                            }
@@ -302,12 +321,29 @@ void HidComms::run()
                             message[1] = buf[101];
                             message[2] = buf[102];
                             
-                            std::cout << "MIDI message: " << message[0] << " " << message[1] << " " << message[2] << std::endl;
+                            //std::cout << "MIDI message: " << message[0] << " " << message[1] << " " << message[2] << std::endl;
                             
-                            MidiMessage midiMessage (buf[100], buf[101], buf[102]);
+                            if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 1)
+                            {
+                                MidiMessage midiMessage (buf[100]);
                             
-                            //send the MIDI message to AlphaLiveEngine
-                            processMidiInput(midiMessage);
+                                //send the MIDI message to AlphaLiveEngine
+                                processMidiInput(midiMessage);
+                            }
+                            else if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 2)
+                            {
+                                MidiMessage midiMessage (buf[100], buf[101]);
+                                
+                                //send the MIDI message to AlphaLiveEngine
+                                processMidiInput(midiMessage);
+                            }
+                            else if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 3)
+                            {
+                                MidiMessage midiMessage (buf[100], buf[101], buf[102]);
+                                
+                                //send the MIDI message to AlphaLiveEngine
+                                processMidiInput(midiMessage);
+                            }
                         }
                     }
                     

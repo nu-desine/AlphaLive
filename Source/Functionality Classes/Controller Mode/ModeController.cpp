@@ -37,6 +37,7 @@ ModeController::ModeController(AlphaLiveEngine &ref)
         pressureLatchModeStatus[i] = false;
     }
 
+     broadcaster.addActionListener(this);
 }
 
 ModeController::~ModeController()
@@ -71,7 +72,6 @@ void ModeController::getInputData(int pad, int value, int velocity)
             MidiMessage message = MidiMessage::programChange(PAD_SETTINGS->getControllerMidiProgramChangeChannel(), PAD_SETTINGS->getControllerMidiProgramChangeNumber());
             alphaLiveEngineRef.sendMidiMessage(message);
         }
-    
     }
     
     else if (PAD_SETTINGS->getControllerControl() == 3) //MIDI program change & scene switcher
@@ -83,20 +83,16 @@ void ModeController::getInputData(int pad, int value, int velocity)
             
             changeScene(); 
         }
-        
-       
     }
+    
     if (PAD_SETTINGS->getControllerControl() == 5) //killswitch
     {
         if (prevPadValue[padNumber] == 0 && padValue > 0)
         {
-            const MessageManagerLock mmLock;    //would be good to use an actionListenerCallback here instead
-                                                //so that the GUI doesn't pause (and probably not show the pad
-                                                //interaction of this pad) while the killswitch command is being
-                                                //carried out. However that wouldn't be as instant.
-            mainComponent->perform(CommandIDs::KillSwitch);
+            broadcaster.sendActionMessage("KILLSWITCH");
         }
     }
+    
     if (PAD_SETTINGS->getControllerControl() == 6) //pressure latch mode
     {
         if (prevPadValue[padNumber] == 0 && padValue > 0)
@@ -122,27 +118,24 @@ void ModeController::getInputData(int pad, int value, int velocity)
      prevPadValue[padNumber] = padValue;
 }
 
-
 //called when pad is set to the scene switcher control
 void ModeController::changeScene()
 {
-    //instead of using Subject/Observer method here to communicate with SceneComponent,
-    //now it would be better to pass in a pointer to MainComponent from AlphaLiveEngine
-    //and access SceneComponent that way like recently implemented for the Elite Controls.
-    //This would make the Subject/Observer here redundant so I can remove it.
-    
     if (prevPadValue[padNumber] == 0 && padValue > 0)
     {
-        triggerAsyncUpdate();
+        mainComponent->getSceneComponent()->selectSlot(PAD_SETTINGS->getControllerSceneNumber() - 1);
+        
         //if there is a 'two clicks' error... it's probably being caused here!
         //how can i fix this?
     }
 }
 
-
-void ModeController::handleAsyncUpdate()
+void ModeController::actionListenerCallback (const String& message)
 {
-    notifyObs();
+    if (message == "KILLSWITCH")
+    {
+        mainComponent->perform(CommandIDs::KillSwitch);
+    }
 }
 
 int ModeController::getPadNumber()

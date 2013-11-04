@@ -80,7 +80,7 @@ private:
     
     ShapeButton *sb;
     int i;
-	Image image;//, midiImage, loopImage, seqImage, controlImage;
+	Image image;
 	Path hitPath;
 	
 	GuiPadLayout &guiPadLayoutRef;
@@ -96,11 +96,12 @@ private:
     bool isMouseInPlayMode; //when true, it means the mouse is currently being used to emulate a pad press
     bool shouldIgnoreValues;
     
-    int playingStatus;  //1 when a looper or sequencer pad which is currently playing.
-    //when true, the pad is highlighted to show that this pad is currently playing
-    //2 when waiting to play, 3 when waiting to stop. These show different colours
-    //0 when not playing. Nothing is displayed
-    
+    int playingStatus;  //Used to display a coloured ring on the pad to signify
+                        //what the pads current playing/function status:
+                        //0 - off
+                        //1 - on/playing
+                        //2 - waiting to play
+                        //3 - waiting to stop
     
 };  
 

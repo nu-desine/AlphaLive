@@ -24,14 +24,12 @@
 #define H_MODECONTROLLER
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
-#include "../../Application/AbstractSubjectAndObserver.h"
 #include "../../My IO Classes/OscOutput.h"
 
 class AlphaLiveEngine;
 class MainComponent;
 
-class ModeController :  public Subject, //so this class can be observed by the scene component
-                        public AsyncUpdater
+class ModeController :  public ActionListener
 {
 
 public:
@@ -42,8 +40,7 @@ public:
     
     void changeScene();
     
-    //void actionListenerCallback (const String& message);
-    void handleAsyncUpdate();
+    void actionListenerCallback (const String& message);
     
     int getPadNumber();
     
@@ -61,6 +58,8 @@ private:
     AlphaLiveEngine &alphaLiveEngineRef;
     
     MainComponent *mainComponent;
+    
+    ActionBroadcaster broadcaster;
 };
 
 

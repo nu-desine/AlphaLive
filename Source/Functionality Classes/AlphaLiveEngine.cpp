@@ -1076,5 +1076,8 @@ Array<int> AlphaLiveEngine::getPreviouslyUsedMidiChannels()
 
 void AlphaLiveEngine::latchPressureValue (int padNum, bool shouldLatch)
 {
-    minPressureValue[padNum] = padPressure[padNum];
+    if (shouldLatch)
+        minPressureValue[padNum] = padPressure[padNum];
+    else
+        minPressureValue[padNum] = 0;
 }

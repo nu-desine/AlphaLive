@@ -3526,7 +3526,7 @@
 		1321578FCA21CAA9DF2E9344 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 			};
 			buildConfigurationList = 3E1F5C277D0A94FB4D7A2678 /* Build configuration list for PBXProject "AlphaLive" */;
 			compatibilityVersion = "Xcode 3.2";

@@ -113,7 +113,7 @@ void ModeController::getInputData(int pad, int value, int velocity)
                 //unlatching a pad
                 int padToLatch = PAD_SETTINGS->getControllerPressureLatchPadNumber();
                 alphaLiveEngineRef.latchPressureValue(padToLatch, false);
-                pressureLatchModeStatus[padNumber] = true;
+                pressureLatchModeStatus[padNumber] = false;
             }
             
         }

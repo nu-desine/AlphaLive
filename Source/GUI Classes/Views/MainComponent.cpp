@@ -91,7 +91,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	addAndMakeVisible(modeOffButton = new ModeButton(offModeImage));
 	modeOffButton->addListener(this);
     modeOffButton->setOpaque(false);
-	modeOffButton->setRadioGroupId (1234);
+	modeOffButton->setRadioGroupId (1234, dontSendNotification);
     modeOffButton->addMouseListener(this, false);
 	
 	//create global settings button
@@ -107,7 +107,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	addAndMakeVisible(modeSamplerButton = new ModeButton(looperModeImage));
 	modeSamplerButton->addListener(this);
     modeSamplerButton->setOpaque(false);
-	modeSamplerButton->setRadioGroupId (1234);
+	modeSamplerButton->setRadioGroupId (1234, dontSendNotification);
     modeSamplerButton->addMouseListener(this, false);
 	
 	//create midi mode button
@@ -115,7 +115,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	addAndMakeVisible(modeMidiButton = new ModeButton(midiModeImage));
 	modeMidiButton->addListener(this);
     modeMidiButton->setOpaque(false);
-	modeMidiButton->setRadioGroupId (1234);
+	modeMidiButton->setRadioGroupId (1234, dontSendNotification);
     modeMidiButton->addMouseListener(this, false);
 	
 	//create sequencer mode button
@@ -123,7 +123,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	addAndMakeVisible(modeSequencerButton = new ModeButton(sequencerModeImage));
 	modeSequencerButton->addListener(this);
     modeSequencerButton->setOpaque(false);
-	modeSequencerButton->setRadioGroupId (1234);
+	modeSequencerButton->setRadioGroupId (1234, dontSendNotification);
     modeSequencerButton->addMouseListener(this, false);
 	
     //createa controller mode button
@@ -131,7 +131,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	addAndMakeVisible(modeControllerButton = new ModeButton(controllerModeImage));
 	modeControllerButton->addListener(this);
     modeControllerButton->setOpaque(false);
-	modeControllerButton->setRadioGroupId (1234);
+	modeControllerButton->setRadioGroupId (1234, dontSendNotification);
     modeControllerButton->addMouseListener(this, false);
     
     
@@ -499,12 +499,16 @@ void MainComponent::buttonClicked(Button *button)
     //MODE BUTTONS
     //==============================================================================
     
+    //NEW - added "button->getToggleState() == true" to the if/else conditions for
+    //selecting mode buttons otherwise turning off the selected button via radio groups
+    //as this function is called 3 times each time a button is clicked due to this.
+    
     //this function sets the selected mode (based on the button pressed)
     //to the currently selected pad (or set of pads)
     int buttonIndex;
     
     //get the selected button and set the right mode to screen
-    if (button == modeOffButton)
+    if (button == modeOffButton && button->getToggleState() == true)
     {
         buttonIndex = 0;
         
@@ -519,7 +523,7 @@ void MainComponent::buttonClicked(Button *button)
         setToOffMode();
     }
     
-    else if (button == modeMidiButton)
+    else if (button == modeMidiButton && button->getToggleState() == true)
     {
         buttonIndex = 1;
         
@@ -534,7 +538,7 @@ void MainComponent::buttonClicked(Button *button)
         setToMidiMode();
     } 
     
-    else if (button == modeSamplerButton)
+    else if (button == modeSamplerButton && button->getToggleState() == true)
     {
         buttonIndex = 2;
         
@@ -549,7 +553,7 @@ void MainComponent::buttonClicked(Button *button)
         setToSamplerMode();
     }
     
-    else if (button == modeSequencerButton)
+    else if (button == modeSequencerButton && button->getToggleState() == true)
     {
         buttonIndex = 3;
         
@@ -565,7 +569,7 @@ void MainComponent::buttonClicked(Button *button)
         
     }
     
-    else if (button == modeControllerButton)
+    else if (button == modeControllerButton && button->getToggleState() == true)
     {
         buttonIndex = 4;
         

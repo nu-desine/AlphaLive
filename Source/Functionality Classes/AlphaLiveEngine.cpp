@@ -401,23 +401,23 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
 
 void AlphaLiveEngine::processMidiInput (const MidiMessage midiMessage)
 {
-//    //==== MIDI Clock stuff ====
-//    if ((midiMessage.isMidiStart() || midiMessage.isMidiContinue()) && midiClockValue == 3)
-//    {
-//        globalClock->startClock();
-//    }
-//    else if (midiMessage.isMidiStop() && midiClockValue == 3)
-//    {
-//        globalClock->stopClock();
-//    }
-//    else if (midiMessage.isMidiClock() && midiClockValue == 3)
-//    {
-//        if (midiClockMessageFilter == 1)
-//        {
-//            if (globalClock->isThreadRunning())
-//                globalClock->setMidiClockMessageTimestamp();
-//        }
-//    }
+    //==== MIDI Clock stuff ====
+    if ((midiMessage.isMidiStart() || midiMessage.isMidiContinue()) && midiClockValue == 3)
+    {
+        globalClock->startClock();
+    }
+    else if (midiMessage.isMidiStop() && midiClockValue == 3)
+    {
+        globalClock->stopClock();
+    }
+    else if (midiMessage.isMidiClock() && midiClockValue == 3)
+    {
+        if (midiClockMessageFilter == 1)
+        {
+            if (globalClock->isThreadRunning())
+                globalClock->setMidiClockMessageTimestamp();
+        }
+    }
     
     //==== MIDI Program Change stuff (to change scenes) ====
     

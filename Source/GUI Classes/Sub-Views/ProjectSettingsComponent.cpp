@@ -339,14 +339,14 @@ void GeneralProjSettingsComponent::resized()
     copyExternalFilesLabel->setBounds(160, 10, 120, 20);
     copyExternalFilesSwitch->setBounds(290, 8, 40, 25);
     
-//    midiClockMenu->setBounds(200, 50, 210, 20);
-//    midiClockLabel->setBounds(60, 50, 120, 20);
-//    
-//    clockStartMessageMenu->setBounds(200, 80, 210, 20);
-//    clockStartMessageLabel->setBounds(60, 80, 120, 20);
-//    
-//    midiClockMessageFilterMenu->setBounds(200, 80, 210, 20);
-//    midiClockMessageFilterLabel->setBounds(60, 80, 120, 20);
+    midiClockMenu->setBounds(200, 50, 210, 20);
+    midiClockLabel->setBounds(60, 50, 120, 20);
+    
+    clockStartMessageMenu->setBounds(200, 80, 210, 20);
+    clockStartMessageLabel->setBounds(60, 80, 120, 20);
+    
+    midiClockMessageFilterMenu->setBounds(200, 80, 210, 20);
+    midiClockMessageFilterLabel->setBounds(60, 80, 120, 20);
     
     receiveMidiProgramChangeMessagesMenu->setBounds(290, 110, 120, 20);
     receiveMidiProgramChangeMessagesLabel->setBounds(60, 110, 210, 20);

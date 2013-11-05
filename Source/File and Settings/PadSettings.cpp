@@ -153,7 +153,10 @@ PadSettings::PadSettings(int arrayIndex)
     controllerOscPort = 5004;
     controllerMidiProgramChangeNumber = 1;
     controllerMidiProgramChangeChannel = 1;
-    controllerPressureLatchPadNumber = 1;
+    
+    controllerPressureLatchPadNumber = 0;
+    if (padNumber == 0)
+        controllerPressureLatchPadNumber = 1;
     
     
     //----pad effects----
@@ -405,7 +408,9 @@ void PadSettings::resetData (int whatToReset)
         setControllerOscPort(5004);
         setControllerMidiProgramChangeNumber(1);
         setControllerMidiProgramChangeChannel(1);
-        setControllerPressureLatchPadNumber(1);
+        setControllerPressureLatchPadNumber(0);
+        if (padNumber == 0)
+            setControllerPressureLatchPadNumber(1);
     }
     
     

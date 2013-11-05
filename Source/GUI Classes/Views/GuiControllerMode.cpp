@@ -296,18 +296,47 @@ void GuiControllerMode::sliderValueChanged (Slider* slider)
     //Pressure latch pad number
     else if (slider == pressureLatchPadNumberSlider)
     {
+        int changeSliderValue = -1;
+        
         for (int i = 0; i < selectedPads.size(); i++)
         {
             int padNum = selectedPads[i];
-            
             int sliderValue = slider->getValue();
             
-            if (sliderValue != padNum)
+            //don't want a pad to control it's own pressure
+            
+            if (sliderValue - 1 != padNum)
+            {
                 PAD_SETTINGS->setControllerPressureLatchPadNumber(sliderValue-1);
+            }
+            else
+            {
+                sliderValue += 1;
+                
+                if (sliderValue > 48)
+                {
+                    sliderValue = 1;
+                }
+                
+                PAD_SETTINGS->setControllerPressureLatchPadNumber(sliderValue-1);
+                
+                changeSliderValue = sliderValue;
+            }
         }
+        
+        //change the slider value if needed
+        
+        if (changeSliderValue != -1)
+        {
+            if (selectedPads.size() > 1)
+                changeSliderValue = -999;
+            
+            //why won't the -999 set the label to '-' here?
+            pressureLatchPadNumberSlider->setValue(changeSliderValue);
+        }
+        
     }
 
-    //
 }
 
 void GuiControllerMode::labelTextChanged (Label* labelThatHasChanged)
@@ -503,7 +532,7 @@ void GuiControllerMode::updateDisplay()
                 break;
             }
             if (i == selectedPads.size()-1)
-                pressureLatchPadNumberSlider->setValue(pressureLatch_);
+                pressureLatchPadNumberSlider->setValue(pressureLatch_+1);
         }
         
     }

@@ -41,15 +41,19 @@ public:
     void changeScene();
     
     void actionListenerCallback (const String& message);
+    void killPad (int padNum);
+    void unlatchPad (int padNum);
     
     int getPadNumber();
-    
     void setMainComponent(MainComponent *mainComponent_);
+    void setControl (int value, int padNum);
 
 private:
     
     int padNumber;
     int padValue;
+    
+    int control[48];
     
     int prevPadValue[48];
     bool pressureLatchModeStatus[48]; //stores whether each pad is currently latching another pad
@@ -60,6 +64,11 @@ private:
     MainComponent *mainComponent;
     
     ActionBroadcaster broadcaster;
+    
+    //see ModeMidi.h for a description of the follow variables...
+    Array<int> guiPadOnUpdater;
+    Array<int> guiPadOffUpdater;
+    
 };
 
 

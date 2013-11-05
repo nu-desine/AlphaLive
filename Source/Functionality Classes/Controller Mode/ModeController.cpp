@@ -35,6 +35,9 @@ ModeController::ModeController(AlphaLiveEngine &ref)
     {
         prevPadValue[i] = 0;
         pressureLatchModeStatus[i] = false;
+        
+        int padNumber = i;
+        control[i] = PAD_SETTINGS->getControllerControl();
     }
 
      broadcaster.addActionListener(this);
@@ -52,20 +55,25 @@ void ModeController::getInputData(int pad, int value, int velocity)
 {
     padNumber = pad;
     padValue = value;
+    
+    
     if (PAD_SETTINGS->getVelocityCurve() == 4)
         velocity = PAD_SETTINGS->getStaticVelocity();
     
-    if (PAD_SETTINGS->getControllerControl() == 1) //scene switcher
+    
+    
+    if (control[padNumber] == 1) //scene switcher
     {
         changeScene(); 
     }
-    else if (PAD_SETTINGS->getControllerControl() == 4) //osc controller
+    
+    else if (control[padNumber] == 4) //osc controller
     {
         //should i bet getting the ip addresses and port numbers for each pad beforehand (is it to cpu heavy accessing PadSettings everytime there is an incoming message?)?
         oscOutput.transmitPadMessage(padNumber+1, padValue, velocity, PAD_SETTINGS->getControllerOscIpAddress(), PAD_SETTINGS->getControllerOscPort());
     }
     
-    else if (PAD_SETTINGS->getControllerControl() == 2) //MIDI program change
+    else if (control[padNumber] == 2) //MIDI program change
     {
         if (prevPadValue[padNumber] == 0 && padValue > 0)
         {
@@ -74,7 +82,7 @@ void ModeController::getInputData(int pad, int value, int velocity)
         }
     }
     
-    else if (PAD_SETTINGS->getControllerControl() == 3) //MIDI program change & scene switcher
+    else if (control[padNumber] == 3) //MIDI program change & scene switcher
     {
         if (prevPadValue[padNumber] == 0 && padValue > 0)
         {
@@ -85,7 +93,7 @@ void ModeController::getInputData(int pad, int value, int velocity)
         }
     }
     
-    if (PAD_SETTINGS->getControllerControl() == 5) //killswitch
+    if (control[padNumber] == 5) //killswitch
     {
         if (prevPadValue[padNumber] == 0 && padValue > 0)
         {
@@ -93,8 +101,12 @@ void ModeController::getInputData(int pad, int value, int velocity)
         }
     }
     
-    if (PAD_SETTINGS->getControllerControl() == 6) //pressure latch mode
+    if (control[padNumber] == 6) //pressure latch mode
     {
+        //Remember that padNumber here is the Controller pad number,
+        //NOT the number of the pad that is being latched. The pad number for
+        //the latched pad is called padToLatch set below.
+        
         if (prevPadValue[padNumber] == 0 && padValue > 0)
         {
             if (pressureLatchModeStatus[padNumber] == false)
@@ -103,13 +115,15 @@ void ModeController::getInputData(int pad, int value, int velocity)
                 int padToLatch = PAD_SETTINGS->getControllerPressureLatchPadNumber();
                 alphaLiveEngineRef.latchPressureValue(padToLatch, true);
                 pressureLatchModeStatus[padNumber] = true;
+                
+                //update the pad GUI
+                guiPadOnUpdater.add(padNumber);
+                broadcaster.sendActionMessage("ON");
             }
             else
             {
                 //unlatching a pad
-                int padToLatch = PAD_SETTINGS->getControllerPressureLatchPadNumber();
-                alphaLiveEngineRef.latchPressureValue(padToLatch, false);
-                pressureLatchModeStatus[padNumber] = false;
+                unlatchPad (padNumber);
             }
             
         }
@@ -125,17 +139,59 @@ void ModeController::changeScene()
     {
         mainComponent->getSceneComponent()->selectSlot(PAD_SETTINGS->getControllerSceneNumber() - 1);
         
-        //if there is a 'two clicks' error... it's probably being caused here!
-        //how can i fix this?
+        //the 'two press' bug is being caused by prevPadValue[padNumber] not being
+        //reset to 0, as once this function is called the getInputData() function
+        //won't be called again if this pad is being switched to a different mode.
     }
 }
 
 void ModeController::actionListenerCallback (const String& message)
 {
-    if (message == "KILLSWITCH")
+    if (message == "ON")
+    {
+        alphaLiveEngineRef.updatePadPlayingStatus(guiPadOnUpdater.getLast(), 1);
+        guiPadOnUpdater.removeLast();
+    }
+    
+    else if (message == "OFF")
+    {
+        alphaLiveEngineRef.updatePadPlayingStatus(guiPadOffUpdater.getLast(), 0);
+        guiPadOffUpdater.removeLast();
+    }
+    
+    else if (message == "KILLSWITCH")
     {
         mainComponent->perform(CommandIDs::KillSwitch);
     }
+}
+
+void ModeController::killPad (int padNum)
+{
+    if (pressureLatchModeStatus[padNum] == true)
+    {
+        //update the pad GUI
+        unlatchPad(padNum);
+    }
+}
+
+void ModeController::unlatchPad (int padNum)
+{
+    //Remember that padNum here is the Controller pad number,
+    //NOT the number of the pad that is being latched. The pad number for
+    //the latched pad is called padToLatch set below.
+    
+    std::cout << "unlatching " << PAD_SETTINGS->getControllerPressureLatchPadNumber() << " using pad " << padNum << std::endl;
+    
+    //unlatch the defined pad
+    int padToLatch = PAD_SETTINGS->getControllerPressureLatchPadNumber();
+    alphaLiveEngineRef.latchPressureValue(padToLatch, false);
+    
+    //set that THIS pad is no longer latching a pad
+    pressureLatchModeStatus[padNum] = false;
+    
+    //update THIS pad GUI
+    guiPadOffUpdater.add(padNum);
+    broadcaster.sendActionMessage("OFF");
 }
 
 int ModeController::getPadNumber()
@@ -146,4 +202,17 @@ int ModeController::getPadNumber()
 void ModeController::setMainComponent(MainComponent *mainComponent_)
 {
     mainComponent = mainComponent_;
+}
+
+void ModeController::setControl(int value, int padNum)
+{
+    if (control[padNum] != value)
+    {
+        if (pressureLatchModeStatus[padNum] == true)
+        {
+            unlatchPad(padNum);
+        }
+        
+        control[padNum] = value;
+    }
 }

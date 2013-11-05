@@ -448,45 +448,56 @@ void PadSettings::setTempo (double value)
 
 void PadSettings::setMode(int value)
 {
-    //at this point, 'mode'  = previously selected mode, 'value' = new mode
     
-    //THIS FUNCTION NEEDS TO BE TIDIED UP - NOT VERY MODULAR IN TERMS OF ADDING NEW MODES, OR IS IT?? HMMM...
     
     if (value != mode) //if mode is different to previously
     {
-        if (value == 1)
+        //=============================================================================
+        
+        if (mode == 1) //if previous mode = MIDI...
         {
-            //This needs to be called as when copying&pasting pad data the new values need to be set within
-            //modeMidi
-            alphaLiveEngineRef->getModeMidi()->setPadData(padNumber);
+            //kill the pad if currently active...
+            alphaLiveEngineRef->getModeMidi()->killPad(padNumber);
+        }
+        else if (mode == 2) //if previous mode = Sampler
+        {
+            //delete instance of AudioFilePlayer for pad 'padNumber',
+            //killing the pad if it is currently active
+            alphaLiveEngineRef->getModeSampler()->deleteAudioFilePlayer(padNumber);
+            
+        }
+        else if (mode == 3) //if previous mode = Sequencer...
+        {
+            //delete instance of SequencePlayer for pad 'padNumber',
+            //killing the pad if it is currently active
+            alphaLiveEngineRef->getModeSequencer()->deleteSequencePlayer(padNumber);
+        }
+        else if (mode == 4) //if previous mode = Controller...
+        {
+            //kill the pad if currently active...
+            alphaLiveEngineRef->getModeController()->killPad(padNumber);
         }
         
-        //do i need the != part in any of the statements below? (as I'm initally checking above)
+        //=============================================================================
         
-        
-        if (value == 2 && mode != 2) //to prevent Sampler AudioFilePlayer objects being re-created
+        if (value == 1) //if new mode = MIDI...
+        {
+            //This needs to be called as when copying&pasting pad data the new values need to be set within
+            //modeMidi. This is handled automatically for other modes (inc. Controller Mode?)
+            alphaLiveEngineRef->getModeMidi()->setPadData(padNumber);
+        }
+        else if (value == 2) //if new mode = Sampler...
         {
             //create an instance of AudioFilePlayer for pad 'padNumber'
             alphaLiveEngineRef->getModeSampler()->createAudioFilePlayer(padNumber);
         }
-        else if (mode == 2 && value != 2) //to prevent non-existent Sampler AudioFilePlayer objects from being deleted
-        {
-            //delete instance of AudioFilePlayer for pad 'padNumber'
-            alphaLiveEngineRef->getModeSampler()->deleteAudioFilePlayer(padNumber);
-        }
-        
-        
-        if (value == 3 && mode != 3) //to prevent Sequencer SequencePlayer objects being re-created
+        else if (value == 3) //if new mode = Sequencer...
         {
             //create an instance of SequencePlayer for pad 'padNumber'
             alphaLiveEngineRef->getModeSequencer()->createSequencePlayer(padNumber);
         }
-        else if (mode == 3 && value != 3) //to prevent non-existent Sequencer SequencePlayer objects from being deleted
-        {
-            //delete instance of SequencePlayer for pad 'padNumber'
-            alphaLiveEngineRef->getModeSequencer()->deleteSequencePlayer(padNumber);
-        }
         
+        //=============================================================================
         
         mode = value; //mode is set!
         
@@ -1554,6 +1565,7 @@ bool PadSettings::getSequencerRecordEnabled()
 void PadSettings::setControllerControl (int value)
 {
     controllerControl = value;
+    alphaLiveEngineRef->getModeController()->setControl(value, padNumber);
 }
 void PadSettings::setControllerSceneNumber (int value)
 {

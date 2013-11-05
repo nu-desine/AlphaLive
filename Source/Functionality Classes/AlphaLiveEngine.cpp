@@ -547,6 +547,7 @@ void AlphaLiveEngine::killAll()
         modeMidi->killPad(i);
         modeSampler->killPad(i);
         modeSequencer->killPad(i);
+        modeController->killPad(i);
     }
     
     if (globalClock->isThreadRunning() == true)

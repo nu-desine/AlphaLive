@@ -110,7 +110,7 @@ public:
     bool getMidiChannelStatus (int channel);
     Array<int> getPreviouslyUsedMidiChannels();
     
-    void latchPressureValue (int padNum, bool shouldLatch);
+    void latchPressureValue (int padNum, bool shouldLatch, bool setPressureInstantaneously = false);
         
 private:
     

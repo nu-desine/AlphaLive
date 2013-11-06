@@ -431,6 +431,12 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
             
             minPressureValue[recievedPad] = 0;
             waitingToSetMinPressureValue[recievedPad] = 0;
+            
+            //display that the pressure is unlatched
+            sharedMemoryGui2.enter();
+            padPressureStatusQueue.add(recievedPad);
+            broadcaster.sendActionMessage("UPDATE PRESSURE STATUS");
+            sharedMemoryGui2.exit();
         }
         
     }
@@ -911,7 +917,6 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
 {
     if (message == "UPDATE PRESSURE GUI")
     {
-        
         sharedMemoryGui.enter();
         
         for (int i = 0; i < padPressureGuiQueue.size(); i++)
@@ -924,6 +929,29 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
         padPressureGuiQueue.clear();
         
         sharedMemoryGui.exit();
+    }
+    
+    else if (message == "UPDATE PRESSURE STATUS")
+    {
+        sharedMemoryGui2.enter();
+        
+        for (int i = 0; i < padPressureStatusQueue.size(); i++)
+        {
+            int padNum = padPressureStatusQueue[i];
+            bool pressureIsLatched;
+            
+            if (waitingToSetMinPressureValue[padNum] != 0)
+                pressureIsLatched = true;
+            else
+                pressureIsLatched = false;
+            
+            if (mainComponent != NULL)
+                mainComponent->getGuiPadLayout()->setPadPressureStatus(padNum, pressureIsLatched);
+        }
+        
+        padPressureStatusQueue.clear();
+        
+        sharedMemoryGui2.exit();
     }
     
     else if (message == "UPDATE ELITE GUI")
@@ -1138,7 +1166,6 @@ Array<int> AlphaLiveEngine::getPreviouslyUsedMidiChannels()
 
 void AlphaLiveEngine::latchPressureValue (int padNum, bool shouldLatch, bool setPressureInstantaneously)
 {
-    std::cout << "latching pad: " << padNum << std::endl;
     //setPressureInstantaneously will only be true here when this function was called
     //from ModeController::killPad() so that the connected latched pad can be truely reset.
     //Otherwise, waitingToSetMinPressureValue is set to flag that the minPressureValue
@@ -1153,13 +1180,18 @@ void AlphaLiveEngine::latchPressureValue (int padNum, bool shouldLatch, bool set
             if (shouldLatch)
             {
                 waitingToSetMinPressureValue[padNum] = 1;
+                
+                //display that the pressure is latched
+                sharedMemoryGui2.enter();
+                padPressureStatusQueue.add(padNum);
+                broadcaster.sendActionMessage("UPDATE PRESSURE STATUS");
+                sharedMemoryGui2.exit();
             }
             else
             {
                 waitingToSetMinPressureValue[padNum] = 2;
             }
         }
-        //
     }
     else if (setPressureInstantaneously == true)
     {
@@ -1171,13 +1203,18 @@ void AlphaLiveEngine::latchPressureValue (int padNum, bool shouldLatch, bool set
         
         waitingToSetMinPressureValue[padNum] = 0;
         
-        //update latched pad GUI
-        
+        //update latched pad pressure GUI
         sharedMemoryGui.enter();
         padPressure[padNum] = 0;
         padPressureGuiQueue.add(padNum);
         broadcaster.sendActionMessage("UPDATE PRESSURE GUI");
         sharedMemoryGui.exit();
+        
+        //display that the pressure is unlatched
+        sharedMemoryGui2.enter();
+        padPressureStatusQueue.add(padNum);
+        broadcaster.sendActionMessage("UPDATE PRESSURE STATUS");
+        sharedMemoryGui2.exit();
         
     }
     

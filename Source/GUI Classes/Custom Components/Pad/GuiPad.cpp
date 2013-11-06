@@ -72,7 +72,7 @@ GuiPad::GuiPad(int padNum, GuiPadLayout &ref)
     
     
     gradientOuterColourAlpha = gradientInnerColourAlpha = 0;
-    oscGradientOuterColour = oscGradientInnerColour = Colours::white.withAlpha(0.0f);
+    gradientOuterColour = gradientInnerColour = Colours::white;
 	
 	modeOpacity = 0.05f;
 	
@@ -133,10 +133,10 @@ void GuiPad::paint (Graphics& g)
     g.fillEllipse((getWidth()*0.08), (getHeight()*0.08), (getWidth()*0.84), (getHeight()*0.84));
     
     //pressure gradient (should this be in a seperate component so that repainting is less CPU-heavy)?
-    oscGradientOuterColour = Colours::white.withAlpha(float(gradientOuterColourAlpha));
-    oscGradientInnerColour = Colours::white.withAlpha(float(gradientInnerColourAlpha));
-    ColourGradient oscGradient(oscGradientInnerColour, (getWidth()*0.5),(getHeight()*0.5), oscGradientOuterColour, (getWidth()*0.8),(getHeight()*0.8), true);
-    g.setGradientFill(oscGradient);
+    gradientOuterColour = gradientOuterColour.withAlpha(float(gradientOuterColourAlpha));
+    gradientInnerColour = gradientInnerColour.withAlpha(float(gradientInnerColourAlpha));
+    ColourGradient gradient(gradientInnerColour, (getWidth()*0.5),(getHeight()*0.5), gradientOuterColour, (getWidth()*0.8),(getHeight()*0.8), true);
+    g.setGradientFill(gradient);
     g.fillEllipse((getWidth()*0.05), (getHeight()*0.05), (getWidth()*0.9), (getHeight()*0.9));
 	
     if (somethingIsBeingDraggedOver == true)
@@ -172,7 +172,7 @@ void GuiPad::paint (Graphics& g)
 }
 
 
-void GuiPad::setGradient (int oscValue)
+void GuiPad::setGradient (int pressureValue)
 {
     
     int currentTime = Time::currentTimeMillis();
@@ -181,8 +181,8 @@ void GuiPad::setGradient (int oscValue)
     //updating everytime there is an OSC message would be too CPU extensive and would create series of commands the GUI couldn't keep up with
     if (currentTime >= (lastTime + UPDATE_TIME)) 
     {
-        gradientInnerColourAlpha = oscValue * (1.0/float(MAX_PRESSURE));
-        gradientOuterColourAlpha = 1 - (oscValue * (1.0/float(MAX_PRESSURE)));
+        gradientInnerColourAlpha = pressureValue * (1.0/float(MAX_PRESSURE));
+        gradientOuterColourAlpha = 1 - (pressureValue * (1.0/float(MAX_PRESSURE)));
         
         //repaint to re-apply gradientChange
         repaint();
@@ -192,7 +192,7 @@ void GuiPad::setGradient (int oscValue)
     
     //following if statement needed as using a timer above means that
     //the pad isn't likely to be set to 0 when depressed
-    if (oscValue == 0)
+    if (pressureValue == 0)
     {
         gradientInnerColourAlpha = gradientOuterColourAlpha = 0;
         
@@ -201,7 +201,7 @@ void GuiPad::setGradient (int oscValue)
     
     //following if statement needed as using a timer above means that
     //the pad isn't likely to be set to 0 when depressed
-    if (oscValue == MAX_PRESSURE)
+    if (pressureValue == MAX_PRESSURE)
     {
         gradientInnerColourAlpha = 1;
         gradientOuterColourAlpha = 0;
@@ -209,6 +209,16 @@ void GuiPad::setGradient (int oscValue)
         repaint();
     }
 
+}
+
+void GuiPad::setGradientColour (bool pressureIsLatched)
+{
+    if (pressureIsLatched == true)
+        gradientInnerColour = gradientOuterColour = Colours::gold;
+    else
+        gradientInnerColour = gradientOuterColour = Colours::white;
+    
+    repaint();
 }
 
 

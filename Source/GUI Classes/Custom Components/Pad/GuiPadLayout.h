@@ -57,6 +57,7 @@ public:
     
     void setPadPlayingState (int pad, int state);
     void setPadPressure (int pad, int pressure);
+    void setPadPressureStatus (int pad, bool pressureIsLatched);
     
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);

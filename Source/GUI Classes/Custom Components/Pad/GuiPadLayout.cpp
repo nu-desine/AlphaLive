@@ -245,6 +245,12 @@ void GuiPadLayout::setPadPressure (int pad, int pressure)
     pads[pad]->setGradient(pressure); 
 }
 
+void GuiPadLayout::setPadPressureStatus (int pad, bool pressureIsLatched)
+{
+    //update gradient colour
+    pads[pad]->setGradientColour(pressureIsLatched);
+}
+
 void GuiPadLayout::paint (Graphics& g)
 {
 

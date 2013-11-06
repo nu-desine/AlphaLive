@@ -129,7 +129,7 @@ private:
     
     //audio related
 	AudioDeviceManager audioDeviceManager;	// this wraps the actual audio device
-    CriticalSection sharedMemory, sharedMemoryGui, sharedMemoryMidi;
+    CriticalSection sharedMemory, sharedMemoryGui, sharedMemoryGui2, sharedMemoryMidi;
     
     //audio stuff for mixing the modeSampler and modeSequencer objects, which are AudioSources
     MixerAudioSource audioMixer;
@@ -186,6 +186,7 @@ private:
     int waitingToSetMinPressureValue[48];   //0 - not
                                             // - waiting to latch
                                             // - waiting to unlatch
+    Array <int> padPressureStatusQueue;
     
 };
 

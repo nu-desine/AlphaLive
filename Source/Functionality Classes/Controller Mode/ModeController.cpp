@@ -180,8 +180,6 @@ void ModeController::unlatchPad (int padNum)
     //NOT the number of the pad that is being latched. The pad number for
     //the latched pad is called padToLatch set below.
     
-    std::cout << "unlatching " << PAD_SETTINGS->getControllerPressureLatchPadNumber() << " using pad " << padNum << std::endl;
-    
     //unlatch the defined pad
     int padToLatch = PAD_SETTINGS->getControllerPressureLatchPadNumber();
     alphaLiveEngineRef.latchPressureValue(padToLatch, false);

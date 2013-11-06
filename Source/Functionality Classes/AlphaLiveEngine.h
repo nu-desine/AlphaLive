@@ -183,6 +183,9 @@ private:
     int minPressureValue[48];  //Used to store the start/unpressed pressure value.
                             //By default and for most of the time each index will equal 0.
                             //The values can only changed when pads pressure is 'latched'.
+    int waitingToSetMinPressureValue[48];   //0 - not
+                                            // - waiting to latch
+                                            // - waiting to unlatch
     
 };
 

@@ -67,6 +67,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     {
         padVelocity[i] = 0;
         minPressureValue[i] = 0;
+        waitingToSetMinPressureValue[i] = 0;
         
         padVelocity[i] = -1;
         padPressure[i] = -1;
@@ -263,9 +264,24 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         recievedValue = value;
         recievedVelocity = velocity;
         
+        std::cout << "received value: " << recievedValue << std::endl;
+        
         //===============================================================================================
         //===============================================================================================
         
+        if (waitingToSetMinPressureValue[recievedPad] == 0)
+        {
+            /*
+             Only continue into the program if the app isn't currently waiting to set
+             the current pads min pressure value (signified to do so in latchPressureValue()).
+             If this check wasn't here, and it set the minPressureValue value directly in
+             latchPressureValue() as before, as soon as latchPressureValue() is called it
+             would jump the pressure value up (or down if unlatching) to the new scaled value. 
+             The else if statements below set it so that you need to release the pad and press it 
+             again for the new minPressureValue to be set, or press the pad to the current latched
+             value to be unlatched. This results in a much more smoother interaction.
+             */
+            
         //===determine pressure curve===
         if (PAD_SETTINGS->getPressureCurve() == 1)
         {
@@ -276,9 +292,6 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
                 recievedValue = MAX_PRESSURE;
             if (recievedValue > 0 && recievedValue < 1) //value 1 = 0.6, which is rounded to 0
                 recievedValue = 1;
-            
-            if (minPressureValue[pad] > 0)
-                recievedValue = scaleValue (recievedValue, 0, MAX_PRESSURE, minPressureValue[recievedPad], MAX_PRESSURE);
         }
         else if (PAD_SETTINGS->getPressureCurve() == 3)
         {
@@ -287,16 +300,12 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
             recievedValue = recievedValue * (MAX_PRESSURE/6.23832);
             if (recievedValue > MAX_PRESSURE)
                 recievedValue = MAX_PRESSURE;
-            
-            if (minPressureValue[pad] > 0)
-                recievedValue = scaleValue (recievedValue, 0, MAX_PRESSURE, minPressureValue[recievedPad], MAX_PRESSURE);
         }
-        else if (PAD_SETTINGS->getPressureCurve() == 2)
-        {
-            //linear mapping of pressure
-            if (minPressureValue[pad] > 0)
-                recievedValue = scaleValue (recievedValue, 0, MAX_PRESSURE, minPressureValue[recievedPad], MAX_PRESSURE);
-        }
+        
+        //else PAD_SETTINGS->getPressureCurve() = 2 = //linear mapping of pressure
+        
+        if (minPressureValue[pad] > 0)
+            recievedValue = scaleValue (recievedValue, 0, MAX_PRESSURE, minPressureValue[recievedPad], MAX_PRESSURE);
         
         
         //===============================================================================================
@@ -354,7 +363,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         
         if (padPressure[recievedPad] != recievedValue)
         {
-            //std::cout << "Pressure value of pad " << recievedPad << ": " << recievedValue << std::endl;
+            std::cout << "Pressure value of pad " << recievedPad << ": " << recievedValue << std::endl;
             
             //route message to midi mode
             if (PAD_SETTINGS->getMode() == 1) //if the pressed pad is set to Midi mode
@@ -397,7 +406,22 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
 //            }
             
         }
-        
+        }
+        else if (waitingToSetMinPressureValue[recievedPad] == 1 && recievedValue <= minPressureValue[recievedPad])
+        {
+
+            minPressureValue[recievedPad] = padPressure[recievedPad];
+            
+            waitingToSetMinPressureValue[recievedPad] = 0;
+            
+        }
+        else if (waitingToSetMinPressureValue[recievedPad] == 2 && recievedValue >= minPressureValue[recievedPad])
+        {
+            minPressureValue[recievedPad] = 0;
+            
+            waitingToSetMinPressureValue[recievedPad] = 0;
+        }
+    
     }
     
     //===============================================================================================
@@ -1103,8 +1127,20 @@ Array<int> AlphaLiveEngine::getPreviouslyUsedMidiChannels()
 
 void AlphaLiveEngine::latchPressureValue (int padNum, bool shouldLatch)
 {
-    if (shouldLatch)
-        minPressureValue[padNum] = padPressure[padNum];
-    else
-        minPressureValue[padNum] = 0;
+    if (padPressure[padNum] > 0)
+    {
+        if (shouldLatch)
+        {
+            waitingToSetMinPressureValue[padNum] = 1;
+        }
+        else
+        {
+            waitingToSetMinPressureValue[padNum] = 2;
+        }
+    }
+    
+//    if (shouldLatch)
+//        minPressureValue[padNum] = padPressure[padNum];
+//    else
+//        minPressureValue[padNum] = 0;
 }

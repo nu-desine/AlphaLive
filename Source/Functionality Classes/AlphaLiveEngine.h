@@ -121,7 +121,7 @@ private:
     EliteControls *eliteControls;
     
     int recievedPad;
-    float recievedValue;
+    int recievedValue;
     float recievedVelocity;
     
     //midi output device

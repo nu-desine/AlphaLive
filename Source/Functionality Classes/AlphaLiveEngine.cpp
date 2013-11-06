@@ -67,6 +67,9 @@ AlphaLiveEngine::AlphaLiveEngine()
     {
         padVelocity[i] = 0;
         minPressureValue[i] = 0;
+        
+        padVelocity[i] = -1;
+        padPressure[i] = -1;
     }
 
     playingStatus = 0;
@@ -260,6 +263,9 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         recievedValue = value;
         recievedVelocity = velocity;
         
+        //===============================================================================================
+        //===============================================================================================
+        
         //===determine pressure curve===
         if (PAD_SETTINGS->getPressureCurve() == 1)
         {
@@ -291,6 +297,10 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
             if (minPressureValue[pad] > 0)
                 recievedValue = scaleValue (recievedValue, 0, MAX_PRESSURE, minPressureValue[recievedPad], MAX_PRESSURE);
         }
+        
+        
+        //===============================================================================================
+        //===============================================================================================
 
         
         if (recievedVelocity != padVelocity[recievedPad])
@@ -337,49 +347,62 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
             //so doesn't make sense to apply any static values here
         }
         
-        //==========================================================================
-        //route message to midi mode
-        if (PAD_SETTINGS->getMode() == 1) //if the pressed pad is set to Midi mode
+        
+        //===============================================================================================
+        //===============================================================================================
+        
+        
+        if (padPressure[recievedPad] != recievedValue)
         {
-            modeMidi->getInputData(recievedPad, recievedValue, recievedVelocity);
+            //std::cout << "Pressure value of pad " << recievedPad << ": " << recievedValue << std::endl;
+            
+            //route message to midi mode
+            if (PAD_SETTINGS->getMode() == 1) //if the pressed pad is set to Midi mode
+            {
+                modeMidi->getInputData(recievedPad, recievedValue, recievedVelocity);
+            }
+            
+            //route message to sampler mode
+            else if (PAD_SETTINGS->getMode() == 2) //if the pressed pad is set to Sampler mode
+            {
+                modeSampler->getInputData(recievedPad, recievedValue, recievedVelocity);
+            }
+            
+            //route message to sequencer mode
+            else if (PAD_SETTINGS->getMode() == 3) //if the pressed pad is set to Sequencer mode
+            {
+                modeSequencer->getInputData(recievedPad, recievedValue);
+            }
+            
+            //route message to controller mode
+            else if (PAD_SETTINGS->getMode() == 4) //if the pressed pad is set to Controller mode
+            {
+                modeController->getInputData(recievedPad, recievedValue, recievedVelocity);
+            }
+            
+            //===============================================================================================
+            
+            sharedMemoryGui.enter();
+            padPressure[recievedPad] = recievedValue;
+            padPressureGuiQueue.add(recievedPad);
+            broadcaster.sendActionMessage("UPDATE PRESSURE GUI");
+            sharedMemoryGui.exit();
+            
+//            //===============================================================================================
+//            //OSC OUTPUT MODE STUFF
+//            
+//            if (isDualOutputMode == true)
+//            {
+//                oscOutput.transmitPadMessage(recievedPad+1, recievedValue, recievedVelocity, oscIpAddress, oscPortNumber);
+//            }
+            
         }
-        //==========================================================================
         
-        //route message to sampler mode
-        else if (PAD_SETTINGS->getMode() == 2) //if the pressed pad is set to Sampler mode
-        {
-            modeSampler->getInputData(recievedPad, recievedValue, recievedVelocity);
-        }
-        //==========================================================================
-        
-        //route message to sequencer mode
-        else if (PAD_SETTINGS->getMode() == 3) //if the pressed pad is set to Sequencer mode
-        {
-            modeSequencer->getInputData(recievedPad, recievedValue);
-        }
-        //==========================================================================
-        
-        //route message to controller mode
-        else if (PAD_SETTINGS->getMode() == 4) //if the pressed pad is set to Controller mode
-        {
-            modeController->getInputData(recievedPad, recievedValue, recievedVelocity);
-        }
-        //==========================================================================
-        
-        sharedMemoryGui.enter();
-        padPressure[recievedPad] = recievedValue;
-        padPressureGuiQueue.add(recievedPad);
-        broadcaster.sendActionMessage("UPDATE PRESSURE GUI");
-        sharedMemoryGui.exit();
-        
-//        //=========================================================================
-//        //OSC OUTPUT MODE STUFF
-//        
-//        if (isDualOutputMode == true)
-//        {
-//            oscOutput.transmitPadMessage(recievedPad+1, recievedValue, recievedVelocity, oscIpAddress, oscPortNumber);
-//        }
     }
+    
+    //===============================================================================================
+    //===============================================================================================
+    
     else 
     {
         //an elite control has been touched. Do your thang!
@@ -391,6 +414,9 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         broadcaster.sendActionMessage("UPDATE ELITE GUI");
         sharedMemoryGui.exit();
     }
+    
+    //===============================================================================================
+    //===============================================================================================
 }
 
 void AlphaLiveEngine::handleExclusiveMode (int padNum)

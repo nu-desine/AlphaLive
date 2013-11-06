@@ -172,7 +172,7 @@ void GuiPad::paint (Graphics& g)
 }
 
 
-void GuiPad::setGradient (int pressureValue)
+void GuiPad::setGradient (int pressureValue, int minPressureValue)
 {
     
     int currentTime = Time::currentTimeMillis();
@@ -201,11 +201,19 @@ void GuiPad::setGradient (int pressureValue)
     
     //following if statement needed as using a timer above means that
     //the pad isn't likely to be set to 0 when depressed
-    if (pressureValue == MAX_PRESSURE)
+    else if (pressureValue == MAX_PRESSURE)
     {
         gradientInnerColourAlpha = 1;
         gradientOuterColourAlpha = 0;
         
+        repaint();
+    }
+    
+    else if (pressureValue == minPressureValue)
+    {
+        gradientInnerColourAlpha = pressureValue * (1.0/float(MAX_PRESSURE));
+        gradientOuterColourAlpha = 1 - (pressureValue * (1.0/float(MAX_PRESSURE)));
+
         repaint();
     }
 

@@ -923,7 +923,7 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
         {
             int padNum = padPressureGuiQueue[i];
             if (mainComponent != NULL)
-                mainComponent->getGuiPadLayout()->setPadPressure(padNum, padPressure[padNum]);
+                mainComponent->getGuiPadLayout()->setPadPressure(padNum, padPressure[padNum], minPressureValue[padNum]);
         }
         
         padPressureGuiQueue.clear();

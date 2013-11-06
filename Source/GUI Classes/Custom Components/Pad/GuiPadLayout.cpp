@@ -239,10 +239,10 @@ void GuiPadLayout::setPadPlayingState (int pad, int state)
         pads[pad]->setPadPlayingState(state);
 }
 
-void GuiPadLayout::setPadPressure (int pad, int pressure)
+void GuiPadLayout::setPadPressure (int pad, int pressure, int minPressureValue)
 {
     //update gradient
-    pads[pad]->setGradient(pressure); 
+    pads[pad]->setGradient(pressure, minPressureValue);
 }
 
 void GuiPadLayout::setPadPressureStatus (int pad, bool pressureIsLatched)

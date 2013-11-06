@@ -56,7 +56,7 @@ public:
     void updateCurrentlySelectedPad();
     
     void setPadPlayingState (int pad, int state);
-    void setPadPressure (int pad, int pressure);
+    void setPadPressure (int pad, int pressure, int minPressureValue);
     void setPadPressureStatus (int pad, bool pressureIsLatched);
     
     void mouseEnter (const MouseEvent &e);

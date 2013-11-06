@@ -59,7 +59,7 @@ public:
     void mouseUp (const MouseEvent &e);
     void mouseDrag (const MouseEvent &e);
     
-    void setGradient (int pressureValue);
+    void setGradient (int pressureValue, int minPressureValue);
     void setGradientColour (bool pressureIsLatched);
     
     void setPadPlayingState (int playingState);

@@ -499,16 +499,12 @@ void MainComponent::buttonClicked(Button *button)
     //MODE BUTTONS
     //==============================================================================
     
-    //NEW - added "button->getToggleState() == true" to the if/else conditions for
-    //selecting mode buttons otherwise turning off the selected button via radio groups
-    //as this function is called 3 times each time a button is clicked due to this.
-    
     //this function sets the selected mode (based on the button pressed)
     //to the currently selected pad (or set of pads)
     int buttonIndex;
     
     //get the selected button and set the right mode to screen
-    if (button == modeOffButton && button->getToggleState() == true)
+    if (button == modeOffButton)
     {
         buttonIndex = 0;
         
@@ -523,7 +519,7 @@ void MainComponent::buttonClicked(Button *button)
         setToOffMode();
     }
     
-    else if (button == modeMidiButton && button->getToggleState() == true)
+    else if (button == modeMidiButton)
     {
         buttonIndex = 1;
         
@@ -538,7 +534,7 @@ void MainComponent::buttonClicked(Button *button)
         setToMidiMode();
     } 
     
-    else if (button == modeSamplerButton && button->getToggleState() == true)
+    else if (button == modeSamplerButton)
     {
         buttonIndex = 2;
         
@@ -553,7 +549,7 @@ void MainComponent::buttonClicked(Button *button)
         setToSamplerMode();
     }
     
-    else if (button == modeSequencerButton && button->getToggleState() == true)
+    else if (button == modeSequencerButton)
     {
         buttonIndex = 3;
         
@@ -569,7 +565,7 @@ void MainComponent::buttonClicked(Button *button)
         
     }
     
-    else if (button == modeControllerButton && button->getToggleState() == true)
+    else if (button == modeControllerButton)
     {
         buttonIndex = 4;
         

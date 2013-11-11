@@ -267,14 +267,6 @@ void GuiPadLayout::buttonClicked(Button *button)
 {
     //get modifier key so we can handle cmd-clicks and shift-clicks when selecting pads
     ModifierKeys modifier = ModifierKeys::getCurrentModifiers();
-    
-    //if a regular click is performed, clear the selectedPads array and clear all pads
-    if (modifier.isCommandDown() == false && modifier.isShiftDown() == false)
-    {
-        selectedPads.clear(); //should I call clearQuick() instead?
-        for (int i = 0; i <=47; i++)
-            turnOff(i);
-    }
 	
     //individual pads
     for (int i = 0; i <=47; i++)
@@ -309,21 +301,32 @@ void GuiPadLayout::buttonClicked(Button *button)
                 }
                 //if newPad == lastPad, do nothing as that pad would have already been selected
             }
-            //else, cmd-click or regular click...
-            else
+            else if (modifier.isCommandDown() == true)
             {
-                if (modifier.isCommandDown() == true && selectedPads.contains(i))
+                if (selectedPads.contains(i)) //if pad has already been selected...
                 {
                     //if cmd-click and pad is already selected, unselected
                     selectedPads.removeFirstMatchingValue(i);
                     turnOff(i);
                 }
-                else
+                else //if pad hasn't been selected
                 {
                     //select and turn on pad
                     selectedPads.addIfNotAlreadyThere(i);
                     turnOn(i);
                 }
+            }
+            //regular click
+            else
+            {
+                selectedPads.clear(); //should I call clearQuick() instead?
+                for (int j = 0; j <= 47; j++)
+                {
+                    turnOff(j);
+                }
+                
+                selectedPads.addIfNotAlreadyThere(i);
+                turnOn(i);
             }
             
             break; // so it doesn't check for other pads afterwards

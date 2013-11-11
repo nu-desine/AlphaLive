@@ -258,13 +258,13 @@ void GuiPad::toggleChange()
 void GuiPad::turnOff()
 {
 	//function that forces toggle to false
-    sb->setToggleState(false, false);
+    sb->setToggleState(false, dontSendNotification);
 }
 
 void GuiPad::turnOn()
 {
 	//function that forces toggle to true
-	sb->setToggleState(true, false);
+	sb->setToggleState(true, dontSendNotification);
 }
 
 bool GuiPad::hitTest (int x, int y)
@@ -398,6 +398,11 @@ void GuiPad::mouseDown (const MouseEvent &e)
     //====================================================================================
     if (e.mods.isPopupMenu() == true)
     {
+        //dissable the component so that that the mouse-up event that
+        //will follow doesn't trigger the shape button to be 'listened' to
+        //(so it doesn't call buttonClicked() is GuiPadLayout)
+        setEnabled(false);
+        
         PopupMenu menu;
         menu.addItem(1, translate("Copy pad settings..."));
         menu.addItem(2, translate("Paste pad settings..."));
@@ -450,7 +455,7 @@ void GuiPad::mouseDown (const MouseEvent &e)
     //====================================================================================
     else if (e.mods.isAltDown() == true)
     {
-        //dissable the component so that that the mouse-up event that 
+        //dissable the component so that that the mouse-up event that
         //will follow doesn't trigger the shape button to be 'listened' to
         //(so it doesn't call buttonClicked() is GuiPadLayout)
         setEnabled(false);
@@ -503,19 +508,19 @@ void GuiPad::mouseDrag (const MouseEvent &e)
 
 void GuiPad::mouseUp (const MouseEvent &e)
 {
-    //if the mouse state is currently being used to emulate a pad press
-    //, re-enable the component and send a pad 'off' message.
+    //if the mouse state is currently being used to emulate a pad press,
+    //send a pad 'off' message.
     if (isMouseInPlayMode == true)
     {
-        setEnabled(true);
- 
         //emulate pad release
         //guiPadLayoutRef.getAlphaLiveEngine().playPadFromMouse(padNumber, 0);
         guiPadLayoutRef.getAlphaLiveEngine().hidInputCallback(padNumber, 0, 110);
         
         isMouseInPlayMode = false;
     }
-        
+    
+    //re-enable the component after dissabling it in mouseDown()
+    setEnabled(true);
 }
 
 

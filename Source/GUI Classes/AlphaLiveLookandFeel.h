@@ -72,6 +72,11 @@ public:
     // background images
     Image mainImage, padsOffImage, padsOnImage, modeOffImage, padsBackgroundImage, settingsOffImage;
     
+    // the following variable is changed when the localisation is changed.
+    // is doesn't actually have anything to do with themes, but this seems like
+    // the most appropriate place for the variable to live.
+    float fontSizeAddition;
+    
 private:
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AlphaTheme);
@@ -98,6 +103,7 @@ public:
     
     //===overridden functions===
 	
+    //=====================================================================
 	void drawButtonBackground (Graphics& g,
                                        Button& button,
                                        const Colour& backgroundColour,
@@ -109,23 +115,28 @@ public:
 	void drawButtonText (Graphics& g, TextButton& button,
 						 bool isMouseOverButton, bool isButtonDown);
 	
+    //=====================================================================
 	void drawComboBox (Graphics& g, int width, int height,
 											 const bool isButtonDown,
 											 int buttonX, int buttonY,
 											 int buttonW, int buttonH,
 											 ComboBox& box);
+    
+    Font getComboBoxFont (ComboBox&);
+    Label* createComboBoxTextBox (ComboBox&);
 	
 	void positionComboBoxText (ComboBox& box, Label& label);
 	
 	
-	
+	//=====================================================================
 	void layoutFilenameComponent (FilenameComponent& filenameComp,
 								  ComboBox* filenameBox,
 								  Button* browseButton);
      
-	
+	//=====================================================================
 	void drawLabel (Graphics& g, Label& label);
 	
+    //=====================================================================
 	void drawRotarySlider (Graphics& g,
 										int x, int y,
 										int width, int height,
@@ -135,16 +146,20 @@ public:
 										Slider& slider);
     
     
-	
+	//=====================================================================
 	Font getPopupMenuFont();
     
     void drawPopupMenuBackground (Graphics &g, int width, int height);
     
+    //=====================================================================
     
 	int getDefaultScrollbarWidth(); 
 
+    //=====================================================================
 	int getDefaultMenuBarHeight();
 	void drawMenuBarBackground (Graphics& g, int width, int height, bool, MenuBarComponent& menuBar);
+    
+    //=====================================================================
     
     void drawFileBrowserRow (Graphics& g, int width, int height,
                              const String& filename, Image* icon,

@@ -125,7 +125,7 @@ void GuiPad::paint (Graphics& g)
     
     //text
     g.setColour(Colours::white);
-    g.setFont(9);
+    g.setFont(9 + AlphaTheme::getInstance()->fontSizeAddition);
     g.drawFittedText(padName, (getWidth()*0.1), 0, (getWidth()*0.8), getHeight(), Justification::centred, 1);
     
     ColourGradient ringGradient(Colours::transparentWhite, (getWidth()*0.5), (getHeight()*0.6), modeColour, (getWidth()*0.5), 0, false);

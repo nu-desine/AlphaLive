@@ -322,17 +322,17 @@ void GeneralSettingsComponent::resized()
     launchTaskMenu->setBounds(200, 130, 210, 20);
     launchTaskLabel->setBounds(60, 130, 120, 20);
     
-    killOnClockStopButton->setBounds(230, 168, 40, 25);
-    killOnClockStopLabel->setBounds(60, 170, 150, 20);
+    killOnClockStopButton->setBounds(280, 168, 40, 25);
+    killOnClockStopLabel->setBounds(60, 170, 200, 20);
     
-    cleanOnCloseButton->setBounds(230, 208, 40, 25);
-    cleanOnCloseLabel->setBounds(60, 210, 150, 20);
+    cleanOnCloseButton->setBounds(280, 208, 40, 25);
+    cleanOnCloseLabel->setBounds(60, 210, 200, 20);
     
-    autoSaveScenesButton->setBounds(230, 248, 40, 25);
-    autoSaveScenesLabel->setBounds(60, 250, 150, 20);
+    autoSaveScenesButton->setBounds(280, 248, 40, 25);
+    autoSaveScenesLabel->setBounds(60, 250, 200, 20);
     
-    autoCheckUpdatesButton->setBounds(230, 288, 40, 25);
-    autoCheckUpdatesLabel->setBounds(60, 290, 150, 20);
+    autoCheckUpdatesButton->setBounds(280, 288, 40, 25);
+    autoCheckUpdatesLabel->setBounds(60, 290, 200, 20);
     
     interfaceThemeMenu->setBounds(200, 328, 210, 20);
     interfaceThemeLabel->setBounds(60, 328, 120, 20);

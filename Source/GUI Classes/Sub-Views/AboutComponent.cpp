@@ -33,7 +33,7 @@ AboutComponent::AboutComponent(MainComponent &ref)
 {
     addAndMakeVisible(titleLabel = new Label("Title", ProjectInfo::projectName));
     titleLabel->setJustificationType(Justification::horizontallyCentred);
-    Font newFont1 (40, Font::bold);
+    Font newFont1 (40 + AlphaTheme::getInstance()->fontSizeAddition, Font::bold);
     titleLabel->setFont(newFont1);
     
     addAndMakeVisible(versionNumberLabel = new Label("Version Number"));

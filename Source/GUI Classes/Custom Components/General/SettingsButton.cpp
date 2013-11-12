@@ -23,7 +23,13 @@
 #include "SettingsButton.h"
 #include "../../AlphaLiveLookandFeel.h"
 
-SettingsButton::SettingsButton (const String& buttonName,float _startRadians, float _endRadians, float _theWidth, float _textRotation, float _textAngle, float _textRadius)
+SettingsButton::SettingsButton (const String& buttonName,
+                                float _startRadians,
+                                float _endRadians,
+                                float _theWidth,
+                                float _textRotation,
+                                float _textAngle,
+                                float _textRadius)
                                 :   Button ("SettingsButton"),
                                     theText(buttonName)
 {
@@ -82,10 +88,10 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 	AffineTransform rotateText(AffineTransform::rotation(textAngle)
 							   .AffineTransform::translated(xCo, yCo)
 							   .AffineTransform::scaled(0.8, 0.8,(getWidth()*0.5),(getHeight()*0.5)));
-	
-	
-	
-	
+    
+    g.setFont(14 + AlphaTheme::getInstance()->fontSizeAddition);
+    
+
 	switch (getToggleState() ? (isButtonDown ? 5 : (isMouseOverButton ? 4 : 3))
 			: (isButtonDown ? 2 : (isMouseOverButton ? 1 : 0)))
     {

@@ -241,14 +241,14 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	minusButton->addMouseListener(this, false);
     
     addAndMakeVisible(parameterLabel = new Label());
-	parameterLabel->setFont(Font(9));
+	parameterLabel->setFont(Font(9 + AlphaTheme::getInstance()->fontSizeAddition));
 	parameterLabel->setText("32", dontSendNotification);
     parameterLabel->setJustificationType(Justification::centred);
     //parameterLabel->setEditable(false, true, true);
     parameterLabel->addListener(this);
 	
 	addChildComponent(currentParameterLabel = new Label());
-	currentParameterLabel->setFont(Font(10));
+	currentParameterLabel->setFont(Font(10 + AlphaTheme::getInstance()->fontSizeAddition));
 	currentParameterLabel->setText(translate("TEMPO"), dontSendNotification);
     currentParameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->textColour);
     currentParameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
@@ -259,7 +259,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     //---------------hover parameter label -------------------------------------
     addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setFont(Font(9));
+    parameterHoverLabel->setFont(Font(11 + AlphaTheme::getInstance()->fontSizeAddition));
     parameterHoverLabel->addMouseListener(this, true);
     
     //----------------------Trigger mode buttons------------------

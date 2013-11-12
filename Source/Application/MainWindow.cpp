@@ -60,11 +60,11 @@ MainAppWindow::MainAppWindow(AlphaLiveEngine &ref, AppDocumentState &ref2, MenuB
     setContentOwned(mainComponent, false); 
     
     #if JUCE_MAC
-    centreWithSize (1024, 685);
+    centreWithSize (1024, 690);
     #endif
     #if ! JUCE_MAC
     //add default menu bar height the height to accomadate the menu bar in the overal window
-	centreWithSize (1024, 685 + LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight());
+	centreWithSize (1024, 690 + LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight());
     #endif
     
     // update key mappings.. should this be done here?? What am I even doing here?

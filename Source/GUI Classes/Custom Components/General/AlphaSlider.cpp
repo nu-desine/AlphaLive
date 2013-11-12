@@ -26,7 +26,7 @@
 AlphaSlider::AlphaSlider()
 {
 	addAndMakeVisible(sliderValueLabel = new Label());
-	sliderValueLabel->setFont(Font(11));
+	sliderValueLabel->setFont(Font(11 + AlphaTheme::getInstance()->fontSizeAddition));
 	sliderValueLabel->setText(String(getValue()), dontSendNotification);
     sliderValueLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     sliderValueLabel->setJustificationType(Justification::centred);

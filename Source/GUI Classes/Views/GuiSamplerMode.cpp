@@ -152,7 +152,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     
     //---------------------- parameter value label ------------------
     addAndMakeVisible(parameterLabel = new Label());
-	parameterLabel->setFont(Font(9));
+	parameterLabel->setFont(Font(9 + AlphaTheme::getInstance()->fontSizeAddition));
 	parameterLabel->setText("1", dontSendNotification);
     parameterLabel->setJustificationType(Justification::centred);
     //parameterLabel->setEditable(false, true, true);
@@ -239,7 +239,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     
     
     addAndMakeVisible(currentParameterLabel = new Label());
-	currentParameterLabel->setFont(Font(10));
+	currentParameterLabel->setFont(Font(10 + AlphaTheme::getInstance()->fontSizeAddition));
 	currentParameterLabel->setText(translate("TEMPO"), dontSendNotification);
     currentParameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->textColour);
     currentParameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);

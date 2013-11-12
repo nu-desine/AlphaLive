@@ -248,7 +248,7 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
 	//---------------parameter label -------------------------------------
     addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setFont(Font(9));
+    parameterHoverLabel->setFont(Font(11 + AlphaTheme::getInstance()->fontSizeAddition));
     parameterHoverLabel->addMouseListener(this, true);
 	
 	//---------------status off bg-------------------------------------

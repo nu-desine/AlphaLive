@@ -70,7 +70,7 @@ SceneSlot::SceneSlot (int slotNumber_, SceneComponent &ref)
     isEditingTextBox = false;
     
     addChildComponent (textBox = new SceneSlotTextEditor(*this));
-	textBox->setFont(Font(11));
+	textBox->setFont(Font(11 + (AlphaTheme::getInstance()->fontSizeAddition/4.0)));
     textBox->setPopupMenuEnabled(false);
     textBox->setSelectAllWhenFocused (true);
     textBox->addListener(this);
@@ -153,7 +153,7 @@ void SceneSlot::paint (Graphics &g)
         
         //text
         g.setColour(AlphaTheme::getInstance()->backgroundColour);
-        g.setFont(9);
+        g.setFont(9 + AlphaTheme::getInstance()->fontSizeAddition);
         g.drawFittedText(slotNumberString, 0, 0, CIRCE_WIDTH, getHeight(), Justification::centred, 1);
         
     }
@@ -162,7 +162,7 @@ void SceneSlot::paint (Graphics &g)
     {
         //text
         g.setColour(AlphaTheme::getInstance()->backgroundColour);
-        g.setFont(9);
+        g.setFont(9 + AlphaTheme::getInstance()->fontSizeAddition);
         g.drawFittedText(slotNumberString, 0, 0, CIRCE_WIDTH, getHeight(), Justification::centred, 1);
     }
     

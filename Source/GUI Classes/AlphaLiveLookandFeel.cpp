@@ -13,7 +13,7 @@
 
 AlphaTheme::AlphaTheme()
 {
-    
+    fontSizeAddition = 0;
 }
 
 AlphaTheme::~AlphaTheme()
@@ -96,7 +96,7 @@ namespace LookAndFeelHelpers
 	
     static TextLayout layoutTooltipText (const String& text, const Colour& colour) noexcept
     {
-        const float tooltipFontSize = 13.0f;
+        const float tooltipFontSize = 13.0f + AlphaTheme::getInstance()->fontSizeAddition;
         const int maxToolTipWidth = 400;
 		
         AttributedString s;
@@ -213,7 +213,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
             TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
             
-            PopupMenu::backgroundColourId,              0x00000000,
+            PopupMenu::backgroundColourId,              AlphaTheme::getInstance()->childBackgroundColour_,
             PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
             PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->textColour_,
             PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
@@ -354,7 +354,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
             TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
             
-            PopupMenu::backgroundColourId,              0x00000000,
+            PopupMenu::backgroundColourId,              AlphaTheme::getInstance()->childBackgroundColour_,
             PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
             PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->textColour_,
             PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
@@ -567,7 +567,7 @@ void AlphaLiveLookandFeel::drawButtonText (Graphics& g, TextButton& button,
                                   bool isMouseOverButton, bool isButtonDown)
 {
     Font font (getTextButtonFont (button));
-    g.setFont (10);
+    g.setFont (10 + AlphaTheme::getInstance()->fontSizeAddition);
     g.setColour (button.findColour (button.getToggleState() ? TextButton::textColourOnId
 									: TextButton::textColourOffId)
 				 .withMultipliedAlpha (button.isEnabled() ? 1.0f : 0.5f));
@@ -640,6 +640,16 @@ void AlphaLiveLookandFeel::drawComboBox (Graphics& g, int width, int height,
     }
 }
 
+Font AlphaLiveLookandFeel::getComboBoxFont (ComboBox& box)
+{
+    return Font (jmin (15.0f + AlphaTheme::getInstance()->fontSizeAddition,
+                       box.getHeight() * 0.85f));
+}
+
+Label* AlphaLiveLookandFeel::createComboBoxTextBox (ComboBox&)
+{
+    return new Label (String::empty, String::empty);
+}
 
 void AlphaLiveLookandFeel::positionComboBoxText (ComboBox& box, Label& label)
 {
@@ -647,7 +657,7 @@ void AlphaLiveLookandFeel::positionComboBoxText (ComboBox& box, Label& label)
                      box.getWidth() - box.getHeight(),
                      box.getHeight() - 6);
 	
-    label.setFont (10);
+    label.setFont (10 + AlphaTheme::getInstance()->fontSizeAddition);
     
 }
 
@@ -805,17 +815,12 @@ void AlphaLiveLookandFeel::drawRotarySlider (Graphics& g,
 
 Font AlphaLiveLookandFeel::getPopupMenuFont() 
 {
-    return Font (13.0f);
+    return Font (13.0f + AlphaTheme::getInstance()->fontSizeAddition);
 }
 
 void AlphaLiveLookandFeel::drawPopupMenuBackground (Graphics& g, int width, int height)
 {
-    const Colour background (findColour (PopupMenu::backgroundColourId));
-    
-    g.fillAll (background);
-    
-	//overlays colour/shape
-    g.setColour (background.overlaidWith (Colour (AlphaTheme::getInstance()->childBackgroundColour_).withAlpha(1.0f)));
+    g.setColour (findColour (PopupMenu::backgroundColourId));
     g.fillRect (0, 0, width, height);
     
     //g.setColour(findColour(ComboBox::outlineColourId));

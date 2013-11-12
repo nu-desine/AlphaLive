@@ -112,7 +112,7 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setFont(Font(9));
+    parameterHoverLabel->setFont(Font(11 + AlphaTheme::getInstance()->fontSizeAddition));
     parameterHoverLabel->addMouseListener(this, true);
         
     setInterceptsMouseClicks(false, true);
@@ -256,12 +256,12 @@ void GuiDistortion::buttonClicked (Button *button)
     {
 		
 		PopupMenu menu;
-        menu.addItem(1, "Soft");
-        menu.addItem(2, "Hard");
+        menu.addItem(1, translate("Soft"));
+        menu.addItem(2, translate("Hard"));
         menu.addItem(3, "HF0");
         menu.addItem(4, "HF1");
         menu.addItem(5, "HF2");
-        menu.addItem(6, "Digital");
+        menu.addItem(6, translate("Digital"));
         //menu.addItem("Recitify", 7);
         //menu.addItem("AddSine", 8);
 		
@@ -292,10 +292,10 @@ void GuiDistortion::setDistortionTypeMenu (int selectedItem)
     switch (selectedItem)
     {
         case 1:
-            distortionTypeMenu->setButtonText("Soft");
+            distortionTypeMenu->setButtonText(translate("Soft"));
             break;
         case 2:
-            distortionTypeMenu->setButtonText("Hard");
+            distortionTypeMenu->setButtonText(translate("Hard"));
             break;
         case 3:
             distortionTypeMenu->setButtonText("HF0");
@@ -307,10 +307,10 @@ void GuiDistortion::setDistortionTypeMenu (int selectedItem)
             distortionTypeMenu->setButtonText("HF2");
             break;
         case 6:
-            distortionTypeMenu->setButtonText("Digital");
+            distortionTypeMenu->setButtonText(translate("Digital"));
             break;
         default:
-            distortionTypeMenu->setButtonText("Soft");
+            distortionTypeMenu->setButtonText(translate("Soft"));
             break;
             
     }

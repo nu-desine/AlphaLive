@@ -131,14 +131,14 @@ Toolbox::Toolbox(MainComponent &parent) :
         treeLists[i]->addListener(this);
         treeLists[i]->setIndentSize(10);
         treeLists[i]->addMouseListener(this, true);
-        treeLists[i]->setItemHeight(16);
+        treeLists[i]->setItemHeight(16 + (AlphaTheme::getInstance()->fontSizeAddition));
     }
     
     for (int i = 0; i < noOfFileLists; i++)
     {
         fileLists.insert(i, new FileListComponent (*contentLists[i]));
         fileLists[i]->addListener(this);
-        fileLists[i]->setRowHeight(16);
+        fileLists[i]->setRowHeight(16 + (AlphaTheme::getInstance()->fontSizeAddition));
         fileLists[i]->addMouseListener(this, true);
     }
     
@@ -165,7 +165,7 @@ Toolbox::Toolbox(MainComponent &parent) :
 
     //create tabbed component 
     addChildComponent(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
-    tabbedComponent->setTabBarDepth(22);
+    tabbedComponent->setTabBarDepth(22 + (AlphaTheme::getInstance()->fontSizeAddition * 2));
     tabbedComponent->addMouseListener(this, true);
 }
 
@@ -313,6 +313,8 @@ void Toolbox::updateDisplay()
         currentTabIndex = 0;
     
     tabbedComponent->setCurrentTabIndex (currentTabIndex);
+    
+    //tabbedComponent->getTabbedButtonBar().setMinimumTabScaleFactor(1);
 }
 
           

@@ -174,7 +174,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //gain and pan label
     addAndMakeVisible(gainPanValueLabel = new Label("value label", String::empty));
     gainPanValueLabel->setJustificationType(Justification::horizontallyCentred);
-    gainPanValueLabel->setFont(Font(12));
+    gainPanValueLabel->setFont(Font(12 + AlphaTheme::getInstance()->fontSizeAddition));
     gainPanValueLabel->addMouseListener(this, true);
     
     //piano
@@ -298,7 +298,7 @@ void MainComponent::resized()
     
     globalClock->setBounds(479, 0, 266, 144);
     
-    infoTextBox->setBounds(0, getHeight()-45, getWidth(), 45);
+    infoTextBox->setBounds(0, getHeight()-50, getWidth(), 50);
     
     pivotX = guiPadLayout->getX() + (guiPadLayout->getWidth() * 0.5);
 	pivotY = guiPadLayout->getY() + (guiPadLayout->getHeight() * 0.5);
@@ -330,7 +330,7 @@ void MainComponent::paint(juce::Graphics &g)
                 0,
                 0,
                 getWidth(),
-                getHeight(),
+                getHeight() - 5, // -5 as I have since increased the size of the info box
                 0,
                 0,
                 AlphaTheme::getInstance()->mainImage.getWidth(),
@@ -342,7 +342,7 @@ void MainComponent::paint(juce::Graphics &g)
                     0,
                     0,
                     getWidth(),
-                    getHeight(),
+                    getHeight() - 5,
                     0,
                     0,
                     AlphaTheme::getInstance()->padsOffImage.getWidth(),
@@ -354,7 +354,7 @@ void MainComponent::paint(juce::Graphics &g)
                         0,
                         0,
                         getWidth(),
-                        getHeight(),
+                        getHeight() - 5,
                         0,
                         0,
                         AlphaTheme::getInstance()->modeOffImage.getWidth(),
@@ -367,7 +367,7 @@ void MainComponent::paint(juce::Graphics &g)
                     0,
                     0,
                     getWidth(),
-                    getHeight(),
+                    getHeight() - 5,
                     0,
                     0,
                     AlphaTheme::getInstance()->padsOnImage.getWidth(),
@@ -392,7 +392,7 @@ void MainComponent::paint(juce::Graphics &g)
                         0,
                         0,
                         getWidth(),
-                        getHeight(),
+                        getHeight() - 5,
                         0,
                         0,
                         AlphaTheme::getInstance()->modeOffImage.getWidth(),
@@ -404,7 +404,7 @@ void MainComponent::paint(juce::Graphics &g)
                 0,
                 0,
                 getWidth(),
-                getHeight(),
+                getHeight() - 5,
                 0,
                 0,
                 AlphaTheme::getInstance()->padsBackgroundImage.getWidth(),
@@ -1252,7 +1252,8 @@ void MainComponent::setLocalisation()
     
     StringArray availableFonts = Font::findAllTypefaceNames();
     
-    infoBoxTextSize = 12;
+    infoBoxTextSize = 12.0; //default font size
+    AlphaTheme::getInstance()->fontSizeAddition = 0;
     
     //countryCode will equal ISO 639-1 or ISO 639-2 codes as listed here:
     //http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
@@ -1278,7 +1279,9 @@ void MainComponent::setLocalisation()
         }
 
         alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(fontToUse);
-        infoBoxTextSize = 13.5;
+        
+        AlphaTheme::getInstance()->fontSizeAddition = 2; //should this change with the typeface?
+        infoBoxTextSize += AlphaTheme::getInstance()->fontSizeAddition;
         
         currentLanguage = "Japanese";
         
@@ -1305,7 +1308,9 @@ void MainComponent::setLocalisation()
         }
 
 		alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(fontToUse);
-        infoBoxTextSize = 13.5;
+        
+        AlphaTheme::getInstance()->fontSizeAddition = 2; //should this change with the typeface?
+        infoBoxTextSize += AlphaTheme::getInstance()->fontSizeAddition;
         
         currentLanguage = "Chinese";
     }
@@ -1323,7 +1328,9 @@ void MainComponent::setLocalisation()
         }
         
 		alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(fontToUse);
-        infoBoxTextSize = 13.5;
+        
+        AlphaTheme::getInstance()->fontSizeAddition = 2; //should this change with the typeface?
+        infoBoxTextSize += AlphaTheme::getInstance()->fontSizeAddition;
         
         currentLanguage = "Korean";
     }

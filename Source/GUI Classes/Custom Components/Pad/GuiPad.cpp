@@ -76,9 +76,20 @@ GuiPad::GuiPad(int padNum, GuiPadLayout &ref)
 	
 	modeOpacity = 0.05f;
 	
-	padColour = Colours::lightgrey.withAlpha(0.6f);
-	padOuterColour = Colours::darkgrey.withAlpha(0.9f);
-    padInnerColour = Colours::darkgrey.withAlpha(0.3f);
+    if (padNum == 0 || padNum == 8 || padNum == 16 || padNum == 24 || padNum == 32 || padNum == 40)
+    {
+        padOuterColour = Colours::grey.withAlpha(0.9f);
+        padInnerColour = Colours::grey.withAlpha(0.3f);
+    }
+    else
+    {
+        padOuterColour = Colours::darkgrey.withAlpha(0.9f);
+        padInnerColour = Colours::darkgrey.withAlpha(0.3f);
+    }
+    
+//    padOuterColour = Colours::darkgrey.withAlpha(0.9f);
+//    padInnerColour = Colours::darkgrey.withAlpha(0.3f);
+    padColour = Colours::lightgrey.withAlpha(0.6f);
     
     somethingIsBeingDraggedOver = false;
 	

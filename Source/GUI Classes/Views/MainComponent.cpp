@@ -1032,13 +1032,13 @@ void MainComponent::setInfoTextBoxText (String text)
      - Everytime the mouse events or exists a control it calls this function with the controls
      description as an argument. The description is put into the infoBoxText String variable.
      - If the thread is not currently running, start the thread.
-     - In the run() function below it will enter the while statement and pause for either 200 ms
+     - In the run() function below it will enter the while statement and pause for either 100 ms
      or until a notification wakes up the thread. If the timeout period expires it will exit the
      loop (as gotNewTextMessage will equal false) and set the infoTextBox Text, and the thread
      will exit.
      - If setInfoTextBoxText() is called whilst the thread is running (meaning the thread is 
      currently 'waiting', notify() will be called which will wake up the thread. However this will
-     cause gotNewTextMessage to equal true, so it will re-enter the loop and wait for 200 ms again.
+     cause gotNewTextMessage to equal true, so it will re-enter the loop and wait for 100 ms again.
      Therefore the info box text will only by updated when the thread is woken by notifications
      sent by new controls being enter exitted by the mouse.
      */

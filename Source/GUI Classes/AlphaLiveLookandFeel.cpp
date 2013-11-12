@@ -771,12 +771,18 @@ void AlphaLiveLookandFeel::drawRotarySlider (Graphics& g,
 	
     if (radius > 12.0f)
     {
+        
+        const float thickness = (1 - 0.2) + (0.2 * (radius * 0.0055));
+        
+        g.setColour(AlphaTheme::getInstance()->childBackgroundColour);
+        Path backgroundArc;
+        backgroundArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness);
+        g.fillPath (backgroundArc);
+        
         if (slider.isEnabled())
             g.setColour (slider.findColour (Slider::rotarySliderFillColourId).withAlpha (isMouseOver ? 1.0f : 0.7f));
         else
             g.setColour (Colour (0x80808080));
-		
-        const float thickness = (1 - 0.2) + (0.2 * (radius * 0.0055));
 		
         {
             Path filledArc;
@@ -787,7 +793,7 @@ void AlphaLiveLookandFeel::drawRotarySlider (Graphics& g,
 			
             g.fillPath (filledArc);
         }
-		
+        
         g.setColour(slider.findColour (Slider::rotarySliderOutlineColourId).withAlpha (isMouseOver ? 1.0f : 0.5f));
         Path outlineArc;
         outlineArc.addPieSegment (rx, ry, rw, rw, rotaryStartAngle, rotaryEndAngle, thickness);

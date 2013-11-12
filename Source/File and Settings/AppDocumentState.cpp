@@ -1718,15 +1718,15 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
             for ( int i = 0; i <= 47; i++)
             {
                 XmlElement* childToInsert = loadedXml->getChildByName("PAD_DATA_"+String(i));
-                sceneData[sceneNumber]->addChildElement(childToInsert);
                 loadedXml->removeChildElement(childToInsert, false);
+                sceneData[sceneNumber]->addChildElement(childToInsert);
             }
-            XmlElement* childToInsert = loadedXml->getChildByName("GLOBAL_DATA");
-            sceneData[sceneNumber]->addChildElement(childToInsert);
             
-            //remove sceneData childelement from loadedXml so it isn't deleted when loadedXml goes out of scope!
+            XmlElement* childToInsert = loadedXml->getChildByName("GLOBAL_DATA");
+            //remove childToInsert from loadedXml so it isn't deleted when loadedXml goes out of scope!
             loadedXml->removeChildElement (childToInsert, false);
             
+            sceneData[sceneNumber]->addChildElement(childToInsert);
             
             // Look for any applied audio files in the scene and make sure that sceneData[] is given the FULL PATH to
             // the audio files (at this point sceneData[] will probably just file names or relative paths to the files)

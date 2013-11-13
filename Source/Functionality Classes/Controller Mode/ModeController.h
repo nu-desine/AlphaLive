@@ -42,7 +42,7 @@ public:
     
     void actionListenerCallback (const String& message);
     void killPad (int padNum);
-    void unlatchPad (int padNum);
+    void unlatchPad (int padNum, bool setPressureInstantaneously = false);
     
     int getPadNumber();
     void setMainComponent(MainComponent *mainComponent_);

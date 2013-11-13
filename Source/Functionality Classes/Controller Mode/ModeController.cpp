@@ -26,6 +26,7 @@
 #include "../../Application/CommandIDs.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
+#define PAD_SETTINGS_padNum AppSettings::Instance()->padSettings[padNum]
 
 
 ModeController::ModeController(AlphaLiveEngine &ref)
@@ -167,24 +168,27 @@ void ModeController::actionListenerCallback (const String& message)
 
 void ModeController::killPad (int padNum)
 {
-    if (pressureLatchModeStatus[padNum] == true)
+    if (control[padNum] == 6) //pressure latch mode
     {
-        //update the pad GUI
-        unlatchPad(padNum);
+        //update the pad GUI and reset the connected
+        //pads minPressureValue value.
+        //int padToLatch = PAD_SETTINGS->getControllerPressureLatchPadNumber();
+        unlatchPad(padNum, true);
     }
 }
 
-void ModeController::unlatchPad (int padNum)
+void ModeController::unlatchPad (int padNum, bool setPressureInstantaneously)
 {
     //Remember that padNum here is the Controller pad number,
     //NOT the number of the pad that is being latched. The pad number for
     //the latched pad is called padToLatch set below.
     
-    std::cout << "unlatching " << PAD_SETTINGS->getControllerPressureLatchPadNumber() << " using pad " << padNum << std::endl;
+    //setPressureInstantaneously will be true here when this function was called
+    //from killPad() so that the connected latch pad can be truely reset.
     
     //unlatch the defined pad
-    int padToLatch = PAD_SETTINGS->getControllerPressureLatchPadNumber();
-    alphaLiveEngineRef.latchPressureValue(padToLatch, false);
+    int padToLatch = PAD_SETTINGS_padNum->getControllerPressureLatchPadNumber();
+    alphaLiveEngineRef.latchPressureValue(padToLatch, false, setPressureInstantaneously);
     
     //set that THIS pad is no longer latching a pad
     pressureLatchModeStatus[padNum] = false;

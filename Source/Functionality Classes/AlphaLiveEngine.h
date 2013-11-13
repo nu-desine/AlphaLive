@@ -110,7 +110,7 @@ public:
     bool getMidiChannelStatus (int channel);
     Array<int> getPreviouslyUsedMidiChannels();
     
-    void latchPressureValue (int padNum, bool shouldLatch);
+    void latchPressureValue (int padNum, bool shouldLatch, bool setPressureInstantaneously = false);
         
 private:
     
@@ -129,7 +129,7 @@ private:
     
     //audio related
 	AudioDeviceManager audioDeviceManager;	// this wraps the actual audio device
-    CriticalSection sharedMemory, sharedMemoryGui, sharedMemoryMidi;
+    CriticalSection sharedMemory, sharedMemoryGui, sharedMemoryGui2, sharedMemoryMidi;
     
     //audio stuff for mixing the modeSampler and modeSequencer objects, which are AudioSources
     MixerAudioSource audioMixer;
@@ -183,6 +183,10 @@ private:
     int minPressureValue[48];  //Used to store the start/unpressed pressure value.
                             //By default and for most of the time each index will equal 0.
                             //The values can only changed when pads pressure is 'latched'.
+    int waitingToSetMinPressureValue[48];   //0 - not
+                                            // - waiting to latch
+                                            // - waiting to unlatch
+    Array <int> padPressureStatusQueue;
     
 };
 

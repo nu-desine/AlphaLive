@@ -67,6 +67,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     {
         padVelocity[i] = 0;
         minPressureValue[i] = 0;
+        waitingToSetMinPressureValue[i] = 0;
         
         padVelocity[i] = -1;
         padPressure[i] = -1;
@@ -263,139 +264,179 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         recievedValue = value;
         recievedVelocity = velocity;
         
+        //std::cout << "received value: " << recievedValue << std::endl;
+        
         //===============================================================================================
         //===============================================================================================
         
-        //===determine pressure curve===
-        if (PAD_SETTINGS->getPressureCurve() == 1)
+        if (waitingToSetMinPressureValue[recievedPad] == 0)
         {
-            //exponential mapping of pressure
-            recievedValue = exp((float)recievedValue/MAX_PRESSURE)-1;
-            recievedValue = recievedValue * (MAX_PRESSURE/1.71828);
-            if (recievedValue > MAX_PRESSURE)
-                recievedValue = MAX_PRESSURE;
-            if (recievedValue > 0 && recievedValue < 1) //value 1 = 0.6, which is rounded to 0
-                recievedValue = 1;
+            /*
+             Only continue into the program if the app isn't currently waiting to set
+             the current pads min pressure value (signified to do so in latchPressureValue()).
+             If this check wasn't here, and it set the minPressureValue value directly in
+             latchPressureValue() as before, as soon as latchPressureValue() is called it
+             would jump the pressure value up (or down if unlatching) to the new scaled value.
+             The else if statements below set it so that you need to release the pad and press it
+             again for the new minPressureValue to be set, or press the pad to the current latched
+             value to be unlatched. This results in a much more smoother interaction.
+             */
+            
+            //===determine pressure curve===
+            if (PAD_SETTINGS->getPressureCurve() == 1)
+            {
+                //exponential mapping of pressure
+                recievedValue = exp((float)recievedValue/MAX_PRESSURE)-1;
+                recievedValue = recievedValue * (MAX_PRESSURE/1.71828);
+                if (recievedValue > MAX_PRESSURE)
+                    recievedValue = MAX_PRESSURE;
+                if (recievedValue > 0 && recievedValue < 1) //value 1 = 0.6, which is rounded to 0
+                    recievedValue = 1;
+            }
+            else if (PAD_SETTINGS->getPressureCurve() == 3)
+            {
+                //logarithmic mapping of pressure
+                recievedValue = log(recievedValue+1);
+                recievedValue = recievedValue * (MAX_PRESSURE/6.23832);
+                if (recievedValue > MAX_PRESSURE)
+                    recievedValue = MAX_PRESSURE;
+            }
+            
+            //else PAD_SETTINGS->getPressureCurve() = 2 = //linear mapping of pressure
             
             if (minPressureValue[pad] > 0)
                 recievedValue = scaleValue (recievedValue, 0, MAX_PRESSURE, minPressureValue[recievedPad], MAX_PRESSURE);
-        }
-        else if (PAD_SETTINGS->getPressureCurve() == 3)
-        {
-            //logarithmic mapping of pressure
-            recievedValue = log(recievedValue+1);
-            recievedValue = recievedValue * (MAX_PRESSURE/6.23832);
-            if (recievedValue > MAX_PRESSURE)
-                recievedValue = MAX_PRESSURE;
             
-            if (minPressureValue[pad] > 0)
-                recievedValue = scaleValue (recievedValue, 0, MAX_PRESSURE, minPressureValue[recievedPad], MAX_PRESSURE);
-        }
-        else if (PAD_SETTINGS->getPressureCurve() == 2)
-        {
-            //linear mapping of pressure
-            if (minPressureValue[pad] > 0)
-                recievedValue = scaleValue (recievedValue, 0, MAX_PRESSURE, minPressureValue[recievedPad], MAX_PRESSURE);
-        }
-        
-        
-        //===============================================================================================
-        //===============================================================================================
-
-        
-        if (recievedVelocity != padVelocity[recievedPad])
-        {
-            padVelocity[recievedPad] = recievedVelocity;
-            
-            //===determine velocity curve===
-            if (PAD_SETTINGS->getVelocityCurve() == 1)
-            {
-                //exponential mapping of velocity
-                recievedVelocity = exp((float)recievedVelocity/MAX_VELOCITY)-1;
-                recievedVelocity = recievedVelocity * (MAX_VELOCITY/1.71828);
-                if (recievedVelocity > MAX_VELOCITY)
-                    recievedVelocity = MAX_VELOCITY;
-                if (recievedVelocity > 0 && recievedVelocity < 1) //value 1 = 0.6, which is rounded to 0
-                    recievedVelocity = 1;
-                
-                int minValue = PAD_SETTINGS->getVelocityMinRange();
-                int maxValue = PAD_SETTINGS->getVelocityMaxRange();
-                recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
-            }
-            else if (PAD_SETTINGS->getVelocityCurve() == 3)
-            {
-                //logarithmic mapping of velocity
-                recievedVelocity = log(recievedVelocity+1);
-                recievedVelocity = recievedVelocity * (MAX_VELOCITY/4.85); // not sure why 4.85 here!
-                if (recievedVelocity > MAX_VELOCITY)
-                    recievedVelocity = MAX_VELOCITY;
-                
-                int minValue = PAD_SETTINGS->getVelocityMinRange();
-                int maxValue = PAD_SETTINGS->getVelocityMaxRange();
-                recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
-            }
-            else if (PAD_SETTINGS->getVelocityCurve() == 2)
-            {
-                //linear mapping of velocity
-                int minValue = PAD_SETTINGS->getVelocityMinRange();
-                int maxValue = PAD_SETTINGS->getVelocityMaxRange();
-                recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
-            }
-            
-            //static velocity stuff is done in the mode classes,
-            //as each mode handles a static velocity in slight different ways
-            //so doesn't make sense to apply any static values here
-        }
-        
-        
-        //===============================================================================================
-        //===============================================================================================
-        
-        
-        if (padPressure[recievedPad] != recievedValue)
-        {
-            //std::cout << "Pressure value of pad " << recievedPad << ": " << recievedValue << std::endl;
-            
-            //route message to midi mode
-            if (PAD_SETTINGS->getMode() == 1) //if the pressed pad is set to Midi mode
-            {
-                modeMidi->getInputData(recievedPad, recievedValue, recievedVelocity);
-            }
-            
-            //route message to sampler mode
-            else if (PAD_SETTINGS->getMode() == 2) //if the pressed pad is set to Sampler mode
-            {
-                modeSampler->getInputData(recievedPad, recievedValue, recievedVelocity);
-            }
-            
-            //route message to sequencer mode
-            else if (PAD_SETTINGS->getMode() == 3) //if the pressed pad is set to Sequencer mode
-            {
-                modeSequencer->getInputData(recievedPad, recievedValue);
-            }
-            
-            //route message to controller mode
-            else if (PAD_SETTINGS->getMode() == 4) //if the pressed pad is set to Controller mode
-            {
-                modeController->getInputData(recievedPad, recievedValue, recievedVelocity);
-            }
             
             //===============================================================================================
+            //===============================================================================================
             
-            sharedMemoryGui.enter();
-            padPressure[recievedPad] = recievedValue;
-            padPressureGuiQueue.add(recievedPad);
-            broadcaster.sendActionMessage("UPDATE PRESSURE GUI");
-            sharedMemoryGui.exit();
             
-//            //===============================================================================================
-//            //OSC OUTPUT MODE STUFF
-//            
-//            if (isDualOutputMode == true)
-//            {
-//                oscOutput.transmitPadMessage(recievedPad+1, recievedValue, recievedVelocity, oscIpAddress, oscPortNumber);
-//            }
+            if (recievedVelocity != padVelocity[recievedPad])
+            {
+                padVelocity[recievedPad] = recievedVelocity;
+                
+                //===determine velocity curve===
+                if (PAD_SETTINGS->getVelocityCurve() == 1)
+                {
+                    //exponential mapping of velocity
+                    recievedVelocity = exp((float)recievedVelocity/MAX_VELOCITY)-1;
+                    recievedVelocity = recievedVelocity * (MAX_VELOCITY/1.71828);
+                    if (recievedVelocity > MAX_VELOCITY)
+                        recievedVelocity = MAX_VELOCITY;
+                    if (recievedVelocity > 0 && recievedVelocity < 1) //value 1 = 0.6, which is rounded to 0
+                        recievedVelocity = 1;
+                    
+                    int minValue = PAD_SETTINGS->getVelocityMinRange();
+                    int maxValue = PAD_SETTINGS->getVelocityMaxRange();
+                    recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
+                }
+                else if (PAD_SETTINGS->getVelocityCurve() == 3)
+                {
+                    //logarithmic mapping of velocity
+                    recievedVelocity = log(recievedVelocity+1);
+                    recievedVelocity = recievedVelocity * (MAX_VELOCITY/4.85); // not sure why 4.85 here!
+                    if (recievedVelocity > MAX_VELOCITY)
+                        recievedVelocity = MAX_VELOCITY;
+                    
+                    int minValue = PAD_SETTINGS->getVelocityMinRange();
+                    int maxValue = PAD_SETTINGS->getVelocityMaxRange();
+                    recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
+                }
+                else if (PAD_SETTINGS->getVelocityCurve() == 2)
+                {
+                    //linear mapping of velocity
+                    int minValue = PAD_SETTINGS->getVelocityMinRange();
+                    int maxValue = PAD_SETTINGS->getVelocityMaxRange();
+                    recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
+                }
+                
+                //static velocity stuff is done in the mode classes,
+                //as each mode handles a static velocity in slight different ways
+                //so doesn't make sense to apply any static values here
+            }
             
+            
+            //===============================================================================================
+            //===============================================================================================
+            
+            
+            if (padPressure[recievedPad] != recievedValue)
+            {
+                //std::cout << "Pressure value of pad " << recievedPad << ": " << recievedValue << std::endl;
+                
+                //route message to midi mode
+                if (PAD_SETTINGS->getMode() == 1) //if the pressed pad is set to Midi mode
+                {
+                    modeMidi->getInputData(recievedPad, recievedValue, recievedVelocity);
+                }
+                
+                //route message to sampler mode
+                else if (PAD_SETTINGS->getMode() == 2) //if the pressed pad is set to Sampler mode
+                {
+                    modeSampler->getInputData(recievedPad, recievedValue, recievedVelocity);
+                }
+                
+                //route message to sequencer mode
+                else if (PAD_SETTINGS->getMode() == 3) //if the pressed pad is set to Sequencer mode
+                {
+                    modeSequencer->getInputData(recievedPad, recievedValue);
+                }
+                
+                //route message to controller mode
+                else if (PAD_SETTINGS->getMode() == 4) //if the pressed pad is set to Controller mode
+                {
+                    modeController->getInputData(recievedPad, recievedValue, recievedVelocity);
+                }
+                
+                //===============================================================================================
+                
+                sharedMemoryGui.enter();
+                padPressure[recievedPad] = recievedValue;
+                padPressureGuiQueue.add(recievedPad);
+                broadcaster.sendActionMessage("UPDATE PRESSURE GUI");
+                sharedMemoryGui.exit();
+                
+                //            //===============================================================================================
+                //            //OSC OUTPUT MODE STUFF
+                //
+                //            if (isDualOutputMode == true)
+                //            {
+                //                oscOutput.transmitPadMessage(recievedPad+1, recievedValue, recievedVelocity, oscIpAddress, oscPortNumber);
+                //            }
+                
+            }
+        }
+        else if (waitingToSetMinPressureValue[recievedPad] == 1 && recievedValue <= minPressureValue[recievedPad])
+        {
+            /*
+             This statement will be true when a pad has been flagged to be latched from latchPressureValue()
+             below and the pad has been released. This statement will then set the minPressureValue to
+             the pressure value of that when the pad was flagged to be latched, and then allow the pressure value
+             to continue into the program as per usual but using the new minPressureValue.
+             */
+            
+            minPressureValue[recievedPad] = padPressure[recievedPad];
+            waitingToSetMinPressureValue[recievedPad] = 0;
+            
+        }
+        else if (waitingToSetMinPressureValue[recievedPad] == 2 && recievedValue >= minPressureValue[recievedPad])
+        {
+            /*
+             This statement will be true when a pad has been flagged to be unlatched from latchPressureValue()
+             below and the pad has been pressed to its current minPressureValue value. 
+             This statement will then set the minPressureValue to 0, and then allow the pressure value
+             to continue into the program as per usual but using the default minPressureValue value.
+             */
+            
+            minPressureValue[recievedPad] = 0;
+            waitingToSetMinPressureValue[recievedPad] = 0;
+            
+            //display that the pressure is unlatched
+            sharedMemoryGui2.enter();
+            padPressureStatusQueue.add(recievedPad);
+            broadcaster.sendActionMessage("UPDATE PRESSURE STATUS");
+            sharedMemoryGui2.exit();
         }
         
     }
@@ -876,19 +917,41 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
 {
     if (message == "UPDATE PRESSURE GUI")
     {
-        
         sharedMemoryGui.enter();
         
         for (int i = 0; i < padPressureGuiQueue.size(); i++)
         {
             int padNum = padPressureGuiQueue[i];
             if (mainComponent != NULL)
-                mainComponent->getGuiPadLayout()->setPadPressure(padNum, padPressure[padNum]);
+                mainComponent->getGuiPadLayout()->setPadPressure(padNum, padPressure[padNum], minPressureValue[padNum]);
         }
         
         padPressureGuiQueue.clear();
         
         sharedMemoryGui.exit();
+    }
+    
+    else if (message == "UPDATE PRESSURE STATUS")
+    {
+        sharedMemoryGui2.enter();
+        
+        for (int i = 0; i < padPressureStatusQueue.size(); i++)
+        {
+            int padNum = padPressureStatusQueue[i];
+            bool pressureIsLatched;
+            
+            if (waitingToSetMinPressureValue[padNum] != 0)
+                pressureIsLatched = true;
+            else
+                pressureIsLatched = false;
+            
+            if (mainComponent != NULL)
+                mainComponent->getGuiPadLayout()->setPadPressureStatus(padNum, pressureIsLatched);
+        }
+        
+        padPressureStatusQueue.clear();
+        
+        sharedMemoryGui2.exit();
     }
     
     else if (message == "UPDATE ELITE GUI")
@@ -1101,10 +1164,63 @@ Array<int> AlphaLiveEngine::getPreviouslyUsedMidiChannels()
     return previouslyUsedMidiChannels;
 }
 
-void AlphaLiveEngine::latchPressureValue (int padNum, bool shouldLatch)
+void AlphaLiveEngine::latchPressureValue (int padNum, bool shouldLatch, bool setPressureInstantaneously)
 {
-    if (shouldLatch)
-        minPressureValue[padNum] = padPressure[padNum];
-    else
-        minPressureValue[padNum] = 0;
+    //setPressureInstantaneously will only be true here when this function was called
+    //from ModeController::killPad() so that the connected latched pad can be truely reset.
+    //Otherwise, waitingToSetMinPressureValue is set to flag that the minPressureValue
+    //needs to be set within hidInputCallback() above when the incoming pressure value
+    //is correct.
+    
+    if (setPressureInstantaneously == false)
+    {
+        
+        if (padPressure[padNum] > 0)
+        {
+            if (shouldLatch)
+            {
+                waitingToSetMinPressureValue[padNum] = 1;
+                
+                //display that the pressure is latched
+                sharedMemoryGui2.enter();
+                padPressureStatusQueue.add(padNum);
+                broadcaster.sendActionMessage("UPDATE PRESSURE STATUS");
+                sharedMemoryGui2.exit();
+            }
+            else
+            {
+                waitingToSetMinPressureValue[padNum] = 2;
+            }
+        }
+    }
+    else if (setPressureInstantaneously == true)
+    {
+        
+        if (shouldLatch)
+            minPressureValue[padNum] = padPressure[padNum];
+        else
+            minPressureValue[padNum] = 0;
+        
+        waitingToSetMinPressureValue[padNum] = 0;
+        
+        //update latched pad pressure GUI
+        sharedMemoryGui.enter();
+        padPressure[padNum] = 0;
+        padPressureGuiQueue.add(padNum);
+        broadcaster.sendActionMessage("UPDATE PRESSURE GUI");
+        sharedMemoryGui.exit();
+        
+        //display that the pressure is unlatched
+        sharedMemoryGui2.enter();
+        padPressureStatusQueue.add(padNum);
+        broadcaster.sendActionMessage("UPDATE PRESSURE STATUS");
+        sharedMemoryGui2.exit();
+        
+    }
+    
+    
+//    if (shouldLatch)
+//        minPressureValue[padNum] = padPressure[padNum];
+//    else
+//        minPressureValue[padNum] = 0;
 }

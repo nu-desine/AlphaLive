@@ -59,16 +59,14 @@ public:
     void mouseUp (const MouseEvent &e);
     void mouseDrag (const MouseEvent &e);
     
-    void setGradient (int oscValue);
-    void setPadPlayingState (int playingState);
+    void setGradient (int pressureValue, int minPressureValue);
+    void setGradientColour (bool pressureIsLatched);
     
+    void setPadPlayingState (int playingState);
     void setPadText();
     
     void copyPadSettings();
     void pastePadSettings();
-    
-	
-	
     
 private:
     //==============================================================================
@@ -88,7 +86,7 @@ private:
 	Colour normalColour, overColour, downColour, overlayColour, modeColour, samplerColour, midiColour, sequencerColour, controllerColour;
 	
     
-    Colour padColour, padOuterColour, padInnerColour, oscGradientOuterColour, oscGradientInnerColour;
+    Colour padColour, padOuterColour, padInnerColour, gradientOuterColour, gradientInnerColour;
     float gradientOuterColourAlpha, gradientInnerColourAlpha, modeOpacity;
 	
     int lastTime;

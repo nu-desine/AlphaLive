@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>02890547-57E6-43D3-B861-293681F2CAB9</string>
+	<key>IDESourceControlProjectName</key>
+	<string>AlphaLive</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>D112D839-2EE7-4CC9-BAD1-8A1164E0282D</key>
+		<string>ssh://bitbucket.org/kasbah/alphalive2.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Builds/MacOSX/AlphaLive.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>D112D839-2EE7-4CC9-BAD1-8A1164E0282D</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://bitbucket.org/kasbah/alphalive2.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>D112D839-2EE7-4CC9-BAD1-8A1164E0282D</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>D112D839-2EE7-4CC9-BAD1-8A1164E0282D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>AlphaLive NEW vDEV</string>
+		</dict>
+	</array>
+</dict>
+</plist>

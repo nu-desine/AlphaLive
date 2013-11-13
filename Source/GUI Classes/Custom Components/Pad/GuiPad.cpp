@@ -232,10 +232,14 @@ void GuiPad::setGradient (int pressureValue, int minPressureValue)
 
 void GuiPad::setGradientColour (bool pressureIsLatched)
 {
+    Colour gradientColour;
+    
     if (pressureIsLatched == true)
-        gradientInnerColour = gradientOuterColour = Colours::gold;
+        gradientColour = Colours::white.overlaidWith (AlphaTheme::getInstance()->mainColour.withAlpha(0.7f));
     else
-        gradientInnerColour = gradientOuterColour = Colours::white;
+        gradientColour = Colours::white;
+    
+    gradientInnerColour = gradientOuterColour = gradientColour;
     
     repaint();
 }

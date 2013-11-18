@@ -55,6 +55,9 @@ namespace CommandIDs
     
     static const int CopyDataToSequencer    = 0x20022;
     
+    static const int EnableLed              = 0x20030;
+    static const int EnableLedPressure      = 0x20031;
+    
     
 }
 
@@ -65,6 +68,7 @@ namespace CommandCategories
     static const char* const ControlCommands		= "Control";
     static const char* const EditCommands           = "Edit";
     static const char* const OptionCommands         = "Option";
+    static const char* const HardwareCommands       = "Hardware";
 }
 
 #endif // COMMANDIDS_H

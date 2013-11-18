@@ -57,6 +57,9 @@ public:
     int autoCheckUpdates; // 1 - off, 2 - on
     int interfaceTheme;
     
+    int hardwareLedStatus; // 1 - off, 2 - on
+    int hardwareLedPressureStatus; //1 - off, 2 - on
+    
 private:
     ScopedPointer<PropertiesFile> props;
 

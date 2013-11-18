@@ -912,6 +912,25 @@ void AlphaLiveEngine::setFirmwareDetails (String version, String serial)
     }
 }
 
+void AlphaLiveEngine::setLedSettings (uint8 setting, uint8 value)
+{
+    //This is the declaration of the abstract HidComms function.
+    //It is used to set the general settings of the LED of the hardware.
+    //The 'setting' argument can have the following values:
+    // 1 - LED on/off status - set 'value' to 0 or 1
+    // 2 - LED pressure interaction status - set 'value' to 0 or 1
+    // 3 - LED clock interaction -  set 'value' to 0 for 'off',
+    //                              1 for 'fade to black', or
+    //                              2 for 'fade from max colour to min colour'.
+    
+    unsigned char dataToSend[4];
+    dataToSend[0] = 0x01; //General LED settings command
+    dataToSend[1] = setting;
+    dataToSend[2] = value;
+    dataToSend[3] = 0x00;
+    addMessageToHidOutReport(dataToSend);
+}
+
 
 void AlphaLiveEngine::actionListenerCallback (const String& message)
 {

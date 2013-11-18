@@ -19,6 +19,7 @@
 //
 
 #include "HidComms.h"
+#include "../File and Settings/StoredSettings.h"
 #if JUCE_LINUX
 #include <unistd.h>
 #endif
@@ -265,7 +266,7 @@ void HidComms::run()
                     }
                     
                     
-                    // ==== write output report (just MIDI messages?) ====
+                    // ==== write output report ====
                     
                     sharedMemory.enter();
                     
@@ -476,6 +477,15 @@ void HidComms::connectToDevice()
         // Set the hid_read() function to be non-blocking
         // for the rest of the program
         hid_set_nonblocking(handle, 1);
+        
+        
+        // ==== Configure LED settings ====
+        
+        //set LED status
+        setLedSettings(1, StoredSettings::getInstance()->hardwareLedStatus - 1);
+        //set LED pressure interation status
+        setLedSettings(2, StoredSettings::getInstance()->hardwareLedPressureStatus - 1);
+
     }
 }
 

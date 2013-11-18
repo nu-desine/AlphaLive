@@ -65,12 +65,14 @@ StringArray MainMenuModel::getMenuBarNames()
     String edit(translate("Edit"));
     String options(translate("Options"));
     String controls(translate("Controls"));
+    String hardware(translate("Hardware"));
     String help(translate("Help"));
     
     names.add(file);
     names.add(edit);
     names.add(options);
     names.add(controls);
+    names.add(hardware);
     names.add(help);
     
     return names;
@@ -127,7 +129,12 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         menu.addCommandItem (commandManager, CommandIDs::KillSwitch);
         menu.addCommandItem (commandManager, CommandIDs::StartStopClock);
     }
-    else if (topLevelMenuIndex == 4) //Help
+    else if (topLevelMenuIndex == 4) //Hardware
+    {
+        menu.addCommandItem (commandManager, CommandIDs::EnableLed);
+        menu.addCommandItem (commandManager, CommandIDs::EnableLedPressure);
+    }
+    else if (topLevelMenuIndex == 5) //Help
     {
         //menu.addCommandItem (commandManager, CommandIDs::StarterGuide);
         menu.addCommandItem (commandManager, CommandIDs::ReferenceManual);

@@ -52,6 +52,7 @@ public:
     void setFirmwareUpdateStatus (bool status);
     void setDeviceStatus();
     void setFirmwareDetails (String version, String serial);
+    void setLedSettings (uint8 setting, uint8 value);
     
     void actionListenerCallback (const String& message);
     

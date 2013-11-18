@@ -320,7 +320,9 @@ public:
             CommandIDs::Save,
             CommandIDs::SaveAs,
             CommandIDs::CleanUpProject,
-            StandardApplicationCommandIDs::quit
+            StandardApplicationCommandIDs::quit,
+            CommandIDs::EnableLed,
+            CommandIDs::EnableLedPressure
         };
         
         commands.addArray (ids, numElementsInArray (ids));
@@ -378,6 +380,23 @@ public:
             
             result.defaultKeypresses.add (KeyPress ('q', cmd, 0));
         }
+        else if (commandID == CommandIDs::EnableLed)
+        {
+            result.setInfo (translate("Enable LED"),
+                            "Sets the status of the LED in the AlphaSphere",
+                            CommandCategories::HardwareCommands, 0);
+            
+            result.setTicked (StoredSettings::getInstance()->hardwareLedStatus - 1);
+        }
+        else if (commandID == CommandIDs::EnableLedPressure)
+        {
+            result.setInfo (translate("Enable LED Pressure Interaction"),
+                            "Sets the status of the LED pressure interaction",
+                            CommandCategories::HardwareCommands, 0);
+            
+            result.setTicked (StoredSettings::getInstance()->hardwareLedPressureStatus - 1);
+            result.setActive(StoredSettings::getInstance()->hardwareLedStatus - 1);
+        }
     }
     
     bool perform (const InvocationInfo& info)
@@ -405,7 +424,52 @@ public:
         {
             appDocumentState->cleanUpProject (false);
         }
-        if (info.commandID == StandardApplicationCommandIDs::quit)
+        
+        else if(info.commandID == CommandIDs::EnableLed)
+        {
+            uint8 status;
+            
+            if (StoredSettings::getInstance()->hardwareLedStatus == 2)
+            {
+                //dissable LED
+                status = 0;
+            }
+            else
+            {
+                //enable LED
+                status = 1;
+            }
+            
+            //send setting value to hardware
+            alphaLiveEngine->setLedSettings(1, status);
+            
+            StoredSettings::getInstance()->hardwareLedStatus = status + 1;
+            StoredSettings::getInstance()->flush();
+        }
+        
+        else if(info.commandID == CommandIDs::EnableLedPressure)
+        {
+            int status;
+            
+            if (StoredSettings::getInstance()->hardwareLedPressureStatus == 2)
+            {
+                //dissable LED pressure interaction
+                status = 0;
+            }
+            else
+            {
+                //enable LED presure interaction
+                status = 1;
+            }
+            
+            //send setting value to hardware
+            alphaLiveEngine->setLedSettings(2, status);
+
+            StoredSettings::getInstance()->hardwareLedPressureStatus = status + 1;
+            StoredSettings::getInstance()->flush();
+        }
+        
+        else if (info.commandID == StandardApplicationCommandIDs::quit)
         {
             systemRequestedQuit();
             return true;

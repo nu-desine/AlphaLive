@@ -923,12 +923,15 @@ void AlphaLiveEngine::setLedSettings (uint8 setting, uint8 value)
     //                              1 for 'fade to black', or
     //                              2 for 'fade from max colour to min colour'.
     
-    unsigned char dataToSend[4];
-    dataToSend[0] = 0x01; //General LED settings command
-    dataToSend[1] = setting;
-    dataToSend[2] = value;
-    dataToSend[3] = 0x00;
-    addMessageToHidOutReport(dataToSend);
+    if (getDeviceStatus() != 0)
+    {
+        unsigned char dataToSend[4];
+        dataToSend[0] = 0x01; //General LED settings command
+        dataToSend[1] = setting;
+        dataToSend[2] = value;
+        dataToSend[3] = 0x00;
+        addMessageToHidOutReport(dataToSend);
+    }
 }
 
 

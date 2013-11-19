@@ -387,6 +387,7 @@ public:
                             CommandCategories::HardwareCommands, 0);
             
             result.setTicked (StoredSettings::getInstance()->hardwareLedStatus - 1);
+            //result.setActive (alphaLiveEngine->getDeviceStatus() != 0); // << not currently working
         }
         else if (commandID == CommandIDs::EnableLedPressure)
         {
@@ -395,7 +396,8 @@ public:
                             CommandCategories::HardwareCommands, 0);
             
             result.setTicked (StoredSettings::getInstance()->hardwareLedPressureStatus - 1);
-            result.setActive(StoredSettings::getInstance()->hardwareLedStatus - 1);
+            result.setActive(StoredSettings::getInstance()->hardwareLedStatus - 1 /*&&
+                             alphaLiveEngine->getDeviceStatus() != 0*/); // << not currently working
         }
     }
     

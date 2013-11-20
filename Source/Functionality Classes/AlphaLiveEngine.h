@@ -53,6 +53,7 @@ public:
     void setDeviceStatus();
     void setFirmwareDetails (String version, String serial);
     void setLedSettings (uint8 setting, uint8 value);
+    void setLedColour (uint8 colourNumber, Colour colour);
     
     void actionListenerCallback (const String& message);
     

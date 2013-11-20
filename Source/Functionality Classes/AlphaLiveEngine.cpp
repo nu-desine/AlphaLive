@@ -934,6 +934,19 @@ void AlphaLiveEngine::setLedSettings (uint8 setting, uint8 value)
     }
 }
 
+void AlphaLiveEngine::setLedColour (uint8 colourNumber, Colour colour)
+{
+    if (getDeviceStatus() != 0)
+    {
+        unsigned char dataToSend[4];
+        dataToSend[0] = colourNumber + 2; //LED colour command
+        dataToSend[1] = colour.getRed();
+        dataToSend[2] = colour.getGreen();
+        dataToSend[3] = colour.getBlue();
+        addMessageToHidOutReport(dataToSend);
+    }
+}
+
 
 void AlphaLiveEngine::actionListenerCallback (const String& message)
 {

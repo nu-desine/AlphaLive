@@ -30,6 +30,7 @@
 
 class MainComponent;
 class GeneralSettingsComponent;
+class HardwarePreferencesComponent;
 
 class PreferencesComponent :    public Component,
                                 public Button::Listener,
@@ -63,6 +64,7 @@ private:
     
     AlphaAudioSettingsComponent *audioAndMidiSettingsComponent;
     GeneralSettingsComponent *generalSettingsComponent;
+    HardwarePreferencesComponent *hardwarePreferencesComponent;
     
     TextButton *closeButton;
 
@@ -119,3 +121,47 @@ private:
 };
 
 #endif //H_GENERALSETTINGSCOMPONENT
+
+
+
+#ifndef H_HARDWAREPREFERENCESCOMPONENT
+#define H_HARDWAREPREFERENCESCOMPONENT
+
+#include "../../../JuceLibraryCode/JuceHeader.h"
+#include "../../Functionality Classes/AlphaLiveEngine.h"
+
+class MainComponent;
+
+class HardwarePreferencesComponent :    public Component,
+                                        public ComboBox::Listener,
+                                        public Button::Listener,
+                                        public ChangeListener
+{
+public:
+    HardwarePreferencesComponent(MainComponent &ref, AlphaLiveEngine &ref2);
+    ~HardwarePreferencesComponent();
+    
+    void resized();
+    void paint (Graphics& g);
+    
+    void buttonClicked (Button* button);
+    void comboBoxChanged (ComboBox *comboBox);
+    
+    void changeListenerCallback (ChangeBroadcaster *source);
+    
+    void mouseEnter (const MouseEvent &e);
+    void mouseExit (const MouseEvent &e);
+    
+    void updateDisplay();
+    
+private:
+    MainComponent &mainComponentRef;
+    AlphaLiveEngine &alphaLiveEngineRef;
+    
+    
+    Label *ledColourLabel[3];
+    ShapeButton *ledColourButton[3];
+};
+
+#endif //H_HARDWAREPREFERENCESCOMPONENT
+

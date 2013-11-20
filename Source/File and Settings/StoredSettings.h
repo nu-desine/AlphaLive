@@ -59,6 +59,7 @@ public:
     
     int hardwareLedStatus; // 1 - off, 2 - on
     int hardwareLedPressureStatus; //1 - off, 2 - on
+    Colour hardwareLedColour[3]; //[min, mid, max]
     
 private:
     ScopedPointer<PropertiesFile> props;

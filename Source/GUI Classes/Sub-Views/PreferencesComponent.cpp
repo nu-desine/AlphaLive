@@ -32,15 +32,28 @@ PreferencesComponent::PreferencesComponent(MainComponent &ref, AlphaLiveEngine &
 {
     //AUDIO OUTPUT SETTINGS
     initAudioSettingsComponent();
-    
     //GENERAL SETTINGS COMPONENT
     generalSettingsComponent = new GeneralSettingsComponent(mainComponentRef, alphaLiveEngineRef);
-    
+    //HARDWARE PREFERENCES COMPONENT
+    hardwarePreferencesComponent = new HardwarePreferencesComponent (mainComponentRef, alphaLiveEngineRef);
     
     //create tabbed component and add tabs/child components
     addAndMakeVisible(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
-    tabbedComponent->addTab(translate("General Settings"), AlphaTheme::getInstance()->foregroundColourDarker, generalSettingsComponent, true);
-    tabbedComponent->addTab(translate("Audio Output Settings"), AlphaTheme::getInstance()->foregroundColourDarker, audioAndMidiSettingsComponent, true);
+    
+    tabbedComponent->addTab(translate("General Settings"),
+                            AlphaTheme::getInstance()->foregroundColourDarker,
+                            generalSettingsComponent,
+                            true);
+    
+    tabbedComponent->addTab(translate("Audio Output Settings"),
+                            AlphaTheme::getInstance()->foregroundColourDarker,
+                            audioAndMidiSettingsComponent,
+                            true);
+    
+    tabbedComponent->addTab(translate("Hardware Settings"),
+                            AlphaTheme::getInstance()->foregroundColourDarker,
+                            hardwarePreferencesComponent,
+                            true);
     
     addAndMakeVisible(closeButton = new TextButton());
     closeButton->setButtonText(translate("Close"));
@@ -540,5 +553,132 @@ void GeneralSettingsComponent::updateDisplay()
     midiNoteDisplayTypeMenu->setSelectedId(StoredSettings::getInstance()->midiNoteDisplayType, true);
     deviceInterfaceMenu->setSelectedId(StoredSettings::getInstance()->deviceType, true);
     
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+HardwarePreferencesComponent::HardwarePreferencesComponent(MainComponent &ref, AlphaLiveEngine &ref2)
+                                                            :   mainComponentRef(ref),
+                                                                alphaLiveEngineRef(ref2)
+{
+    addAndMakeVisible(ledColourLabel[0] = new Label());
+    ledColourLabel[0]->setText(translate("Minimum Pressure LED Colour:"), dontSendNotification);
+    addAndMakeVisible(ledColourLabel[1] = new Label());
+    ledColourLabel[1]->setText(translate("Mid Pressure LED Colour:"), dontSendNotification);
+    addAndMakeVisible(ledColourLabel[2] = new Label());
+    ledColourLabel[2]->setText(translate("Maximum Pressure LED Colour:"), dontSendNotification);
+    
+    Path rect;
+    rect.addRoundedRectangle(0, 0, 10, 10, 2);
+    
+    for (int i = 0; i < 3; i++)
+    {
+        Colour colour = StoredSettings::getInstance()->hardwareLedColour[i];
+        
+        addAndMakeVisible(ledColourButton[i] = new ShapeButton("LED colour button " + String(i),
+                                                               colour,
+                                                               colour,
+                                                               colour));
+        ledColourButton[i]->setShape(rect, true, false, false);
+        ledColourButton[i]->addListener(this);
+        ledColourButton[i]->addMouseListener(this, true);
+    }
+}
+
+HardwarePreferencesComponent::~HardwarePreferencesComponent()
+{
+    deleteAllChildren();
+}
+
+void HardwarePreferencesComponent::resized()
+{
+    ledColourLabel[0]->setBounds(60, 10, 200, 20);
+    ledColourButton[0]->setBounds(280, 8, 80, 25);
+    
+    ledColourLabel[1]->setBounds(60, 50, 200, 20);
+    ledColourButton[1]->setBounds(280, 48, 80, 25);
+
+    ledColourLabel[2]->setBounds(60, 90, 200, 20);
+    ledColourButton[2]->setBounds(280, 88, 80, 25);
+
+
+}
+
+void HardwarePreferencesComponent::paint (Graphics& g)
+{
+    for (int i = 0; i < 3; i++)
+    {
+        Colour colour = StoredSettings::getInstance()->hardwareLedColour[i];
+        ledColourButton[i]->setColours(colour, colour, colour);
+    }
+}
+
+void HardwarePreferencesComponent::buttonClicked (Button* button)
+{
+    for (int i = 0; i < 3; i++)
+    {
+        if (button == ledColourButton[i])
+        {
+            ColourSelector* colourSelector = new ColourSelector(14);
+            colourSelector->setName("cs" + String (i));
+            colourSelector->setCurrentColour (StoredSettings::getInstance()->hardwareLedColour[i]);
+            colourSelector->addChangeListener(this);
+            colourSelector->setSize (300, 400);
+
+            CallOutBox::launchAsynchronously (colourSelector, button->getScreenBounds(), nullptr);
+        }
+    }
+ 
+}
+
+void HardwarePreferencesComponent::comboBoxChanged (ComboBox *comboBox)
+{
+    
+}
+
+void HardwarePreferencesComponent::changeListenerCallback (ChangeBroadcaster *source)
+{
+    ColourSelector* cs = dynamic_cast <ColourSelector*> (source);
+    Colour colour = cs->getCurrentColour();
+    
+    for (int i = 0; i < 3; i++)
+    {
+        if (cs->getName() == "cs" + String (i))
+        {
+            alphaLiveEngineRef.setLedColour(i, colour);
+            
+            StoredSettings::getInstance()->hardwareLedColour[i] = colour;
+            
+            ledColourButton[i]->repaint();
+        }
+    }
+}
+
+
+void HardwarePreferencesComponent::mouseEnter (const MouseEvent &e)
+{
+    
+}
+
+void HardwarePreferencesComponent::mouseExit (const MouseEvent &e)
+{
+    //remove any text
+    mainComponentRef.setInfoTextBoxText (String::empty);
+}
+
+void HardwarePreferencesComponent::updateDisplay()
+{
+    //this function is called from PreferencesComponent::visibilityChanged
 }
 

@@ -485,6 +485,10 @@ void HidComms::connectToDevice()
         setLedSettings(1, StoredSettings::getInstance()->hardwareLedStatus - 1);
         //set LED pressure interation status
         setLedSettings(2, StoredSettings::getInstance()->hardwareLedPressureStatus - 1);
+        
+        //set LED colours
+        for (int i = 0; i < 3; i ++)
+            setLedColour(i, StoredSettings::getInstance()->hardwareLedColour[i]);
 
     }
 }

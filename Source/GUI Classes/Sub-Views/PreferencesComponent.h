@@ -55,6 +55,7 @@ public:
     void removeMidiOutputSelector();
     void redrawAudioSettingsComponent();
     void setTabColour();
+    void selectHardwareTab();
     
 private:
     MainComponent &mainComponentRef;

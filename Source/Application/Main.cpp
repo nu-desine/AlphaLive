@@ -322,7 +322,8 @@ public:
             CommandIDs::CleanUpProject,
             StandardApplicationCommandIDs::quit,
             CommandIDs::EnableLed,
-            CommandIDs::EnableLedPressure
+            CommandIDs::EnableLedPressure,
+            CommandIDs::EnableLedClock
         };
         
         commands.addArray (ids, numElementsInArray (ids));
@@ -399,6 +400,17 @@ public:
             result.setActive(StoredSettings::getInstance()->hardwareLedStatus - 1 /*&&
                              alphaLiveEngine->getDeviceStatus() != 0*/); // << not currently working
         }
+        else if (commandID == CommandIDs::EnableLedClock)
+        {
+            result.setInfo (translate("Enable LED Clock Interaction"),
+                            "Sets the status of the LED clock interaction",
+                            CommandCategories::HardwareCommands, 0);
+            
+            result.setTicked (StoredSettings::getInstance()->hardwareLedClockStatus - 1);
+            result.setActive(StoredSettings::getInstance()->hardwareLedStatus - 1 /*&&
+                             alphaLiveEngine->getDeviceStatus() != 0*/); // << not currently working
+        }
+        
     }
     
     bool perform (const InvocationInfo& info)
@@ -468,6 +480,28 @@ public:
             alphaLiveEngine->setLedSettings(2, status);
 
             StoredSettings::getInstance()->hardwareLedPressureStatus = status + 1;
+            StoredSettings::getInstance()->flush();
+        }
+        
+        else if(info.commandID == CommandIDs::EnableLedClock)
+        {
+            int status;
+            
+            if (StoredSettings::getInstance()->hardwareLedClockStatus == 2)
+            {
+                //dissable LED clock interaction
+                status = 0;
+            }
+            else
+            {
+                //enable LED clock interaction
+                status = 1;
+            }
+            
+            //send setting value to hardware
+            alphaLiveEngine->setLedSettings(3, status);
+            
+            StoredSettings::getInstance()->hardwareLedClockStatus = status + 1;
             StoredSettings::getInstance()->flush();
         }
         

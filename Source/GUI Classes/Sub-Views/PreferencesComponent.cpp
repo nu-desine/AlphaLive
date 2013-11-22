@@ -187,6 +187,11 @@ void PreferencesComponent::redrawAudioSettingsComponent()
     tabbedComponent->addTab(translate("Audio Output Settings"), AlphaTheme::getInstance()->foregroundColourDarker, audioAndMidiSettingsComponent, true);
 }
 
+void PreferencesComponent::selectHardwareTab()
+{
+    tabbedComponent->setCurrentTabIndex(2);
+}
+
 
 
 

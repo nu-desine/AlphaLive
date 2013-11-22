@@ -1665,7 +1665,8 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::StarterGuide,
         CommandIDs::ReferenceManual,
         CommandIDs::UpdateSoftware,
-        CommandIDs::CopyDataToSequencer
+        CommandIDs::CopyDataToSequencer,
+        CommandIDs::HardwarePreferences
     };
 	
 	commands.addArray (ids, numElementsInArray (ids));
@@ -1852,6 +1853,13 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
                         CommandCategories::EditCommands, 0);
         
         result.setActive(shouldBeActive);
+    }
+    
+    else if (commandID == CommandIDs::HardwarePreferences)
+    {
+        result.setInfo (translate("Hardware Preferences..."),
+						"Opens the application hadware preferences view.",
+						CommandCategories::OtherCommands, 0);
     }
 }
 
@@ -2057,6 +2065,19 @@ bool MainComponent::perform (const InvocationInfo& info)
             }
         }
     }
+    
+    else if(info.commandID == CommandIDs::HardwarePreferences)
+	{
+		aboutComponent->setVisible(false);
+        projectSettingsComponent->setVisible(false);
+        
+        preferencesComponent->toFront(true);
+        infoTextBox->toFront(false);
+        
+        preferencesComponent->selectHardwareTab();
+		preferencesComponent->setVisible(true);
+        preferencesComponent->grabKeyboardFocus();
+	}
     
 	//else
 	//	return false;

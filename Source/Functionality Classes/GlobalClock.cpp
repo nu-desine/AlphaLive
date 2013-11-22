@@ -119,6 +119,9 @@ void GlobalClock::actionListenerCallback (const String& message)
     if (message == "UPDATE CLOCK DISPLAY")
     {
         mainComponent->getGuiGlobalClock()->updateClockDisplay(beatNumber, barNumber, beatsPerBar);
+        
+        if (StoredSettings::getInstance()->hardwareLedClockStatus != 0)
+            sendLedClockMessage(1);
     }
     
     else if (message == "UPDATE TRANSPORT BUTTON")
@@ -268,6 +271,9 @@ void GlobalClock::stopClock()
         }
     }
     
+    //if (StoredSettings::getInstance()->hardwareLedClockStatus != 0)
+    sendLedClockMessage(0);
+    
     stopThread(100);
     
 }
@@ -316,4 +322,40 @@ int GlobalClock::getBarNumber()
 void GlobalClock::setMainComponent(MainComponent *mainComponent_)
 {
     mainComponent = mainComponent_;
+}
+
+void GlobalClock::sendLedClockMessage (uint8 messageType)
+{
+    /*
+     This function is used to send a message to the firmware to control
+     the LED interaction with the clock when LED clock interaction is enabled.
+     
+     The 'messageType' argument can be equal to two values:
+     0 - Stop LED clock interaction. Sent when the global clock stops to set the LED back to normal.
+     1 - Clock timestamp. Sent when the clock starts and on every clock beat after that to trigger the LED to animate.
+     
+     The tempo being sent here is used only to set the speed at which the LED fades on each beat,
+     NOT for the timing of each beat. Therefore the fact that the 'float' tempo may be rounded
+     down to an 'int' value won't cause any issues. Note that for tempos over 255 we must sent the
+     value over two bytes.
+     
+     */
+    
+    if (alphaLiveEngineRef.getDeviceStatus() != 0)
+    {
+        uint8 tempoLowerByte, tempoUpperByte = 0;
+        tempoLowerByte = (int)tempo & 255;
+        tempoUpperByte = (int)tempo >> 8;
+        
+        //int encodedTempo = (tempoUpperByte << 8) + tempoLowerByte;
+        //std::cout << (int)tempoLowerByte << " " << (int)tempoUpperByte << " " << encodedTempo << std::endl;
+        
+        unsigned char dataToSend[4];
+        dataToSend[0] = 0x05; //Clock timing messages command
+        dataToSend[1] = messageType;
+        dataToSend[2] = tempoLowerByte;
+        dataToSend[3] = tempoUpperByte;
+        alphaLiveEngineRef.addMessageToHidOutReport(dataToSend);
+    }
+    
 }

@@ -67,6 +67,8 @@ public:
     
     void setMainComponent(MainComponent *mainComponent_);
     
+    void sendLedClockMessage (uint8 messageType);
+    
 private:
     
     double currentTime;

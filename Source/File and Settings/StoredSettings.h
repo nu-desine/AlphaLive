@@ -57,6 +57,7 @@ public:
     int autoCheckUpdates; // 1 - off, 2 - on
     int interfaceTheme;
     
+    int hardwareLedMode; //1 - normal, 2 - MIDI CC controlled
     int hardwareLedStatus; // 1 - off, 2 - on
     int hardwareLedPressureStatus; //1 - off, 2 - on
     int hardwareLedClockStatus; // 1 - off, 2 - on

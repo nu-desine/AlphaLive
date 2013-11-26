@@ -68,6 +68,7 @@ void StoredSettings::flush()
         props->setValue ("deviceType", deviceType);
         props->setValue ("autoCheckUpdates", autoCheckUpdates);
         props->setValue ("interfaceTheme", interfaceTheme);
+        props->setValue ("hardwareLedMode", hardwareLedMode);
         props->setValue ("hardwareLedStatus", hardwareLedStatus);
         props->setValue ("hardwareLedPressureStatus", hardwareLedPressureStatus);
         props->setValue ("hardwareLedClockStatus", hardwareLedClockStatus);
@@ -107,6 +108,7 @@ void StoredSettings::flush()
     deviceType = props->getIntValue("deviceType");
     autoCheckUpdates = props->getIntValue("autoCheckUpdates");
     interfaceTheme = props->getIntValue("interfaceTheme");
+    hardwareLedMode = props->getIntValue("hardwareLedMode");
     hardwareLedStatus = props->getIntValue("hardwareLedStatus");
     hardwareLedPressureStatus = props->getIntValue("hardwareLedPressureStatus");
     hardwareLedClockStatus = props->getIntValue("hardwareLedClockStatus");
@@ -218,6 +220,9 @@ void StoredSettings::setDefaultValues()
     
     if (interfaceTheme == 0)
         interfaceTheme = 1;
+    
+    if (hardwareLedMode == 0)
+        hardwareLedMode = 1;
     
     if (hardwareLedStatus == 0)
         hardwareLedStatus = 2;

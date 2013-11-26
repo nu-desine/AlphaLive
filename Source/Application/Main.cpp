@@ -323,7 +323,8 @@ public:
             StandardApplicationCommandIDs::quit,
             CommandIDs::EnableLed,
             CommandIDs::EnableLedPressure,
-            CommandIDs::EnableLedClock
+            CommandIDs::EnableLedClock,
+            CommandIDs::EnableLedMidiMode
         };
         
         commands.addArray (ids, numElementsInArray (ids));
@@ -388,6 +389,7 @@ public:
                             CommandCategories::HardwareCommands, 0);
             
             result.setTicked (StoredSettings::getInstance()->hardwareLedStatus - 1);
+            result.setActive (!(StoredSettings::getInstance()->hardwareLedMode - 1));
             //result.setActive (alphaLiveEngine->getDeviceStatus() != 0); // << not currently working
         }
         else if (commandID == CommandIDs::EnableLedPressure)
@@ -397,7 +399,8 @@ public:
                             CommandCategories::HardwareCommands, 0);
             
             result.setTicked (StoredSettings::getInstance()->hardwareLedPressureStatus - 1);
-            result.setActive(StoredSettings::getInstance()->hardwareLedStatus - 1 /*&&
+            result.setActive(StoredSettings::getInstance()->hardwareLedStatus - 1 &&
+                             !(StoredSettings::getInstance()->hardwareLedMode - 1) /*&&
                              alphaLiveEngine->getDeviceStatus() != 0*/); // << not currently working
         }
         else if (commandID == CommandIDs::EnableLedClock)
@@ -407,8 +410,18 @@ public:
                             CommandCategories::HardwareCommands, 0);
             
             result.setTicked (StoredSettings::getInstance()->hardwareLedClockStatus - 1);
-            result.setActive(StoredSettings::getInstance()->hardwareLedStatus - 1 /*&&
+            result.setActive(StoredSettings::getInstance()->hardwareLedStatus - 1 &&
+                             !(StoredSettings::getInstance()->hardwareLedMode - 1) /*&&
                              alphaLiveEngine->getDeviceStatus() != 0*/); // << not currently working
+        }
+        else if (commandID == CommandIDs::EnableLedMidiMode)
+        {
+            result.setInfo (translate("Enable LED MIDI CC Control"),
+                            "Sets the status of the LED MIDI CC Control mode",
+                            CommandCategories::HardwareCommands, 0);
+            
+            result.setTicked (StoredSettings::getInstance()->hardwareLedMode - 1);
+            //result.setActive (alphaLiveEngine->getDeviceStatus() != 0); // << not currently working
         }
         
     }
@@ -502,6 +515,28 @@ public:
             alphaLiveEngine->setLedSettings(3, status);
             
             StoredSettings::getInstance()->hardwareLedClockStatus = status + 1;
+            StoredSettings::getInstance()->flush();
+        }
+        
+        else if(info.commandID == CommandIDs::EnableLedMidiMode)
+        {
+            int mode;
+            
+            if (StoredSettings::getInstance()->hardwareLedMode == 2)
+            {
+                //set to normal mode
+                mode = 0;
+            }
+            else
+            {
+                //set to MIDI controlled mode
+                mode = 1;
+            }
+            
+            //send setting value to hardware
+            alphaLiveEngine->setLedSettings(4, mode);
+            
+            StoredSettings::getInstance()->hardwareLedMode = mode + 1;
             StoredSettings::getInstance()->flush();
         }
         

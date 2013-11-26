@@ -487,6 +487,8 @@ void HidComms::connectToDevice()
         setLedSettings(2, StoredSettings::getInstance()->hardwareLedPressureStatus - 1);
         //set LED clock interation status
         setLedSettings(3, StoredSettings::getInstance()->hardwareLedClockStatus - 1);
+        //set LED mode
+        setLedSettings(4, StoredSettings::getInstance()->hardwareLedMode - 1);
         
         //set LED colours
         for (int i = 0; i < 3; i ++)

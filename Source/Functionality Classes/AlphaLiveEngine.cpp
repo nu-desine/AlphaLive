@@ -921,7 +921,8 @@ void AlphaLiveEngine::setLedSettings (uint8 setting, uint8 value)
     // 2 - LED pressure interaction status - set 'value' to 0 or 1
     // 3 - LED clock interaction -  set 'value' to 0 for 'off',
     //                              1 for 'fade to black', or
-    //                              2 for 'fade from max colour to min colour'.
+    //                              2 for 'fade from max colour to min colour' (not yet implemented).
+    // 4 - LED mode - set 'value' to 0 for normal or 1 for MIDI CC controlled mode
     
     if (getDeviceStatus() != 0)
     {

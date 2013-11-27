@@ -118,6 +118,10 @@ public:
     
     void setCopyExternalFiles (bool value);
     void setSceneName (int sceneNumber, String value);
+    void setHardwareLedMode (int value);
+    void setHardwareLedStatus (int value);
+    void setHardwareLedPressureStatus (int value);
+    void setHardwareLedClockStatus (int value);
     
     Array<int> getCurrentlySelectedPad();
     int getPadDisplayTextMode();
@@ -133,6 +137,10 @@ public:
     
     bool getCopyExternalFiles();
     String getSceneName(int sceneNumber);
+    int getHardwareLedMode();
+    int getHardwareLedStatus();
+    int getHardwareLedPressureStatus();
+    int getHardwareLedClockStatus();
     
     //Elite Controls Stuff
     void setEliteDialPrevValue(double value, int dialNumber);
@@ -254,6 +262,11 @@ private:
     
     bool copyExternalFiles;
     String sceneName[20];
+    
+    int hardwareLedMode;            // 0 - normal, 1 - MIDI CC controlled
+    int hardwareLedStatus;          // 0 - off, 1 - on
+    int hardwareLedPressureStatus;  // 0 - off, 1 - on
+    int hardwareLedClockStatus;     // 0 - off, 1 - on
     
     
 };

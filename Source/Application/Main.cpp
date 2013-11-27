@@ -388,8 +388,8 @@ public:
                             "Sets the status of the LED in the AlphaSphere",
                             CommandCategories::HardwareCommands, 0);
             
-            result.setTicked (StoredSettings::getInstance()->hardwareLedStatus - 1);
-            result.setActive (!(StoredSettings::getInstance()->hardwareLedMode - 1));
+            result.setTicked (AppSettings::Instance()->getHardwareLedStatus());
+            result.setActive (!(AppSettings::Instance()->getHardwareLedMode()));
             //result.setActive (alphaLiveEngine->getDeviceStatus() != 0); // << not currently working
         }
         else if (commandID == CommandIDs::EnableLedPressure)
@@ -398,9 +398,9 @@ public:
                             "Sets the status of the LED pressure interaction",
                             CommandCategories::HardwareCommands, 0);
             
-            result.setTicked (StoredSettings::getInstance()->hardwareLedPressureStatus - 1);
-            result.setActive(StoredSettings::getInstance()->hardwareLedStatus - 1 &&
-                             !(StoredSettings::getInstance()->hardwareLedMode - 1) /*&&
+            result.setTicked (AppSettings::Instance()->getHardwareLedPressureStatus());
+            result.setActive (AppSettings::Instance()->getHardwareLedStatus() &&
+                             !(AppSettings::Instance()->getHardwareLedMode()) /*&&
                              alphaLiveEngine->getDeviceStatus() != 0*/); // << not currently working
         }
         else if (commandID == CommandIDs::EnableLedClock)
@@ -409,9 +409,9 @@ public:
                             "Sets the status of the LED clock interaction",
                             CommandCategories::HardwareCommands, 0);
             
-            result.setTicked (StoredSettings::getInstance()->hardwareLedClockStatus - 1);
-            result.setActive(StoredSettings::getInstance()->hardwareLedStatus - 1 &&
-                             !(StoredSettings::getInstance()->hardwareLedMode - 1) /*&&
+            result.setTicked (AppSettings::Instance()->getHardwareLedClockStatus());
+            result.setActive (AppSettings::Instance()->getHardwareLedStatus() &&
+                             !(AppSettings::Instance()->getHardwareLedMode()) /*&&
                              alphaLiveEngine->getDeviceStatus() != 0*/); // << not currently working
         }
         else if (commandID == CommandIDs::EnableLedMidiMode)
@@ -420,7 +420,7 @@ public:
                             "Sets the status of the LED MIDI CC Control mode",
                             CommandCategories::HardwareCommands, 0);
             
-            result.setTicked (StoredSettings::getInstance()->hardwareLedMode - 1);
+            result.setTicked (AppSettings::Instance()->getHardwareLedMode());
             //result.setActive (alphaLiveEngine->getDeviceStatus() != 0); // << not currently working
         }
         
@@ -456,7 +456,7 @@ public:
         {
             uint8 status;
             
-            if (StoredSettings::getInstance()->hardwareLedStatus == 2)
+            if (AppSettings::Instance()->getHardwareLedStatus() == 1)
             {
                 //dissable LED
                 status = 0;
@@ -467,18 +467,14 @@ public:
                 status = 1;
             }
             
-            //send setting value to hardware
-            alphaLiveEngine->setLedSettings(1, status);
-            
-            StoredSettings::getInstance()->hardwareLedStatus = status + 1;
-            StoredSettings::getInstance()->flush();
+            AppSettings::Instance()->setHardwareLedStatus(status);
         }
         
         else if(info.commandID == CommandIDs::EnableLedPressure)
         {
             int status;
             
-            if (StoredSettings::getInstance()->hardwareLedPressureStatus == 2)
+            if (AppSettings::Instance()->getHardwareLedPressureStatus())
             {
                 //dissable LED pressure interaction
                 status = 0;
@@ -489,18 +485,14 @@ public:
                 status = 1;
             }
             
-            //send setting value to hardware
-            alphaLiveEngine->setLedSettings(2, status);
-
-            StoredSettings::getInstance()->hardwareLedPressureStatus = status + 1;
-            StoredSettings::getInstance()->flush();
+            AppSettings::Instance()->setHardwareLedPressureStatus(status);
         }
         
         else if(info.commandID == CommandIDs::EnableLedClock)
         {
             int status;
             
-            if (StoredSettings::getInstance()->hardwareLedClockStatus == 2)
+            if (AppSettings::Instance()->getHardwareLedClockStatus())
             {
                 //dissable LED clock interaction
                 status = 0;
@@ -511,18 +503,14 @@ public:
                 status = 1;
             }
             
-            //send setting value to hardware
-            alphaLiveEngine->setLedSettings(3, status);
-            
-            StoredSettings::getInstance()->hardwareLedClockStatus = status + 1;
-            StoredSettings::getInstance()->flush();
+            AppSettings::Instance()->setHardwareLedClockStatus(status);
         }
         
         else if(info.commandID == CommandIDs::EnableLedMidiMode)
         {
             int mode;
             
-            if (StoredSettings::getInstance()->hardwareLedMode == 2)
+            if (AppSettings::Instance()->getHardwareLedMode())
             {
                 //set to normal mode
                 mode = 0;
@@ -533,11 +521,7 @@ public:
                 mode = 1;
             }
             
-            //send setting value to hardware
-            alphaLiveEngine->setLedSettings(4, mode);
-            
-            StoredSettings::getInstance()->hardwareLedMode = mode + 1;
-            StoredSettings::getInstance()->flush();
+            AppSettings::Instance()->setHardwareLedMode(mode);
         }
         
         else if (info.commandID == StandardApplicationCommandIDs::quit)

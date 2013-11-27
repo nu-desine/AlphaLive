@@ -757,7 +757,12 @@ void AppDocumentState::saveProjectSettings()
     for (int i = 0; i < NO_OF_SCENES; i++)
     {
         projectData->setAttribute("sceneName" + String(i), AppSettings::Instance()->getSceneName(i));
-    }   
+    }
+    
+    projectData->setAttribute("hardwareLedMode", AppSettings::Instance()->getHardwareLedMode());
+    projectData->setAttribute("hardwareLedStatus", AppSettings::Instance()->getHardwareLedStatus());
+    projectData->setAttribute("hardwareLedPressureStatus", AppSettings::Instance()->getHardwareLedPressureStatus());
+    projectData->setAttribute("hardwareLedClockStatus", AppSettings::Instance()->getHardwareLedClockStatus());
     
 }
 
@@ -773,6 +778,15 @@ void AppDocumentState::loadProjectSettings()
         if (projectData->hasAttribute("sceneName" + String(i)) == true)
             AppSettings::Instance()->setSceneName(i, projectData->getStringAttribute("sceneName" + String(i)));
     }
+    
+    if (projectData->hasAttribute("hardwareLedMode"))
+        AppSettings::Instance()->setHardwareLedMode(projectData->getIntAttribute("hardwareLedMode"));
+    if (projectData->hasAttribute("hardwareLedStatus"))
+        AppSettings::Instance()->setHardwareLedStatus(projectData->getIntAttribute("hardwareLedStatus"));
+    if (projectData->hasAttribute("hardwareLedPressureStatus"))
+        AppSettings::Instance()->setHardwareLedPressureStatus(projectData->getIntAttribute("hardwareLedPressureStatus"));
+    if (projectData->hasAttribute("hardwareLedClockStatus"))
+        AppSettings::Instance()->setHardwareLedClockStatus(projectData->getIntAttribute("hardwareLedClockStatus"));
 }
 
 

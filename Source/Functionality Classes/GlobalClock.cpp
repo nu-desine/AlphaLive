@@ -120,7 +120,7 @@ void GlobalClock::actionListenerCallback (const String& message)
     {
         mainComponent->getGuiGlobalClock()->updateClockDisplay(beatNumber, barNumber, beatsPerBar);
         
-        if (StoredSettings::getInstance()->hardwareLedClockStatus != 0)
+        if (AppSettings::Instance()->getHardwareLedClockStatus() != 0)
             sendLedClockMessage(1);
     }
     

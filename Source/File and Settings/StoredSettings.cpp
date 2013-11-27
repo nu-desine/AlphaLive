@@ -68,10 +68,6 @@ void StoredSettings::flush()
         props->setValue ("deviceType", deviceType);
         props->setValue ("autoCheckUpdates", autoCheckUpdates);
         props->setValue ("interfaceTheme", interfaceTheme);
-        props->setValue ("hardwareLedMode", hardwareLedMode);
-        props->setValue ("hardwareLedStatus", hardwareLedStatus);
-        props->setValue ("hardwareLedPressureStatus", hardwareLedPressureStatus);
-        props->setValue ("hardwareLedClockStatus", hardwareLedClockStatus);
         
         for (int i = 0; i < 3; i++)
             props->setValue("hardwareLedColour" + String(i), hardwareLedColour[i].toString());
@@ -108,10 +104,6 @@ void StoredSettings::flush()
     deviceType = props->getIntValue("deviceType");
     autoCheckUpdates = props->getIntValue("autoCheckUpdates");
     interfaceTheme = props->getIntValue("interfaceTheme");
-    hardwareLedMode = props->getIntValue("hardwareLedMode");
-    hardwareLedStatus = props->getIntValue("hardwareLedStatus");
-    hardwareLedPressureStatus = props->getIntValue("hardwareLedPressureStatus");
-    hardwareLedClockStatus = props->getIntValue("hardwareLedClockStatus");
     
     for (int i = 0; i < 3; i++)
         hardwareLedColour[i] = Colour::fromString (props->getValue("hardwareLedColour" + String(i)));
@@ -220,18 +212,6 @@ void StoredSettings::setDefaultValues()
     
     if (interfaceTheme == 0)
         interfaceTheme = 1;
-    
-    if (hardwareLedMode == 0)
-        hardwareLedMode = 1;
-    
-    if (hardwareLedStatus == 0)
-        hardwareLedStatus = 2;
-    
-    if (hardwareLedPressureStatus == 0)
-        hardwareLedPressureStatus = 2;
-    
-    if (hardwareLedClockStatus == 0)
-        hardwareLedClockStatus = 1;
     
     if (hardwareLedColour[0] == Colours::transparentBlack)
         hardwareLedColour[0] = Colour::fromRGB(0, 0, 255);

@@ -20,6 +20,7 @@
 
 #include "HidComms.h"
 #include "../File and Settings/StoredSettings.h"
+#include "../File and Settings/AppSettings.h"
 #if JUCE_LINUX
 #include <unistd.h>
 #endif
@@ -482,13 +483,13 @@ void HidComms::connectToDevice()
         // ==== Configure LED settings ====
         
         //set LED status
-        setLedSettings(1, StoredSettings::getInstance()->hardwareLedStatus - 1);
+        setLedSettings(1, AppSettings::Instance()->getHardwareLedStatus());
         //set LED pressure interation status
-        setLedSettings(2, StoredSettings::getInstance()->hardwareLedPressureStatus - 1);
+        setLedSettings(2, AppSettings::Instance()->getHardwareLedPressureStatus());
         //set LED clock interation status
-        setLedSettings(3, StoredSettings::getInstance()->hardwareLedClockStatus - 1);
+        setLedSettings(3, AppSettings::Instance()->getHardwareLedClockStatus());
         //set LED mode
-        setLedSettings(4, StoredSettings::getInstance()->hardwareLedMode - 1);
+        setLedSettings(4, AppSettings::Instance()->getHardwareLedMode());
         
         //set LED colours
         for (int i = 0; i < 3; i ++)

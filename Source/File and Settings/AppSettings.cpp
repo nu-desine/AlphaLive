@@ -52,12 +52,18 @@ AppSettings::AppSettings()
     autoStartClock = 0; //off
     metronomeStatus = false;
     
+    //==== project settings ====
     for (int i = 0; i < 20; i++)
         sceneName[i] = "Scene " + String(i+1);
     
     copyExternalFiles = true;
     
-    //elite controls stuff
+    hardwareLedMode = 0;
+    hardwareLedStatus = 1;
+    hardwareLedPressureStatus = 1;
+    hardwareLedClockStatus = 0;
+    
+    // ==== elite controls settings ====
     eliteDial[0].control = 1;
     eliteDial[1].control = 2;
     eliteButton[0].control = 1;
@@ -138,7 +144,7 @@ void AppSettings::resetData()
     setBeatsPerBar(4);
     setAutoStartClock(0);
     
-    //elite controls stuff
+    //elite controls settings
     eliteDial[0].control = 1;
     eliteDial[1].control = 2;
     eliteButton[0].control = 1;
@@ -181,6 +187,11 @@ void AppSettings::resetProjectSettingsData()
     
     for (int i = 0; i < 20; i++)
         setSceneName(i, "Scene " + String(i+1));
+    
+    setHardwareLedMode(0);
+    setHardwareLedStatus(1);
+    setHardwareLedPressureStatus(1);
+    setHardwareLedClockStatus(0);
 }
 
 void AppSettings::copyPadSettings (int padNumber)
@@ -227,6 +238,7 @@ void AppSettings::setPadDisplayTextMode(int value)
     padDisplayTextMode = value;
 }
 
+#pragma mark scene mutator functions
 
 void AppSettings::setGlobalPan (float value)
 {
@@ -274,6 +286,8 @@ void AppSettings::setMetronomeStatus (bool value)
     alphaLiveEngineRef->getGlobalClock()->setMetronomeStatus(value);
 }
 
+#pragma mark project settings mutator functions
+
 void AppSettings::setCopyExternalFiles (bool value)
 {
     copyExternalFiles = value;
@@ -282,6 +296,35 @@ void AppSettings::setCopyExternalFiles (bool value)
 void AppSettings::setSceneName(int sceneNumber, String value)
 {
     sceneName[sceneNumber] = value;
+}
+
+void AppSettings::setHardwareLedMode (int value)
+{
+    hardwareLedMode = value;
+    
+    //send setting value to hardware
+    alphaLiveEngineRef->setLedSettings(4, value);
+}
+void AppSettings::setHardwareLedStatus (int value)
+{
+    hardwareLedStatus = value;
+    
+    //send setting value to hardware
+    alphaLiveEngineRef->setLedSettings(1, value);
+}
+void AppSettings::setHardwareLedPressureStatus (int value)
+{
+    hardwareLedPressureStatus = value;
+    
+    //send setting value to hardware
+    alphaLiveEngineRef->setLedSettings(2, value);
+}
+void AppSettings::setHardwareLedClockStatus (int value)
+{
+    hardwareLedClockStatus = value;
+    
+    //send setting value to hardware
+    alphaLiveEngineRef->setLedSettings(3, value);
 }
 
 
@@ -295,7 +338,7 @@ int AppSettings::getPadDisplayTextMode()
     return padDisplayTextMode;
 }
 
-
+#pragma mark scene accessor functions
 
 float AppSettings::getGlobalPan()
 {
@@ -328,6 +371,7 @@ bool AppSettings::getMetronomeStatus()
     return metronomeStatus;
 }
 
+#pragma mark project settings accessor functions
 
 bool AppSettings::getCopyExternalFiles()
 {
@@ -337,6 +381,23 @@ bool AppSettings::getCopyExternalFiles()
 String AppSettings::getSceneName (int sceneNumber)
 {
     return sceneName[sceneNumber];
+}
+
+int AppSettings::getHardwareLedMode()
+{
+    return hardwareLedMode;
+}
+int AppSettings::getHardwareLedStatus()
+{
+    return hardwareLedStatus;
+}
+int AppSettings::getHardwareLedPressureStatus()
+{
+    return hardwareLedPressureStatus;
+}
+int AppSettings::getHardwareLedClockStatus()
+{
+    return hardwareLedClockStatus;
 }
 
 
@@ -350,6 +411,7 @@ File AppSettings::getLastAudioSampleDirectory()
     return lastAudioSampleDirectory;
 }
 
+#pragma mark elite control settings mutator functions
 
 //Elite controls stuff
 void AppSettings::setEliteDialPrevValue(double value, int dialNumber)
@@ -406,6 +468,7 @@ void AppSettings::setEliteDialOscStepValue(double value, int dialNumber)
     eliteDial[dialNumber].oscStepValue = value;
 }
 
+#pragma mark elite control settings accessor functions
 
 double AppSettings::getEliteDialPrevValue (int dialNumber)
 {

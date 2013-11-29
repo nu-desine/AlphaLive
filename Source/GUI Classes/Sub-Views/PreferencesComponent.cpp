@@ -585,7 +585,7 @@ HardwarePreferencesComponent::HardwarePreferencesComponent(MainComponent &ref, A
     ledColourLabel[2]->setText(translate("Maximum Pressure LED Colour:"), dontSendNotification);
     
     Path rect;
-    rect.addRoundedRectangle(0, 0, 10, 10, 2);
+    rect.addRectangle(0, 0, 10, 10);
     
     for (int i = 0; i < 3; i++)
     {
@@ -608,14 +608,14 @@ HardwarePreferencesComponent::~HardwarePreferencesComponent()
 
 void HardwarePreferencesComponent::resized()
 {
-    ledColourLabel[0]->setBounds(60, 10, 200, 20);
-    ledColourButton[0]->setBounds(280, 8, 80, 25);
+    ledColourLabel[0]->setBounds(60+30, 20, 200, 20);
+    ledColourButton[0]->setBounds(280+30, 18, 80, 25);
     
-    ledColourLabel[1]->setBounds(60, 50, 200, 20);
-    ledColourButton[1]->setBounds(280, 48, 80, 25);
+    ledColourLabel[1]->setBounds(60+30, 60, 200, 20);
+    ledColourButton[1]->setBounds(280+30, 58, 80, 25);
 
-    ledColourLabel[2]->setBounds(60, 90, 200, 20);
-    ledColourButton[2]->setBounds(280, 88, 80, 25);
+    ledColourLabel[2]->setBounds(60+30, 100, 200, 20);
+    ledColourButton[2]->setBounds(280+30, 98, 80, 25);
 
 
 }
@@ -673,7 +673,18 @@ void HardwarePreferencesComponent::changeListenerCallback (ChangeBroadcaster *so
 
 void HardwarePreferencesComponent::mouseEnter (const MouseEvent &e)
 {
-    
+    if (ledColourButton[0]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Minimum Pressure LED Colour Selector. Click this button to display a colour picker to choose the colour of the LED when no pads are being pressed."));
+    }
+    else if (ledColourButton[1]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Mid Pressure LED Colour Selector. Click this button to display a colour picker to choose the colour of the LED when a single pad is presssed to it's full depth. To see the colour change in realtime, hold a pad at it's full depth while chosing the colour."));
+    }
+    else if (ledColourButton[2]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Maximum Pressure LED Colour Selector. Click this button to display a colour picker to choose the colour of the LED when a two or more pads are pressed to their full depth. To see the colour change in realtime, hold two pads at their full depths while chosing the colour."));
+    }
 }
 
 void HardwarePreferencesComponent::mouseExit (const MouseEvent &e)

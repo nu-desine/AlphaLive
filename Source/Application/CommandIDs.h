@@ -60,6 +60,7 @@ namespace CommandIDs
     static const int EnableLedClock         = 0x20032;
     static const int HardwarePreferences    = 0x20033;
     static const int EnableLedMidiMode      = 0x20034;
+    static const int HardwareProjectSettings = 0x20035;
     
     
 }

@@ -1666,7 +1666,8 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::ReferenceManual,
         CommandIDs::UpdateSoftware,
         CommandIDs::CopyDataToSequencer,
-        CommandIDs::HardwarePreferences
+        CommandIDs::HardwarePreferences,
+        CommandIDs::HardwareProjectSettings
     };
 	
 	commands.addArray (ids, numElementsInArray (ids));
@@ -1859,7 +1860,14 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
     {
         result.setInfo (translate("Hardware Preferences..."),
 						"Opens the application hadware preferences view.",
-						CommandCategories::OtherCommands, 0);
+						CommandCategories::HardwareCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::HardwareProjectSettings)
+    {
+        result.setInfo (translate("Hardware Project Settings..."),
+						"Opens the application hadware project settings view.",
+						CommandCategories::HardwareCommands, 0);
     }
 }
 
@@ -2077,6 +2085,19 @@ bool MainComponent::perform (const InvocationInfo& info)
         preferencesComponent->selectHardwareTab();
 		preferencesComponent->setVisible(true);
         preferencesComponent->grabKeyboardFocus();
+	}
+    
+    else if(info.commandID == CommandIDs::HardwareProjectSettings)
+	{
+		aboutComponent->setVisible(false);
+        preferencesComponent->setVisible(false);
+        
+        projectSettingsComponent->toFront(true);
+        infoTextBox->toFront(false);
+        
+        projectSettingsComponent->selectHardwareTab();
+		projectSettingsComponent->setVisible(true);
+        projectSettingsComponent->grabKeyboardFocus();
 	}
     
 	//else

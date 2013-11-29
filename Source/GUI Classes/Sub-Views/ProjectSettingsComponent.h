@@ -31,6 +31,7 @@
 class MainComponent;
 class GlobalOscComponent;
 class GeneralProjSettingsComponent;
+class HardwareSettingsComponent;
 
 class ProjectSettingsComponent :    public Component,
                                     public Button::Listener,
@@ -42,6 +43,7 @@ public:
     
     void resized();
     void paint (Graphics& g);
+    void visibilityChanged();
     
     void buttonClicked (Button *button);
     
@@ -53,6 +55,8 @@ public:
     void updateDisplay();
     void setTabColour();
     
+    void selectHardwareTab();
+    
 private:
     MainComponent &mainComponentRef;
     AlphaLiveEngine &alphaLiveEngineRef;
@@ -61,6 +65,7 @@ private:
     TabbedComponent *tabbedComponent;
     GlobalOscComponent *globalOscComponent;
     GeneralProjSettingsComponent *generalSettingsComponent;
+    HardwareSettingsComponent *hardwareSettingsComponent;
     
     TextButton *closeButton;
     
@@ -165,3 +170,48 @@ private:
 };
 
 #endif //H_GENERALPROJSETTINGSCOMPONENT
+
+
+
+
+
+
+#ifndef H_HARDWARESETTINGSCOMPONENT
+#define H_HARDWARESETTINGSCOMPONENT
+
+#include "../../../JuceLibraryCode/JuceHeader.h"
+//#include "../../Functionality Classes/AlphaLiveEngine.h"
+#include "../../File and Settings/AppDocumentState.h"
+
+class MainComponent;
+
+class HardwareSettingsComponent :   public Component,
+                                    public ComboBox::Listener,
+                                    public Button::Listener
+{
+public:
+    HardwareSettingsComponent (MainComponent &ref, AppDocumentState &ref2);
+    ~HardwareSettingsComponent();
+    
+    void resized();
+    void paint (Graphics& g);
+    
+    void buttonClicked (Button* button);
+    void comboBoxChanged (ComboBox *comboBox);
+    
+    void mouseEnter (const MouseEvent &e);
+    void mouseExit (const MouseEvent &e);
+    
+    void updateDisplay();
+    void setDisplay();
+    
+private:
+    MainComponent &mainComponentRef;
+    AppDocumentState &appDocumentStateRef;
+    //AlphaLiveEngine &alphaLiveEngineRef;
+    
+    Label *ledModeLabel, *ledStatusLabel, *ledPressureStatusLabel, *ledClockStatusLabel;
+    TextButton *ledModeButton, *ledStatusButton, *ledPressureStatusButton, *ledClockStatusButton;
+};
+
+#endif //H_HARDWARESETTINGSCOMPONENT

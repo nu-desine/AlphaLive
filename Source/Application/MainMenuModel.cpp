@@ -137,7 +137,8 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         menu.addCommandItem (commandManager, CommandIDs::EnableLedPressure);
         menu.addCommandItem (commandManager, CommandIDs::EnableLedClock);
         menu.addSeparator();
-        menu.addCommandItem(commandManager, CommandIDs::HardwarePreferences);
+        menu.addCommandItem (commandManager, CommandIDs::HardwareProjectSettings);
+        menu.addCommandItem (commandManager, CommandIDs::HardwarePreferences);
     }
     else if (topLevelMenuIndex == 5) //Help
     {

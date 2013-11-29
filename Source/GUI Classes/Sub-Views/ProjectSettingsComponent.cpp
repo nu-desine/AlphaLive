@@ -37,10 +37,19 @@ ProjectSettingsComponent::ProjectSettingsComponent(MainComponent &ref, AlphaLive
     //temporarily hide global osc feature/settings
     //globalOscComponent = new GlobalOscComponent(mainComponentRef, alphaLiveEngineRef);
     generalSettingsComponent = new GeneralProjSettingsComponent(mainComponentRef, appDocumentStateRef);
+    hardwareSettingsComponent = new HardwareSettingsComponent (mainComponentRef, appDocumentStateRef);
     
     //create tabbed component and add tabs/child components
     addAndMakeVisible(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
-    tabbedComponent->addTab(translate("General Settings"), AlphaTheme::getInstance()->foregroundColourDarker, generalSettingsComponent, true);
+    tabbedComponent->addTab(translate("General Settings"),
+                            AlphaTheme::getInstance()->foregroundColourDarker,
+                            generalSettingsComponent,
+                            true);
+    tabbedComponent->addTab(translate("Hardware Settings"),
+                            AlphaTheme::getInstance()->foregroundColourDarker,
+                            hardwareSettingsComponent,
+                            true);
+    
     //temporarily hide global osc feature/settings
     //tabbedComponent->addTab(translate("Global OSC Settings"), AlphaTheme::getInstance()->foregroundColourDarker, globalOscComponent, true);
     
@@ -75,6 +84,16 @@ void ProjectSettingsComponent::paint (Graphics& g)
     g.setColour(AlphaTheme::getInstance()->childBackgroundColourLighter.withAlpha(1.0f));
     g.fillRoundedRectangle(getWidth()/4, getHeight()/6, getWidth()/2, ((getHeight()/6)*4)-30, 10);
     
+}
+
+void ProjectSettingsComponent::visibilityChanged()
+{
+    //this is an easy way of updating the values/display of the components/views when needed
+    
+    if(isVisible())
+    {
+        hardwareSettingsComponent->updateDisplay();
+    }
 }
 
 
@@ -124,6 +143,11 @@ void ProjectSettingsComponent::setTabColour()
     //This can't be called in paint as it calls repaint and would cause loops and high CPU.
     for (int i = 0; i < tabbedComponent->getNumTabs(); i++)
         tabbedComponent->setTabBackgroundColour(i, AlphaTheme::getInstance()->foregroundColourDarker);
+}
+
+void ProjectSettingsComponent::selectHardwareTab()
+{
+    tabbedComponent->setCurrentTabIndex(1);
 }
 
 
@@ -375,6 +399,222 @@ void GeneralProjSettingsComponent::mouseExit (const MouseEvent &e)
 {
     //remove any text
     mainComponentRef.setInfoTextBoxText (String::empty);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+HardwareSettingsComponent::HardwareSettingsComponent(MainComponent &ref, AppDocumentState &ref2)
+                                                        :   mainComponentRef(ref),
+                                                            appDocumentStateRef(ref2)
+{
+    addAndMakeVisible(ledModeLabel = new Label());
+    ledModeLabel->setText(translate("LED MIDI CC Control Mode:"), dontSendNotification);
+    addAndMakeVisible(ledModeButton = new TextButton());
+    ledModeButton->setClickingTogglesState(true);
+    ledModeButton->setToggleState(AppSettings::Instance()->getHardwareLedMode(), dontSendNotification);
+    if (ledModeButton->getToggleState() == true)
+        ledModeButton->setButtonText(translate("On"));
+    else
+        ledModeButton->setButtonText(translate("Off"));
+    ledModeButton->addListener(this);
+    ledModeButton->addMouseListener(this, true);
+    
+    addAndMakeVisible(ledStatusLabel = new Label());
+    ledStatusLabel->setText(translate("LED Status:"), dontSendNotification);
+    addAndMakeVisible(ledStatusButton = new TextButton());
+    ledStatusButton->setClickingTogglesState(true);
+    ledStatusButton->setToggleState(AppSettings::Instance()->getHardwareLedStatus(), dontSendNotification);
+    if (ledStatusButton->getToggleState() == true)
+        ledStatusButton->setButtonText(translate("On"));
+    else
+        ledStatusButton->setButtonText(translate("Off"));
+    ledStatusButton->addListener(this);
+    ledStatusButton->addMouseListener(this, true);
+    
+    addAndMakeVisible(ledPressureStatusLabel = new Label());
+    ledPressureStatusLabel->setText(translate("LED Pressure Interaction:"), dontSendNotification);
+    addAndMakeVisible(ledPressureStatusButton = new TextButton());
+    ledPressureStatusButton->setClickingTogglesState(true);
+    ledPressureStatusButton->setToggleState(AppSettings::Instance()->getHardwareLedPressureStatus(), dontSendNotification);
+    if (ledPressureStatusButton->getToggleState() == true)
+        ledPressureStatusButton->setButtonText(translate("On"));
+    else
+        ledPressureStatusButton->setButtonText(translate("Off"));
+    ledPressureStatusButton->addListener(this);
+    ledPressureStatusButton->addMouseListener(this, true);
+    
+    addAndMakeVisible(ledClockStatusLabel = new Label());
+    ledClockStatusLabel->setText(translate("LED Clock Interaction:"), dontSendNotification);
+    addAndMakeVisible(ledClockStatusButton = new TextButton());
+    ledClockStatusButton->setClickingTogglesState(true);
+    ledClockStatusButton->setToggleState(AppSettings::Instance()->getHardwareLedClockStatus(), dontSendNotification);
+    if (ledClockStatusButton->getToggleState() == true)
+        ledClockStatusButton->setButtonText(translate("On"));
+    else
+        ledClockStatusButton->setButtonText(translate("Off"));
+    ledClockStatusButton->addListener(this);
+    ledClockStatusButton->addMouseListener(this, true);
+
+}
+
+HardwareSettingsComponent::~HardwareSettingsComponent()
+{
+    deleteAllChildren();
+}
+
+void HardwareSettingsComponent::resized()
+{
+    ledModeButton->setBounds(280+50, 18, 40, 25);
+    ledModeLabel->setBounds(60+50, 20, 200, 20);
+    
+    ledStatusButton->setBounds(280+50, 58, 40, 25);
+    ledStatusLabel->setBounds(60+50, 60, 200, 20);
+    
+    ledPressureStatusButton->setBounds(280+50, 98, 40, 25);
+    ledPressureStatusLabel->setBounds(60+50, 100, 200, 20);
+    
+    ledClockStatusButton->setBounds(280+50, 138, 40, 25);
+    ledClockStatusLabel->setBounds(60+50, 140, 200, 20);
+}
+
+void HardwareSettingsComponent::paint (Graphics& g)
+{
+
+}
+
+void HardwareSettingsComponent::buttonClicked (Button* button)
+{
+    if (button == ledModeButton)
+    {
+        AppSettings::Instance()->setHardwareLedMode(button->getToggleState());
+        
+        if (button->getToggleState() == true)
+            button->setButtonText(translate("On"));
+        else
+            button->setButtonText(translate("Off"));
+        
+        setDisplay();
+    }
+    
+    else if (button == ledStatusButton)
+    {
+        AppSettings::Instance()->setHardwareLedStatus(button->getToggleState());
+        
+        if (button->getToggleState() == true)
+            button->setButtonText(translate("On"));
+        else
+            button->setButtonText(translate("Off"));
+        
+        setDisplay();
+    }
+    
+    else if (button == ledPressureStatusButton)
+    {
+        AppSettings::Instance()->setHardwareLedPressureStatus(button->getToggleState());
+        
+        if (button->getToggleState() == true)
+            button->setButtonText(translate("On"));
+        else
+            button->setButtonText(translate("Off"));
+    }
+    
+    else if (button == ledClockStatusButton)
+    {
+        AppSettings::Instance()->setHardwareLedClockStatus(button->getToggleState());
+        
+        if (button->getToggleState() == true)
+            button->setButtonText(translate("On"));
+        else
+            button->setButtonText(translate("Off"));
+    }
+    
+}
+
+void HardwareSettingsComponent::comboBoxChanged (ComboBox *comboBox)
+{
+    
+}
+
+
+void HardwareSettingsComponent::mouseEnter (const MouseEvent &e)
+{
+    if (ledModeButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Use this button to enable LED MIDI CC Control Mode. This mode allows the LED to be controlled using external MIDI Control Change messages, set to Channel 16, being sent to the AlphaSphere. Use CC 21 to control the red value, CC 22 to control the green value, and CC 23 to control the blue value, where a value of '0' is 'off' and '127' is 'full brightness'. You can also enable this mode externally using CC 20 - a value of '0' disables the mode while anything else enables it. Please note that this mode disables pressure and clock LED control."));
+    }
+    else if (ledStatusButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Use this button to enable/disable the LED. When this is disabled it will disable pressure and clock LED control."));
+    }
+    else if (ledPressureStatusButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Use this button to enable/disable the LED pressure interaction. When this is disabled the LED will stay at a static colour."));
+    }
+    else if (ledClockStatusButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Use this button to enable/disable the LED clock interaction. When this is enabled you can use either the AlphaLive clock or an external MIDI clock to animate the LED with synchronised fade-outs. Please not that the LED can only sync to a single clock source at any time."));
+    }
+}
+
+void HardwareSettingsComponent::mouseExit (const MouseEvent &e)
+{
+    //remove any text
+    mainComponentRef.setInfoTextBoxText (String::empty);
+}
+
+void HardwareSettingsComponent::updateDisplay()
+{
+    //this function is called from ProjectSettingsComponent::visibilityChanged
+    
+    ledModeButton->setToggleState(AppSettings::Instance()->getHardwareLedMode(), dontSendNotification);
+    ledStatusButton->setToggleState(AppSettings::Instance()->getHardwareLedStatus(), dontSendNotification);
+    ledPressureStatusButton->setToggleState(AppSettings::Instance()->getHardwareLedPressureStatus(), dontSendNotification);
+    ledClockStatusButton->setToggleState(AppSettings::Instance()->getHardwareLedClockStatus(), dontSendNotification);
+    
+    setDisplay();
+}
+
+void HardwareSettingsComponent::setDisplay()
+{
+    //sets which buttons are enabled/dissabled
+    
+    ledStatusButton->setEnabled(false);
+    ledStatusButton->setAlpha(0.4);
+    ledPressureStatusButton->setEnabled(false);
+    ledPressureStatusButton->setAlpha(0.4);
+    ledClockStatusButton->setEnabled(false);
+    ledClockStatusButton->setAlpha(0.4);
+    
+    if (AppSettings::Instance()->getHardwareLedMode() == 0)
+    {
+        if (AppSettings::Instance()->getHardwareLedStatus() == 0)
+        {
+            ledStatusButton->setEnabled(true);
+            ledStatusButton->setAlpha(1.0);
+        }
+        else
+        {
+            ledStatusButton->setEnabled(true);
+            ledStatusButton->setAlpha(1.0);
+            ledPressureStatusButton->setEnabled(true);
+            ledPressureStatusButton->setAlpha(1.0);
+            ledClockStatusButton->setEnabled(true);
+            ledClockStatusButton->setAlpha(1.0);
+        }
+    }
+    
 }
 
 

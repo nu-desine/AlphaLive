@@ -296,7 +296,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
             else if (PAD_SETTINGS->getPressureCurve() == 3)
             {
                 //logarithmic mapping of pressure
-                recievedValue = log(recievedValue+1);
+                recievedValue = log(recievedValue + 1);
                 recievedValue = recievedValue * (MAX_PRESSURE/6.23832);
                 if (recievedValue > MAX_PRESSURE)
                     recievedValue = MAX_PRESSURE;
@@ -310,7 +310,6 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
             
             //===============================================================================================
             //===============================================================================================
-            
             
             if (recievedVelocity != padVelocity[recievedPad])
             {
@@ -355,7 +354,6 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
                 //as each mode handles a static velocity in slight different ways
                 //so doesn't make sense to apply any static values here
             }
-            
             
             //===============================================================================================
             //===============================================================================================
@@ -404,7 +402,6 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
                 //            {
                 //                oscOutput.transmitPadMessage(recievedPad+1, recievedValue, recievedVelocity, oscIpAddress, oscPortNumber);
                 //            }
-                
             }
         }
         else if (waitingToSetMinPressureValue[recievedPad] == 1 && recievedValue <= minPressureValue[recievedPad])

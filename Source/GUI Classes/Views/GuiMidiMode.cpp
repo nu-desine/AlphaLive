@@ -871,7 +871,7 @@ void GuiMidiMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getMidiPressureStatus() != pressureStatus_)
             {
-                pressureStatusButton->setToggleState(1, false);
+                pressureStatusButton->setToggleState(0, false);
                 break;
             }
             if (i == selectedPads.size()-1)

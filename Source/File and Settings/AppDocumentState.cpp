@@ -130,8 +130,8 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
         padData->setAttribute("midiNoteStatus", PAD_SETTINGS->getMidiNoteStatus());
         padData->setAttribute("midiCcController", PAD_SETTINGS->getMidiCcController());
         padData->setAttribute("midiAutoChannelStatus", PAD_SETTINGS->getMidiAutoChannelStatus());
-        for (int i = 0; i < 16; i++)
-            padData->setAttribute("midiAutoChannels" + String(i), PAD_SETTINGS->getMidiAutoChannels(i));
+        for (int chan = 0; chan < 16; chan++)
+            padData->setAttribute("midiAutoChannels" + String(chan), PAD_SETTINGS->getMidiAutoChannels(chan));
     }
     else if (PAD_SETTINGS->getMode() == 2) //sampler mode
     {
@@ -408,10 +408,10 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
             PAD_SETTINGS->setMidiCcController(padData->getIntAttribute("midiCcController"));
         if (padData->hasAttribute("midiAutoChannelStatus"))
             PAD_SETTINGS->setMidiAutoChannelStatus(padData->getBoolAttribute("midiAutoChannelStatus"));
-        for (int i = 0; i < 16; i++)
+        for (int chan = 0; chan < 16; chan++)
         {
-            if (padData->hasAttribute("midiAutoChannels" + String(i)))
-                PAD_SETTINGS->setMidiAutoChannels(i, padData->getBoolAttribute("midiAutoChannels" + String(i)));
+            if (padData->hasAttribute("midiAutoChannels" + String(chan)))
+                PAD_SETTINGS->setMidiAutoChannels(chan, padData->getBoolAttribute("midiAutoChannels" + String(chan)));
         }
     }
     

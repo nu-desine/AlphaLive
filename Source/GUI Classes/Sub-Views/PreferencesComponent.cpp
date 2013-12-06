@@ -44,16 +44,16 @@ PreferencesComponent::PreferencesComponent(MainComponent &ref, AlphaLiveEngine &
                             AlphaTheme::getInstance()->foregroundColourDarker,
                             generalSettingsComponent,
                             true);
-    
+    tabbedComponent->addTab(translate("Hardware Settings"),
+                            AlphaTheme::getInstance()->foregroundColourDarker,
+                            hardwarePreferencesComponent,
+                            true);
+    //make sure the audio component is always the last tab, as this moves when the theme is changed
     tabbedComponent->addTab(translate("Audio Output Settings"),
                             AlphaTheme::getInstance()->foregroundColourDarker,
                             audioAndMidiSettingsComponent,
                             true);
     
-    tabbedComponent->addTab(translate("Hardware Settings"),
-                            AlphaTheme::getInstance()->foregroundColourDarker,
-                            hardwarePreferencesComponent,
-                            true);
     
     addAndMakeVisible(closeButton = new TextButton());
     closeButton->setButtonText(translate("Close"));
@@ -180,7 +180,7 @@ void PreferencesComponent::redrawAudioSettingsComponent()
 {
     //this function is called when changing the theme to easily change the colour scheme
     
-    tabbedComponent->removeTab(1); 
+    tabbedComponent->removeTab(tabbedComponent->getNumTabs() - 1);
     
     initAudioSettingsComponent();
 
@@ -189,7 +189,7 @@ void PreferencesComponent::redrawAudioSettingsComponent()
 
 void PreferencesComponent::selectHardwareTab()
 {
-    tabbedComponent->setCurrentTabIndex(2);
+    tabbedComponent->setCurrentTabIndex(1);
 }
 
 
@@ -668,6 +668,11 @@ void HardwarePreferencesComponent::paint (Graphics& g)
         Colour colour = StoredSettings::getInstance()->hardwareLedColour[i];
         ledColourButton[i]->setColours(colour, colour, colour);
     }
+    
+    ledColourSchemeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    ledColourLabel[0]->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    ledColourLabel[1]->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    ledColourLabel[2]->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
 }
 
 void HardwarePreferencesComponent::buttonClicked (Button* button)

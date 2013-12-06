@@ -273,6 +273,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
             DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
+            
+            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->foregroundColour_,
+            ColourSelector::labelTextColourId,          AlphaTheme::getInstance()->textColour_,
         };
         
         for (int i = 0; i < numElementsInArray (standardColours); i += 2)
@@ -414,6 +417,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
             DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
+            
+            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->foregroundColour_,
+            ColourSelector::labelTextColourId,          AlphaTheme::getInstance()->textColour_,
         };
         
         for (int i = 0; i < numElementsInArray (standardColours); i += 2)

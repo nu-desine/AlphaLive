@@ -37,6 +37,16 @@
  #define JUCE_WEB_BROWSER 1
 #endif
 
+/** Config: JUCE_ENABLE_LIVE_CONSTANT_EDITOR
+    This lets you turn on the JUCE_ENABLE_LIVE_CONSTANT_EDITOR support. See the documentation
+    for that macro for more details.
+*/
+#ifndef JUCE_ENABLE_LIVE_CONSTANT_EDITOR
+ #if JUCE_DEBUG
+  #define JUCE_ENABLE_LIVE_CONSTANT_EDITOR 1
+ #endif
+#endif
+
 //=============================================================================
 namespace juce
 {
@@ -59,6 +69,7 @@ namespace juce
 #include "misc/juce_SplashScreen.h"
 #include "misc/juce_SystemTrayIconComponent.h"
 #include "misc/juce_WebBrowserComponent.h"
+#include "misc/juce_LiveConstantEditor.h"
 
 }
 

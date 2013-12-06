@@ -18,6 +18,8 @@
 		0C295EF3176B6E0B00D497FF /* document_icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0C295EF1176B6E0A00D497FF /* document_icon.icns */; };
 		0C295EF4176B6E0B00D497FF /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0C295EF2176B6E0B00D497FF /* icon.icns */; };
 		0CE1FE71825DA499049EB1AD /* HighPassFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15090B1D501FA2D0FED84947 /* HighPassFilter.cpp */; };
+		0CFCE6EC1851EA8100FCE665 /* juce_VST3PluginFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CFCE6EA1851EA8100FCE665 /* juce_VST3PluginFormat.cpp */; };
+		0CFCE6EF1851EACA00FCE665 /* juce_LiveConstantEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0CFCE6ED1851EACA00FCE665 /* juce_LiveConstantEditor.cpp */; };
 		10A2A9826D8913678D603121 /* FxGuiPanAndGain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AB80EF629962969ED7338153 /* FxGuiPanAndGain.cpp */; };
 		1104AA6F37DBB175F4AC28CB /* SoftwareUpdateComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51561E67FEC93CB1BBD8CCCD /* SoftwareUpdateComponent.cpp */; };
 		116ECA5FBAFD74E81642C0D9 /* ModeSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48D1E4DA99311E4C8D738672 /* ModeSampler.cpp */; };
@@ -240,6 +242,10 @@
 		0C635138181FECC700FF9F93 /* juce_LookAndFeel_V3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_LookAndFeel_V3.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/lookandfeel/juce_LookAndFeel_V3.cpp; sourceTree = "<group>"; };
 		0C635139181FECC700FF9F93 /* juce_LookAndFeel_V3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_LookAndFeel_V3.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/lookandfeel/juce_LookAndFeel_V3.h; sourceTree = "<group>"; };
 		0CA92FACC9C857515F5DC895 /* juce_Colours.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_Colours.h; path = ../../JuceLibraryCode/modules/juce_graphics/colour/juce_Colours.h; sourceTree = SOURCE_ROOT; };
+		0CFCE6EA1851EA8100FCE665 /* juce_VST3PluginFormat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = juce_VST3PluginFormat.cpp; path = ../../JuceLibraryCode/modules/juce_audio_processors/format_types/juce_VST3PluginFormat.cpp; sourceTree = "<group>"; };
+		0CFCE6EB1851EA8100FCE665 /* juce_VST3PluginFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = juce_VST3PluginFormat.h; path = ../../JuceLibraryCode/modules/juce_audio_processors/format_types/juce_VST3PluginFormat.h; sourceTree = "<group>"; };
+		0CFCE6ED1851EACA00FCE665 /* juce_LiveConstantEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = juce_LiveConstantEditor.cpp; path = ../../JuceLibraryCode/modules/juce_gui_extra/misc/juce_LiveConstantEditor.cpp; sourceTree = "<group>"; };
+		0CFCE6EE1851EACA00FCE665 /* juce_LiveConstantEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = juce_LiveConstantEditor.h; path = ../../JuceLibraryCode/modules/juce_gui_extra/misc/juce_LiveConstantEditor.h; sourceTree = "<group>"; };
 		0D19278F9D9AA81467F930FC /* FxGuiLowPassFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FxGuiLowPassFilter.cpp; path = "../../Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiLowPassFilter.cpp"; sourceTree = SOURCE_ROOT; };
 		0D5838014A4AB76B63EC13C4 /* juce_FileTreeComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_FileTreeComponent.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/filebrowser/juce_FileTreeComponent.cpp; sourceTree = SOURCE_ROOT; };
 		0D683EFC0C730B43D4BA49E6 /* juce_OggVorbisAudioFormat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_OggVorbisAudioFormat.cpp; path = ../../JuceLibraryCode/modules/juce_audio_formats/codecs/juce_OggVorbisAudioFormat.cpp; sourceTree = SOURCE_ROOT; };
@@ -1350,6 +1356,8 @@
 				176ACCAF7D33C440A16C9E29 /* juce_VSTMidiEventList.h */,
 				1081FC53AFBCEA7F3CF7B0E8 /* juce_VSTPluginFormat.cpp */,
 				D5562313AC8112A0E188BAF7 /* juce_VSTPluginFormat.h */,
+				0CFCE6EA1851EA8100FCE665 /* juce_VST3PluginFormat.cpp */,
+				0CFCE6EB1851EA8100FCE665 /* juce_VST3PluginFormat.h */,
 			);
 			name = format_types;
 			sourceTree = "<group>";
@@ -2138,6 +2146,8 @@
 				69F5DAF6ED056C87ED792857 /* juce_SystemTrayIconComponent.cpp */,
 				594BFFB8260128EA8CB7892B /* juce_SystemTrayIconComponent.h */,
 				EF5E913DEB7F6ECE2DB96834 /* juce_WebBrowserComponent.h */,
+				0CFCE6ED1851EACA00FCE665 /* juce_LiveConstantEditor.cpp */,
+				0CFCE6EE1851EACA00FCE665 /* juce_LiveConstantEditor.h */,
 			);
 			name = misc;
 			sourceTree = "<group>";
@@ -3672,11 +3682,13 @@
 				0B98042E73263DA868E52B8B /* RBJ.cpp in Sources */,
 				A64CE57AF8E9E5ED6BBB9852 /* RootFinder.cpp in Sources */,
 				A1CD3D97AA98F351E9F00156 /* State.cpp in Sources */,
+				0CFCE6EF1851EACA00FCE665 /* juce_LiveConstantEditor.cpp in Sources */,
 				3FD96C22010BEA8FE7F1E583 /* hid.c in Sources */,
 				097DBB834B76BAA478937CBA /* IpEndpointName.cpp in Sources */,
 				C61CDB2E7FA7C6CFE125F500 /* NetworkingUtils.cpp in Sources */,
 				7AF2B0F787FB480F2C1DD202 /* UdpSocket.cpp in Sources */,
 				FC9A997E37139E0FB5EB3DC9 /* OscOutboundPacketStream.cpp in Sources */,
+				0CFCE6EC1851EA8100FCE665 /* juce_VST3PluginFormat.cpp in Sources */,
 				E8563F51141B8D46CCB98485 /* OscPrintReceivedElements.cpp in Sources */,
 				8AA54932DCB65485A3FEE02E /* OscReceivedElements.cpp in Sources */,
 				D616CA0AF26A6C5EA619306C /* OscTypes.cpp in Sources */,

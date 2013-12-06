@@ -129,6 +129,31 @@ void ModeController::getInputData(int pad, int value, int velocity)
             
         }
     }
+    
+    if (control[padNumber] == 7) //led control mode
+    {
+        if (prevPadValue[padNumber] == 0 && padValue > 0)
+        {
+            switch (PAD_SETTINGS->getControllerLedControl())
+            {
+                case 1:
+                    JUCEApplication::getInstance()->perform(CommandIDs::EnableLed);
+                    break;
+                case 2:
+                    JUCEApplication::getInstance()->perform(CommandIDs::EnableLedPressure);
+                    break;
+                case 3:
+                    JUCEApplication::getInstance()->perform(CommandIDs::EnableLedClock);
+                    break;
+                case 4:
+                    JUCEApplication::getInstance()->perform(CommandIDs::EnableLedMidiMode);
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+    }
 
      prevPadValue[padNumber] = padValue;
 }

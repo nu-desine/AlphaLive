@@ -211,6 +211,7 @@ public:
     void setControllerMidiProgramChangeNumber (int value);
     void setControllerMidiProgramChangeChannel (int value);
     void setControllerPressureLatchPadNumber (int value);
+    void setControllerLedControl (int value);
     
     int getControllerControl();
     int getControllerSceneNumber();
@@ -219,6 +220,7 @@ public:
     int getControllerMidiProgramChangeNumber();
     int getControllerMidiProgramChangeChannel();
     int getControllerPressureLatchPadNumber();
+    int getControllerLedControl();
 
     
     //==================================================================
@@ -481,6 +483,7 @@ private:
     int controllerMidiProgramChangeNumber;
     int controllerMidiProgramChangeChannel;
     int controllerPressureLatchPadNumber;
+    int controllerLedControl;
     
     
     //==================================================================

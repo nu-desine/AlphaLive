@@ -598,7 +598,7 @@ HardwarePreferencesComponent::HardwarePreferencesComponent(MainComponent &ref, A
     for (int i = 0; i < names.size(); i++)
     {
         //to add new colour schemes to the application, see 'createLedColourScheme()'
-        ledColourSchemeMenu->addItem (translate(names[i]), i + 1);
+        ledColourSchemeMenu->addItem (names[i], i + 1);
     }
     
     //select the matching item from what is stored in prefs
@@ -784,14 +784,14 @@ void HardwarePreferencesComponent::createLedColourSchemes()
     
     ledColourScheme.add(new LedColourScheme());
     currentIndex = ledColourScheme.size() - 1;
-    ledColourScheme[currentIndex]->name = translate("Default");
+    ledColourScheme[currentIndex]->name = "Default";
     ledColourScheme[currentIndex]->colour[0] = Colour(0, 0, 255);
     ledColourScheme[currentIndex]->colour[1] = Colour(0, 255, 0);
     ledColourScheme[currentIndex]->colour[2] = Colour(255, 0, 0);
     
     ledColourScheme.add(new LedColourScheme());
     currentIndex = ledColourScheme.size() - 1;
-    ledColourScheme[currentIndex]->name = translate("Custom");
+    ledColourScheme[currentIndex]->name = "Custom";
     
     //=================================================
     //create schemes here....

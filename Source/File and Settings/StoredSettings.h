@@ -57,6 +57,7 @@ public:
     int autoCheckUpdates; // 1 - off, 2 - on
     int interfaceTheme;
     
+    String hardwareLedColourScheme;
     Colour hardwareLedColour[3]; //[min, mid, max]
     
 private:

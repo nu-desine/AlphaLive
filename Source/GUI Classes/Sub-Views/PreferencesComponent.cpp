@@ -569,14 +569,51 @@ void GeneralSettingsComponent::updateDisplay()
 
 
 
-
-
-
-
 HardwarePreferencesComponent::HardwarePreferencesComponent(MainComponent &ref, AlphaLiveEngine &ref2)
                                                             :   mainComponentRef(ref),
                                                                 alphaLiveEngineRef(ref2)
 {
+    addAndMakeVisible(ledColourSchemeLabel = new Label());
+    ledColourSchemeLabel->setText(translate("LED Colour Scheme:"), dontSendNotification);
+    
+    addAndMakeVisible(ledColourSchemeMenu = new ComboBox());
+    ledColourSchemeMenu->addListener(this);
+    ledColourSchemeMenu->addMouseListener(this, true);
+    
+    createLedColourSchemes();
+    
+    //Set the order of the colour schemes to be displayed as follows:
+    // 1. 'Default'
+    // 2. All other schemes in alphabetically order
+    // 3. 'Custom'
+    
+    StringArray names;
+    for (int i = 0; i < ledColourScheme.size(); i++)
+        names.add(ledColourScheme[i]->name);
+    names.sort(true);
+    names.move(names.indexOf("Default"), 0);
+    names.move(names.indexOf("Custom"), names.size() - 1);
+    
+    //add all schemes to the combobox
+    for (int i = 0; i < names.size(); i++)
+    {
+        //to add new colour schemes to the application, see 'createLedColourScheme()'
+        ledColourSchemeMenu->addItem (translate(names[i]), i + 1);
+    }
+    
+    //select the matching item from what is stored in prefs
+    //We do not use the stored scheme to set the colours here.
+    //This is just displayed for continuity.
+    //The actual LED colours and button colours are set below.
+    for (int i = 0; i <= names.size(); i++)
+    {
+        if (names[i] == StoredSettings::getInstance()->hardwareLedColourScheme)
+        {
+            ledColourSchemeMenu->setSelectedId(i + 1);
+            break;
+        }
+    }
+    
     addAndMakeVisible(ledColourLabel[0] = new Label());
     ledColourLabel[0]->setText(translate("Minimum Pressure LED Colour:"), dontSendNotification);
     addAndMakeVisible(ledColourLabel[1] = new Label());
@@ -603,19 +640,23 @@ HardwarePreferencesComponent::HardwarePreferencesComponent(MainComponent &ref, A
 
 HardwarePreferencesComponent::~HardwarePreferencesComponent()
 {
+    ledColourScheme.clear();
     deleteAllChildren();
 }
 
 void HardwarePreferencesComponent::resized()
 {
-    ledColourLabel[0]->setBounds(60+30, 20, 200, 20);
-    ledColourButton[0]->setBounds(280+30, 18, 80, 25);
+    ledColourSchemeLabel->setBounds(90, 20, 150, 20);
+    ledColourSchemeMenu->setBounds(250, 20, 140, 20);
     
-    ledColourLabel[1]->setBounds(60+30, 60, 200, 20);
-    ledColourButton[1]->setBounds(280+30, 58, 80, 25);
+    ledColourLabel[0]->setBounds(60+30, 60+20, 200, 20);
+    ledColourButton[0]->setBounds(280+30, 60+18, 80, 25);
+    
+    ledColourLabel[1]->setBounds(60+30, 60+60, 200, 20);
+    ledColourButton[1]->setBounds(280+30, 60+58, 80, 25);
 
-    ledColourLabel[2]->setBounds(60+30, 100, 200, 20);
-    ledColourButton[2]->setBounds(280+30, 98, 80, 25);
+    ledColourLabel[2]->setBounds(60+30, 60+100, 200, 20);
+    ledColourButton[2]->setBounds(280+30, 60+98, 80, 25);
 
 
 }
@@ -649,7 +690,37 @@ void HardwarePreferencesComponent::buttonClicked (Button* button)
 
 void HardwarePreferencesComponent::comboBoxChanged (ComboBox *comboBox)
 {
-    
+    if (comboBox == ledColourSchemeMenu)
+    {
+        //if it does not equal custom...
+        if (comboBox->getSelectedId() != comboBox->getNumItems())
+        {
+            int schemeArrayIndex;
+            
+            //find the ledColourScheme object with the matching name
+            for (int i = 0; i < ledColourScheme.size(); i++)
+            {
+                if (ledColourScheme[i]->name == comboBox->getText())
+                {
+                    schemeArrayIndex = i;
+                    break;
+                }
+            }
+            
+            //apply the colours to the LED and the buttons
+            for (int i = 0; i < 3; i++)
+            {
+                Colour colour = ledColourScheme[schemeArrayIndex]->colour[i];
+                
+                alphaLiveEngineRef.setLedColour(i, colour);
+                StoredSettings::getInstance()->hardwareLedColour[i] = colour;
+                ledColourButton[i]->repaint();
+            }
+            
+            StoredSettings::getInstance()->hardwareLedColourScheme = ledColourScheme[schemeArrayIndex]->name;
+            StoredSettings::getInstance()->flush();
+        }
+    }
 }
 
 void HardwarePreferencesComponent::changeListenerCallback (ChangeBroadcaster *source)
@@ -668,22 +739,31 @@ void HardwarePreferencesComponent::changeListenerCallback (ChangeBroadcaster *so
             ledColourButton[i]->repaint();
         }
     }
+    
+    //Set the colour scheme menu to "Custom"
+    if (ledColourSchemeMenu->getSelectedId() != ledColourSchemeMenu->getNumItems())
+        ledColourSchemeMenu->setSelectedId(ledColourSchemeMenu->getNumItems(), true);
 }
 
 
 void HardwarePreferencesComponent::mouseEnter (const MouseEvent &e)
 {
-    if (ledColourButton[0]->isMouseOver(true))
+    if (ledColourSchemeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Minimum Pressure LED Colour Selector. Click this button to display a colour picker to choose the colour of the LED when no pads are being pressed."));
+        mainComponentRef.setInfoTextBoxText(translate("LED Colour Scheme Selector. This menu provides you with a set of colour schemes that can be applied to the AlphaSphere's LED. The LED will transition between three colours as more pressure is applied to the pads. You can also create a custom colour scheme using the three buttons below."));
+    }
+    
+    else if (ledColourButton[0]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Minimum Pressure LED Colour Selector. Click this button to display a colour picker to choose a custom colour for the LED when no pads are being pressed."));
     }
     else if (ledColourButton[1]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Mid Pressure LED Colour Selector. Click this button to display a colour picker to choose the colour of the LED when a single pad is presssed to it's full depth. To see the colour change in realtime, hold a pad at it's full depth while chosing the colour."));
+        mainComponentRef.setInfoTextBoxText(translate("Mid Pressure LED Colour Selector. Click this button to display a colour picker to choose a custom colour for the LED when a single pad is presssed to it's full depth. To see the colour change in realtime, hold a pad at it's full depth while chosing the colour."));
     }
     else if (ledColourButton[2]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Maximum Pressure LED Colour Selector. Click this button to display a colour picker to choose the colour of the LED when a two or more pads are pressed to their full depth. To see the colour change in realtime, hold two pads at their full depths while chosing the colour."));
+        mainComponentRef.setInfoTextBoxText(translate("Maximum Pressure LED Colour Selector. Click this button to display a colour picker to choose a custom colour for the LED when a two or more pads are pressed to their full depth. To see the colour change in realtime, hold two pads at their full depths while chosing the colour."));
     }
 }
 
@@ -696,5 +776,34 @@ void HardwarePreferencesComponent::mouseExit (const MouseEvent &e)
 void HardwarePreferencesComponent::updateDisplay()
 {
     //this function is called from PreferencesComponent::visibilityChanged
+}
+
+void HardwarePreferencesComponent::createLedColourSchemes()
+{
+    int currentIndex;
+    
+    //=================================================
+    //create schemes here....
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Fire";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xffffff00);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xffff7500);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xffff0000);
+    
+    
+    //=================================================
+
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = translate("Default");
+    ledColourScheme[currentIndex]->colour[0] = Colour(0, 0, 255);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0, 255, 0);
+    ledColourScheme[currentIndex]->colour[2] = Colour(255, 0, 0);
+
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = translate("Custom");
 }
 

@@ -131,6 +131,12 @@ private:
 #include "../../../JuceLibraryCode/JuceHeader.h"
 #include "../../Functionality Classes/AlphaLiveEngine.h"
 
+struct LedColourScheme
+{
+    String name;
+    Colour colour[3];
+};
+
 class MainComponent;
 
 class HardwarePreferencesComponent :    public Component,
@@ -155,13 +161,17 @@ public:
     
     void updateDisplay();
     
+    void createLedColourSchemes();
+    
 private:
     MainComponent &mainComponentRef;
     AlphaLiveEngine &alphaLiveEngineRef;
     
-    
-    Label *ledColourLabel[3];
+    Label *ledColourLabel[3], *ledColourSchemeLabel;
     ShapeButton *ledColourButton[3];
+    ComboBox *ledColourSchemeMenu;
+    
+    OwnedArray <LedColourScheme> ledColourScheme;
 };
 
 #endif //H_HARDWAREPREFERENCESCOMPONENT

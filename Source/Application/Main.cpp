@@ -435,25 +435,30 @@ public:
         if(info.commandID == CommandIDs::New)
         {
             appDocumentState->createNewProject();
+            return true;
         }
         else if(info.commandID == CommandIDs::Open)
         {
             appDocumentState->loadProject(true);
+            return true;
         }
         
         else if(info.commandID == CommandIDs::Save)
         {
             appDocumentState->saveProject();
+            return true;
         }
         
         else if(info.commandID == CommandIDs::SaveAs)
         {
             appDocumentState->saveProjectAs();
+            return true;
         }
         
         else if(info.commandID == CommandIDs::CleanUpProject)
         {
             appDocumentState->cleanUpProject (false);
+            return true;
         }
         
         else if(info.commandID == CommandIDs::EnableLed)
@@ -472,6 +477,9 @@ public:
             }
             
             AppSettings::Instance()->setHardwareLedStatus(status);
+            //update the menu bar items status if this was called not from the menu bar
+            commandManager->commandStatusChanged();
+            return true;
         }
         
         else if(info.commandID == CommandIDs::EnableLedPressure)
@@ -490,6 +498,9 @@ public:
             }
             
             AppSettings::Instance()->setHardwareLedPressureStatus(status);
+            //update the menu bar items status if this was called not from the menu bar
+            commandManager->commandStatusChanged();
+            return true;
         }
         
         else if(info.commandID == CommandIDs::EnableLedClock)
@@ -508,6 +519,9 @@ public:
             }
             
             AppSettings::Instance()->setHardwareLedClockStatus(status);
+            //update the menu bar items status if this was called not from the menu bar
+            commandManager->commandStatusChanged();
+            return true;
         }
         
         else if(info.commandID == CommandIDs::EnableLedMidiMode)
@@ -526,6 +540,9 @@ public:
             }
             
             AppSettings::Instance()->setHardwareLedMode(mode);
+            //update the menu bar items status if this was called not from the menu bar
+            commandManager->commandStatusChanged();
+            return true;
         }
         
         else if (info.commandID == StandardApplicationCommandIDs::quit)
@@ -534,7 +551,7 @@ public:
             return true;
         }
 
-        return true;
+        return false;
     }
     
     

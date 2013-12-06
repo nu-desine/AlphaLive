@@ -1871,6 +1871,8 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
     }
 }
 
+
+
 bool MainComponent::perform (const InvocationInfo& info)
 {
 	if(info.commandID == CommandIDs::About)
@@ -1884,6 +1886,8 @@ bool MainComponent::perform (const InvocationInfo& info)
         aboutComponent->grabKeyboardFocus();    //so that the ESC to close works without having to
                                                 //click on the component first
         
+        return true;
+        
 	}
     
 	else if(info.commandID == CommandIDs::Preferences)
@@ -1895,6 +1899,8 @@ bool MainComponent::perform (const InvocationInfo& info)
         infoTextBox->toFront(false);
 		preferencesComponent->setVisible(true);
         preferencesComponent->grabKeyboardFocus();
+        
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::ProjectSettings)
@@ -1906,16 +1912,20 @@ bool MainComponent::perform (const InvocationInfo& info)
         infoTextBox->toFront(false);
 		projectSettingsComponent->setVisible(true);
         projectSettingsComponent->grabKeyboardFocus();
+        
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::SaveScene)
 	{
 		sceneComponent->getSelectedSceneSlot()->saveScene();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::LoadScene)
 	{
 		sceneComponent->getSelectedSceneSlot()->loadScene();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::DisableHelpBox)
@@ -1924,21 +1934,26 @@ bool MainComponent::perform (const InvocationInfo& info)
             isInfoBoxEnabled = false;
         else
             isInfoBoxEnabled = true;
+        
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::CopyPadSettings) 
 	{
 		guiPadLayout->copyPadSettings();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::PastePadSettings) 
 	{
 		guiPadLayout->pastePadSettings();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::ClearScene)
 	{
 		sceneComponent->getSelectedSceneSlot()->clearScene();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::ClearAllScenes)
@@ -1950,32 +1965,39 @@ bool MainComponent::perform (const InvocationInfo& info)
         {
             sceneComponent->clearAll();
         }
+        
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::KillSwitch)
 	{
 		alphaLiveEngineRef.killAll();
         globalClock->toggleTransportButtonOff();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::StartStopClock)
 	{
 		globalClock->triggerTransportButton();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::StarterGuide)
     {
         openDocumentation (1);
+        return true;
     }
     
     else if(info.commandID == CommandIDs::ReferenceManual)
     {
         openDocumentation (2);
+        return true;
     }
     
     else if(info.commandID == CommandIDs::UpdateSoftware)
     {
         updateSoftware(false);
+        return true;
     }
     
     else if(info.commandID == CommandIDs::CopyDataToSequencer)
@@ -2072,6 +2094,8 @@ bool MainComponent::perform (const InvocationInfo& info)
                 }
             }
         }
+        
+        return true;
     }
     
     else if(info.commandID == CommandIDs::HardwarePreferences)
@@ -2085,6 +2109,8 @@ bool MainComponent::perform (const InvocationInfo& info)
         preferencesComponent->selectHardwareTab();
 		preferencesComponent->setVisible(true);
         preferencesComponent->grabKeyboardFocus();
+        
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::HardwareProjectSettings)
@@ -2098,13 +2124,11 @@ bool MainComponent::perform (const InvocationInfo& info)
         projectSettingsComponent->selectHardwareTab();
 		projectSettingsComponent->setVisible(true);
         projectSettingsComponent->grabKeyboardFocus();
+        
+        return true;
 	}
     
-	//else
-	//	return false;
-	
-	return true;
-	
+	return false;
 }
 
 

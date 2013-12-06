@@ -26,6 +26,7 @@
 #include "../../Functionality Classes/Sequencer Mode/SequencerValues.h"
 #include "../../Application/CommonInfoBoxText.h"
 #include "../AlphaLiveLookandFeel.h"
+#include "../../Application/CommandIDs.h"
 
 
 
@@ -498,7 +499,7 @@ void HardwareSettingsComponent::buttonClicked (Button* button)
 {
     if (button == ledModeButton)
     {
-        AppSettings::Instance()->setHardwareLedMode(button->getToggleState());
+        JUCEApplication::getInstance()->perform(CommandIDs::EnableLedMidiMode);
         
         if (button->getToggleState() == true)
             button->setButtonText(translate("On"));
@@ -510,7 +511,7 @@ void HardwareSettingsComponent::buttonClicked (Button* button)
     
     else if (button == ledStatusButton)
     {
-        AppSettings::Instance()->setHardwareLedStatus(button->getToggleState());
+        JUCEApplication::getInstance()->perform(CommandIDs::EnableLed);
         
         if (button->getToggleState() == true)
             button->setButtonText(translate("On"));
@@ -522,7 +523,7 @@ void HardwareSettingsComponent::buttonClicked (Button* button)
     
     else if (button == ledPressureStatusButton)
     {
-        AppSettings::Instance()->setHardwareLedPressureStatus(button->getToggleState());
+        JUCEApplication::getInstance()->perform(CommandIDs::EnableLedPressure);
         
         if (button->getToggleState() == true)
             button->setButtonText(translate("On"));
@@ -532,7 +533,7 @@ void HardwareSettingsComponent::buttonClicked (Button* button)
     
     else if (button == ledClockStatusButton)
     {
-        AppSettings::Instance()->setHardwareLedClockStatus(button->getToggleState());
+        JUCEApplication::getInstance()->perform(CommandIDs::EnableLedClock);
         
         if (button->getToggleState() == true)
             button->setButtonText(translate("On"));
@@ -579,9 +580,28 @@ void HardwareSettingsComponent::updateDisplay()
     //this function is called from ProjectSettingsComponent::visibilityChanged
     
     ledModeButton->setToggleState(AppSettings::Instance()->getHardwareLedMode(), dontSendNotification);
+    if (ledModeButton->getToggleState() == true)
+        ledModeButton->setButtonText(translate("On"));
+    else
+        ledModeButton->setButtonText(translate("Off"));
+    
     ledStatusButton->setToggleState(AppSettings::Instance()->getHardwareLedStatus(), dontSendNotification);
+    if (ledStatusButton->getToggleState() == true)
+        ledStatusButton->setButtonText(translate("On"));
+    else
+        ledStatusButton->setButtonText(translate("Off"));
+    
     ledPressureStatusButton->setToggleState(AppSettings::Instance()->getHardwareLedPressureStatus(), dontSendNotification);
+    if (ledPressureStatusButton->getToggleState() == true)
+        ledPressureStatusButton->setButtonText(translate("On"));
+    else
+        ledPressureStatusButton->setButtonText(translate("Off"));
+    
     ledClockStatusButton->setToggleState(AppSettings::Instance()->getHardwareLedClockStatus(), dontSendNotification);
+    if (ledClockStatusButton->getToggleState() == true)
+        ledClockStatusButton->setButtonText(translate("On"));
+    else
+        ledClockStatusButton->setButtonText(translate("Off"));
     
     setDisplay();
 }

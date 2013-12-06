@@ -215,7 +215,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             PopupMenu::backgroundColourId,              AlphaTheme::getInstance()->childBackgroundColour_,
             PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
-            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->textColour_,
+            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->foregroundColour_,
             PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
             PopupMenu::highlightedBackgroundColourId,   AlphaTheme::getInstance()->mainColour_,
             
@@ -356,7 +356,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             PopupMenu::backgroundColourId,              AlphaTheme::getInstance()->childBackgroundColour_,
             PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
-            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->textColour_,
+            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->foregroundColour_,
             PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
             PopupMenu::highlightedBackgroundColourId,   AlphaTheme::getInstance()->mainColour_,
             

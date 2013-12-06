@@ -36,23 +36,27 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     currentlySelectedControl = 0;
     
     addChildComponent(dialsMenu = new ComboBox());
+    dialsMenu->addSectionHeading(translate("AlphaLive Controls"));
     dialsMenu->addItem(translate("Global Gain"), 1);
     dialsMenu->addItem(translate("Global Pan"), 2);
     dialsMenu->addItem(translate("Tempo"), 6);
     dialsMenu->addItem(translate("Scene Switcher"), 3);
+    dialsMenu->addItem(translate("Smart Dial"), 7);
+    dialsMenu->addSectionHeading(translate("External Controls"));
     dialsMenu->addItem(translate("MIDI CC"), 4);
     dialsMenu->addItem(translate("OSC"), 5);
-    dialsMenu->addItem(translate("Smart Dial"), 7);
     dialsMenu->addListener(this);
     dialsMenu->addMouseListener(this, true);
     
     addChildComponent(buttonsMenu = new ComboBox());
-    buttonsMenu->addItem(translate("Start/Stop Clock"), 1);
-    buttonsMenu->addItem(translate("Killswitch"), 6);
+    buttonsMenu->addSectionHeading(translate("AlphaLive Controls"));
     buttonsMenu->addItem(translate("Scene Switcher"), 2);
+    buttonsMenu->addItem(translate("Killswitch"), 6);
+    buttonsMenu->addItem(translate("Start/Stop Clock"), 1);
     buttonsMenu->addItem(translate("Metronome"), 7);
     buttonsMenu->addItem(translate("Sequencer Record"), 8);
     buttonsMenu->addItem(translate("Save"), 3);
+    buttonsMenu->addSectionHeading(translate("External Controls"));
     buttonsMenu->addItem(translate("MIDI CC"), 4);
     buttonsMenu->addItem(translate("OSC"), 5);
     buttonsMenu->addListener(this);

@@ -56,9 +56,17 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     buttonsMenu->addItem(translate("Metronome"), 7);
     buttonsMenu->addItem(translate("Sequencer Record"), 8);
     buttonsMenu->addItem(translate("Save"), 3);
+    
     buttonsMenu->addSectionHeading(translate("External Controls"));
     buttonsMenu->addItem(translate("MIDI CC"), 4);
     buttonsMenu->addItem(translate("OSC"), 5);
+    
+    buttonsMenu->addSectionHeading(translate("LED Controls"));
+    buttonsMenu->addItem(translate("LED Status"), 9);
+    buttonsMenu->addItem(translate("Pressure Interaction Status"), 10);
+    buttonsMenu->addItem(translate("Clock Interaction Status"), 11);
+    buttonsMenu->addItem(translate("MIDI CC Control Status"), 12);
+    
     buttonsMenu->addListener(this);
     buttonsMenu->addMouseListener(this, true);
     

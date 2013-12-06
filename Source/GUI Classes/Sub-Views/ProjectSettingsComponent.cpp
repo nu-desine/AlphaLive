@@ -492,7 +492,10 @@ void HardwareSettingsComponent::resized()
 
 void HardwareSettingsComponent::paint (Graphics& g)
 {
-
+    ledModeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    ledStatusLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    ledPressureStatusLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    ledClockStatusLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
 }
 
 void HardwareSettingsComponent::buttonClicked (Button* button)

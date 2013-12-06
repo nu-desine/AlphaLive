@@ -782,6 +782,17 @@ void HardwarePreferencesComponent::createLedColourSchemes()
 {
     int currentIndex;
     
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = translate("Default");
+    ledColourScheme[currentIndex]->colour[0] = Colour(0, 0, 255);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0, 255, 0);
+    ledColourScheme[currentIndex]->colour[2] = Colour(255, 0, 0);
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = translate("Custom");
+    
     //=================================================
     //create schemes here....
     
@@ -792,18 +803,56 @@ void HardwarePreferencesComponent::createLedColourSchemes()
     ledColourScheme[currentIndex]->colour[1] = Colour(0xffff7500);
     ledColourScheme[currentIndex]->colour[2] = Colour(0xffff0000);
     
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Ice";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xff0000ff);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xff00d8ff);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xff7effff);
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Christmas";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xffffffff);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xff00ff00);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xffff0000);
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Monochrome";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xff000000);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xff222222);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xffffffff);
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Water";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xff034e25);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xff0000ff);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xff00e3ff);
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Midnight";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xff240046);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xffa900ff);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xff3a00ff);
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Dub";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xff00ff00);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xffffff00);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xffff0000);
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Pink Power";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xffe100ff);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xff8400ff);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xff4a00ff);
+    
     
     //=================================================
-
-    ledColourScheme.add(new LedColourScheme());
-    currentIndex = ledColourScheme.size() - 1;
-    ledColourScheme[currentIndex]->name = translate("Default");
-    ledColourScheme[currentIndex]->colour[0] = Colour(0, 0, 255);
-    ledColourScheme[currentIndex]->colour[1] = Colour(0, 255, 0);
-    ledColourScheme[currentIndex]->colour[2] = Colour(255, 0, 0);
-
-    ledColourScheme.add(new LedColourScheme());
-    currentIndex = ledColourScheme.size() - 1;
-    ledColourScheme[currentIndex]->name = translate("Custom");
 }
 

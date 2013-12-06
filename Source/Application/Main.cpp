@@ -334,7 +334,7 @@ public:
     {
         const int cmd = ModifierKeys::commandModifier;
         const int shift = ModifierKeys::shiftModifier;
-        //const int alt = ModifierKeys::altModifier;
+        const int alt = ModifierKeys::altModifier;
         
         //within 'setInfo()' below, the name sets the String that appears in the Menu bar,
         //and the description sets what would appear in the tooltip if the command is set to a button
@@ -387,6 +387,7 @@ public:
             result.setInfo (translate("Enable LED"),
                             "Sets the status of the LED in the AlphaSphere",
                             CommandCategories::HardwareCommands, 0);
+            result.defaultKeypresses.add (KeyPress ('l', cmd|alt, 0));
             
             result.setTicked (AppSettings::Instance()->getHardwareLedStatus());
             result.setActive (!(AppSettings::Instance()->getHardwareLedMode()));
@@ -397,6 +398,7 @@ public:
             result.setInfo (translate("Enable LED Pressure Interaction"),
                             "Sets the status of the LED pressure interaction",
                             CommandCategories::HardwareCommands, 0);
+            result.defaultKeypresses.add (KeyPress ('p', cmd|alt, 0));
             
             result.setTicked (AppSettings::Instance()->getHardwareLedPressureStatus());
             result.setActive (AppSettings::Instance()->getHardwareLedStatus() &&
@@ -408,6 +410,7 @@ public:
             result.setInfo (translate("Enable LED Clock Interaction"),
                             "Sets the status of the LED clock interaction",
                             CommandCategories::HardwareCommands, 0);
+            result.defaultKeypresses.add (KeyPress ('c', cmd|alt, 0));
             
             result.setTicked (AppSettings::Instance()->getHardwareLedClockStatus());
             result.setActive (AppSettings::Instance()->getHardwareLedStatus() &&
@@ -419,6 +422,7 @@ public:
             result.setInfo (translate("Enable LED MIDI CC Control"),
                             "Sets the status of the LED MIDI CC Control mode",
                             CommandCategories::HardwareCommands, 0);
+            result.defaultKeypresses.add (KeyPress ('m', cmd|alt, 0));
             
             result.setTicked (AppSettings::Instance()->getHardwareLedMode());
             //result.setActive (alphaLiveEngine->getDeviceStatus() != 0); // << not currently working

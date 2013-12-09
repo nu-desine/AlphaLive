@@ -384,8 +384,6 @@ void GlobalClock::setMidiClockMessageTimestamp()
         newTempo = ceil(newTempo);
         newTempo = newTempo/10;
         
-        std::cout << newTempo << std::endl;
-        
         //its probably worth changing the tempo less frequently than everytime a clock message is recieved,
         //and set the tempo to the most common value found here.
         

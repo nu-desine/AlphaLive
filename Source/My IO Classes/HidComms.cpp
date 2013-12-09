@@ -290,8 +290,6 @@ void HidComms::run()
                             message[1] = buf[messageIndex + 1];
                             message[2] = buf[messageIndex + 2];
                             
-                            std::cout << "MIDI message " << i + 1 << ": " << message[0] << " " << message[1] << " " << message[2] << std::endl;
-                            
                             if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 1)
                             {
                                 MidiMessage midiMessage (message[0]);

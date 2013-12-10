@@ -72,7 +72,7 @@
 #include "../GUI Classes/Initial Loading Window/LoadingWindow.h"
 #include "../File and Settings/StoredSettings.h"
 #include "MainMenuModel.h"
-#include "../GUI Classes/Binary Data/BinaryDataNew.h"
+#include "../GUI Classes/Binary Data/MainBinaryData.h"
 
 //==============================================================================
 class AlphaSoftApplication  :   public JUCEApplication
@@ -91,7 +91,7 @@ public:
     void initialise (const String& commandLine)
     {
         SplashScreen* splash = new SplashScreen(String::empty,
-                                                ImageFileFormat::loadFrom(BinaryDataNew::loading_png, BinaryDataNew::loading_pngSize),
+                                                ImageFileFormat::loadFrom(MainBinaryData::loading_png, MainBinaryData::loading_pngSize),
                                                 false);
         
         
@@ -320,7 +320,11 @@ public:
             CommandIDs::Save,
             CommandIDs::SaveAs,
             CommandIDs::CleanUpProject,
-            StandardApplicationCommandIDs::quit
+            StandardApplicationCommandIDs::quit,
+            CommandIDs::EnableLed,
+            CommandIDs::EnableLedPressure,
+            CommandIDs::EnableLedClock,
+            CommandIDs::EnableLedMidiMode
         };
         
         commands.addArray (ids, numElementsInArray (ids));
@@ -330,7 +334,7 @@ public:
     {
         const int cmd = ModifierKeys::commandModifier;
         const int shift = ModifierKeys::shiftModifier;
-        //const int alt = ModifierKeys::altModifier;
+        const int alt = ModifierKeys::altModifier;
         
         //within 'setInfo()' below, the name sets the String that appears in the Menu bar,
         //and the description sets what would appear in the tooltip if the command is set to a button
@@ -378,6 +382,52 @@ public:
             
             result.defaultKeypresses.add (KeyPress ('q', cmd, 0));
         }
+        else if (commandID == CommandIDs::EnableLed)
+        {
+            result.setInfo (translate("Enable LED"),
+                            "Sets the status of the LED in the AlphaSphere",
+                            CommandCategories::HardwareCommands, 0);
+            result.defaultKeypresses.add (KeyPress ('l', cmd|alt, 0));
+            
+            result.setTicked (AppSettings::Instance()->getHardwareLedStatus());
+            result.setActive (!(AppSettings::Instance()->getHardwareLedMode()));
+            //result.setActive (alphaLiveEngine->getDeviceStatus() != 0); // << not currently working
+        }
+        else if (commandID == CommandIDs::EnableLedPressure)
+        {
+            result.setInfo (translate("Enable LED Pressure Interaction"),
+                            "Sets the status of the LED pressure interaction",
+                            CommandCategories::HardwareCommands, 0);
+            result.defaultKeypresses.add (KeyPress ('p', cmd|alt, 0));
+            
+            result.setTicked (AppSettings::Instance()->getHardwareLedPressureStatus());
+            result.setActive (AppSettings::Instance()->getHardwareLedStatus() &&
+                             !(AppSettings::Instance()->getHardwareLedMode()) /*&&
+                             alphaLiveEngine->getDeviceStatus() != 0*/); // << not currently working
+        }
+        else if (commandID == CommandIDs::EnableLedClock)
+        {
+            result.setInfo (translate("Enable LED Clock Interaction"),
+                            "Sets the status of the LED clock interaction",
+                            CommandCategories::HardwareCommands, 0);
+            result.defaultKeypresses.add (KeyPress ('c', cmd|alt, 0));
+            
+            result.setTicked (AppSettings::Instance()->getHardwareLedClockStatus());
+            result.setActive (AppSettings::Instance()->getHardwareLedStatus() &&
+                             !(AppSettings::Instance()->getHardwareLedMode()) /*&&
+                             alphaLiveEngine->getDeviceStatus() != 0*/); // << not currently working
+        }
+        else if (commandID == CommandIDs::EnableLedMidiMode)
+        {
+            result.setInfo (translate("Enable LED MIDI CC Control"),
+                            "Sets the status of the LED MIDI CC Control mode",
+                            CommandCategories::HardwareCommands, 0);
+            result.defaultKeypresses.add (KeyPress ('m', cmd|alt, 0));
+            
+            result.setTicked (AppSettings::Instance()->getHardwareLedMode());
+            //result.setActive (alphaLiveEngine->getDeviceStatus() != 0); // << not currently working
+        }
+        
     }
     
     bool perform (const InvocationInfo& info)
@@ -385,33 +435,123 @@ public:
         if(info.commandID == CommandIDs::New)
         {
             appDocumentState->createNewProject();
+            return true;
         }
         else if(info.commandID == CommandIDs::Open)
         {
             appDocumentState->loadProject(true);
+            return true;
         }
         
         else if(info.commandID == CommandIDs::Save)
         {
             appDocumentState->saveProject();
+            return true;
         }
         
         else if(info.commandID == CommandIDs::SaveAs)
         {
             appDocumentState->saveProjectAs();
+            return true;
         }
         
         else if(info.commandID == CommandIDs::CleanUpProject)
         {
             appDocumentState->cleanUpProject (false);
+            return true;
         }
-        if (info.commandID == StandardApplicationCommandIDs::quit)
+        
+        else if(info.commandID == CommandIDs::EnableLed)
+        {
+            uint8 status;
+            
+            if (AppSettings::Instance()->getHardwareLedStatus() == 1)
+            {
+                //dissable LED
+                status = 0;
+            }
+            else
+            {
+                //enable LED
+                status = 1;
+            }
+            
+            AppSettings::Instance()->setHardwareLedStatus(status);
+            //update the menu bar items status if this was called not from the menu bar
+            commandManager->commandStatusChanged();
+            return true;
+        }
+        
+        else if(info.commandID == CommandIDs::EnableLedPressure)
+        {
+            int status;
+            
+            if (AppSettings::Instance()->getHardwareLedPressureStatus())
+            {
+                //dissable LED pressure interaction
+                status = 0;
+            }
+            else
+            {
+                //enable LED presure interaction
+                status = 1;
+            }
+            
+            AppSettings::Instance()->setHardwareLedPressureStatus(status);
+            //update the menu bar items status if this was called not from the menu bar
+            commandManager->commandStatusChanged();
+            return true;
+        }
+        
+        else if(info.commandID == CommandIDs::EnableLedClock)
+        {
+            int status;
+            
+            if (AppSettings::Instance()->getHardwareLedClockStatus())
+            {
+                //dissable LED clock interaction
+                status = 0;
+            }
+            else
+            {
+                //enable LED clock interaction
+                status = 1;
+            }
+            
+            AppSettings::Instance()->setHardwareLedClockStatus(status);
+            //update the menu bar items status if this was called not from the menu bar
+            commandManager->commandStatusChanged();
+            return true;
+        }
+        
+        else if(info.commandID == CommandIDs::EnableLedMidiMode)
+        {
+            int mode;
+            
+            if (AppSettings::Instance()->getHardwareLedMode())
+            {
+                //set to normal mode
+                mode = 0;
+            }
+            else
+            {
+                //set to MIDI controlled mode
+                mode = 1;
+            }
+            
+            AppSettings::Instance()->setHardwareLedMode(mode);
+            //update the menu bar items status if this was called not from the menu bar
+            commandManager->commandStatusChanged();
+            return true;
+        }
+        
+        else if (info.commandID == StandardApplicationCommandIDs::quit)
         {
             systemRequestedQuit();
             return true;
         }
 
-        return true;
+        return false;
     }
     
     

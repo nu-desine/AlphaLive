@@ -26,7 +26,7 @@
 #include "GlobalValues.h"
 #include "../../Application/CommandIDs.h"
 #include "../../File and Settings/StoredSettings.h"
-#include "../Binary Data/BinaryDataNew.h"
+#include "../Binary Data/MainBinaryData.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
@@ -87,7 +87,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //--------------------------------------------------------------------------
     //Mode Buttons
     //create off mode button
-	Image *offModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::offsymbol_png, BinaryDataNew::offsymbol_pngSize)); 
+	Image *offModeImage = new Image(ImageCache::getFromMemory(MainBinaryData::offsymbol_png, MainBinaryData::offsymbol_pngSize)); 
 	addAndMakeVisible(modeOffButton = new ModeButton(offModeImage));
 	modeOffButton->addListener(this);
     modeOffButton->setOpaque(false);
@@ -95,7 +95,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeOffButton->addMouseListener(this, false);
 	
 	//create global settings button
-	Image *globalSettingsImage = new Image(ImageCache::getFromMemory(BinaryDataNew::padsettingssymbol_png, BinaryDataNew::padsettingssymbol_pngSize)); 
+	Image *globalSettingsImage = new Image(ImageCache::getFromMemory(MainBinaryData::padsettingssymbol_png, MainBinaryData::padsettingssymbol_pngSize)); 
 	addAndMakeVisible(globalSettingsButton = new ModeButton(globalSettingsImage));
 	globalSettingsButton->addListener(this);
     globalSettingsButton->setOpaque(false);
@@ -103,7 +103,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     
     
     //create looper mode button
-	Image *looperModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::loopsymbol_png, BinaryDataNew::loopsymbol_pngSize)); 
+	Image *looperModeImage = new Image(ImageCache::getFromMemory(MainBinaryData::loopsymbol_png, MainBinaryData::loopsymbol_pngSize)); 
 	addAndMakeVisible(modeSamplerButton = new ModeButton(looperModeImage));
 	modeSamplerButton->addListener(this);
     modeSamplerButton->setOpaque(false);
@@ -111,7 +111,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeSamplerButton->addMouseListener(this, false);
 	
 	//create midi mode button
-	Image *midiModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::midisymbol_png, BinaryDataNew::midisymbol_pngSize)); 
+	Image *midiModeImage = new Image(ImageCache::getFromMemory(MainBinaryData::midisymbol_png, MainBinaryData::midisymbol_pngSize)); 
 	addAndMakeVisible(modeMidiButton = new ModeButton(midiModeImage));
 	modeMidiButton->addListener(this);
     modeMidiButton->setOpaque(false);
@@ -119,7 +119,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeMidiButton->addMouseListener(this, false);
 	
 	//create sequencer mode button
-	Image *sequencerModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::sequenceicon_png, BinaryDataNew::sequenceicon_pngSize)); 
+	Image *sequencerModeImage = new Image(ImageCache::getFromMemory(MainBinaryData::sequenceicon_png, MainBinaryData::sequenceicon_pngSize)); 
 	addAndMakeVisible(modeSequencerButton = new ModeButton(sequencerModeImage));
 	modeSequencerButton->addListener(this);
     modeSequencerButton->setOpaque(false);
@@ -127,7 +127,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     modeSequencerButton->addMouseListener(this, false);
 	
     //createa controller mode button
-	Image *controllerModeImage = new Image(ImageCache::getFromMemory(BinaryDataNew::controlsymbol_png, BinaryDataNew::controlsymbol_pngSize)); 
+	Image *controllerModeImage = new Image(ImageCache::getFromMemory(MainBinaryData::controlsymbol_png, MainBinaryData::controlsymbol_pngSize)); 
 	addAndMakeVisible(modeControllerButton = new ModeButton(controllerModeImage));
 	modeControllerButton->addListener(this);
     modeControllerButton->setOpaque(false);
@@ -141,13 +141,13 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     globalClock->addMouseListener(this, true);
 	
     //open/save buttons
-	Image *openImage = new Image(ImageCache::getFromMemory(BinaryDataNew::loadsymbol_png, BinaryDataNew::loadsymbol_pngSize)); 
+	Image *openImage = new Image(ImageCache::getFromMemory(MainBinaryData::loadsymbol_png, MainBinaryData::loadsymbol_pngSize)); 
     addAndMakeVisible(openButton = new ModeButton(openImage));
 	openButton->setClickingTogglesState(false);
     openButton->setCommandToTrigger(commandManager, CommandIDs::Open, false);
     openButton->addMouseListener(this, false);
     
-	Image *saveImage = new Image(ImageCache::getFromMemory(BinaryDataNew::savesymbol_png, BinaryDataNew::savesymbol_pngSize)); 
+	Image *saveImage = new Image(ImageCache::getFromMemory(MainBinaryData::savesymbol_png, MainBinaryData::savesymbol_pngSize)); 
     addAndMakeVisible(saveButton = new ModeButton(saveImage));
 	saveButton->setClickingTogglesState(false);
     saveButton->setCommandToTrigger(commandManager, CommandIDs::Save, false);
@@ -1665,7 +1665,12 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::StarterGuide,
         CommandIDs::ReferenceManual,
         CommandIDs::UpdateSoftware,
-        CommandIDs::CopyDataToSequencer
+        CommandIDs::CopyDataToSequencer,
+        CommandIDs::HardwarePreferences,
+        CommandIDs::HardwareProjectSettings,
+        CommandIDs::SendMidiClock,
+        CommandIDs::SyncToMidiClock,
+        CommandIDs::MidiClockSettings
     };
 	
 	commands.addArray (ids, numElementsInArray (ids));
@@ -1853,7 +1858,56 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
         
         result.setActive(shouldBeActive);
     }
+    
+    else if (commandID == CommandIDs::HardwarePreferences)
+    {
+        result.setInfo (translate("Hardware Preferences..."),
+						"Opens the application hadware preferences view.",
+						CommandCategories::HardwareCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::HardwareProjectSettings)
+    {
+        result.setInfo (translate("Hardware Project Settings..."),
+						"Opens the application hardware project settings view.",
+						CommandCategories::HardwareCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::SendMidiClock)
+    {
+        result.setInfo (translate("Send MIDI Clock"),
+						"Enables the application to send MIDI Clock messages when the global clock is running.",
+						CommandCategories::OptionCommands, 0);
+        
+        bool status = false;
+        if (AppSettings::Instance()->getMidiClockValue() == 2)
+            status = true;
+        
+        result.setTicked(status);
+    }
+    
+    else if (commandID == CommandIDs::SyncToMidiClock)
+    {
+        result.setInfo (translate("Sync to External MIDI Clock"),
+						"Enables the application's clock to sync to an external MIDI clock.",
+						CommandCategories::OptionCommands, 0);
+        
+        bool status = false;
+        if (AppSettings::Instance()->getMidiClockValue() == 3)
+            status = true;
+        
+        result.setTicked(status);
+    }
+    
+    else if (commandID == CommandIDs::MidiClockSettings)
+    {
+        result.setInfo (translate("MIDI Clock Settings..."),
+						"Opens the application MIDI clock project settings view.",
+						CommandCategories::OptionCommands, 0);
+    }
 }
+
+
 
 bool MainComponent::perform (const InvocationInfo& info)
 {
@@ -1868,6 +1922,8 @@ bool MainComponent::perform (const InvocationInfo& info)
         aboutComponent->grabKeyboardFocus();    //so that the ESC to close works without having to
                                                 //click on the component first
         
+        return true;
+        
 	}
     
 	else if(info.commandID == CommandIDs::Preferences)
@@ -1879,6 +1935,8 @@ bool MainComponent::perform (const InvocationInfo& info)
         infoTextBox->toFront(false);
 		preferencesComponent->setVisible(true);
         preferencesComponent->grabKeyboardFocus();
+        
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::ProjectSettings)
@@ -1890,16 +1948,20 @@ bool MainComponent::perform (const InvocationInfo& info)
         infoTextBox->toFront(false);
 		projectSettingsComponent->setVisible(true);
         projectSettingsComponent->grabKeyboardFocus();
+        
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::SaveScene)
 	{
 		sceneComponent->getSelectedSceneSlot()->saveScene();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::LoadScene)
 	{
 		sceneComponent->getSelectedSceneSlot()->loadScene();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::DisableHelpBox)
@@ -1908,21 +1970,26 @@ bool MainComponent::perform (const InvocationInfo& info)
             isInfoBoxEnabled = false;
         else
             isInfoBoxEnabled = true;
+        
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::CopyPadSettings) 
 	{
 		guiPadLayout->copyPadSettings();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::PastePadSettings) 
 	{
 		guiPadLayout->pastePadSettings();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::ClearScene)
 	{
 		sceneComponent->getSelectedSceneSlot()->clearScene();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::ClearAllScenes)
@@ -1934,32 +2001,39 @@ bool MainComponent::perform (const InvocationInfo& info)
         {
             sceneComponent->clearAll();
         }
+        
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::KillSwitch)
 	{
 		alphaLiveEngineRef.killAll();
         globalClock->toggleTransportButtonOff();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::StartStopClock)
 	{
 		globalClock->triggerTransportButton();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::StarterGuide)
     {
         openDocumentation (1);
+        return true;
     }
     
     else if(info.commandID == CommandIDs::ReferenceManual)
     {
         openDocumentation (2);
+        return true;
     }
     
     else if(info.commandID == CommandIDs::UpdateSoftware)
     {
         updateSoftware(false);
+        return true;
     }
     
     else if(info.commandID == CommandIDs::CopyDataToSequencer)
@@ -2056,13 +2130,96 @@ bool MainComponent::perform (const InvocationInfo& info)
                 }
             }
         }
+        
+        return true;
     }
     
-	//else
-	//	return false;
-	
-	return true;
-	
+    else if(info.commandID == CommandIDs::HardwarePreferences)
+	{
+		aboutComponent->setVisible(false);
+        projectSettingsComponent->setVisible(false);
+        
+        preferencesComponent->toFront(true);
+        infoTextBox->toFront(false);
+        
+        preferencesComponent->selectHardwareTab();
+		preferencesComponent->setVisible(true);
+        preferencesComponent->grabKeyboardFocus();
+        
+        return true;
+	}
+    
+    else if(info.commandID == CommandIDs::HardwareProjectSettings)
+	{
+		aboutComponent->setVisible(false);
+        preferencesComponent->setVisible(false);
+        
+        projectSettingsComponent->toFront(true);
+        infoTextBox->toFront(false);
+        
+        projectSettingsComponent->selectTab(1);
+		projectSettingsComponent->setVisible(true);
+        projectSettingsComponent->grabKeyboardFocus();
+        
+        return true;
+	}
+    
+    else if (info.commandID == CommandIDs::SendMidiClock)
+    {
+        uint8 status;
+        
+        if (AppSettings::Instance()->getMidiClockValue() == 2)
+        {
+            //turn off MIDI clock
+            status = 1;
+        }
+        else
+        {
+            //turn on sending
+            status = 2;
+        }
+        
+        AppSettings::Instance()->setMidiClockValue(status);
+        
+        return true;
+    }
+    
+    else if (info.commandID == CommandIDs::SyncToMidiClock)
+    {
+        uint8 status;
+        
+        if (AppSettings::Instance()->getMidiClockValue() == 3)
+        {
+            //turn off MIDI clock
+            status = 1;
+        }
+        else
+        {
+            //turn on syncing
+            status = 3;
+        }
+        
+        AppSettings::Instance()->setMidiClockValue(status);
+
+        return true;
+    }
+    
+    else if(info.commandID == CommandIDs::MidiClockSettings)
+	{
+		aboutComponent->setVisible(false);
+        preferencesComponent->setVisible(false);
+        
+        projectSettingsComponent->toFront(true);
+        infoTextBox->toFront(false);
+        
+        projectSettingsComponent->selectTab(0);
+		projectSettingsComponent->setVisible(true);
+        projectSettingsComponent->grabKeyboardFocus();
+        
+        return true;
+	}
+    
+	return false;
 }
 
 

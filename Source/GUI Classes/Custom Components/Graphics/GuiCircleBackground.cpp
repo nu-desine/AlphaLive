@@ -21,7 +21,7 @@
 //
 
 #include "GuiCircleBackground.h"
-#include "../../Binary Data/BinaryDataNew.h"
+#include "../../Binary Data/MainBinaryData.h"
 #include "../../AlphaLiveLookandFeel.h"
 
 GuiCircleBackground::GuiCircleBackground()

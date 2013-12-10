@@ -153,10 +153,10 @@ PadSettings::PadSettings(int arrayIndex)
     controllerOscPort = 5004;
     controllerMidiProgramChangeNumber = 1;
     controllerMidiProgramChangeChannel = 1;
-    
     controllerPressureLatchPadNumber = 0;
     if (padNumber == 0)
         controllerPressureLatchPadNumber = 1;
+    controllerLedControl = 1;
     
     
     //----pad effects----
@@ -411,6 +411,7 @@ void PadSettings::resetData (int whatToReset)
         setControllerPressureLatchPadNumber(0);
         if (padNumber == 0)
             setControllerPressureLatchPadNumber(1);
+        setControllerLedControl(1);
     }
     
     
@@ -1596,6 +1597,10 @@ void PadSettings::setControllerPressureLatchPadNumber (int value)
 {
     controllerPressureLatchPadNumber = value;
 }
+void PadSettings::setControllerLedControl (int value)
+{
+    controllerLedControl = value;
+}
 
 #pragma mark Controller mode accessor functions
 
@@ -1626,6 +1631,10 @@ int PadSettings::getControllerMidiProgramChangeChannel()
 int PadSettings::getControllerPressureLatchPadNumber()
 {
     return controllerPressureLatchPadNumber;
+}
+int PadSettings::getControllerLedControl()
+{
+    return controllerLedControl;
 }
 
 

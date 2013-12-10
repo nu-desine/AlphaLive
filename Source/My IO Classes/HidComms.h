@@ -51,6 +51,7 @@ public:
     
     void run();
     virtual void hidInputCallback (int pad, int value, int velocity) = 0;
+    virtual void processMidiInput (const MidiMessage midiMessage) = 0;
     
     virtual void setDeviceType (int type) = 0;
     virtual void removeMidiOut() = 0;
@@ -58,6 +59,8 @@ public:
     virtual void setFirmwareUpdateStatus (bool status) = 0;
     virtual void setDeviceStatus() = 0;
     virtual void setFirmwareDetails (String version, String serial) = 0;
+    virtual void setLedSettings (uint8 setting, uint8 value) = 0;
+    virtual void setLedColour (uint8 colourNumber, Colour colour) = 0;
     
     void addMessageToHidOutReport (uint8 message[]);
     

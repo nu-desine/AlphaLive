@@ -117,7 +117,17 @@ public:
     void setMetronomeStatus (bool value);
     
     void setCopyExternalFiles (bool value);
+    void setMidiClockValue (int value);
+    void setMidiClockStartMessage (int value);
+    void setMidiClockMessageFilter (int value);
+    
+    void setReceiveMidiProgramChangeMessages (bool value);
+
     void setSceneName (int sceneNumber, String value);
+    void setHardwareLedMode (int value);
+    void setHardwareLedStatus (int value);
+    void setHardwareLedPressureStatus (int value);
+    void setHardwareLedClockStatus (int value);
     
     Array<int> getCurrentlySelectedPad();
     int getPadDisplayTextMode();
@@ -132,7 +142,17 @@ public:
     bool getMetronomeStatus();
     
     bool getCopyExternalFiles();
+    int getMidiClockValue();
+    int getMidiClockStartMessage();
+    int getMidiClockMessageFilter();
+    
+    bool getReceiveMidiProgramChangeMessages();
+    
     String getSceneName(int sceneNumber);
+    int getHardwareLedMode();
+    int getHardwareLedStatus();
+    int getHardwareLedPressureStatus();
+    int getHardwareLedClockStatus();
     
     //Elite Controls Stuff
     void setEliteDialPrevValue(double value, int dialNumber);
@@ -253,8 +273,15 @@ private:
     //========================================================================================================
     
     bool copyExternalFiles;
-    String sceneName[20];
+    int midiClockValue, midiClockStartMessage, midiClockMessageFilter;
+    bool receiveMidiProgramChangeMessages;
     
+    int hardwareLedMode;            // 0 - normal, 1 - MIDI CC controlled
+    int hardwareLedStatus;          // 0 - off, 1 - on
+    int hardwareLedPressureStatus;  // 0 - off, 1 - on
+    int hardwareLedClockStatus;     // 0 - off, 1 - on
+
+    String sceneName[20];
     
 };
 

@@ -32,15 +32,28 @@ PreferencesComponent::PreferencesComponent(MainComponent &ref, AlphaLiveEngine &
 {
     //AUDIO OUTPUT SETTINGS
     initAudioSettingsComponent();
-    
     //GENERAL SETTINGS COMPONENT
     generalSettingsComponent = new GeneralSettingsComponent(mainComponentRef, alphaLiveEngineRef);
-    
+    //HARDWARE PREFERENCES COMPONENT
+    hardwarePreferencesComponent = new HardwarePreferencesComponent (mainComponentRef, alphaLiveEngineRef);
     
     //create tabbed component and add tabs/child components
     addAndMakeVisible(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
-    tabbedComponent->addTab(translate("General Settings"), AlphaTheme::getInstance()->foregroundColourDarker, generalSettingsComponent, true);
-    tabbedComponent->addTab(translate("Audio Output Settings"), AlphaTheme::getInstance()->foregroundColourDarker, audioAndMidiSettingsComponent, true);
+    
+    tabbedComponent->addTab(translate("General Settings"),
+                            AlphaTheme::getInstance()->foregroundColourDarker,
+                            generalSettingsComponent,
+                            true);
+    tabbedComponent->addTab(translate("Hardware Settings"),
+                            AlphaTheme::getInstance()->foregroundColourDarker,
+                            hardwarePreferencesComponent,
+                            true);
+    //make sure the audio component is always the last tab, as this moves when the theme is changed
+    tabbedComponent->addTab(translate("Audio Output Settings"),
+                            AlphaTheme::getInstance()->foregroundColourDarker,
+                            audioAndMidiSettingsComponent,
+                            true);
+    
     
     addAndMakeVisible(closeButton = new TextButton());
     closeButton->setButtonText(translate("Close"));
@@ -106,8 +119,8 @@ void PreferencesComponent::initAudioSettingsComponent()
     }
     else
     {
-        //allow a MIDI output device to be set
-        audioAndMidiSettingsComponent = new AlphaAudioSettingsComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, false, true, true, false, alphaLiveEngineRef);
+        //allow MIDI output and input devices to be set
+        audioAndMidiSettingsComponent = new AlphaAudioSettingsComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, true, true, true, false, alphaLiveEngineRef);
     }
     #endif
     audioAndMidiSettingsComponent->addMouseListener(this, true);
@@ -167,11 +180,16 @@ void PreferencesComponent::redrawAudioSettingsComponent()
 {
     //this function is called when changing the theme to easily change the colour scheme
     
-    tabbedComponent->removeTab(1); 
+    tabbedComponent->removeTab(tabbedComponent->getNumTabs() - 1);
     
     initAudioSettingsComponent();
 
     tabbedComponent->addTab(translate("Audio Output Settings"), AlphaTheme::getInstance()->foregroundColourDarker, audioAndMidiSettingsComponent, true);
+}
+
+void PreferencesComponent::selectHardwareTab()
+{
+    tabbedComponent->setCurrentTabIndex(1);
 }
 
 
@@ -291,13 +309,28 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     
     addAndMakeVisible(interfaceThemeMenu = new ComboBox());
     interfaceThemeMenu->addItem(translate("Classic"), 1);
-    interfaceThemeMenu->addItem("Materia", 2);
     interfaceThemeMenu->addListener(this);
     interfaceThemeMenu->addMouseListener(this, true);
-    interfaceThemeMenu->setSelectedId(StoredSettings::getInstance()->interfaceTheme, true);
     
     addAndMakeVisible(interfaceThemeLabel = new Label());
     interfaceThemeLabel->setText(translate("Interface Theme:"), dontSendNotification);
+    
+    // ===== Add the Materia theme if the user has the Materia sample pack =====
+    
+    File currentAppParentDir = File::getSpecialLocation(File::currentApplicationFile).getParentDirectory();
+    
+    File materiaDir (currentAppParentDir.getFullPathName() +
+                     File::separatorString +
+                     "Library" +
+                     File::separatorString +
+                     "Audio Library" +
+                     File::separatorString +
+                     "Materia");
+    
+    if (materiaDir.exists())
+        interfaceThemeMenu->addItem("Materia", 101);
+    
+    interfaceThemeMenu->setSelectedId(StoredSettings::getInstance()->interfaceTheme, true);
     
 }
 
@@ -540,5 +573,306 @@ void GeneralSettingsComponent::updateDisplay()
     midiNoteDisplayTypeMenu->setSelectedId(StoredSettings::getInstance()->midiNoteDisplayType, true);
     deviceInterfaceMenu->setSelectedId(StoredSettings::getInstance()->deviceType, true);
     
+}
+
+
+
+
+
+
+
+
+
+
+HardwarePreferencesComponent::HardwarePreferencesComponent(MainComponent &ref, AlphaLiveEngine &ref2)
+                                                            :   mainComponentRef(ref),
+                                                                alphaLiveEngineRef(ref2)
+{
+    addAndMakeVisible(ledColourSchemeLabel = new Label());
+    ledColourSchemeLabel->setText(translate("LED Colour Scheme:"), dontSendNotification);
+    
+    addAndMakeVisible(ledColourSchemeMenu = new ComboBox());
+    ledColourSchemeMenu->addListener(this);
+    ledColourSchemeMenu->addMouseListener(this, true);
+    
+    createLedColourSchemes();
+    
+    //Set the order of the colour schemes to be displayed as follows:
+    // 1. 'Default'
+    // 2. All other schemes in alphabetically order
+    // 3. 'Custom'
+    
+    StringArray names;
+    for (int i = 0; i < ledColourScheme.size(); i++)
+        names.add(ledColourScheme[i]->name);
+    names.sort(true);
+    names.move(names.indexOf("Default"), 0);
+    names.move(names.indexOf("Custom"), names.size() - 1);
+    
+    //add all schemes to the combobox
+    for (int i = 0; i < names.size(); i++)
+    {
+        //to add new colour schemes to the application, see 'createLedColourScheme()'
+        ledColourSchemeMenu->addItem (names[i], i + 1);
+    }
+    
+    //select the matching item from what is stored in prefs
+    //We do not use the stored scheme to set the colours here.
+    //This is just displayed for continuity.
+    //The actual LED colours and button colours are set below.
+    for (int i = 0; i <= names.size(); i++)
+    {
+        if (names[i] == StoredSettings::getInstance()->hardwareLedColourScheme)
+        {
+            ledColourSchemeMenu->setSelectedId(i + 1);
+            break;
+        }
+    }
+    
+    addAndMakeVisible(ledColourLabel[0] = new Label());
+    ledColourLabel[0]->setText(translate("Minimum Pressure LED Colour:"), dontSendNotification);
+    addAndMakeVisible(ledColourLabel[1] = new Label());
+    ledColourLabel[1]->setText(translate("Mid Pressure LED Colour:"), dontSendNotification);
+    addAndMakeVisible(ledColourLabel[2] = new Label());
+    ledColourLabel[2]->setText(translate("Maximum Pressure LED Colour:"), dontSendNotification);
+    
+    Path rect;
+    rect.addRectangle(0, 0, 10, 10);
+    
+    for (int i = 0; i < 3; i++)
+    {
+        Colour colour = StoredSettings::getInstance()->hardwareLedColour[i];
+        
+        addAndMakeVisible(ledColourButton[i] = new ShapeButton("LED colour button " + String(i),
+                                                               colour,
+                                                               colour,
+                                                               colour));
+        ledColourButton[i]->setShape(rect, true, false, false);
+        ledColourButton[i]->addListener(this);
+        ledColourButton[i]->addMouseListener(this, true);
+    }
+}
+
+HardwarePreferencesComponent::~HardwarePreferencesComponent()
+{
+    ledColourScheme.clear();
+    deleteAllChildren();
+}
+
+void HardwarePreferencesComponent::resized()
+{
+    ledColourSchemeLabel->setBounds(90, 20, 150, 20);
+    ledColourSchemeMenu->setBounds(250, 20, 140, 20);
+    
+    ledColourLabel[0]->setBounds(60+30, 60+20, 200, 20);
+    ledColourButton[0]->setBounds(280+30, 60+18, 80, 25);
+    
+    ledColourLabel[1]->setBounds(60+30, 60+60, 200, 20);
+    ledColourButton[1]->setBounds(280+30, 60+58, 80, 25);
+
+    ledColourLabel[2]->setBounds(60+30, 60+100, 200, 20);
+    ledColourButton[2]->setBounds(280+30, 60+98, 80, 25);
+
+
+}
+
+void HardwarePreferencesComponent::paint (Graphics& g)
+{
+    for (int i = 0; i < 3; i++)
+    {
+        Colour colour = StoredSettings::getInstance()->hardwareLedColour[i];
+        ledColourButton[i]->setColours(colour, colour, colour);
+    }
+    
+    ledColourSchemeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    ledColourLabel[0]->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    ledColourLabel[1]->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    ledColourLabel[2]->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+}
+
+void HardwarePreferencesComponent::buttonClicked (Button* button)
+{
+    for (int i = 0; i < 3; i++)
+    {
+        if (button == ledColourButton[i])
+        {
+            ColourSelector* colourSelector = new ColourSelector(14);
+            colourSelector->setName("cs" + String (i));
+            colourSelector->setCurrentColour (StoredSettings::getInstance()->hardwareLedColour[i]);
+            colourSelector->addChangeListener(this);
+            colourSelector->setSize (300, 400);
+
+            CallOutBox::launchAsynchronously (colourSelector, button->getScreenBounds(), nullptr);
+        }
+    }
+ 
+}
+
+void HardwarePreferencesComponent::comboBoxChanged (ComboBox *comboBox)
+{
+    if (comboBox == ledColourSchemeMenu)
+    {
+        //if it does not equal custom...
+        if (comboBox->getSelectedId() != comboBox->getNumItems())
+        {
+            int schemeArrayIndex;
+            
+            //find the ledColourScheme object with the matching name
+            for (int i = 0; i < ledColourScheme.size(); i++)
+            {
+                if (ledColourScheme[i]->name == comboBox->getText())
+                {
+                    schemeArrayIndex = i;
+                    break;
+                }
+            }
+            
+            //apply the colours to the LED and the buttons
+            for (int i = 0; i < 3; i++)
+            {
+                Colour colour = ledColourScheme[schemeArrayIndex]->colour[i];
+                
+                alphaLiveEngineRef.setLedColour(i, colour);
+                StoredSettings::getInstance()->hardwareLedColour[i] = colour;
+                ledColourButton[i]->repaint();
+            }
+            
+            StoredSettings::getInstance()->hardwareLedColourScheme = ledColourScheme[schemeArrayIndex]->name;
+            StoredSettings::getInstance()->flush();
+        }
+    }
+}
+
+void HardwarePreferencesComponent::changeListenerCallback (ChangeBroadcaster *source)
+{
+    ColourSelector* cs = dynamic_cast <ColourSelector*> (source);
+    Colour colour = cs->getCurrentColour();
+    
+    for (int i = 0; i < 3; i++)
+    {
+        if (cs->getName() == "cs" + String (i))
+        {
+            alphaLiveEngineRef.setLedColour(i, colour);
+            
+            StoredSettings::getInstance()->hardwareLedColour[i] = colour;
+            
+            ledColourButton[i]->repaint();
+        }
+    }
+    
+    //Set the colour scheme menu to "Custom"
+    if (ledColourSchemeMenu->getSelectedId() != ledColourSchemeMenu->getNumItems())
+        ledColourSchemeMenu->setSelectedId(ledColourSchemeMenu->getNumItems(), true);
+}
+
+
+void HardwarePreferencesComponent::mouseEnter (const MouseEvent &e)
+{
+    if (ledColourSchemeMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("LED Colour Scheme Selector. This menu provides you with a set of colour schemes that can be applied to the AlphaSphere's LED. The LED will transition between three colours as more pressure is applied to the pads. You can also create a custom colour scheme using the three buttons below."));
+    }
+    
+    else if (ledColourButton[0]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Minimum Pressure LED Colour Selector. Click this button to display a colour picker to choose a custom colour for the LED when no pads are being pressed."));
+    }
+    else if (ledColourButton[1]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Mid Pressure LED Colour Selector. Click this button to display a colour picker to choose a custom colour for the LED when a single pad is presssed to it's full depth. To see the colour change in realtime, hold a pad at it's full depth while chosing the colour."));
+    }
+    else if (ledColourButton[2]->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Maximum Pressure LED Colour Selector. Click this button to display a colour picker to choose a custom colour for the LED when a two or more pads are pressed to their full depth. To see the colour change in realtime, hold two pads at their full depths while chosing the colour."));
+    }
+}
+
+void HardwarePreferencesComponent::mouseExit (const MouseEvent &e)
+{
+    //remove any text
+    mainComponentRef.setInfoTextBoxText (String::empty);
+}
+
+void HardwarePreferencesComponent::updateDisplay()
+{
+    //this function is called from PreferencesComponent::visibilityChanged
+}
+
+void HardwarePreferencesComponent::createLedColourSchemes()
+{
+    int currentIndex;
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Default";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0, 0, 255);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0, 255, 0);
+    ledColourScheme[currentIndex]->colour[2] = Colour(255, 0, 0);
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Custom";
+    
+    //=================================================
+    //create schemes here....
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Fire";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xffffff00);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xffff7500);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xffff0000);
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Ice";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xff0000ff);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xff00d8ff);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xff7effff);
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Christmas";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xffffffff);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xff00ff00);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xffff0000);
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Monochrome";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xff000000);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xff222222);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xffffffff);
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Water";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xff034e25);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xff0000ff);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xff00e3ff);
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Midnight";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xff240046);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xffa900ff);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xff3a00ff);
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Dub";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xff00ff00);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xffffff00);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xffff0000);
+    
+    ledColourScheme.add(new LedColourScheme());
+    currentIndex = ledColourScheme.size() - 1;
+    ledColourScheme[currentIndex]->name = "Pink Power";
+    ledColourScheme[currentIndex]->colour[0] = Colour(0xffe100ff);
+    ledColourScheme[currentIndex]->colour[1] = Colour(0xff8400ff);
+    ledColourScheme[currentIndex]->colour[2] = Colour(0xff4a00ff);
+    
+    
+    //=================================================
 }
 

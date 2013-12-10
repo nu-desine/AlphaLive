@@ -226,7 +226,8 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
         padData->setAttribute("controllerOscPortNumber", PAD_SETTINGS->getControllerOscPort());
         padData->setAttribute("controllerMidiProgramChangeNumber", PAD_SETTINGS->getControllerMidiProgramChangeNumber());
         padData->setAttribute("controllerMidiProgramChangeChannel", PAD_SETTINGS->getControllerMidiProgramChangeChannel());
-        padData->setAttribute("pressureLatchPadNumber", PAD_SETTINGS->getControllerPressureLatchPadNumber());
+        padData->setAttribute("controllerPressureLatchPadNumber", PAD_SETTINGS->getControllerPressureLatchPadNumber());
+        padData->setAttribute("controllerLedControl", PAD_SETTINGS->getControllerLedControl());
     }
     
     int modeCheck = PAD_SETTINGS->getMode();
@@ -606,8 +607,10 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
             PAD_SETTINGS->setControllerMidiProgramChangeNumber(padData->getIntAttribute("controllerMidiProgramChangeNumber"));
         if (padData->hasAttribute("controllerMidiProgramChangeChannel"))
             PAD_SETTINGS->setControllerMidiProgramChangeChannel(padData->getIntAttribute("controllerMidiProgramChangeChannel"));
-        if (padData->hasAttribute("pressureLatchPadNumber"))
-            PAD_SETTINGS->setControllerPressureLatchPadNumber(padData->getIntAttribute("pressureLatchPadNumber"));
+        if (padData->hasAttribute("controllerPressureLatchPadNumber"))
+            PAD_SETTINGS->setControllerPressureLatchPadNumber(padData->getIntAttribute("controllerPressureLatchPadNumber"));
+        if (padData->hasAttribute("controllerLedControl"))
+            PAD_SETTINGS->setControllerLedControl(padData->getIntAttribute("controllerLedControl"));
     }
     
     int modeCheck = PAD_SETTINGS->getMode();
@@ -753,11 +756,22 @@ void AppDocumentState::saveProjectSettings()
         projectData->removeAllAttributes();
     
     projectData->setAttribute("copyExternalFiles", AppSettings::Instance()->getCopyExternalFiles());
+    projectData->setAttribute("midiClockValue", AppSettings::Instance()->getMidiClockValue());
+    projectData->setAttribute("midiClockStartMessage", AppSettings::Instance()->getMidiClockStartMessage());
+    projectData->setAttribute("midiClockMessageFilter", AppSettings::Instance()->getMidiClockMessageFilter());
+    
+    projectData->setAttribute("receiveMidiProgramChangeMessages",
+                              AppSettings::Instance()->getReceiveMidiProgramChangeMessages());
     
     for (int i = 0; i < NO_OF_SCENES; i++)
     {
         projectData->setAttribute("sceneName" + String(i), AppSettings::Instance()->getSceneName(i));
-    }   
+    }
+    
+    projectData->setAttribute("hardwareLedMode", AppSettings::Instance()->getHardwareLedMode());
+    projectData->setAttribute("hardwareLedStatus", AppSettings::Instance()->getHardwareLedStatus());
+    projectData->setAttribute("hardwareLedPressureStatus", AppSettings::Instance()->getHardwareLedPressureStatus());
+    projectData->setAttribute("hardwareLedClockStatus", AppSettings::Instance()->getHardwareLedClockStatus());
     
 }
 
@@ -765,14 +779,34 @@ void AppDocumentState::loadProjectSettings()
 {
     if (projectData->hasAttribute("copyExternalFiles") == true)
         AppSettings::Instance()->setCopyExternalFiles(projectData->getIntAttribute("copyExternalFiles"));
-    else
+    else //why do I have this else statement?
         AppSettings::Instance()->setCopyExternalFiles(true); //default value
+
+    if (projectData->hasAttribute("midiClockValue") == true)
+        AppSettings::Instance()->setMidiClockValue(projectData->getIntAttribute("midiClockValue"));
+    if (projectData->hasAttribute("midiClockStartMessage") == true)
+        AppSettings::Instance()->setMidiClockStartMessage(projectData->getIntAttribute("midiClockStartMessage"));
+    if (projectData->hasAttribute("midiClockMessageFilter") == true)
+        AppSettings::Instance()->setMidiClockMessageFilter(projectData->getIntAttribute("midiClockMessageFilter"));
     
+    if (projectData->hasAttribute("receiveMidiProgramChangeMessages") == true)
+        AppSettings::Instance()->setReceiveMidiProgramChangeMessages(projectData->getBoolAttribute("receiveMidiProgramChangeMessages"));
+
     for (int i = 0; i < NO_OF_SCENES; i++)
     {
         if (projectData->hasAttribute("sceneName" + String(i)) == true)
             AppSettings::Instance()->setSceneName(i, projectData->getStringAttribute("sceneName" + String(i)));
     }
+    
+    if (projectData->hasAttribute("hardwareLedMode"))
+        AppSettings::Instance()->setHardwareLedMode(projectData->getIntAttribute("hardwareLedMode"));
+    if (projectData->hasAttribute("hardwareLedStatus"))
+        AppSettings::Instance()->setHardwareLedStatus(projectData->getIntAttribute("hardwareLedStatus"));
+    if (projectData->hasAttribute("hardwareLedPressureStatus"))
+        AppSettings::Instance()->setHardwareLedPressureStatus(projectData->getIntAttribute("hardwareLedPressureStatus"));
+    if (projectData->hasAttribute("hardwareLedClockStatus"))
+        AppSettings::Instance()->setHardwareLedClockStatus(projectData->getIntAttribute("hardwareLedClockStatus"));
+    
 }
 
 

@@ -77,6 +77,7 @@ private:
     AlphaSlider *midiProgramChangeNumberSlider, *pressureLatchPadNumberSlider;
     OwnedArray<AlphaTextButton> midiChannelButtons;
     Label *oscIpAddressEditor;
+    ComboBox *ledControlMenu;
     
     int drawButtons;
     

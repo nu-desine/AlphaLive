@@ -68,6 +68,10 @@ void StoredSettings::flush()
         props->setValue ("deviceType", deviceType);
         props->setValue ("autoCheckUpdates", autoCheckUpdates);
         props->setValue ("interfaceTheme", interfaceTheme);
+        props->setValue("hardwareLedColourScheme", hardwareLedColourScheme);
+        
+        for (int i = 0; i < 3; i++)
+            props->setValue("hardwareLedColour" + String(i), hardwareLedColour[i].toString());
     }
 
     props = nullptr;
@@ -101,7 +105,10 @@ void StoredSettings::flush()
     deviceType = props->getIntValue("deviceType");
     autoCheckUpdates = props->getIntValue("autoCheckUpdates");
     interfaceTheme = props->getIntValue("interfaceTheme");
-
+    hardwareLedColourScheme = props->getValue("hardwareLedColourScheme");
+    
+    for (int i = 0; i < 3; i++)
+        hardwareLedColour[i] = Colour::fromString (props->getValue("hardwareLedColour" + String(i)));
 }
 
 void StoredSettings::setDefaultValues()
@@ -207,6 +214,17 @@ void StoredSettings::setDefaultValues()
     
     if (interfaceTheme == 0)
         interfaceTheme = 1;
+    
+    if (hardwareLedColourScheme == String::empty)
+        hardwareLedColourScheme = "Default";
+    
+    if (hardwareLedColour[0] == Colours::transparentBlack)
+        hardwareLedColour[0] = Colour::fromRGB(0, 0, 255);
+    if (hardwareLedColour[1] == Colours::transparentBlack)
+        hardwareLedColour[1] = Colour::fromRGB(0, 255, 0);
+    if (hardwareLedColour[2] == Colours::transparentBlack)
+        hardwareLedColour[2] = Colour::fromRGB(255, 0, 0);
+
     
     flush();
 }

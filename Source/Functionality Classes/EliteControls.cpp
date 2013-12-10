@@ -333,6 +333,33 @@ void EliteControls::getInputData(int control, int value)
                     mainComponent->perform(CommandIDs::KillSwitch);
                 }
             }
+            
+            //=============== LED Controls ====================
+            
+            //LED Status
+            else if (controlType == 9)
+            {
+                if (eliteControlValue == 1)
+                    JUCEApplication::getInstance()->perform(CommandIDs::EnableLed);
+            }
+            //LED Pressure Status
+            else if (controlType == 10)
+            {
+                if (eliteControlValue == 1)
+                    JUCEApplication::getInstance()->perform(CommandIDs::EnableLedPressure);
+            }
+            //LED Clock Status
+            else if (controlType == 11)
+            {
+                if (eliteControlValue == 1)
+                    JUCEApplication::getInstance()->perform(CommandIDs::EnableLedClock);
+            }
+            //LED MIDI CC Control Status
+            else if (controlType == 12)
+            {
+                if (eliteControlValue == 1)
+                    JUCEApplication::getInstance()->perform(CommandIDs::EnableLedMidiMode);
+            }
         }
     }
     

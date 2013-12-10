@@ -65,12 +65,14 @@ StringArray MainMenuModel::getMenuBarNames()
     String edit(translate("Edit"));
     String options(translate("Options"));
     String controls(translate("Controls"));
+    String hardware(translate("Hardware"));
     String help(translate("Help"));
     
     names.add(file);
     names.add(edit);
     names.add(options);
     names.add(controls);
+    names.add(hardware);
     names.add(help);
     
     return names;
@@ -121,13 +123,28 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
     else if (topLevelMenuIndex == 2) //Options
     {
         menu.addCommandItem (commandManager, CommandIDs::DisableHelpBox);
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::SendMidiClock);
+        menu.addCommandItem(commandManager, CommandIDs::SyncToMidiClock);
+        menu.addCommandItem(commandManager, CommandIDs::MidiClockSettings);
     }
     else if (topLevelMenuIndex == 3) //Controls
     {
         menu.addCommandItem (commandManager, CommandIDs::KillSwitch);
         menu.addCommandItem (commandManager, CommandIDs::StartStopClock);
     }
-    else if (topLevelMenuIndex == 4) //Help
+    else if (topLevelMenuIndex == 4) //Hardware
+    {
+        menu.addCommandItem(commandManager, CommandIDs::EnableLedMidiMode);
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::EnableLed);
+        menu.addCommandItem (commandManager, CommandIDs::EnableLedPressure);
+        menu.addCommandItem (commandManager, CommandIDs::EnableLedClock);
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::HardwareProjectSettings);
+        menu.addCommandItem (commandManager, CommandIDs::HardwarePreferences);
+    }
+    else if (topLevelMenuIndex == 5) //Help
     {
         //menu.addCommandItem (commandManager, CommandIDs::StarterGuide);
         menu.addCommandItem (commandManager, CommandIDs::ReferenceManual);

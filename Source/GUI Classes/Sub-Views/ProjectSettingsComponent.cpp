@@ -27,6 +27,7 @@
 #include "../../Application/CommonInfoBoxText.h"
 #include "../AlphaLiveLookandFeel.h"
 #include "../../Application/CommandIDs.h"
+#include "../../Application/Common.h"
 
 
 
@@ -95,6 +96,7 @@ void ProjectSettingsComponent::visibilityChanged()
     if(isVisible())
     {
         hardwareSettingsComponent->updateDisplay();
+        generalSettingsComponent->updateDisplay();
     }
 }
 
@@ -147,9 +149,9 @@ void ProjectSettingsComponent::setTabColour()
         tabbedComponent->setTabBackgroundColour(i, AlphaTheme::getInstance()->foregroundColourDarker);
 }
 
-void ProjectSettingsComponent::selectHardwareTab()
+void ProjectSettingsComponent::selectTab (int tab)
 {
-    tabbedComponent->setCurrentTabIndex(1);
+    tabbedComponent->setCurrentTabIndex(tab);
 }
 
 
@@ -457,6 +459,9 @@ void GeneralProjSettingsComponent::comboBoxChanged (ComboBox *comboBox)
         AppSettings::Instance()->setMidiClockValue(comboBox->getSelectedId());
         
         setDisplay();
+        
+        //update the menu bar items status
+        commandManager->commandStatusChanged();
     }
     
     else if (comboBox == clockStartMessageMenu)
@@ -476,6 +481,8 @@ void GeneralProjSettingsComponent::comboBoxChanged (ComboBox *comboBox)
 
 void GeneralProjSettingsComponent::updateDisplay()
 {
+    //this function is called from ProjectSettingsComponent::visibilityChanged
+    
     //set component values...
     
     copyExternalFilesSwitch->setToggleState(AppSettings::Instance()->getCopyExternalFiles(), false);

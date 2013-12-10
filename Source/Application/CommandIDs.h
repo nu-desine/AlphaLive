@@ -62,6 +62,10 @@ namespace CommandIDs
     static const int EnableLedMidiMode      = 0x20034;
     static const int HardwareProjectSettings = 0x20035;
     
+    static const int SendMidiClock          = 0x20036;
+    static const int SyncToMidiClock        = 0x20037;
+    static const int MidiClockSettings      = 0x20038;
+    
     
 }
 

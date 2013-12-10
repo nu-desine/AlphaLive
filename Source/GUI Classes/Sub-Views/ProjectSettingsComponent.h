@@ -55,7 +55,7 @@ public:
     void updateDisplay();
     void setTabColour();
     
-    void selectHardwareTab();
+    void selectTab (int tab);
     
 private:
     MainComponent &mainComponentRef;

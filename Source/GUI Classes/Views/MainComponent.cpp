@@ -1667,7 +1667,10 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::UpdateSoftware,
         CommandIDs::CopyDataToSequencer,
         CommandIDs::HardwarePreferences,
-        CommandIDs::HardwareProjectSettings
+        CommandIDs::HardwareProjectSettings,
+        CommandIDs::SendMidiClock,
+        CommandIDs::SyncToMidiClock,
+        CommandIDs::MidiClockSettings
     };
 	
 	commands.addArray (ids, numElementsInArray (ids));
@@ -1866,8 +1869,41 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
     else if (commandID == CommandIDs::HardwareProjectSettings)
     {
         result.setInfo (translate("Hardware Project Settings..."),
-						"Opens the application hadware project settings view.",
+						"Opens the application hardware project settings view.",
 						CommandCategories::HardwareCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::SendMidiClock)
+    {
+        result.setInfo (translate("Send MIDI Clock"),
+						"Enables the application to send MIDI Clock messages when the global clock is running.",
+						CommandCategories::OptionCommands, 0);
+        
+        bool status = false;
+        if (AppSettings::Instance()->getMidiClockValue() == 2)
+            status = true;
+        
+        result.setTicked(status);
+    }
+    
+    else if (commandID == CommandIDs::SyncToMidiClock)
+    {
+        result.setInfo (translate("Sync to External MIDI Clock"),
+						"Enables the application's clock to sync to an external MIDI clock.",
+						CommandCategories::OptionCommands, 0);
+        
+        bool status = false;
+        if (AppSettings::Instance()->getMidiClockValue() == 3)
+            status = true;
+        
+        result.setTicked(status);
+    }
+    
+    else if (commandID == CommandIDs::MidiClockSettings)
+    {
+        result.setInfo (translate("MIDI Clock Settings..."),
+						"Opens the application MIDI clock project settings view.",
+						CommandCategories::OptionCommands, 0);
     }
 }
 
@@ -2121,7 +2157,62 @@ bool MainComponent::perform (const InvocationInfo& info)
         projectSettingsComponent->toFront(true);
         infoTextBox->toFront(false);
         
-        projectSettingsComponent->selectHardwareTab();
+        projectSettingsComponent->selectTab(1);
+		projectSettingsComponent->setVisible(true);
+        projectSettingsComponent->grabKeyboardFocus();
+        
+        return true;
+	}
+    
+    else if (info.commandID == CommandIDs::SendMidiClock)
+    {
+        uint8 status;
+        
+        if (AppSettings::Instance()->getMidiClockValue() == 2)
+        {
+            //turn off MIDI clock
+            status = 1;
+        }
+        else
+        {
+            //turn on sending
+            status = 2;
+        }
+        
+        AppSettings::Instance()->setMidiClockValue(status);
+        
+        return true;
+    }
+    
+    else if (info.commandID == CommandIDs::SyncToMidiClock)
+    {
+        uint8 status;
+        
+        if (AppSettings::Instance()->getMidiClockValue() == 3)
+        {
+            //turn off MIDI clock
+            status = 1;
+        }
+        else
+        {
+            //turn on syncing
+            status = 3;
+        }
+        
+        AppSettings::Instance()->setMidiClockValue(status);
+
+        return true;
+    }
+    
+    else if(info.commandID == CommandIDs::MidiClockSettings)
+	{
+		aboutComponent->setVisible(false);
+        preferencesComponent->setVisible(false);
+        
+        projectSettingsComponent->toFront(true);
+        infoTextBox->toFront(false);
+        
+        projectSettingsComponent->selectTab(0);
 		projectSettingsComponent->setVisible(true);
         projectSettingsComponent->grabKeyboardFocus();
         

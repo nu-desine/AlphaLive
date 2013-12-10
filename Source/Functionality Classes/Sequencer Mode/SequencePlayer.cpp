@@ -523,7 +523,9 @@ void SequencePlayer::startSequence()
     currentTime = Time::getMillisecondCounterHiRes();
     columnNumber = 0; //counter variable
     
+    sharedMemoryMidiClock.enter();
     midiClockMessageCounter = 6;
+    sharedMemoryMidiClock.exit();
     
     if (mode == 2)
     {
@@ -584,11 +586,15 @@ void SequencePlayer::processSequence()
     //when synced to MIDI clock messages
     else
     {
+        sharedMemoryMidiClock.enter();
+        
         if (midiClockMessageCounter >= 6)
         {
             processSeq = true;
             midiClockMessageCounter = 0;
         }
+        
+        sharedMemoryMidiClock.exit();
     }
     
     
@@ -1592,7 +1598,9 @@ double SequencePlayer::getTimeInterval()
 
 void SequencePlayer::setMidiClockMessageTimestamp()
 {
+    sharedMemoryMidiClock.enter();
     midiClockMessageCounter++;
+    sharedMemoryMidiClock.exit();
 }
 
 void SequencePlayer::setCurrentlySyncedToMidiClockMessages (bool value)

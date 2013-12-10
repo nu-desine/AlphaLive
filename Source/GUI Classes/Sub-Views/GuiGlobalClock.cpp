@@ -334,7 +334,7 @@ void GuiGlobalClock::mouseEnter (const MouseEvent &e)
     
     else if (transportButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText (translate("Clock Start/Stop. This button is used to manually start and stop the global clock."));
+        mainComponentRef.setInfoTextBoxText (translate("Clock Start/Stop. This button is used to manually start and stop the global clock. Please note that this button will be disabled if the current project is set to sync with an external MIDI clock - here the global clock can only controlled with the external clock."));
     }
     
      else if (autoStartSwitch->isMouseOver(true))

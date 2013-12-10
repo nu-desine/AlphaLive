@@ -155,6 +155,7 @@ public:
     void mouseExit (const MouseEvent &e);
     
     void updateDisplay();
+    void setDisplay();
     
 private:
     MainComponent &mainComponentRef;

@@ -412,21 +412,7 @@ void GeneralProjSettingsComponent::comboBoxChanged (ComboBox *comboBox)
     {
         AppSettings::Instance()->setMidiClockValue(comboBox->getSelectedId());
         
-        clockStartMessageLabel->setVisible(false);
-        clockStartMessageMenu->setVisible(false);
-        midiClockMessageFilterLabel->setVisible(false);
-        midiClockMessageFilterMenu->setVisible(false);
-        
-        if (comboBox->getSelectedId() == 2) //send MIDI Clock
-        {
-            clockStartMessageMenu->setVisible(true);
-            clockStartMessageLabel->setVisible(true);
-        }
-        else if (comboBox->getSelectedId() == 3) //receive MIDI Clock
-        {
-            midiClockMessageFilterLabel->setVisible(true);
-            midiClockMessageFilterMenu->setVisible(true);
-        }
+        setDisplay();
     }
     
     else if (comboBox == clockStartMessageMenu)
@@ -446,17 +432,48 @@ void GeneralProjSettingsComponent::comboBoxChanged (ComboBox *comboBox)
 
 void GeneralProjSettingsComponent::updateDisplay()
 {
+    //set component values...
+    
     copyExternalFilesSwitch->setToggleState(AppSettings::Instance()->getCopyExternalFiles(), false);
     if(copyExternalFilesSwitch->getToggleStateValue() == true)
         copyExternalFilesSwitch->setButtonText(translate("On"));
     else
         copyExternalFilesSwitch->setButtonText(translate("Off"));
-    
+
     midiClockMenu->setSelectedId(AppSettings::Instance()->getMidiClockValue(), true);
     clockStartMessageMenu->setSelectedId(AppSettings::Instance()->getMidiClockStartMessage(), true);
     midiClockMessageFilterMenu->setSelectedId(AppSettings::Instance()->getMidiClockMessageFilter(), true);
-    receiveMidiProgramChangeMessagesMenu->setSelectedId(AppSettings::Instance()->getReceiveMidiProgramChangeMessages()+1,
-                                                        true);
+    
+    receiveMidiProgramChangeMessagesMenu->setSelectedId(AppSettings::Instance()->getReceiveMidiProgramChangeMessages() + 1, true);
+    
+    setDisplay();
+
+}
+
+void GeneralProjSettingsComponent::setDisplay()
+{
+    //set component visibility...
+    
+    clockStartMessageLabel->setVisible(false);
+    clockStartMessageMenu->setVisible(false);
+    midiClockMessageFilterLabel->setVisible(false);
+    midiClockMessageFilterMenu->setVisible(false);
+    
+    int midiClockValue = midiClockMenu->getSelectedId();
+    
+    switch (midiClockValue)
+    {
+        case 2:
+            clockStartMessageLabel->setVisible(true);
+            clockStartMessageMenu->setVisible(true);
+            break;
+        case 3:
+            midiClockMessageFilterLabel->setVisible(true);
+            midiClockMessageFilterMenu->setVisible(true);
+            break;
+        default:
+            break;
+    }
 }
 
 void GeneralProjSettingsComponent::mouseEnter (const MouseEvent &e)

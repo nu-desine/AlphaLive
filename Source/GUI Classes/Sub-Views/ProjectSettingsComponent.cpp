@@ -712,19 +712,19 @@ void HardwareSettingsComponent::mouseEnter (const MouseEvent &e)
 {
     if (ledModeButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Use this button to enable LED MIDI CC Control Mode. This mode allows the LED to be controlled using external MIDI Control Change messages, set to Channel 16, being sent to the AlphaSphere. Use CC 21 to control the red value, CC 22 to control the green value, and CC 23 to control the blue value, where a value of '0' is 'off' and '127' is 'full brightness'. You can also enable this mode externally using CC 20 - a value of '0' disables the mode while anything else enables it. Please note that this mode disables pressure and clock LED control."));
+        mainComponentRef.setInfoTextBoxText(translate("Use this button to enable LED MIDI CC Control Mode for the current project. This mode allows the LED to be controlled using external MIDI Control Change messages, set to Channel 16, being sent to the AlphaSphere. Use CC 21 to control the red value, CC 22 to control the green value, and CC 23 to control the blue value, where a value of '0' is 'off' and '127' is 'full brightness'. You can also enable this mode externally using CC 20 - a value of '0' disables the mode while anything else enables it. Please note that this mode disables pressure and clock LED control."));
     }
     else if (ledStatusButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Use this button to enable/disable the LED. When this is disabled it will disable pressure and clock LED control."));
+        mainComponentRef.setInfoTextBoxText(translate("Use this button to enable/disable the LED for the current project. When this is disabled it will disable pressure and clock LED control."));
     }
     else if (ledPressureStatusButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Use this button to enable/disable the LED pressure interaction. When this is disabled the LED will stay at a static colour."));
+        mainComponentRef.setInfoTextBoxText(translate("Use this button to enable/disable the LED pressure interaction for the current project. When this is disabled the LED will stay at a static colour."));
     }
     else if (ledClockStatusButton->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Use this button to enable/disable the LED clock interaction. When this is enabled you can use either the AlphaLive clock or an external MIDI clock to animate the LED with synchronised fade-outs. Please not that the LED can only sync to a single clock source at any time."));
+        mainComponentRef.setInfoTextBoxText(translate("Use this button to enable/disable the LED clock interaction for the current project. When this is enabled you can use either the AlphaLive clock or an external MIDI clock to animate the LED with synchronised fade-outs. Please not that the LED can only sync to a single clock source at any time."));
     }
 }
 

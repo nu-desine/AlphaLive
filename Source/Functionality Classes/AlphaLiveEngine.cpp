@@ -59,6 +59,10 @@ AlphaLiveEngine::AlphaLiveEngine()
     panLeft = panLeftPrev = PanControl::leftChanPan_(AppSettings::Instance()->getGlobalPan());
     panRight = panRightPrev = PanControl::rightChanPan_(AppSettings::Instance()->getGlobalPan());
     
+    midiClockValue = AppSettings::Instance()->getMidiClockValue();
+    midiClockMessageFilter = AppSettings::Instance()->getMidiClockMessageFilter();
+    receiveMidiProgramChanngeMessages = AppSettings::Instance()->getReceiveMidiProgramChangeMessages();
+    
     recievedPad = 0;
     recievedValue = 0;
     recievedVelocity = 110;
@@ -100,30 +104,43 @@ AlphaLiveEngine::AlphaLiveEngine()
     delete audioSettingsXml;
     
     
-    //SET UP MIDI OUTPUT if not connected to the HID device
+    //SET UP MIDI OUTPUT AND INPUT if not connected to the HID device
     if (getDeviceStatus() == 0)
     {
         #if JUCE_MAC || JUCE_LINUX
         //==========================================================================
-        //Create new virtual MIDI device
+        //Create a virtual MIDI output device
         midiOutputDevice = MidiOutput::createNewDevice("AlphaLive");
         
         if(midiOutputDevice)
             midiOutputDevice->startBackgroundThread();
         else
-            std::cout << "Failed to create a virtual MIDI device!" << std::endl;
+            std::cout << "Failed to create a virtual MIDI output device!" << std::endl;
+        
+        //Create a virtual MIDI input device
+        midiInputDevice = MidiInput::createNewDevice("AlphaLive", this);
+        
+        if (midiInputDevice)
+            midiInputDevice->start();
+        else
+            std::cout << "Failed to create a virtual MIDI input device!" << std::endl;
         
         //==========================================================================
         #endif //JUCE_MAC || JUCE_LINUX
         
         #if JUCE_WINDOWS
         //==========================================================================
-        //connect to a MIDI device
+        //connect to a MIDI output and input device's
         midiOutputDevice = NULL;
+        midiInputDevice = NULL;
+        
         #endif //JUCE_WINDOWS
     }
     else
+    {
         midiOutputDevice = NULL;
+        midiInputDevice = NULL;
+    }
 
     modeMidi = new ModeMidi (*this);
     modeSampler = new ModeSampler (*this);
@@ -189,6 +206,12 @@ AlphaLiveEngine::~AlphaLiveEngine()
     {
         midiOutputDevice->stopBackgroundThread();
         delete midiOutputDevice;
+    }
+    
+    if (midiInputDevice)
+    {
+        midiInputDevice->stop();
+        delete midiInputDevice;
     }
     
     audioDeviceManager.removeAudioCallback (this);//unregister the audio callback
@@ -457,6 +480,39 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
     //===============================================================================================
 }
 
+void AlphaLiveEngine::processMidiInput (const MidiMessage midiMessage)
+{
+    //==== MIDI Clock stuff ====
+    if ((midiMessage.isMidiStart() || midiMessage.isMidiContinue()) && midiClockValue == 3)
+    {
+        globalClock->startClock();
+    }
+    else if (midiMessage.isMidiStop() && midiClockValue == 3)
+    {
+        globalClock->stopClock();
+    }
+    else if (midiMessage.isMidiClock() && midiClockValue == 3)
+    {
+        if (midiClockMessageFilter == 1)
+        {
+            if (globalClock->isThreadRunning())
+                globalClock->setMidiClockMessageTimestamp();
+        }
+    }
+    
+    //==== MIDI Program Change stuff (to change scenes) ====
+    
+    /*else*/ if (midiMessage.isProgramChange() && receiveMidiProgramChanngeMessages == true)
+    {
+        int programNumber = midiMessage.getProgramChangeNumber();
+        
+        if (programNumber >= 0 && programNumber < NO_OF_SCENES)
+        {
+            mainComponent->getSceneComponent()->selectSlot(programNumber);
+        }
+    }
+}
+
 void AlphaLiveEngine::handleExclusiveMode (int padNum)
 {
 
@@ -681,6 +737,19 @@ void AlphaLiveEngine::setOscPortNumber (int value)
     oscPortNumber = value;
 }
 
+void AlphaLiveEngine::setMidiClockValue (int value)
+{
+    midiClockValue = value;
+}
+void AlphaLiveEngine::setMidiClockMessageFilter (int value)
+{
+    midiClockMessageFilter = value;
+}
+void AlphaLiveEngine::setReceiveMidiProgramChangeMessages(bool value)
+{
+    receiveMidiProgramChanngeMessages = value;
+}
+
 
 
 //==============================================================================
@@ -735,6 +804,11 @@ void AlphaLiveEngine::audioDeviceAboutToStart (AudioIODevice* device)
 void AlphaLiveEngine::audioDeviceStopped()
 {
 	audioPlayer.audioDeviceStopped();
+}
+
+void AlphaLiveEngine::handleIncomingMidiMessage(MidiInput* midiInput, const MidiMessage& midiMessage)
+{
+    processMidiInput(midiMessage);
 }
 
 void AlphaLiveEngine::setDeviceType (int type)
@@ -830,10 +904,10 @@ void AlphaLiveEngine::removeMidiOut()
 {
     sharedMemoryMidi.enter();
     
-    std::cout << "removing midi output stuff" << std::endl;
+    std::cout << "removing midi input/output stuff" << std::endl;
     
-    //if currently connected to a midiOutputDevice (either the virtual port on mac/linux
-    //or a hardware port on Windows) delete/dissconnected it.
+    //if currently connected to midiOutputDevice and midiInputDevice (either the virtual ports on mac/linux
+    //or a hardware ports on Windows) delete/dissconnected them.
     if (midiOutputDevice)
     {
         midiOutputDevice->stopBackgroundThread();
@@ -842,8 +916,16 @@ void AlphaLiveEngine::removeMidiOut()
         midiOutputDevice = NULL;
     }
     
+    if (midiInputDevice)
+    {
+        midiInputDevice->stop();
+        delete midiInputDevice;
+        
+        midiInputDevice = NULL;
+    }
+    
     #if JUCE_WINDOWS
-    //remove MIDI output selector from the preferences view
+    //remove MIDI output and input selectors from the preferences view
     if (mainComponent != NULL)
     {
         const MessageManagerLock mmLock;

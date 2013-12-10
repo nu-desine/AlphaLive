@@ -42,7 +42,8 @@ ProjectSettingsComponent::ProjectSettingsComponent(MainComponent &ref, AlphaLive
     
     //create tabbed component and add tabs/child components
     addAndMakeVisible(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
-    tabbedComponent->addTab(translate("General Settings"),
+
+    tabbedComponent->addTab(translate("Software Settings"),
                             AlphaTheme::getInstance()->foregroundColourDarker,
                             generalSettingsComponent,
                             true);
@@ -297,6 +298,8 @@ GeneralProjSettingsComponent::GeneralProjSettingsComponent(MainComponent &ref, A
                                                 :   mainComponentRef(ref),
                                                     appDocumentStateRef(ref2)
 {
+    addAndMakeVisible(generalGroupComponent = new GroupComponent("general group",
+                                                                 translate("General")));
     addAndMakeVisible(copyExternalFilesSwitch = new TextButton());
     copyExternalFilesSwitch->setClickingTogglesState(true);
     copyExternalFilesSwitch->setToggleState(AppSettings::Instance()->getCopyExternalFiles(), false);
@@ -307,9 +310,53 @@ GeneralProjSettingsComponent::GeneralProjSettingsComponent(MainComponent &ref, A
     
     copyExternalFilesSwitch->addListener(this);
     copyExternalFilesSwitch->addMouseListener(this, true);
-    
+
     addAndMakeVisible(copyExternalFilesLabel = new Label());
     copyExternalFilesLabel->setText(translate("Copy External Files:"), dontSendNotification);
+    
+    addAndMakeVisible(midiGroupComponent = new GroupComponent("midi group",
+                                                                 translate("MIDI")));
+    
+    addAndMakeVisible(midiClockMenu = new ComboBox());
+    midiClockMenu->addItem(translate("Off"), 1);
+    midiClockMenu->addItem(translate("Send MIDI Clock"), 2);
+    midiClockMenu->addItem(translate("Sync to External MIDI Clock"), 3);
+    midiClockMenu->addListener(this);
+    midiClockMenu->addMouseListener(this, true);
+    midiClockMenu->setSelectedId(AppSettings::Instance()->getMidiClockValue());
+    
+    addAndMakeVisible(midiClockLabel = new Label());
+    midiClockLabel->setText(translate("MIDI Clock:"), dontSendNotification);
+    
+    addChildComponent(clockStartMessageMenu = new ComboBox());
+    clockStartMessageMenu->addItem(translate("Send MIDI Clock Start Message"), 1);
+    clockStartMessageMenu->addItem(translate("Send MIDI Clock Continue Message"), 2);
+    clockStartMessageMenu->addListener(this);
+    clockStartMessageMenu->addMouseListener(this, true);
+    clockStartMessageMenu->setSelectedId(AppSettings::Instance()->getMidiClockStartMessage());
+    
+    addChildComponent(clockStartMessageLabel = new Label());
+    clockStartMessageLabel->setText(translate("On Clock Start:"), dontSendNotification);
+    
+    addChildComponent(midiClockMessageFilterMenu = new ComboBox());
+    midiClockMessageFilterMenu->addItem(translate("Use All Clock Messages"), 1);
+    midiClockMessageFilterMenu->addItem(translate("Use only Start/Stop Messages"), 2);
+    midiClockMessageFilterMenu->addListener(this);
+    midiClockMessageFilterMenu->addMouseListener(this, true);
+    midiClockMessageFilterMenu->setSelectedId(AppSettings::Instance()->getMidiClockMessageFilter());
+    
+    addChildComponent(midiClockMessageFilterLabel = new Label());
+    midiClockMessageFilterLabel->setText(translate("Message Filter:"), dontSendNotification);
+    
+    addAndMakeVisible(receiveMidiProgramChangeMessagesMenu = new ComboBox());
+    receiveMidiProgramChangeMessagesMenu->addItem(translate("Off"), 1);
+    receiveMidiProgramChangeMessagesMenu->addItem(translate("On"), 2);
+    receiveMidiProgramChangeMessagesMenu->addListener(this);
+    receiveMidiProgramChangeMessagesMenu->addMouseListener(this, true);
+    receiveMidiProgramChangeMessagesMenu->setSelectedId(AppSettings::Instance()->getReceiveMidiProgramChangeMessages());
+    
+    addAndMakeVisible(receiveMidiProgramChangeMessagesLabel = new Label());
+    receiveMidiProgramChangeMessagesLabel->setText(translate("Receive Program Change Messages:"), dontSendNotification);
     
 }
 
@@ -320,14 +367,39 @@ GeneralProjSettingsComponent::~GeneralProjSettingsComponent()
 
 void GeneralProjSettingsComponent::resized()
 {
-    copyExternalFilesLabel->setBounds(160, 10, 120, 20);
-    copyExternalFilesSwitch->setBounds(290, 8, 40, 25);
+    generalGroupComponent->setBounds(20, 20, getWidth() - 40, 80);
+    
+    copyExternalFilesLabel->setBounds(160, 50, 120, 20);
+    copyExternalFilesSwitch->setBounds(290, 48, 40, 25);
+    
+    midiGroupComponent->setBounds(20, 110, getWidth() - 40, 140);
+    
+    midiClockMenu->setBounds(200, 140, 210, 20);
+    midiClockLabel->setBounds(60, 140, 120, 20);
+    
+    clockStartMessageMenu->setBounds(200, 170, 210, 20);
+    clockStartMessageLabel->setBounds(60, 170, 120, 20);
+    
+    midiClockMessageFilterMenu->setBounds(200, 170, 210, 20);
+    midiClockMessageFilterLabel->setBounds(60, 170, 120, 20);
+    
+    receiveMidiProgramChangeMessagesMenu->setBounds(290, 200, 120, 20);
+    receiveMidiProgramChangeMessagesLabel->setBounds(60, 200, 210, 20);
     
 }
 
 void GeneralProjSettingsComponent::paint (Graphics& g)
 {
     copyExternalFilesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    midiClockLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    clockStartMessageLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    midiClockMessageFilterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    receiveMidiProgramChangeMessagesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    
+    generalGroupComponent->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    generalGroupComponent->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    midiGroupComponent->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    midiGroupComponent->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter);
 }
 
 void GeneralProjSettingsComponent::sliderValueChanged (Slider* slider)
@@ -378,13 +450,74 @@ void GeneralProjSettingsComponent::buttonClicked (Button* button)
     
 }
 
+void GeneralProjSettingsComponent::comboBoxChanged (ComboBox *comboBox)
+{
+    if (comboBox == midiClockMenu)
+    {
+        AppSettings::Instance()->setMidiClockValue(comboBox->getSelectedId());
+        
+        setDisplay();
+    }
+    
+    else if (comboBox == clockStartMessageMenu)
+    {
+        AppSettings::Instance()->setMidiClockStartMessage(comboBox->getSelectedId());
+    }
+    
+    else if (comboBox == midiClockMessageFilterMenu)
+    {
+        AppSettings::Instance()->setMidiClockMessageFilter(comboBox->getSelectedId());
+    }
+    else if (comboBox == receiveMidiProgramChangeMessagesMenu)
+    {
+        AppSettings::Instance()->setReceiveMidiProgramChangeMessages(comboBox->getSelectedId()-1);
+    }
+}
+
 void GeneralProjSettingsComponent::updateDisplay()
 {
+    //set component values...
+    
     copyExternalFilesSwitch->setToggleState(AppSettings::Instance()->getCopyExternalFiles(), false);
     if(copyExternalFilesSwitch->getToggleStateValue() == true)
         copyExternalFilesSwitch->setButtonText(translate("On"));
     else
         copyExternalFilesSwitch->setButtonText(translate("Off"));
+
+    midiClockMenu->setSelectedId(AppSettings::Instance()->getMidiClockValue(), true);
+    clockStartMessageMenu->setSelectedId(AppSettings::Instance()->getMidiClockStartMessage(), true);
+    midiClockMessageFilterMenu->setSelectedId(AppSettings::Instance()->getMidiClockMessageFilter(), true);
+    
+    receiveMidiProgramChangeMessagesMenu->setSelectedId(AppSettings::Instance()->getReceiveMidiProgramChangeMessages() + 1, true);
+    
+    setDisplay();
+
+}
+
+void GeneralProjSettingsComponent::setDisplay()
+{
+    //set component visibility...
+    
+    clockStartMessageLabel->setVisible(false);
+    clockStartMessageMenu->setVisible(false);
+    midiClockMessageFilterLabel->setVisible(false);
+    midiClockMessageFilterMenu->setVisible(false);
+    
+    int midiClockValue = midiClockMenu->getSelectedId();
+    
+    switch (midiClockValue)
+    {
+        case 2:
+            clockStartMessageLabel->setVisible(true);
+            clockStartMessageMenu->setVisible(true);
+            break;
+        case 3:
+            midiClockMessageFilterLabel->setVisible(true);
+            midiClockMessageFilterMenu->setVisible(true);
+            break;
+        default:
+            break;
+    }
 }
 
 void GeneralProjSettingsComponent::mouseEnter (const MouseEvent &e)
@@ -392,6 +525,22 @@ void GeneralProjSettingsComponent::mouseEnter (const MouseEvent &e)
     if (copyExternalFilesSwitch->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Copy External Audio Files Options. By default when an external audio file is added to an AlphaLive project it is copied into the projects directory. Use this button to turn this option off. Be aware that with this set to off the project will not be able to link to any external audio files if moved onto another computer."));
+    }
+    else if (midiClockMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("MIDI Clock Mode Selector. Sets and displays the MIDI Clock functionality of the current AlphaLive project. AlphaLive can both send and receive MIDI Clock messages in order to synchronize this application with other MIDI applications and devices. Note that when set to sync with an external MIDI Clock, AlphaLive's global clock cannot be controlled directly via AlphaLive."));
+    }
+    else if (clockStartMessageMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Sets and displays what type of MIDI Clock message is sent when AlphaLive's clock is started. A Clock Start message will start the sequence of the external MIDI software/device from the beginning, whereas a Clock Continue message will continue the sequence from its current position."));
+    }
+    else if (midiClockMessageFilterMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Sets and displays what type of MIDI Clock messages are received and used by AlphaLive. By default any external clock that AlphaLive is syced to will start and stop AlphaLive's clock as well as keep it in sync and adjust its tempo. However if the option to only use Start/Stop messages is selected the external clock will only start and stop AlphaLive's clock."));
+    }
+    else if (receiveMidiProgramChangeMessagesMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("AlphaLive is able to receive MIDI Program Change Messages from external MIDI devices/software to trigger scene switching within AlphaLive. Send a Program Change message on any MIDI channel with a Program Change number in the range of 1 - 20 (or 0 - 19 if given 127 available programs instead of 128) to change to the corresponding scene number. Use this menu to disable this feature for the current project."));
     }
 
 }

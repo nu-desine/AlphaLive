@@ -52,6 +52,8 @@ public:
     void stopClock();
     void processClock();
     
+    void setMidiClockMessageTimestamp();
+    
     //AudioSource Functions
 	void prepareToPlay (int samplesPerBlockExpected,double sampleRate);
 	void releaseResources();
@@ -61,6 +63,11 @@ public:
     void setBeatsPerBar (int value);
     void setQuantizationValue (int value);
     void setMetronomeStatus (bool value);
+    
+    void setMidiClockValue (int value);
+    void setMidiClockStartMessage (int value);
+    void setMidiClockMessageFilter (int value);
+    
     
     int getBeatNumber();
     int getBarNumber();
@@ -82,6 +89,8 @@ private:
     int quantizationValue;
     bool metronomeStatus;
     
+    int midiClockValue, midiClockStartMessage, midiClockMessageFilter;
+    
     //audio related
     MixerAudioSource audioMixer;
 	AudioTransportSource tickFileSource, tockFileSource;
@@ -90,6 +99,14 @@ private:
     
     ActionBroadcaster broadcaster;
     MainComponent *mainComponent;
+    
+    bool midiClockOutIsRunning, midiClockInIsRunning;
+    double midiClockTimeInterval, midiClockCurrentTime;
+    double prevMidiClockMessageTimestamp;
+    Array <double> midiClockTempos;
+    int midiClockMessageCounter;
+    
+    CriticalSection sharedMemory;
 };
 
 #endif //H_GLOBALCLOCK

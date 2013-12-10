@@ -756,6 +756,12 @@ void AppDocumentState::saveProjectSettings()
         projectData->removeAllAttributes();
     
     projectData->setAttribute("copyExternalFiles", AppSettings::Instance()->getCopyExternalFiles());
+    projectData->setAttribute("midiClockValue", AppSettings::Instance()->getMidiClockValue());
+    projectData->setAttribute("midiClockStartMessage", AppSettings::Instance()->getMidiClockStartMessage());
+    projectData->setAttribute("midiClockMessageFilter", AppSettings::Instance()->getMidiClockMessageFilter());
+    
+    projectData->setAttribute("receiveMidiProgramChangeMessages",
+                              AppSettings::Instance()->getReceiveMidiProgramChangeMessages());
     
     for (int i = 0; i < NO_OF_SCENES; i++)
     {
@@ -773,9 +779,19 @@ void AppDocumentState::loadProjectSettings()
 {
     if (projectData->hasAttribute("copyExternalFiles") == true)
         AppSettings::Instance()->setCopyExternalFiles(projectData->getIntAttribute("copyExternalFiles"));
-    else
+    else //why do I have this else statement?
         AppSettings::Instance()->setCopyExternalFiles(true); //default value
+
+    if (projectData->hasAttribute("midiClockValue") == true)
+        AppSettings::Instance()->setMidiClockValue(projectData->getIntAttribute("midiClockValue"));
+    if (projectData->hasAttribute("midiClockStartMessage") == true)
+        AppSettings::Instance()->setMidiClockStartMessage(projectData->getIntAttribute("midiClockStartMessage"));
+    if (projectData->hasAttribute("midiClockMessageFilter") == true)
+        AppSettings::Instance()->setMidiClockMessageFilter(projectData->getIntAttribute("midiClockMessageFilter"));
     
+    if (projectData->hasAttribute("receiveMidiProgramChangeMessages") == true)
+        AppSettings::Instance()->setReceiveMidiProgramChangeMessages(projectData->getBoolAttribute("receiveMidiProgramChangeMessages"));
+
     for (int i = 0; i < NO_OF_SCENES; i++)
     {
         if (projectData->hasAttribute("sceneName" + String(i)) == true)
@@ -790,6 +806,7 @@ void AppDocumentState::loadProjectSettings()
         AppSettings::Instance()->setHardwareLedPressureStatus(projectData->getIntAttribute("hardwareLedPressureStatus"));
     if (projectData->hasAttribute("hardwareLedClockStatus"))
         AppSettings::Instance()->setHardwareLedClockStatus(projectData->getIntAttribute("hardwareLedClockStatus"));
+    
 }
 
 

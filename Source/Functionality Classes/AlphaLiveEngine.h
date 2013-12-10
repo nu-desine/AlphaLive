@@ -38,7 +38,8 @@ class MainComponent;
 
 class AlphaLiveEngine :     public AudioIODeviceCallback, //so this class handles the audio output
                             public HidComms,
-                            public ActionListener
+                            public ActionListener,
+                            public MidiInputCallback
 
 {
 public:
@@ -46,6 +47,7 @@ public:
     ~AlphaLiveEngine();
     
     void hidInputCallback (int pad, int value, int velocity);
+    void processMidiInput (const MidiMessage midiMessage);
     void setDeviceType (int type); //1 - AlphaSphere, 2 - AlphaSphere elite
     void removeMidiOut();
     void updateFirmware();
@@ -79,6 +81,7 @@ public:
                                 int totalNumOutputChannels,
                                 int numSamples);
     
+    void handleIncomingMidiMessage(MidiInput* midiInput, const MidiMessage& midiMessage);
     
     void sendMidiMessage (MidiMessage midiMessage);
     void setMidiOutputDevice (int deviceIndex);
@@ -113,6 +116,10 @@ public:
     Array<int> getPreviouslyUsedMidiChannels();
     
     void latchPressureValue (int padNum, bool shouldLatch, bool setPressureInstantaneously = false);
+
+    void setMidiClockValue (int value);
+    void setMidiClockMessageFilter (int value);
+    void setReceiveMidiProgramChangeMessages (bool value);
         
 private:
     
@@ -126,8 +133,9 @@ private:
     float recievedValue;
     float recievedVelocity;
     
-    //midi output device
-    MidiOutput *midiOutputDevice; //is this actually needed?
+    //midi output and input devices
+    MidiOutput *midiOutputDevice;
+    MidiInput *midiInputDevice;
     
     //audio related
 	AudioDeviceManager audioDeviceManager;	// this wraps the actual audio device
@@ -189,7 +197,10 @@ private:
                                             // - waiting to latch
                                             // - waiting to unlatch
     Array <int> padPressureStatusQueue;
-    
+
+    int midiClockValue, midiClockMessageFilter;
+    bool receiveMidiProgramChanngeMessages;
+
 };
 
 #endif // H_ALPHALIVEENGINE

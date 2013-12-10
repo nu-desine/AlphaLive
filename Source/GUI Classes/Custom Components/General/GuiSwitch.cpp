@@ -8,13 +8,13 @@
  */
 
 #include "GuiSwitch.h"
-#include "../../Binary Data/BinaryDataNew.h"
+#include "../../Binary Data/MainBinaryData.h"
 #include "../../AlphaLiveLookandFeel.h"
 
 GuiSwitch::GuiSwitch()
 {
 	setClickingTogglesState(true);
-	theImage = ImageCache::getFromMemory(BinaryDataNew::onoff_png, BinaryDataNew::onoff_pngSize);
+	theImage = ImageCache::getFromMemory(MainBinaryData::onoff_png, MainBinaryData::onoff_pngSize);
 }
 
 GuiSwitch::~GuiSwitch()

@@ -142,7 +142,8 @@ class MainComponent;
 
 class GeneralProjSettingsComponent :    public Component,
                                         public Button::Listener,
-                                        public Slider::Listener
+                                        public Slider::Listener,
+                                        public ComboBox::Listener
 {
 public:
     GeneralProjSettingsComponent(MainComponent &ref, AppDocumentState &ref2);
@@ -153,19 +154,28 @@ public:
     
     void sliderValueChanged (Slider* slider);
     void buttonClicked (Button* button);
+    void comboBoxChanged (ComboBox *comboBox);
     
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);
     
     void updateDisplay();
+    void setDisplay();
     
 private:
     MainComponent &mainComponentRef;
     AppDocumentState &appDocumentStateRef;
     //AlphaLiveEngine &alphaLiveEngineRef;
     
+    GroupComponent *generalGroupComponent, *midiGroupComponent;
+    
     TextButton *copyExternalFilesSwitch;
     Label *copyExternalFilesLabel;
+    
+    ComboBox *midiClockMenu, *clockStartMessageMenu, *midiClockMessageFilterMenu;
+    Label *midiClockLabel, *clockStartMessageLabel, *midiClockMessageFilterLabel;
+    ComboBox *receiveMidiProgramChangeMessagesMenu;
+    Label *receiveMidiProgramChangeMessagesLabel;
     
 };
 

@@ -57,6 +57,11 @@ AppSettings::AppSettings()
         sceneName[i] = "Scene " + String(i+1);
     
     copyExternalFiles = true;
+    midiClockValue = 1;
+    midiClockStartMessage = 1;
+    midiClockMessageFilter = 1;
+    
+    receiveMidiProgramChangeMessages = true;
     
     hardwareLedMode = 0;
     hardwareLedStatus = 1;
@@ -144,7 +149,14 @@ void AppSettings::resetData()
     setBeatsPerBar(4);
     setAutoStartClock(0);
     
-    //elite controls settings
+    setCopyExternalFiles(true);
+    setMidiClockValue(1);
+    setMidiClockStartMessage(1);
+    setMidiClockMessageFilter(1);
+    
+    setReceiveMidiProgramChangeMessages(true);
+    
+    //elite controls stuff
     eliteDial[0].control = 1;
     eliteDial[1].control = 2;
     eliteButton[0].control = 1;
@@ -292,6 +304,41 @@ void AppSettings::setCopyExternalFiles (bool value)
 {
     copyExternalFiles = value;
 }
+void AppSettings::setMidiClockValue (int value)
+{
+    midiClockValue = value;
+    alphaLiveEngineRef->getGlobalClock()->setMidiClockValue(value);
+    alphaLiveEngineRef->setMidiClockValue(value);
+    
+    for (int i = 0; i < 48; i++)
+    {
+        if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(i) != nullptr)
+            alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(i)->setMidiClockValue(value);
+    }
+}
+void AppSettings::setMidiClockStartMessage (int value)
+{
+    midiClockStartMessage = value;
+    alphaLiveEngineRef->getGlobalClock()->setMidiClockStartMessage(value);
+}
+void AppSettings::setMidiClockMessageFilter (int value)
+{
+    midiClockMessageFilter = value;
+    alphaLiveEngineRef->getGlobalClock()->setMidiClockMessageFilter(value);
+    alphaLiveEngineRef->setMidiClockMessageFilter(value);
+    
+    for (int i = 0; i < 48; i++)
+    {
+        if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(i) != nullptr)
+            alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(i)->setMidiClockMessageFilter(value);
+    }
+}
+
+void AppSettings::setReceiveMidiProgramChangeMessages(bool value)
+{
+    receiveMidiProgramChangeMessages = value;
+    alphaLiveEngineRef->setReceiveMidiProgramChangeMessages(value);
+}
 
 void AppSettings::setSceneName(int sceneNumber, String value)
 {
@@ -376,6 +423,23 @@ bool AppSettings::getMetronomeStatus()
 bool AppSettings::getCopyExternalFiles()
 {
     return copyExternalFiles;
+}
+int AppSettings::getMidiClockValue()
+{
+    return midiClockValue;
+}
+int AppSettings::getMidiClockStartMessage()
+{
+    return midiClockStartMessage;
+}
+int AppSettings::getMidiClockMessageFilter()
+{
+    return midiClockMessageFilter;
+}
+
+bool AppSettings::getReceiveMidiProgramChangeMessages()
+{
+    return receiveMidiProgramChangeMessages;
 }
 
 String AppSettings::getSceneName (int sceneNumber)

@@ -82,6 +82,11 @@ SequencePlayer::SequencePlayer(int padNumber_, ModeSequencer &ref, TimeSliceThre
     triggerModeData.playingStatus = 0;
     triggerModeData.moveToNextSeq = false;
     
+    midiClockValue = AppSettings::Instance()->getMidiClockValue();
+    midiClockMessageFilter = AppSettings::Instance()->getMidiClockMessageFilter();
+    midiClockMessageCounter = 0;
+    currentlySyncedToMidiClockMessages = false;
+    
     //=====================================
     
     sequenceNumber = 0;
@@ -518,6 +523,10 @@ void SequencePlayer::startSequence()
     currentTime = Time::getMillisecondCounterHiRes();
     columnNumber = 0; //counter variable
     
+    sharedMemoryMidiClock.enter();
+    midiClockMessageCounter = 6;
+    sharedMemoryMidiClock.exit();
+    
     if (mode == 2)
     {
         //set the state of certain effects
@@ -562,7 +571,34 @@ void SequencePlayer::processSequence()
     //called in between calling sendActionMessage and the actual action being carried out, which is not what
     //we want.
     
-    if (Time::getMillisecondCounterHiRes() >= currentTime && sequenceFlaggedToStop == false)
+    //detmine whether the sequence needs to be processed at this point in time depending
+    //on current time and/or MIDI Clock status
+    bool processSeq = false;
+    
+    //When not syncing to an external MIDI clock messages
+    if (!currentlySyncedToMidiClockMessages)
+    {
+        if (Time::getMillisecondCounterHiRes() >= currentTime && sequenceFlaggedToStop == false)
+        {
+            processSeq = true;
+        }
+    }
+    //when synced to MIDI clock messages
+    else
+    {
+        sharedMemoryMidiClock.enter();
+        
+        if (midiClockMessageCounter >= 6)
+        {
+            processSeq = true;
+            midiClockMessageCounter = 0;
+        }
+        
+        sharedMemoryMidiClock.exit();
+    }
+    
+    
+    if (processSeq)
     {
         if (columnNumber >= sequenceLength || sequenceNumber >= numberOfSequences)
         {
@@ -1558,6 +1594,28 @@ void SequencePlayer::setSamplesPolyphony (int value)
 double SequencePlayer::getTimeInterval()
 {
     return timeInterval;
+}
+
+void SequencePlayer::setMidiClockMessageTimestamp()
+{
+    sharedMemoryMidiClock.enter();
+    midiClockMessageCounter++;
+    sharedMemoryMidiClock.exit();
+}
+
+void SequencePlayer::setCurrentlySyncedToMidiClockMessages (bool value)
+{
+    currentlySyncedToMidiClockMessages = value;
+}
+
+void SequencePlayer::setMidiClockValue (int value)
+{
+    midiClockValue = value;
+}
+
+void SequencePlayer::setMidiClockMessageFilter (int value)
+{
+    midiClockMessageFilter = value;
 }
 
 

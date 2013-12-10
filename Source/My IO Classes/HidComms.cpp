@@ -266,6 +266,96 @@ void HidComms::run()
                         }
                     }
                     
+                    //===================================================================================
+                    //===================================================================================
+                    /*
+                     Processing any incoming MIDI messages.
+                     The firmware can send up to 6 messages in a HID report.
+                     buf[100] is equal to the number of containing messages,
+                     and then the following groups of 3 bytes are the individual
+                     messages.
+                     */
+                    
+                    if (buf[100] > 0)
+                    {
+                        //get number of MIDI messages within report
+                        int noOfMessages = buf[100];
+                        
+                        //retrieve each MIDI message from the report
+                        for (int i = 0; i < noOfMessages; i++)
+                        {
+                            //get the first byte index of the message
+                            int messageIndex  = (i * 3) + 101;
+                            
+                            int message[3];
+                            message[0] = buf[messageIndex];
+                            message[1] = buf[messageIndex + 1];
+                            message[2] = buf[messageIndex + 2];
+                            
+                            if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 1)
+                            {
+                                MidiMessage midiMessage (message[0]);
+                                
+                                //send the MIDI message to AlphaLiveEngine
+                                processMidiInput(midiMessage);
+                            }
+                            else if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 2)
+                            {
+                                MidiMessage midiMessage (message[0], message[1]);
+                                
+                                //send the MIDI message to AlphaLiveEngine
+                                processMidiInput(midiMessage);
+                            }
+                            else if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 3)
+                            {
+                                MidiMessage midiMessage (message[0], message[1], message[2]);
+                                
+                                //send the MIDI message to AlphaLiveEngine
+                                processMidiInput(midiMessage);
+                            }
+                            
+                        }
+                        
+                    }
+                    
+//                        //process any incoming midi messages
+//                        //if the byte 100 is < 128 or > 255 it is not a correct MIDI message which
+//                        //will cause an asseration failure when creating the MidiMessage object below.
+//                        //Though this will probably need to be changed if we start using MIDI SysEx at all.
+//                        
+//                        if (buf[100] > 127 && buf[100] <= 255)
+//                        {
+//                            int message[3];
+//                            message[0] = buf[100];
+//                            message[1] = buf[101];
+//                            message[2] = buf[102];
+//                            
+//                            std::cout << "MIDI message: " << message[0] << " " << message[1] << " " << message[2] << std::endl;
+//                            
+//                            //determine the message length, and init the relevent MidiMessage
+//                            if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 1)
+//                            {
+//                                MidiMessage midiMessage (buf[100]);
+//                            
+//                                //send the MIDI message to AlphaLiveEngine
+//                                processMidiInput(midiMessage);
+//                            }
+//                            else if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 2)
+//                            {
+//                                MidiMessage midiMessage (buf[100], buf[101]);
+//                                
+//                                //send the MIDI message to AlphaLiveEngine
+//                                processMidiInput(midiMessage);
+//                            }
+//                            else if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 3)
+//                            {
+//                                MidiMessage midiMessage (buf[100], buf[101], buf[102]);
+//                                
+//                                //send the MIDI message to AlphaLiveEngine
+//                                processMidiInput(midiMessage);
+//                            }
+//                        }
+                
                     
                     // ==== write output report ====
                     

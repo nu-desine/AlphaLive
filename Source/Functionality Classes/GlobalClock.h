@@ -98,7 +98,7 @@ private:
     ActionBroadcaster broadcaster;
     MainComponent *mainComponent;
     
-    bool midiClockOutIsRunning;
+    bool midiClockOutIsRunning, midiClockInIsRunning;
     double midiClockTimeInterval, midiClockCurrentTime;
     double prevMidiClockMessageTimestamp;
     Array <double> midiClockTempos;

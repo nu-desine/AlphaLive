@@ -109,6 +109,12 @@ public:
     void setRelativeTempoMode (int value);
     double getTimeInterval();
     
+    void setMidiClockValue (int value);
+    void setMidiClockMessageFilter (int value);
+    
+    void setMidiClockMessageTimestamp();
+    void setCurrentlySyncedToMidiClockMessages (bool value);
+    
     //called when previewing sequence
     void setSequenceNumber (int value);
     
@@ -130,7 +136,6 @@ public:
     Tremolo& getTremolo();
 	Distortion& getDistortion();
 	Bitcrusher& getBitcrusher();
-
     
 private:
     int padNumber;
@@ -194,6 +199,8 @@ private:
     int midiPressureMode;
     bool midiPressureStatus;
     
+    int midiClockValue, midiClockMessageFilter;
+    
     float gain, gainPrev, panLeft, panLeftPrev, panRight, panRightPrev;
     int effect;
     
@@ -203,6 +210,9 @@ private:
     
     double timeInterval;
     bool sequenceIsRunning, sequenceFlaggedToStop;
+    
+    int midiClockMessageCounter;
+    bool currentlySyncedToMidiClockMessages; //true when actively receiving MIDI clock messages
 };
 
 

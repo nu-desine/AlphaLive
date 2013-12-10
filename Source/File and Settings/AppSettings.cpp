@@ -295,6 +295,12 @@ void AppSettings::setMidiClockValue (int value)
     midiClockValue = value;
     alphaLiveEngineRef->getGlobalClock()->setMidiClockValue(value);
     alphaLiveEngineRef->setMidiClockValue(value);
+    
+    for (int i = 0; i < 48; i++)
+    {
+        if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(i) != nullptr)
+            alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(i)->setMidiClockValue(value);
+    }
 }
 void AppSettings::setMidiClockStartMessage (int value)
 {
@@ -306,6 +312,12 @@ void AppSettings::setMidiClockMessageFilter (int value)
     midiClockMessageFilter = value;
     alphaLiveEngineRef->getGlobalClock()->setMidiClockMessageFilter(value);
     alphaLiveEngineRef->setMidiClockMessageFilter(value);
+    
+    for (int i = 0; i < 48; i++)
+    {
+        if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(i) != nullptr)
+            alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(i)->setMidiClockMessageFilter(value);
+    }
 }
 
 void AppSettings::setReceiveMidiProgramChangeMessages(bool value)

@@ -41,7 +41,7 @@ GlobalClock::GlobalClock(AlphaLiveEngine &ref)
     midiClockStartMessage = AppSettings::Instance()->getMidiClockStartMessage();
     midiClockMessageFilter = AppSettings::Instance()->getMidiClockMessageFilter();
     
-    midiClockOutIsRunning = false;
+    midiClockOutIsRunning = midiClockInIsRunning = false;
     
     for (int i = 0; i < 6; i++)
         midiClockTempos.insert(i, 0);
@@ -152,8 +152,8 @@ void GlobalClock::startClock()
     midiClockMessageCounter = 6; //so that 'processClock()' will be called instantly
     prevMidiClockMessageTimestamp = Time::getMillisecondCounterHiRes();
     
-    //MIDI Clock stuff
-    if (midiClockValue == 2) //send MIDI Clock
+    //Iif sending MIDI Clock
+    if (midiClockValue == 2)
     {
         if (midiClockStartMessage == 1) //'Start' message
         {
@@ -167,6 +167,22 @@ void GlobalClock::startClock()
         }
         
         midiClockOutIsRunning = true;
+    }
+    
+    //else if syncing to external MIDI Clock
+    else if (midiClockValue == 3)
+    {
+        midiClockInIsRunning = true;
+        
+        //if receiving all clock messages
+        if (midiClockMessageFilter == 1)
+        {
+            for (int i = 0; i < 48; i++)
+            {
+                if (alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(i) != nullptr)
+                    alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(i)->setCurrentlySyncedToMidiClockMessages(true);
+            }
+        }
     }
     
     //start the thread
@@ -340,13 +356,25 @@ void GlobalClock::stopClock()
     
     stopThread(100);
     
-    //MIDI Clock stuff
+    //if sending MIDI Clock
     if (midiClockOutIsRunning)
     {
         MidiMessage message = MidiMessage::midiStop();
         alphaLiveEngineRef.sendMidiMessage(message);
         
         midiClockOutIsRunning = false;
+    }
+    
+    //if syncing to external MIDI Clock
+    if (midiClockInIsRunning)
+    {
+        for (int i = 0; i < 48; i++)
+        {
+            if (alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(i) != nullptr)
+                alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(i)->setCurrentlySyncedToMidiClockMessages(false);
+        }
+        
+        midiClockInIsRunning = false;
     }
     
     broadcaster.sendActionMessage("UPDATE TRANSPORT BUTTON TO OFF");
@@ -364,6 +392,12 @@ void GlobalClock::setMidiClockMessageTimestamp()
     midiClockTempos.set(midiClockMessageCounter, 2500 / (Time::getMillisecondCounterHiRes() - prevMidiClockMessageTimestamp));
     prevMidiClockMessageTimestamp = Time::getMillisecondCounterHiRes();
     midiClockMessageCounter++;
+    
+    for (int i = 0; i < 48; i++)
+    {
+        if (alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(i) != nullptr)
+            alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(i)->setMidiClockMessageTimestamp();
+    }
     
     if (midiClockMessageCounter >= 6)
     {

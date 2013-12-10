@@ -502,13 +502,32 @@ void AlphaLiveEngine::processMidiInput (const MidiMessage midiMessage)
     
     //==== MIDI Program Change stuff (to change scenes) ====
     
-    /*else*/ if (midiMessage.isProgramChange() && receiveMidiProgramChanngeMessages == true)
+    else if (midiMessage.isProgramChange() && receiveMidiProgramChanngeMessages == true)
     {
         int programNumber = midiMessage.getProgramChangeNumber();
         
         if (programNumber >= 0 && programNumber < NO_OF_SCENES)
         {
             mainComponent->getSceneComponent()->selectSlot(programNumber);
+        }
+    }
+    
+    //==== MIDI LED Control Mode Status message ====
+    else if (midiMessage.isControllerOfType(20) && midiMessage.getChannel() == 16)
+    {
+        if (midiMessage.getControllerValue() > 0 && AppSettings::Instance()->getHardwareLedMode() == 0)
+        {
+            AppSettings::Instance()->setHardwareLedMode(1);
+            
+            //update the menu bar items status
+            commandManager->commandStatusChanged();
+        }
+        else if (midiMessage.getControllerValue() == 0 && AppSettings::Instance()->getHardwareLedMode() == 1)
+        {
+            AppSettings::Instance()->setHardwareLedMode(0);
+            
+            //update the menu bar items status if this was called not from the menu bar
+            commandManager->commandStatusChanged();
         }
     }
 }

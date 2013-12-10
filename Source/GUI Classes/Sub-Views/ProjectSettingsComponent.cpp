@@ -40,7 +40,7 @@ ProjectSettingsComponent::ProjectSettingsComponent(MainComponent &ref, AlphaLive
     
     //create tabbed component and add tabs/child components
     addAndMakeVisible(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
-    tabbedComponent->addTab(translate("General Settings"), AlphaTheme::getInstance()->foregroundColourDarker, generalSettingsComponent, true);
+    tabbedComponent->addTab(translate("Software Settings"), AlphaTheme::getInstance()->foregroundColourDarker, generalSettingsComponent, true);
     //temporarily hide global osc feature/settings
     //tabbedComponent->addTab(translate("Global OSC Settings"), AlphaTheme::getInstance()->foregroundColourDarker, globalOscComponent, true);
     
@@ -272,6 +272,8 @@ GeneralProjSettingsComponent::GeneralProjSettingsComponent(MainComponent &ref, A
                                                 :   mainComponentRef(ref),
                                                     appDocumentStateRef(ref2)
 {
+    addAndMakeVisible(generalGroupComponent = new GroupComponent("general group",
+                                                                 translate("General")));
     addAndMakeVisible(copyExternalFilesSwitch = new TextButton());
     copyExternalFilesSwitch->setClickingTogglesState(true);
     copyExternalFilesSwitch->setToggleState(AppSettings::Instance()->getCopyExternalFiles(), false);
@@ -282,9 +284,12 @@ GeneralProjSettingsComponent::GeneralProjSettingsComponent(MainComponent &ref, A
     
     copyExternalFilesSwitch->addListener(this);
     copyExternalFilesSwitch->addMouseListener(this, true);
-    
+
     addAndMakeVisible(copyExternalFilesLabel = new Label());
     copyExternalFilesLabel->setText(translate("Copy External Files:"), dontSendNotification);
+    
+    addAndMakeVisible(midiGroupComponent = new GroupComponent("midi group",
+                                                                 translate("MIDI")));
     
     addAndMakeVisible(midiClockMenu = new ComboBox());
     midiClockMenu->addItem(translate("Off"), 1);
@@ -336,26 +341,39 @@ GeneralProjSettingsComponent::~GeneralProjSettingsComponent()
 
 void GeneralProjSettingsComponent::resized()
 {
-    copyExternalFilesLabel->setBounds(160, 10, 120, 20);
-    copyExternalFilesSwitch->setBounds(290, 8, 40, 25);
+    generalGroupComponent->setBounds(20, 20, getWidth() - 40, 80);
     
-    midiClockMenu->setBounds(200, 50, 210, 20);
-    midiClockLabel->setBounds(60, 50, 120, 20);
+    copyExternalFilesLabel->setBounds(160, 50, 120, 20);
+    copyExternalFilesSwitch->setBounds(290, 48, 40, 25);
     
-    clockStartMessageMenu->setBounds(200, 80, 210, 20);
-    clockStartMessageLabel->setBounds(60, 80, 120, 20);
+    midiGroupComponent->setBounds(20, 110, getWidth() - 40, 140);
     
-    midiClockMessageFilterMenu->setBounds(200, 80, 210, 20);
-    midiClockMessageFilterLabel->setBounds(60, 80, 120, 20);
+    midiClockMenu->setBounds(200, 140, 210, 20);
+    midiClockLabel->setBounds(60, 140, 120, 20);
     
-    receiveMidiProgramChangeMessagesMenu->setBounds(290, 110, 120, 20);
-    receiveMidiProgramChangeMessagesLabel->setBounds(60, 110, 210, 20);
+    clockStartMessageMenu->setBounds(200, 170, 210, 20);
+    clockStartMessageLabel->setBounds(60, 170, 120, 20);
+    
+    midiClockMessageFilterMenu->setBounds(200, 170, 210, 20);
+    midiClockMessageFilterLabel->setBounds(60, 170, 120, 20);
+    
+    receiveMidiProgramChangeMessagesMenu->setBounds(290, 200, 120, 20);
+    receiveMidiProgramChangeMessagesLabel->setBounds(60, 200, 210, 20);
     
 }
 
 void GeneralProjSettingsComponent::paint (Graphics& g)
 {
     copyExternalFilesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    midiClockLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    clockStartMessageLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    midiClockMessageFilterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    receiveMidiProgramChangeMessagesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    
+    generalGroupComponent->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    generalGroupComponent->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    midiGroupComponent->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    midiGroupComponent->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter);
 }
 
 void GeneralProjSettingsComponent::sliderValueChanged (Slider* slider)

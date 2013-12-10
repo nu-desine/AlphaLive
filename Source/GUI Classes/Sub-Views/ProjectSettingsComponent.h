@@ -162,6 +162,8 @@ private:
     AppDocumentState &appDocumentStateRef;
     //AlphaLiveEngine &alphaLiveEngineRef;
     
+    GroupComponent *generalGroupComponent, *midiGroupComponent;
+    
     TextButton *copyExternalFilesSwitch;
     Label *copyExternalFilesLabel;
     

@@ -304,7 +304,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             HyperlinkButton::textColourId,              0xcc1111ee,
             
-            GroupComponent::outlineColourId,            0x66000000,
+            GroupComponent::outlineColourId,            AlphaTheme::getInstance()->textColour_,
             GroupComponent::textColourId,               AlphaTheme::getInstance()->textColour_,
             
             DirectoryContentsDisplayComponent::highlightColourId,   AlphaTheme::getInstance()->mainColour_, // <-- used for fileList and fileTree item's
@@ -448,7 +448,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             HyperlinkButton::textColourId,              0xcc1111ee,
             
-            GroupComponent::outlineColourId,            0x66000000,
+            GroupComponent::outlineColourId,            AlphaTheme::getInstance()->textColour_,
             GroupComponent::textColourId,               AlphaTheme::getInstance()->textColour_,
             
             DirectoryContentsDisplayComponent::highlightColourId,   AlphaTheme::getInstance()->mainColour_, // <-- used for fileList and fileTree item's

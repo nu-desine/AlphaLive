@@ -1670,7 +1670,11 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::HardwareProjectSettings,
         CommandIDs::SendMidiClock,
         CommandIDs::SyncToMidiClock,
-        CommandIDs::MidiClockSettings
+        CommandIDs::MidiClockSettings,
+        CommandIDs::WebsiteHomeLink,
+        CommandIDs::WebsiteTutorialsLink,
+        CommandIDs::WebsiteSupportLink,
+        CommandIDs::WebsiteForumLink
     };
 	
 	commands.addArray (ids, numElementsInArray (ids));
@@ -1904,6 +1908,34 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
         result.setInfo (translate("MIDI Clock Settings..."),
 						"Opens the application MIDI clock project settings view.",
 						CommandCategories::OptionCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::WebsiteHomeLink)
+    {
+        result.setInfo (translate("Visit alphasphere.com..."),
+						"Opens the AlphaSphere website homepage in an internet browser.",
+						CommandCategories::OtherCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::WebsiteTutorialsLink)
+    {
+        result.setInfo (translate("Tutorials..."),
+						"Opens the AlphaSphere website tutorial page in an internet browser.",
+						CommandCategories::OtherCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::WebsiteSupportLink)
+    {
+        result.setInfo (translate("Troubleshooting/Support..."),
+						"Opens the AlphaSphere website troubleshooting/support page in an internet browser.",
+						CommandCategories::OtherCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::WebsiteForumLink)
+    {
+        result.setInfo (translate("User Forums..."),
+						"Opens the AlphaSphere website forums page in an internet browser.",
+						CommandCategories::OtherCommands, 0);
     }
 }
 
@@ -2218,6 +2250,34 @@ bool MainComponent::perform (const InvocationInfo& info)
         
         return true;
 	}
+    
+    else if (info.commandID == CommandIDs::WebsiteHomeLink)
+    {
+        URL url ("http://www.alphasphere.com/");
+        url.launchInDefaultBrowser();
+        return true;
+    }
+    
+    else if (info.commandID == CommandIDs::WebsiteTutorialsLink)
+    {
+        URL url ("http://www.alphasphere.com/tutorials/");
+        url.launchInDefaultBrowser();
+        return true;
+    }
+    
+    else if (info.commandID == CommandIDs::WebsiteSupportLink)
+    {
+        URL url ("http://www.alphasphere.com/support/");
+        url.launchInDefaultBrowser();
+        return true;
+    }
+    
+    else if (info.commandID == CommandIDs::WebsiteForumLink)
+    {
+        URL url ("http://forums.alphasphere.com");
+        url.launchInDefaultBrowser();
+        return true;
+    }
     
 	return false;
 }

@@ -148,7 +148,11 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
     {
         //menu.addCommandItem (commandManager, CommandIDs::StarterGuide);
         menu.addCommandItem (commandManager, CommandIDs::ReferenceManual);
-        
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::WebsiteHomeLink);
+        menu.addCommandItem(commandManager, CommandIDs::WebsiteTutorialsLink);
+        menu.addCommandItem(commandManager, CommandIDs::WebsiteSupportLink);
+        menu.addCommandItem(commandManager, CommandIDs::WebsiteForumLink);
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::UpdateSoftware);
         

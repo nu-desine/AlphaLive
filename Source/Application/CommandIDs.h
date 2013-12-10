@@ -66,6 +66,10 @@ namespace CommandIDs
     static const int SyncToMidiClock        = 0x20037;
     static const int MidiClockSettings      = 0x20038;
     
+    static const int WebsiteHomeLink        = 0x20040;
+    static const int WebsiteTutorialsLink   = 0x20041;
+    static const int WebsiteSupportLink     = 0x20042;
+    static const int WebsiteForumLink       = 0x20043;
     
 }
 

@@ -1389,6 +1389,16 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen, bool askT
         }
         //else, shouldSave == 2 (don't save)
         
+        
+        //============= reset all settings =================
+        //(to reset newer controls/settings that wouldn't be changed if opening an old project)
+        
+        AppSettings::Instance()->resetData();
+        AppSettings::Instance()->resetProjectSettingsData();
+        
+        for (int i = 0; i <= 47; i++)
+            PAD_SETTINGS->resetData(0);
+        
         // ========================== 'LOAD PROJECT' CODE ==================================
         
         //navigate to app directory

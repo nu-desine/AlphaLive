@@ -398,10 +398,10 @@ void GeneralProjSettingsComponent::paint (Graphics& g)
     midiClockMessageFilterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     receiveMidiProgramChangeMessagesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     
-    generalGroupComponent->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    generalGroupComponent->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    midiGroupComponent->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    midiGroupComponent->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    generalGroupComponent->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
+    generalGroupComponent->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
+    midiGroupComponent->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
+    midiGroupComponent->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
 }
 
 void GeneralProjSettingsComponent::sliderValueChanged (Slider* slider)

@@ -72,9 +72,9 @@ PreferencesComponent::~PreferencesComponent()
 
 void PreferencesComponent::resized()
 {
-    tabbedComponent->setBounds(getWidth()/4, getHeight()/6, getWidth()/2, ((getHeight()/6)*4)-70);
+    tabbedComponent->setBounds(getWidth()/4, getHeight()/10, getWidth()/2, ((getHeight()/10)*8)-70);
     
-    closeButton->setBounds((getWidth()/2)-20, ((getHeight()/6)*5)-68, 40, 35);
+    closeButton->setBounds((getWidth()/2)-20, ((getHeight()/10)*9)-68, 40, 35);
 }
 
 void PreferencesComponent::paint (Graphics& g)
@@ -83,7 +83,7 @@ void PreferencesComponent::paint (Graphics& g)
     g.fillRect(0, 0, getWidth(), getHeight());
     
     g.setColour(AlphaTheme::getInstance()->childBackgroundColourLighter.withAlpha(1.0f));
-    g.fillRoundedRectangle(getWidth()/4, getHeight()/6, getWidth()/2, ((getHeight()/6)*4)-30, 10);
+    g.fillRoundedRectangle(getWidth()/4, getHeight()/10, getWidth()/2, ((getHeight()/10)*8)-30, 10);
     
 }
 
@@ -212,6 +212,10 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     //To add a non-standard character to a label, combobox, etc..
     // you must wrap the string like this - CharPointer_UTF8 ("日本の").
     
+    addAndMakeVisible(fileGroup = new GroupComponent("file group", translate("File")));
+    addAndMakeVisible(displayGroup = new GroupComponent("display group", translate("Display")));
+    addAndMakeVisible(audioMidiGroup = new GroupComponent("audio/midi group", translate("Audio/MIDI")));
+    
     addAndMakeVisible(deviceInterfaceMenu = new ComboBox());
     deviceInterfaceMenu->addItem(translate("AlphaSphere"), 1);
     deviceInterfaceMenu->addItem(translate("AlphaSphere elite"), 2);
@@ -332,6 +336,24 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     
     interfaceThemeMenu->setSelectedId(StoredSettings::getInstance()->interfaceTheme, true);
     
+    addAndMakeVisible(padContentDisplayLabel = new Label());
+    padContentDisplayLabel->setText(translate("Pad Content Display:"), dontSendNotification);
+    
+    addAndMakeVisible(padContentDisplayMenu = new ComboBox());
+    padContentDisplayMenu->addItem(translate("Pad numbers only"), 1);
+    padContentDisplayMenu->addItem(translate("All pad contents"), 2);
+    padContentDisplayMenu->addListener(this);
+    padContentDisplayMenu->addMouseListener(this, true);
+    
+    addAndMakeVisible(midiChannelPressureModeLabel = new Label());
+    midiChannelPressureModeLabel->setText(translate("MIDI Channel Pressure Mode:"), dontSendNotification);
+    
+    addAndMakeVisible(midiChannelPressureModeMenu = new ComboBox());
+    midiChannelPressureModeMenu->addItem(translate("All pads have control"), 1);
+    midiChannelPressureModeMenu->addItem(translate("Newest pad has control only"), 2);
+    midiChannelPressureModeMenu->addListener(this);
+    midiChannelPressureModeMenu->addMouseListener(this, true);
+    
 }
 
 GeneralSettingsComponent::~GeneralSettingsComponent()
@@ -343,33 +365,50 @@ GeneralSettingsComponent::~GeneralSettingsComponent()
 
 void GeneralSettingsComponent::resized()
 {
-    deviceInterfaceMenu->setBounds(200, 10, 210, 20);
-    deviceInterfaceLabel->setBounds(60, 10, 120, 20);
     
-    appProjectDirChooser->setBounds(200, 50, 210, 20);
-    directoryLabel->setBounds(60, 50, 120, 20);
+    fileGroup->setBounds(20, 10, getWidth() - 40, 180);
     
-    midiNoteDisplayTypeMenu->setBounds(200, 90, 210, 20);
-    midiNoteDisplayTypeLabel->setBounds(60, 90, 120, 20);
+    appProjectDirChooser->setBounds(200, 30, 210, 20);
+    directoryLabel->setBounds(60, 30, 120, 20);
     
-    launchTaskMenu->setBounds(200, 130, 210, 20);
-    launchTaskLabel->setBounds(60, 130, 120, 20);
+    launchTaskMenu->setBounds(200, 60, 210, 20);
+    launchTaskLabel->setBounds(60, 60, 120, 20);
     
-    killOnClockStopButton->setBounds(280, 168, 40, 25);
-    killOnClockStopLabel->setBounds(60, 170, 200, 20);
+    cleanOnCloseButton->setBounds(280, 88, 40, 25);
+    cleanOnCloseLabel->setBounds(60, 90, 200, 20);
     
-    cleanOnCloseButton->setBounds(280, 208, 40, 25);
-    cleanOnCloseLabel->setBounds(60, 210, 200, 20);
+    autoSaveScenesButton->setBounds(280, 118, 40, 25);
+    autoSaveScenesLabel->setBounds(60, 120, 200, 20);
     
-    autoSaveScenesButton->setBounds(280, 248, 40, 25);
-    autoSaveScenesLabel->setBounds(60, 250, 200, 20);
+    autoCheckUpdatesButton->setBounds(280, 148, 40, 25);
+    autoCheckUpdatesLabel->setBounds(60, 150, 200, 20);
     
-    autoCheckUpdatesButton->setBounds(280, 288, 40, 25);
-    autoCheckUpdatesLabel->setBounds(60, 290, 200, 20);
     
-    interfaceThemeMenu->setBounds(200, 328, 210, 20);
-    interfaceThemeLabel->setBounds(60, 328, 120, 20);
-}
+    displayGroup->setBounds(20, 200, getWidth() - 40, 150);
+    
+    interfaceThemeMenu->setBounds(200, 220, 210, 20);
+    interfaceThemeLabel->setBounds(60, 220, 120, 20);
+
+    deviceInterfaceMenu->setBounds(200, 250, 210, 20);
+    deviceInterfaceLabel->setBounds(60, 250, 120, 20);
+    
+    midiNoteDisplayTypeMenu->setBounds(200, 280, 210, 20);
+    midiNoteDisplayTypeLabel->setBounds(60, 280, 120, 20);
+    
+    padContentDisplayMenu->setBounds(240, 310, 170, 20);
+    padContentDisplayLabel->setBounds(60, 310, 160, 20);
+    
+    
+    audioMidiGroup->setBounds(20, 360, getWidth() - 40, 90);
+    
+    midiChannelPressureModeMenu->setBounds(270, 380, 140, 20);
+    midiChannelPressureModeLabel->setBounds(60, 380, 190, 20);
+    
+    killOnClockStopButton->setBounds(280, 410, 40, 25);
+    killOnClockStopLabel->setBounds(60, 410, 200, 20);
+    
+    
+    }
 
 void GeneralSettingsComponent::paint (Graphics& g)
 {
@@ -382,6 +421,17 @@ void GeneralSettingsComponent::paint (Graphics& g)
     autoSaveScenesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     autoCheckUpdatesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     interfaceThemeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    padContentDisplayMenu->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    padContentDisplayLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    midiChannelPressureModeMenu->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    midiChannelPressureModeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+    
+    fileGroup->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
+    fileGroup->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
+    displayGroup->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
+    displayGroup->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
+    audioMidiGroup->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
+    audioMidiGroup->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
 }
 
 void GeneralSettingsComponent::buttonClicked (Button* button)

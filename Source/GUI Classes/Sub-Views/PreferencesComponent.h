@@ -118,6 +118,12 @@ private:
     TextButton *autoCheckUpdatesButton;
     ComboBox *deviceInterfaceMenu;
     ComboBox *interfaceThemeMenu;
+    Label *padContentDisplayLabel;
+    ComboBox *padContentDisplayMenu;
+    Label *midiChannelPressureModeLabel;
+    ComboBox *midiChannelPressureModeMenu;
+    
+    GroupComponent *fileGroup, *displayGroup, *audioMidiGroup;
 
 };
 

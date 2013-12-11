@@ -25,6 +25,7 @@
 #include "ModeSampler.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
+#define START_RAMP_LENGTH 100.0
 
 
 AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSliceThread* audioTransportSourceThread_)
@@ -81,8 +82,8 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     
     attackSamples = attackTime * sampleRate_;
     releaseSamples = releaseTime * sampleRate_;
-    isInAttack = isInRelease = false;
-    attackPosition = releasePosition = 0;
+    isInAttack = isInRelease = isInStartRamp = false;
+    attackPosition = releasePosition = startRampPosition = 0;
     attRelGainL = attRelGainR = prevGainL = prevGainR = 0;
     velocityGain = 1.0;
     velocity = 127;
@@ -460,6 +461,11 @@ void AudioFilePlayer::playAudioFile()
         attackPosition = 0;
         isInAttack = true;
     }
+    else
+    {
+        startRampPosition = 0;
+        isInStartRamp = true;
+    }
     
     if (nextFileSourceIndex >= polyphony)
         nextFileSourceIndex = 0;
@@ -583,7 +589,8 @@ void AudioFilePlayer::stopAudioFile (bool shouldStopInstantly)
         broadcaster.sendActionMessage("OFF");
     }
     
-      isInAttack = false;
+    isInAttack = false;
+    isInStartRamp = false;
     
 }
 
@@ -683,6 +690,8 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
     sharedMemory.exit();
     
     
+    
+    
     if (isInAttack == true || isInRelease == true)
     {
         //====== set attack and release =======
@@ -778,6 +787,49 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
         }
         
         sharedMemory.exit();
+    }
+    
+    else if (isInStartRamp)
+    {
+        //==== apply very short gain ramp from zero to prevent potential click at sample start ====
+        
+        sharedMemory.enter();
+        
+        //get first pair of sample data from audio buffer
+        float *pOutL = bufferToFill.buffer->getSampleData (0, bufferToFill.startSample);
+        float *pOutR = bufferToFill.buffer->getSampleData (1, bufferToFill.startSample);
+        
+        //increment through each pair of samples (left channel and right channel) in the current block of the audio buffer
+        for (int i = 0; i < bufferToFill.numSamples; ++i)
+        {
+            //ramp up to 1.0 over START_RAMP_LENGTH samples...
+            
+            //get a gain value based on the position in the ramp
+            float gain_ = startRampPosition * (1.0/START_RAMP_LENGTH);
+            
+            //apply the gain to the current samples
+            if (gain_ <= 1.0)
+            {
+                *pOutL = *pOutL * gain_;
+                *pOutR = *pOutR * gain_;
+            }
+            
+            //increment position
+            startRampPosition++;
+            
+            //move to next pair of samples
+            pOutL++;
+            pOutR++;
+            
+            if (startRampPosition >= START_RAMP_LENGTH)
+            {
+                isInStartRamp = false;
+            }
+        }
+
+
+        sharedMemory.exit();
+        
     }
 
     

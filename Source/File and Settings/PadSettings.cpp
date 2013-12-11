@@ -69,9 +69,9 @@ PadSettings::PadSettings(int arrayIndex)
     midiCcController = Layouts::ccLayout[padNumber];
     
     midiAutoChannelStatus = false;
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 4; i++)
         midiAutoChannels[i] = true;
-    for (int i = 8; i < 16; i++)
+    for (int i = 4; i < 16; i++)
         midiAutoChannels[i] = false;
     
     //sampler mode
@@ -328,9 +328,9 @@ void PadSettings::resetData (int whatToReset)
         setMidiCcController (Layouts::ccLayout[padNumber]);
         
         setMidiAutoChannelStatus(false);
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 4; i++)
             setMidiAutoChannels(i, true);
-        for (int i = 8; i < 16; i++)
+        for (int i = 4; i < 16; i++)
             setMidiAutoChannels(i, false);
     }
     

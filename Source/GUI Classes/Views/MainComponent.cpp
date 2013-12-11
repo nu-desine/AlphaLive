@@ -1950,7 +1950,7 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
 						CommandCategories::ViewCommands, 0);
         
         result.defaultKeypresses.add (KeyPress ('1', cmd, 0));
-        result.setActive(selectedPads.size() && !(guiControllerMode->isVisible()));
+        result.setActive(selectedPads.size() && !(guiControllerMode->isVisible()) && !(modeOffButton->getToggleState()));
     }
     else if (commandID == CommandIDs::ViewPressureSettings)
     {
@@ -1959,7 +1959,7 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
 						CommandCategories::ViewCommands, 0);
         
         result.defaultKeypresses.add (KeyPress ('2', cmd, 0));
-        result.setActive(selectedPads.size() && !(guiControllerMode->isVisible()));
+        result.setActive(selectedPads.size() && !(guiControllerMode->isVisible()) && !(modeOffButton->getToggleState()));
     }
     else if (commandID == CommandIDs::ViewGlobalPadSettings)
     {

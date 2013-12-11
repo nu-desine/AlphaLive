@@ -63,7 +63,7 @@ private:
     
     TabbedComponent *tabbedComponent;
     
-    AlphaAudioSettingsComponent *audioAndMidiSettingsComponent;
+    AudioDeviceSelectorComponent *audioAndMidiSettingsComponent;
     GeneralSettingsComponent *generalSettingsComponent;
     HardwarePreferencesComponent *hardwarePreferencesComponent;
     

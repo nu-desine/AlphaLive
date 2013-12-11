@@ -109,18 +109,18 @@ void PreferencesComponent::buttonClicked (Button *button)
 void PreferencesComponent::initAudioSettingsComponent()
 {
     #if JUCE_MAC || JUCE_LINUX
-    audioAndMidiSettingsComponent = new AlphaAudioSettingsComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, false, false, true, false, alphaLiveEngineRef);
+    audioAndMidiSettingsComponent = new AudioDeviceSelectorComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, false, false, true, false);
     #endif
     #if JUCE_WINDOWS
     if (alphaLiveEngineRef.getDeviceStatus() != 0)
     {
         //don't display the option to set a MIDI ouput device
-        audioAndMidiSettingsComponent = new AlphaAudioSettingsComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, false, false, true, false, alphaLiveEngineRef);
+        audioAndMidiSettingsComponent = new AudioDeviceSelectorComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, false, false, true, false);
     }
     else
     {
         //allow MIDI output and input devices to be set
-        audioAndMidiSettingsComponent = new AlphaAudioSettingsComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, true, true, true, false, alphaLiveEngineRef);
+        audioAndMidiSettingsComponent = new AudioDeviceSelectorComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, true, true, true, false);
     }
     #endif
     audioAndMidiSettingsComponent->addMouseListener(this, true);
@@ -133,7 +133,7 @@ void PreferencesComponent::removeMidiOutputSelector()
     tabbedComponent->removeTab(1);
     
     //don't display the option to set a MIDI ouput device
-    audioAndMidiSettingsComponent = new AlphaAudioSettingsComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, false, false, true, false, alphaLiveEngineRef);
+    audioAndMidiSettingsComponent = new AudioDeviceSelectorComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, false, false, true, false);
     tabbedComponent->addTab(translate("Audio Output Settings"), AlphaTheme::getInstance()->foregroundColourDarker, audioAndMidiSettingsComponent, true);
     
     #endif //JUCE_WINDOWS

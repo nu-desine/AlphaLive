@@ -13,7 +13,7 @@ To build AlphaLive on Windows you will need to do the following:
 +  Download and install the [Windows Driver Kit (WDK)](http://msdn.microsoft.com/en-gb/library/windows/hardware/gg487428.aspx).
 +  Download the [Steinberg ASIO SDK](http://www.steinberg.net/en/company/developer.html) and add to "./Source/Third Party Libraries" within a folder called "ASIOSDK". However AlphaLive can be built without ASIO compatibility by setting the JUCE_ASIO flag in "./JuceLibraryCode/AppConfig.h" to "0" which will not require the ASIO SDK.
 
-For all platforms see "./Other Files/README - running AlphaLive.txt" for instructions regarding the extra files needed when running the built AlphaLive binary. These extra files can be extracted from the pre-built binary download available [here](http://www.alphasphere.com/alphalive/).
+For all platforms see "[./Other Files/README - running AlphaLive.txt](https://github.com/nu-desine/AlphaLive/blob/master/Other%20Files/README%20-%20running%20AlphaLive.txt)" for instructions regarding the extra files needed when running the built AlphaLive binary.
 
 ## License ##
 

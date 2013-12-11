@@ -71,6 +71,11 @@ namespace CommandIDs
     static const int WebsiteSupportLink     = 0x20042;
     static const int WebsiteForumLink       = 0x20043;
     
+    static const int ViewTriggerSettings    = 0x20050;
+    static const int ViewPressureSettings   = 0x20051;
+    static const int ViewGlobalPadSettings  = 0x20052;
+    static const int ViewScenePresets       = 0x20053;
+    
 }
 
 namespace CommandCategories
@@ -81,6 +86,7 @@ namespace CommandCategories
     static const char* const EditCommands           = "Edit";
     static const char* const OptionCommands         = "Option";
     static const char* const HardwareCommands       = "Hardware";
+    static const char* const ViewCommands           = "View";
 }
 
 #endif // COMMANDIDS_H

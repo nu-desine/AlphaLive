@@ -2378,14 +2378,30 @@ void GuiSequencerMode::setNoteLengthSliderRange (int maxValue)
     
 }
 
-void GuiSequencerMode::changeView()
+void GuiSequencerMode::changeView (int view)
 {
-    if (sequenceSettingsButton->getToggleState())
-        triggerSettingsButton->triggerClick();
-    else if (triggerSettingsButton->getToggleState())
-        pressureSettingsButton->triggerClick();
-    else if (pressureSettingsButton->getToggleState())
-        sequenceSettingsButton->triggerClick();
+    // view - 1 - trigger
+    // view - 2 - pressure
+    // view - 3 - sequence
+    // view - 0 - switch to other view
+    
+    switch (view)
+    {
+        case 1:
+            triggerSettingsButton->triggerClick();
+            break;
+        case 2:
+            pressureSettingsButton->triggerClick();
+            break;
+        default:
+            if (sequenceSettingsButton->getToggleState())
+                triggerSettingsButton->triggerClick();
+            else if (triggerSettingsButton->getToggleState())
+                pressureSettingsButton->triggerClick();
+            else if (pressureSettingsButton->getToggleState())
+                sequenceSettingsButton->triggerClick();
+            break;
+    }
 }
 
 void GuiSequencerMode::drawDrawableButtons()

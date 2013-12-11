@@ -63,6 +63,7 @@ StringArray MainMenuModel::getMenuBarNames()
     
     String file(translate("File"));
     String edit(translate("Edit"));
+    String view(translate("View"));
     String options(translate("Options"));
     String controls(translate("Controls"));
     String hardware(translate("Hardware"));
@@ -70,6 +71,7 @@ StringArray MainMenuModel::getMenuBarNames()
     
     names.add(file);
     names.add(edit);
+    names.add(view);
     names.add(options);
     names.add(controls);
     names.add(hardware);
@@ -120,7 +122,15 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::CopyDataToSequencer);
     }
-    else if (topLevelMenuIndex == 2) //Options
+    else if (topLevelMenuIndex == 2) //View
+    {
+        menu.addCommandItem (commandManager, CommandIDs::ViewTriggerSettings);
+        menu.addCommandItem (commandManager, CommandIDs::ViewPressureSettings);
+        menu.addCommandItem (commandManager, CommandIDs::ViewGlobalPadSettings);
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::ViewScenePresets);
+    }
+    else if (topLevelMenuIndex == 3) //Options
     {
         menu.addCommandItem (commandManager, CommandIDs::DisableHelpBox);
         menu.addSeparator();
@@ -128,12 +138,12 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         menu.addCommandItem(commandManager, CommandIDs::SyncToMidiClock);
         menu.addCommandItem(commandManager, CommandIDs::MidiClockSettings);
     }
-    else if (topLevelMenuIndex == 3) //Controls
+    else if (topLevelMenuIndex == 4) //Controls
     {
         menu.addCommandItem (commandManager, CommandIDs::KillSwitch);
         menu.addCommandItem (commandManager, CommandIDs::StartStopClock);
     }
-    else if (topLevelMenuIndex == 4) //Hardware
+    else if (topLevelMenuIndex == 5) //Hardware
     {
         menu.addCommandItem(commandManager, CommandIDs::EnableLedMidiMode);
         menu.addSeparator();
@@ -144,7 +154,7 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         menu.addCommandItem (commandManager, CommandIDs::HardwareProjectSettings);
         menu.addCommandItem (commandManager, CommandIDs::HardwarePreferences);
     }
-    else if (topLevelMenuIndex == 5) //Help
+    else if (topLevelMenuIndex == 6) //Help
     {
         //menu.addCommandItem (commandManager, CommandIDs::StarterGuide);
         menu.addCommandItem (commandManager, CommandIDs::ReferenceManual);

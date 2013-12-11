@@ -83,7 +83,7 @@ public:
     void hideComponents();
     void setDisplay (int settingsType); // 1 = trigger settings, 2 = pressure settings, 3 = sequence settings
     void setRotaryControlDisplay();
-    void changeView();
+    void changeView (int view);
     
     void setParameterLabelText (String value);
     void setCurrentSequenceNumber();

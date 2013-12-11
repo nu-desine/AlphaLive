@@ -560,6 +560,17 @@ void Toolbox::noteLayoutSelected (String layout, bool isScale)
     
 }
 
+void Toolbox::setCurrentTabIndex (int index)
+{
+    //index - -1 - last tab
+    //index - 0+ - corresponding tab
+    
+    if (index == -1)
+        tabbedComponent->setCurrentTabIndex(tabbedComponent->getNumTabs() - 1);
+    else
+        tabbedComponent->setCurrentTabIndex (index);
+}
+
 void Toolbox::setTabColour()
 {
     //This can't be called in paint as it calls repaint and would cause loops and high CPU.

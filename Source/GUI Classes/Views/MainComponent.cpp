@@ -694,7 +694,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool call
             modeMidiButton->setToggleState(true, false);
             
             if (selectedPads[0] == prevSelectedPad && calledFromMouseClick)
-                guiMidiMode->changeView();
+                guiMidiMode->changeView(0);
         }
         
         if (PAD_SETTINGS->getMode() == 2) //sampler mode
@@ -703,7 +703,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool call
             modeSamplerButton->setToggleState(true, false);
             
             if (selectedPads[0] == prevSelectedPad && calledFromMouseClick)
-                guiSamplerMode->changeView();
+                guiSamplerMode->changeView(0);
         }
     
         if (PAD_SETTINGS->getMode() == 3) //sequencer mode
@@ -712,7 +712,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool call
             modeSequencerButton->setToggleState(true, false);
             
             if (selectedPads[0] == prevSelectedPad && calledFromMouseClick)
-                guiSequencerMode->changeView();
+                guiSequencerMode->changeView(0);
         }
         if (PAD_SETTINGS->getMode() == 4) //controller mode
         {
@@ -781,8 +781,8 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool call
     if (globalSettingsButton->getToggleState() == true)
         setGlobalPadSettingsDisplay();
 
-    commandManager->commandStatusChanged(); //so that if a single pad is selected, the copy and paste settings
-                                            //command is enabled
+    commandManager->commandStatusChanged(); //so that pad copy/paste and pad settings view options
+                                            //are updated correctly.
             
      
 }
@@ -1674,7 +1674,11 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::WebsiteHomeLink,
         CommandIDs::WebsiteTutorialsLink,
         CommandIDs::WebsiteSupportLink,
-        CommandIDs::WebsiteForumLink
+        CommandIDs::WebsiteForumLink,
+        CommandIDs::ViewTriggerSettings,
+        CommandIDs::ViewPressureSettings,
+        CommandIDs::ViewGlobalPadSettings,
+        CommandIDs::ViewScenePresets
     };
 	
 	commands.addArray (ids, numElementsInArray (ids));
@@ -1937,6 +1941,43 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
 						"Opens the AlphaSphere website forums page in an internet browser.",
 						CommandCategories::OtherCommands, 0);
     }
+    
+    
+    else if (commandID == CommandIDs::ViewTriggerSettings)
+    {
+        result.setInfo (translate("Show Pads Touch/Trigger Settings..."),
+						"Displays the touch/trigger settings view for the selected pads.",
+						CommandCategories::ViewCommands, 0);
+        
+        result.defaultKeypresses.add (KeyPress ('1', cmd, 0));
+        result.setActive(selectedPads.size() && !(guiControllerMode->isVisible()));
+    }
+    else if (commandID == CommandIDs::ViewPressureSettings)
+    {
+        result.setInfo (translate("Show Pads Pressure Settings..."),
+						"Displays the pressure settings view for the selected pads.",
+						CommandCategories::ViewCommands, 0);
+        
+        result.defaultKeypresses.add (KeyPress ('2', cmd, 0));
+        result.setActive(selectedPads.size() && !(guiControllerMode->isVisible()));
+    }
+    else if (commandID == CommandIDs::ViewGlobalPadSettings)
+    {
+        result.setInfo (translate("Show Pads Global Settings..."),
+						"Displays the global settings view for the selected pads.",
+						CommandCategories::ViewCommands, 0);
+        
+        result.defaultKeypresses.add (KeyPress ('3', cmd, 0));
+        result.setActive(selectedPads.size() && !(guiControllerMode->isVisible()));
+    }
+    else if (commandID == CommandIDs::ViewScenePresets)
+    {
+        result.setInfo (translate("Show Scene Presets in Toolbox..."),
+						"Selects all pads and displays the scene preset tab in the Toolbox.",
+						CommandCategories::ViewCommands, 0);
+
+    }
+
 }
 
 
@@ -2276,6 +2317,57 @@ bool MainComponent::perform (const InvocationInfo& info)
     {
         URL url ("http://forums.alphasphere.com");
         url.launchInDefaultBrowser();
+        return true;
+    }
+    
+    else if (info.commandID == CommandIDs::ViewTriggerSettings)
+    {
+        if (guiGlobalPadSettings->isVisible())
+        {
+            globalSettingsButton->setToggleState(false, false);
+            setGlobalPadSettingsDisplay();
+        }
+        
+        if (guiMidiMode->isVisible())
+            guiMidiMode->changeView(1);
+        else if (guiSamplerMode->isVisible())
+            guiSamplerMode->changeView(1);
+        else if (guiSequencerMode->isVisible())
+            guiSequencerMode->changeView(1);
+        
+        return true;
+    }
+    else if (info.commandID == CommandIDs::ViewPressureSettings)
+    {
+        if (guiGlobalPadSettings->isVisible())
+        {
+            globalSettingsButton->setToggleState(false, false);
+            setGlobalPadSettingsDisplay();
+        }
+        
+        if (guiMidiMode->isVisible())
+            guiMidiMode->changeView(2);
+        else if (guiSamplerMode->isVisible())
+            guiSamplerMode->changeView(2);
+        else if (guiSequencerMode->isVisible())
+            guiSequencerMode->changeView(2);
+        return true;
+    }
+    else if (info.commandID == CommandIDs::ViewGlobalPadSettings)
+    {
+        if (guiGlobalPadSettings->isVisible() == false)
+        {
+            globalSettingsButton->setToggleState(true, false);
+            setGlobalPadSettingsDisplay();
+        }
+        
+        return true;
+
+    }
+    else if (info.commandID == CommandIDs::ViewScenePresets)
+    {
+        guiPadLayout->selectAllPads();
+        toolbox->setCurrentTabIndex(-1);
         return true;
     }
     

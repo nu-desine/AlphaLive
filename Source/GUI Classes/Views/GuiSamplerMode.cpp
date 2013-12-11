@@ -1011,12 +1011,27 @@ void GuiSamplerMode::setRotaryControlDisplay()
 }
 
 
-void GuiSamplerMode::changeView()
+void GuiSamplerMode::changeView (int view)
 {
-    if (triggerSettingsButton->getToggleState())
-        pressureSettingsButton->triggerClick();
-    else if (pressureSettingsButton->getToggleState())
-        triggerSettingsButton->triggerClick();
+    // view - 1 - trigger
+    // view - 2 - pressure
+    // view - 0 - switch to other view
+    
+    switch (view)
+    {
+        case 1:
+            triggerSettingsButton->triggerClick();
+            break;
+        case 2:
+            pressureSettingsButton->triggerClick();
+            break;
+        default:
+            if (triggerSettingsButton->getToggleState())
+                pressureSettingsButton->triggerClick();
+            else if (pressureSettingsButton->getToggleState())
+                triggerSettingsButton->triggerClick();
+            break;
+    }
 }
 
 void GuiSamplerMode::mouseEnter (const MouseEvent &e)

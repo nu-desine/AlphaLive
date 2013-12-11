@@ -490,6 +490,19 @@ void GuiPadLayout::deselectAllPads()
     mainComponentRef.setCurrentlySelectedPad(selectedPads, true);
 }
 
+void GuiPadLayout::selectAllPads()
+{
+    selectedPads.clear(); //so that the pads will be put in the right order below
+    
+    for (int i = 0; i < 48; i++)
+    {
+        selectedPads.addIfNotAlreadyThere(i);
+        turnOn(i);
+    }
+    
+    mainComponentRef.setCurrentlySelectedPad(selectedPads, true);
+}
+
 
 bool GuiPadLayout::keyPressed (const KeyPress &key, Component *originatingComponent)
 {

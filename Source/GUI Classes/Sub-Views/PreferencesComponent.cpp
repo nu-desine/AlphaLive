@@ -361,10 +361,11 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     midiChannelPressureModeLabel->setText(translate("MIDI Channel Pressure Mode:"), dontSendNotification);
     
     addAndMakeVisible(midiChannelPressureModeMenu = new ComboBox());
-    midiChannelPressureModeMenu->addItem(translate("All pads have control"), 1);
-    midiChannelPressureModeMenu->addItem(translate("Newest pad has control only"), 2);
+    midiChannelPressureModeMenu->addItem(translate("Newest pad has control"), 1);
+    midiChannelPressureModeMenu->addItem(translate("All pads have control"), 2);
     midiChannelPressureModeMenu->addListener(this);
     midiChannelPressureModeMenu->addMouseListener(this, true);
+    midiChannelPressureModeMenu->setSelectedId(StoredSettings::getInstance()->midiChannelPressureMode, dontSendNotification);
     
 }
 
@@ -587,7 +588,7 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
         mainComponentRef.changeLookAndFeel();
     }
     
-    if (comboBox == padContentDisplayMenu)
+    else if (comboBox == padContentDisplayMenu)
     {
         StoredSettings::getInstance()->padContentDisplay = comboBox->getSelectedId();
         StoredSettings::getInstance()->flush();
@@ -596,6 +597,14 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
             mainComponentRef.getGuiPadLayout()->setPadDisplay(i);
         
         commandManager->commandStatusChanged();
+    }
+    
+    else if (comboBox == midiChannelPressureModeMenu)
+    {
+        StoredSettings::getInstance()->midiChannelPressureMode = comboBox->getSelectedId();
+        StoredSettings::getInstance()->flush();
+        
+        alphaLiveEngineRef.getModeMidi()->setMidiChannelPressureMode(comboBox->getSelectedId());
     }
     
 }
@@ -641,7 +650,11 @@ void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
     }
     else if (padContentDisplayMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Pad Contents Display select. This allows you to change the text of the pads on the pad layout display. If you selected 'All pad contents' the values of the main settings are shown using the following common abbreviations: Ch - channel, N - note, P - pressure, M - Mode. See the Reference Manual for the full list of abbreviations."));
+        mainComponentRef.setInfoTextBoxText(translate("Pad Contents Display selector. This allows you to change the text of the pads on the pad layout display. If you select 'All pad contents' the values of the main settings are shown using the following common abbreviations: Ch - channel, N - note, P - pressure, M - Mode. See the Reference Manual for the full list of abbreviations."));
+    }
+    else if (midiChannelPressureModeMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("MIDI Channel Pressure Mode selector. This allows you to set what happens when multiple pads set to the same MIDI channel and the same channel pressure mode (channel aftertouch, pitch bend, mod wheel or CC data) are being held. If you select 'Newest pad has control' only the last pressed pad can send pressure data, however 'All pads have control' means that all pads can send pressure data at any time. You will find that the latter option may causes 'glitchy' effects when moving multiple pads."));
     }
 }
 

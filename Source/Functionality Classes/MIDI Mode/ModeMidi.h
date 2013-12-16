@@ -69,6 +69,8 @@ public:
     void setAutoMidiChannels (int channel, bool status, int pad);
     
     void setCurrentChannel (int padNum);
+    
+    void setMidiChannelPressureMode (int value);
 
 private:
     
@@ -121,6 +123,8 @@ private:
                             //this is used in conjunction with auto channel mode so when
                             //a note off is sent we know what channel it needs to be
                             //set to.
+    
+    int midiChannelPressureMode;
 };
 
 

@@ -20,6 +20,29 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+
+#ifndef H_MIDICHANNELPRESSUREHOLDER
+#define H_MIDICHANNELPRESSUREHOLDER
+
+/*
+ This struct is used to store the currently used pad number
+ for each type of MIDI channel pressure data.
+ It is used in the feature that allows only the newest pressed
+ pad to have control of the pressure data it is set to send.
+ 
+ A value of -1 for each item means that no pad is currently
+ controlling that type of pressure data.
+ */
+
+struct MidiChannelPressureHolder
+{
+    int aftertouch;
+    int pitchBend;
+    int controlChange[128];
+};
+
+#endif
+
 #ifndef H_ALPHALIVEENGINE
 #define H_ALPHALIVEENGINE
 
@@ -122,6 +145,9 @@ public:
     void setReceiveMidiProgramChangeMessages (bool value);
     
     void changeGuiPadText (int padNum);
+    
+    MidiChannelPressureHolder* getMidiChannelPressureHolderPtr (int chan);
+    void resetMidiChannelPressureHolderData();
         
 private:
     
@@ -202,6 +228,8 @@ private:
 
     int midiClockValue, midiClockMessageFilter;
     bool receiveMidiProgramChanngeMessages;
+    
+    MidiChannelPressureHolder *midiChannelPressureHolder[16];
 
 };
 

@@ -24,9 +24,11 @@
 #include "../../File and Settings/AppSettings.h"
 #include "../Other/LayoutsAndScales.cpp"
 #include "../../Application/Common.h"
+#include "../../File and Settings/StoredSettings.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
 #define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
+#define PRESSURE_HOLDER alphaLiveEngineRef.getMidiChannelPressureHolderPtr(currentChannel[padNumber])
 
 ModeMidi::ModeMidi (AlphaLiveEngine &ref)
                 : alphaLiveEngineRef(ref)
@@ -60,9 +62,9 @@ ModeMidi::ModeMidi (AlphaLiveEngine &ref)
     }
     
     columnNumber = sequenceNumber = 0;
+    midiChannelPressureMode = StoredSettings::getInstance()->midiChannelPressureMode;
     
     broadcaster.addActionListener(this);
-            
 }
 
 
@@ -145,7 +147,6 @@ void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
     }
     
     
-    
     if (noteStatus[padNumber] == true) //if pad note status is 'on'
     {
         //==========================================================================================
@@ -207,6 +208,36 @@ void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
     }
     
     
+    //exclusive channel pressure stuff.
+    //Do this here after the noteOn() function is called
+    //incase auto channel mode is on and currentChannel is
+    //changed.
+    if (triggerModeData[padNumber].playingStatus == 1) //play
+    {
+        if (midiChannelPressureMode == 1)
+        {
+            //assign the pressed pad number to the relevent variable in the
+            //MidiChannelPressureHolder struct...
+            
+            if (pressureMode[padNumber] == 2) //channel aftertouch
+            {
+                PRESSURE_HOLDER->aftertouch = padNumber;
+            }
+            else if (pressureMode[padNumber] == 3) //mod wheel
+            {
+                PRESSURE_HOLDER->controlChange[1] = padNumber;
+            }
+            else if (pressureMode[padNumber] == 4) //CC data
+            {
+                PRESSURE_HOLDER->controlChange[controllerNumber[padNumber]] = padNumber;
+            }
+            else if (pressureMode[padNumber] == 5 || pressureMode[padNumber] == 6) //pitch bend
+            {
+                PRESSURE_HOLDER->pitchBend = padNumber;
+            }
+        }
+    }
+    
     //==========================================================================================
     // Pressure stuff
     //==========================================================================================
@@ -236,6 +267,52 @@ void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
     
     // === create pressure MIDI data ===
     sendPressureData(padNumber);
+    
+    
+    
+    
+    //exclusive channel pressure stuff.
+    //do this stuff here after pressure data has been sent.
+    if (triggerModeData[padNumber].playingStatus == 0) //stop
+    {
+        if (midiChannelPressureMode == 1)
+        {
+            //remove the released pad number from the relevent variable in the
+            //MidiChannelPressureHolder struct if it exists there...
+            
+            if (pressureMode[padNumber] == 2) //channel aftertouch
+            {
+                if (PRESSURE_HOLDER->aftertouch == padNumber)
+                {
+                    PRESSURE_HOLDER->aftertouch = -1;
+                }
+            }
+            else if (pressureMode[padNumber] == 3) //mod wheel
+            {
+                if (PRESSURE_HOLDER->controlChange[1] == padNumber)
+                {
+                    PRESSURE_HOLDER->controlChange[1] = -padNumber;
+                }
+            }
+            else if (pressureMode[padNumber] == 4) //CC data
+            {
+                if (PRESSURE_HOLDER->controlChange[controllerNumber[padNumber]] == padNumber)
+                {
+                    PRESSURE_HOLDER->controlChange[controllerNumber[padNumber]] = -1;
+                }
+            }
+            else if (pressureMode[padNumber] == 5 || pressureMode[padNumber] == 6) //pitch bend
+            {
+                if (PRESSURE_HOLDER->pitchBend == padNumber)
+                {
+                    PRESSURE_HOLDER->pitchBend = -1;
+                }
+            }
+        }
+    }
+    
+    
+    
     
     prevPadValue[padNumber] = padValue;
 }
@@ -388,38 +465,84 @@ void ModeMidi::sendPressureData (int padNumber)
         {
             case 1: //poly aftertouch
                 message = MidiMessage::aftertouchChange(currentChannel[padNumber], note[padNumber], pressureValueScaled);
+                alphaLiveEngineRef.sendMidiMessage(message);
                 break;
                 
             case 4: //CC messages
-                message = MidiMessage::controllerEvent(currentChannel[padNumber], controllerNumber[padNumber], pressureValueScaled);
-                break;
+                
+                if (midiChannelPressureMode == 1 && PRESSURE_HOLDER->controlChange[controllerNumber[padNumber]] != padNumber)
+                {
+                    break;
+                }
+                else
+                {
+                    message = MidiMessage::controllerEvent(currentChannel[padNumber], controllerNumber[padNumber], pressureValueScaled);
+                    alphaLiveEngineRef.sendMidiMessage(message);
+                    break;
+                }
                 
             case 2: //channel aftertouch
-                message = MidiMessage::channelPressureChange(currentChannel[padNumber], pressureValueScaled);
-                break;
+                
+                if (midiChannelPressureMode == 1 && PRESSURE_HOLDER->aftertouch != padNumber)
+                {
+                    break;
+                }
+                else
+                {
+                    message = MidiMessage::channelPressureChange(currentChannel[padNumber], pressureValueScaled);
+                    alphaLiveEngineRef.sendMidiMessage(message);
+                    break;
+                }
                 
             case 5: //pitch bend up
-                //convert 0-127 to 8192-16383
-                pressureValueScaled = scaleValue (pressureValueScaled, 0, 127, 8192, 16383);
-                message = MidiMessage::pitchWheel(currentChannel[padNumber], pressureValueScaled);
-                break;
+                
+                if (midiChannelPressureMode == 1 && PRESSURE_HOLDER->pitchBend != padNumber)
+                {
+                    break;
+                }
+                else
+                {
+                    //convert 0-127 to 8192-16383
+                    pressureValueScaled = scaleValue (pressureValueScaled, 0, 127, 8192, 16383);
+                    message = MidiMessage::pitchWheel(currentChannel[padNumber], pressureValueScaled);
+                    alphaLiveEngineRef.sendMidiMessage(message);
+                    break;
+                }
                 
             case 6: //pitch bend down
-                //convert 0-127 to 8192-0
-                pressureValueScaled = scaleValue (pressureValueScaled, 0, 127, 8192, 0);
-                message = MidiMessage::pitchWheel(currentChannel[padNumber], pressureValueScaled);
-                break;
+                
+                if (midiChannelPressureMode == 1 && PRESSURE_HOLDER->pitchBend != padNumber)
+                {
+                    break;
+                }
+                else
+                {
+                    //convert 0-127 to 8192-0
+                    pressureValueScaled = scaleValue (pressureValueScaled, 0, 127, 8192, 0);
+                    message = MidiMessage::pitchWheel(currentChannel[padNumber], pressureValueScaled);
+                    alphaLiveEngineRef.sendMidiMessage(message);
+                    break;
+                }
                 
             case 3: // mod wheel
-                message = MidiMessage::controllerEvent(currentChannel[padNumber], 1, pressureValueScaled);
-                break;
+                
+                if (midiChannelPressureMode == 1 && PRESSURE_HOLDER->controlChange[1] != padNumber)
+                {
+                    break;
+                }
+                else
+                {
+                    message = MidiMessage::controllerEvent(currentChannel[padNumber], 1, pressureValueScaled);
+                    alphaLiveEngineRef.sendMidiMessage(message);
+                    break;
+                }
                 
             default: //poly aftertouch
                 message = MidiMessage::aftertouchChange(currentChannel[padNumber], note[padNumber], pressureValueScaled);
-                break;
+                alphaLiveEngineRef.sendMidiMessage(message);
+                break; //
         }
         
-        alphaLiveEngineRef.sendMidiMessage(message);
     }
 
 }
@@ -741,5 +864,10 @@ void ModeMidi::setAutoMidiChannelStatus (bool value, int pad)
 void ModeMidi::setAutoMidiChannels (int channel, bool status, int pad)
 {
     autoMidiChannels[channel][pad] = status;
+}
+
+void ModeMidi::setMidiChannelPressureMode (int value)
+{
+    midiChannelPressureMode = value;
 }
 

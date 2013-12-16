@@ -70,6 +70,8 @@ void StoredSettings::flush()
         props->setValue ("interfaceTheme", interfaceTheme);
         props->setValue ("padContentDisplay", padContentDisplay);
         props->setValue("hardwareLedColourScheme", hardwareLedColourScheme);
+        props->setValue("midiChannelPressureMode", midiChannelPressureMode
+                        );
         
         for (int i = 0; i < 3; i++)
             props->setValue("hardwareLedColour" + String(i), hardwareLedColour[i].toString());
@@ -108,6 +110,7 @@ void StoredSettings::flush()
     interfaceTheme = props->getIntValue("interfaceTheme");
     padContentDisplay = props->getIntValue("padContentDisplay");
     hardwareLedColourScheme = props->getValue("hardwareLedColourScheme");
+    midiChannelPressureMode = props->getIntValue("midiChannelPressureMode");
     
     for (int i = 0; i < 3; i++)
         hardwareLedColour[i] = Colour::fromString (props->getValue("hardwareLedColour" + String(i)));
@@ -219,6 +222,9 @@ void StoredSettings::setDefaultValues()
     
     if (padContentDisplay == 0)
         padContentDisplay = 1;
+    
+    if (midiChannelPressureMode == 0)
+        midiChannelPressureMode = 1; //should this be the default?
     
     if (hardwareLedColourScheme == String::empty)
         hardwareLedColourScheme = "Default";

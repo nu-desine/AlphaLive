@@ -57,6 +57,7 @@ public:
     int autoCheckUpdates; // 1 - off, 2 - on
     int interfaceTheme;
     int padContentDisplay; // 1 - pad numbers, 2 - all contents
+    int midiChannelPressureMode; // 1 - newest pad has control, 2 - all pads have control
     
     String hardwareLedColourScheme;
     Colour hardwareLedColour[3]; //[min, mid, max]

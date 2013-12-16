@@ -83,7 +83,11 @@ AlphaLiveEngine::AlphaLiveEngine()
     {
         isMidiChannelActive[i] = false;
         previouslyUsedMidiChannels.add(i);
+        
+        midiChannelPressureHolder[i] = new MidiChannelPressureHolder;
     }
+    
+    resetMidiChannelPressureHolderData();
     
     //==========================================================================
     // initialise the device manager
@@ -215,6 +219,9 @@ AlphaLiveEngine::~AlphaLiveEngine()
     }
     
     audioDeviceManager.removeAudioCallback (this);//unregister the audio callback
+    
+    for (int i = 0; i < 16; i++)
+        delete midiChannelPressureHolder[i];
     
     delete modeMidi;
     delete modeSampler;
@@ -691,6 +698,8 @@ void AlphaLiveEngine::killAll()
     
     if (globalClock->isThreadRunning() == true)
         globalClock->stopClock(); //currently all mode's are being killed again here
+    
+    resetMidiChannelPressureHolderData();
 }
 
 void AlphaLiveEngine::setRecordingSequencerPadsState (int padNum, int state)
@@ -1366,4 +1375,20 @@ void AlphaLiveEngine::changeGuiPadText (int padNum)
     //but oh well.
     
     mainComponent->getGuiPadLayout()->setPadDisplay(padNum);
+}
+
+MidiChannelPressureHolder* AlphaLiveEngine::getMidiChannelPressureHolderPtr (int chan)
+{
+    return midiChannelPressureHolder[chan];
+}
+
+void AlphaLiveEngine::resetMidiChannelPressureHolderData()
+{
+    for (int i = 0; i < 16; i++)
+    {
+        midiChannelPressureHolder[i]->aftertouch = -1;
+        midiChannelPressureHolder[i]->pitchBend = -1;
+        for (int j = 0; j < 128; j++)
+            midiChannelPressureHolder[i]->controlChange[j] = -1;
+    }
 }

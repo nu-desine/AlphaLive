@@ -605,6 +605,15 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
         StoredSettings::getInstance()->flush();
         
         alphaLiveEngineRef.getModeMidi()->setMidiChannelPressureMode(comboBox->getSelectedId());
+        
+        for (int i = 0; i < 48; i++)
+        {
+            if (alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(i) != nullptr)
+            {
+                alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(i)->setMidiChannelPressureMode(comboBox->getSelectedId());
+            }
+        }
+        
     }
     
 }

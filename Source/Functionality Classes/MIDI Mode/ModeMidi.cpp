@@ -540,7 +540,7 @@ void ModeMidi::sendPressureData (int padNumber)
             default: //poly aftertouch
                 message = MidiMessage::aftertouchChange(currentChannel[padNumber], note[padNumber], pressureValueScaled);
                 alphaLiveEngineRef.sendMidiMessage(message);
-                break; //
+                break;
         }
         
     }

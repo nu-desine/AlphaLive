@@ -24,8 +24,10 @@
 #include "../../File and Settings/AppSettings.h"
 #include "ModeSequencer.h"
 #include "../../Application/Common.h"
+#include "../../File and Settings/StoredSettings.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
+#define PRESSURE_HOLDER modeSequencerRef.getAlphaLiveEngineRef().getMidiChannelPressureHolderPtr(midiChannel)
 
 //=====================================================================================
 //=Constructor=========================================================================
@@ -36,7 +38,6 @@ SequencePlayer::SequencePlayer(int padNumber_, ModeSequencer &ref, TimeSliceThre
                                     modeSequencerRef(ref)
 {
     sequenceIsRunning = sequenceFlaggedToStop = false;
-    
     audioTransportSourceThread = audioTransportSourceThread_;
     
     //=======get setting values=========
@@ -135,6 +136,8 @@ SequencePlayer::SequencePlayer(int padNumber_, ModeSequencer &ref, TimeSliceThre
     //if the pad is currently set to be record enabled, add this pad to the recordingPad array
     if (PAD_SETTINGS->getSequencerRecordEnabled() == 1)
         modeSequencerRef.getAlphaLiveEngineRef().setRecordingSequencerPadsState(padNumber, 1);
+    
+    midiChannelPressureMode = StoredSettings::getInstance()->midiChannelPressureMode;
 }
 
 //=====================================================================================
@@ -355,6 +358,33 @@ void SequencePlayer::processInputData(int padValue)
         }
     }
     
+    //exclusive channel pressure stuff.
+    if (triggerModeData.playingStatus == 1) //play
+    {
+        if (midiChannelPressureMode == 1)
+        {
+            //assign the pressed pad number to the relevent variable in the
+            //MidiChannelPressureHolder struct...
+            
+            if (midiPressureMode == 1) //channel aftertouch
+            {
+                PRESSURE_HOLDER->aftertouch = padNumber;
+            }
+            else if (midiPressureMode == 2) //mod wheel
+            {
+                PRESSURE_HOLDER->controlChange[1] = padNumber;
+            }
+            else if (midiPressureMode == 3) //CC data
+            {
+                PRESSURE_HOLDER->controlChange[midiControllerNumber] = padNumber;
+            }
+            else if (midiPressureMode == 4 || midiPressureMode == 5) //pitch bend
+            {
+                PRESSURE_HOLDER->pitchBend = padNumber;
+            }
+        }
+    }
+    
     
     //==========================================================================================
       
@@ -435,6 +465,45 @@ void SequencePlayer::processInputData(int padValue)
                 break;
             default:
                 break;
+        }
+    }
+    
+    //exclusive channel pressure stuff.
+    if (triggerModeData.playingStatus == 0) //stop
+    {
+        if (midiChannelPressureMode == 1)
+        {
+            //remove the released pad number from the relevent variable in the
+            //MidiChannelPressureHolder struct if it exists there...
+            
+            if (midiPressureMode == 1) //channel aftertouch
+            {
+                if (PRESSURE_HOLDER->aftertouch == padNumber)
+                {
+                    PRESSURE_HOLDER->aftertouch = -1;
+                }
+            }
+            else if (midiPressureMode == 2) //mod wheel
+            {
+                if (PRESSURE_HOLDER->controlChange[1] == padNumber)
+                {
+                    PRESSURE_HOLDER->controlChange[1] = -padNumber;
+                }
+            }
+            else if (midiPressureMode == 3) //CC data
+            {
+                if (PRESSURE_HOLDER->controlChange[midiControllerNumber] == padNumber)
+                {
+                    PRESSURE_HOLDER->controlChange[midiControllerNumber] = -1;
+                }
+            }
+            else if (midiPressureMode == 4 || midiPressureMode == 5) //pitch bend
+            {
+                if (PRESSURE_HOLDER->pitchBend == padNumber)
+                {
+                    PRESSURE_HOLDER->pitchBend = -1;
+                }
+            }
         }
     }
     
@@ -896,30 +965,81 @@ void SequencePlayer::sendMidiPressureData()
         switch (midiPressureMode)
         {
             case 1: //channel aftertouch
-                message = MidiMessage::channelPressureChange(midiChannel, pressureValueScaled);
-                break;
+                
+                if (midiChannelPressureMode == 1 && PRESSURE_HOLDER->aftertouch != padNumber)
+                {
+                    break;
+                }
+                else
+                {
+                    message = MidiMessage::channelPressureChange(midiChannel, pressureValueScaled);
+                    modeSequencerRef.getAlphaLiveEngineRef().sendMidiMessage(message);
+                    break;
+                }
+                
             case 2: // mod wheel
-                message = MidiMessage::controllerEvent(midiChannel, 1, pressureValueScaled);
-                break;
+                
+                if (midiChannelPressureMode == 1 && PRESSURE_HOLDER->controlChange[1] != padNumber)
+                {
+                    break;
+                }
+                else
+                {
+                    message = MidiMessage::controllerEvent(midiChannel, 1, pressureValueScaled);
+                    modeSequencerRef.getAlphaLiveEngineRef().sendMidiMessage(message);
+                    break;
+                }
+                
             case 3: //CC messages
-                message = MidiMessage::controllerEvent(midiChannel, midiControllerNumber, pressureValueScaled);
-                break;
+                
+                if (midiChannelPressureMode == 1 && PRESSURE_HOLDER->controlChange[midiControllerNumber] != padNumber)
+                {
+                    break;
+                }
+                else
+                {
+                    message = MidiMessage::controllerEvent(midiChannel, midiControllerNumber, pressureValueScaled);
+                    modeSequencerRef.getAlphaLiveEngineRef().sendMidiMessage(message);
+                    break;
+                }
+                
             case 4: //pitch bend up
-                //convert 0-127 to 8191-16383
-                pressureValueScaled = 8192 + (pressureValueScaled * (8191.0/127.0));
-                message = MidiMessage::pitchWheel(midiChannel, pressureValueScaled);
-                break;
+                
+                if (midiChannelPressureMode == 1 && PRESSURE_HOLDER->pitchBend != padNumber)
+                {
+                    break;
+                }
+                else
+                {
+                    //convert 0-127 to 8191-16383
+                    pressureValueScaled = 8192 + (pressureValueScaled * (8191.0/127.0));
+                    message = MidiMessage::pitchWheel(midiChannel, pressureValueScaled);
+                    modeSequencerRef.getAlphaLiveEngineRef().sendMidiMessage(message);
+                    break;
+                }
+                
             case 5: //pitch bend down
-                //convert 0-127 to 8191-0
-                pressureValueScaled = 8192 - (pressureValueScaled * (8191.0/127.0));
-                message = MidiMessage::pitchWheel(midiChannel, pressureValueScaled);
-                break;
-            default: 
+                
+                if (midiChannelPressureMode == 1 && PRESSURE_HOLDER->pitchBend != padNumber)
+                {
+                    break;
+                }
+                else
+                {
+                    //convert 0-127 to 8191-0
+                    pressureValueScaled = 8192 - (pressureValueScaled * (8191.0/127.0));
+                    message = MidiMessage::pitchWheel(midiChannel, pressureValueScaled);
+                    modeSequencerRef.getAlphaLiveEngineRef().sendMidiMessage(message);
+                    break;
+
+                }
+                
+            default:
                 message = MidiMessage::channelPressureChange(midiChannel, pressureValueScaled);
+                modeSequencerRef.getAlphaLiveEngineRef().sendMidiMessage(message);
                 break;
         }
         
-        modeSequencerRef.getAlphaLiveEngineRef().sendMidiMessage(message);
     }
     
 }
@@ -1667,4 +1787,9 @@ Distortion& SequencePlayer::getDistortion()
 Bitcrusher& SequencePlayer::getBitcrusher()
 {
 	return *bitcrusher;
+}
+
+void SequencePlayer::setMidiChannelPressureMode (int value)
+{
+    midiChannelPressureMode = value;
 }

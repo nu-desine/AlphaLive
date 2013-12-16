@@ -137,6 +137,8 @@ public:
 	Distortion& getDistortion();
 	Bitcrusher& getBitcrusher();
     
+    void setMidiChannelPressureMode (int value);
+    
 private:
     int padNumber;
     int prevPadValue, pressureValue;
@@ -213,6 +215,8 @@ private:
     
     int midiClockMessageCounter;
     bool currentlySyncedToMidiClockMessages; //true when actively receiving MIDI clock messages
+    
+    int midiChannelPressureMode;
 };
 
 

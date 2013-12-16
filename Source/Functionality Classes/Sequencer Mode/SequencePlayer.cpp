@@ -359,7 +359,7 @@ void SequencePlayer::processInputData(int padValue)
     }
     
     //exclusive channel pressure stuff.
-    if (triggerModeData.playingStatus == 1) //play
+    if (prevPadValue == 0) //pad pressed
     {
         if (midiChannelPressureMode == 1)
         {
@@ -469,7 +469,7 @@ void SequencePlayer::processInputData(int padValue)
     }
     
     //exclusive channel pressure stuff.
-    if (triggerModeData.playingStatus == 0) //stop
+    if (padValue == 0) //pad released
     {
         if (midiChannelPressureMode == 1)
         {

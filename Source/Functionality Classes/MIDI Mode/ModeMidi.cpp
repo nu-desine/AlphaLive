@@ -212,7 +212,7 @@ void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
     //Do this here after the noteOn() function is called
     //incase auto channel mode is on and currentChannel is
     //changed.
-    if (triggerModeData[padNumber].playingStatus == 1) //play
+    if (prevPadValue[padNumber] == 0) //pad pressed
     {
         if (midiChannelPressureMode == 1)
         {
@@ -273,7 +273,7 @@ void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
     
     //exclusive channel pressure stuff.
     //do this stuff here after pressure data has been sent.
-    if (triggerModeData[padNumber].playingStatus == 0) //stop
+    if (padValue == 0) //pad released
     {
         if (midiChannelPressureMode == 1)
         {
@@ -310,10 +310,7 @@ void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
             }
         }
     }
-    
-    
-    
-    
+
     prevPadValue[padNumber] = padValue;
 }
 

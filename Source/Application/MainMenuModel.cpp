@@ -129,6 +129,8 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         menu.addCommandItem (commandManager, CommandIDs::ViewGlobalPadSettings);
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::ViewScenePresets);
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::EnabledPadContentsDisplay);
     }
     else if (topLevelMenuIndex == 3) //Options
     {

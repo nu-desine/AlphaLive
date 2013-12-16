@@ -24,6 +24,7 @@
 #include "../Views/MainComponent.h"
 #include "../../Application/CommonInfoBoxText.h"
 #include "../AlphaLiveLookandFeel.h"
+#include "../../Application/Common.h"
 
 
 PreferencesComponent::PreferencesComponent(MainComponent &ref, AlphaLiveEngine &ref2)
@@ -593,6 +594,8 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
         
         for (int i = 0; i < 48; i++)
             mainComponentRef.getGuiPadLayout()->setPadDisplay(i);
+        
+        commandManager->commandStatusChanged();
     }
     
 }

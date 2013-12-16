@@ -1678,7 +1678,8 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::ViewTriggerSettings,
         CommandIDs::ViewPressureSettings,
         CommandIDs::ViewGlobalPadSettings,
-        CommandIDs::ViewScenePresets
+        CommandIDs::ViewScenePresets,
+        CommandIDs::EnabledPadContentsDisplay
     };
 	
 	commands.addArray (ids, numElementsInArray (ids));
@@ -1976,6 +1977,15 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
 						"Selects all pads and displays the scene preset tab in the Toolbox.",
 						CommandCategories::ViewCommands, 0);
 
+    }
+    else if (commandID == CommandIDs::EnabledPadContentsDisplay)
+    {
+        result.setInfo (translate("Display Pad Contents on Pads..."),
+						"Sets a preferences option that sets what is display on the Pad Layout pads.",
+						CommandCategories::ViewCommands, 0);
+        result.defaultKeypresses.add (KeyPress ('o', cmd|alt, 0));
+        result.setTicked(StoredSettings::getInstance()->padContentDisplay - 1);
+        
     }
 
 }
@@ -2368,6 +2378,20 @@ bool MainComponent::perform (const InvocationInfo& info)
     {
         guiPadLayout->selectAllPads();
         toolbox->setCurrentTabIndex(-1);
+        return true;
+    }
+    else if (info.commandID == CommandIDs::EnabledPadContentsDisplay)
+    {
+        if (StoredSettings::getInstance()->padContentDisplay == 2)
+            StoredSettings::getInstance()->padContentDisplay = 1;
+        else
+            StoredSettings::getInstance()->padContentDisplay = 2;
+        
+        StoredSettings::getInstance()->flush();
+        
+        for (int i = 0; i < 48; i++)
+            guiPadLayout->setPadDisplay(i);
+        
         return true;
     }
     

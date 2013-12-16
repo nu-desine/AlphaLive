@@ -525,6 +525,8 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
         StoredSettings::getInstance()->midiNoteDisplayType = comboBox->getSelectedId();
         StoredSettings::getInstance()->flush();
         
+        mainComponentRef.getGuiPiano()->setNoteDisplayType(comboBox->getSelectedId());
+        
         if (StoredSettings::getInstance()->getInstance()->padContentDisplay == 2)
         {
             for (int i = 0; i < 48; i++)

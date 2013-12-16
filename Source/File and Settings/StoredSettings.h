@@ -56,6 +56,7 @@ public:
     int deviceType; //1 - AlphaSphere, 2 - AlphaSphere elite 
     int autoCheckUpdates; // 1 - off, 2 - on
     int interfaceTheme;
+    int padContentDisplay; // 1 - pad numbers, 2 - all contents
     
     String hardwareLedColourScheme;
     Colour hardwareLedColour[3]; //[min, mid, max]

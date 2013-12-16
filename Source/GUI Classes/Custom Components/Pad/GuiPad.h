@@ -40,7 +40,7 @@ public:
 	
 	void resized();
 	void paint (Graphics& g);
-	void modeChange(int value);
+	void setDisplay();
 	bool hitTest (int x, int y);
 	void toggleChange();
 	void turnOff();
@@ -100,6 +100,8 @@ private:
                         //1 - on/playing
                         //2 - waiting to play
                         //3 - waiting to stop
+    
+    int padContentsDisplay; //1 - pad numbers only, 2 - pad contents
     
 };  
 

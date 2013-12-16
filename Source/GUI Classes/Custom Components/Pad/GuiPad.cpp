@@ -41,6 +41,7 @@ GuiPad::GuiPad(int padNum, GuiPadLayout &ref)
 {
     
 	padName = String(padNum + 1);
+    padContentsDisplay = 1;
 
     // path for shapebutton
 	Path myPath;
@@ -135,9 +136,20 @@ void GuiPad::paint (Graphics& g)
     g.fillEllipse((getWidth()*0.08), (getHeight()*0.08), (getWidth()*0.84), (getHeight()*0.84));
     
     //text
+    int fontSize = 9;
+    
+    if (padContentsDisplay == 2)
+    {
+        if (padNumber < 8 || (padNumber >= 32 && padNumber < 40)) //2nd smallest pad
+            fontSize = 8;
+        else if (padNumber > 39) //smallest pad
+            fontSize = 7;
+    }
+    
+    g.setFont(fontSize + AlphaTheme::getInstance()->fontSizeAddition);
+    
     g.setColour(Colours::white);
-    g.setFont(9 + AlphaTheme::getInstance()->fontSizeAddition);
-    g.drawFittedText(padName, (getWidth()*0.1), 0, (getWidth()*0.8), getHeight(), Justification::centred, 1);
+    g.drawFittedText(padName, (getWidth()*0.1), 0, (getWidth()*0.8), getHeight(), Justification::centred, 5);
     
     ColourGradient ringGradient(Colours::transparentWhite, (getWidth()*0.5), (getHeight()*0.6), modeColour, (getWidth()*0.5), 0, false);
     g.setGradientFill(ringGradient);
@@ -246,27 +258,31 @@ void GuiPad::setGradientColour (bool pressureIsLatched)
 
 
 
-void GuiPad::modeChange(int value)
+void GuiPad::setDisplay()
 {
-	if (value == 0) 
-		modeColour = normalColour;
-	
-	else if (value == 1)
-		modeColour = midiColour;
-	
-	else if (value == 2)
-		modeColour = samplerColour;
-	
-	else if (value == 3)
-		modeColour = sequencerColour;
-	
-	else if (value == 4)
-		modeColour = controllerColour;
+    //Set pad colour based on mode
+    switch (PAD_SETTINGS->getMode())
+    {
+        case 1:
+            modeColour = midiColour;
+            break;
+        case 2:
+            modeColour = samplerColour;
+            break;
+        case 3:
+            modeColour = sequencerColour;
+            break;
+        case 4:
+            modeColour = controllerColour;
+            break;
+        default:
+            modeColour = normalColour;
+            break;
+    }
     
-    
+    //set pad text (and repaint)
+    padContentsDisplay = 1;
     setPadText();
-	
-	repaint();
 }	
 
 
@@ -314,43 +330,296 @@ Button* GuiPad::getButton()
 
 
 //called from 'mode change' above
-//finish this feature at a later date.
-//think about how the pad text updates when contents are updated directly by the user...
-//...Where should this function be called to do this?
-//relevent combobox in maincomponent is hidden for now
 void GuiPad::setPadText()
 {
-    if (AppSettings::Instance()->getPadDisplayTextMode() == 1) //pad numbers
+    if (StoredSettings::getInstance()->padContentDisplay == 1) //pad numbers
     {
         padName = String(padNumber+1);
     }
     
-    else if (AppSettings::Instance()->getPadDisplayTextMode() == 2) //pad contents
+    else if (StoredSettings::getInstance()->padContentDisplay == 2) //pad contents
     {
+        //==== OFF MODE ====
+        
         if (PAD_SETTINGS->getMode() == 0) //off
         {
-            padName = String::empty; 
+            padName = String(padNumber+1);
         }
+        
+        //==== MIDI MODE ====
         
         else if (PAD_SETTINGS->getMode() == 1) //MIDI
         {
-            padName = "Note " + String(PAD_SETTINGS->getMidiNote()); 
+            padName = String(padNumber+1);
+            
+            //channel
+            if (PAD_SETTINGS->getMidiAutoChannelStatus() == false)
+                padName += "\nCh: " + String(PAD_SETTINGS->getMidiChannel());
+            else
+                padName += "\nCh: Au";
+            
+            //note
+            if (PAD_SETTINGS->getMidiNoteStatus() == false)
+                padName += "\nN: Off";
+            else
+            {
+                if (StoredSettings::getInstance()->midiNoteDisplayType == 2)
+                    padName += "\nN: " + MidiMessage::getMidiNoteName(PAD_SETTINGS->getMidiNote(), true, true, 3);
+                else
+                    padName += "\nN: " + String(PAD_SETTINGS->getMidiNote());
+            }
+            
+            //pressure
+            if (PAD_SETTINGS->getMidiPressureStatus() == false)
+                padName += "\nP: Off";
+            else
+            {
+                switch (PAD_SETTINGS->getMidiPressureMode())
+                {
+                    case 1:
+                        padName += "\nP: PAT";
+                        break;
+                    case 2:
+                        padName += "\nP: CAT";
+                        break;
+                    case 3:
+                        padName += "\nP: MW";
+                        break;
+                    case 4:
+                        padName += "\nP: CC" + String(PAD_SETTINGS->getMidiCcController());
+                        break;
+                    case 5:
+                        padName += "\nP: PBU";
+                        break;
+                    case 6:
+                        padName += "\nP: PBD";
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
+        
+        //==== SAMPLER MODE ====
         
         else if (PAD_SETTINGS->getMode() == 2) //Sampler
         {
-            File newFile(PAD_SETTINGS->getSamplerAudioFilePath());
-            padName = newFile.getFileNameWithoutExtension();
+            padName = String(padNumber+1);
+            
+            //sample
+            if (PAD_SETTINGS->getSamplerAudioFilePath() != File::nonexistent)
+            {
+                padName += "\n" + File(PAD_SETTINGS->getSamplerAudioFilePath()).getFileNameWithoutExtension();
+            }
+            
+            //pressure/effect
+            switch (PAD_SETTINGS->getSamplerEffect())
+            {
+                case 0:
+                    padName += "\nP: Off";
+                    break;
+                case 1:
+                    padName += "\nP: G&P";
+                    break;
+                case 2:
+                    padName += "\nP: LPF";
+                    break;
+                case 3:
+                    padName += "\nP: HPF";
+                    break;
+                case 4:
+                    padName += "\nP: BPF";
+                    break;
+                case 5:
+                    padName += "\nP: Di";
+                    break;
+                case 6:
+                    padName += "\nP: Bi";
+                    break;
+                case 7:
+                    padName += "\nP: De";
+                    break;
+                case 8:
+                    padName += "\nP: Re";
+                    break;
+                case 9:
+                    padName += "\nP: Fl";
+                    break;
+                case 10:
+                    padName += "\nP: Tr";
+                    break;
+                default:
+                    break;
+            }
         }
+        
+        //==== SEQUENCER MODE ====
         
         else if (PAD_SETTINGS->getMode() == 3) //Sequencer
         {
-            padName = String::empty; 
+            padName = String(padNumber+1);
+            
+            //mode
+            if (PAD_SETTINGS->getSequencerMode() == 1)
+            {
+                //midi mode
+                padName += "\nM: M";
+
+                //channel
+                padName += "\nCh: " + String(PAD_SETTINGS->getSequencerMidiChannel());
+                
+                //pressure
+                if (PAD_SETTINGS->getSequencerMidiPressureStatus() == false)
+                    padName += "\nP: Off";
+                else
+                {
+                    switch (PAD_SETTINGS->getSequencerMidiPressureMode())
+                    {
+                        case 1:
+                            padName += "\nP: CAT";
+                            break;
+                        case 2:
+                            padName += "\nP: MW";
+                            break;
+                        case 3:
+                            padName += "\nP: CC" + String(PAD_SETTINGS->getSequencerMidiCcController());
+                            break;
+                        case 4:
+                            padName += "\nP: PBU";
+                            break;
+                        case 5:
+                            padName += "\nP: PBD";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                
+            }
+            else
+            {
+                //mode sample mode
+                padName += "\nM: S";
+                
+                //pressure/effect
+                switch (PAD_SETTINGS->getSequencerEffect())
+                {
+                    case 0:
+                        padName += "\nP: Off";
+                        break;
+                    case 1:
+                        padName += "\nP: G&P";
+                        break;
+                    case 2:
+                        padName += "\nP: LPF";
+                        break;
+                    case 3:
+                        padName += "\nP: HPF";
+                        break;
+                    case 4:
+                        padName += "\nP: BPF";
+                        break;
+                    case 5:
+                        padName += "\nP: Di";
+                        break;
+                    case 6:
+                        padName += "\nP: Bi";
+                        break;
+                    case 7:
+                        padName += "\nP: De";
+                        break;
+                    case 8:
+                        padName += "\nP: Re";
+                        break;
+                    case 9:
+                        padName += "\nP: Fl";
+                        break;
+                    case 10:
+                        padName += "\nP: Tr";
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            
         }
+        
+        //==== CONTROLLER MODE ====
         
         else if (PAD_SETTINGS->getMode() == 4) //Controller
         {
-            padName = String::empty; 
+            padName = String(padNumber+1);
+            
+            //mode
+            switch (PAD_SETTINGS->getControllerControl())
+            {
+                //scene switch
+                case 1:
+                    padName += "\nM: SS";
+                    padName += "\nS: " + String(PAD_SETTINGS->getControllerSceneNumber());
+                    break;
+                //program change
+                case 2:
+                    padName += "\nM: PC";
+                    padName += "\nP: " + String(PAD_SETTINGS->getControllerMidiProgramChangeNumber());
+                    padName += "\nCh: " + String(PAD_SETTINGS->getControllerMidiProgramChangeChannel());
+                    break;
+                //scene switch & program change
+                case 3:
+                    padName += "\nM: SS&PC";
+                    padName += "\nS: " + String(PAD_SETTINGS->getControllerSceneNumber());
+                    padName += "\nP: " + String(PAD_SETTINGS->getControllerMidiProgramChangeNumber());
+                    padName += "\nCh: " + String(PAD_SETTINGS->getControllerMidiProgramChangeChannel());
+                    break;
+                //osc
+                case 4:
+                    padName += "\nM: OSC";
+                    padName += "\nP: " + String(PAD_SETTINGS->getControllerOscPort());
+                    padName += "\n" + PAD_SETTINGS->getControllerOscIpAddress();
+                    break;
+                //killswitch
+                case 5:
+                    padName += "\nM: Kill";
+                    break;
+                //pressure latch
+                case 6:
+                    padName += "\nM: PL";
+                    padName += "\nP: " + String(PAD_SETTINGS->getControllerPressureLatchPadNumber() + 1);
+                    break;
+                //LED control
+                case 7:
+                    padName += "\nM: LED";
+                    
+                    switch (PAD_SETTINGS->getControllerLedControl())
+                    {
+                        case 1:
+                            padName += "\nC: LED";
+                            break;
+                        case 2:
+                            padName += "\nC: P";
+                            break;
+                        case 3:
+                            padName += "\nC: C";
+                            break;
+                        case 4:
+                            padName += "\nC: MIDI";
+                            break;
+                        default:
+                            break;
+                    }
+                    
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        
+        //==== GLOBAL SETTINGS ====
+        if (PAD_SETTINGS->getExclusiveMode() == 1)
+        {
+            padName += "\nEx: " + String(PAD_SETTINGS->getExclusiveGroup());
         }
     }
     
@@ -570,8 +839,8 @@ void GuiPad::pastePadSettings()
     // paste pad settings from memory into pad
     AppSettings::Instance()->pastePadSettings(padNumber);
     
-    // set the mode ring colour
-    modeChange(PAD_SETTINGS->getMode());
+    // set the mode ring colour and text
+    setDisplay();
     
     //if the pasted pad is currently selected, update its display
 

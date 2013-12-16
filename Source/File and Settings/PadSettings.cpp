@@ -418,6 +418,14 @@ void PadSettings::resetData (int whatToReset)
     //what about reseting the FX values?
 }
 
+void PadSettings::changeGuiPadText()
+{
+    if (StoredSettings::getInstance()->padContentDisplay == 2)
+    {
+        alphaLiveEngineRef->changeGuiPadText(padNumber);
+    }
+}
+
 void PadSettings::setTempo (double value)
 {
     //set the rate of any tempo-relative effects
@@ -519,11 +527,13 @@ void PadSettings::setPressureCurve (int value)
 void PadSettings::setExclusiveMode (int value)
 {
     exclusiveMode = value;
+    changeGuiPadText();
 }
 
 void PadSettings::setExclusiveGroup (int value)
 {
     exclusiveGroup = value;
+    changeGuiPadText();
 }
 void PadSettings::setQuantizeMode (int value)
 {
@@ -626,12 +636,14 @@ void PadSettings::setMidiNote(int value)
         midiNote = 119;
     
     alphaLiveEngineRef->getModeMidi()->setNote(midiNote, padNumber);
+    changeGuiPadText();
 }
 
 void PadSettings::setMidiChannel(int value)
 {
     midiChannel = value;
     alphaLiveEngineRef->getModeMidi()->setChannel(value, padNumber);
+    changeGuiPadText();
 }
 void PadSettings::setMidiMinPressureRange(int value)
 {
@@ -647,6 +659,7 @@ void PadSettings::setMidiPressureMode(int value)
 {
     midiPressureMode = value;
     alphaLiveEngineRef->getModeMidi()->setPressureMode(value, padNumber);
+    changeGuiPadText();
 }
 void PadSettings::setMidiTriggerMode(int value)
 {
@@ -667,21 +680,25 @@ void PadSettings::setMidiPressureStatus (bool value)
 {
     midiPressureStatus = value;
     alphaLiveEngineRef->getModeMidi()->setPressureStatus(value, padNumber);
+    changeGuiPadText();
 }
 void PadSettings::setMidiNoteStatus (bool value)
 {
     midiNoteStatus = value;
     alphaLiveEngineRef->getModeMidi()->setNoteStatus(value, padNumber);
+    changeGuiPadText();
 }
 void PadSettings::setMidiCcController (int value)
 {
     midiCcController = value;
     alphaLiveEngineRef->getModeMidi()->setControllerNumber(value, padNumber);
+    changeGuiPadText();
 }
 void PadSettings::setMidiAutoChannelStatus (bool value)
 {
     midiAutoChannelStatus = value;
     alphaLiveEngineRef->getModeMidi()->setAutoMidiChannelStatus(value, padNumber);
+    changeGuiPadText();
 }
 void PadSettings::setMidiAutoChannels (int channel, bool status)
 {
@@ -823,6 +840,7 @@ void PadSettings::setSamplerAudioFilePath(File value)
     if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setAudioFile(value);
+        changeGuiPadText();
     }
 }
 
@@ -879,8 +897,8 @@ void PadSettings::setSamplerEffect(int value)
     if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setEffect(samplerEffect);
+        changeGuiPadText();
     }
-    
 }
 
 void PadSettings::setSamplerPan(float value)
@@ -1023,6 +1041,7 @@ void PadSettings::setSequencerMode(int value)
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMode(value);
+        changeGuiPadText();
     }
 }
 
@@ -1228,6 +1247,7 @@ void PadSettings::setSequencerMidiChannel(int value)
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMidiChannel(value);
+        changeGuiPadText();
     }
 }
 void PadSettings::setSequencerMidiNoteLength(int value)
@@ -1261,6 +1281,7 @@ void PadSettings::setSequencerMidiPressureMode (int value)
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMidiPressureMode(value);
+        changeGuiPadText();
     }
 }
 void PadSettings::setSequencerMidiPressureStatus (bool value)
@@ -1269,6 +1290,7 @@ void PadSettings::setSequencerMidiPressureStatus (bool value)
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMidiPressureStatus(value);
+        changeGuiPadText();
     }
 }
 void PadSettings::setSequencerMidiCcController (int value)
@@ -1277,6 +1299,7 @@ void PadSettings::setSequencerMidiCcController (int value)
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMidiControllerNumber(value);
+        changeGuiPadText();
     }
 }
 
@@ -1372,6 +1395,7 @@ void PadSettings::setSequencerEffect(int value)
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setSamplesEffect(sequencerEffect);
+        changeGuiPadText();
     }
      
     
@@ -1572,34 +1596,42 @@ void PadSettings::setControllerControl (int value)
 {
     controllerControl = value;
     alphaLiveEngineRef->getModeController()->setControl(value, padNumber);
+    changeGuiPadText();
 }
 void PadSettings::setControllerSceneNumber (int value)
 {
     controllerSceneNumber = value;
+    changeGuiPadText();
 }
 void PadSettings::setControllerOscIpAddress (String value)
 {
     controllerOscIpAddress = value;
+    changeGuiPadText();
 }
 void PadSettings::setControllerOscPort (int value)
 {
     controllerOscPort = value;
+    changeGuiPadText();
 }
 void PadSettings::setControllerMidiProgramChangeNumber (int value)
 {
     controllerMidiProgramChangeNumber = value;
+    changeGuiPadText();
 }
 void PadSettings::setControllerMidiProgramChangeChannel (int value)
 {
     controllerMidiProgramChangeChannel = value;
+    changeGuiPadText();
 }
 void PadSettings::setControllerPressureLatchPadNumber (int value)
 {
     controllerPressureLatchPadNumber = value;
+    changeGuiPadText();
 }
 void PadSettings::setControllerLedControl (int value)
 {
     controllerLedControl = value;
+    changeGuiPadText();
 }
 
 #pragma mark Controller mode accessor functions

@@ -1358,3 +1358,12 @@ void AlphaLiveEngine::latchPressureValue (int padNum, bool shouldLatch, bool set
 //    else
 //        minPressureValue[padNum] = 0;
 }
+
+
+void AlphaLiveEngine::changeGuiPadText (int padNum)
+{
+    //its really hacky and bed design having this here,
+    //but oh well.
+    
+    mainComponent->getGuiPadLayout()->setPadDisplay(padNum);
+}

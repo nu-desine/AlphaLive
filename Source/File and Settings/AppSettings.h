@@ -105,7 +105,6 @@ public:
     void resetProjectSettingsData();
     
     void setCurrentlySelectedPad (Array<int> selectedPads_);
-    void setPadDisplayTextMode (int value);
     
     void setGlobalPan (float value);
     void setGlobalGain (float value);
@@ -130,7 +129,6 @@ public:
     void setHardwareLedClockStatus (int value);
     
     Array<int> getCurrentlySelectedPad();
-    int getPadDisplayTextMode();
     
     float getGlobalPan();
     float getGlobalGain();
@@ -245,7 +243,6 @@ private:
     
     //int currentlySelectedPad;
     Array<int> selectedPads;
-    int padDisplayTextMode; //1 is pad numbers, 2 is pad contents. More will be added!
     
     float globalPan;
     float globalGain;

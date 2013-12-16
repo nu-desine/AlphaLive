@@ -47,6 +47,7 @@ public:
     void setAlphaLiveEngineRef (AlphaLiveEngine *ref);
     void setPadNumber (int value);
     void resetData(int whatToReset);
+    void changeGuiPadText();
     void setTempo (double value);
     
     //==================================================================

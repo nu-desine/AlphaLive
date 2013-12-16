@@ -120,6 +120,8 @@ public:
     void setMidiClockValue (int value);
     void setMidiClockMessageFilter (int value);
     void setReceiveMidiProgramChangeMessages (bool value);
+    
+    void changeGuiPadText (int padNum);
         
 private:
     

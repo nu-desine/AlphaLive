@@ -437,7 +437,7 @@ bool MainComponent::update(const Subject& theChangedSubject)
             
             //set the mode colour ring of each pad
             for (int i = 0; i <= 47; i++)
-                guiPadLayout->modeChange(i, AppSettings::Instance()->padSettings[i]->getMode());
+                guiPadLayout->setPadDisplay(i);
             
             globalClock->updateDisplay();
             projectSettingsComponent->updateDisplay();
@@ -513,7 +513,7 @@ void MainComponent::buttonClicked(Button *button)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setMode(buttonIndex);
             //set the Gui pads to have a ring of colour signifying the pad's current mode
-            guiPadLayout->modeChange(padNum, buttonIndex);
+            guiPadLayout->setPadDisplay(padNum);
         }
         
         setToOffMode();
@@ -528,7 +528,7 @@ void MainComponent::buttonClicked(Button *button)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setMode(buttonIndex);
             //set the Gui pads to have a ring of colour signifying the pad's current mode
-            guiPadLayout->modeChange(padNum, buttonIndex);
+            guiPadLayout->setPadDisplay(padNum);
         }
         
         setToMidiMode();
@@ -543,7 +543,7 @@ void MainComponent::buttonClicked(Button *button)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setMode(buttonIndex);
             //set the Gui pads to have a ring of colour signifying the pad's current mode
-            guiPadLayout->modeChange(padNum, buttonIndex);
+            guiPadLayout->setPadDisplay(padNum);
         }
         
         setToSamplerMode();
@@ -558,7 +558,7 @@ void MainComponent::buttonClicked(Button *button)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setMode(buttonIndex);
             //set the Gui pads to have a ring of colour signifying the pad's current mode
-            guiPadLayout->modeChange(padNum, buttonIndex);
+            guiPadLayout->setPadDisplay(padNum);
         }
         
         setToSequencerMode();
@@ -574,7 +574,7 @@ void MainComponent::buttonClicked(Button *button)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setMode(buttonIndex);
             //set the Gui pads to have a ring of colour signifying the pad's current mode
-            guiPadLayout->modeChange(padNum, buttonIndex);
+            guiPadLayout->setPadDisplay(padNum);
         }
         
         setToControllerMode();

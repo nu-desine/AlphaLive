@@ -344,6 +344,17 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     padContentDisplayMenu->addItem(translate("All pad contents"), 2);
     padContentDisplayMenu->addListener(this);
     padContentDisplayMenu->addMouseListener(this, true);
+    padContentDisplayMenu->setSelectedId(StoredSettings::getInstance()->padContentDisplay);
+    /*
+     Eventually it would be good if the user could completely customise what contents
+     they can see on a pad. This could be done by instead of using a combobox, the user
+     is just given a button that pops up a calloutbox that includes a bunch of tick boxes
+     for each available setting (e.g. MIDI Mode - note, channel; Sampler Mode - sample, 
+     effect etc...). 
+     How should we handle what happens when there's too much info to fit on a pad?
+     Should we warn the user here if they've selected 'too many' settings, or just
+     make the settings really small or use ellipsis?
+     */
     
     addAndMakeVisible(midiChannelPressureModeLabel = new Label());
     midiChannelPressureModeLabel->setText(translate("MIDI Channel Pressure Mode:"), dontSendNotification);
@@ -513,6 +524,12 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
     {
         StoredSettings::getInstance()->midiNoteDisplayType = comboBox->getSelectedId();
         StoredSettings::getInstance()->flush();
+        
+        if (StoredSettings::getInstance()->getInstance()->padContentDisplay == 2)
+        {
+            for (int i = 0; i < 48; i++)
+                mainComponentRef.getGuiPadLayout()->setPadDisplay(i);
+        }
     }
     
     else if (comboBox == launchTaskMenu)
@@ -550,7 +567,7 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
                     //Add to stored settings
                     StoredSettings::getInstance()->appProjectDir = newProjectDirectory;
                     StoredSettings::getInstance()->flush();
-                    //set menu item 1 to new directory
+                    //set menu item 1 to  new directory
                     appProjectDirChooser->changeItemText(1, StoredSettings::getInstance()->appProjectDir.getFullPathName());
                 }
             }
@@ -565,6 +582,15 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
         StoredSettings::getInstance()->flush();
         
         mainComponentRef.changeLookAndFeel();
+    }
+    
+    if (comboBox == padContentDisplayMenu)
+    {
+        StoredSettings::getInstance()->padContentDisplay = comboBox->getSelectedId();
+        StoredSettings::getInstance()->flush();
+        
+        for (int i = 0; i < 48; i++)
+            mainComponentRef.getGuiPadLayout()->setPadDisplay(i);
     }
     
 }
@@ -607,6 +633,10 @@ void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
     else if (interfaceThemeMenu->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("AlphaLive interface theme selector. This allows you to change the overall interface skin and colour scheme of the application."));
+    }
+    else if (padContentDisplayMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Pad Contents Display select. This allows you to change the text of the pads on the pad layout display. If you selected 'All pad contents' the values of the main settings are shown using the following common abbreviations: Ch - channel, N - note, P - pressure, M - Mode. See the Reference Manual for the full list of abbreviations."));
     }
 }
 

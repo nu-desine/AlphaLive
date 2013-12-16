@@ -453,9 +453,9 @@ void GuiPadLayout::turnOff(int pad)
 }
 
 
-void GuiPadLayout::modeChange(int padNumber, int modeNumber)
+void GuiPadLayout::setPadDisplay(int padNumber)
 {
-    pads[padNumber]->modeChange(modeNumber);
+    pads[padNumber]->setDisplay();
 }
 
 

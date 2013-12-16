@@ -41,7 +41,6 @@ AppSettings::AppSettings()
 {
     //default values
     //currentlySelectedPad = 99; //what should this default be?
-    padDisplayTextMode = 1;
     
     globalPan = 0.5;
     globalGain = 1.0;
@@ -245,10 +244,6 @@ void AppSettings::setCurrentlySelectedPad(Array<int> selectedPads_)
 {
     selectedPads = selectedPads_;
 }
-void AppSettings::setPadDisplayTextMode(int value)
-{
-    padDisplayTextMode = value;
-}
 
 #pragma mark scene mutator functions
 
@@ -378,11 +373,6 @@ void AppSettings::setHardwareLedClockStatus (int value)
 Array<int> AppSettings::getCurrentlySelectedPad()
 {
     return selectedPads;
-}
-
-int AppSettings::getPadDisplayTextMode()
-{
-    return padDisplayTextMode;
 }
 
 #pragma mark scene accessor functions

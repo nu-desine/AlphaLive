@@ -51,7 +51,7 @@ public:
     
     void turnOn(int pad);
 	void turnOff(int pad);
-	void modeChange(int padNumber, int modeNumber);
+	void setPadDisplay(int padNumber);
     
     void updateCurrentlySelectedPad();
     

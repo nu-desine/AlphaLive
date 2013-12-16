@@ -68,6 +68,7 @@ void StoredSettings::flush()
         props->setValue ("deviceType", deviceType);
         props->setValue ("autoCheckUpdates", autoCheckUpdates);
         props->setValue ("interfaceTheme", interfaceTheme);
+        props->setValue ("padContentDisplay", padContentDisplay);
         props->setValue("hardwareLedColourScheme", hardwareLedColourScheme);
         
         for (int i = 0; i < 3; i++)
@@ -105,6 +106,7 @@ void StoredSettings::flush()
     deviceType = props->getIntValue("deviceType");
     autoCheckUpdates = props->getIntValue("autoCheckUpdates");
     interfaceTheme = props->getIntValue("interfaceTheme");
+    padContentDisplay = props->getIntValue("padContentDisplay");
     hardwareLedColourScheme = props->getValue("hardwareLedColourScheme");
     
     for (int i = 0; i < 3; i++)
@@ -214,6 +216,9 @@ void StoredSettings::setDefaultValues()
     
     if (interfaceTheme == 0)
         interfaceTheme = 1;
+    
+    if (padContentDisplay == 0)
+        padContentDisplay = 1;
     
     if (hardwareLedColourScheme == String::empty)
         hardwareLedColourScheme = "Default";

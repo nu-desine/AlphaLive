@@ -127,6 +127,7 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         menu.addCommandItem (commandManager, CommandIDs::ViewTriggerSettings);
         menu.addCommandItem (commandManager, CommandIDs::ViewPressureSettings);
         menu.addCommandItem (commandManager, CommandIDs::ViewGlobalPadSettings);
+        menu.addCommandItem (commandManager, CommandIDs::ViewSequenceSettings);
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::ViewScenePresets);
         menu.addSeparator();

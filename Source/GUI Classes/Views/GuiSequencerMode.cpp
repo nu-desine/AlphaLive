@@ -2393,6 +2393,9 @@ void GuiSequencerMode::changeView (int view)
         case 2:
             pressureSettingsButton->triggerClick();
             break;
+        case 3:
+            sequenceSettingsButton->triggerClick();
+            break;
         default:
             if (sequenceSettingsButton->getToggleState())
                 triggerSettingsButton->triggerClick();

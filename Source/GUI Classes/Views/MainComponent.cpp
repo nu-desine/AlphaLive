@@ -1678,6 +1678,7 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::ViewTriggerSettings,
         CommandIDs::ViewPressureSettings,
         CommandIDs::ViewGlobalPadSettings,
+        CommandIDs::ViewSequenceSettings,
         CommandIDs::ViewScenePresets,
         CommandIDs::EnabledPadContentsDisplay
     };
@@ -1970,6 +1971,15 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
         
         result.defaultKeypresses.add (KeyPress ('3', cmd, 0));
         result.setActive(selectedPads.size() && !(guiControllerMode->isVisible()));
+    }
+    else if (commandID == CommandIDs::ViewSequenceSettings)
+    {
+        result.setInfo (translate("Show Pads Sequence Settings..."),
+						"Displays the sequence settings view for the selected pads.",
+						CommandCategories::ViewCommands, 0);
+        
+        result.defaultKeypresses.add (KeyPress ('4', cmd, 0));
+        result.setActive(selectedPads.size() && (modeSequencerButton->getToggleState()));
     }
     else if (commandID == CommandIDs::ViewScenePresets)
     {
@@ -2373,6 +2383,17 @@ bool MainComponent::perform (const InvocationInfo& info)
         
         return true;
 
+    }
+    else if (info.commandID == CommandIDs::ViewSequenceSettings)
+    {
+        if (guiGlobalPadSettings->isVisible())
+        {
+            globalSettingsButton->setToggleState(false, false);
+            setGlobalPadSettingsDisplay();
+        }
+
+        guiSequencerMode->changeView(3);
+        return true;
     }
     else if (info.commandID == CommandIDs::ViewScenePresets)
     {

@@ -224,7 +224,7 @@ void StoredSettings::setDefaultValues()
         padContentDisplay = 1;
     
     if (midiChannelPressureMode == 0)
-        midiChannelPressureMode = 1; //should this be the default?
+        midiChannelPressureMode = 2; //should this be the default?
     
     if (hardwareLedColourScheme == String::empty)
         hardwareLedColourScheme = "Default";

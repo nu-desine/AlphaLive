@@ -489,9 +489,6 @@
     <ClCompile Include="..\..\Source\GUI Classes\AlphaLiveLookandFeel.cpp">
       <Filter>AlphaLive\Source\GUI Classes</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\BinaryDataNew.cpp">
-      <Filter>AlphaLive\Source\GUI Classes\Binary Data</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Circle Piano\GuiKeys.cpp">
       <Filter>AlphaLive\Source\GUI Classes\Custom Components\Circle Piano</Filter>
     </ClCompile>
@@ -1848,6 +1845,15 @@
     <ClCompile Include="..\..\JuceLibraryCode\modules\juce_gui_extra\native\juce_mac_SystemTrayIcon.cpp">
       <Filter>Juce Modules</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\MainBinaryData.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Binary Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\ThemeClassicBinaryData.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Binary Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\ThemeMateriaBinaryData.cpp">
+      <Filter>AlphaLive\Source\GUI Classes\Binary Data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\Application\AbstractSubjectAndObserver.h">
@@ -1954,9 +1960,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\GUI Classes\AlphaLiveLookandFeel.h">
       <Filter>AlphaLive\Source\GUI Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\BinaryDataNew.h">
-      <Filter>AlphaLive\Source\GUI Classes\Binary Data</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Circle Piano\GuiKeys.h">
       <Filter>AlphaLive\Source\GUI Classes\Custom Components\Circle Piano</Filter>
@@ -3545,6 +3548,15 @@
     </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\modules\juce_audio_devices\audio_io\juce_SystemAudioVolume.h">
       <Filter>Juce Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\MainBinaryData.h">
+      <Filter>AlphaLive\Source\GUI Classes\Binary Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\ThemeClassicBinaryData.h">
+      <Filter>AlphaLive\Source\GUI Classes\Binary Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\ThemeMateriaBinaryData.h">
+      <Filter>AlphaLive\Source\GUI Classes\Binary Data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

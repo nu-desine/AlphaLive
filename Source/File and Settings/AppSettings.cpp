@@ -65,7 +65,7 @@ AppSettings::AppSettings()
     hardwareLedMode = 0;
     hardwareLedStatus = 1;
     hardwareLedPressureStatus = 1;
-    hardwareLedClockStatus = 0;
+    hardwareLedClockStatus = 1;
     
     // ==== elite controls settings ====
     eliteDial[0].control = 1;
@@ -202,7 +202,7 @@ void AppSettings::resetProjectSettingsData()
     setHardwareLedMode(0);
     setHardwareLedStatus(1);
     setHardwareLedPressureStatus(1);
-    setHardwareLedClockStatus(0);
+    setHardwareLedClockStatus(1);
 }
 
 void AppSettings::copyPadSettings (int padNumber)

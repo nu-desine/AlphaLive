@@ -1690,7 +1690,7 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
 void MainComponent::getCommandInfo (const CommandID commandID, ApplicationCommandInfo& result)
 {
 	const int cmd = ModifierKeys::commandModifier;
-	//const int shift = ModifierKeys::shiftModifier;
+	const int shift = ModifierKeys::shiftModifier;
     const int alt = ModifierKeys::altModifier;
     
     //within 'setInfo()' below, the name sets the String that appears in the Menu bar,
@@ -1716,7 +1716,7 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
         result.setInfo (translate("Project Settings..."),
 						"Opens the Project Settings view.",
 						CommandCategories::FileCommands, 0);
-        result.defaultKeypresses.add (KeyPress ('p', cmd|alt, 0));
+        result.defaultKeypresses.add (KeyPress ('p', cmd|shift, 0));
     }
     else if (commandID == CommandIDs::SaveScene)
     {

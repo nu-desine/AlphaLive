@@ -120,7 +120,7 @@ private:
     int columnNumber, sequenceNumber;
     
     int currentChannel[48]; //this holds the current or last channel used by each pad.
-                            //this is used in conjunction with auto channel mode so when
+                            //this is used in conjunction with dynamic channel mode so when
                             //a note off is sent we know what channel it needs to be
                             //set to.
     

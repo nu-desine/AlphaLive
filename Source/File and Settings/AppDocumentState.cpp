@@ -129,9 +129,9 @@ void AppDocumentState::savePadSettings (int padNumber, XmlElement *padData)
         padData->setAttribute("midiPressureStatus", PAD_SETTINGS->getMidiPressureStatus());
         padData->setAttribute("midiNoteStatus", PAD_SETTINGS->getMidiNoteStatus());
         padData->setAttribute("midiCcController", PAD_SETTINGS->getMidiCcController());
-        padData->setAttribute("midiAutoChannelStatus", PAD_SETTINGS->getMidiAutoChannelStatus());
+        padData->setAttribute("midiDynamicChannelStatus", PAD_SETTINGS->getMidiDynamicChannelStatus());
         for (int chan = 0; chan < 16; chan++)
-            padData->setAttribute("midiAutoChannels" + String(chan), PAD_SETTINGS->getMidiAutoChannels(chan));
+            padData->setAttribute("midiDynamicChannels" + String(chan), PAD_SETTINGS->getMidiDynamicChannels(chan));
     }
     else if (PAD_SETTINGS->getMode() == 2) //sampler mode
     {
@@ -407,12 +407,12 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
             PAD_SETTINGS->setMidiNoteStatus(padData->getBoolAttribute("midiNoteStatus"));
         if (padData->hasAttribute("midiCcController"))
             PAD_SETTINGS->setMidiCcController(padData->getIntAttribute("midiCcController"));
-        if (padData->hasAttribute("midiAutoChannelStatus"))
-            PAD_SETTINGS->setMidiAutoChannelStatus(padData->getBoolAttribute("midiAutoChannelStatus"));
+        if (padData->hasAttribute("midiDynamicChannelStatus"))
+            PAD_SETTINGS->setMidiDynamicChannelStatus(padData->getBoolAttribute("midiDynamicChannelStatus"));
         for (int chan = 0; chan < 16; chan++)
         {
-            if (padData->hasAttribute("midiAutoChannels" + String(chan)))
-                PAD_SETTINGS->setMidiAutoChannels(chan, padData->getBoolAttribute("midiAutoChannels" + String(chan)));
+            if (padData->hasAttribute("midiDynamicChannels" + String(chan)))
+                PAD_SETTINGS->setMidiDynamicChannels(chan, padData->getBoolAttribute("midiDynamicChannels" + String(chan)));
         }
     }
     

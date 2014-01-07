@@ -48,9 +48,9 @@ ModeMidi::ModeMidi (AlphaLiveEngine &ref)
         pressureStatus[i] = PAD_SETTINGS_i->getMidiPressureStatus();
         noteStatus[i] = PAD_SETTINGS_i->getMidiNoteStatus();
         quantizeMode[i] = PAD_SETTINGS_i->getQuantizeMode();
-        autoMidiChannelStatus[i] = PAD_SETTINGS_i->getMidiAutoChannelStatus();
+        autoMidiChannelStatus[i] = PAD_SETTINGS_i->getMidiDynamicChannelStatus();
         for (int chan = 0; chan < 16; chan++)
-            autoMidiChannels[chan][i] = PAD_SETTINGS_i->getMidiAutoChannels(chan);
+            autoMidiChannels[chan][i] = PAD_SETTINGS_i->getMidiDynamicChannels(chan);
         
         //not all members of the TriggerModeData struct are needed for MIDI mode
         triggerModeData[i].playingStatus = 0;
@@ -210,7 +210,7 @@ void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
     
     //exclusive channel pressure stuff.
     //Do this here after the noteOn() function is called
-    //incase auto channel mode is on and currentChannel is
+    //incase dynamic channel mode is on and currentChannel is
     //changed.
     if (prevPadValue[padNumber] == 0) //pad pressed
     {
@@ -328,7 +328,7 @@ void ModeMidi::noteOn (int padNumber)
         isPlaying[padNumber] = false;
     }
     
-    //if auto channel mode is on, only need to dynamically set the channel here when turning
+    //if dynamic channel mode is on, only need to dynamically set the channel here when turning
     //a note on. The following pressure data and note off message must use the same channel.
     setCurrentChannel(padNumber);
     
@@ -662,7 +662,7 @@ void ModeMidi::setCurrentChannel (int padNum)
         currentChannel[padNum] = channel[padNum];
     }
     
-    //auto MIDI channel
+    //Dynamic MIDI channel
     else if (autoMidiChannelStatus[padNum] == true)
     {
         Array<int> previouslyUsedChannels = alphaLiveEngineRef.getPreviouslyUsedMidiChannels();
@@ -841,7 +841,7 @@ void ModeMidi::setNoteStatus (bool value, int pad)
     
     //If note status has been changed to off, we need to make sure that the channel is set
     //correctly, as at this point it could have been set to another channel using the
-    //auto channel mode.
+    //dynamic channel mode.
     if (value == false)
     {
         currentChannel[pad] = channel[pad];

@@ -68,11 +68,11 @@ PadSettings::PadSettings(int arrayIndex)
     //default CC layout
     midiCcController = Layouts::ccLayout[padNumber];
     
-    midiAutoChannelStatus = false;
+    midiDynamicChannelStatus = false;
     for (int i = 0; i < 4; i++)
-        midiAutoChannels[i] = true;
+        midiDynamicChannels[i] = true;
     for (int i = 4; i < 16; i++)
-        midiAutoChannels[i] = false;
+        midiDynamicChannels[i] = false;
     
     //sampler mode
     samplerAudioFilePath = String::empty;
@@ -327,11 +327,11 @@ void PadSettings::resetData (int whatToReset)
         setMidiNoteStatus (true);
         setMidiCcController (Layouts::ccLayout[padNumber]);
         
-        setMidiAutoChannelStatus(false);
+        setMidiDynamicChannelStatus(false);
         for (int i = 0; i < 4; i++)
-            setMidiAutoChannels(i, true);
+            setMidiDynamicChannels(i, true);
         for (int i = 4; i < 16; i++)
-            setMidiAutoChannels(i, false);
+            setMidiDynamicChannels(i, false);
     }
     
     if (whatToReset != 2)
@@ -694,15 +694,15 @@ void PadSettings::setMidiCcController (int value)
     alphaLiveEngineRef->getModeMidi()->setControllerNumber(value, padNumber);
     changeGuiPadText();
 }
-void PadSettings::setMidiAutoChannelStatus (bool value)
+void PadSettings::setMidiDynamicChannelStatus (bool value)
 {
-    midiAutoChannelStatus = value;
+    midiDynamicChannelStatus = value;
     alphaLiveEngineRef->getModeMidi()->setAutoMidiChannelStatus(value, padNumber);
     changeGuiPadText();
 }
-void PadSettings::setMidiAutoChannels (int channel, bool status)
+void PadSettings::setMidiDynamicChannels (int channel, bool status)
 {
-    midiAutoChannels[channel] = status;
+    midiDynamicChannels[channel] = status;
     alphaLiveEngineRef->getModeMidi()->setAutoMidiChannels(channel, status, padNumber);
 }
 
@@ -752,13 +752,13 @@ int PadSettings::getMidiCcController()
 {
     return midiCcController;
 }
-bool PadSettings::getMidiAutoChannelStatus()
+bool PadSettings::getMidiDynamicChannelStatus()
 {
-    return midiAutoChannelStatus;
+    return midiDynamicChannelStatus;
 }
-bool PadSettings::getMidiAutoChannels (int channel)
+bool PadSettings::getMidiDynamicChannels (int channel)
 {
-    return midiAutoChannels[channel];
+    return midiDynamicChannels[channel];
 }
 
 #pragma mark Sampler mode mutator functions

@@ -208,9 +208,9 @@ private:
     String firmwareVersion, deviceSerial;
     bool hasDisplayedNoMidiDeviceWarning;
     
-    //auto MIDI Channel stuff
+    //dynamic MIDI Channel stuff
     //this stuff needs to be here and not within the MIDI Mode class
-    //as we don't want auto channels to interfere with MIDI from Sequencer Mode
+    //as we don't want dynamic channels to interfere with MIDI from Sequencer Mode
     bool isMidiChannelActive[16];
     Array<int> previouslyUsedMidiChannels;  //this array will always hold all 16 channels but
                                             //its order will changing depending on the order

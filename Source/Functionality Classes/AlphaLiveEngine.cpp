@@ -908,7 +908,7 @@ void AlphaLiveEngine::sendMidiMessage(MidiMessage midiMessage)
     }
     
     //==================================================================================
-    //log data about the MIDI channels that is then used by the Auto MIDI Channel Mode
+    //log data about the MIDI channels that is then used by the Dynamic MIDI Channel Mode
     if (midiMessage.isNoteOn())
     {
         //put this channel at the end of the array

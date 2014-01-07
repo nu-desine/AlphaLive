@@ -85,8 +85,8 @@ public:
     void setMidiPressureStatus (bool value);
     void setMidiNoteStatus (bool value);
     void setMidiCcController (int value);
-    void setMidiAutoChannelStatus (bool value);
-    void setMidiAutoChannels (int channel, bool status);
+    void setMidiDynamicChannelStatus (bool value);
+    void setMidiDynamicChannels (int channel, bool status);
     
     int getMidiNote();
     int getMidiChannel();
@@ -99,8 +99,8 @@ public:
     bool getMidiPressureStatus();
     bool getMidiNoteStatus();
     int getMidiCcController();
-    bool getMidiAutoChannelStatus();
-    bool getMidiAutoChannels (int channel);
+    bool getMidiDynamicChannelStatus();
+    bool getMidiDynamicChannels (int channel);
     
     //==================================================================
     //Sampler mode
@@ -420,8 +420,8 @@ private:
     bool midiPressureStatus;
     bool midiNoteStatus;
     int midiCcController;
-    bool midiAutoChannelStatus;
-    bool midiAutoChannels[16];
+    bool midiDynamicChannelStatus;
+    bool midiDynamicChannels[16];
     
     //==================================================================
     //Sampler mode

@@ -353,10 +353,10 @@ void GuiPad::setPadText()
             padName = String(padNumber+1);
             
             //channel
-            if (PAD_SETTINGS->getMidiAutoChannelStatus() == false)
+            if (PAD_SETTINGS->getMidiDynamicChannelStatus() == false)
                 padName += "\nCh: " + String(PAD_SETTINGS->getMidiChannel());
             else
-                padName += "\nCh: Au";
+                padName += "\nCh: Dyn";
             
             //note
             if (PAD_SETTINGS->getMidiNoteStatus() == false)

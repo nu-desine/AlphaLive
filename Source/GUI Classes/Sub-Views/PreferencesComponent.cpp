@@ -939,7 +939,7 @@ void HardwarePreferencesComponent::createLedColourSchemes()
     
     ledColourScheme.add(new LedColourScheme());
     currentIndex = ledColourScheme.size() - 1;
-    ledColourScheme[currentIndex]->name = "Christmas";
+    ledColourScheme[currentIndex]->name = "Festive";
     ledColourScheme[currentIndex]->colour[0] = Colour(0xffffffff);
     ledColourScheme[currentIndex]->colour[1] = Colour(0xff00ff00);
     ledColourScheme[currentIndex]->colour[2] = Colour(0xffff0000);
@@ -974,7 +974,7 @@ void HardwarePreferencesComponent::createLedColourSchemes()
     
     ledColourScheme.add(new LedColourScheme());
     currentIndex = ledColourScheme.size() - 1;
-    ledColourScheme[currentIndex]->name = "Pink Power";
+    ledColourScheme[currentIndex]->name = "Pink";
     ledColourScheme[currentIndex]->colour[0] = Colour(0xffe100ff);
     ledColourScheme[currentIndex]->colour[1] = Colour(0xff8400ff);
     ledColourScheme[currentIndex]->colour[2] = Colour(0xff4a00ff);

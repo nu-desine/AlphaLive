@@ -359,7 +359,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
      */
     
     addAndMakeVisible(midiChannelPressureModeLabel = new Label());
-    midiChannelPressureModeLabel->setText(translate("MIDI Channel Pressure Mode:"), dontSendNotification);
+    midiChannelPressureModeLabel->setText(translate("MIDI Channel Pressure Interaction:"), dontSendNotification);
     
     addAndMakeVisible(midiChannelPressureModeMenu = new ComboBox());
     midiChannelPressureModeMenu->addItem(translate("Newest pad has control"), 1);
@@ -664,7 +664,8 @@ void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
     }
     else if (midiChannelPressureModeMenu->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("MIDI Channel Pressure Mode selector. This allows you to set what happens when multiple pads set to the same MIDI channel and the same channel pressure mode (channel aftertouch, pitch bend, mod wheel or CC data) are being held. If you select 'Newest pad has control' only the last pressed pad can send pressure data, however 'All pads have control' means that all pads can send pressure data at any time. You will find that the latter option may causes 'glitchy' effects when moving multiple pads."));
+        mainComponentRef.setInfoTextBoxText(translate("MIDI Channel Pressure Interaction selector. This allows you to set what happens when multiple pads set to the same MIDI channel and the same channel pressure mode (channel aftertouch, pitch bend, mod wheel or CC data) are being held. 'Newest pad has control' means that only the last pressed pad can send pressure data. 'All pads have control' means that all pads can send pressure data at any time, however this option may cause pads to interfere with each other and cause 'glitchy' effects."));
+
     }
 }
 

@@ -27,7 +27,7 @@
 #include "../../File and Settings/StoredSettings.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
-#define PRESSURE_HOLDER modeSequencerRef.getAlphaLiveEngineRef().getMidiChannelPressureHolderPtr(midiChannel)
+#define PRESSURE_HOLDER modeSequencerRef.getAlphaLiveEngineRef().getMidiChannelPressureHolderPtr(midiChannel-1)
 
 //=====================================================================================
 //=Constructor=========================================================================

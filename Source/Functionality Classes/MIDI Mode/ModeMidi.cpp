@@ -28,7 +28,7 @@
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNumber]
 #define PAD_SETTINGS_i AppSettings::Instance()->padSettings[i]
-#define PRESSURE_HOLDER alphaLiveEngineRef.getMidiChannelPressureHolderPtr(currentChannel[padNumber])
+#define PRESSURE_HOLDER alphaLiveEngineRef.getMidiChannelPressureHolderPtr(currentChannel[padNumber]-1)
 
 ModeMidi::ModeMidi (AlphaLiveEngine &ref)
                 : alphaLiveEngineRef(ref)

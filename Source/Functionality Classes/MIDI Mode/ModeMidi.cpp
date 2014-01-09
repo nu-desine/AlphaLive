@@ -216,24 +216,27 @@ void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
     {
         if (midiChannelPressureMode == 1)
         {
-            //assign the pressed pad number to the relevent variable in the
-            //MidiChannelPressureHolder struct...
+            if (pressureStatus[padNumber] == true)
+            {
+                //assign the pressed pad number to the relevent variable in the
+                //MidiChannelPressureHolder struct...
             
-            if (pressureMode[padNumber] == 2) //channel aftertouch
-            {
-                PRESSURE_HOLDER->aftertouch = padNumber;
-            }
-            else if (pressureMode[padNumber] == 3) //mod wheel
-            {
-                PRESSURE_HOLDER->controlChange[1] = padNumber;
-            }
-            else if (pressureMode[padNumber] == 4) //CC data
-            {
-                PRESSURE_HOLDER->controlChange[controllerNumber[padNumber]] = padNumber;
-            }
-            else if (pressureMode[padNumber] == 5 || pressureMode[padNumber] == 6) //pitch bend
-            {
-                PRESSURE_HOLDER->pitchBend = padNumber;
+                if (pressureMode[padNumber] == 2) //channel aftertouch
+                {
+                    PRESSURE_HOLDER->aftertouch = padNumber;
+                }
+                else if (pressureMode[padNumber] == 3) //mod wheel
+                {
+                    PRESSURE_HOLDER->controlChange[1] = padNumber;
+                }
+                else if (pressureMode[padNumber] == 4) //CC data
+                {
+                    PRESSURE_HOLDER->controlChange[controllerNumber[padNumber]] = padNumber;
+                }
+                else if (pressureMode[padNumber] == 5 || pressureMode[padNumber] == 6) //pitch bend
+                {
+                    PRESSURE_HOLDER->pitchBend = padNumber;
+                }
             }
         }
     }
@@ -277,35 +280,38 @@ void ModeMidi::getInputData(int padNumber, int padValue, int padVelocity)
     {
         if (midiChannelPressureMode == 1)
         {
-            //remove the released pad number from the relevent variable in the
-            //MidiChannelPressureHolder struct if it exists there...
-            
-            if (pressureMode[padNumber] == 2) //channel aftertouch
+            if (pressureStatus[padNumber] == true)
             {
-                if (PRESSURE_HOLDER->aftertouch == padNumber)
+                //remove the released pad number from the relevent variable in the
+                //MidiChannelPressureHolder struct if it exists there...
+                
+                if (pressureMode[padNumber] == 2) //channel aftertouch
                 {
-                    PRESSURE_HOLDER->aftertouch = -1;
+                    if (PRESSURE_HOLDER->aftertouch == padNumber)
+                    {
+                        PRESSURE_HOLDER->aftertouch = -1;
+                    }
                 }
-            }
-            else if (pressureMode[padNumber] == 3) //mod wheel
-            {
-                if (PRESSURE_HOLDER->controlChange[1] == padNumber)
+                else if (pressureMode[padNumber] == 3) //mod wheel
                 {
-                    PRESSURE_HOLDER->controlChange[1] = -padNumber;
+                    if (PRESSURE_HOLDER->controlChange[1] == padNumber)
+                    {
+                        PRESSURE_HOLDER->controlChange[1] = -padNumber;
+                    }
                 }
-            }
-            else if (pressureMode[padNumber] == 4) //CC data
-            {
-                if (PRESSURE_HOLDER->controlChange[controllerNumber[padNumber]] == padNumber)
+                else if (pressureMode[padNumber] == 4) //CC data
                 {
-                    PRESSURE_HOLDER->controlChange[controllerNumber[padNumber]] = -1;
+                    if (PRESSURE_HOLDER->controlChange[controllerNumber[padNumber]] == padNumber)
+                    {
+                        PRESSURE_HOLDER->controlChange[controllerNumber[padNumber]] = -1;
+                    }
                 }
-            }
-            else if (pressureMode[padNumber] == 5 || pressureMode[padNumber] == 6) //pitch bend
-            {
-                if (PRESSURE_HOLDER->pitchBend == padNumber)
+                else if (pressureMode[padNumber] == 5 || pressureMode[padNumber] == 6) //pitch bend
                 {
-                    PRESSURE_HOLDER->pitchBend = -1;
+                    if (PRESSURE_HOLDER->pitchBend == padNumber)
+                    {
+                        PRESSURE_HOLDER->pitchBend = -1;
+                    }
                 }
             }
         }

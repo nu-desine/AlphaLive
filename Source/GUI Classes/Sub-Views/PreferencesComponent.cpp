@@ -888,11 +888,11 @@ void HardwarePreferencesComponent::mouseEnter (const MouseEvent &e)
     }
     else if (ledColourButton[1]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Mid Pressure LED Colour Selector. Click this button to display a colour picker to choose a custom colour for the LED when a single pad is presssed to it's full depth. To see the colour change in realtime, hold a pad at it's full depth while chosing the colour."));
+        mainComponentRef.setInfoTextBoxText(translate("Mid Pressure LED Colour Selector. Click this button to display a colour picker to choose a custom colour for the LED when a single pad is pressed to it's full depth. To see the colour change in realtime, hold a pad at it's full depth while choosing the colour."));
     }
     else if (ledColourButton[2]->isMouseOver(true))
     {
-        mainComponentRef.setInfoTextBoxText(translate("Maximum Pressure LED Colour Selector. Click this button to display a colour picker to choose a custom colour for the LED when a two or more pads are pressed to their full depth. To see the colour change in realtime, hold two pads at their full depths while chosing the colour."));
+        mainComponentRef.setInfoTextBoxText(translate("Maximum Pressure LED Colour Selector. Click this button to display a colour picker to choose a custom colour for the LED when a two or more pads are pressed to their full depth. To see the colour change in realtime, hold two pads at their full depths while choosing the colour."));
     }
 }
 

@@ -65,8 +65,21 @@ public:
     // colour for button images/icons. Works best when this is the same as textColour_
     uint32 iconColour_;
     
+    // colour for button images/icons when button is on.
+    uint32 iconOnColour_;
+    
+    // colour for pads
+    uint32 padColour_;
+    
+    // colour for pads text
+    uint32 padTextColour_;
+    
+    // colour for toolbox tabs
+    uint32 tabColour_;
+    
     Colour mainColour, mainColourLighter, childBackgroundColour, childBackgroundColourLighter, textColour;
     Colour backgroundColour, foregroundColour, foregroundColourLighter, foregroundColourDarker, iconColour;
+    Colour padColour, padTextColour,tabColour, iconOnColour;
     
     //=============================================
     // background images

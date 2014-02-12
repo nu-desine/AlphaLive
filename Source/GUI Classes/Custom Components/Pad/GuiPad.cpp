@@ -75,10 +75,6 @@ GuiPad::GuiPad(int padNum, GuiPadLayout &ref)
     oscGradientOuterColour = oscGradientInnerColour = Colours::white.withAlpha(0.0f);
 	
 	modeOpacity = 0.05f;
-	
-	padColour = Colours::lightgrey.withAlpha(0.6f);
-	padOuterColour = Colours::darkgrey.withAlpha(0.9f);
-    padInnerColour = Colours::darkgrey.withAlpha(0.3f);
     
     somethingIsBeingDraggedOver = false;
 	
@@ -111,9 +107,9 @@ void GuiPad::resized()
 void GuiPad::paint (Graphics& g)
 {
     //main image
-	g.setColour(padColour);
+	g.setColour(AlphaTheme::getInstance()->padColour.withAlpha(0.7f));
 	g.drawEllipse(getWidth()*0.05, getHeight()*0.05, getWidth()*0.9, getHeight()*0.9, 2.0f);
-    ColourGradient padGradient(padInnerColour, (getWidth()*0.5),(getHeight()*0.5), padOuterColour, (getWidth()*0.8),(getHeight()*0.8), true);
+    ColourGradient padGradient(AlphaTheme::getInstance()->padColour.withAlpha(0.1f), (getWidth()*0.5),(getHeight()*0.5), AlphaTheme::getInstance()->padColour.withAlpha(0.7f), (getWidth()*0.8),(getHeight()*0.8), true);
     g.setGradientFill(padGradient);
     
 	g.fillEllipse((getWidth()*0.05), (getHeight()*0.05), (getWidth()*0.9), (getHeight()*0.9));
@@ -124,7 +120,7 @@ void GuiPad::paint (Graphics& g)
     g.fillEllipse((getWidth()*0.08), (getHeight()*0.08), (getWidth()*0.84), (getHeight()*0.84));
     
     //text
-    g.setColour(Colours::white);
+    g.setColour(AlphaTheme::getInstance()->padTextColour);
     g.setFont(9);
     g.drawFittedText(padName, (getWidth()*0.1), 0, (getWidth()*0.8), getHeight(), Justification::centred, 1);
     

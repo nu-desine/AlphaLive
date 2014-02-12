@@ -241,7 +241,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     addAndMakeVisible(currentParameterLabel = new Label());
 	currentParameterLabel->setFont(Font(10));
 	currentParameterLabel->setText(translate("TEMPO"), dontSendNotification);
-    currentParameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->textColour);
+    currentParameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->iconOnColour);
     currentParameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     currentParameterLabel->setJustificationType(Justification::centred);
     //currentParameterLabel->setEditable(false, false, false);
@@ -314,6 +314,8 @@ void GuiSamplerMode::paint (Graphics& g)
 	
 	g.fillEllipse(678,285, 38, 38);
 	g.fillEllipse(850,493, 38, 38);
+    g.fillEllipse(891,469, 38, 38);
+    g.fillEllipse(915,428, 38, 38);
 	
 	if(triggerSettingsButton->getToggleStateValue()==true)
 	{
@@ -333,6 +335,8 @@ void GuiSamplerMode::paint (Graphics& g)
 	
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(850,493, 38, 38, 1.0);
+    g.drawEllipse(891,469, 38, 38, 1.0);
+    g.drawEllipse(915,428, 38, 38, 1.0);
 	
 	if(triggerSettingsButton->getToggleStateValue()==true)
 	{

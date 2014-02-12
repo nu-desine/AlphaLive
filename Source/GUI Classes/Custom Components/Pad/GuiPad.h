@@ -88,7 +88,7 @@ private:
 	Colour normalColour, overColour, downColour, overlayColour, modeColour, samplerColour, midiColour, sequencerColour, controllerColour;
 	
     
-    Colour padColour, padOuterColour, padInnerColour, oscGradientOuterColour, oscGradientInnerColour;
+    Colour oscGradientOuterColour, oscGradientInnerColour;
     float gradientOuterColourAlpha, gradientInnerColourAlpha, modeOpacity;
 	
     int lastTime;

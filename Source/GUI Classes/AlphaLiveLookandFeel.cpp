@@ -12,6 +12,10 @@
 #include "Binary Data/MainBinaryData.h"
 #include "Binary Data/ThemeClassicBinaryData.h"
 #include "Binary Data/ThemeMateriaBinaryData.h"
+#include "Binary Data/ThemeMinimalBinaryData.h"
+#include "Binary Data/ThemeCharcoalBinaryData.h"
+#include "Binary Data/ThemeAuroraBinaryData.h"
+#include "Binary Data/ThemeTransparencyBinaryData.h"
 
 AlphaTheme::AlphaTheme()
 {
@@ -211,6 +215,10 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffb6b797; //materia cream
         AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff46505a; //dark blue/grey
         AlphaTheme::getInstance()->iconColour_ = 0xffb6b797; // materia cream
+        AlphaTheme::getInstance()->iconOnColour_ = 0xffb6b797;
+        AlphaTheme::getInstance()->tabColour_ = 0xff46505a;
+        AlphaTheme::getInstance()->padColour_ = 0xff999999; //dark grey
+        AlphaTheme::getInstance()->padTextColour_ = 0xffffffff;
         
         
         // set up the standard set of colours..
@@ -264,7 +272,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             ListBox::outlineColourId,                   AlphaTheme::getInstance()->childBackgroundColourLighter_,
             ListBox::textColourId,                      AlphaTheme::getInstance()->textColour_,
             
-            Slider::backgroundColourId,                 0x00000000,
+            Slider::backgroundColourId,                 AlphaTheme::getInstance()->tabColour_,
             Slider::thumbColourId,                      AlphaTheme::getInstance()->backgroundColour_,
             Slider::trackColourId,                      AlphaTheme::getInstance()->mainColour_,
             Slider::rotarySliderFillColourId,           AlphaTheme::getInstance()->mainColour_,
@@ -325,6 +333,588 @@ void AlphaLiveLookandFeel::setTheme (int theme)
     //======================================================================
     
     
+    else if (theme == 2) //minimal theme
+    {
+        // set background images here...
+        
+        AlphaTheme::getInstance()->mainImage = ImageCache::getFromMemory(ThemeMinimalBinaryData::minimal_interfacemain_png,
+                                                                         ThemeMinimalBinaryData::minimal_interfacemain_pngSize);
+        AlphaTheme::getInstance()->padsOffImage = ImageCache::getFromMemory(ThemeMinimalBinaryData::minimal_padsoff_png,
+                                                                            ThemeMinimalBinaryData::minimal_padsoff_pngSize);
+        AlphaTheme::getInstance()->padsOnImage = ImageCache::getFromMemory(ThemeMinimalBinaryData::minimal_padson_png,
+                                                                           ThemeMinimalBinaryData::minimal_padson_pngSize);
+        AlphaTheme::getInstance()->modeOffImage = ImageCache::getFromMemory(ThemeMinimalBinaryData::minimal_modeoff_png,
+                                                                            ThemeMinimalBinaryData::minimal_modeoff_pngSize);
+        AlphaTheme::getInstance()->padsBackgroundImage = ImageCache::getFromMemory(ThemeMinimalBinaryData::minimal_padsbg_png,
+                                                                                   ThemeMinimalBinaryData::minimal_padsbg_pngSize);
+        AlphaTheme::getInstance()->settingsOffImage = ImageCache::getFromMemory(ThemeMinimalBinaryData::minimal_statusoff_png,
+                                                                                ThemeMinimalBinaryData::minimal_statusoff_pngSize);
+        
+        //set custom and default AlphaLive colours here...
+        
+        AlphaTheme::getInstance()->mainColour_ = 0xff195fad; //blue
+        AlphaTheme::getInstance()->mainColourLighter_ = 0xff6ec8e8; //light blue
+        AlphaTheme::getInstance()->childBackgroundColour_ = 0xffebebeb; //light grey
+        AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xfff0f0f0; //dark white
+        AlphaTheme::getInstance()->textColour_ = 0xff999999; //dark grey
+        AlphaTheme::getInstance()->backgroundColour_ = 0xffffffff; //white
+        AlphaTheme::getInstance()->foregroundColour_ = 0xffaeaeae; //grey
+        AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffdddddd; //light grey
+        AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff999999; //dark grey
+        AlphaTheme::getInstance()->iconColour_ = 0xff999999; //dark grey (same as text colour)
+        AlphaTheme::getInstance()->iconOnColour_ = 0xffffffff;
+        AlphaTheme::getInstance()->padColour_ = 0xfff0f0f0; //dark grey
+        AlphaTheme::getInstance()->padTextColour_ = 0xffffffff;
+        AlphaTheme::getInstance()->tabColour_ = 0xffffffff;
+        
+        
+        // set up the standard set of colours..
+        static const uint32 standardColours[] =
+        {
+            TextButton::buttonColourId,                 AlphaTheme::getInstance()->backgroundColour_,
+            TextButton::buttonOnColourId,               AlphaTheme::getInstance()->mainColour_,
+            TextButton::textColourOnId,                 AlphaTheme::getInstance()->textColour_,
+            TextButton::textColourOffId,                AlphaTheme::getInstance()->textColour_,
+            
+            DrawableButton::backgroundColourId,         0x00000000,
+            DrawableButton::backgroundOnColourId,       AlphaTheme::getInstance()->mainColour_,
+            
+            
+            ComboBox::buttonColourId,                   0xffcccccc,
+            ComboBox::outlineColourId,                  AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            ComboBox::textColourId,                     AlphaTheme::getInstance()->textColour_,
+            ComboBox::backgroundColourId,               AlphaTheme::getInstance()->childBackgroundColour_,
+            ComboBox::arrowColourId,                    AlphaTheme::getInstance()->textColour_,
+            
+            ToggleButton::textColourId,                 AlphaTheme::getInstance()->textColour_,
+            
+            TextEditor::backgroundColourId,             AlphaTheme::getInstance()->childBackgroundColour_,
+            TextEditor::textColourId,                   AlphaTheme::getInstance()->textColour_,
+            TextEditor::highlightColourId,              AlphaTheme::getInstance()->mainColour_,
+            TextEditor::highlightedTextColourId,        AlphaTheme::getInstance()->textColour_,
+            TextEditor::outlineColourId,                AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            TextEditor::focusedOutlineColourId,         AlphaTheme::getInstance()->foregroundColourDarker_,
+            TextEditor::shadowColourId,                 0x38000000,
+            
+            CaretComponent::caretColourId,              AlphaTheme::getInstance()->textColour_,
+            
+            Label::backgroundColourId,                  0x00000000,
+            Label::textColourId,                        AlphaTheme::getInstance()->textColour_,
+            Label::outlineColourId,                     0x00000000,
+            
+            ScrollBar::backgroundColourId,              0x00000000,
+            ScrollBar::thumbColourId,                   AlphaTheme::getInstance()->textColour_,
+            
+            TreeView::linesColourId,                    0x00000000,
+            TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
+            TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
+            
+            PopupMenu::backgroundColourId,              0x00000000,
+            PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
+            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->textColour_,
+            PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
+            PopupMenu::highlightedBackgroundColourId,   AlphaTheme::getInstance()->mainColour_,
+            
+            ListBox::backgroundColourId,                AlphaTheme::getInstance()->backgroundColour_,
+            ListBox::outlineColourId,                   AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            ListBox::textColourId,                      AlphaTheme::getInstance()->textColour_,
+            
+            Slider::backgroundColourId,                 0x00000000,
+            Slider::thumbColourId,                      AlphaTheme::getInstance()->backgroundColour_,
+            Slider::trackColourId,                      AlphaTheme::getInstance()->mainColour_,
+            Slider::rotarySliderFillColourId,           AlphaTheme::getInstance()->mainColour_,
+            Slider::rotarySliderOutlineColourId,        AlphaTheme::getInstance()->childBackgroundColour_, //0xff3c3c3c
+            Slider::textBoxTextColourId,                AlphaTheme::getInstance()->textColour_,
+            Slider::textBoxBackgroundColourId,          0x00000000,
+            Slider::textBoxHighlightColourId,           AlphaTheme::getInstance()->mainColour_,
+            Slider::textBoxOutlineColourId,             AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            
+            ResizableWindow::backgroundColourId,        0xff777777,
+            //DocumentWindow::textColourId,               0xff000000, // (this is deliberately not set)
+            
+            AlertWindow::backgroundColourId,            AlphaTheme::getInstance()->backgroundColour_,
+            AlertWindow::textColourId,                  AlphaTheme::getInstance()->textColour_,
+            AlertWindow::outlineColourId,               0xff666666,
+            
+            ProgressBar::backgroundColourId,            AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            ProgressBar::foregroundColourId,            AlphaTheme::getInstance()->foregroundColour_,
+            
+            TooltipWindow::backgroundColourId,          0x00000000,
+            TooltipWindow::textColourId,                AlphaTheme::getInstance()->textColour_,
+            TooltipWindow::outlineColourId,             0x4c000000,
+            
+            TabbedComponent::backgroundColourId,        AlphaTheme::getInstance()->tabColour_,
+            TabbedComponent::outlineColourId,           AlphaTheme::getInstance()->backgroundColour_,
+            TabbedButtonBar::tabOutlineColourId,        0x80000000,
+            TabbedButtonBar::frontOutlineColourId,      0x90000000,
+            TabbedButtonBar::tabTextColourId,           AlphaTheme::getInstance()->textColour_,
+            TabbedButtonBar::frontTextColourId,         AlphaTheme::getInstance()->textColour_,
+            
+            Toolbar::backgroundColourId,                0xfff6f8f9,
+            Toolbar::separatorColourId,                 0x4c000000,
+            Toolbar::buttonMouseOverBackgroundColourId, 0x4c0000ff,
+            Toolbar::buttonMouseDownBackgroundColourId, 0x800000ff,
+            Toolbar::labelTextColourId,                 0xf0000000,
+            Toolbar::editingModeOutlineColourId,        0xffff0000,
+            
+            HyperlinkButton::textColourId,              0xcc1111ee,
+            
+            GroupComponent::outlineColourId,            0x66000000,
+            GroupComponent::textColourId,               AlphaTheme::getInstance()->textColour_,
+            
+            DirectoryContentsDisplayComponent::highlightColourId,   AlphaTheme::getInstance()->mainColour_, // <-- used for fileList and fileTree item's
+            DirectoryContentsDisplayComponent::textColourId,        AlphaTheme::getInstance()->textColour_,
+            
+            FileSearchPathListComponent::backgroundColourId,        0x00000000,
+            
+            FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
+            DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
+        };
+        
+        for (int i = 0; i < numElementsInArray (standardColours); i += 2)
+            setColour (standardColours [i], Colour ((uint32) standardColours [i + 1]));
+    }
+
+    
+    
+    //======================================================================
+    //======================================================================
+    
+    else if (theme == 3) //charcoal theme
+    {
+        // set background images here...
+        
+        AlphaTheme::getInstance()->mainImage = ImageCache::getFromMemory(ThemeCharcoalBinaryData::charcoal_interfacemain_png,
+                                                                         ThemeCharcoalBinaryData::charcoal_interfacemain_pngSize);
+        AlphaTheme::getInstance()->padsOffImage = ImageCache::getFromMemory(ThemeCharcoalBinaryData::charcoal_padsoff_png,
+                                                                            ThemeCharcoalBinaryData::charcoal_padsoff_pngSize);
+        AlphaTheme::getInstance()->padsOnImage = ImageCache::getFromMemory(ThemeCharcoalBinaryData::charcoal_padson_png,
+                                                                           ThemeCharcoalBinaryData::charcoal_padson_pngSize);
+        AlphaTheme::getInstance()->modeOffImage = ImageCache::getFromMemory(ThemeCharcoalBinaryData::charcoal_modeoff_png,
+                                                                            ThemeCharcoalBinaryData::charcoal_modeoff_pngSize);
+        AlphaTheme::getInstance()->padsBackgroundImage = ImageCache::getFromMemory(ThemeCharcoalBinaryData::charcoal_padsbg_png,
+                                                                                   ThemeCharcoalBinaryData::charcoal_padsbg_pngSize);
+        AlphaTheme::getInstance()->settingsOffImage = ImageCache::getFromMemory(ThemeCharcoalBinaryData::charcoal_statusoff_png,
+                                                                                ThemeCharcoalBinaryData::charcoal_statusoff_pngSize);
+        
+        //set custom and default AlphaLive colours here...
+        
+        AlphaTheme::getInstance()->mainColour_ = 0xff244458; //turqoise
+        AlphaTheme::getInstance()->mainColourLighter_ = 0xff35a296; //green
+        AlphaTheme::getInstance()->childBackgroundColour_ = 0xff262c38; //dark blue
+        AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xff2e343f; //light grey
+        AlphaTheme::getInstance()->textColour_ = 0xff999999; //dark grey
+        AlphaTheme::getInstance()->backgroundColour_ = 0xff1c212a; //bg
+        AlphaTheme::getInstance()->foregroundColour_ = 0xff999999; //grey
+        AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffcccccc; //light grey
+        AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff606060; //dark grey
+        AlphaTheme::getInstance()->iconColour_ = 0xff999999; //dark grey (same as text colour)
+        AlphaTheme::getInstance()->iconOnColour_ = 0xffffffff;
+        AlphaTheme::getInstance()->padColour_ = 0xff2e343f; //dark grey
+        AlphaTheme::getInstance()->padTextColour_ = 0xff999999;
+        AlphaTheme::getInstance()->tabColour_ = 0xff2e343f;
+        
+        
+        // set up the standard set of colours..
+        static const uint32 standardColours[] =
+        {
+            TextButton::buttonColourId,                 AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            TextButton::buttonOnColourId,               AlphaTheme::getInstance()->mainColour_,
+            TextButton::textColourOnId,                 AlphaTheme::getInstance()->iconOnColour_,
+            TextButton::textColourOffId,                AlphaTheme::getInstance()->textColour_,
+            
+            DrawableButton::backgroundColourId,         AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            DrawableButton::backgroundOnColourId,       AlphaTheme::getInstance()->mainColour_,
+            
+            
+            ComboBox::buttonColourId,                   0xffcccccc,
+            ComboBox::outlineColourId,                  AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            ComboBox::textColourId,                     AlphaTheme::getInstance()->textColour_,
+            ComboBox::backgroundColourId,               AlphaTheme::getInstance()->childBackgroundColour_,
+            ComboBox::arrowColourId,                    AlphaTheme::getInstance()->textColour_,
+            
+            ToggleButton::textColourId,                 AlphaTheme::getInstance()->textColour_,
+            
+            TextEditor::backgroundColourId,             AlphaTheme::getInstance()->childBackgroundColour_,
+            TextEditor::textColourId,                   AlphaTheme::getInstance()->textColour_,
+            TextEditor::highlightColourId,              AlphaTheme::getInstance()->mainColour_,
+            TextEditor::highlightedTextColourId,        AlphaTheme::getInstance()->textColour_,
+            TextEditor::outlineColourId,                AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            TextEditor::focusedOutlineColourId,         AlphaTheme::getInstance()->foregroundColourDarker_,
+            TextEditor::shadowColourId,                 0x38000000,
+            
+            CaretComponent::caretColourId,              AlphaTheme::getInstance()->textColour_,
+            
+            Label::backgroundColourId,                  0x00000000,
+            Label::textColourId,                        AlphaTheme::getInstance()->textColour_,
+            Label::outlineColourId,                     0x00000000,
+            
+            ScrollBar::backgroundColourId,              0x00000000,
+            ScrollBar::thumbColourId,                   AlphaTheme::getInstance()->textColour_,
+            
+            TreeView::linesColourId,                    0x00000000,
+            TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
+            TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
+            
+            PopupMenu::backgroundColourId,              0x00000000,
+            PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
+            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->textColour_,
+            PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
+            PopupMenu::highlightedBackgroundColourId,   AlphaTheme::getInstance()->mainColour_,
+            
+            ListBox::backgroundColourId,                AlphaTheme::getInstance()->backgroundColour_,
+            ListBox::outlineColourId,                   AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            ListBox::textColourId,                      AlphaTheme::getInstance()->textColour_,
+            
+            Slider::backgroundColourId,                 0x00000000,
+            Slider::thumbColourId,                      AlphaTheme::getInstance()->backgroundColour_,
+            Slider::trackColourId,                      AlphaTheme::getInstance()->mainColour_,
+            Slider::rotarySliderFillColourId,           AlphaTheme::getInstance()->mainColour_,
+            Slider::rotarySliderOutlineColourId,        AlphaTheme::getInstance()->foregroundColour_, //0xff3c3c3c
+            Slider::textBoxTextColourId,                AlphaTheme::getInstance()->textColour_,
+            Slider::textBoxBackgroundColourId,          0x00000000,
+            Slider::textBoxHighlightColourId,           AlphaTheme::getInstance()->mainColour_,
+            Slider::textBoxOutlineColourId,             AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            
+            ResizableWindow::backgroundColourId,        0xff777777,
+            //DocumentWindow::textColourId,               0xff000000, // (this is deliberately not set)
+            
+            AlertWindow::backgroundColourId,            AlphaTheme::getInstance()->backgroundColour_,
+            AlertWindow::textColourId,                  AlphaTheme::getInstance()->textColour_,
+            AlertWindow::outlineColourId,               0xff666666,
+            
+            ProgressBar::backgroundColourId,            AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            ProgressBar::foregroundColourId,            AlphaTheme::getInstance()->foregroundColour_,
+            
+            TooltipWindow::backgroundColourId,          0x00000000,
+            TooltipWindow::textColourId,                AlphaTheme::getInstance()->textColour_,
+            TooltipWindow::outlineColourId,             0x4c000000,
+            
+            TabbedComponent::backgroundColourId,        AlphaTheme::getInstance()->tabColour_,
+            TabbedComponent::outlineColourId,           AlphaTheme::getInstance()->backgroundColour_,
+            TabbedButtonBar::tabOutlineColourId,        AlphaTheme::getInstance()->backgroundColour_,
+            TabbedButtonBar::frontOutlineColourId,      AlphaTheme::getInstance()->foregroundColourLighter_,
+            TabbedButtonBar::tabTextColourId,           AlphaTheme::getInstance()->textColour_,
+            TabbedButtonBar::frontTextColourId,         AlphaTheme::getInstance()->textColour_,
+            
+            Toolbar::backgroundColourId,                0xfff6f8f9,
+            Toolbar::separatorColourId,                 0x4c000000,
+            Toolbar::buttonMouseOverBackgroundColourId, 0x4c0000ff,
+            Toolbar::buttonMouseDownBackgroundColourId, 0x800000ff,
+            Toolbar::labelTextColourId,                 0xf0000000,
+            Toolbar::editingModeOutlineColourId,        0xffff0000,
+            
+            HyperlinkButton::textColourId,              0xcc1111ee,
+            
+            GroupComponent::outlineColourId,            0x66000000,
+            GroupComponent::textColourId,               AlphaTheme::getInstance()->textColour_,
+            
+            DirectoryContentsDisplayComponent::highlightColourId,   AlphaTheme::getInstance()->mainColour_, // <-- used for fileList and fileTree item's
+            DirectoryContentsDisplayComponent::textColourId,        AlphaTheme::getInstance()->textColour_,
+            
+            FileSearchPathListComponent::backgroundColourId,        0x00000000,
+            
+            FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
+            DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
+        };
+        
+        for (int i = 0; i < numElementsInArray (standardColours); i += 2)
+            setColour (standardColours [i], Colour ((uint32) standardColours [i + 1]));
+    }
+    
+    //======================================================================
+    //======================================================================
+    
+    else if (theme == 4) //aurora theme
+    {
+        // set background images here...
+        
+        AlphaTheme::getInstance()->mainImage = ImageCache::getFromMemory(ThemeAuroraBinaryData::aurora_interfacemain_png,
+                                                                         ThemeAuroraBinaryData::aurora_interfacemain_pngSize);
+        AlphaTheme::getInstance()->padsOffImage = ImageCache::getFromMemory(ThemeAuroraBinaryData::aurora_padsoff_png,
+                                                                            ThemeAuroraBinaryData::aurora_padsoff_pngSize);
+        AlphaTheme::getInstance()->padsOnImage = ImageCache::getFromMemory(ThemeAuroraBinaryData::aurora_padson_png,
+                                                                           ThemeAuroraBinaryData::aurora_padson_pngSize);
+        AlphaTheme::getInstance()->modeOffImage = ImageCache::getFromMemory(ThemeAuroraBinaryData::aurora_modeoff_png,
+                                                                            ThemeAuroraBinaryData::aurora_modeoff_pngSize);
+        AlphaTheme::getInstance()->padsBackgroundImage = ImageCache::getFromMemory(ThemeAuroraBinaryData::aurora_padsbg_png,
+                                                                                   ThemeAuroraBinaryData::aurora_padsbg_pngSize);
+        AlphaTheme::getInstance()->settingsOffImage = ImageCache::getFromMemory(ThemeAuroraBinaryData::aurora_statusoff_png,
+                                                                                ThemeAuroraBinaryData::aurora_statusoff_pngSize);
+        
+        //set custom and default AlphaLive colours here...
+        
+        AlphaTheme::getInstance()->mainColour_ = 0xffb67dad; //purple
+        AlphaTheme::getInstance()->mainColourLighter_ = 0xffee95ac; //pink
+        AlphaTheme::getInstance()->childBackgroundColour_ = 0xff1c1c1c; //dark blue
+        AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xff1e1e1e; //light grey
+        AlphaTheme::getInstance()->textColour_ = 0xff999999; //dark grey
+        AlphaTheme::getInstance()->backgroundColour_ = 0xff1a1a1a; //bg
+        AlphaTheme::getInstance()->foregroundColour_ = 0xff505050; //grey
+        AlphaTheme::getInstance()->foregroundColourLighter_ = 0xff999999; //light grey
+        AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff3a3a3a; //dark grey
+        AlphaTheme::getInstance()->iconColour_ = 0xff999999; //dark grey (same as text colour)
+        AlphaTheme::getInstance()->iconOnColour_ = 0xffffffff;
+        AlphaTheme::getInstance()->padColour_ = 0xff1e1e1e; //dark grey
+        AlphaTheme::getInstance()->padTextColour_ = 0xff999999;
+        AlphaTheme::getInstance()->tabColour_ = 0xff1e1e1e;
+        
+        
+        // set up the standard set of colours..
+        static const uint32 standardColours[] =
+        {
+            TextButton::buttonColourId,                 AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            TextButton::buttonOnColourId,               AlphaTheme::getInstance()->mainColour_,
+            TextButton::textColourOnId,                 AlphaTheme::getInstance()->childBackgroundColour_,
+            TextButton::textColourOffId,                AlphaTheme::getInstance()->textColour_,
+            
+            DrawableButton::backgroundColourId,         AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            DrawableButton::backgroundOnColourId,       AlphaTheme::getInstance()->mainColour_,
+            
+            
+            ComboBox::buttonColourId,                   0xffcccccc,
+            ComboBox::outlineColourId,                  AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            ComboBox::textColourId,                     AlphaTheme::getInstance()->textColour_,
+            ComboBox::backgroundColourId,               AlphaTheme::getInstance()->childBackgroundColour_,
+            ComboBox::arrowColourId,                    AlphaTheme::getInstance()->textColour_,
+            
+            ToggleButton::textColourId,                 AlphaTheme::getInstance()->textColour_,
+            
+            TextEditor::backgroundColourId,             AlphaTheme::getInstance()->childBackgroundColour_,
+            TextEditor::textColourId,                   AlphaTheme::getInstance()->textColour_,
+            TextEditor::highlightColourId,              AlphaTheme::getInstance()->mainColour_,
+            TextEditor::highlightedTextColourId,        AlphaTheme::getInstance()->textColour_,
+            TextEditor::outlineColourId,                AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            TextEditor::focusedOutlineColourId,         AlphaTheme::getInstance()->foregroundColourDarker_,
+            TextEditor::shadowColourId,                 0x38000000,
+            
+            CaretComponent::caretColourId,              AlphaTheme::getInstance()->textColour_,
+            
+            Label::backgroundColourId,                  0x00000000,
+            Label::textColourId,                        AlphaTheme::getInstance()->textColour_,
+            Label::outlineColourId,                     0x00000000,
+            
+            ScrollBar::backgroundColourId,              0x00000000,
+            ScrollBar::thumbColourId,                   AlphaTheme::getInstance()->textColour_,
+            
+            TreeView::linesColourId,                    0x00000000,
+            TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
+            TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
+            
+            PopupMenu::backgroundColourId,              0x00000000,
+            PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
+            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->textColour_,
+            PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
+            PopupMenu::highlightedBackgroundColourId,   AlphaTheme::getInstance()->mainColour_,
+            
+            ListBox::backgroundColourId,                AlphaTheme::getInstance()->backgroundColour_,
+            ListBox::outlineColourId,                   AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            ListBox::textColourId,                      AlphaTheme::getInstance()->textColour_,
+            
+            Slider::backgroundColourId,                 0x00000000,
+            Slider::thumbColourId,                      AlphaTheme::getInstance()->backgroundColour_,
+            Slider::trackColourId,                      AlphaTheme::getInstance()->mainColour_,
+            Slider::rotarySliderFillColourId,           AlphaTheme::getInstance()->mainColour_,
+            Slider::rotarySliderOutlineColourId,        AlphaTheme::getInstance()->foregroundColour_, //0xff3c3c3c
+            Slider::textBoxTextColourId,                AlphaTheme::getInstance()->textColour_,
+            Slider::textBoxBackgroundColourId,          0x00000000,
+            Slider::textBoxHighlightColourId,           AlphaTheme::getInstance()->mainColour_,
+            Slider::textBoxOutlineColourId,             AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            
+            ResizableWindow::backgroundColourId,        0xff777777,
+            //DocumentWindow::textColourId,               0xff000000, // (this is deliberately not set)
+            
+            AlertWindow::backgroundColourId,            AlphaTheme::getInstance()->backgroundColour_,
+            AlertWindow::textColourId,                  AlphaTheme::getInstance()->textColour_,
+            AlertWindow::outlineColourId,               0xff666666,
+            
+            ProgressBar::backgroundColourId,            AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            ProgressBar::foregroundColourId,            AlphaTheme::getInstance()->foregroundColour_,
+            
+            TooltipWindow::backgroundColourId,          0x00000000,
+            TooltipWindow::textColourId,                AlphaTheme::getInstance()->textColour_,
+            TooltipWindow::outlineColourId,             0x4c000000,
+            
+            TabbedComponent::backgroundColourId,        AlphaTheme::getInstance()->tabColour_,
+            TabbedComponent::outlineColourId,           AlphaTheme::getInstance()->backgroundColour_,
+            TabbedButtonBar::tabOutlineColourId,        AlphaTheme::getInstance()->backgroundColour_,
+            TabbedButtonBar::frontOutlineColourId,      AlphaTheme::getInstance()->foregroundColourLighter_,
+            TabbedButtonBar::tabTextColourId,           AlphaTheme::getInstance()->textColour_,
+            TabbedButtonBar::frontTextColourId,         AlphaTheme::getInstance()->textColour_,
+            
+            Toolbar::backgroundColourId,                0xfff6f8f9,
+            Toolbar::separatorColourId,                 0x4c000000,
+            Toolbar::buttonMouseOverBackgroundColourId, 0x4c0000ff,
+            Toolbar::buttonMouseDownBackgroundColourId, 0x800000ff,
+            Toolbar::labelTextColourId,                 0xf0000000,
+            Toolbar::editingModeOutlineColourId,        0xffff0000,
+            
+            HyperlinkButton::textColourId,              0xcc1111ee,
+            
+            GroupComponent::outlineColourId,            0x66000000,
+            GroupComponent::textColourId,               AlphaTheme::getInstance()->textColour_,
+            
+            DirectoryContentsDisplayComponent::highlightColourId,   AlphaTheme::getInstance()->mainColour_, // <-- used for fileList and fileTree item's
+            DirectoryContentsDisplayComponent::textColourId,        AlphaTheme::getInstance()->textColour_,
+            
+            FileSearchPathListComponent::backgroundColourId,        0x00000000,
+            
+            FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
+            DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
+        };
+        
+        for (int i = 0; i < numElementsInArray (standardColours); i += 2)
+            setColour (standardColours [i], Colour ((uint32) standardColours [i + 1]));
+    }
+
+
+    
+    //======================================================================
+    //======================================================================
+    
+    else if (theme == 5) //transparency theme
+    {
+        // set background images here...
+        
+        AlphaTheme::getInstance()->mainImage = ImageCache::getFromMemory(ThemeTransparencyBinaryData::transparency_interfacemain_png,
+                                                                         ThemeTransparencyBinaryData::transparency_interfacemain_pngSize);
+        AlphaTheme::getInstance()->padsOffImage = ImageCache::getFromMemory(ThemeTransparencyBinaryData::transparency_padsoff_png,
+                                                                            ThemeTransparencyBinaryData::transparency_padsoff_pngSize);
+        AlphaTheme::getInstance()->padsOnImage = ImageCache::getFromMemory(ThemeTransparencyBinaryData::transparency_padson_png,
+                                                                           ThemeTransparencyBinaryData::transparency_padson_pngSize);
+        AlphaTheme::getInstance()->modeOffImage = ImageCache::getFromMemory(ThemeTransparencyBinaryData::transparency_modeoff_png,
+                                                                            ThemeTransparencyBinaryData::transparency_modeoff_pngSize);
+        AlphaTheme::getInstance()->padsBackgroundImage = ImageCache::getFromMemory(ThemeTransparencyBinaryData::transparency_padsbg_png,
+                                                                                   ThemeTransparencyBinaryData::transparency_padsbg_pngSize);
+        AlphaTheme::getInstance()->settingsOffImage = ImageCache::getFromMemory(ThemeTransparencyBinaryData::transparency_statusoff_png,
+                                                                                ThemeTransparencyBinaryData::transparency_statusoff_pngSize);
+        
+        //set custom and default AlphaLive colours here...
+        
+        AlphaTheme::getInstance()->mainColour_ = 0xffb67dad; //purple
+        AlphaTheme::getInstance()->mainColourLighter_ = 0xffee95ac; //pink
+        AlphaTheme::getInstance()->childBackgroundColour_ = 0xff1c1c1c; //dark blue
+        AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xff1e1e1e; //light grey
+        AlphaTheme::getInstance()->textColour_ = 0xffffffff; //dark grey
+        AlphaTheme::getInstance()->backgroundColour_ = 0x1affffff; //bg
+        AlphaTheme::getInstance()->foregroundColour_ = 0xff505050; //grey
+        AlphaTheme::getInstance()->foregroundColourLighter_ = 0xff999999; //light grey
+        AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff3a3a3a; //dark grey
+        AlphaTheme::getInstance()->iconColour_ = 0xffffffff; //dark grey (same as text colour)
+        AlphaTheme::getInstance()->iconOnColour_ = 0xffffffff;
+        AlphaTheme::getInstance()->padColour_ = 0xff1e1e1e; //dark grey
+        AlphaTheme::getInstance()->padTextColour_ = 0xff999999;
+        AlphaTheme::getInstance()->tabColour_ = 0xff1e1e1e;
+        
+        
+        // set up the standard set of colours..
+        static const uint32 standardColours[] =
+        {
+            TextButton::buttonColourId,                 AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            TextButton::buttonOnColourId,               AlphaTheme::getInstance()->mainColour_,
+            TextButton::textColourOnId,                 AlphaTheme::getInstance()->childBackgroundColour_,
+            TextButton::textColourOffId,                AlphaTheme::getInstance()->textColour_,
+            
+            DrawableButton::backgroundColourId,         AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            DrawableButton::backgroundOnColourId,       AlphaTheme::getInstance()->mainColour_,
+            
+            
+            ComboBox::buttonColourId,                   0xffcccccc,
+            ComboBox::outlineColourId,                  AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            ComboBox::textColourId,                     AlphaTheme::getInstance()->textColour_,
+            ComboBox::backgroundColourId,               AlphaTheme::getInstance()->childBackgroundColour_,
+            ComboBox::arrowColourId,                    AlphaTheme::getInstance()->textColour_,
+            
+            ToggleButton::textColourId,                 AlphaTheme::getInstance()->textColour_,
+            
+            TextEditor::backgroundColourId,             AlphaTheme::getInstance()->childBackgroundColour_,
+            TextEditor::textColourId,                   AlphaTheme::getInstance()->textColour_,
+            TextEditor::highlightColourId,              AlphaTheme::getInstance()->mainColour_,
+            TextEditor::highlightedTextColourId,        AlphaTheme::getInstance()->textColour_,
+            TextEditor::outlineColourId,                AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            TextEditor::focusedOutlineColourId,         AlphaTheme::getInstance()->foregroundColourDarker_,
+            TextEditor::shadowColourId,                 0x38000000,
+            
+            CaretComponent::caretColourId,              AlphaTheme::getInstance()->textColour_,
+            
+            Label::backgroundColourId,                  0x00000000,
+            Label::textColourId,                        AlphaTheme::getInstance()->textColour_,
+            Label::outlineColourId,                     0x00000000,
+            
+            ScrollBar::backgroundColourId,              0x00000000,
+            ScrollBar::thumbColourId,                   AlphaTheme::getInstance()->textColour_,
+            
+            TreeView::linesColourId,                    0x00000000,
+            TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
+            TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
+            
+            PopupMenu::backgroundColourId,              0x00000000,
+            PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
+            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->textColour_,
+            PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
+            PopupMenu::highlightedBackgroundColourId,   AlphaTheme::getInstance()->mainColour_,
+            
+            ListBox::backgroundColourId,                AlphaTheme::getInstance()->backgroundColour_,
+            ListBox::outlineColourId,                   AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            ListBox::textColourId,                      AlphaTheme::getInstance()->textColour_,
+            
+            Slider::backgroundColourId,                 0x00000000,
+            Slider::thumbColourId,                      AlphaTheme::getInstance()->backgroundColour_,
+            Slider::trackColourId,                      AlphaTheme::getInstance()->mainColour_,
+            Slider::rotarySliderFillColourId,           AlphaTheme::getInstance()->mainColour_,
+            Slider::rotarySliderOutlineColourId,        AlphaTheme::getInstance()->foregroundColour_, //0xff3c3c3c
+            Slider::textBoxTextColourId,                AlphaTheme::getInstance()->textColour_,
+            Slider::textBoxBackgroundColourId,          0x00000000,
+            Slider::textBoxHighlightColourId,           AlphaTheme::getInstance()->mainColour_,
+            Slider::textBoxOutlineColourId,             AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            
+            ResizableWindow::backgroundColourId,        0xff777777,
+            //DocumentWindow::textColourId,               0xff000000, // (this is deliberately not set)
+            
+            AlertWindow::backgroundColourId,            AlphaTheme::getInstance()->backgroundColour_,
+            AlertWindow::textColourId,                  AlphaTheme::getInstance()->textColour_,
+            AlertWindow::outlineColourId,               0xff666666,
+            
+            ProgressBar::backgroundColourId,            AlphaTheme::getInstance()->childBackgroundColourLighter_,
+            ProgressBar::foregroundColourId,            AlphaTheme::getInstance()->foregroundColour_,
+            
+            TooltipWindow::backgroundColourId,          0x00000000,
+            TooltipWindow::textColourId,                AlphaTheme::getInstance()->textColour_,
+            TooltipWindow::outlineColourId,             0x4c000000,
+            
+            TabbedComponent::backgroundColourId,        AlphaTheme::getInstance()->tabColour_,
+            TabbedComponent::outlineColourId,           AlphaTheme::getInstance()->backgroundColour_,
+            TabbedButtonBar::tabOutlineColourId,        AlphaTheme::getInstance()->backgroundColour_,
+            TabbedButtonBar::frontOutlineColourId,      AlphaTheme::getInstance()->foregroundColourLighter_,
+            TabbedButtonBar::tabTextColourId,           AlphaTheme::getInstance()->textColour_,
+            TabbedButtonBar::frontTextColourId,         AlphaTheme::getInstance()->textColour_,
+            
+            Toolbar::backgroundColourId,                0xfff6f8f9,
+            Toolbar::separatorColourId,                 0x4c000000,
+            Toolbar::buttonMouseOverBackgroundColourId, 0x4c0000ff,
+            Toolbar::buttonMouseDownBackgroundColourId, 0x800000ff,
+            Toolbar::labelTextColourId,                 0xf0000000,
+            Toolbar::editingModeOutlineColourId,        0xffff0000,
+            
+            HyperlinkButton::textColourId,              0xcc1111ee,
+            
+            GroupComponent::outlineColourId,            0x66000000,
+            GroupComponent::textColourId,               AlphaTheme::getInstance()->textColour_,
+            
+            DirectoryContentsDisplayComponent::highlightColourId,   AlphaTheme::getInstance()->mainColour_, // <-- used for fileList and fileTree item's
+            DirectoryContentsDisplayComponent::textColourId,        AlphaTheme::getInstance()->textColour_,
+            
+            FileSearchPathListComponent::backgroundColourId,        0x00000000,
+            
+            FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
+            DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
+        };
+        
+        for (int i = 0; i < numElementsInArray (standardColours); i += 2)
+            setColour (standardColours [i], Colour ((uint32) standardColours [i + 1]));
+    }
+
+    
     
     else //Theme either equals 1 or has an unspecified value, so set it to CLASSIC
     {
@@ -355,6 +945,10 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffd3d3d3; //light grey
         AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff555555; //dark grey
         AlphaTheme::getInstance()->iconColour_ = 0xffffffff; //white (same as text colour)
+        AlphaTheme::getInstance()->iconOnColour_ = 0xffffffff;
+        AlphaTheme::getInstance()->padColour_ = 0xff999999; //dark grey
+        AlphaTheme::getInstance()->padTextColour_ = 0xffffffff;
+        AlphaTheme::getInstance()->tabColour_ = 0xff555555;
         
         
         // set up the standard set of colours..
@@ -432,7 +1026,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TooltipWindow::textColourId,                AlphaTheme::getInstance()->textColour_,
             TooltipWindow::outlineColourId,             0x4c000000,
             
-            TabbedComponent::backgroundColourId,        0x00000000,
+            TabbedComponent::backgroundColourId,        AlphaTheme::getInstance()->tabColour_,
             TabbedComponent::outlineColourId,           AlphaTheme::getInstance()->backgroundColour_,
             TabbedButtonBar::tabOutlineColourId,        0x80000000,
             TabbedButtonBar::frontOutlineColourId,      0x90000000,
@@ -477,6 +1071,11 @@ void AlphaLiveLookandFeel::setTheme (int theme)
     AlphaTheme::getInstance()->foregroundColourLighter = Colour(AlphaTheme::getInstance()->foregroundColourLighter_);
     AlphaTheme::getInstance()->foregroundColourDarker = Colour(AlphaTheme::getInstance()->foregroundColourDarker_);
     AlphaTheme::getInstance()->iconColour = Colour(AlphaTheme::getInstance()->iconColour_);
+    AlphaTheme::getInstance()->iconOnColour = Colour(AlphaTheme::getInstance()->iconOnColour_);
+    AlphaTheme::getInstance()->padColour = Colour(AlphaTheme::getInstance()->padColour_);
+    AlphaTheme::getInstance()->padTextColour = Colour(AlphaTheme::getInstance()->padTextColour_);
+    AlphaTheme::getInstance()->tabColour = Colour(AlphaTheme::getInstance()->tabColour_);
+    
 }
 
 
@@ -505,7 +1104,7 @@ void AlphaLiveLookandFeel::drawButtonBackground (Graphics& g,
 			g.setGradientFill(fillGradient);
 			g.fillEllipse(0, 0, button.getWidth(), button.getHeight());
 			
-			ColourGradient highlightGradient(Colours::transparentWhite, (button.getWidth()*0.5), (button.getHeight()*0.8), Colours::silver.withAlpha(0.3f), (button.getWidth()*0.5), 0, false);
+			ColourGradient highlightGradient(Colours::transparentWhite, (button.getWidth()*0.5), (button.getHeight()*0.8), AlphaTheme::getInstance()->foregroundColourDarker, (button.getWidth()*0.5), 0, false);
 			g.setGradientFill(highlightGradient);
 			g.drawEllipse((button.getWidth()* 0.03), (button.getHeight()* 0.03), (button.getWidth()*0.94), (button.getHeight()*0.94), (button.getHeight()*0.025));
 			
@@ -521,7 +1120,7 @@ void AlphaLiveLookandFeel::drawButtonBackground (Graphics& g,
 			g.setGradientFill(fillGradient);
 			g.fillEllipse(0, 0, button.getWidth(), button.getHeight());
 			
-			ColourGradient highlightGradient(Colours::transparentWhite, (button.getWidth()*0.5), (button.getHeight()*0.8), Colours::silver.withAlpha(0.3f), (button.getWidth()*0.5), 0, false);
+			ColourGradient highlightGradient(Colours::transparentWhite, (button.getWidth()*0.5), (button.getHeight()*0.8), AlphaTheme::getInstance()->foregroundColourDarker, (button.getWidth()*0.5), 0, false);
 			g.setGradientFill(highlightGradient);
 			g.drawEllipse((button.getWidth()* 0.03), (button.getHeight()* 0.03), (button.getWidth()*0.94), (button.getHeight()*0.94), (button.getHeight()*0.025));
 			
@@ -538,7 +1137,7 @@ void AlphaLiveLookandFeel::drawButtonBackground (Graphics& g,
 			g.setGradientFill(fillGradient);
 			g.fillEllipse(0, 0, button.getWidth(), button.getHeight());
 			
-			ColourGradient highlightGradient(Colours::transparentWhite, (button.getWidth()*0.5), (button.getHeight()*0.8), Colours::silver.withAlpha(0.3f), (button.getWidth()*0.5), 0, false);
+			ColourGradient highlightGradient(Colours::transparentWhite, (button.getWidth()*0.5), (button.getHeight()*0.8), AlphaTheme::getInstance()->foregroundColourDarker, (button.getWidth()*0.5), 0, false);
 			g.setGradientFill(highlightGradient);
 			g.drawEllipse((button.getWidth()* 0.03), (button.getHeight()* 0.03), (button.getWidth()*0.94), (button.getHeight()*0.94), (button.getHeight()*0.025));
 			
@@ -555,7 +1154,7 @@ void AlphaLiveLookandFeel::drawButtonBackground (Graphics& g,
 			g.setGradientFill(fillGradient);
 			g.fillEllipse(0, 0, button.getWidth(), button.getHeight());
 			
-			ColourGradient highlightGradient(Colours::transparentWhite, (button.getWidth()*0.5), (button.getHeight()*0.8), Colours::silver.withAlpha(0.3f), (button.getWidth()*0.5), 0, false);
+			ColourGradient highlightGradient(Colours::transparentWhite, (button.getWidth()*0.5), (button.getHeight()*0.8), AlphaTheme::getInstance()->foregroundColourDarker, (button.getWidth()*0.5), 0, false);
 			g.setGradientFill(highlightGradient);
 			g.drawEllipse((button.getWidth()* 0.03), (button.getHeight()* 0.03), (button.getWidth()*0.94), (button.getHeight()*0.94), (button.getHeight()*0.025));
 			
@@ -573,7 +1172,7 @@ void AlphaLiveLookandFeel::drawButtonBackground (Graphics& g,
 			g.setGradientFill(fillGradient);
 			g.fillEllipse(0, 0, button.getWidth(), button.getHeight());
 			
-			ColourGradient highlightGradient(Colours::transparentWhite, (button.getWidth()*0.5), (button.getHeight()*0.8), Colours::silver.withAlpha(0.3f), (button.getWidth()*0.5), 0, false);
+			ColourGradient highlightGradient(Colours::transparentWhite, (button.getWidth()*0.5), (button.getHeight()*0.8), AlphaTheme::getInstance()->foregroundColourDarker, (button.getWidth()*0.5), 0, false);
 			g.setGradientFill(highlightGradient);
 			g.drawEllipse((button.getWidth()* 0.03), (button.getHeight()* 0.03), (button.getWidth()*0.94), (button.getHeight()*0.94), (button.getHeight()*0.025));			
 			
@@ -589,7 +1188,7 @@ void AlphaLiveLookandFeel::drawButtonBackground (Graphics& g,
 			g.setGradientFill(fillGradient);
 			g.fillEllipse(0, 0, button.getWidth(), button.getHeight());
 			
-			ColourGradient highlightGradient(Colours::transparentWhite, (button.getWidth()*0.5), (button.getHeight()*0.8), Colours::silver.withAlpha(0.3f), (button.getWidth()*0.5), 0, false);
+			ColourGradient highlightGradient(Colours::transparentWhite, (button.getWidth()*0.5), (button.getHeight()*0.8), AlphaTheme::getInstance()->foregroundColourDarker, (button.getWidth()*0.5), 0, false);
 			g.setGradientFill(highlightGradient);
 			g.drawEllipse((button.getWidth()* 0.03), (button.getHeight()* 0.03), (button.getWidth()*0.94), (button.getHeight()*0.94), (button.getHeight()*0.025));
 			

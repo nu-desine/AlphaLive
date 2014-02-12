@@ -250,7 +250,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	addChildComponent(currentParameterLabel = new Label());
 	currentParameterLabel->setFont(Font(10));
 	currentParameterLabel->setText(translate("TEMPO"), dontSendNotification);
-    currentParameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->textColour);
+    currentParameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->iconOnColour);
     currentParameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
     currentParameterLabel->setJustificationType(Justification::centred);
     currentParameterLabel->setEditable(false, false, false);

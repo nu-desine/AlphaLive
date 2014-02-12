@@ -39,8 +39,8 @@ PreferencesComponent::PreferencesComponent(MainComponent &ref, AlphaLiveEngine &
     
     //create tabbed component and add tabs/child components
     addAndMakeVisible(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
-    tabbedComponent->addTab(translate("General Settings"), AlphaTheme::getInstance()->foregroundColourDarker, generalSettingsComponent, true);
-    tabbedComponent->addTab(translate("Audio Output Settings"), AlphaTheme::getInstance()->foregroundColourDarker, audioAndMidiSettingsComponent, true);
+    tabbedComponent->addTab(translate("General Settings"), AlphaTheme::getInstance()->tabColour, generalSettingsComponent, true);
+    tabbedComponent->addTab(translate("Audio Output Settings"), AlphaTheme::getInstance()->tabColour, audioAndMidiSettingsComponent, true);
     
     addAndMakeVisible(closeButton = new TextButton());
     closeButton->setButtonText(translate("Close"));
@@ -291,6 +291,10 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     
     addAndMakeVisible(interfaceThemeMenu = new ComboBox());
     interfaceThemeMenu->addItem(translate("Classic"), 1);
+    interfaceThemeMenu->addItem(translate("Minimal"), 2);
+    interfaceThemeMenu->addItem(translate("Charcoal"), 3);
+    interfaceThemeMenu->addItem(translate("Aurora"), 4);
+    interfaceThemeMenu->addItem(translate("Transparency"), 5);
     interfaceThemeMenu->addListener(this);
     interfaceThemeMenu->addMouseListener(this, true);
     

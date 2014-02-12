@@ -120,6 +120,10 @@
 		AE1151B02FEB499578174617 /* FxGuiTremolo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B7012FAA64E9EEDC2039190E /* FxGuiTremolo.cpp */; };
 		B008FE6529547D1064CB67E6 /* LayoutsAndScales.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B59351EC51D9921D462CC4E4 /* LayoutsAndScales.cpp */; };
 		B833A4900694C5248CE155C4 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B0711F13B4343AC13C8E66E /* OpenGL.framework */; };
+		B92BCF41189A940000B2931E /* ThemeMinimalBinaryData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B92BCF3F189A940000B2931E /* ThemeMinimalBinaryData.cpp */; };
+		B96EF51A189A9E4D0059A668 /* ThemeCharcoalBinaryData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B96EF518189A9E4D0059A668 /* ThemeCharcoalBinaryData.cpp */; };
+		B9DEB53718A12BF70029A255 /* ThemeAuroraBinaryData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9DEB53518A12BF70029A255 /* ThemeAuroraBinaryData.cpp */; };
+		B9DEB53A18A14DDC0029A255 /* ThemeTransparencyBinaryData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9DEB53818A14DDC0029A255 /* ThemeTransparencyBinaryData.cpp */; };
 		BCDF3A4303C84754808806F1 /* Param.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95033D5AA89C939BBC37B892 /* Param.cpp */; };
 		C0762E8CB60307F8885A5F46 /* AlphaLiveLookandFeel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFEF11425DC9D49419C5F164 /* AlphaLiveLookandFeel.cpp */; };
 		C09C2CFEC012FA6C5E735BE6 /* FileDropButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45868CE8ACC5156E4D6FD01C /* FileDropButton.cpp */; };
@@ -971,7 +975,15 @@
 		B89B436E2105E04183C2712C /* juce_SelectedItemSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_SelectedItemSet.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/mouse/juce_SelectedItemSet.h; sourceTree = SOURCE_ROOT; };
 		B8AB98CEA12E5B1C05266B02 /* juce_ComponentDragger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_ComponentDragger.cpp; path = ../../JuceLibraryCode/modules/juce_gui_basics/mouse/juce_ComponentDragger.cpp; sourceTree = SOURCE_ROOT; };
 		B8EF44B9097B17D89A49AB43 /* juce_OldSchoolLookAndFeel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_OldSchoolLookAndFeel.cpp; path = ../../JuceLibraryCode/modules/juce_gui_extra/lookandfeel/juce_OldSchoolLookAndFeel.cpp; sourceTree = SOURCE_ROOT; };
+		B92BCF3F189A940000B2931E /* ThemeMinimalBinaryData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ThemeMinimalBinaryData.cpp; path = "../../Source/GUI Classes/Binary Data/ThemeMinimalBinaryData.cpp"; sourceTree = "<group>"; };
+		B92BCF40189A940000B2931E /* ThemeMinimalBinaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThemeMinimalBinaryData.h; path = "../../Source/GUI Classes/Binary Data/ThemeMinimalBinaryData.h"; sourceTree = "<group>"; };
+		B96EF518189A9E4D0059A668 /* ThemeCharcoalBinaryData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ThemeCharcoalBinaryData.cpp; path = "../../Source/GUI Classes/Binary Data/ThemeCharcoalBinaryData.cpp"; sourceTree = "<group>"; };
+		B96EF519189A9E4D0059A668 /* ThemeCharcoalBinaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThemeCharcoalBinaryData.h; path = "../../Source/GUI Classes/Binary Data/ThemeCharcoalBinaryData.h"; sourceTree = "<group>"; };
 		B9A0575587AE7E089DC99D7B /* juce_android_WebBrowserComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_android_WebBrowserComponent.cpp; path = ../../JuceLibraryCode/modules/juce_gui_extra/native/juce_android_WebBrowserComponent.cpp; sourceTree = SOURCE_ROOT; };
+		B9DEB53518A12BF70029A255 /* ThemeAuroraBinaryData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ThemeAuroraBinaryData.cpp; path = "../../Source/GUI Classes/Binary Data/ThemeAuroraBinaryData.cpp"; sourceTree = "<group>"; };
+		B9DEB53618A12BF70029A255 /* ThemeAuroraBinaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThemeAuroraBinaryData.h; path = "../../Source/GUI Classes/Binary Data/ThemeAuroraBinaryData.h"; sourceTree = "<group>"; };
+		B9DEB53818A14DDC0029A255 /* ThemeTransparencyBinaryData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ThemeTransparencyBinaryData.cpp; path = "../../Source/GUI Classes/Binary Data/ThemeTransparencyBinaryData.cpp"; sourceTree = "<group>"; };
+		B9DEB53918A14DDC0029A255 /* ThemeTransparencyBinaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThemeTransparencyBinaryData.h; path = "../../Source/GUI Classes/Binary Data/ThemeTransparencyBinaryData.h"; sourceTree = "<group>"; };
 		B9E3BD00F2B15EBCBC805A1F /* juce_TableListBox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = juce_TableListBox.h; path = ../../JuceLibraryCode/modules/juce_gui_basics/widgets/juce_TableListBox.h; sourceTree = SOURCE_ROOT; };
 		BA0AE1072B330AA7098C9098 /* juce_Expression.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = juce_Expression.cpp; path = ../../JuceLibraryCode/modules/juce_core/maths/juce_Expression.cpp; sourceTree = SOURCE_ROOT; };
 		BA36E35E311B4BCA77C3F824 /* IpEndpointName.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IpEndpointName.h; path = "../../Source/Third Party Libraries/oscpack/ip/IpEndpointName.h"; sourceTree = SOURCE_ROOT; };
@@ -1306,6 +1318,14 @@
 		01AB8EC30C2288304A549A6A /* Binary Data */ = {
 			isa = PBXGroup;
 			children = (
+				B9DEB53818A14DDC0029A255 /* ThemeTransparencyBinaryData.cpp */,
+				B9DEB53918A14DDC0029A255 /* ThemeTransparencyBinaryData.h */,
+				B9DEB53518A12BF70029A255 /* ThemeAuroraBinaryData.cpp */,
+				B9DEB53618A12BF70029A255 /* ThemeAuroraBinaryData.h */,
+				B96EF518189A9E4D0059A668 /* ThemeCharcoalBinaryData.cpp */,
+				B96EF519189A9E4D0059A668 /* ThemeCharcoalBinaryData.h */,
+				B92BCF3F189A940000B2931E /* ThemeMinimalBinaryData.cpp */,
+				B92BCF40189A940000B2931E /* ThemeMinimalBinaryData.h */,
 				0C493A391817D76700AB0400 /* MainBinaryData.cpp */,
 				0C493A3A1817D76700AB0400 /* MainBinaryData.h */,
 				0C493A3B1817D76700AB0400 /* ThemeClassicBinaryData.cpp */,
@@ -3519,7 +3539,7 @@
 		1321578FCA21CAA9DF2E9344 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 			};
 			buildConfigurationList = 3E1F5C277D0A94FB4D7A2678 /* Build configuration list for PBXProject "AlphaLive" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -3602,8 +3622,10 @@
 				2DA1D1526D56DE6F05585DDF /* FxGuiBitcrusher.cpp in Sources */,
 				56F30FDE303D871CC55998C7 /* FxGuiDelay.cpp in Sources */,
 				4B4B3981E0CED0293C5274ED /* FxGuiDistortion.cpp in Sources */,
+				B9DEB53A18A14DDC0029A255 /* ThemeTransparencyBinaryData.cpp in Sources */,
 				EE9C3006E70C39E25F16F3DD /* FxGuiFlanger.cpp in Sources */,
 				169B6DA6E36514F98237B69F /* FxGuiHighPassFilter.cpp in Sources */,
+				B92BCF41189A940000B2931E /* ThemeMinimalBinaryData.cpp in Sources */,
 				4706883DD8099F0C30C3BF5C /* FxGuiLowPassFilter.cpp in Sources */,
 				10A2A9826D8913678D603121 /* FxGuiPanAndGain.cpp in Sources */,
 				DB6A259DAFBE0DD87381B4EE /* FxGuiReverb.cpp in Sources */,
@@ -3633,6 +3655,7 @@
 				84C4A8627B2D5561B5FDF8A7 /* SequencerGridEndBlock.cpp in Sources */,
 				62BE9DAF5B237C488624AB60 /* SequencerGridPlayHead.cpp in Sources */,
 				EC251EA67FCE6FC037368733 /* SequencerGridPoint.cpp in Sources */,
+				B9DEB53718A12BF70029A255 /* ThemeAuroraBinaryData.cpp in Sources */,
 				93894298A165B3540D84CE0A /* AlphaListBoxModel.cpp in Sources */,
 				AB2428EB06891504188C97B5 /* Toolbox.cpp in Sources */,
 				26A4AFB9A6F97890046B79DF /* XmlAttributesListBox.cpp in Sources */,
@@ -3680,6 +3703,7 @@
 				8AA54932DCB65485A3FEE02E /* OscReceivedElements.cpp in Sources */,
 				D616CA0AF26A6C5EA619306C /* OscTypes.cpp in Sources */,
 				C639BA23C8C1C7582FACAB75 /* juce_audio_basics.mm in Sources */,
+				B96EF51A189A9E4D0059A668 /* ThemeCharcoalBinaryData.cpp in Sources */,
 				E9D0ABCC8D5EAB5F130FDB01 /* juce_audio_devices.mm in Sources */,
 				700613FE77AA6748ECD5888E /* juce_audio_formats.mm in Sources */,
 				99C5CFD46A031221B89F5B89 /* juce_audio_processors.mm in Sources */,
@@ -3702,7 +3726,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
@@ -3713,9 +3736,10 @@
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = AlphaLive;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx;
 				WARNING_CFLAGS = "-Wreorder";
 				ZERO_LINK = NO;
 			};
@@ -3725,7 +3749,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
@@ -3736,9 +3759,9 @@
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = AlphaLive;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx;
 				WARNING_CFLAGS = "-Wreorder";
 				ZERO_LINK = NO;
 			};
@@ -3767,7 +3790,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx;
 				SDKROOT_ppc = macosx10.5;
 			};
 			name = Release;
@@ -3796,7 +3819,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx;
 				SDKROOT_ppc = macosx10.5;
 			};
 			name = Debug;

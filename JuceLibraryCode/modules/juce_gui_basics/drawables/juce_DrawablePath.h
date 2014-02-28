@@ -22,11 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_DRAWABLEPATH_JUCEHEADER__
-#define __JUCE_DRAWABLEPATH_JUCEHEADER__
-
-#include "juce_DrawableShape.h"
-#include "../positioning/juce_RelativePointPath.h"
+#ifndef JUCE_DRAWABLEPATH_H_INCLUDED
+#define JUCE_DRAWABLEPATH_H_INCLUDED
 
 
 //==============================================================================
@@ -145,4 +142,4 @@ private:
 };
 
 
-#endif   // __JUCE_DRAWABLEPATH_JUCEHEADER__
+#endif   // JUCE_DRAWABLEPATH_H_INCLUDED

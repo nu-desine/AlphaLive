@@ -22,8 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_ASYNCUPDATER_JUCEHEADER__
-#define __JUCE_ASYNCUPDATER_JUCEHEADER__
+#ifndef JUCE_ASYNCUPDATER_H_INCLUDED
+#define JUCE_ASYNCUPDATER_H_INCLUDED
 
 
 //==============================================================================
@@ -100,10 +100,10 @@ private:
     //==============================================================================
     class AsyncUpdaterMessage;
     friend class ReferenceCountedObjectPtr<AsyncUpdaterMessage>;
-    ReferenceCountedObjectPtr<AsyncUpdaterMessage> message;
+    ReferenceCountedObjectPtr<AsyncUpdaterMessage> activeMessage;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AsyncUpdater)
 };
 
 
-#endif   // __JUCE_ASYNCUPDATER_JUCEHEADER__
+#endif   // JUCE_ASYNCUPDATER_H_INCLUDED

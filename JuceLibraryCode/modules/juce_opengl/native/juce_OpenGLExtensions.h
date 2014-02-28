@@ -22,8 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_OPENGLEXTENSIONS_JUCEHEADER__
-#define __JUCE_OPENGLEXTENSIONS_JUCEHEADER__
+#ifndef JUCE_OPENGLEXTENSIONS_H_INCLUDED
+#define JUCE_OPENGLEXTENSIONS_H_INCLUDED
 
 #if JUCE_MAC && (JUCE_PPC || ((! defined (MAC_OS_X_VERSION_10_6)) || MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_6))
  #define JUCE_EXT(func) func ## EXT
@@ -122,7 +122,7 @@ struct OpenGLExtensionFunctions
     #define JUCE_DECLARE_GL_FUNCTION(name, returnType, params, callparams)      typedef returnType (JUCE_GL_STDCALL *type_ ## name) params; type_ ## name name;
     JUCE_GL_EXTENSION_FUNCTIONS (JUCE_DECLARE_GL_FUNCTION, JUCE_DECLARE_GL_FUNCTION)
    #elif JUCE_OPENGL_ES
-    #define JUCE_DECLARE_GL_FUNCTION(name, returnType, params, callparams)      inline static returnType name params;
+    #define JUCE_DECLARE_GL_FUNCTION(name, returnType, params, callparams)      static returnType name params;
     JUCE_GL_EXTENSION_FUNCTIONS (JUCE_DECLARE_GL_FUNCTION, JUCE_DECLARE_GL_FUNCTION)
    #else
     #define JUCE_DECLARE_GL_FUNCTION(name, returnType, params, callparams)      inline static returnType name params { return ::name callparams; }
@@ -134,4 +134,4 @@ struct OpenGLExtensionFunctions
     #undef JUCE_DECLARE_GL_FUNCTION
 };
 
-#endif   // __JUCE_OPENGLEXTENSIONS_JUCEHEADER__
+#endif   // JUCE_OPENGLEXTENSIONS_H_INCLUDED

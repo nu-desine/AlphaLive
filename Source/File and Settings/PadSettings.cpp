@@ -68,6 +68,12 @@ PadSettings::PadSettings(int arrayIndex)
     //default CC layout
     midiCcController = Layouts::ccLayout[padNumber];
     
+    midiDynamicChannelStatus = false;
+    for (int i = 0; i < 4; i++)
+        midiDynamicChannels[i] = true;
+    for (int i = 4; i < 16; i++)
+        midiDynamicChannels[i] = false;
+    
     //sampler mode
     samplerAudioFilePath = String::empty;
     samplerTriggerMode = 2; 
@@ -147,6 +153,10 @@ PadSettings::PadSettings(int arrayIndex)
     controllerOscPort = 5004;
     controllerMidiProgramChangeNumber = 1;
     controllerMidiProgramChangeChannel = 1;
+    controllerPressureLatchPadNumber = 0;
+    if (padNumber == 0)
+        controllerPressureLatchPadNumber = 1;
+    controllerLedControl = 1;
     
     
     //----pad effects----
@@ -316,6 +326,12 @@ void PadSettings::resetData (int whatToReset)
         setMidiPressureStatus (true);
         setMidiNoteStatus (true);
         setMidiCcController (Layouts::ccLayout[padNumber]);
+        
+        setMidiDynamicChannelStatus(false);
+        for (int i = 0; i < 4; i++)
+            setMidiDynamicChannels(i, true);
+        for (int i = 4; i < 16; i++)
+            setMidiDynamicChannels(i, false);
     }
     
     if (whatToReset != 2)
@@ -392,10 +408,22 @@ void PadSettings::resetData (int whatToReset)
         setControllerOscPort(5004);
         setControllerMidiProgramChangeNumber(1);
         setControllerMidiProgramChangeChannel(1);
+        setControllerPressureLatchPadNumber(0);
+        if (padNumber == 0)
+            setControllerPressureLatchPadNumber(1);
+        setControllerLedControl(1);
     }
     
     
     //what about reseting the FX values?
+}
+
+void PadSettings::changeGuiPadText()
+{
+    if (StoredSettings::getInstance()->padContentDisplay == 2)
+    {
+        alphaLiveEngineRef->changeGuiPadText(padNumber);
+    }
 }
 
 void PadSettings::setTempo (double value)
@@ -434,45 +462,56 @@ void PadSettings::setTempo (double value)
 
 void PadSettings::setMode(int value)
 {
-    //at this point, 'mode'  = previously selected mode, 'value' = new mode
     
-    //THIS FUNCTION NEEDS TO BE TIDIED UP - NOT VERY MODULAR IN TERMS OF ADDING NEW MODES, OR IS IT?? HMMM...
     
     if (value != mode) //if mode is different to previously
     {
-        if (value == 1)
+        //=============================================================================
+        
+        if (mode == 1) //if previous mode = MIDI...
         {
-            //This needs to be called as when copying&pasting pad data the new values need to be set within
-            //modeMidi
-            alphaLiveEngineRef->getModeMidi()->setPadData(padNumber);
+            //kill the pad if currently active...
+            alphaLiveEngineRef->getModeMidi()->killPad(padNumber);
+        }
+        else if (mode == 2) //if previous mode = Sampler
+        {
+            //delete instance of AudioFilePlayer for pad 'padNumber',
+            //killing the pad if it is currently active
+            alphaLiveEngineRef->getModeSampler()->deleteAudioFilePlayer(padNumber);
+            
+        }
+        else if (mode == 3) //if previous mode = Sequencer...
+        {
+            //delete instance of SequencePlayer for pad 'padNumber',
+            //killing the pad if it is currently active
+            alphaLiveEngineRef->getModeSequencer()->deleteSequencePlayer(padNumber);
+        }
+        else if (mode == 4) //if previous mode = Controller...
+        {
+            //kill the pad if currently active...
+            alphaLiveEngineRef->getModeController()->killPad(padNumber);
         }
         
-        //do i need the != part in any of the statements below? (as I'm initally checking above)
+        //=============================================================================
         
-        
-        if (value == 2 && mode != 2) //to prevent Sampler AudioFilePlayer objects being re-created
+        if (value == 1) //if new mode = MIDI...
+        {
+            //This needs to be called as when copying&pasting pad data the new values need to be set within
+            //modeMidi. This is handled automatically for other modes (inc. Controller Mode?)
+            alphaLiveEngineRef->getModeMidi()->setPadData(padNumber);
+        }
+        else if (value == 2) //if new mode = Sampler...
         {
             //create an instance of AudioFilePlayer for pad 'padNumber'
             alphaLiveEngineRef->getModeSampler()->createAudioFilePlayer(padNumber);
         }
-        else if (mode == 2 && value != 2) //to prevent non-existent Sampler AudioFilePlayer objects from being deleted
-        {
-            //delete instance of AudioFilePlayer for pad 'padNumber'
-            alphaLiveEngineRef->getModeSampler()->deleteAudioFilePlayer(padNumber);
-        }
-        
-        
-        if (value == 3 && mode != 3) //to prevent Sequencer SequencePlayer objects being re-created
+        else if (value == 3) //if new mode = Sequencer...
         {
             //create an instance of SequencePlayer for pad 'padNumber'
             alphaLiveEngineRef->getModeSequencer()->createSequencePlayer(padNumber);
         }
-        else if (mode == 3 && value != 3) //to prevent non-existent Sequencer SequencePlayer objects from being deleted
-        {
-            //delete instance of SequencePlayer for pad 'padNumber'
-            alphaLiveEngineRef->getModeSequencer()->deleteSequencePlayer(padNumber);
-        }
         
+        //=============================================================================
         
         mode = value; //mode is set!
         
@@ -488,11 +527,13 @@ void PadSettings::setPressureCurve (int value)
 void PadSettings::setExclusiveMode (int value)
 {
     exclusiveMode = value;
+    changeGuiPadText();
 }
 
 void PadSettings::setExclusiveGroup (int value)
 {
     exclusiveGroup = value;
+    changeGuiPadText();
 }
 void PadSettings::setQuantizeMode (int value)
 {
@@ -595,12 +636,14 @@ void PadSettings::setMidiNote(int value)
         midiNote = 119;
     
     alphaLiveEngineRef->getModeMidi()->setNote(midiNote, padNumber);
+    changeGuiPadText();
 }
 
 void PadSettings::setMidiChannel(int value)
 {
     midiChannel = value;
     alphaLiveEngineRef->getModeMidi()->setChannel(value, padNumber);
+    changeGuiPadText();
 }
 void PadSettings::setMidiMinPressureRange(int value)
 {
@@ -616,6 +659,7 @@ void PadSettings::setMidiPressureMode(int value)
 {
     midiPressureMode = value;
     alphaLiveEngineRef->getModeMidi()->setPressureMode(value, padNumber);
+    changeGuiPadText();
 }
 void PadSettings::setMidiTriggerMode(int value)
 {
@@ -636,16 +680,30 @@ void PadSettings::setMidiPressureStatus (bool value)
 {
     midiPressureStatus = value;
     alphaLiveEngineRef->getModeMidi()->setPressureStatus(value, padNumber);
+    changeGuiPadText();
 }
 void PadSettings::setMidiNoteStatus (bool value)
 {
     midiNoteStatus = value;
     alphaLiveEngineRef->getModeMidi()->setNoteStatus(value, padNumber);
+    changeGuiPadText();
 }
 void PadSettings::setMidiCcController (int value)
 {
     midiCcController = value;
     alphaLiveEngineRef->getModeMidi()->setControllerNumber(value, padNumber);
+    changeGuiPadText();
+}
+void PadSettings::setMidiDynamicChannelStatus (bool value)
+{
+    midiDynamicChannelStatus = value;
+    alphaLiveEngineRef->getModeMidi()->setAutoMidiChannelStatus(value, padNumber);
+    changeGuiPadText();
+}
+void PadSettings::setMidiDynamicChannels (int channel, bool status)
+{
+    midiDynamicChannels[channel] = status;
+    alphaLiveEngineRef->getModeMidi()->setAutoMidiChannels(channel, status, padNumber);
 }
 
 #pragma mark MIDI mode accessor functions
@@ -694,8 +752,14 @@ int PadSettings::getMidiCcController()
 {
     return midiCcController;
 }
-
-
+bool PadSettings::getMidiDynamicChannelStatus()
+{
+    return midiDynamicChannelStatus;
+}
+bool PadSettings::getMidiDynamicChannels (int channel)
+{
+    return midiDynamicChannels[channel];
+}
 
 #pragma mark Sampler mode mutator functions
 //==================================================================
@@ -711,6 +775,10 @@ void PadSettings::setSamplerAudioFilePath(File value)
      but it also ensures that imported files with an existing name might not necessarily be a duplicate!
      
      */
+    
+    //Within PadSettings (and most of the application) all audio files are stored as absolute file paths.
+    //It is only in AppDocumentState and when the files are saved to XML files that the file can be
+    //stored as just a file name.
     
     if (value != File::nonexistent)
     {
@@ -766,12 +834,13 @@ void PadSettings::setSamplerAudioFilePath(File value)
         samplerAudioFilePath = value.getFullPathName();
     }
     else
-        samplerAudioFilePath = String::empty; 
+        samplerAudioFilePath = String::empty;
     
     //set the audio file within the correct AudioFilePlayer Instance if it exists
     if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setAudioFile(value);
+        changeGuiPadText();
     }
 }
 
@@ -828,8 +897,8 @@ void PadSettings::setSamplerEffect(int value)
     if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber)->setEffect(samplerEffect);
+        changeGuiPadText();
     }
-    
 }
 
 void PadSettings::setSamplerPan(float value)
@@ -880,6 +949,10 @@ void PadSettings::setSamplerPolyphony (int value)
 
 File PadSettings::getSamplerAudioFilePath()
 {
+    //Within PadSettings (and most of the application) all audio files are stored as absolute file paths.
+    //It is only in AppDocumentState and when the files are saved to XML files that the file can be
+    //stored as just a file name.
+    
     if (samplerAudioFilePath != String::empty)
     {
         File audioFile = samplerAudioFilePath;
@@ -968,6 +1041,7 @@ void PadSettings::setSequencerMode(int value)
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMode(value);
+        changeGuiPadText();
     }
 }
 
@@ -1173,6 +1247,7 @@ void PadSettings::setSequencerMidiChannel(int value)
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMidiChannel(value);
+        changeGuiPadText();
     }
 }
 void PadSettings::setSequencerMidiNoteLength(int value)
@@ -1206,6 +1281,7 @@ void PadSettings::setSequencerMidiPressureMode (int value)
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMidiPressureMode(value);
+        changeGuiPadText();
     }
 }
 void PadSettings::setSequencerMidiPressureStatus (bool value)
@@ -1214,6 +1290,7 @@ void PadSettings::setSequencerMidiPressureStatus (bool value)
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMidiPressureStatus(value);
+        changeGuiPadText();
     }
 }
 void PadSettings::setSequencerMidiCcController (int value)
@@ -1222,6 +1299,7 @@ void PadSettings::setSequencerMidiCcController (int value)
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setMidiControllerNumber(value);
+        changeGuiPadText();
     }
 }
 
@@ -1237,6 +1315,10 @@ void PadSettings::setSequencerSamplesAudioFilePath(File value, int rowNumber)
      but it also ensures that imported files with an existing name might not necessarily be a duplicate!
      
      */
+    
+    //Within PadSettings (and most of the application) all audio files are stored as absolute file paths.
+    //It is only in AppDocumentState and when the files are saved to XML files that the file can be
+    //stored as just a file name.
     
     if (value != File::nonexistent)
     {
@@ -1313,6 +1395,7 @@ void PadSettings::setSequencerEffect(int value)
     if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber) != nullptr)
     {
         alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(padNumber)->setSamplesEffect(sequencerEffect);
+        changeGuiPadText();
     }
      
     
@@ -1446,6 +1529,10 @@ int PadSettings::getSequencerMidiCcController()
 
 File PadSettings::getSequencerSamplesAudioFilePath(int rowNumber)
 {
+    //Within PadSettings (and most of the application) all audio files are stored as absolute file paths.
+    //It is only in AppDocumentState and when the files are saved to XML files that the file can be
+    //stored as just a file name.
+    
     if (sequencerSamplesAudioFilePath[rowNumber] != String::empty)
     {
         File audioFile = sequencerSamplesAudioFilePath[rowNumber];
@@ -1508,29 +1595,46 @@ bool PadSettings::getSequencerRecordEnabled()
 void PadSettings::setControllerControl (int value)
 {
     controllerControl = value;
+    alphaLiveEngineRef->getModeController()->setControl(value, padNumber);
+    changeGuiPadText();
 }
 void PadSettings::setControllerSceneNumber (int value)
 {
     controllerSceneNumber = value;
+    changeGuiPadText();
 }
 void PadSettings::setControllerOscIpAddress (String value)
 {
     controllerOscIpAddress = value;
+    changeGuiPadText();
 }
 void PadSettings::setControllerOscPort (int value)
 {
     controllerOscPort = value;
+    changeGuiPadText();
 }
 void PadSettings::setControllerMidiProgramChangeNumber (int value)
 {
     controllerMidiProgramChangeNumber = value;
+    changeGuiPadText();
 }
 void PadSettings::setControllerMidiProgramChangeChannel (int value)
 {
     controllerMidiProgramChangeChannel = value;
+    changeGuiPadText();
+}
+void PadSettings::setControllerPressureLatchPadNumber (int value)
+{
+    controllerPressureLatchPadNumber = value;
+    changeGuiPadText();
+}
+void PadSettings::setControllerLedControl (int value)
+{
+    controllerLedControl = value;
+    changeGuiPadText();
 }
 
-#pragma mark Sequencer mode accessor functions
+#pragma mark Controller mode accessor functions
 
 int PadSettings::getControllerControl()
 {
@@ -1555,6 +1659,14 @@ int PadSettings::getControllerMidiProgramChangeNumber()
 int PadSettings::getControllerMidiProgramChangeChannel()
 {
     return controllerMidiProgramChangeChannel;
+}
+int PadSettings::getControllerPressureLatchPadNumber()
+{
+    return controllerPressureLatchPadNumber;
+}
+int PadSettings::getControllerLedControl()
+{
+    return controllerLedControl;
 }
 
 

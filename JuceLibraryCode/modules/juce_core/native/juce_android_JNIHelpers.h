@@ -26,8 +26,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_ANDROID_JNIHELPERS_JUCEHEADER__
-#define __JUCE_ANDROID_JNIHELPERS_JUCEHEADER__
+#ifndef JUCE_ANDROID_JNIHELPERS_H_INCLUDED
+#define JUCE_ANDROID_JNIHELPERS_H_INCLUDED
 
 #if ! (defined (JUCE_ANDROID_ACTIVITY_CLASSNAME) && defined (JUCE_ANDROID_ACTIVITY_CLASSPATH))
  #error "The JUCE_ANDROID_ACTIVITY_CLASSNAME and JUCE_ANDROID_ACTIVITY_CLASSPATH macros must be set!"
@@ -349,7 +349,7 @@ extern ThreadLocalJNIEnvHolder threadLocalJNIEnvHolder;
 
 //==============================================================================
 #define JNI_CLASS_MEMBERS(METHOD, STATICMETHOD, FIELD, STATICFIELD) \
- METHOD (createNewView,          "createNewView",        "(Z)L" JUCE_ANDROID_ACTIVITY_CLASSPATH "$ComponentPeerView;") \
+ METHOD (createNewView,          "createNewView",        "(ZJ)L" JUCE_ANDROID_ACTIVITY_CLASSPATH "$ComponentPeerView;") \
  METHOD (deleteView,             "deleteView",           "(L" JUCE_ANDROID_ACTIVITY_CLASSPATH "$ComponentPeerView;)V") \
  METHOD (postMessage,            "postMessage",          "(J)V") \
  METHOD (finish,                 "finish",               "()V") \
@@ -404,4 +404,4 @@ DECLARE_JNI_CLASS (Matrix, "android/graphics/Matrix");
 DECLARE_JNI_CLASS (RectClass, "android/graphics/Rect");
 #undef JNI_CLASS_MEMBERS
 
-#endif   // __JUCE_ANDROID_JNIHELPERS_JUCEHEADER__
+#endif   // JUCE_ANDROID_JNIHELPERS_H_INCLUDED

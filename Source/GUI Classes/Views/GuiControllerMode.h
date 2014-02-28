@@ -74,9 +74,10 @@ private:
     int numOfControlButtons;
     
     AlphaSlider *sceneNumberSlider, *oscPortNumberSlider;
-    AlphaSlider *midiProgramChangeNumberSlider;
+    AlphaSlider *midiProgramChangeNumberSlider, *pressureLatchPadNumberSlider;
     OwnedArray<AlphaTextButton> midiChannelButtons;
     Label *oscIpAddressEditor;
+    ComboBox *ledControlMenu;
     
     int drawButtons;
     

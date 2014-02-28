@@ -20,6 +20,29 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+
+#ifndef H_MIDICHANNELPRESSUREHOLDER
+#define H_MIDICHANNELPRESSUREHOLDER
+
+/*
+ This struct is used to store the currently used pad number
+ for each type of MIDI channel pressure data.
+ It is used in the feature that allows only the newest pressed
+ pad to have control of the pressure data it is set to send.
+ 
+ A value of -1 for each item means that no pad is currently
+ controlling that type of pressure data.
+ */
+
+struct MidiChannelPressureHolder
+{
+    int aftertouch;
+    int pitchBend;
+    int controlChange[128];
+};
+
+#endif
+
 #ifndef H_ALPHALIVEENGINE
 #define H_ALPHALIVEENGINE
 
@@ -38,7 +61,8 @@ class MainComponent;
 
 class AlphaLiveEngine :     public AudioIODeviceCallback, //so this class handles the audio output
                             public HidComms,
-                            public ActionListener
+                            public ActionListener,
+                            public MidiInputCallback
 
 {
 public:
@@ -46,12 +70,15 @@ public:
     ~AlphaLiveEngine();
     
     void hidInputCallback (int pad, int value, int velocity);
+    void processMidiInput (const MidiMessage midiMessage);
     void setDeviceType (int type); //1 - AlphaSphere, 2 - AlphaSphere elite
     void removeMidiOut();
     void updateFirmware();
     void setFirmwareUpdateStatus (bool status);
     void setDeviceStatus();
     void setFirmwareDetails (String version, String serial);
+    void setLedSettings (uint8 setting, uint8 value);
+    void setLedColour (uint8 colourNumber, Colour colour);
     
     void actionListenerCallback (const String& message);
     
@@ -77,6 +104,7 @@ public:
                                 int totalNumOutputChannels,
                                 int numSamples);
     
+    void handleIncomingMidiMessage(MidiInput* midiInput, const MidiMessage& midiMessage);
     
     void sendMidiMessage (MidiMessage midiMessage);
     void setMidiOutputDevice (int deviceIndex);
@@ -106,6 +134,20 @@ public:
     
     String getFirmwareVersion();
     String getDeviceSerial();
+    
+    bool getMidiChannelStatus (int channel);
+    Array<int> getPreviouslyUsedMidiChannels();
+    
+    void latchPressureValue (int padNum, bool shouldLatch, bool setPressureInstantaneously = false);
+
+    void setMidiClockValue (int value);
+    void setMidiClockMessageFilter (int value);
+    void setReceiveMidiProgramChangeMessages (bool value);
+    
+    void changeGuiPadText (int padNum);
+    
+    MidiChannelPressureHolder* getMidiChannelPressureHolderPtr (int chan);
+    void resetMidiChannelPressureHolderData();
         
 private:
     
@@ -119,12 +161,13 @@ private:
     float recievedValue;
     float recievedVelocity;
     
-    //midi output device
-    MidiOutput *midiOutputDevice; //is this actually needed?
+    //midi output and input devices
+    MidiOutput *midiOutputDevice;
+    MidiInput *midiInputDevice;
     
     //audio related
 	AudioDeviceManager audioDeviceManager;	// this wraps the actual audio device
-    CriticalSection sharedMemory, sharedMemoryGui, sharedMemoryMidi;
+    CriticalSection sharedMemory, sharedMemoryGui, sharedMemoryGui2, sharedMemoryMidi;
     
     //audio stuff for mixing the modeSampler and modeSequencer objects, which are AudioSources
     MixerAudioSource audioMixer;
@@ -164,6 +207,30 @@ private:
     
     String firmwareVersion, deviceSerial;
     bool hasDisplayedNoMidiDeviceWarning;
+    
+    //dynamic MIDI Channel stuff
+    //this stuff needs to be here and not within the MIDI Mode class
+    //as we don't want dynamic channels to interfere with MIDI from Sequencer Mode
+    bool isMidiChannelActive[16];
+    Array<int> previouslyUsedMidiChannels;  //this array will always hold all 16 channels but
+                                            //its order will changing depending on the order
+                                            //of active channels - the oldest channel will always
+                                            //be at the start of the array with latest played channel
+                                            //being at the end.
+    
+    int minPressureValue[48];  //Used to store the start/unpressed pressure value.
+                            //By default and for most of the time each index will equal 0.
+                            //The values can only changed when pads pressure is 'latched'.
+    int waitingToSetMinPressureValue[48];   //0 - not
+                                            // - waiting to latch
+                                            // - waiting to unlatch
+    Array <int> padPressureStatusQueue;
+
+    int midiClockValue, midiClockMessageFilter;
+    bool receiveMidiProgramChanngeMessages;
+    
+    MidiChannelPressureHolder *midiChannelPressureHolder[16];
+
 };
 
 #endif // H_ALPHALIVEENGINE

@@ -39,7 +39,7 @@ GuiPiano::GuiPiano() : Component ("GuiPiano")
     //note display label
     addAndMakeVisible(midiNoteLabel = new Label("Note Label", String::empty));
     midiNoteLabel->setJustificationType(Justification::horizontallyCentred);
-    midiNoteLabel->setFont(Font(12));
+    midiNoteLabel->setFont(Font(12 + AlphaTheme::getInstance()->fontSizeAddition));
     midiNoteLabel->addMouseListener(this, true);
     
     noteDisplayType = StoredSettings::getInstance()->midiNoteDisplayType;

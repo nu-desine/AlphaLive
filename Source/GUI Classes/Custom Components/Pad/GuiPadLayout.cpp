@@ -239,10 +239,16 @@ void GuiPadLayout::setPadPlayingState (int pad, int state)
         pads[pad]->setPadPlayingState(state);
 }
 
-void GuiPadLayout::setPadPressure (int pad, int pressure)
+void GuiPadLayout::setPadPressure (int pad, int pressure, int minPressureValue)
 {
     //update gradient
-    pads[pad]->setGradient(pressure); 
+    pads[pad]->setGradient(pressure, minPressureValue);
+}
+
+void GuiPadLayout::setPadPressureStatus (int pad, bool pressureIsLatched)
+{
+    //update gradient colour
+    pads[pad]->setGradientColour(pressureIsLatched);
 }
 
 void GuiPadLayout::paint (Graphics& g)
@@ -309,21 +315,26 @@ void GuiPadLayout::buttonClicked(Button *button)
                 }
                 //if newPad == lastPad, do nothing as that pad would have already been selected
             }
-            //else, cmd-click or regular click...
-            else
+            else if (modifier.isCommandDown() == true)
             {
-                if (modifier.isCommandDown() == true && selectedPads.contains(i))
+                if (selectedPads.contains(i)) //if pad has already been selected...
                 {
                     //if cmd-click and pad is already selected, unselected
                     selectedPads.removeFirstMatchingValue(i);
                     turnOff(i);
                 }
-                else
+                else //if pad hasn't been selected
                 {
                     //select and turn on pad
                     selectedPads.addIfNotAlreadyThere(i);
                     turnOn(i);
                 }
+            }
+            //regular click
+            else
+            {
+                selectedPads.addIfNotAlreadyThere(i);
+                turnOn(i);
             }
             
             break; // so it doesn't check for other pads afterwards
@@ -442,9 +453,9 @@ void GuiPadLayout::turnOff(int pad)
 }
 
 
-void GuiPadLayout::modeChange(int padNumber, int modeNumber)
+void GuiPadLayout::setPadDisplay(int padNumber)
 {
-    pads[padNumber]->modeChange(modeNumber);
+    pads[padNumber]->setDisplay();
 }
 
 
@@ -475,6 +486,19 @@ void GuiPadLayout::deselectAllPads()
     
     for (int i = 0; i <=47; i++)
         turnOff(i);
+    
+    mainComponentRef.setCurrentlySelectedPad(selectedPads, true);
+}
+
+void GuiPadLayout::selectAllPads()
+{
+    selectedPads.clear(); //so that the pads will be put in the right order below
+    
+    for (int i = 0; i < 48; i++)
+    {
+        selectedPads.addIfNotAlreadyThere(i);
+        turnOn(i);
+    }
     
     mainComponentRef.setCurrentlySelectedPad(selectedPads, true);
 }

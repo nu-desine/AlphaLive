@@ -51,12 +51,13 @@ public:
     
     void turnOn(int pad);
 	void turnOff(int pad);
-	void modeChange(int padNumber, int modeNumber);
+	void setPadDisplay(int padNumber);
     
     void updateCurrentlySelectedPad();
     
     void setPadPlayingState (int pad, int state);
-    void setPadPressure (int pad, int pressure);
+    void setPadPressure (int pad, int pressure, int minPressureValue);
+    void setPadPressureStatus (int pad, bool pressureIsLatched);
     
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);
@@ -66,6 +67,7 @@ public:
     
     void setShouldDisplaySettings (bool value);
     void deselectAllPads();
+    void selectAllPads();
     
     //access by the menu bar/command manager in MainComponent
     //which will only be available when a single pad is selected

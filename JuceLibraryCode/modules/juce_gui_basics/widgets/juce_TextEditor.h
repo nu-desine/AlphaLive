@@ -22,14 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_TEXTEDITOR_JUCEHEADER__
-#define __JUCE_TEXTEDITOR_JUCEHEADER__
-
-#include "../components/juce_Component.h"
-#include "../layout/juce_Viewport.h"
-#include "../menus/juce_PopupMenu.h"
-#include "../keyboard/juce_TextInputTarget.h"
-#include "../keyboard/juce_CaretComponent.h"
+#ifndef JUCE_TEXTEDITOR_H_INCLUDED
+#define JUCE_TEXTEDITOR_H_INCLUDED
 
 
 //==============================================================================
@@ -420,7 +414,7 @@ public:
     String getHighlightedText() const;
 
     /** Finds the index of the character at a given position.
-        The co-ordinates are relative to the component's top-left.
+        The coordinates are relative to the component's top-left.
     */
     int getTextIndexAt (int x, int y);
 
@@ -587,6 +581,20 @@ public:
                                const String& allowedCharacters = String::empty);
 
     //==============================================================================
+    /** This abstract base class is implemented by LookAndFeel classes to provide
+        TextEditor drawing functionality.
+    */
+    struct JUCE_API  LookAndFeelMethods
+    {
+        virtual ~LookAndFeelMethods() {}
+
+        virtual void fillTextEditorBackground (Graphics&, int width, int height, TextEditor&) = 0;
+        virtual void drawTextEditorOutline (Graphics&, int width, int height, TextEditor&) = 0;
+
+        virtual CaretComponent* createCaretComponent (Component* keyFocusOwner) = 0;
+    };
+
+    //==============================================================================
     /** @internal */
     void paint (Graphics&) override;
     /** @internal */
@@ -727,4 +735,4 @@ private:
 typedef TextEditor::Listener TextEditorListener;
 
 
-#endif   // __JUCE_TEXTEDITOR_JUCEHEADER__
+#endif   // JUCE_TEXTEDITOR_H_INCLUDED

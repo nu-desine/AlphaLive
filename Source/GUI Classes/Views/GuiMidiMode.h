@@ -57,7 +57,7 @@ public:
     
     void setCurrentlySelectedPad (Array<int> selectedPads_);
     void updateDisplay();
-    void changeView();
+    void changeView (int view);
     
     //void setScale();
     
@@ -82,6 +82,7 @@ private:
     
     GuiCircleBackground *notSelected;
     
+    AlphaTextButton *dynamicChannelButton;
     OwnedArray<AlphaTextButton> channelButtons;
     OwnedArray<SettingsButtonImage> triggerModeButtons;
     OwnedArray<SettingsButtonImage> pressureModeButtons;

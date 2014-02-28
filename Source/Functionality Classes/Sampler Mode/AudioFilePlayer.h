@@ -141,6 +141,10 @@ private:
     int attackSamples, releaseSamples;
     int attackPosition, releasePosition;
     float attRelGainL, attRelGainR;
+    bool isInStartRamp; //signifies that the audio file has just started and a short gain
+                        //ramp needs to be applied to prevent potential clicking. This is
+                        //only used if the user hasn't set a custom attack time.
+    int startRampPosition;
     
     GainAndPan *gainAndPan;
     LowpassFilter *lowPassFilter;

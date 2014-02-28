@@ -141,6 +141,8 @@ void AlphaRotarySlider::hideTextBox()
         
         hitPath.clear();
         hitPath.addPieSegment (0, 0, theWidth, theWidth, rotaryStart, rotaryEnd, ((1 - 0.2) + (0.2 * (theWidth * 0.5) * 0.003)));
+        
+        this->toBack();
     }
 }
 

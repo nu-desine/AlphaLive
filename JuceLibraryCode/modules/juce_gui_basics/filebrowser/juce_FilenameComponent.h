@@ -25,11 +25,6 @@
 #ifndef JUCE_FILENAMECOMPONENT_H_INCLUDED
 #define JUCE_FILENAMECOMPONENT_H_INCLUDED
 
-#include "../widgets/juce_ComboBox.h"
-#include "../buttons/juce_TextButton.h"
-#include "../mouse/juce_FileDragAndDropTarget.h"
-class FilenameComponent;
-
 
 //==============================================================================
 /**
@@ -184,6 +179,16 @@ public:
 
     /** Gives the component a tooltip. */
     void setTooltip (const String& newTooltip) override;
+
+    //==============================================================================
+    /** This abstract base class is implemented by LookAndFeel classes. */
+    struct JUCE_API  LookAndFeelMethods
+    {
+        virtual ~LookAndFeelMethods() {}
+
+        virtual Button* createFilenameComponentBrowseButton (const String& text) = 0;
+        virtual void layoutFilenameComponent (FilenameComponent&, ComboBox* filenameBox, Button* browseButton) =  0;
+    };
 
     //==============================================================================
     /** @internal */

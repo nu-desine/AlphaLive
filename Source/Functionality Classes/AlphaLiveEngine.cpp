@@ -59,14 +59,35 @@ AlphaLiveEngine::AlphaLiveEngine()
     panLeft = panLeftPrev = PanControl::leftChanPan_(AppSettings::Instance()->getGlobalPan());
     panRight = panRightPrev = PanControl::rightChanPan_(AppSettings::Instance()->getGlobalPan());
     
+    midiClockValue = AppSettings::Instance()->getMidiClockValue();
+    midiClockMessageFilter = AppSettings::Instance()->getMidiClockMessageFilter();
+    receiveMidiProgramChanngeMessages = AppSettings::Instance()->getReceiveMidiProgramChangeMessages();
+    
     recievedPad = 0;
     recievedValue = 0;
     recievedVelocity = 110;
     
     for (int i = 0; i < 48; i++)
+    {
         padVelocity[i] = 0;
+        minPressureValue[i] = 0;
+        waitingToSetMinPressureValue[i] = 0;
+        
+        padVelocity[i] = -1;
+        padPressure[i] = -1;
+    }
 
     playingStatus = 0;
+    
+    for (int i = 0; i < 16; i++)
+    {
+        isMidiChannelActive[i] = false;
+        previouslyUsedMidiChannels.add(i);
+        
+        midiChannelPressureHolder[i] = new MidiChannelPressureHolder;
+    }
+    
+    resetMidiChannelPressureHolderData();
     
     //==========================================================================
     // initialise the device manager
@@ -87,30 +108,43 @@ AlphaLiveEngine::AlphaLiveEngine()
     delete audioSettingsXml;
     
     
-    //SET UP MIDI OUTPUT if not connected to the HID device
+    //SET UP MIDI OUTPUT AND INPUT if not connected to the HID device
     if (getDeviceStatus() == 0)
     {
         #if JUCE_MAC || JUCE_LINUX
         //==========================================================================
-        //Create new virtual MIDI device
+        //Create a virtual MIDI output device
         midiOutputDevice = MidiOutput::createNewDevice("AlphaLive");
         
         if(midiOutputDevice)
             midiOutputDevice->startBackgroundThread();
         else
-            std::cout << "Failed to create a virtual MIDI device!" << std::endl;
+            std::cout << "Failed to create a virtual MIDI output device!" << std::endl;
+        
+        //Create a virtual MIDI input device
+        midiInputDevice = MidiInput::createNewDevice("AlphaLive", this);
+        
+        if (midiInputDevice)
+            midiInputDevice->start();
+        else
+            std::cout << "Failed to create a virtual MIDI input device!" << std::endl;
         
         //==========================================================================
         #endif //JUCE_MAC || JUCE_LINUX
         
         #if JUCE_WINDOWS
         //==========================================================================
-        //connect to a MIDI device
+        //connect to a MIDI output and input device's
         midiOutputDevice = NULL;
+        midiInputDevice = NULL;
+        
         #endif //JUCE_WINDOWS
     }
     else
+    {
         midiOutputDevice = NULL;
+        midiInputDevice = NULL;
+    }
 
     modeMidi = new ModeMidi (*this);
     modeSampler = new ModeSampler (*this);
@@ -178,7 +212,16 @@ AlphaLiveEngine::~AlphaLiveEngine()
         delete midiOutputDevice;
     }
     
+    if (midiInputDevice)
+    {
+        midiInputDevice->stop();
+        delete midiInputDevice;
+    }
+    
     audioDeviceManager.removeAudioCallback (this);//unregister the audio callback
+    
+    for (int i = 0; i < 16; i++)
+        delete midiChannelPressureHolder[i];
     
     delete modeMidi;
     delete modeSampler;
@@ -243,7 +286,7 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         //=====TEMPORARY PAD NUMBER REVERSAL======
         //pad = Layouts::padArrangementLayout[pad];
         
-        //At the point the 'value' value is expected to be between 0 and MAX_PRESSURE.
+        //At the point the 'value' value is expected to be between minPressureValue[pad] and MAX_PRESSURE.
         //In the older version this was scaled in the serial input class.
         //This range is also scaled in the Pad.cpp class for emulating pad presses.
         
@@ -251,118 +294,183 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         recievedValue = value;
         recievedVelocity = velocity;
         
-        //===determine pressure curve===
-        if (PAD_SETTINGS->getPressureCurve() == 1)
+        //std::cout << "received value: " << recievedValue << std::endl;
+        
+        //===============================================================================================
+        //===============================================================================================
+        
+        if (waitingToSetMinPressureValue[recievedPad] == 0)
         {
-            //exponential mapping of pressure
-            recievedValue = exp((float)recievedValue/MAX_PRESSURE)-1;
-            recievedValue = recievedValue * (MAX_PRESSURE/1.71828);
-            if (recievedValue > MAX_PRESSURE)
-                recievedValue = MAX_PRESSURE;
-            if (recievedValue > 0 && recievedValue < 1) //value 1 = 0.6, which is rounded to 0
-                recievedValue = 1;
-        }
-        else if (PAD_SETTINGS->getPressureCurve() == 3)
-        {
-            //logarithmic mapping of pressure
-            recievedValue = log(recievedValue+1);
-            recievedValue = recievedValue * (MAX_PRESSURE/6.23832);
-            if (recievedValue > MAX_PRESSURE)
-                recievedValue = MAX_PRESSURE;
-        }
-        //else, pressureCurve == 2 which is a linear mapping of pressure
-        
-        
-        
-        
-        
-        if (recievedVelocity != padVelocity[recievedPad])
-        {
-            padVelocity[recievedPad] = recievedVelocity;
+            /*
+             Only continue into the program if the app isn't currently waiting to set
+             the current pads min pressure value (signified to do so in latchPressureValue()).
+             If this check wasn't here, and it set the minPressureValue value directly in
+             latchPressureValue() as before, as soon as latchPressureValue() is called it
+             would jump the pressure value up (or down if unlatching) to the new scaled value.
+             The else if statements below set it so that you need to release the pad and press it
+             again for the new minPressureValue to be set, or press the pad to the current latched
+             value to be unlatched. This results in a much more smoother interaction.
+             */
             
-            //===determine velocity curve===
-            if (PAD_SETTINGS->getVelocityCurve() == 1)
+            //===determine pressure curve===
+            if (PAD_SETTINGS->getPressureCurve() == 1)
             {
-                //exponential mapping of velocity
-                recievedVelocity = exp((float)recievedVelocity/MAX_VELOCITY)-1;
-                recievedVelocity = recievedVelocity * (MAX_VELOCITY/1.71828);
-                if (recievedVelocity > MAX_VELOCITY)
-                    recievedVelocity = MAX_VELOCITY;
-                if (recievedVelocity > 0 && recievedVelocity < 1) //value 1 = 0.6, which is rounded to 0
-                    recievedVelocity = 1;
-                
-                int minValue = PAD_SETTINGS->getVelocityMinRange();
-                int maxValue = PAD_SETTINGS->getVelocityMaxRange();
-                recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
+                //exponential mapping of pressure
+                recievedValue = exp((float)recievedValue/MAX_PRESSURE)-1;
+                recievedValue = recievedValue * (MAX_PRESSURE/1.71828);
+                if (recievedValue > MAX_PRESSURE)
+                    recievedValue = MAX_PRESSURE;
+                if (recievedValue > 0 && recievedValue < 1) //value 1 = 0.6, which is rounded to 0
+                    recievedValue = 1;
             }
-            else if (PAD_SETTINGS->getVelocityCurve() == 3)
+            else if (PAD_SETTINGS->getPressureCurve() == 3)
             {
-                //logarithmic mapping of velocity
-                recievedVelocity = log(recievedVelocity+1);
-                recievedVelocity = recievedVelocity * (MAX_VELOCITY/4.85); // not sure why 4.85 here!
-                if (recievedVelocity > MAX_VELOCITY)
-                    recievedVelocity = MAX_VELOCITY;
-                
-                int minValue = PAD_SETTINGS->getVelocityMinRange();
-                int maxValue = PAD_SETTINGS->getVelocityMaxRange();
-                recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
-            }
-            else if (PAD_SETTINGS->getVelocityCurve() == 2)
-            {
-                //linear mapping of velocity
-                int minValue = PAD_SETTINGS->getVelocityMinRange();
-                int maxValue = PAD_SETTINGS->getVelocityMaxRange();
-                recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
+                //logarithmic mapping of pressure
+                recievedValue = log(recievedValue + 1);
+                recievedValue = recievedValue * (MAX_PRESSURE/6.23832);
+                if (recievedValue > MAX_PRESSURE)
+                    recievedValue = MAX_PRESSURE;
             }
             
-            //static velocity stuff is done in the mode classes,
-            //as each mode handles a static velocity in slight different ways
-            //so doesn't make sense to apply any static values here
+            //else PAD_SETTINGS->getPressureCurve() = 2 = //linear mapping of pressure
+            
+            if (minPressureValue[pad] > 0)
+                recievedValue = scaleValue (recievedValue, 0, MAX_PRESSURE, minPressureValue[recievedPad], MAX_PRESSURE);
+            
+            
+            //===============================================================================================
+            //===============================================================================================
+            
+            if (recievedVelocity != padVelocity[recievedPad])
+            {
+                padVelocity[recievedPad] = recievedVelocity;
+                
+                //===determine velocity curve===
+                if (PAD_SETTINGS->getVelocityCurve() == 1)
+                {
+                    //exponential mapping of velocity
+                    recievedVelocity = exp((float)recievedVelocity/MAX_VELOCITY)-1;
+                    recievedVelocity = recievedVelocity * (MAX_VELOCITY/1.71828);
+                    if (recievedVelocity > MAX_VELOCITY)
+                        recievedVelocity = MAX_VELOCITY;
+                    if (recievedVelocity > 0 && recievedVelocity < 1) //value 1 = 0.6, which is rounded to 0
+                        recievedVelocity = 1;
+                    
+                    int minValue = PAD_SETTINGS->getVelocityMinRange();
+                    int maxValue = PAD_SETTINGS->getVelocityMaxRange();
+                    recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
+                }
+                else if (PAD_SETTINGS->getVelocityCurve() == 3)
+                {
+                    //logarithmic mapping of velocity
+                    recievedVelocity = log(recievedVelocity+1);
+                    recievedVelocity = recievedVelocity * (MAX_VELOCITY/4.85); // not sure why 4.85 here!
+                    if (recievedVelocity > MAX_VELOCITY)
+                        recievedVelocity = MAX_VELOCITY;
+                    
+                    int minValue = PAD_SETTINGS->getVelocityMinRange();
+                    int maxValue = PAD_SETTINGS->getVelocityMaxRange();
+                    recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
+                }
+                else if (PAD_SETTINGS->getVelocityCurve() == 2)
+                {
+                    //linear mapping of velocity
+                    int minValue = PAD_SETTINGS->getVelocityMinRange();
+                    int maxValue = PAD_SETTINGS->getVelocityMaxRange();
+                    recievedVelocity = scaleValue (recievedVelocity, 0, 127.0, minValue, maxValue);
+                }
+                
+                //static velocity stuff is done in the mode classes,
+                //as each mode handles a static velocity in slight different ways
+                //so doesn't make sense to apply any static values here
+            }
+            
+            //===============================================================================================
+            //===============================================================================================
+            
+            
+            if (padPressure[recievedPad] != recievedValue)
+            {
+                //std::cout << "Pressure value of pad " << recievedPad << ": " << recievedValue << std::endl;
+                
+                //route message to midi mode
+                if (PAD_SETTINGS->getMode() == 1) //if the pressed pad is set to Midi mode
+                {
+                    modeMidi->getInputData(recievedPad, recievedValue, recievedVelocity);
+                }
+                
+                //route message to sampler mode
+                else if (PAD_SETTINGS->getMode() == 2) //if the pressed pad is set to Sampler mode
+                {
+                    modeSampler->getInputData(recievedPad, recievedValue, recievedVelocity);
+                }
+                
+                //route message to sequencer mode
+                else if (PAD_SETTINGS->getMode() == 3) //if the pressed pad is set to Sequencer mode
+                {
+                    modeSequencer->getInputData(recievedPad, recievedValue);
+                }
+                
+                //route message to controller mode
+                else if (PAD_SETTINGS->getMode() == 4) //if the pressed pad is set to Controller mode
+                {
+                    modeController->getInputData(recievedPad, recievedValue, recievedVelocity);
+                }
+                
+                //===============================================================================================
+                
+                sharedMemoryGui.enter();
+                padPressure[recievedPad] = recievedValue;
+                padPressureGuiQueue.add(recievedPad);
+                broadcaster.sendActionMessage("UPDATE PRESSURE GUI");
+                sharedMemoryGui.exit();
+                
+                //            //===============================================================================================
+                //            //OSC OUTPUT MODE STUFF
+                //
+                //            if (isDualOutputMode == true)
+                //            {
+                //                oscOutput.transmitPadMessage(recievedPad+1, recievedValue, recievedVelocity, oscIpAddress, oscPortNumber);
+                //            }
+            }
         }
-        
-        //==========================================================================
-        //route message to midi mode
-        if (PAD_SETTINGS->getMode() == 1) //if the pressed pad is set to Midi mode
+        else if (waitingToSetMinPressureValue[recievedPad] == 1 && recievedValue <= minPressureValue[recievedPad])
         {
-            modeMidi->getInputData(recievedPad, recievedValue, recievedVelocity);
+            /*
+             This statement will be true when a pad has been flagged to be latched from latchPressureValue()
+             below and the pad has been released. This statement will then set the minPressureValue to
+             the pressure value of that when the pad was flagged to be latched, and then allow the pressure value
+             to continue into the program as per usual but using the new minPressureValue.
+             */
+            
+            minPressureValue[recievedPad] = padPressure[recievedPad];
+            waitingToSetMinPressureValue[recievedPad] = 0;
+            
         }
-        //==========================================================================
-        
-        //route message to sampler mode
-        else if (PAD_SETTINGS->getMode() == 2) //if the pressed pad is set to Sampler mode
+        else if (waitingToSetMinPressureValue[recievedPad] == 2 && recievedValue >= minPressureValue[recievedPad])
         {
-            modeSampler->getInputData(recievedPad, recievedValue, recievedVelocity);
+            /*
+             This statement will be true when a pad has been flagged to be unlatched from latchPressureValue()
+             below and the pad has been pressed to its current minPressureValue value. 
+             This statement will then set the minPressureValue to 0, and then allow the pressure value
+             to continue into the program as per usual but using the default minPressureValue value.
+             */
+            
+            minPressureValue[recievedPad] = 0;
+            waitingToSetMinPressureValue[recievedPad] = 0;
+            
+            //display that the pressure is unlatched
+            sharedMemoryGui2.enter();
+            padPressureStatusQueue.add(recievedPad);
+            broadcaster.sendActionMessage("UPDATE PRESSURE STATUS");
+            sharedMemoryGui2.exit();
         }
-        //==========================================================================
         
-        //route message to sequencer mode
-        else if (PAD_SETTINGS->getMode() == 3) //if the pressed pad is set to Sequencer mode
-        {
-            modeSequencer->getInputData(recievedPad, recievedValue);
-        }
-        //==========================================================================
-        
-        //route message to controller mode
-        else if (PAD_SETTINGS->getMode() == 4) //if the pressed pad is set to Controller mode
-        {
-            modeController->getInputData(recievedPad, recievedValue, recievedVelocity);
-        }
-        //==========================================================================
-        
-        sharedMemoryGui.enter();
-        padPressure[recievedPad] = recievedValue;
-        padPressureGuiQueue.add(recievedPad);
-        broadcaster.sendActionMessage("UPDATE PRESSURE GUI");
-        sharedMemoryGui.exit();
-        
-//        //=========================================================================
-//        //OSC OUTPUT MODE STUFF
-//        
-//        if (isDualOutputMode == true)
-//        {
-//            oscOutput.transmitPadMessage(recievedPad+1, recievedValue, recievedVelocity, oscIpAddress, oscPortNumber);
-//        }
     }
+    
+    //===============================================================================================
+    //===============================================================================================
+    
     else 
     {
         //an elite control has been touched. Do your thang!
@@ -373,6 +481,61 @@ void AlphaLiveEngine::hidInputCallback (int pad, int value, int velocity)
         eliteControlGuiQueue.add (pad-100);
         broadcaster.sendActionMessage("UPDATE ELITE GUI");
         sharedMemoryGui.exit();
+    }
+    
+    //===============================================================================================
+    //===============================================================================================
+}
+
+void AlphaLiveEngine::processMidiInput (const MidiMessage midiMessage)
+{
+    //==== MIDI Clock stuff ====
+    if ((midiMessage.isMidiStart() || midiMessage.isMidiContinue()) && midiClockValue == 3)
+    {
+        globalClock->startClock();
+    }
+    else if (midiMessage.isMidiStop() && midiClockValue == 3)
+    {
+        globalClock->stopClock();
+    }
+    else if (midiMessage.isMidiClock() && midiClockValue == 3)
+    {
+        if (midiClockMessageFilter == 1)
+        {
+            if (globalClock->isThreadRunning())
+                globalClock->setMidiClockMessageTimestamp();
+        }
+    }
+    
+    //==== MIDI Program Change stuff (to change scenes) ====
+    
+    else if (midiMessage.isProgramChange() && receiveMidiProgramChanngeMessages == true)
+    {
+        int programNumber = midiMessage.getProgramChangeNumber();
+        
+        if (programNumber >= 0 && programNumber < NO_OF_SCENES)
+        {
+            mainComponent->getSceneComponent()->selectSlot(programNumber);
+        }
+    }
+    
+    //==== MIDI LED Control Mode Status message ====
+    else if (midiMessage.isControllerOfType(20) && midiMessage.getChannel() == 16)
+    {
+        if (midiMessage.getControllerValue() > 0 && AppSettings::Instance()->getHardwareLedMode() == 0)
+        {
+            AppSettings::Instance()->setHardwareLedMode(1);
+            
+            //update the menu bar items status
+            commandManager->commandStatusChanged();
+        }
+        else if (midiMessage.getControllerValue() == 0 && AppSettings::Instance()->getHardwareLedMode() == 1)
+        {
+            AppSettings::Instance()->setHardwareLedMode(0);
+            
+            //update the menu bar items status if this was called not from the menu bar
+            commandManager->commandStatusChanged();
+        }
     }
 }
 
@@ -530,10 +693,13 @@ void AlphaLiveEngine::killAll()
         modeMidi->killPad(i);
         modeSampler->killPad(i);
         modeSequencer->killPad(i);
+        modeController->killPad(i);
     }
     
     if (globalClock->isThreadRunning() == true)
         globalClock->stopClock(); //currently all mode's are being killed again here
+    
+    resetMidiChannelPressureHolderData();
 }
 
 void AlphaLiveEngine::setRecordingSequencerPadsState (int padNum, int state)
@@ -599,6 +765,19 @@ void AlphaLiveEngine::setOscPortNumber (int value)
     oscPortNumber = value;
 }
 
+void AlphaLiveEngine::setMidiClockValue (int value)
+{
+    midiClockValue = value;
+}
+void AlphaLiveEngine::setMidiClockMessageFilter (int value)
+{
+    midiClockMessageFilter = value;
+}
+void AlphaLiveEngine::setReceiveMidiProgramChangeMessages(bool value)
+{
+    receiveMidiProgramChanngeMessages = value;
+}
+
 
 
 //==============================================================================
@@ -653,6 +832,11 @@ void AlphaLiveEngine::audioDeviceAboutToStart (AudioIODevice* device)
 void AlphaLiveEngine::audioDeviceStopped()
 {
 	audioPlayer.audioDeviceStopped();
+}
+
+void AlphaLiveEngine::handleIncomingMidiMessage(MidiInput* midiInput, const MidiMessage& midiMessage)
+{
+    processMidiInput(midiMessage);
 }
 
 void AlphaLiveEngine::setDeviceType (int type)
@@ -723,6 +907,23 @@ void AlphaLiveEngine::sendMidiMessage(MidiMessage midiMessage)
         }
     }
     
+    //==================================================================================
+    //log data about the MIDI channels that is then used by the Dynamic MIDI Channel Mode
+    if (midiMessage.isNoteOn())
+    {
+        //put this channel at the end of the array
+        previouslyUsedMidiChannels.removeAllInstancesOf(midiMessage.getChannel()-1);
+        previouslyUsedMidiChannels.add(midiMessage.getChannel()-1);
+        
+        //flag that the channel is active
+        isMidiChannelActive[midiMessage.getChannel()-1] = true;
+    }
+    else if (midiMessage.isNoteOff())
+    {
+        //flag that the channel is free to use
+        isMidiChannelActive[midiMessage.getChannel()-1] = false;
+    }
+
     sharedMemoryMidi.exit();
 }
 
@@ -731,10 +932,10 @@ void AlphaLiveEngine::removeMidiOut()
 {
     sharedMemoryMidi.enter();
     
-    std::cout << "removing midi output stuff" << std::endl;
+    std::cout << "removing midi input/output stuff" << std::endl;
     
-    //if currently connected to a midiOutputDevice (either the virtual port on mac/linux
-    //or a hardware port on Windows) delete/dissconnected it.
+    //if currently connected to midiOutputDevice and midiInputDevice (either the virtual ports on mac/linux
+    //or a hardware ports on Windows) delete/dissconnected them.
     if (midiOutputDevice)
     {
         midiOutputDevice->stopBackgroundThread();
@@ -743,8 +944,16 @@ void AlphaLiveEngine::removeMidiOut()
         midiOutputDevice = NULL;
     }
     
+    if (midiInputDevice)
+    {
+        midiInputDevice->stop();
+        delete midiInputDevice;
+        
+        midiInputDevice = NULL;
+    }
+    
     #if JUCE_WINDOWS
-    //remove MIDI output selector from the preferences view
+    //remove MIDI output and input selectors from the preferences view
     if (mainComponent != NULL)
     {
         const MessageManagerLock mmLock;
@@ -810,24 +1019,82 @@ void AlphaLiveEngine::setFirmwareDetails (String version, String serial)
     }
 }
 
+void AlphaLiveEngine::setLedSettings (uint8 setting, uint8 value)
+{
+    //This is the declaration of the abstract HidComms function.
+    //It is used to set the general settings of the LED of the hardware.
+    //The 'setting' argument can have the following values:
+    // 1 - LED on/off status - set 'value' to 0 or 1
+    // 2 - LED pressure interaction status - set 'value' to 0 or 1
+    // 3 - LED clock interaction -  set 'value' to 0 for 'off',
+    //                              1 for 'fade to black', or
+    //                              2 for 'fade from max colour to min colour' (not yet implemented).
+    // 4 - LED mode - set 'value' to 0 for normal or 1 for MIDI CC controlled mode
+    
+    if (getDeviceStatus() != 0)
+    {
+        unsigned char dataToSend[4];
+        dataToSend[0] = 0x01; //General LED settings command
+        dataToSend[1] = setting;
+        dataToSend[2] = value;
+        dataToSend[3] = 0x00;
+        addMessageToHidOutReport(dataToSend);
+    }
+}
+
+void AlphaLiveEngine::setLedColour (uint8 colourNumber, Colour colour)
+{
+    if (getDeviceStatus() != 0)
+    {
+        unsigned char dataToSend[4];
+        dataToSend[0] = colourNumber + 2; //LED colour command
+        dataToSend[1] = colour.getRed();
+        dataToSend[2] = colour.getGreen();
+        dataToSend[3] = colour.getBlue();
+        addMessageToHidOutReport(dataToSend);
+    }
+}
+
 
 void AlphaLiveEngine::actionListenerCallback (const String& message)
 {
     if (message == "UPDATE PRESSURE GUI")
     {
-        
         sharedMemoryGui.enter();
         
         for (int i = 0; i < padPressureGuiQueue.size(); i++)
         {
             int padNum = padPressureGuiQueue[i];
             if (mainComponent != NULL)
-                mainComponent->getGuiPadLayout()->setPadPressure(padNum, padPressure[padNum]);
+                mainComponent->getGuiPadLayout()->setPadPressure(padNum, padPressure[padNum], minPressureValue[padNum]);
         }
         
         padPressureGuiQueue.clear();
         
         sharedMemoryGui.exit();
+    }
+    
+    else if (message == "UPDATE PRESSURE STATUS")
+    {
+        sharedMemoryGui2.enter();
+        
+        for (int i = 0; i < padPressureStatusQueue.size(); i++)
+        {
+            int padNum = padPressureStatusQueue[i];
+            bool pressureIsLatched;
+            
+            if (waitingToSetMinPressureValue[padNum] != 0)
+                pressureIsLatched = true;
+            else
+                pressureIsLatched = false;
+            
+            if (mainComponent != NULL)
+                mainComponent->getGuiPadLayout()->setPadPressureStatus(padNum, pressureIsLatched);
+        }
+        
+        padPressureStatusQueue.clear();
+        
+        sharedMemoryGui2.exit();
     }
     
     else if (message == "UPDATE ELITE GUI")
@@ -1028,4 +1295,100 @@ void AlphaLiveEngine::setMainComponent(MainComponent *mainComponent_)
     eliteControls->setMainComponent(mainComponent_);
     globalClock->setMainComponent(mainComponent_);
     modeController->setMainComponent(mainComponent_);
+}
+
+bool AlphaLiveEngine::getMidiChannelStatus (int channel)
+{
+    return isMidiChannelActive[channel];
+}
+
+Array<int> AlphaLiveEngine::getPreviouslyUsedMidiChannels()
+{
+    return previouslyUsedMidiChannels;
+}
+
+void AlphaLiveEngine::latchPressureValue (int padNum, bool shouldLatch, bool setPressureInstantaneously)
+{
+    //setPressureInstantaneously will only be true here when this function was called
+    //from ModeController::killPad() so that the connected latched pad can be truely reset.
+    //Otherwise, waitingToSetMinPressureValue is set to flag that the minPressureValue
+    //needs to be set within hidInputCallback() above when the incoming pressure value
+    //is correct.
+    
+    if (setPressureInstantaneously == false)
+    {
+        
+        if (padPressure[padNum] > 0)
+        {
+            if (shouldLatch)
+            {
+                waitingToSetMinPressureValue[padNum] = 1;
+                
+                //display that the pressure is latched
+                sharedMemoryGui2.enter();
+                padPressureStatusQueue.add(padNum);
+                broadcaster.sendActionMessage("UPDATE PRESSURE STATUS");
+                sharedMemoryGui2.exit();
+            }
+            else
+            {
+                waitingToSetMinPressureValue[padNum] = 2;
+            }
+        }
+    }
+    else if (setPressureInstantaneously == true)
+    {
+        
+        if (shouldLatch)
+            minPressureValue[padNum] = padPressure[padNum];
+        else
+            minPressureValue[padNum] = 0;
+        
+        waitingToSetMinPressureValue[padNum] = 0;
+        
+        //update latched pad pressure GUI
+        sharedMemoryGui.enter();
+        padPressure[padNum] = 0;
+        padPressureGuiQueue.add(padNum);
+        broadcaster.sendActionMessage("UPDATE PRESSURE GUI");
+        sharedMemoryGui.exit();
+        
+        //display that the pressure is unlatched
+        sharedMemoryGui2.enter();
+        padPressureStatusQueue.add(padNum);
+        broadcaster.sendActionMessage("UPDATE PRESSURE STATUS");
+        sharedMemoryGui2.exit();
+        
+    }
+    
+    
+//    if (shouldLatch)
+//        minPressureValue[padNum] = padPressure[padNum];
+//    else
+//        minPressureValue[padNum] = 0;
+}
+
+
+void AlphaLiveEngine::changeGuiPadText (int padNum)
+{
+    //its really hacky and bed design having this here,
+    //but oh well.
+    
+    mainComponent->getGuiPadLayout()->setPadDisplay(padNum);
+}
+
+MidiChannelPressureHolder* AlphaLiveEngine::getMidiChannelPressureHolderPtr (int chan)
+{
+    return midiChannelPressureHolder[chan];
+}
+
+void AlphaLiveEngine::resetMidiChannelPressureHolderData()
+{
+    for (int i = 0; i < 16; i++)
+    {
+        midiChannelPressureHolder[i]->aftertouch = -1;
+        midiChannelPressureHolder[i]->pitchBend = -1;
+        for (int j = 0; j < 128; j++)
+            midiChannelPressureHolder[i]->controlChange[j] = -1;
+    }
 }

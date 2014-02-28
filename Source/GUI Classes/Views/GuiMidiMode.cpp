@@ -158,6 +158,12 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
 	}
     
     channelButtons[0]->setToggleState(true, false);
+    
+    addAndMakeVisible(dynamicChannelButton = new AlphaTextButton);
+    dynamicChannelButton->setButtonText(translate("DYN"));
+    dynamicChannelButton->setClickingTogglesState(true);
+    dynamicChannelButton->addListener(this);
+    dynamicChannelButton->addMouseListener(this, true);
 
     //----------------quantise button-------------------
 	
@@ -224,7 +230,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     //---------------parameter label -------------------------------------
     addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setFont(Font(9));
+    parameterHoverLabel->setFont(Font(11 + AlphaTheme::getInstance()->fontSizeAddition));
     parameterHoverLabel->addMouseListener(this, true);
     
     
@@ -253,6 +259,8 @@ void GuiMidiMode::resized()
     noteStatusButton->setBounds(816, 393, 58, 58);
 	pressureStatusButton->setBounds(816, 393, 58, 58);
 	
+    dynamicChannelButton->setBounds(647, 402, 26, 26);
+    
 	channelButtons[0]->setBounds(649,439,21, 21);
 	channelButtons[1]->setBounds(656,467,21, 21);
 	channelButtons[2]->setBounds(667,495,21, 21);
@@ -261,7 +269,6 @@ void GuiMidiMode::resized()
 	channelButtons[5]->setBounds(722,562,21, 21);
 	channelButtons[6]->setBounds(747,577,21, 21);
 	channelButtons[7]->setBounds(774,589,21, 21);
-	
 	channelButtons[8]->setBounds(803,596,21, 21);
 	channelButtons[9]->setBounds(832,599,21, 21);
 	channelButtons[10]->setBounds(861,597,21, 21);
@@ -308,6 +315,7 @@ void GuiMidiMode::paint (Graphics& g)
     parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
     
 	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
+
 	g.setGradientFill(fillGradient);
 	
 	g.fillEllipse(802, 379, 86, 86);
@@ -320,6 +328,10 @@ void GuiMidiMode::paint (Graphics& g)
 	g.fillEllipse(678,285, 38, 38);
 	g.fillEllipse(850,493, 38, 38);
 	
+    //dynamic channel button
+    g.fillEllipse(644,399, 32, 32);
+    
+    //channel buttons
 	g.fillEllipse(646,436, 27, 27);
 	g.fillEllipse(653,464, 27, 27);
 	g.fillEllipse(664,492, 27, 27);
@@ -328,7 +340,6 @@ void GuiMidiMode::paint (Graphics& g)
 	g.fillEllipse(719,559, 27, 27);
 	g.fillEllipse(744,574, 27, 27);
 	g.fillEllipse(771,586, 27, 27);
-	
 	g.fillEllipse(800,593, 27, 27);
 	g.fillEllipse(829,596, 27, 27);
 	g.fillEllipse(858,594, 27, 27);
@@ -343,6 +354,10 @@ void GuiMidiMode::paint (Graphics& g)
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(850,493, 38, 38, 1.0);
 	
+    //dynamic channel button
+    g.drawEllipse(644,399, 32, 32, 1.0);
+    
+    //channel buttons
 	g.drawEllipse(646,436, 27, 27, 1.0);
 	g.drawEllipse(653,464, 27, 27, 1.0);
 	g.drawEllipse(664,492, 27, 27, 1.0);
@@ -351,7 +366,6 @@ void GuiMidiMode::paint (Graphics& g)
 	g.drawEllipse(719,559, 27, 27, 1.0);
 	g.drawEllipse(744,574, 27, 27, 1.0);
 	g.drawEllipse(771,586, 27, 27, 1.0);
-	
 	g.drawEllipse(800,593, 27, 27, 1.0);
 	g.drawEllipse(829,596, 27, 27, 1.0);
 	g.drawEllipse(858,594, 27, 27, 1.0);
@@ -474,7 +488,20 @@ void GuiMidiMode::buttonClicked (Button* button)
             mainComponentRef.getGuiPiano()->setActive(false);
         }
         
-        
+        //if note status is set to off, make sure non of the pads are set to auto
+        //channel mode. dynamic channel mode can't work with pressure-only pads, as there is
+        //no way of determining if a channel is 'active' or not if no note data is being used.
+        if (button->getToggleState() == false)
+        {
+            dynamicChannelButton->setToggleState(false, true);
+            dynamicChannelButton->setEnabled(false);
+            dynamicChannelButton->setAlpha(0.4);
+        }
+        else
+        {
+            dynamicChannelButton->setEnabled(true);
+            dynamicChannelButton->setAlpha(1.0);
+        }
     }
     
     
@@ -496,19 +523,127 @@ void GuiMidiMode::buttonClicked (Button* button)
         }
     }
     
+    else if (button == dynamicChannelButton)
+    {
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            PAD_SETTINGS->setMidiDynamicChannelStatus(button->getToggleState());
+        }
+        
+        //if dynamic channels mode is turned on, dissable the radio group functionality
+        //of the channels buttons and get and display the group of channels that can be used
+        if (button->getToggleState() == true)
+        {
+            for (int chan = 0; chan < 16; chan++)
+            {
+                channelButtons[chan]->setRadioGroupId(0, dontSendNotification);
+                
+                if (SINGLE_PAD)
+                {
+                    int padNum = selectedPads[0];
+                    channelButtons[chan]->setToggleState(PAD_SETTINGS->getMidiDynamicChannels(chan), dontSendNotification);
+                }
+                else if (MULTI_PADS)
+                {
+                    int autoChans_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiDynamicChannels(chan);
+                    for (int i = 1; i < selectedPads.size(); i++)
+                    {
+                        int padNum = selectedPads[i];
+                        if (PAD_SETTINGS->getMidiDynamicChannels(chan) != autoChans_)
+                        {
+                            channelButtons[chan]->setToggleState(true, dontSendNotification);
+                            break;
+                        }
+                        if (i == selectedPads.size()-1)
+                            channelButtons[chan]->setToggleState(autoChans_, dontSendNotification);
+                    }
+                }
+            }
+        }
+        //if dynamic channels mode is turned off, set the channel buttons to be a radio group
+        //and get and display the static channel of this pad.
+        else
+        {
+            for (int chan = 0; chan < 16; chan++)
+            {
+                channelButtons[chan]->setRadioGroupId(12, dontSendNotification);
+                channelButtons[chan]->setToggleState(false, dontSendNotification);
+            }
+            
+            if (SINGLE_PAD)
+            {
+                int padNum = selectedPads[0];
+                channelButtons[PAD_SETTINGS->getMidiChannel()-1]->setToggleState(true, dontSendNotification);
+            }
+            else if (MULTI_PADS)
+            {
+                int channel_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiChannel();
+                for (int i = 1; i < selectedPads.size(); i++)
+                {
+                    int padNum = selectedPads[i];
+                    if (PAD_SETTINGS->getMidiChannel() != channel_)
+                    {
+                        for (int i = 0; i <16; i++)
+                            channelButtons[i]->setToggleState(0, dontSendNotification);
+                        break;
+                    }
+                    if (i == selectedPads.size()-1)
+                        channelButtons[channel_-1]->setToggleState(true, dontSendNotification);
+                }
+            }
+        }
+    }
+    
     
     //channel buttons
     for (int chan = 0; chan < 16; chan++)
     {
-        if (button == channelButtons[chan])
+        //Selecting a static channel
+        if (dynamicChannelButton->getToggleState() == false)
         {
-            for (int i = 0; i < selectedPads.size(); i++)
+            if (button == channelButtons[chan])
             {
-                int padNum = selectedPads[i];
-                PAD_SETTINGS->setMidiChannel(chan + 1);
+                for (int i = 0; i < selectedPads.size(); i++)
+                {
+                    int padNum = selectedPads[i];
+                    PAD_SETTINGS->setMidiChannel(chan + 1);
+                }
+                
+                break;
             }
-            
-            break;
+        }
+        //selecting the group of channels for dynamic-channel mode
+        else if (dynamicChannelButton->getToggleState() == true)
+        {
+            if (button == channelButtons[chan])
+            {
+                //don't allow the user to deselect all MIDI channel buttons
+                bool noChannelSelected = true;
+                for (int i = 0; i < 16; i++)
+                {
+                    if (channelButtons[i]->getToggleState() == true)
+                    {
+                        noChannelSelected = false;
+                        break;
+                    }
+                }
+                    
+                if (noChannelSelected == false)
+                {
+                    for (int i = 0; i < selectedPads.size(); i++)
+                    {
+                        int padNum = selectedPads[i];
+                        PAD_SETTINGS->setMidiDynamicChannels(chan, button->getToggleState());
+                    }
+                }
+                else
+                {
+                    button->setToggleState(true, false);
+                }
+                
+                break;
+            }
         }
         
     }
@@ -565,7 +700,6 @@ void GuiMidiMode::updateDisplay()
         //Don't broadcast any changes to the component Listeners. Only want to update the GUI here
         
         quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
-        channelButtons[PAD_SETTINGS->getMidiChannel()-1]->setToggleState(true, false);
         pressureMinRangeSlider->setValue(PAD_SETTINGS->getMidiMinPressureRange(), dontSendNotification);
         pressureMaxRangeSlider->setValue(PAD_SETTINGS->getMidiMaxPressureRange(), dontSendNotification);
         pressureModeButtons[PAD_SETTINGS->getMidiPressureMode()-1]->setToggleState(true, false);
@@ -577,23 +711,28 @@ void GuiMidiMode::updateDisplay()
         pressureStatusButton->setToggleState(PAD_SETTINGS->getMidiPressureStatus(), false);
         noteStatusButton->setToggleState(PAD_SETTINGS->getMidiNoteStatus(), false);
         
+        dynamicChannelButton->setToggleState(PAD_SETTINGS->getMidiDynamicChannelStatus(), false);
+        
+        if (dynamicChannelButton->getToggleState() == false) //static channel
+        {
+            for (int chan = 0; chan < 16; chan++)
+                channelButtons[chan]->setRadioGroupId(12, dontSendNotification);
+            
+            channelButtons[PAD_SETTINGS->getMidiChannel()-1]->setToggleState(true, dontSendNotification);
+        }
+        else
+        {
+            for (int chan = 0; chan < 16; chan++)
+            {
+                channelButtons[chan]->setRadioGroupId(0, dontSendNotification);
+                channelButtons[chan]->setToggleState(PAD_SETTINGS->getMidiDynamicChannels(chan), dontSendNotification);
+            }
+        }
+        
     }
     
     else if(MULTI_PADS)
     {
-        /*
-        quantiseButton->setToggleState(false, false);
-        channelButtons[0]->setToggleState(true, false);
-        pressureMinRangeSlider->setValue(0);
-        pressureMaxRangeSlider->setValue(127);
-        pressureModeButtons[0]->setToggleState(true, false); //ideally nothing should be selected here
-        triggerModeButtons[0]->setToggleState(true, false); // '' ''
-        indestructibleButton->setToggleState(0, false);
-        stickyButton->setToggleState(0, false);
-        ccControllerSlider->setValue(12);
-        pressureStatusButton->setToggleState(true, false);
-        noteStatusButton->setToggleState(true, false);
-         */
         //==================================================================================================
         int quantiseMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getQuantizeMode();
         //loop through all selected pads expect for the first one
@@ -609,21 +748,6 @@ void GuiMidiMode::updateDisplay()
             //if this is the last 'natural' iteraction, displayed the setting that matches all the pads
             if (i == selectedPads.size()-1)
                 quantiseButton->setToggleState(quantiseMode_, false);
-        }
-        
-        //==================================================================================================
-        int channel_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiChannel();
-        for (int i = 1; i < selectedPads.size(); i++)
-        {
-            int padNum = selectedPads[i];
-            if (PAD_SETTINGS->getMidiChannel() != channel_)
-            {
-                for (int i = 0; i <16; i++)
-                    channelButtons[i]->setToggleState(0, false);
-                break;
-            }
-            if (i == selectedPads.size()-1)
-                channelButtons[channel_-1]->setToggleState(true, false);
         }
         
         //==================================================================================================
@@ -747,17 +871,87 @@ void GuiMidiMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getMidiPressureStatus() != pressureStatus_)
             {
-                pressureStatusButton->setToggleState(1, false);
+                pressureStatusButton->setToggleState(0, false);
                 break;
             }
             if (i == selectedPads.size()-1)
                 pressureStatusButton->setToggleState(pressureStatus_, false);
         }
         
+        //==================================================================================================
+        int dynamicChannelStatus_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiDynamicChannelStatus();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getMidiDynamicChannelStatus() != dynamicChannelStatus_)
+            {
+                dynamicChannelButton->setToggleState(false, false);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                dynamicChannelButton->setToggleState(dynamicChannelStatus_, false);
+        }
+        
+        
+        //==================================================================================================
+        
+        //static MIDI channel
+        if (dynamicChannelButton->getToggleState() == false)
+        {
+            for (int i = 0; i < 16; i++)
+                channelButtons[i]->setRadioGroupId(12, dontSendNotification);
+            
+            int channel_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiChannel();
+            for (int i = 1; i < selectedPads.size(); i++)
+            {
+                int padNum = selectedPads[i];
+                if (PAD_SETTINGS->getMidiChannel() != channel_)
+                {
+                    for (int i = 0; i <16; i++)
+                        channelButtons[i]->setToggleState(0, dontSendNotification);
+                    break;
+                }
+                if (i == selectedPads.size()-1)
+                    channelButtons[channel_-1]->setToggleState(true, dontSendNotification);
+            }
+        }
+        
+        //dynamic-channel mode channels
+        else
+        {
+            for (int chan = 0; chan < 16; chan++)
+            {
+                channelButtons[chan]->setRadioGroupId(0, dontSendNotification);
+                
+                int autoChans_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getMidiDynamicChannels(chan);
+                for (int i = 1; i < selectedPads.size(); i++)
+                {
+                    int padNum = selectedPads[i];
+                    if (PAD_SETTINGS->getMidiDynamicChannels(chan) != autoChans_)
+                    {
+                        channelButtons[chan]->setToggleState(true, dontSendNotification);
+                        break;
+                    }
+                    if (i == selectedPads.size()-1)
+                        channelButtons[chan]->setToggleState(autoChans_, dontSendNotification);
+                }
+            }
+        }
         
     }
 
     //set visibility of certain components
+    
+    if (noteStatusButton->getToggleState() == true)
+    {
+        dynamicChannelButton->setEnabled(true);
+        dynamicChannelButton->setAlpha(1.0);
+    }
+    else
+    {
+        dynamicChannelButton->setEnabled(false);
+        dynamicChannelButton->setAlpha(0.4);
+    }
     
     notSelected->setVisible(false);
     
@@ -851,12 +1045,27 @@ void GuiMidiMode::setDisplay(int settingsType)
     
 }
 
-void GuiMidiMode::changeView()
+void GuiMidiMode::changeView (int view)
 {
-    if (triggerSettingsButton->getToggleState())
-        pressureSettingsButton->triggerClick();
-    else if (pressureSettingsButton->getToggleState())
-        triggerSettingsButton->triggerClick();
+    // view - 1 - trigger
+    // view - 2 - pressure
+    // view - 0 - switch to other view
+    
+    switch (view)
+    {
+        case 1:
+            triggerSettingsButton->triggerClick();
+            break;
+        case 2:
+            pressureSettingsButton->triggerClick();
+            break;
+        default:
+            if (triggerSettingsButton->getToggleState())
+                pressureSettingsButton->triggerClick();
+            else if (pressureSettingsButton->getToggleState())
+                triggerSettingsButton->triggerClick();
+            break;
+    }
 }
 
 
@@ -867,7 +1076,15 @@ void GuiMidiMode::mouseEnter (const MouseEvent &e)
     {
         if (channelButtons[i]->isMouseOver(true))
         {
-            mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::midiChannelButtons) + " " + String(i+1) + ".");
+            if (dynamicChannelButton->getToggleState() == false) //static MIDI channel
+            {
+                mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::midiChannelButtons) + " " + String(i+1) + ".");
+            }
+            else //Dynamic MIDI channels
+            {
+                mainComponentRef.setInfoTextBoxText(translate("MIDI Channel Buttons. Sets and displays the group of possible MIDI channels that the selected pads could be applied to. Click an inactive button to add the channel to the group, or click an active button to remove the channel from the group. However these buttons are used to select the pads static MIDI channel when the Dynamic MIDI Channel Mode is turned off."));
+            }
+            
             break;
         }
     }
@@ -954,6 +1171,10 @@ void GuiMidiMode::mouseEnter (const MouseEvent &e)
     else if (stickyButton->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::stickyButton));
+    }
+    else if (dynamicChannelButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Dynamic MIDI Channel Mode button. Dynamic MIDI Channel Mode is a feature that allows individual channels to be dynamically applied to each pressed MIDI pad. Channels are applied to pads in the order they are pressed, and when this mode is turned on you can use the 16 MIDI channel buttons to select the possible channels that the selected pads could be applied to. This feature can be used as an alternative to polyphonic aftertouch when it is not available. Turn on this button to activate this mode. This feature is not available to pressure-only pads."));
     }
     
     

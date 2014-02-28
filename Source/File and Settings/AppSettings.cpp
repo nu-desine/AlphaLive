@@ -41,7 +41,6 @@ AppSettings::AppSettings()
 {
     //default values
     //currentlySelectedPad = 99; //what should this default be?
-    padDisplayTextMode = 1;
     
     globalPan = 0.5;
     globalGain = 1.0;
@@ -52,12 +51,23 @@ AppSettings::AppSettings()
     autoStartClock = 0; //off
     metronomeStatus = false;
     
+    //==== project settings ====
     for (int i = 0; i < 20; i++)
         sceneName[i] = "Scene " + String(i+1);
     
     copyExternalFiles = true;
+    midiClockValue = 1;
+    midiClockStartMessage = 1;
+    midiClockMessageFilter = 1;
     
-    //elite controls stuff
+    receiveMidiProgramChangeMessages = true;
+    
+    hardwareLedMode = 0;
+    hardwareLedStatus = 1;
+    hardwareLedPressureStatus = 1;
+    hardwareLedClockStatus = 1;
+    
+    // ==== elite controls settings ====
     eliteDial[0].control = 1;
     eliteDial[1].control = 2;
     eliteButton[0].control = 1;
@@ -138,6 +148,13 @@ void AppSettings::resetData()
     setBeatsPerBar(4);
     setAutoStartClock(0);
     
+    setCopyExternalFiles(true);
+    setMidiClockValue(1);
+    setMidiClockStartMessage(1);
+    setMidiClockMessageFilter(1);
+    
+    setReceiveMidiProgramChangeMessages(true);
+    
     //elite controls stuff
     eliteDial[0].control = 1;
     eliteDial[1].control = 2;
@@ -181,6 +198,11 @@ void AppSettings::resetProjectSettingsData()
     
     for (int i = 0; i < 20; i++)
         setSceneName(i, "Scene " + String(i+1));
+    
+    setHardwareLedMode(0);
+    setHardwareLedStatus(1);
+    setHardwareLedPressureStatus(1);
+    setHardwareLedClockStatus(1);
 }
 
 void AppSettings::copyPadSettings (int padNumber)
@@ -222,11 +244,8 @@ void AppSettings::setCurrentlySelectedPad(Array<int> selectedPads_)
 {
     selectedPads = selectedPads_;
 }
-void AppSettings::setPadDisplayTextMode(int value)
-{
-    padDisplayTextMode = value;
-}
 
+#pragma mark scene mutator functions
 
 void AppSettings::setGlobalPan (float value)
 {
@@ -274,14 +293,80 @@ void AppSettings::setMetronomeStatus (bool value)
     alphaLiveEngineRef->getGlobalClock()->setMetronomeStatus(value);
 }
 
+#pragma mark project settings mutator functions
+
 void AppSettings::setCopyExternalFiles (bool value)
 {
     copyExternalFiles = value;
+}
+void AppSettings::setMidiClockValue (int value)
+{
+    midiClockValue = value;
+    alphaLiveEngineRef->getGlobalClock()->setMidiClockValue(value);
+    alphaLiveEngineRef->setMidiClockValue(value);
+    
+    for (int i = 0; i < 48; i++)
+    {
+        if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(i) != nullptr)
+            alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(i)->setMidiClockValue(value);
+    }
+}
+void AppSettings::setMidiClockStartMessage (int value)
+{
+    midiClockStartMessage = value;
+    alphaLiveEngineRef->getGlobalClock()->setMidiClockStartMessage(value);
+}
+void AppSettings::setMidiClockMessageFilter (int value)
+{
+    midiClockMessageFilter = value;
+    alphaLiveEngineRef->getGlobalClock()->setMidiClockMessageFilter(value);
+    alphaLiveEngineRef->setMidiClockMessageFilter(value);
+    
+    for (int i = 0; i < 48; i++)
+    {
+        if (alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(i) != nullptr)
+            alphaLiveEngineRef->getModeSequencer()->getSequencePlayerInstance(i)->setMidiClockMessageFilter(value);
+    }
+}
+
+void AppSettings::setReceiveMidiProgramChangeMessages(bool value)
+{
+    receiveMidiProgramChangeMessages = value;
+    alphaLiveEngineRef->setReceiveMidiProgramChangeMessages(value);
 }
 
 void AppSettings::setSceneName(int sceneNumber, String value)
 {
     sceneName[sceneNumber] = value;
+}
+
+void AppSettings::setHardwareLedMode (int value)
+{
+    hardwareLedMode = value;
+    
+    //send setting value to hardware
+    alphaLiveEngineRef->setLedSettings(4, value);
+}
+void AppSettings::setHardwareLedStatus (int value)
+{
+    hardwareLedStatus = value;
+    
+    //send setting value to hardware
+    alphaLiveEngineRef->setLedSettings(1, value);
+}
+void AppSettings::setHardwareLedPressureStatus (int value)
+{
+    hardwareLedPressureStatus = value;
+    
+    //send setting value to hardware
+    alphaLiveEngineRef->setLedSettings(2, value);
+}
+void AppSettings::setHardwareLedClockStatus (int value)
+{
+    hardwareLedClockStatus = value;
+    
+    //send setting value to hardware
+    alphaLiveEngineRef->setLedSettings(3, value);
 }
 
 
@@ -290,12 +375,7 @@ Array<int> AppSettings::getCurrentlySelectedPad()
     return selectedPads;
 }
 
-int AppSettings::getPadDisplayTextMode()
-{
-    return padDisplayTextMode;
-}
-
-
+#pragma mark scene accessor functions
 
 float AppSettings::getGlobalPan()
 {
@@ -328,15 +408,50 @@ bool AppSettings::getMetronomeStatus()
     return metronomeStatus;
 }
 
+#pragma mark project settings accessor functions
 
 bool AppSettings::getCopyExternalFiles()
 {
     return copyExternalFiles;
 }
+int AppSettings::getMidiClockValue()
+{
+    return midiClockValue;
+}
+int AppSettings::getMidiClockStartMessage()
+{
+    return midiClockStartMessage;
+}
+int AppSettings::getMidiClockMessageFilter()
+{
+    return midiClockMessageFilter;
+}
+
+bool AppSettings::getReceiveMidiProgramChangeMessages()
+{
+    return receiveMidiProgramChangeMessages;
+}
 
 String AppSettings::getSceneName (int sceneNumber)
 {
     return sceneName[sceneNumber];
+}
+
+int AppSettings::getHardwareLedMode()
+{
+    return hardwareLedMode;
+}
+int AppSettings::getHardwareLedStatus()
+{
+    return hardwareLedStatus;
+}
+int AppSettings::getHardwareLedPressureStatus()
+{
+    return hardwareLedPressureStatus;
+}
+int AppSettings::getHardwareLedClockStatus()
+{
+    return hardwareLedClockStatus;
 }
 
 
@@ -350,6 +465,7 @@ File AppSettings::getLastAudioSampleDirectory()
     return lastAudioSampleDirectory;
 }
 
+#pragma mark elite control settings mutator functions
 
 //Elite controls stuff
 void AppSettings::setEliteDialPrevValue(double value, int dialNumber)
@@ -406,6 +522,7 @@ void AppSettings::setEliteDialOscStepValue(double value, int dialNumber)
     eliteDial[dialNumber].oscStepValue = value;
 }
 
+#pragma mark elite control settings accessor functions
 
 double AppSettings::getEliteDialPrevValue (int dialNumber)
 {

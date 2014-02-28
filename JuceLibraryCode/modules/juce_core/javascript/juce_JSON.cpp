@@ -35,12 +35,69 @@ public:
 
         switch (t.getAndAdvance())
         {
-            case 0:      result = var::null; return Result::ok();
+            case 0:      result = var(); return Result::ok();
             case '{':    return parseObject (t, result);
             case '[':    return parseArray  (t, result);
         }
 
         return createFail ("Expected '{' or '['", &t);
+    }
+
+    static Result parseString (const juce_wchar quoteChar, String::CharPointerType& t, var& result)
+    {
+        MemoryOutputStream buffer (256);
+
+        for (;;)
+        {
+            juce_wchar c = t.getAndAdvance();
+
+            if (c == quoteChar)
+                break;
+
+            if (c == '\\')
+            {
+                c = t.getAndAdvance();
+
+                switch (c)
+                {
+                    case '"':
+                    case '\'':
+                    case '\\':
+                    case '/':  break;
+
+                    case 'a':  c = '\a'; break;
+                    case 'b':  c = '\b'; break;
+                    case 'f':  c = '\f'; break;
+                    case 'n':  c = '\n'; break;
+                    case 'r':  c = '\r'; break;
+                    case 't':  c = '\t'; break;
+
+                    case 'u':
+                    {
+                        c = 0;
+
+                        for (int i = 4; --i >= 0;)
+                        {
+                            const int digitValue = CharacterFunctions::getHexDigitValue (t.getAndAdvance());
+                            if (digitValue < 0)
+                                return createFail ("Syntax error in unicode escape sequence");
+
+                            c = (juce_wchar) ((c << 4) + digitValue);
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+            if (c == 0)
+                return createFail ("Unexpected end-of-input in string constant");
+
+            buffer.appendUTF8Char (c);
+        }
+
+        result = buffer.toUTF8();
+        return Result::ok();
     }
 
 private:
@@ -53,7 +110,8 @@ private:
         {
             case '{':    t = t2; return parseObject (t, result);
             case '[':    t = t2; return parseArray  (t, result);
-            case '"':    t = t2; return parseString (t, result);
+            case '"':    t = t2; return parseString ('"',  t, result);
+            case '\'':   t = t2; return parseString ('\'', t, result);
 
             case '-':
                 t2 = t2.findEndOfWhitespace();
@@ -90,7 +148,7 @@ private:
                 if (t2.getAndAdvance() == 'u' && t2.getAndAdvance() == 'l' && t2.getAndAdvance() == 'l')
                 {
                     t = t2;
-                    result = var::null;
+                    result = var();
                     return Result::ok();
                 }
                 break;
@@ -180,7 +238,7 @@ private:
             if (c == '"')
             {
                 var propertyNameVar;
-                Result r (parseString (t, propertyNameVar));
+                Result r (parseString ('"', t, propertyNameVar));
 
                 if (r.failed())
                     return r;
@@ -196,7 +254,7 @@ private:
                     if (c2 != ':')
                         return createFail ("Expected ':', but found", &oldT);
 
-                    resultProperties.set (propertyName, var::null);
+                    resultProperties.set (propertyName, var());
                     var* propertyValue = resultProperties.getVarPointer (propertyName);
 
                     Result r2 (parseAny (t, *propertyValue));
@@ -242,7 +300,7 @@ private:
                 return createFail ("Unexpected end-of-input in array declaration");
 
             t = oldT;
-            destArray->add (var::null);
+            destArray->add (var());
             Result r (parseAny (t, destArray->getReference (destArray->size() - 1)));
 
             if (r.failed())
@@ -264,61 +322,6 @@ private:
 
         return Result::ok();
     }
-
-    static Result parseString (String::CharPointerType& t, var& result)
-    {
-        MemoryOutputStream buffer (256);
-
-        for (;;)
-        {
-            juce_wchar c = t.getAndAdvance();
-
-            if (c == '"')
-                break;
-
-            if (c == '\\')
-            {
-                c = t.getAndAdvance();
-
-                switch (c)
-                {
-                    case '"':
-                    case '\\':
-                    case '/':  break;
-
-                    case 'b':  c = '\b'; break;
-                    case 'f':  c = '\f'; break;
-                    case 'n':  c = '\n'; break;
-                    case 'r':  c = '\r'; break;
-                    case 't':  c = '\t'; break;
-
-                    case 'u':
-                    {
-                        c = 0;
-
-                        for (int i = 4; --i >= 0;)
-                        {
-                            const int digitValue = CharacterFunctions::getHexDigitValue (t.getAndAdvance());
-                            if (digitValue < 0)
-                                return createFail ("Syntax error in unicode escape sequence");
-
-                            c = (juce_wchar) ((c << 4) + digitValue);
-                        }
-
-                        break;
-                    }
-                }
-            }
-
-            if (c == 0)
-                return createFail ("Unexpected end-of-input in string constant");
-
-            buffer.appendUTF8Char (c);
-        }
-
-        result = buffer.toString();
-        return Result::ok();
-    }
 };
 
 //==============================================================================
@@ -330,11 +333,17 @@ public:
     {
         if (v.isString())
         {
+            out << '"';
             writeString (out, v.toString().getCharPointer());
+            out << '"';
         }
         else if (v.isVoid())
         {
             out << "null";
+        }
+        else if (v.isUndefined())
+        {
+            out << "undefined";
         }
         else if (v.isBool())
         {
@@ -346,8 +355,8 @@ public:
         }
         else if (v.isObject())
         {
-            if (DynamicObject* const object = v.getDynamicObject())
-                writeObject (out, *object, indentLevel, allOnOneLine);
+            if (DynamicObject* object = v.getDynamicObject())
+                object->writeAsJSON (out, indentLevel, allOnOneLine);
             else
                 jassertfalse; // Only DynamicObjects can be converted to JSON!
         }
@@ -360,9 +369,6 @@ public:
         }
     }
 
-private:
-    enum { indentSize = 2 };
-
     static void writeEscapedChar (OutputStream& out, const unsigned short value)
     {
         out << "\\u" << String::toHexString ((int) value).paddedLeft ('0', 4);
@@ -370,18 +376,17 @@ private:
 
     static void writeString (OutputStream& out, String::CharPointerType t)
     {
-        out << '"';
-
         for (;;)
         {
             const juce_wchar c (t.getAndAdvance());
 
             switch (c)
             {
-                case 0:  out << '"'; return;
+                case 0:  return;
 
                 case '\"':  out << "\\\""; break;
                 case '\\':  out << "\\\\"; break;
+                case '\a':  out << "\\a";  break;
                 case '\b':  out << "\\b";  break;
                 case '\f':  out << "\\f";  break;
                 case '\t':  out << "\\t";  break;
@@ -424,34 +429,38 @@ private:
                             const int indentLevel, const bool allOnOneLine)
     {
         out << '[';
-        if (! allOnOneLine)
-            out << newLine;
 
-        for (int i = 0; i < array.size(); ++i)
+        if (array.size() > 0)
         {
             if (! allOnOneLine)
-                writeSpaces (out, indentLevel + indentSize);
-
-            write (out, array.getReference(i), indentLevel + indentSize, allOnOneLine);
-
-            if (i < array.size() - 1)
-            {
-                if (allOnOneLine)
-                    out << ", ";
-                else
-                    out << ',' << newLine;
-            }
-            else if (! allOnOneLine)
                 out << newLine;
-        }
 
-        if (! allOnOneLine)
-            writeSpaces (out, indentLevel);
+            for (int i = 0; i < array.size(); ++i)
+            {
+                if (! allOnOneLine)
+                    writeSpaces (out, indentLevel + indentSize);
+
+                write (out, array.getReference(i), indentLevel + indentSize, allOnOneLine);
+
+                if (i < array.size() - 1)
+                {
+                    if (allOnOneLine)
+                        out << ", ";
+                    else
+                        out << ',' << newLine;
+                }
+                else if (! allOnOneLine)
+                    out << newLine;
+            }
+
+            if (! allOnOneLine)
+                writeSpaces (out, indentLevel);
+        }
 
         out << ']';
     }
 
-    static void writeObject (OutputStream& out, DynamicObject& object,
+/*    static void writeObject (OutputStream& out, DynamicObject& object,
                              const int indentLevel, const bool allOnOneLine)
     {
         NamedValueSet& props = object.getProperties();
@@ -472,8 +481,9 @@ private:
             if (! allOnOneLine)
                 writeSpaces (out, indentLevel + indentSize);
 
+            out << '"';
             writeString (out, v->name);
-            out << ": ";
+            out << "\": ";
             write (out, v->value, indentLevel + indentSize, allOnOneLine);
 
             if (v->nextListItem.get() != nullptr)
@@ -493,7 +503,9 @@ private:
             writeSpaces (out, indentLevel);
 
         out << '}';
-    }
+    }*/
+
+    enum { indentSize = 2 };
 };
 
 //==============================================================================
@@ -502,7 +514,7 @@ var JSON::parse (const String& text)
     var result;
 
     if (! JSONParser::parseObjectOrArray (text.getCharPointer(), result))
-        result = var::null;
+        result = var();
 
     return result;
 }
@@ -526,12 +538,29 @@ String JSON::toString (const var& data, const bool allOnOneLine)
 {
     MemoryOutputStream mo (1024);
     JSONFormatter::write (mo, data, 0, allOnOneLine);
-    return mo.toString();
+    return mo.toUTF8();
 }
 
 void JSON::writeToStream (OutputStream& output, const var& data, const bool allOnOneLine)
 {
     JSONFormatter::write (output, data, 0, allOnOneLine);
+}
+
+String JSON::escapeString (StringRef s)
+{
+    MemoryOutputStream mo;
+    JSONFormatter::writeString (mo, s.text);
+    return mo.toString();
+}
+
+Result JSON::parseQuotedString (String::CharPointerType& t, var& result)
+{
+    const juce_wchar quote = t.getAndAdvance();
+
+    if (quote == '"' || quote == '\'')
+        return JSONParser::parseString (quote, t, result);
+
+    return Result::fail ("Not a quoted string!");
 }
 
 //==============================================================================
@@ -581,7 +610,7 @@ public:
     {
         switch (r.nextInt (depth > 3 ? 6 : 8))
         {
-            case 0:     return var::null;
+            case 0:     return var();
             case 1:     return r.nextInt();
             case 2:     return r.nextInt64();
             case 3:     return r.nextBool();
@@ -609,15 +638,14 @@ public:
             }
 
             default:
-                return var::null;
+                return var();
         }
     }
 
     void runTest()
     {
         beginTest ("JSON");
-        Random r;
-        r.setSeedRandomly();
+        Random r = getRandom();
 
         expect (JSON::parse (String::empty) == var::null);
         expect (JSON::parse ("{}").isObject());

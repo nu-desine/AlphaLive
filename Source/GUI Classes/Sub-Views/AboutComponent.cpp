@@ -33,7 +33,7 @@ AboutComponent::AboutComponent(MainComponent &ref)
 {
     addAndMakeVisible(titleLabel = new Label("Title", ProjectInfo::projectName));
     titleLabel->setJustificationType(Justification::horizontallyCentred);
-    Font newFont1 (40, Font::bold);
+    Font newFont1 (40 + AlphaTheme::getInstance()->fontSizeAddition, Font::bold);
     titleLabel->setFont(newFont1);
     
     addAndMakeVisible(versionNumberLabel = new Label("Version Number"));
@@ -73,7 +73,7 @@ AboutComponent::AboutComponent(MainComponent &ref)
                                                          URL("http://www.opensource.org/licenses/GPL-2.0")));
     
     addAndMakeVisible(copyrightLabel = new Label("Copyright Label"));
-    copyrightLabel->setText(translate("Copyright 2011-2013 nu desine"), dontSendNotification);
+    copyrightLabel->setText(translate("Copyright 2011-2014 nu desine"), dontSendNotification);
     copyrightLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(samplesLabel = new Label("Samples Label"));

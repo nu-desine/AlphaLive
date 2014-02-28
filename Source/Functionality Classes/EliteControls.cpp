@@ -256,7 +256,7 @@ void EliteControls::getInputData(int control, int value)
                     else if (sceneMode == 2) //previous scene
                         mainComponent->getSceneComponent()->selectSlot(-2);
                     else //a specific scene
-                        mainComponent->getSceneComponent()->selectSlot(AppSettings::Instance()->getEliteButtonSceneNumber(eliteButtonNumber) -1 );
+                        mainComponent->getSceneComponent()->selectSlot(AppSettings::Instance()->getEliteButtonSceneNumber(eliteButtonNumber) - 1);
                 }
             }
             
@@ -332,6 +332,33 @@ void EliteControls::getInputData(int control, int value)
                     const MessageManagerLock mmLock;
                     mainComponent->perform(CommandIDs::KillSwitch);
                 }
+            }
+            
+            //=============== LED Controls ====================
+            
+            //LED Status
+            else if (controlType == 9)
+            {
+                if (eliteControlValue == 1)
+                    JUCEApplication::getInstance()->perform(CommandIDs::EnableLed);
+            }
+            //LED Pressure Status
+            else if (controlType == 10)
+            {
+                if (eliteControlValue == 1)
+                    JUCEApplication::getInstance()->perform(CommandIDs::EnableLedPressure);
+            }
+            //LED Clock Status
+            else if (controlType == 11)
+            {
+                if (eliteControlValue == 1)
+                    JUCEApplication::getInstance()->perform(CommandIDs::EnableLedClock);
+            }
+            //LED MIDI CC Control Status
+            else if (controlType == 12)
+            {
+                if (eliteControlValue == 1)
+                    JUCEApplication::getInstance()->perform(CommandIDs::EnableLedMidiMode);
             }
         }
     }

@@ -22,8 +22,9 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_MOUSEINACTIVITYDETECTOR_JUCEHEADER__
-#define __JUCE_MOUSEINACTIVITYDETECTOR_JUCEHEADER__
+#ifndef JUCE_MOUSEINACTIVITYDETECTOR_H_INCLUDED
+#define JUCE_MOUSEINACTIVITYDETECTOR_H_INCLUDED
+
 
 //==============================================================================
 /**
@@ -102,4 +103,4 @@ private:
 };
 
 
-#endif   // __JUCE_MOUSEINACTIVITYDETECTOR_JUCEHEADER__
+#endif   // JUCE_MOUSEINACTIVITYDETECTOR_H_INCLUDED

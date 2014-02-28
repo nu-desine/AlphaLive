@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_LABEL_JUCEHEADER__
-#define __JUCE_LABEL_JUCEHEADER__
-
-#include "juce_TextEditor.h"
+#ifndef JUCE_LABEL_H_INCLUDED
+#define JUCE_LABEL_H_INCLUDED
 
 
 //==============================================================================
@@ -125,12 +123,10 @@ public:
     */
     void setBorderSize (int horizontalBorder, int verticalBorder);
 
-    /** Returns the size of the horizontal gap being left around the text.
-    */
+    /** Returns the size of the horizontal gap being left around the text. */
     int getHorizontalBorderSize() const noexcept                                { return horizontalBorderSize; }
 
-    /** Returns the size of the vertical gap being left around the text.
-    */
+    /** Returns the size of the vertical gap being left around the text. */
     int getVerticalBorderSize() const noexcept                                  { return verticalBorderSize; }
 
     /** Makes this label "stick to" another component.
@@ -253,6 +249,18 @@ public:
     /** Returns the currently-visible text editor, or nullptr if none is open. */
     TextEditor* getCurrentTextEditor() const noexcept;
 
+    //==============================================================================
+    /** This abstract base class is implemented by LookAndFeel classes to provide
+        label drawing functionality.
+    */
+    struct JUCE_API  LookAndFeelMethods
+    {
+        virtual ~LookAndFeelMethods() {}
+
+        virtual void drawLabel (Graphics&, Label&) = 0;
+        virtual Font getLabelFont (Label&) = 0;
+    };
+
 protected:
     //==============================================================================
     /** Creates the TextEditor component that will be used when the user has clicked on the label.
@@ -321,10 +329,10 @@ private:
     WeakReference<Component> ownerComponent;
     int horizontalBorderSize, verticalBorderSize;
     float minimumHorizontalScale;
-    bool editSingleClick : 1;
-    bool editDoubleClick : 1;
-    bool lossOfFocusDiscardsChanges : 1;
-    bool leftOfOwnerComp : 1;
+    bool editSingleClick;
+    bool editDoubleClick;
+    bool lossOfFocusDiscardsChanges;
+    bool leftOfOwnerComp;
 
     bool updateFromTextEditorContents (TextEditor&);
 
@@ -334,4 +342,4 @@ private:
 /** This typedef is just for compatibility with old code - newer code should use the Label::Listener class directly. */
 typedef Label::Listener LabelListener;
 
-#endif   // __JUCE_LABEL_JUCEHEADER__
+#endif   // JUCE_LABEL_H_INCLUDED

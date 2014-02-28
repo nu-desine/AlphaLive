@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_CARETCOMPONENT_JUCEHEADER__
-#define __JUCE_CARETCOMPONENT_JUCEHEADER__
-
-#include "../components/juce_Component.h"
+#ifndef JUCE_CARETCOMPONENT_H_INCLUDED
+#define JUCE_CARETCOMPONENT_H_INCLUDED
 
 
 //==============================================================================
@@ -79,4 +77,4 @@ private:
 };
 
 
-#endif   // __JUCE_CARETCOMPONENT_JUCEHEADER__
+#endif   // JUCE_CARETCOMPONENT_H_INCLUDED

@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_TEXTBUTTON_JUCEHEADER__
-#define __JUCE_TEXTBUTTON_JUCEHEADER__
-
-#include "juce_Button.h"
+#ifndef JUCE_TEXTBUTTON_H_INCLUDED
+#define JUCE_TEXTBUTTON_H_INCLUDED
 
 
 //==============================================================================
@@ -99,4 +97,4 @@ private:
 };
 
 
-#endif   // __JUCE_TEXTBUTTON_JUCEHEADER__
+#endif   // JUCE_TEXTBUTTON_H_INCLUDED

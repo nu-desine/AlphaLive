@@ -28,11 +28,9 @@
 #include "../../../File and Settings/AppDocumentState.h"
 #include "SceneValues.h"
 #include "../../../Functionality Classes/Controller Mode/ModeController.h"
-#include "../../../Application/AbstractSubjectAndObserver.h"
 
 class SceneComponent :  public Component,
-                        public KeyListener,
-                        public Observer //so this class can observe ModeController
+                        public KeyListener
 {
 public:
     SceneComponent(AppDocumentState &ref, ModeController &ref2);
@@ -48,9 +46,6 @@ public:
     void setSelectedSceneNumber(int value);
     
     void setSlotStatus (int slotNumber, int statusValue);
-    
-    //override the Observer virtual update function
-    bool update(const Subject& theChangedSubject);
     
     void disableSaveAlertWindow();
     
@@ -69,9 +64,6 @@ private:
     int selectedSceneNumber;
     
     AppDocumentState &appDocumentStateRef;
-    
-    //create a reference to the subject that you want this class to observe
-    ModeController &mSubject;
     
     bool shouldShowSaveWindow;
 };

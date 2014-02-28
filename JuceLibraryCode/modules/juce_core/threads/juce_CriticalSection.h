@@ -26,10 +26,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_CRITICALSECTION_JUCEHEADER__
-#define __JUCE_CRITICALSECTION_JUCEHEADER__
-
-#include "juce_ScopedLock.h"
+#ifndef JUCE_CRITICALSECTION_H_INCLUDED
+#define JUCE_CRITICALSECTION_H_INCLUDED
 
 
 //==============================================================================
@@ -105,16 +103,16 @@ public:
 private:
     //==============================================================================
    #if JUCE_WINDOWS
-    // To avoid including windows.h in the public JUCE headers, we'll just allocate a
-    // block of memory here that's big enough to be used internally as a windows critical
-    // section structure.
+    // To avoid including windows.h in the public JUCE headers, we'll just allocate
+    // a block of memory here that's big enough to be used internally as a windows
+    // CRITICAL_SECTION structure.
     #if JUCE_64BIT
-     uint8 internal [44];
+     uint8 lock[44];
     #else
-     uint8 internal [24];
+     uint8 lock[24];
     #endif
    #else
-    mutable pthread_mutex_t internal;
+    mutable pthread_mutex_t lock;
    #endif
 
     JUCE_DECLARE_NON_COPYABLE (CriticalSection)
@@ -254,4 +252,4 @@ typedef CriticalSection::ScopedUnlockType  ScopedUnlock;
 typedef CriticalSection::ScopedTryLockType  ScopedTryLock;
 
 
-#endif   // __JUCE_CRITICALSECTION_JUCEHEADER__
+#endif   // JUCE_CRITICALSECTION_H_INCLUDED

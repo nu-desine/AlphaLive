@@ -47,6 +47,7 @@ public:
     void setAlphaLiveEngineRef (AlphaLiveEngine *ref);
     void setPadNumber (int value);
     void resetData(int whatToReset);
+    void changeGuiPadText();
     void setTempo (double value);
     
     //==================================================================
@@ -84,6 +85,8 @@ public:
     void setMidiPressureStatus (bool value);
     void setMidiNoteStatus (bool value);
     void setMidiCcController (int value);
+    void setMidiDynamicChannelStatus (bool value);
+    void setMidiDynamicChannels (int channel, bool status);
     
     int getMidiNote();
     int getMidiChannel();
@@ -96,6 +99,8 @@ public:
     bool getMidiPressureStatus();
     bool getMidiNoteStatus();
     int getMidiCcController();
+    bool getMidiDynamicChannelStatus();
+    bool getMidiDynamicChannels (int channel);
     
     //==================================================================
     //Sampler mode
@@ -206,6 +211,8 @@ public:
     void setControllerOscPort (int value);
     void setControllerMidiProgramChangeNumber (int value);
     void setControllerMidiProgramChangeChannel (int value);
+    void setControllerPressureLatchPadNumber (int value);
+    void setControllerLedControl (int value);
     
     int getControllerControl();
     int getControllerSceneNumber();
@@ -213,6 +220,8 @@ public:
     int getControllerOscPort();
     int getControllerMidiProgramChangeNumber();
     int getControllerMidiProgramChangeChannel();
+    int getControllerPressureLatchPadNumber();
+    int getControllerLedControl();
 
     
     //==================================================================
@@ -411,6 +420,8 @@ private:
     bool midiPressureStatus;
     bool midiNoteStatus;
     int midiCcController;
+    bool midiDynamicChannelStatus;
+    bool midiDynamicChannels[16];
     
     //==================================================================
     //Sampler mode
@@ -472,6 +483,8 @@ private:
     int controllerOscPort;
     int controllerMidiProgramChangeNumber;
     int controllerMidiProgramChangeChannel;
+    int controllerPressureLatchPadNumber;
+    int controllerLedControl;
     
     
     //==================================================================

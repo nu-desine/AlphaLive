@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_MIDIMESSAGECOLLECTOR_JUCEHEADER__
-#define __JUCE_MIDIMESSAGECOLLECTOR_JUCEHEADER__
-
-#include "juce_MidiInput.h"
+#ifndef JUCE_MIDIMESSAGECOLLECTOR_H_INCLUDED
+#define JUCE_MIDIMESSAGECOLLECTOR_H_INCLUDED
 
 
 //==============================================================================
@@ -103,4 +101,4 @@ private:
 };
 
 
-#endif   // __JUCE_MIDIMESSAGECOLLECTOR_JUCEHEADER__
+#endif   // JUCE_MIDIMESSAGECOLLECTOR_H_INCLUDED

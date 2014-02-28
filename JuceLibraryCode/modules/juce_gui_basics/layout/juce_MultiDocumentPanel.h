@@ -22,11 +22,9 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_MULTIDOCUMENTPANEL_JUCEHEADER__
-#define __JUCE_MULTIDOCUMENTPANEL_JUCEHEADER__
+#ifndef JUCE_MULTIDOCUMENTPANEL_H_INCLUDED
+#define JUCE_MULTIDOCUMENTPANEL_H_INCLUDED
 
-#include "juce_TabbedComponent.h"
-#include "../windows/juce_DocumentWindow.h"
 class MultiDocumentPanel;
 
 
@@ -303,4 +301,4 @@ private:
 };
 
 
-#endif   // __JUCE_MULTIDOCUMENTPANEL_JUCEHEADER__
+#endif   // JUCE_MULTIDOCUMENTPANEL_H_INCLUDED

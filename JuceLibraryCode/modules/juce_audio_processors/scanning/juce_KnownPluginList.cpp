@@ -136,7 +136,8 @@ bool KnownPluginList::scanAndAddFile (const String& fileOrIdentifier,
     OwnedArray <PluginDescription> found;
 
     {
-        const ScopedUnlock sl (scanLock);
+        const ScopedUnlock sl2 (scanLock);
+
         if (scanner != nullptr)
         {
             if (! scanner->findPluginTypesFor (format, found, fileOrIdentifier))
@@ -240,7 +241,8 @@ void KnownPluginList::clearBlacklistedFiles()
 //==============================================================================
 struct PluginSorter
 {
-    PluginSorter (KnownPluginList::SortMethod sortMethod) noexcept  : method (sortMethod) {}
+    PluginSorter (KnownPluginList::SortMethod sortMethod, bool forwards) noexcept
+        : method (sortMethod), direction (forwards ? 1 : -1) {}
 
     int compareElements (const PluginDescription* const first,
                          const PluginDescription* const second) const
@@ -251,6 +253,7 @@ struct PluginSorter
         {
             case KnownPluginList::sortByCategory:           diff = first->category.compareLexicographically (second->category); break;
             case KnownPluginList::sortByManufacturer:       diff = first->manufacturerName.compareLexicographically (second->manufacturerName); break;
+            case KnownPluginList::sortByFormat:             diff = first->pluginFormatName.compare (second->pluginFormatName); break;
             case KnownPluginList::sortByFileSystemLocation: diff = lastPathPart (first->fileOrIdentifier).compare (lastPathPart (second->fileOrIdentifier)); break;
             default: break;
         }
@@ -258,7 +261,7 @@ struct PluginSorter
         if (diff == 0)
             diff = first->name.compareLexicographically (second->name);
 
-        return diff;
+        return diff * direction;
     }
 
 private:
@@ -267,14 +270,17 @@ private:
         return path.replaceCharacter ('\\', '/').upToLastOccurrenceOf ("/", false, false);
     }
 
-    KnownPluginList::SortMethod method;
+    const KnownPluginList::SortMethod method;
+    const int direction;
+
+    JUCE_DECLARE_NON_COPYABLE (PluginSorter)
 };
 
-void KnownPluginList::sort (const SortMethod method)
+void KnownPluginList::sort (const SortMethod method, bool forwards)
 {
     if (method != defaultOrder)
     {
-        PluginSorter sorter (method);
+        PluginSorter sorter (method, forwards);
         types.sort (sorter, true);
 
         sendChangeMessage();
@@ -286,8 +292,8 @@ XmlElement* KnownPluginList::createXml() const
 {
     XmlElement* const e = new XmlElement ("KNOWNPLUGINS");
 
-    for (int i = 0; i < types.size(); ++i)
-        e->addChildElement (types.getUnchecked(i)->createXml());
+    for (int i = types.size(); --i >= 0;)
+        e->prependChildElement (types.getUnchecked(i)->createXml());
 
     for (int i = 0; i < blacklist.size(); ++i)
         e->createNewChildElement ("BLACKLISTED")->setAttribute ("id", blacklist[i]);
@@ -434,6 +440,18 @@ struct PluginTreeUtils
         }
     }
 
+    static bool containsDuplicateNames (const Array<const PluginDescription*>& plugins, const String& name)
+    {
+        int matches = 0;
+
+        for (int i = 0; i < plugins.size(); ++i)
+            if (plugins.getUnchecked(i)->name == name)
+                if (++matches > 1)
+                    return true;
+
+        return false;
+    }
+
     static void addToMenu (const KnownPluginList::PluginTree& tree, PopupMenu& m, const OwnedArray <PluginDescription>& allPlugins)
     {
         for (int i = 0; i < tree.subFolders.size(); ++i)
@@ -449,7 +467,12 @@ struct PluginTreeUtils
         {
             const PluginDescription* const plugin = tree.plugins.getUnchecked(i);
 
-            m.addItem (allPlugins.indexOf (plugin) + menuIdBase, plugin->name, true, false);
+            String name (plugin->name);
+
+            if (containsDuplicateNames (tree.plugins, name))
+                name << " (" << plugin->pluginFormatName << ')';
+
+            m.addItem (allPlugins.indexOf (plugin) + menuIdBase, name, true, false);
         }
     }
 };
@@ -459,7 +482,7 @@ KnownPluginList::PluginTree* KnownPluginList::createTree (const SortMethod sortM
     Array <PluginDescription*> sorted;
 
     {
-        PluginSorter sorter (sortMethod);
+        PluginSorter sorter (sortMethod, true);
 
         for (int i = 0; i < types.size(); ++i)
             sorted.addSorted (sorter, types.getUnchecked(i));
@@ -467,7 +490,7 @@ KnownPluginList::PluginTree* KnownPluginList::createTree (const SortMethod sortM
 
     PluginTree* tree = new PluginTree();
 
-    if (sortMethod == sortByCategory || sortMethod == sortByManufacturer)
+    if (sortMethod == sortByCategory || sortMethod == sortByManufacturer || sortMethod == sortByFormat)
     {
         PluginTreeUtils::buildTreeByCategory (*tree, sorted, sortMethod);
     }

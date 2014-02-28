@@ -55,6 +55,28 @@ namespace CommandIDs
     
     static const int CopyDataToSequencer    = 0x20022;
     
+    static const int EnableLed              = 0x20030;
+    static const int EnableLedPressure      = 0x20031;
+    static const int EnableLedClock         = 0x20032;
+    static const int HardwarePreferences    = 0x20033;
+    static const int EnableLedMidiMode      = 0x20034;
+    static const int HardwareProjectSettings = 0x20035;
+    
+    static const int SendMidiClock          = 0x20036;
+    static const int SyncToMidiClock        = 0x20037;
+    static const int MidiClockSettings      = 0x20038;
+    
+    static const int WebsiteHomeLink        = 0x20040;
+    static const int WebsiteTutorialsLink   = 0x20041;
+    static const int WebsiteSupportLink     = 0x20042;
+    static const int WebsiteForumLink       = 0x20043;
+    
+    static const int ViewTriggerSettings    = 0x20050;
+    static const int ViewPressureSettings   = 0x20051;
+    static const int ViewGlobalPadSettings  = 0x20052;
+    static const int ViewScenePresets       = 0x20053;
+    static const int EnabledPadContentsDisplay = 0x20054;
+    static const int ViewSequenceSettings   = 0x20055;
     
 }
 
@@ -65,6 +87,8 @@ namespace CommandCategories
     static const char* const ControlCommands		= "Control";
     static const char* const EditCommands           = "Edit";
     static const char* const OptionCommands         = "Option";
+    static const char* const HardwareCommands       = "Hardware";
+    static const char* const ViewCommands           = "View";
 }
 
 #endif // COMMANDIDS_H

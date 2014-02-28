@@ -22,14 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_DRAWABLE_JUCEHEADER__
-#define __JUCE_DRAWABLE_JUCEHEADER__
-
-#include "../components/juce_Component.h"
-#include "../positioning/juce_RelativeCoordinate.h"
-#include "../positioning/juce_RelativeCoordinatePositioner.h"
-#include "../layout/juce_ComponentBuilder.h"
-class DrawableComposite;
+#ifndef JUCE_DRAWABLE_H_INCLUDED
+#define JUCE_DRAWABLE_H_INCLUDED
 
 
 //==============================================================================
@@ -73,7 +67,7 @@ public:
 
     /** Renders the Drawable at a given offset within the Graphics context.
 
-        The co-ordinates passed-in are used to translate the object relative to its own
+        The coordinates passed-in are used to translate the object relative to its own
         origin before drawing it - this is basically a quick way of saying:
 
         @code
@@ -148,7 +142,7 @@ public:
         into a Drawable tree.
 
         The object returned must be deleted by the caller. If something goes wrong
-        while parsing, it may return 0.
+        while parsing, it may return nullptr.
 
         SVG is a pretty large and complex spec, and this doesn't aim to be a full
         implementation, but it can return the basic vector objects.
@@ -257,4 +251,4 @@ private:
 };
 
 
-#endif   // __JUCE_DRAWABLE_JUCEHEADER__
+#endif   // JUCE_DRAWABLE_H_INCLUDED

@@ -63,14 +63,18 @@ StringArray MainMenuModel::getMenuBarNames()
     
     String file(translate("File"));
     String edit(translate("Edit"));
+    String view(translate("View"));
     String options(translate("Options"));
     String controls(translate("Controls"));
+    String hardware(translate("Hardware"));
     String help(translate("Help"));
     
     names.add(file);
     names.add(edit);
+    names.add(view);
     names.add(options);
     names.add(controls);
+    names.add(hardware);
     names.add(help);
     
     return names;
@@ -118,20 +122,50 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::CopyDataToSequencer);
     }
-    else if (topLevelMenuIndex == 2) //Options
+    else if (topLevelMenuIndex == 2) //View
+    {
+        menu.addCommandItem (commandManager, CommandIDs::ViewTriggerSettings);
+        menu.addCommandItem (commandManager, CommandIDs::ViewPressureSettings);
+        menu.addCommandItem (commandManager, CommandIDs::ViewGlobalPadSettings);
+        menu.addCommandItem (commandManager, CommandIDs::ViewSequenceSettings);
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::ViewScenePresets);
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::EnabledPadContentsDisplay);
+    }
+    else if (topLevelMenuIndex == 3) //Options
     {
         menu.addCommandItem (commandManager, CommandIDs::DisableHelpBox);
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::SendMidiClock);
+        menu.addCommandItem(commandManager, CommandIDs::SyncToMidiClock);
+        menu.addCommandItem(commandManager, CommandIDs::MidiClockSettings);
     }
-    else if (topLevelMenuIndex == 3) //Controls
+    else if (topLevelMenuIndex == 4) //Controls
     {
         menu.addCommandItem (commandManager, CommandIDs::KillSwitch);
         menu.addCommandItem (commandManager, CommandIDs::StartStopClock);
     }
-    else if (topLevelMenuIndex == 4) //Help
+    else if (topLevelMenuIndex == 5) //Hardware
+    {
+        menu.addCommandItem(commandManager, CommandIDs::EnableLedMidiMode);
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::EnableLed);
+        menu.addCommandItem (commandManager, CommandIDs::EnableLedPressure);
+        menu.addCommandItem (commandManager, CommandIDs::EnableLedClock);
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::HardwareProjectSettings);
+        menu.addCommandItem (commandManager, CommandIDs::HardwarePreferences);
+    }
+    else if (topLevelMenuIndex == 6) //Help
     {
         //menu.addCommandItem (commandManager, CommandIDs::StarterGuide);
         menu.addCommandItem (commandManager, CommandIDs::ReferenceManual);
-        
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::WebsiteHomeLink);
+        menu.addCommandItem(commandManager, CommandIDs::WebsiteTutorialsLink);
+        menu.addCommandItem(commandManager, CommandIDs::WebsiteSupportLink);
+        menu.addCommandItem(commandManager, CommandIDs::WebsiteForumLink);
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::UpdateSoftware);
         

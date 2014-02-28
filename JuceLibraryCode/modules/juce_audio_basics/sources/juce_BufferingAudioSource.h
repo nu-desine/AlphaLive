@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_BUFFERINGAUDIOSOURCE_JUCEHEADER__
-#define __JUCE_BUFFERINGAUDIOSOURCE_JUCEHEADER__
-
-#include "juce_PositionableAudioSource.h"
+#ifndef JUCE_BUFFERINGAUDIOSOURCE_H_INCLUDED
+#define JUCE_BUFFERINGAUDIOSOURCE_H_INCLUDED
 
 
 //==============================================================================
@@ -76,7 +74,7 @@ public:
     void releaseResources() override;
 
     /** Implementation of the AudioSource method. */
-    void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override;
+    void getNextAudioBlock (const AudioSourceChannelInfo&) override;
 
     //==============================================================================
     /** Implements the PositionableAudioSource method. */
@@ -104,10 +102,10 @@ private:
 
     bool readNextBufferChunk();
     void readBufferSection (int64 start, int length, int bufferOffset);
-    int useTimeSlice();
+    int useTimeSlice() override;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BufferingAudioSource)
 };
 
 
-#endif   // __JUCE_BUFFERINGAUDIOSOURCE_JUCEHEADER__
+#endif   // JUCE_BUFFERINGAUDIOSOURCE_H_INCLUDED

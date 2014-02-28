@@ -102,7 +102,7 @@ public:
     void updateDisplay();
     void setParameterLabelText (String value);
     void setRotaryControlDisplay();
-    void changeView();
+    void changeView (int view);
     
     void mouseEnter (const MouseEvent &e);
     void mouseExit (const MouseEvent &e);

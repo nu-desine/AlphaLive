@@ -168,7 +168,7 @@ public:
         if (items.size() == 0)
         {
             g.setColour (AlphaTheme::getInstance()->foregroundColour);
-            g.setFont (13.0f);
+            g.setFont (13.0f + AlphaTheme::getInstance()->fontSizeAddition);
             g.drawText (noItemsMessage,
                         0, 0, getWidth(), getHeight() / 2,
                         Justification::centred, true);
@@ -816,7 +816,7 @@ public:
             if (items.size() == 0)
             {
                 g.setColour (AlphaTheme::getInstance()->foregroundColour);
-                g.setFont (13.0f);
+                g.setFont (13.0f + AlphaTheme::getInstance()->fontSizeAddition);
                 g.drawText (noItemsMessage,
                             0, 0, getWidth(), getHeight() / 2,
                             Justification::centred, true);

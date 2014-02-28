@@ -45,7 +45,7 @@ void GuiCircleBackground::paint (Graphics &g)
                 0,
                 0,
                 getWidth(),
-                getHeight(),
+                getHeight() - 5,
                 0,
                 0,
                 AlphaTheme::getInstance()->settingsOffImage.getWidth(),

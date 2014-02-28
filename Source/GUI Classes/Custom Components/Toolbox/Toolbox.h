@@ -54,6 +54,7 @@ public:
     void noteLayoutSelected (String layout, bool isScale);
     
     void setTabColour();
+    void setCurrentTabIndex (int index);
     
 private:
     //==============================================================================

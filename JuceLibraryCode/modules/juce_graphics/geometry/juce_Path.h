@@ -22,16 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_PATH_JUCEHEADER__
-#define __JUCE_PATH_JUCEHEADER__
-
-#include "juce_AffineTransform.h"
-#include "juce_Line.h"
-#include "juce_Rectangle.h"
-#include "../placement/juce_Justification.h"
-class Image;
-class InputStream;
-class OutputStream;
+#ifndef JUCE_PATH_H_INCLUDED
+#define JUCE_PATH_H_INCLUDED
 
 
 //==============================================================================
@@ -190,7 +182,7 @@ public:
 
     /** Begins a new subpath with a given starting position.
 
-        This will move the path's current position to the co-ordinates passed in and
+        This will move the path's current position to the coordinates passed in and
         make it ready to draw lines or curves starting from this position.
 
         After adding whatever lines and curves are needed, you can either
@@ -203,7 +195,7 @@ public:
 
     /** Begins a new subpath with a given starting position.
 
-        This will move the path's current position to the co-ordinates passed in and
+        This will move the path's current position to the coordinates passed in and
         make it ready to draw lines or curves starting from this position.
 
         After adding whatever lines and curves are needed, you can either
@@ -748,7 +740,7 @@ public:
     /** Restores this path from a string that was created with the toString() method.
         @see toString()
     */
-    void restoreFromString (const String& stringVersion);
+    void restoreFromString (StringRef stringVersion);
 
 
 private:
@@ -782,4 +774,4 @@ private:
     JUCE_LEAK_DETECTOR (Path)
 };
 
-#endif   // __JUCE_PATH_JUCEHEADER__
+#endif   // JUCE_PATH_H_INCLUDED

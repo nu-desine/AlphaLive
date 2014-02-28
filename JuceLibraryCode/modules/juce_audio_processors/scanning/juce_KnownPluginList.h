@@ -22,11 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_KNOWNPLUGINLIST_JUCEHEADER__
-#define __JUCE_KNOWNPLUGINLIST_JUCEHEADER__
-
-#include "../processors/juce_PluginDescription.h"
-#include "../format/juce_AudioPluginFormat.h"
+#ifndef JUCE_KNOWNPLUGINLIST_H_INCLUDED
+#define JUCE_KNOWNPLUGINLIST_H_INCLUDED
 
 
 //==============================================================================
@@ -135,6 +132,7 @@ public:
         sortAlphabetically,
         sortByCategory,
         sortByManufacturer,
+        sortByFormat,
         sortByFileSystemLocation
     };
 
@@ -146,7 +144,7 @@ public:
 
         Use getIndexChosenByMenu() to find out the type that was chosen.
     */
-    void addToMenu (PopupMenu& menu, const SortMethod sortMethod) const;
+    void addToMenu (PopupMenu& menu, SortMethod sortMethod) const;
 
     /** Converts a menu item index that has been chosen into its index in this list.
         Returns -1 if it's not an ID that was used.
@@ -156,7 +154,7 @@ public:
 
     //==============================================================================
     /** Sorts the list. */
-    void sort (const SortMethod method);
+    void sort (SortMethod method, bool forwards);
 
     //==============================================================================
     /** Creates some XML that can be used to store the state of this list. */
@@ -198,7 +196,7 @@ public:
 
 private:
     //==============================================================================
-    OwnedArray <PluginDescription> types;
+    OwnedArray<PluginDescription> types;
     StringArray blacklist;
     ScopedPointer<CustomScanner> scanner;
     CriticalSection scanLock;
@@ -207,4 +205,4 @@ private:
 };
 
 
-#endif   // __JUCE_KNOWNPLUGINLIST_JUCEHEADER__
+#endif   // JUCE_KNOWNPLUGINLIST_H_INCLUDED

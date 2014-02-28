@@ -69,21 +69,17 @@ namespace SystemStatsHelpers
 }
 
 //==============================================================================
-SystemStats::CPUFlags::CPUFlags()
+void CPUInformation::initialise() noexcept
 {
    #if JUCE_INTEL && ! JUCE_NO_INLINE_ASM
-    uint32 familyModel = 0, extFeatures = 0, features = 0, dummy = 0;
-    SystemStatsHelpers::doCPUID (familyModel, extFeatures, dummy, features, 1);
+    uint32 a = 0, b = 0, d = 0, c = 0;
+    SystemStatsHelpers::doCPUID (a, b, c, d, 1);
 
-    hasMMX   = (features    & (1u << 23)) != 0;
-    hasSSE   = (features    & (1u << 25)) != 0;
-    hasSSE2  = (features    & (1u << 26)) != 0;
-    has3DNow = (extFeatures & (1u << 31)) != 0;
-   #else
-    hasMMX = false;
-    hasSSE = false;
-    hasSSE2 = false;
-    has3DNow = false;
+    hasMMX   = (d & (1u << 23)) != 0;
+    hasSSE   = (d & (1u << 25)) != 0;
+    hasSSE2  = (d & (1u << 26)) != 0;
+    has3DNow = (b & (1u << 31)) != 0;
+    hasSSE3  = (c & (1u <<  0)) != 0;
    #endif
 
    #if JUCE_IOS || (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
@@ -128,7 +124,7 @@ SystemStats::OperatingSystemType SystemStats::getOperatingSystemType()
     return iOS;
    #else
     StringArray parts;
-    parts.addTokens (getOSXVersion(), ".", String::empty);
+    parts.addTokens (getOSXVersion(), ".", String());
 
     jassert (parts[0].getIntValue() == 10);
     const int major = parts[1].getIntValue();
@@ -144,6 +140,15 @@ String SystemStats::getOperatingSystemName()
     return "iOS " + nsStringToJuce ([[UIDevice currentDevice] systemVersion]);
    #else
     return "Mac OSX " + getOSXVersion();
+   #endif
+}
+
+String SystemStats::getDeviceDescription()
+{
+   #if JUCE_IOS
+    return nsStringToJuce ([[UIDevice currentDevice] model]);
+   #else
+    return String();
    #endif
 }
 
@@ -177,7 +182,7 @@ String SystemStats::getCpuVendor()
 
     return String (reinterpret_cast <const char*> (vendor), 12);
    #else
-    return String::empty;
+    return String();
    #endif
 }
 
@@ -213,7 +218,7 @@ String SystemStats::getComputerName()
     if (gethostname (name, sizeof (name) - 1) == 0)
         return String (name).upToLastOccurrenceOf (".local", false, true);
 
-    return String::empty;
+    return String();
 }
 
 static String getLocaleValue (CFStringRef key)

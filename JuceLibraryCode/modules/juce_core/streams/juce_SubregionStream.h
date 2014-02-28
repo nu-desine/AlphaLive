@@ -26,11 +26,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_SUBREGIONSTREAM_JUCEHEADER__
-#define __JUCE_SUBREGIONSTREAM_JUCEHEADER__
-
-#include "juce_InputStream.h"
-#include "../memory/juce_OptionalScopedPointer.h"
+#ifndef JUCE_SUBREGIONSTREAM_H_INCLUDED
+#define JUCE_SUBREGIONSTREAM_H_INCLUDED
 
 
 //==============================================================================
@@ -88,4 +85,4 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SubregionStream)
 };
 
-#endif   // __JUCE_SUBREGIONSTREAM_JUCEHEADER__
+#endif   // JUCE_SUBREGIONSTREAM_H_INCLUDED

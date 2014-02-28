@@ -27,11 +27,8 @@
 
 
 SceneComponent::SceneComponent(AppDocumentState &ref, ModeController &ref2)
-                                :   appDocumentStateRef(ref),
-                                    mSubject(ref2)
+                                :   appDocumentStateRef(ref)
 {
-    //attach this class to the subject class
-    mSubject.attach(this);
     
     shouldShowSaveWindow = false; //to prevent the 'saved'alertwindow to be shown on start up and in other situtions
     
@@ -53,9 +50,6 @@ SceneComponent::SceneComponent(AppDocumentState &ref, ModeController &ref2)
 SceneComponent::~SceneComponent()
 {
     deleteAllChildren();
-    
-    //detach this class from the subject class
-    mSubject.detach(this);
 }
 
 void SceneComponent::resized()
@@ -136,20 +130,6 @@ void SceneComponent::setSlotStatus (int slotNumber, int statusValue)
     {
         selectedSceneNumber = slotNumber;
     }
-}
-
-
-
-//observers update function, called everytime a pad set to the controller mode asks to load up scene settings
-bool SceneComponent::update(const Subject& theChangedSubject)
-{
-    if (&theChangedSubject == &mSubject)
-    {
-        int sceneNumber = AppSettings::Instance()->padSettings[mSubject.getPadNumber()]->getControllerSceneNumber()-1;
-        selectSlot(sceneNumber);
-    }
-    
-    return true;
 }
 
 void SceneComponent::selectSlot (int slotNumber)

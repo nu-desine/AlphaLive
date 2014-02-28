@@ -19,6 +19,8 @@
 //
 
 #include "HidComms.h"
+#include "../File and Settings/StoredSettings.h"
+#include "../File and Settings/AppSettings.h"
 #if JUCE_LINUX
 #include <unistd.h>
 #endif
@@ -264,8 +266,98 @@ void HidComms::run()
                         }
                     }
                     
+                    //===================================================================================
+                    //===================================================================================
+                    /*
+                     Processing any incoming MIDI messages.
+                     The firmware can send up to 6 messages in a HID report.
+                     buf[100] is equal to the number of containing messages,
+                     and then the following groups of 3 bytes are the individual
+                     messages.
+                     */
                     
-                    // ==== write output report (just MIDI messages?) ====
+                    if (buf[100] > 0)
+                    {
+                        //get number of MIDI messages within report
+                        int noOfMessages = buf[100];
+                        
+                        //retrieve each MIDI message from the report
+                        for (int i = 0; i < noOfMessages; i++)
+                        {
+                            //get the first byte index of the message
+                            int messageIndex  = (i * 3) + 101;
+                            
+                            int message[3];
+                            message[0] = buf[messageIndex];
+                            message[1] = buf[messageIndex + 1];
+                            message[2] = buf[messageIndex + 2];
+                            
+                            if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 1)
+                            {
+                                MidiMessage midiMessage (message[0]);
+                                
+                                //send the MIDI message to AlphaLiveEngine
+                                processMidiInput(midiMessage);
+                            }
+                            else if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 2)
+                            {
+                                MidiMessage midiMessage (message[0], message[1]);
+                                
+                                //send the MIDI message to AlphaLiveEngine
+                                processMidiInput(midiMessage);
+                            }
+                            else if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 3)
+                            {
+                                MidiMessage midiMessage (message[0], message[1], message[2]);
+                                
+                                //send the MIDI message to AlphaLiveEngine
+                                processMidiInput(midiMessage);
+                            }
+                            
+                        }
+                        
+                    }
+                    
+//                        //process any incoming midi messages
+//                        //if the byte 100 is < 128 or > 255 it is not a correct MIDI message which
+//                        //will cause an asseration failure when creating the MidiMessage object below.
+//                        //Though this will probably need to be changed if we start using MIDI SysEx at all.
+//                        
+//                        if (buf[100] > 127 && buf[100] <= 255)
+//                        {
+//                            int message[3];
+//                            message[0] = buf[100];
+//                            message[1] = buf[101];
+//                            message[2] = buf[102];
+//                            
+//                            std::cout << "MIDI message: " << message[0] << " " << message[1] << " " << message[2] << std::endl;
+//                            
+//                            //determine the message length, and init the relevent MidiMessage
+//                            if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 1)
+//                            {
+//                                MidiMessage midiMessage (buf[100]);
+//                            
+//                                //send the MIDI message to AlphaLiveEngine
+//                                processMidiInput(midiMessage);
+//                            }
+//                            else if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 2)
+//                            {
+//                                MidiMessage midiMessage (buf[100], buf[101]);
+//                                
+//                                //send the MIDI message to AlphaLiveEngine
+//                                processMidiInput(midiMessage);
+//                            }
+//                            else if (MidiMessage::getMessageLengthFromFirstByte((uint8) message[0]) == 3)
+//                            {
+//                                MidiMessage midiMessage (buf[100], buf[101], buf[102]);
+//                                
+//                                //send the MIDI message to AlphaLiveEngine
+//                                processMidiInput(midiMessage);
+//                            }
+//                        }
+                
+                    
+                    // ==== write output report ====
                     
                     sharedMemory.enter();
                     
@@ -476,6 +568,23 @@ void HidComms::connectToDevice()
         // Set the hid_read() function to be non-blocking
         // for the rest of the program
         hid_set_nonblocking(handle, 1);
+        
+        
+        // ==== Configure LED settings ====
+        
+        //set LED status
+        setLedSettings(1, AppSettings::Instance()->getHardwareLedStatus());
+        //set LED pressure interation status
+        setLedSettings(2, AppSettings::Instance()->getHardwareLedPressureStatus());
+        //set LED clock interation status
+        setLedSettings(3, AppSettings::Instance()->getHardwareLedClockStatus());
+        //set LED mode
+        setLedSettings(4, AppSettings::Instance()->getHardwareLedMode());
+        
+        //set LED colours
+        for (int i = 0; i < 3; i ++)
+            setLedColour(i, StoredSettings::getInstance()->hardwareLedColour[i]);
+
     }
 }
 

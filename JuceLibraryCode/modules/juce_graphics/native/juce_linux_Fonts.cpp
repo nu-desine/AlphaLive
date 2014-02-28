@@ -26,7 +26,7 @@ StringArray FTTypefaceList::getDefaultFontDirectories()
 {
     StringArray fontDirs;
 
-    fontDirs.addTokens (CharPointer_UTF8 (getenv ("JUCE_FONT_PATH")), ";,", String::empty);
+    fontDirs.addTokens (String (CharPointer_UTF8 (getenv ("JUCE_FONT_PATH"))), ";,", "");
     fontDirs.removeEmptyStrings (true);
 
     if (fontDirs.size() == 0)
@@ -43,7 +43,7 @@ StringArray FTTypefaceList::getDefaultFontDirectories()
                 {
                     if (e->getStringAttribute ("prefix") == "xdg")
                     {
-                        String xdgDataHome (SystemStats::getEnvironmentVariable ("XDG_DATA_HOME", String::empty));
+                        String xdgDataHome (SystemStats::getEnvironmentVariable ("XDG_DATA_HOME", String()));
 
                         if (xdgDataHome.trimStart().isEmpty())
                             xdgDataHome = "~/.local/share";
@@ -137,8 +137,8 @@ private:
         StringArray allFonts;
         FTTypefaceList::getInstance()->getSansSerifNames (allFonts);
 
-        const char* targets[] = { "Verdana", "Bitstream Vera Sans", "Luxi Sans",
-                                  "Liberation Sans", "DejaVu Sans", "Sans", nullptr };
+        static const char* targets[] = { "Verdana", "Bitstream Vera Sans", "Luxi Sans",
+                                         "Liberation Sans", "DejaVu Sans", "Sans", nullptr };
         return pickBestFont (allFonts, targets);
     }
 
@@ -147,8 +147,8 @@ private:
         StringArray allFonts;
         FTTypefaceList::getInstance()->getSerifNames (allFonts);
 
-        const char* targets[] = { "Bitstream Vera Serif", "Times", "Nimbus Roman",
-                                  "Liberation Serif", "DejaVu Serif", "Serif", nullptr };
+        static const char* targets[] = { "Bitstream Vera Serif", "Times", "Nimbus Roman",
+                                         "Liberation Serif", "DejaVu Serif", "Serif", nullptr };
         return pickBestFont (allFonts, targets);
     }
 
@@ -157,8 +157,8 @@ private:
         StringArray allFonts;
         FTTypefaceList::getInstance()->getMonospacedNames (allFonts);
 
-        const char* targets[] = { "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Sans Mono",
-                                  "Liberation Mono", "Courier", "DejaVu Mono", "Mono", nullptr };
+        static const char* targets[] = { "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Sans Mono",
+                                         "Liberation Mono", "Courier", "DejaVu Mono", "Mono", nullptr };
         return pickBestFont (allFonts, targets);
     }
 

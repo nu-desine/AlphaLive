@@ -40,7 +40,7 @@ public:
 	
 	void resized();
 	void paint (Graphics& g);
-	void modeChange(int value);
+	void setDisplay();
 	bool hitTest (int x, int y);
 	void toggleChange();
 	void turnOff();
@@ -59,16 +59,14 @@ public:
     void mouseUp (const MouseEvent &e);
     void mouseDrag (const MouseEvent &e);
     
-    void setGradient (int oscValue);
-    void setPadPlayingState (int playingState);
+    void setGradient (int pressureValue, int minPressureValue);
+    void setGradientColour (bool pressureIsLatched);
     
+    void setPadPlayingState (int playingState);
     void setPadText();
     
     void copyPadSettings();
     void pastePadSettings();
-    
-	
-	
     
 private:
     //==============================================================================
@@ -80,7 +78,7 @@ private:
     
     ShapeButton *sb;
     int i;
-	Image image;//, midiImage, loopImage, seqImage, controlImage;
+	Image image;
 	Path hitPath;
 	
 	GuiPadLayout &guiPadLayoutRef;
@@ -88,7 +86,8 @@ private:
 	Colour normalColour, overColour, downColour, overlayColour, modeColour, samplerColour, midiColour, sequencerColour, controllerColour;
 	
     
-    Colour oscGradientOuterColour, oscGradientInnerColour;
+    Colour padColour, padOuterColour, padInnerColour, gradientOuterColour, gradientInnerColour;
+
     float gradientOuterColourAlpha, gradientInnerColourAlpha, modeOpacity;
 	
     int lastTime;
@@ -96,11 +95,14 @@ private:
     bool isMouseInPlayMode; //when true, it means the mouse is currently being used to emulate a pad press
     bool shouldIgnoreValues;
     
-    int playingStatus;  //1 when a looper or sequencer pad which is currently playing.
-    //when true, the pad is highlighted to show that this pad is currently playing
-    //2 when waiting to play, 3 when waiting to stop. These show different colours
-    //0 when not playing. Nothing is displayed
+    int playingStatus;  //Used to display a coloured ring on the pad to signify
+                        //what the pads current playing/function status:
+                        //0 - off
+                        //1 - on/playing
+                        //2 - waiting to play
+                        //3 - waiting to stop
     
+    int padContentsDisplay; //1 - pad numbers only, 2 - pad contents
     
 };  
 

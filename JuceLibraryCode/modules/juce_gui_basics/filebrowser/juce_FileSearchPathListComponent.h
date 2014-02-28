@@ -22,13 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_FILESEARCHPATHLISTCOMPONENT_JUCEHEADER__
-#define __JUCE_FILESEARCHPATHLISTCOMPONENT_JUCEHEADER__
-
-#include "../widgets/juce_ListBox.h"
-#include "../buttons/juce_DrawableButton.h"
-#include "../buttons/juce_TextButton.h"
-#include "../mouse/juce_FileDragAndDropTarget.h"
+#ifndef JUCE_FILESEARCHPATHLISTCOMPONENT_H_INCLUDED
+#define JUCE_FILESEARCHPATHLISTCOMPONENT_H_INCLUDED
 
 
 //==============================================================================
@@ -118,4 +113,4 @@ private:
 };
 
 
-#endif   // __JUCE_FILESEARCHPATHLISTCOMPONENT_JUCEHEADER__
+#endif   // JUCE_FILESEARCHPATHLISTCOMPONENT_H_INCLUDED

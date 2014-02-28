@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_RESIZABLECORNERCOMPONENT_JUCEHEADER__
-#define __JUCE_RESIZABLECORNERCOMPONENT_JUCEHEADER__
-
-#include "juce_ComponentBoundsConstrainer.h"
+#ifndef JUCE_RESIZABLECORNERCOMPONENT_H_INCLUDED
+#define JUCE_RESIZABLECORNERCOMPONENT_H_INCLUDED
 
 
 //==============================================================================
@@ -90,4 +88,4 @@ private:
 };
 
 
-#endif   // __JUCE_RESIZABLECORNERCOMPONENT_JUCEHEADER__
+#endif   // JUCE_RESIZABLECORNERCOMPONENT_H_INCLUDED

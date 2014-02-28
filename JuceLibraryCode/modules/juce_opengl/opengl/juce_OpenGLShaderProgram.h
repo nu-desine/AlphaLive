@@ -22,8 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_OPENGLSHADERPROGRAM_JUCEHEADER__
-#define __JUCE_OPENGLSHADERPROGRAM_JUCEHEADER__
+#ifndef JUCE_OPENGLSHADERPROGRAM_H_INCLUDED
+#define JUCE_OPENGLSHADERPROGRAM_H_INCLUDED
 
 //==============================================================================
 /**
@@ -59,7 +59,17 @@ public:
         @returns  true if the shader compiled successfully. If not, you can call
                   getLastError() to find out what happened.
     */
-    bool addShader (const char* const shaderSourceCode, GLenum shaderType);
+    bool addShader (StringRef shaderSourceCode, GLenum shaderType);
+
+    /** Compiles and adds a fragment shader to this program.
+        This is equivalent to calling addShader() with a type of GL_VERTEX_SHADER.
+    */
+    bool addVertexShader (StringRef shaderSourceCode);
+
+    /** Compiles and adds a fragment shader to this program.
+        This is equivalent to calling addShader() with a type of GL_FRAGMENT_SHADER.
+    */
+    bool addFragmentShader (StringRef shaderSourceCode);
 
     /** Links all the compiled shaders into a usable program.
         If your app is built in debug mode, this method will assert if the program
@@ -150,4 +160,4 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenGLShaderProgram)
 };
 
-#endif   // __JUCE_OPENGLSHADERPROGRAM_JUCEHEADER__
+#endif   // JUCE_OPENGLSHADERPROGRAM_H_INCLUDED

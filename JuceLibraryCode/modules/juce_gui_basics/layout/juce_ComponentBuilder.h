@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_COMPONENTBUILDER_JUCEHEADER__
-#define __JUCE_COMPONENTBUILDER_JUCEHEADER__
-
-#include "../components/juce_Component.h"
+#ifndef JUCE_COMPONENTBUILDER_H_INCLUDED
+#define JUCE_COMPONENTBUILDER_H_INCLUDED
 
 
 //==============================================================================
@@ -244,4 +242,4 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ComponentBuilder)
 };
 
-#endif   // __JUCE_COMPONENTBUILDER_JUCEHEADER__
+#endif   // JUCE_COMPONENTBUILDER_H_INCLUDED

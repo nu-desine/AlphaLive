@@ -22,11 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_APPLICATIONCOMMANDTARGET_JUCEHEADER__
-#define __JUCE_APPLICATIONCOMMANDTARGET_JUCEHEADER__
-
-#include "juce_ApplicationCommandInfo.h"
-class Component;
+#ifndef JUCE_APPLICATIONCOMMANDTARGET_H_INCLUDED
+#define JUCE_APPLICATIONCOMMANDTARGET_H_INCLUDED
 
 
 //==============================================================================
@@ -245,4 +242,4 @@ private:
 };
 
 
-#endif   // __JUCE_APPLICATIONCOMMANDTARGET_JUCEHEADER__
+#endif   // JUCE_APPLICATIONCOMMANDTARGET_H_INCLUDED

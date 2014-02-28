@@ -158,10 +158,8 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	addAndMakeVisible(modeMidiButton = new ModeButton(modeMidiIcon));
 	modeMidiButton->setRadioGroupId (123);
 	modeMidiButton->setClickingTogglesState(true);
-	modeMidiButton->setToggleState(false, false);	
 	modeMidiButton->addListener(this);
 	modeMidiButton->addMouseListener(this, true);
-	modeMidiButton->setOpaque(false);
     modeMidiButton->setToggleState(true, false);
 	
 	//----------------sequence Samples button-------------------
@@ -169,10 +167,9 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	addAndMakeVisible(modeSamplesButton = new ModeButton(modeAudioIcon));
 	modeSamplesButton->setRadioGroupId (123);
 	modeSamplesButton->setClickingTogglesState(true);
-	modeSamplesButton->setToggleState(false, false);	
 	modeSamplesButton->addListener(this);
 	modeSamplesButton->addMouseListener(this, true);
-	modeSamplesButton->setOpaque(false);
+    modeSamplesButton->setToggleState(false, false);
 	
 	//---------------channel buttons---------------------
 	for (int i = 0; i <= 15; i++)
@@ -241,14 +238,14 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	minusButton->addMouseListener(this, false);
     
     addAndMakeVisible(parameterLabel = new Label());
-	parameterLabel->setFont(Font(9));
+	parameterLabel->setFont(Font(9 + AlphaTheme::getInstance()->fontSizeAddition));
 	parameterLabel->setText("32", dontSendNotification);
     parameterLabel->setJustificationType(Justification::centred);
     //parameterLabel->setEditable(false, true, true);
     parameterLabel->addListener(this);
 	
 	addChildComponent(currentParameterLabel = new Label());
-	currentParameterLabel->setFont(Font(10));
+	currentParameterLabel->setFont(Font(10 + AlphaTheme::getInstance()->fontSizeAddition));
 	currentParameterLabel->setText(translate("TEMPO"), dontSendNotification);
     currentParameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->iconOnColour);
     currentParameterLabel->setColour(Label::backgroundColourId, Colours::transparentBlack);
@@ -259,7 +256,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     //---------------hover parameter label -------------------------------------
     addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
     parameterHoverLabel->setJustificationType(Justification::centred);
-    parameterHoverLabel->setFont(Font(9));
+    parameterHoverLabel->setFont(Font(11 + AlphaTheme::getInstance()->fontSizeAddition));
     parameterHoverLabel->addMouseListener(this, true);
     
     //----------------------Trigger mode buttons------------------
@@ -1805,8 +1802,7 @@ void GuiSequencerMode::setRotaryControlDisplay()
 void GuiSequencerMode::updateDisplay()
 {
     //This method is used to set all the components to the currently selected pad's settings,
-    //as well as to hide/dissabled any unneeded components. 
-    
+    //as well as to hide/disabled any uneeded components.
     
     //if an individual pad number is currently selected
     if(SINGLE_PAD)
@@ -1820,6 +1816,8 @@ void GuiSequencerMode::updateDisplay()
             
             mainComponentRef.getGuiPiano()->setActive(true);
             mainComponentRef.getGuiPiano()->updateDisplay();
+            
+            modeSamplesButton->setToggleState(false, false);
         }
         else if (PAD_SETTINGS->getSequencerMode() == 2) //samples mode
         {
@@ -1832,6 +1830,8 @@ void GuiSequencerMode::updateDisplay()
             else
                 pressureStatusButton->setToggleState(true, false);
             //effect is found a set with fxDial
+            
+            modeMidiButton->setToggleState(false, false);
              
         }
         
@@ -2378,14 +2378,33 @@ void GuiSequencerMode::setNoteLengthSliderRange (int maxValue)
     
 }
 
-void GuiSequencerMode::changeView()
+void GuiSequencerMode::changeView (int view)
 {
-    if (sequenceSettingsButton->getToggleState())
-        triggerSettingsButton->triggerClick();
-    else if (triggerSettingsButton->getToggleState())
-        pressureSettingsButton->triggerClick();
-    else if (pressureSettingsButton->getToggleState())
-        sequenceSettingsButton->triggerClick();
+    // view - 1 - trigger
+    // view - 2 - pressure
+    // view - 3 - sequence
+    // view - 0 - switch to other view
+    
+    switch (view)
+    {
+        case 1:
+            triggerSettingsButton->triggerClick();
+            break;
+        case 2:
+            pressureSettingsButton->triggerClick();
+            break;
+        case 3:
+            sequenceSettingsButton->triggerClick();
+            break;
+        default:
+            if (sequenceSettingsButton->getToggleState())
+                triggerSettingsButton->triggerClick();
+            else if (triggerSettingsButton->getToggleState())
+                pressureSettingsButton->triggerClick();
+            else if (pressureSettingsButton->getToggleState())
+                sequenceSettingsButton->triggerClick();
+            break;
+    }
 }
 
 void GuiSequencerMode::drawDrawableButtons()

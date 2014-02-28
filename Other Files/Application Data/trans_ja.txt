@@ -165,7 +165,7 @@ countries: jp
 "Version" = "バージョン"
 "Developed by" = "開発者"
 "released under the" = "オープン・ソース・アプリケーション"
-"Copyright 2011-2013 nu desine." = "Copyright 2011-2013 nu desine"
+"Copyright 2011-2014 nu desine." = "Copyright 2011-2014 nu desine"
 "Close" = "閉じる"
 "START" = "開始"
 "STOP" = "停止"
@@ -601,3 +601,134 @@ countries: jp
 "Copy Notes/Samples To Sequencer" = "シーケンサーにノート/サンプルをコピーする"
 "Copy Selected MIDI Notes To Sequencer" = "シーケンサーに選択されたMIDIノートをコピーする"
 "Copy Selected Samples To Sequencer" = "シーケンサーに選択されたサンプルをコピーする"
+"none" = "なし"
+"Active output channels:" = "有効な出力チャンネル"
+"(no audio input channels found)" = "(オーディオ入力チャンネルがありません)"
+"Active input channels:" = "有効な入力チャンネル"
+"Output:" = "出力"
+"Input:" = "入力"
+"Sample rate:" = "サンプルレート"
+"Audio buffer size:" = "オーディオバッファサイズ"
+"Audio device type:" = "オーディオデバイス タイプ"
+"No MIDI inputs available" = "MIDI入力がありません"
+"(no audio output channels found)" = "(オーディオ出力チャンネルがありません)"
+"Active MIDI inputs:" = "有効なMIDI入力"
+"Use this swatch as the current colour" = "現在のカラーを見本に使用する"
+"Set this swatch to the current colour" = "現在のカラーを見本に設定する"
+"red" = "レッド"
+"green" = "グリーン"
+"blue" = "ブルー"
+"alpha" = "アルファ"
+"Enable LED" = "LEDを有効にする"
+"Enable LED Pressure Interaction" = "プレッシャーでのLEDコントロールを有効にする"
+"Enable LED Clock Interaction" = "クロックでのLEDコントロールを有効にする"
+"Enable LED MIDI CC Control" = "MIDI CCでのLEDコントロールを有効にする"
+"View" = "表示"
+"Hardware" = "ハードウェア"
+"Soft" = "ソフト"
+"Hard" = "ハード"
+"Digital" = "デジタル"
+"AlphaLive Controls" = "AlphaLiveコントロール"
+"External Controls" = "エクスターナルコントロール"
+"LED Controls" = "LEDコントロール"
+"LED Status" = "LEDステータス"
+"Pressure Interaction Status" = "プレッシャーによるの作用のステータス"
+"Clock Interaction Status" = "クロックによる作用のステータス"
+"MIDI CC Control Status" = "MIDI CCによる作用のステータス"
+
+"Clock Start/Stop. This button is used to manually start and stop the global clock. Please note that this button will be disabled if the current project is set to sync with an external MIDI clock - here the global clock can only controlled with the external clock." = "クロック スタート/ストップ. このボタンはクローバルクロックを手動でスタート/ストップします. 同期がエクスターナルMIDIクロックに設定されている場合は、このボタンが無効になることに注意してください."
+
+"Hardware Settings" = "ハードウェア設定"
+"Display" = "ディスプレイ"
+"Audio/MIDI" = "オーディオ/MIDI"
+"Pad Content Display:" = "パッドコンテンツディスプレイ"
+"Pad numbers only" = "パッド番号のみ"
+"All pad contents" = "全てのパッドコンテンツ"
+"MIDI Channel Pressure Interaction:" = "MIDIチャンネル プレッシャー 作用"
+"Newest pad has control" = "新規パッドが操作"
+"All pads have control" = "全てのパッドが操作"
+
+"Pad Contents Display selector. This allows you to change the text of the pads on the pad layout display. If you select 'All pad contents' the values of the main settings are shown using the following common abbreviations: Ch - channel, N - note, P - pressure, M - Mode. See the Reference Manual for the full list of abbreviations." = "パッドコンテンツ ディスプレイ.パッドレイアウト表示でパッドのテキストを変更することができます. '全てのパッドコンテンツ'を選択していれば、主要なセッティングの値が省略されて表示されます: Ch - channel, N - note, P - pressure, M - Mode."
+
+"MIDI Channel Pressure Interaction selector. This allows you to set what happens when multiple pads set to the same MIDI channel and the same channel pressure mode (channel aftertouch, pitch bend, mod wheel or CC data) are being held. 'Newest pad has control' means that only the last pressed pad can send pressure data. 'All pads have control' means that all pads can send pressure data at any time, however this option may cause pads to interfere with each other and cause 'glitchy' effects." = "MIDIチャンネルプレッシャー選択. 複数のパッドに同じMIDIチャンネルやプレッシャーモード(アフタータッチ, ピッチベンド, モジュレーション,コントロールチェンジ)を設定することができます.'新規パッドが操作'は最後に押したパッドのみプレッシャー信号を送信します. '全てのパッドが操作'は全てのパッドからプレッシャー信号を常に送信します.しかしながらこのオプションはパッドが互いに干渉して、'不具合'動作を起こす原因となることがあります."
+
+"LED Colour Scheme:" = "LEDカラーの構成"
+"Minimum Pressure LED Colour:" = "最小時のLEDカラー"
+"Mid Pressure LED Colour:" = "シングルプレス時のLEDカラー"
+"Maximum Pressure LED Colour:" = "最大時のLEDカラー"
+
+"LED Colour Scheme Selector. This menu provides you with a set of colour schemes that can be applied to the AlphaSphere's LED. The LED will transition between three colours as more pressure is applied to the pads. You can also create a custom colour scheme using the three buttons below." = "LEDカラーの構成. このメニューはAlphaSphereのLEDカラーの構成を設定します. LEDは3つのカラー構成からなり、パッドを押し込むことで変化します. 3つのボタンを使って好みのカラー構成にすることができます."
+
+"Minimum Pressure LED Colour Selector. Click this button to display a colour picker to choose a custom colour for the LED when no pads are being pressed." = "最小時のLEDカラー. このボタをクリックするとカラーピッカーが表示され、PADが押されていない状態のLEDカラーを選択できます。"
+
+"Mid Pressure LED Colour Selector. Click this button to display a colour picker to choose a custom colour for the LED when a single pad is pressed to it's full depth. To see the colour change in realtime, hold a pad at it's full depth while choosing the colour." = "シングルプレス時のLEDカラー. このボタをクリックするとカラーピッカーが表示され、1つのパッドが最大まで押されている状態のLEDカラーを選択できます."
+
+"Maximum Pressure LED Colour Selector. Click this button to display a colour picker to choose a custom colour for the LED when a two or more pads are pressed to their full depth. To see the colour change in realtime, hold two pads at their full depths while choosing the colour." = "最大時のLEDカラー.このボタをクリックするとカラーピッカーが表示され、2つのパッドが最大まで押されている状態のLEDカラーを選択できます。"
+
+"Software Settings" = "ソフトウェア設定"
+"General" = "一般"
+"MIDI" = "MIDI"
+"Send MIDI Clock" = "MIDIクロック送信"
+"Sync to External MIDI Clock" = "外部MIDIクロックに同期"
+"MIDI Clock:" = "MIDIクロック"
+"Send MIDI Clock Start Message" = "MIDIクロック開始を送信する"
+"Send MIDI Clock Continue Message" = "MIDIクロック継続を送信する"
+"On Clock Start:" = "クロック受信でスタート"
+"Use All Clock Messages" = "全てのクロックメッセージを使用"
+"Use only Start/Stop Messages" = "スタート/ストップ のみを使用"
+"Message Filter:" = "メッセージ フィルター"
+"Receive Program Change Messages:" = "プログラムチェンジを受信する"
+
+"MIDI Clock Mode Selector. Sets and displays the MIDI Clock functionality of the current AlphaLive project. AlphaLive can both send and receive MIDI Clock messages in order to synchronise this application with other MIDI applications and devices. Note that when set to sync with an external MIDI Clock, AlphaLive's global clock cannot be controlled directly via AlphaLive." = "MIDIクロックモード. AlphaLiveプロジェクトのMIDIクロックを設定、表示します. AlphaLiveはMIDIクロックの送信と受信が可能で、他のMIDIアプリケーションやMIDIデバイスを同期できます. エクスターナルMIDIクロックが設定されている場合、AlphaLiveはクロックを送信することはできず、受信のみとなります."
+
+"Sets and displays what type of MIDI Clock message is sent when AlphaLive's clock is started. A Clock Start message will start the sequence of the external MIDI software/device from the beginning, whereas a Clock Continue message will continue the sequence from its current position." = "AlphaLiveがクロックを送信しはじめる際にMIDIクロックメッセージを表示します.  クロックスタートのメッセージは外部MIDIソフト/デバイスの頭からシーケンスを開始しますが、クロックコンティニューは現在の位置からシーケンスを続けます."
+
+"Sets and displays what type of MIDI Clock messages are received and used by AlphaLive. By default any external clock that AlphaLive is synced to will start and stop AlphaLive's clock as well as keep it in sync and adjust its tempo. However if the option to only use Start/Stop messages is selected the external clock will only start and stop AlphaLive's clock." = "AlphaLiveが試用される時にMIDIクロックメッセージを表示します. 初期値ではあらゆるクロックに対してもAlphaLiveは同期して、スタート/ストップとテンポを同期します。. しかしながらこのオプションでは スタート/ストップの動作のみとなります。"
+
+"AlphaLive is able to receive MIDI Program Change Messages from external MIDI devices/software to trigger scene switching within AlphaLive. Send a Program Change message on any MIDI channel with a Program Change number in the range of 1 - 20 (or 0 - 19 if given 127 available programs instead of 128) to change to the corresponding scene number. Use this menu to disable this feature for the current project." = "AlphaLiveはMIDIプログラムチェンジを外部MIDIデバイス/ソフトよろ受信して、シーンの変更などができます。"
+
+"LED MIDI CC Control Mode:" = "LEDをCCでコントロール"
+"LED Status:" = "LEDステータス"
+"LED Pressure Interaction:" = "プレッシャーでLEDを動作"
+"LED Clock Interaction:" = "クロックでLEDを動作"
+
+"Use this button to enable LED MIDI CC Control Mode for the current project. This mode allows the LED to be controlled using external MIDI Control Change messages, set to Channel 16, being sent to the AlphaSphere. Use CC 21 to control the red value, CC 22 to control the green value, and CC 23 to control the blue value, where a value of '0' is 'off' and '127' is 'full brightness'. You can also enable this mode externally using CC 20 - a value of '0' disables the mode while anything else enables it. Please note that this mode disables pressure and clock LED control." = "このボタンが有効になっているとLEDをMIDI CCでコントロールができます. LEDを外部からのMIDI CCを使ってコントロールすることができ、チャンネル16に設定されます. CC21でレッドの値, CC22でグリーンの値, CC23でブルーの値をそれぞれコントロールできます. 値'0'は'消灯'. 値'127'は'最大点灯'を意味します. 同様にCC 20を使ってこのモードを有効にすることもできます.'0'の場合はモードを無効にします。"
+
+"Use this button to enable/disable the LED for the current project. When this is disabled it will disable pressure and clock LED control." = "このボタンは LEDの有効/無効を切り替えます. こちらが'無効'になっているとき, プレッシャーとクロックのコントロールを抑制します."
+
+"Use this button to enable/disable the LED pressure interaction for the current project. When this is disabled the LED will stay at a static colour." = "このボタンは LEDプレッシャーの有効/無効を切り替えます. 無効になっている場合,LEDカラーは変化しません."
+
+"Use this button to enable/disable the LED clock interaction for the current project. When this is enabled you can use either the AlphaLive clock or an external MIDI clock to animate the LED with synchronised fade-outs. Please not that the LED can only sync to a single clock source at any time." = "このボタンはLEDのクロック動作の有効/無効を切り替えます. 有効になっているとき、内部または外部MIDIクロックによってLEDを同期することができます. LEDはシングルクロックのみに同期することに注意してください."
+
+"PRESSURE LATCH" = "プレッシャーラッチ"
+"LED CONTROL" = "LEDコントロール"
+"MIDI CC Mode Status" = "MIDI CCモードのステータス"
+
+"Pressure Latch Mode. This mode enables you to 'latch' the pressure of a selected pad. When you press this pad it will freeze the pressure to the currently pressed value of the selected pad, and then press this pad again to reset the pressure back to 0." = "プレッシャーラッチ モード. このモードは選択されたパッドのプレッシャーを'ラッチ'にします. パッドを押すと押し込んだところの値で固定されます. 再度パッドを押すと解除されます."
+
+"LED Control Mode. This mode enables you to configure certain aspects of the LED in the AlphaSphere." = "LEDコントロールモード. このモードを有効にするとAlphaSphereのLEDをコントロールできます."
+
+"Pad Number Selector. Sets which pad you want the selected pads to 'latch'." = "パッドナンバーセレクター. ラッチするパッドを選択します."
+
+"LED Control Selector. Sets which LED option you would like to control with the selected pads." = "LEDコントロールセレクター. 選択したパッドでどのLEDオプションをコントロールするか設定します."
+
+"DYN" = "DYN"
+
+"MIDI Channel Buttons. Sets and displays the group of possible MIDI channels that the selected pads could be applied to. Click an inactive button to add the channel to the group, or click an active button to remove the channel from the group. However these buttons are used to select the pads static MIDI channel when the Dynamic MIDI Channel Mode is turned off." = "MIDIチャンネルボタン. 選択されたパッドが適用されることがで
+選択されたパッドが適用されることができる可能性があるMIDIチャンネルのグループを設定、表示します.ボタンをクリックするとチャンネルからグループに追加し, もう一方をクリックするとグループからチャンネルを取り払います. しかしながら,これらのボタンは選択されたパッドが静的なMIDIチャンネルのみに適用され, ダイナミックMIDIチャンネル時は利用できません."
+
+"Dynamic MIDI Channel Mode button. Dynamic MIDI Channel Mode is a feature that allows individual channels to be dynamically applied to each pressed MIDI pad. Channels are applied to pads in the order they are pressed, and when this mode is turned on you can use the 16 MIDI channel buttons to select the possible channels that the selected pads could be applied to. This feature can be used as an alternative to polyphonic aftertouch when it is not available. Turn on this button to activate this mode. This feature is not available to pressure-only pads." = "ダイナミックMIDIチャンネルモードボタン. このモードは個々のチャンネルがそれぞれのパッドにダイナミックに適用することができます. モードを有効にすると選択されたパッドに16 MIDIチャンネルボタンを選択可能になります. 有効でない場合, ポリフォニック アフタータッチに代わるものとして使われることができます. 有効にするとプレッシャーのみとなります."
+
+"Hardware Preferences..." = "ハードウェア設定"
+"Hardware Project Settings..." = "ハードウェアプロジェクト設定"
+"MIDI Clock Settings..." = "MIDIクロック設定"
+"Visit alphasphere.com..." = "alphasphereウェブサイトを見る"
+"Tutorials..." = "チュートリアル…"
+"Troubleshooting/Support..." = "トラブルシューティング/サポート..."
+"User Forums..." = "ユーザーフォーラム…"
+"Show Pads Touch/Trigger Settings..." = "パッドのタッチ/トリガー設定を表示"
+"Show Pads Pressure Settings..." = "パッドのプレッシャー設定を表示"
+"Show Pads Global Settings..." = "パッドのグローバル設定を表示"
+"Show Pads Sequence Settings..." = "パッドのシーケンス設定を表示"
+"Show Scene Presets in Toolbox..." = "パッドのシーン設定を表示"
+"Display Pad Contents on Pads..." = "パッドのコンテンツを表示"

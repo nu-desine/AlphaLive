@@ -91,7 +91,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	addAndMakeVisible(modeOffButton = new ModeButton(offModeImage));
 	modeOffButton->addListener(this);
     modeOffButton->setOpaque(false);
-	modeOffButton->setRadioGroupId (1234);
+	modeOffButton->setRadioGroupId (1234, dontSendNotification);
     modeOffButton->addMouseListener(this, false);
 	
 	//create global settings button
@@ -107,7 +107,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	addAndMakeVisible(modeSamplerButton = new ModeButton(looperModeImage));
 	modeSamplerButton->addListener(this);
     modeSamplerButton->setOpaque(false);
-	modeSamplerButton->setRadioGroupId (1234);
+	modeSamplerButton->setRadioGroupId (1234, dontSendNotification);
     modeSamplerButton->addMouseListener(this, false);
 	
 	//create midi mode button
@@ -115,7 +115,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	addAndMakeVisible(modeMidiButton = new ModeButton(midiModeImage));
 	modeMidiButton->addListener(this);
     modeMidiButton->setOpaque(false);
-	modeMidiButton->setRadioGroupId (1234);
+	modeMidiButton->setRadioGroupId (1234, dontSendNotification);
     modeMidiButton->addMouseListener(this, false);
 	
 	//create sequencer mode button
@@ -123,7 +123,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	addAndMakeVisible(modeSequencerButton = new ModeButton(sequencerModeImage));
 	modeSequencerButton->addListener(this);
     modeSequencerButton->setOpaque(false);
-	modeSequencerButton->setRadioGroupId (1234);
+	modeSequencerButton->setRadioGroupId (1234, dontSendNotification);
     modeSequencerButton->addMouseListener(this, false);
 	
     //createa controller mode button
@@ -131,7 +131,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
 	addAndMakeVisible(modeControllerButton = new ModeButton(controllerModeImage));
 	modeControllerButton->addListener(this);
     modeControllerButton->setOpaque(false);
-	modeControllerButton->setRadioGroupId (1234);
+	modeControllerButton->setRadioGroupId (1234, dontSendNotification);
     modeControllerButton->addMouseListener(this, false);
     
     
@@ -174,7 +174,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     //gain and pan label
     addAndMakeVisible(gainPanValueLabel = new Label("value label", String::empty));
     gainPanValueLabel->setJustificationType(Justification::horizontallyCentred);
-    gainPanValueLabel->setFont(Font(12));
+    gainPanValueLabel->setFont(Font(12 + AlphaTheme::getInstance()->fontSizeAddition));
     gainPanValueLabel->addMouseListener(this, true);
     
     //piano
@@ -298,7 +298,7 @@ void MainComponent::resized()
     
     globalClock->setBounds(479, 0, 266, 144);
     
-    infoTextBox->setBounds(0, getHeight()-45, getWidth(), 45);
+    infoTextBox->setBounds(0, getHeight()-50, getWidth(), 50);
     
     pivotX = guiPadLayout->getX() + (guiPadLayout->getWidth() * 0.5);
 	pivotY = guiPadLayout->getY() + (guiPadLayout->getHeight() * 0.5);
@@ -330,7 +330,7 @@ void MainComponent::paint(juce::Graphics &g)
                 0,
                 0,
                 getWidth(),
-                getHeight(),
+                getHeight() - 5, // -5 as I have since increased the size of the info box
                 0,
                 0,
                 AlphaTheme::getInstance()->mainImage.getWidth(),
@@ -342,7 +342,7 @@ void MainComponent::paint(juce::Graphics &g)
                     0,
                     0,
                     getWidth(),
-                    getHeight(),
+                    getHeight() - 5,
                     0,
                     0,
                     AlphaTheme::getInstance()->padsOffImage.getWidth(),
@@ -354,7 +354,7 @@ void MainComponent::paint(juce::Graphics &g)
                         0,
                         0,
                         getWidth(),
-                        getHeight(),
+                        getHeight() - 5,
                         0,
                         0,
                         AlphaTheme::getInstance()->modeOffImage.getWidth(),
@@ -367,7 +367,7 @@ void MainComponent::paint(juce::Graphics &g)
                     0,
                     0,
                     getWidth(),
-                    getHeight(),
+                    getHeight() - 5,
                     0,
                     0,
                     AlphaTheme::getInstance()->padsOnImage.getWidth(),
@@ -392,7 +392,7 @@ void MainComponent::paint(juce::Graphics &g)
                         0,
                         0,
                         getWidth(),
-                        getHeight(),
+                        getHeight() - 5,
                         0,
                         0,
                         AlphaTheme::getInstance()->modeOffImage.getWidth(),
@@ -404,7 +404,7 @@ void MainComponent::paint(juce::Graphics &g)
                 0,
                 0,
                 getWidth(),
-                getHeight(),
+                getHeight() - 5,
                 0,
                 0,
                 AlphaTheme::getInstance()->padsBackgroundImage.getWidth(),
@@ -437,7 +437,7 @@ bool MainComponent::update(const Subject& theChangedSubject)
             
             //set the mode colour ring of each pad
             for (int i = 0; i <= 47; i++)
-                guiPadLayout->modeChange(i, AppSettings::Instance()->padSettings[i]->getMode());
+                guiPadLayout->setPadDisplay(i);
             
             globalClock->updateDisplay();
             projectSettingsComponent->updateDisplay();
@@ -513,7 +513,7 @@ void MainComponent::buttonClicked(Button *button)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setMode(buttonIndex);
             //set the Gui pads to have a ring of colour signifying the pad's current mode
-            guiPadLayout->modeChange(padNum, buttonIndex);
+            guiPadLayout->setPadDisplay(padNum);
         }
         
         setToOffMode();
@@ -528,7 +528,7 @@ void MainComponent::buttonClicked(Button *button)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setMode(buttonIndex);
             //set the Gui pads to have a ring of colour signifying the pad's current mode
-            guiPadLayout->modeChange(padNum, buttonIndex);
+            guiPadLayout->setPadDisplay(padNum);
         }
         
         setToMidiMode();
@@ -543,7 +543,7 @@ void MainComponent::buttonClicked(Button *button)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setMode(buttonIndex);
             //set the Gui pads to have a ring of colour signifying the pad's current mode
-            guiPadLayout->modeChange(padNum, buttonIndex);
+            guiPadLayout->setPadDisplay(padNum);
         }
         
         setToSamplerMode();
@@ -558,7 +558,7 @@ void MainComponent::buttonClicked(Button *button)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setMode(buttonIndex);
             //set the Gui pads to have a ring of colour signifying the pad's current mode
-            guiPadLayout->modeChange(padNum, buttonIndex);
+            guiPadLayout->setPadDisplay(padNum);
         }
         
         setToSequencerMode();
@@ -574,7 +574,7 @@ void MainComponent::buttonClicked(Button *button)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setMode(buttonIndex);
             //set the Gui pads to have a ring of colour signifying the pad's current mode
-            guiPadLayout->modeChange(padNum, buttonIndex);
+            guiPadLayout->setPadDisplay(padNum);
         }
         
         setToControllerMode();
@@ -694,7 +694,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool call
             modeMidiButton->setToggleState(true, false);
             
             if (selectedPads[0] == prevSelectedPad && calledFromMouseClick)
-                guiMidiMode->changeView();
+                guiMidiMode->changeView(0);
         }
         
         if (PAD_SETTINGS->getMode() == 2) //sampler mode
@@ -703,7 +703,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool call
             modeSamplerButton->setToggleState(true, false);
             
             if (selectedPads[0] == prevSelectedPad && calledFromMouseClick)
-                guiSamplerMode->changeView();
+                guiSamplerMode->changeView(0);
         }
     
         if (PAD_SETTINGS->getMode() == 3) //sequencer mode
@@ -712,7 +712,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool call
             modeSequencerButton->setToggleState(true, false);
             
             if (selectedPads[0] == prevSelectedPad && calledFromMouseClick)
-                guiSequencerMode->changeView();
+                guiSequencerMode->changeView(0);
         }
         if (PAD_SETTINGS->getMode() == 4) //controller mode
         {
@@ -781,8 +781,8 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool call
     if (globalSettingsButton->getToggleState() == true)
         setGlobalPadSettingsDisplay();
 
-    commandManager->commandStatusChanged(); //so that if a single pad is selected, the copy and paste settings
-                                            //command is enabled
+    commandManager->commandStatusChanged(); //so that pad copy/paste and pad settings view options
+                                            //are updated correctly.
             
      
 }
@@ -1032,13 +1032,13 @@ void MainComponent::setInfoTextBoxText (String text)
      - Everytime the mouse events or exists a control it calls this function with the controls
      description as an argument. The description is put into the infoBoxText String variable.
      - If the thread is not currently running, start the thread.
-     - In the run() function below it will enter the while statement and pause for either 200 ms
+     - In the run() function below it will enter the while statement and pause for either 100 ms
      or until a notification wakes up the thread. If the timeout period expires it will exit the
      loop (as gotNewTextMessage will equal false) and set the infoTextBox Text, and the thread
      will exit.
      - If setInfoTextBoxText() is called whilst the thread is running (meaning the thread is 
      currently 'waiting', notify() will be called which will wake up the thread. However this will
-     cause gotNewTextMessage to equal true, so it will re-enter the loop and wait for 200 ms again.
+     cause gotNewTextMessage to equal true, so it will re-enter the loop and wait for 100 ms again.
      Therefore the info box text will only by updated when the thread is woken by notifications
      sent by new controls being enter exitted by the mouse.
      */
@@ -1252,14 +1252,15 @@ void MainComponent::setLocalisation()
     
     StringArray availableFonts = Font::findAllTypefaceNames();
     
-    infoBoxTextSize = 12;
+    infoBoxTextSize = 12.0; //default font size
+    AlphaTheme::getInstance()->fontSizeAddition = 0;
     
     //countryCode will equal ISO 639-1 or ISO 639-2 codes as listed here:
     //http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
     
     if (countryCode == "ja" || countryCode == "jpn") //japanese
     {
-        File transFile (appDir + "Application Data" + File::separatorString + "trans_ja");
+        File transFile (appDir + "Application Data" + File::separatorString + "trans_ja.txt");
         trans = new LocalisedStrings (transFile, false);
         LocalisedStrings::setCurrentMappings(trans);
         
@@ -1278,14 +1279,16 @@ void MainComponent::setLocalisation()
         }
 
         alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(fontToUse);
-        infoBoxTextSize = 13.5;
+        
+        AlphaTheme::getInstance()->fontSizeAddition = 2; //should this change with the typeface?
+        infoBoxTextSize += AlphaTheme::getInstance()->fontSizeAddition;
         
         currentLanguage = "Japanese";
         
     }
     else if (countryCode == "zh" || countryCode == "zho" || countryCode == "zh-Hant" || countryCode == "zh-Hans") //chinese. do i need the first two?
     {
-        File transFile (appDir + "Application Data" + File::separatorString + "trans_zh");
+        File transFile (appDir + "Application Data" + File::separatorString + "trans_zh.txt");
         trans = new LocalisedStrings (transFile, false);
         LocalisedStrings::setCurrentMappings(trans);
         
@@ -1305,13 +1308,15 @@ void MainComponent::setLocalisation()
         }
 
 		alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(fontToUse);
-        infoBoxTextSize = 13.5;
+        
+        AlphaTheme::getInstance()->fontSizeAddition = 2; //should this change with the typeface?
+        infoBoxTextSize += AlphaTheme::getInstance()->fontSizeAddition;
         
         currentLanguage = "Chinese";
     }
     else if (countryCode == "ko" || countryCode == "kor") //Korean
     {
-        File transFile (appDir + "Application Data" + File::separatorString + "trans_ko");
+        File transFile (appDir + "Application Data" + File::separatorString + "trans_ko.txt");
         trans = new LocalisedStrings (transFile, false);
         LocalisedStrings::setCurrentMappings(trans);
         
@@ -1323,7 +1328,9 @@ void MainComponent::setLocalisation()
         }
         
 		alphaLiveLookAndFeel.setDefaultSansSerifTypefaceName(fontToUse);
-        infoBoxTextSize = 13.5;
+        
+        AlphaTheme::getInstance()->fontSizeAddition = 2; //should this change with the typeface?
+        infoBoxTextSize += AlphaTheme::getInstance()->fontSizeAddition;
         
         currentLanguage = "Korean";
     }
@@ -1658,7 +1665,22 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::StarterGuide,
         CommandIDs::ReferenceManual,
         CommandIDs::UpdateSoftware,
-        CommandIDs::CopyDataToSequencer
+        CommandIDs::CopyDataToSequencer,
+        CommandIDs::HardwarePreferences,
+        CommandIDs::HardwareProjectSettings,
+        CommandIDs::SendMidiClock,
+        CommandIDs::SyncToMidiClock,
+        CommandIDs::MidiClockSettings,
+        CommandIDs::WebsiteHomeLink,
+        CommandIDs::WebsiteTutorialsLink,
+        CommandIDs::WebsiteSupportLink,
+        CommandIDs::WebsiteForumLink,
+        CommandIDs::ViewTriggerSettings,
+        CommandIDs::ViewPressureSettings,
+        CommandIDs::ViewGlobalPadSettings,
+        CommandIDs::ViewSequenceSettings,
+        CommandIDs::ViewScenePresets,
+        CommandIDs::EnabledPadContentsDisplay
     };
 	
 	commands.addArray (ids, numElementsInArray (ids));
@@ -1668,7 +1690,7 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
 void MainComponent::getCommandInfo (const CommandID commandID, ApplicationCommandInfo& result)
 {
 	const int cmd = ModifierKeys::commandModifier;
-	//const int shift = ModifierKeys::shiftModifier;
+	const int shift = ModifierKeys::shiftModifier;
     const int alt = ModifierKeys::altModifier;
     
     //within 'setInfo()' below, the name sets the String that appears in the Menu bar,
@@ -1694,7 +1716,7 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
         result.setInfo (translate("Project Settings..."),
 						"Opens the Project Settings view.",
 						CommandCategories::FileCommands, 0);
-        result.defaultKeypresses.add (KeyPress ('p', cmd|alt, 0));
+        result.defaultKeypresses.add (KeyPress ('p', cmd|shift, 0));
     }
     else if (commandID == CommandIDs::SaveScene)
     {
@@ -1846,7 +1868,139 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
         
         result.setActive(shouldBeActive);
     }
+    
+    else if (commandID == CommandIDs::HardwarePreferences)
+    {
+        result.setInfo (translate("Hardware Preferences..."),
+						"Opens the application hadware preferences view.",
+						CommandCategories::HardwareCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::HardwareProjectSettings)
+    {
+        result.setInfo (translate("Hardware Project Settings..."),
+						"Opens the application hardware project settings view.",
+						CommandCategories::HardwareCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::SendMidiClock)
+    {
+        result.setInfo (translate("Send MIDI Clock"),
+						"Enables the application to send MIDI Clock messages when the global clock is running.",
+						CommandCategories::OptionCommands, 0);
+        
+        bool status = false;
+        if (AppSettings::Instance()->getMidiClockValue() == 2)
+            status = true;
+        
+        result.setTicked(status);
+    }
+    
+    else if (commandID == CommandIDs::SyncToMidiClock)
+    {
+        result.setInfo (translate("Sync to External MIDI Clock"),
+						"Enables the application's clock to sync to an external MIDI clock.",
+						CommandCategories::OptionCommands, 0);
+        
+        bool status = false;
+        if (AppSettings::Instance()->getMidiClockValue() == 3)
+            status = true;
+        
+        result.setTicked(status);
+    }
+    
+    else if (commandID == CommandIDs::MidiClockSettings)
+    {
+        result.setInfo (translate("MIDI Clock Settings..."),
+						"Opens the application MIDI clock project settings view.",
+						CommandCategories::OptionCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::WebsiteHomeLink)
+    {
+        result.setInfo (translate("Visit alphasphere.com..."),
+						"Opens the AlphaSphere website homepage in an internet browser.",
+						CommandCategories::OtherCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::WebsiteTutorialsLink)
+    {
+        result.setInfo (translate("Tutorials..."),
+						"Opens the AlphaSphere website tutorial page in an internet browser.",
+						CommandCategories::OtherCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::WebsiteSupportLink)
+    {
+        result.setInfo (translate("Troubleshooting/Support..."),
+						"Opens the AlphaSphere website troubleshooting/support page in an internet browser.",
+						CommandCategories::OtherCommands, 0);
+    }
+    
+    else if (commandID == CommandIDs::WebsiteForumLink)
+    {
+        result.setInfo (translate("User Forums..."),
+						"Opens the AlphaSphere website forums page in an internet browser.",
+						CommandCategories::OtherCommands, 0);
+    }
+    
+    
+    else if (commandID == CommandIDs::ViewTriggerSettings)
+    {
+        result.setInfo (translate("Show Pads Touch/Trigger Settings..."),
+						"Displays the touch/trigger settings view for the selected pads.",
+						CommandCategories::ViewCommands, 0);
+        
+        result.defaultKeypresses.add (KeyPress ('1', cmd, 0));
+        result.setActive(selectedPads.size() && !(guiControllerMode->isVisible()) && !(modeOffButton->getToggleState()));
+    }
+    else if (commandID == CommandIDs::ViewPressureSettings)
+    {
+        result.setInfo (translate("Show Pads Pressure Settings..."),
+						"Displays the pressure settings view for the selected pads.",
+						CommandCategories::ViewCommands, 0);
+        
+        result.defaultKeypresses.add (KeyPress ('2', cmd, 0));
+        result.setActive(selectedPads.size() && !(guiControllerMode->isVisible()) && !(modeOffButton->getToggleState()));
+    }
+    else if (commandID == CommandIDs::ViewGlobalPadSettings)
+    {
+        result.setInfo (translate("Show Pads Global Settings..."),
+						"Displays the global settings view for the selected pads.",
+						CommandCategories::ViewCommands, 0);
+        
+        result.defaultKeypresses.add (KeyPress ('3', cmd, 0));
+        result.setActive(selectedPads.size() && !(guiControllerMode->isVisible()));
+    }
+    else if (commandID == CommandIDs::ViewSequenceSettings)
+    {
+        result.setInfo (translate("Show Pads Sequence Settings..."),
+						"Displays the sequence settings view for the selected pads.",
+						CommandCategories::ViewCommands, 0);
+        
+        result.defaultKeypresses.add (KeyPress ('4', cmd, 0));
+        result.setActive(selectedPads.size() && (modeSequencerButton->getToggleState()));
+    }
+    else if (commandID == CommandIDs::ViewScenePresets)
+    {
+        result.setInfo (translate("Show Scene Presets in Toolbox..."),
+						"Selects all pads and displays the scene preset tab in the Toolbox.",
+						CommandCategories::ViewCommands, 0);
+
+    }
+    else if (commandID == CommandIDs::EnabledPadContentsDisplay)
+    {
+        result.setInfo (translate("Display Pad Contents on Pads..."),
+						"Sets a preferences option that sets what is display on the Pad Layout pads.",
+						CommandCategories::ViewCommands, 0);
+        result.defaultKeypresses.add (KeyPress ('o', cmd|alt, 0));
+        result.setTicked(StoredSettings::getInstance()->padContentDisplay - 1);
+        
+    }
+
 }
+
+
 
 bool MainComponent::perform (const InvocationInfo& info)
 {
@@ -1861,6 +2015,8 @@ bool MainComponent::perform (const InvocationInfo& info)
         aboutComponent->grabKeyboardFocus();    //so that the ESC to close works without having to
                                                 //click on the component first
         
+        return true;
+        
 	}
     
 	else if(info.commandID == CommandIDs::Preferences)
@@ -1872,6 +2028,8 @@ bool MainComponent::perform (const InvocationInfo& info)
         infoTextBox->toFront(false);
 		preferencesComponent->setVisible(true);
         preferencesComponent->grabKeyboardFocus();
+        
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::ProjectSettings)
@@ -1883,16 +2041,20 @@ bool MainComponent::perform (const InvocationInfo& info)
         infoTextBox->toFront(false);
 		projectSettingsComponent->setVisible(true);
         projectSettingsComponent->grabKeyboardFocus();
+        
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::SaveScene)
 	{
 		sceneComponent->getSelectedSceneSlot()->saveScene();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::LoadScene)
 	{
 		sceneComponent->getSelectedSceneSlot()->loadScene();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::DisableHelpBox)
@@ -1901,21 +2063,26 @@ bool MainComponent::perform (const InvocationInfo& info)
             isInfoBoxEnabled = false;
         else
             isInfoBoxEnabled = true;
+        
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::CopyPadSettings) 
 	{
 		guiPadLayout->copyPadSettings();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::PastePadSettings) 
 	{
 		guiPadLayout->pastePadSettings();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::ClearScene)
 	{
 		sceneComponent->getSelectedSceneSlot()->clearScene();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::ClearAllScenes)
@@ -1927,32 +2094,39 @@ bool MainComponent::perform (const InvocationInfo& info)
         {
             sceneComponent->clearAll();
         }
+        
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::KillSwitch)
 	{
 		alphaLiveEngineRef.killAll();
         globalClock->toggleTransportButtonOff();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::StartStopClock)
 	{
 		globalClock->triggerTransportButton();
+        return true;
 	}
     
     else if(info.commandID == CommandIDs::StarterGuide)
     {
         openDocumentation (1);
+        return true;
     }
     
     else if(info.commandID == CommandIDs::ReferenceManual)
     {
         openDocumentation (2);
+        return true;
     }
     
     else if(info.commandID == CommandIDs::UpdateSoftware)
     {
         updateSoftware(false);
+        return true;
     }
     
     else if(info.commandID == CommandIDs::CopyDataToSequencer)
@@ -2049,13 +2223,200 @@ bool MainComponent::perform (const InvocationInfo& info)
                 }
             }
         }
+        
+        return true;
     }
     
-	//else
-	//	return false;
-	
-	return true;
-	
+    else if(info.commandID == CommandIDs::HardwarePreferences)
+	{
+		aboutComponent->setVisible(false);
+        projectSettingsComponent->setVisible(false);
+        
+        preferencesComponent->toFront(true);
+        infoTextBox->toFront(false);
+        
+        preferencesComponent->selectHardwareTab();
+		preferencesComponent->setVisible(true);
+        preferencesComponent->grabKeyboardFocus();
+        
+        return true;
+	}
+    
+    else if(info.commandID == CommandIDs::HardwareProjectSettings)
+	{
+		aboutComponent->setVisible(false);
+        preferencesComponent->setVisible(false);
+        
+        projectSettingsComponent->toFront(true);
+        infoTextBox->toFront(false);
+        
+        projectSettingsComponent->selectTab(1);
+		projectSettingsComponent->setVisible(true);
+        projectSettingsComponent->grabKeyboardFocus();
+        
+        return true;
+	}
+    
+    else if (info.commandID == CommandIDs::SendMidiClock)
+    {
+        uint8 status;
+        
+        if (AppSettings::Instance()->getMidiClockValue() == 2)
+        {
+            //turn off MIDI clock
+            status = 1;
+        }
+        else
+        {
+            //turn on sending
+            status = 2;
+        }
+        
+        AppSettings::Instance()->setMidiClockValue(status);
+        
+        return true;
+    }
+    
+    else if (info.commandID == CommandIDs::SyncToMidiClock)
+    {
+        uint8 status;
+        
+        if (AppSettings::Instance()->getMidiClockValue() == 3)
+        {
+            //turn off MIDI clock
+            status = 1;
+        }
+        else
+        {
+            //turn on syncing
+            status = 3;
+        }
+        
+        AppSettings::Instance()->setMidiClockValue(status);
+
+        return true;
+    }
+    
+    else if(info.commandID == CommandIDs::MidiClockSettings)
+	{
+		aboutComponent->setVisible(false);
+        preferencesComponent->setVisible(false);
+        
+        projectSettingsComponent->toFront(true);
+        infoTextBox->toFront(false);
+        
+        projectSettingsComponent->selectTab(0);
+		projectSettingsComponent->setVisible(true);
+        projectSettingsComponent->grabKeyboardFocus();
+        
+        return true;
+	}
+    
+    else if (info.commandID == CommandIDs::WebsiteHomeLink)
+    {
+        URL url ("http://www.alphasphere.com/");
+        url.launchInDefaultBrowser();
+        return true;
+    }
+    
+    else if (info.commandID == CommandIDs::WebsiteTutorialsLink)
+    {
+        URL url ("http://www.alphasphere.com/tutorials/");
+        url.launchInDefaultBrowser();
+        return true;
+    }
+    
+    else if (info.commandID == CommandIDs::WebsiteSupportLink)
+    {
+        URL url ("http://www.alphasphere.com/support/");
+        url.launchInDefaultBrowser();
+        return true;
+    }
+    
+    else if (info.commandID == CommandIDs::WebsiteForumLink)
+    {
+        URL url ("http://forums.alphasphere.com");
+        url.launchInDefaultBrowser();
+        return true;
+    }
+    
+    else if (info.commandID == CommandIDs::ViewTriggerSettings)
+    {
+        if (guiGlobalPadSettings->isVisible())
+        {
+            globalSettingsButton->setToggleState(false, false);
+            setGlobalPadSettingsDisplay();
+        }
+        
+        if (guiMidiMode->isVisible())
+            guiMidiMode->changeView(1);
+        else if (guiSamplerMode->isVisible())
+            guiSamplerMode->changeView(1);
+        else if (guiSequencerMode->isVisible())
+            guiSequencerMode->changeView(1);
+        
+        return true;
+    }
+    else if (info.commandID == CommandIDs::ViewPressureSettings)
+    {
+        if (guiGlobalPadSettings->isVisible())
+        {
+            globalSettingsButton->setToggleState(false, false);
+            setGlobalPadSettingsDisplay();
+        }
+        
+        if (guiMidiMode->isVisible())
+            guiMidiMode->changeView(2);
+        else if (guiSamplerMode->isVisible())
+            guiSamplerMode->changeView(2);
+        else if (guiSequencerMode->isVisible())
+            guiSequencerMode->changeView(2);
+        return true;
+    }
+    else if (info.commandID == CommandIDs::ViewGlobalPadSettings)
+    {
+        if (guiGlobalPadSettings->isVisible() == false)
+        {
+            globalSettingsButton->setToggleState(true, false);
+            setGlobalPadSettingsDisplay();
+        }
+        
+        return true;
+
+    }
+    else if (info.commandID == CommandIDs::ViewSequenceSettings)
+    {
+        if (guiGlobalPadSettings->isVisible())
+        {
+            globalSettingsButton->setToggleState(false, false);
+            setGlobalPadSettingsDisplay();
+        }
+
+        guiSequencerMode->changeView(3);
+        return true;
+    }
+    else if (info.commandID == CommandIDs::ViewScenePresets)
+    {
+        guiPadLayout->selectAllPads();
+        toolbox->setCurrentTabIndex(-1);
+        return true;
+    }
+    else if (info.commandID == CommandIDs::EnabledPadContentsDisplay)
+    {
+        if (StoredSettings::getInstance()->padContentDisplay == 2)
+            StoredSettings::getInstance()->padContentDisplay = 1;
+        else
+            StoredSettings::getInstance()->padContentDisplay = 2;
+        
+        StoredSettings::getInstance()->flush();
+        
+        for (int i = 0; i < 48; i++)
+            guiPadLayout->setPadDisplay(i);
+        
+        return true;
+    }
+    
+	return false;
 }
 
 

@@ -22,11 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_MARKERLIST_JUCEHEADER__
-#define __JUCE_MARKERLIST_JUCEHEADER__
-
-#include "../positioning/juce_RelativeCoordinate.h"
-class Component;
+#ifndef JUCE_MARKERLIST_H_INCLUDED
+#define JUCE_MARKERLIST_H_INCLUDED
 
 
 //==============================================================================
@@ -184,4 +181,4 @@ private:
 };
 
 
-#endif   // __JUCE_MARKERLIST_JUCEHEADER__
+#endif   // JUCE_MARKERLIST_H_INCLUDED

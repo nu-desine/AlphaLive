@@ -22,6 +22,7 @@
 
 #include "XmlAttributesListBox.h"
 #include "Toolbox.h"
+#include "../../AlphaLiveLookandFeel.h"
 
 
 XmlAttributesListBox::XmlAttributesListBox (File fileToList, File fileToList2, bool forScales, Toolbox &parent)
@@ -67,7 +68,7 @@ XmlAttributesListBox::XmlAttributesListBox (File fileToList, File fileToList2, b
     listBoxModel = new AlphaListBoxModel(itemStrings, *this);
     addAndMakeVisible(listBox = new ListBox("list box", listBoxModel));
         
-    listBox->setRowHeight(14);
+    listBox->setRowHeight(14 + (AlphaTheme::getInstance()->fontSizeAddition * 1.5));
     listBox->updateContent();
   
     

@@ -33,11 +33,18 @@ GlobalClock::GlobalClock(AlphaLiveEngine &ref)
 
                             
 {
-    tempo = AppSettings::Instance()->getGlobalTempo();
-    timeInterval = (double(15000.0)/tempo);
+    setTempo (AppSettings::Instance()->getGlobalTempo()); //sets timeInterval and midiClockTimeInterval too
     beatsPerBar = AppSettings::Instance()->getBeatsPerBar();
     quantizationValue = AppSettings::Instance()->getQuantizationValue();
     metronomeStatus = AppSettings::Instance()->getMetronomeStatus();
+    midiClockValue = AppSettings::Instance()->getMidiClockValue();
+    midiClockStartMessage = AppSettings::Instance()->getMidiClockStartMessage();
+    midiClockMessageFilter = AppSettings::Instance()->getMidiClockMessageFilter();
+    
+    midiClockOutIsRunning = midiClockInIsRunning = false;
+    
+    for (int i = 0; i < 6; i++)
+        midiClockTempos.insert(i, 0);
     
     //=================metronome stuff======================
     
@@ -119,17 +126,71 @@ void GlobalClock::actionListenerCallback (const String& message)
     if (message == "UPDATE CLOCK DISPLAY")
     {
         mainComponent->getGuiGlobalClock()->updateClockDisplay(beatNumber, barNumber, beatsPerBar);
+        
+        if (AppSettings::Instance()->getHardwareLedClockStatus() != 0)
+            sendLedClockMessage(1);
     }
     
     else if (message == "UPDATE TRANSPORT BUTTON")
     {
         mainComponent->getGuiGlobalClock()->updateTransportButtonDisplay(true);
     }
+    
+    else if (message == "UPDATE TRANSPORT BUTTON TO OFF")
+    {
+        mainComponent->getGuiGlobalClock()->updateTransportButtonDisplay(false);
+    }
+    else if (message == "UPDATE TEMPO")
+    {
+        mainComponent->getGuiGlobalClock()->updateTempoDisplay(tempo);
+    }
 }
 
 
 void GlobalClock::startClock()
 {
+    
+    microbeatNumber = beatNumber = barNumber = 1;
+    currentTime = midiClockCurrentTime = Time::getMillisecondCounterHiRes();
+    midiClockMessageCounter = 6; //so that 'processClock()' will be called instantly
+    prevMidiClockMessageTimestamp = Time::getMillisecondCounterHiRes();
+    
+    //Iif sending MIDI Clock
+    if (midiClockValue == 2)
+    {
+        if (midiClockStartMessage == 1) //'Start' message
+        {
+            MidiMessage message = MidiMessage::midiStart();
+            alphaLiveEngineRef.sendMidiMessage(message);
+        }
+        else if (midiClockStartMessage == 2) //'Continue' message
+        {
+            MidiMessage message = MidiMessage::midiContinue();
+            alphaLiveEngineRef.sendMidiMessage(message);
+        }
+        
+        midiClockOutIsRunning = true;
+    }
+    
+    //else if syncing to external MIDI Clock
+    else if (midiClockValue == 3)
+    {
+        midiClockInIsRunning = true;
+        
+        //if receiving all clock messages
+        if (midiClockMessageFilter == 1)
+        {
+            for (int i = 0; i < 48; i++)
+            {
+                if (alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(i) != nullptr)
+                    alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(i)->setCurrentlySyncedToMidiClockMessages(true);
+            }
+        }
+    }
+    
+    //start the thread
+    startThread(6);
+    
     //update the GUI of the start/stop button. 
     //This is only really neccassery when auto started from pressing a pad - check for that here?
     //Here i need to LOCK the message thread and directly call notifyObs() instead of through the AsyncUpdater
@@ -137,14 +198,8 @@ void GlobalClock::startClock()
     //be updated, but using alt-click would work fine! why?
     broadcaster.sendActionMessage("UPDATE TRANSPORT BUTTON");
     
-    microbeatNumber = beatNumber = barNumber = 1;
     //tell GuiGlobalClock to update its display
     broadcaster.sendActionMessage("UPDATE CLOCK DISPLAY");
-    
-    currentTime = Time::getMillisecondCounterHiRes();
-    
-    //start the thread
-    startThread(6);
     
 }
 
@@ -152,22 +207,57 @@ void GlobalClock::run()
 {
     while ( ! threadShouldExit())
     {
-        //process the internal clock display and quantisation points
-        processClock();
+        //When not syncing to an external MIDI clock,
+        //or when syncing to an external clock but only for the start/stop controls
+        if (midiClockValue != 3 || (midiClockValue == 3 && midiClockMessageFilter == 2))
+        {
+            //process the internal clock display and quantisation points
+            
+            if (Time::getMillisecondCounterHiRes() >= currentTime)
+            {
+                currentTime = currentTime + timeInterval;
+                
+                processClock();
+            }
+            
+            //Sending MIDI Clock stuff
+            if (midiClockOutIsRunning)
+            {
+                if (Time::getMillisecondCounterHiRes() >= midiClockCurrentTime)
+                {
+                    midiClockCurrentTime += midiClockTimeInterval;
+                    
+                    MidiMessage message = MidiMessage::midiClock();
+                    alphaLiveEngineRef.sendMidiMessage(message);
+                }
+            }
+        }
         
-        //Do MIDI clock send stuff here...
+        //When syncing to an external MIDI clock and not filtering out clock messages
+        else
+        {
+            sharedMemory.enter();
+            
+            if (midiClockMessageCounter >= 6)
+            {
+                midiClockMessageCounter = 0;
+                
+                processClock();
+            }
+            
+            sharedMemory.exit();
+        }
         
+        
+        
+        //sleep the thread for 1ms
         wait(1); 
     }
 }
 
 void GlobalClock::processClock()
 {
-    
-    if (Time::getMillisecondCounterHiRes() >= currentTime)
-    {
-        currentTime = currentTime + timeInterval;
-        
+
         //=====get current microbeat, beat, and bar numbers============
         if (microbeatNumber == 5) //1 beat
         {
@@ -252,8 +342,7 @@ void GlobalClock::processClock()
         
         //increment microbeat
         microbeatNumber++;
-    }
-    
+
 }
 
 void GlobalClock::stopClock()
@@ -268,8 +357,81 @@ void GlobalClock::stopClock()
         }
     }
     
+    //if (StoredSettings::getInstance()->hardwareLedClockStatus != 0)
+    sendLedClockMessage(0);
+    
     stopThread(100);
     
+    //if sending MIDI Clock
+    if (midiClockOutIsRunning)
+    {
+        MidiMessage message = MidiMessage::midiStop();
+        alphaLiveEngineRef.sendMidiMessage(message);
+        
+        midiClockOutIsRunning = false;
+    }
+    
+    //if syncing to external MIDI Clock
+    if (midiClockInIsRunning)
+    {
+        for (int i = 0; i < 48; i++)
+        {
+            if (alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(i) != nullptr)
+                alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(i)->setCurrentlySyncedToMidiClockMessages(false);
+        }
+        
+        midiClockInIsRunning = false;
+    }
+    
+    broadcaster.sendActionMessage("UPDATE TRANSPORT BUTTON TO OFF");
+    
+}
+
+void GlobalClock::setMidiClockMessageTimestamp()
+{
+    //need to improve how things work here so the set tempo is more accurate.
+    //also, when the clock is being 'driven' by Midi clock messages, sequences
+    //should also be driven this way, somehow...
+    
+    sharedMemory.enter();
+    
+    midiClockTempos.set(midiClockMessageCounter, 2500 / (Time::getMillisecondCounterHiRes() - prevMidiClockMessageTimestamp));
+    prevMidiClockMessageTimestamp = Time::getMillisecondCounterHiRes();
+    midiClockMessageCounter++;
+    
+    for (int i = 0; i < 48; i++)
+    {
+        if (alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(i) != nullptr)
+            alphaLiveEngineRef.getModeSequencer()->getSequencePlayerInstance(i)->setMidiClockMessageTimestamp();
+    }
+    
+    if (midiClockMessageCounter >= 6)
+    {
+        //order the array
+        for (int i = midiClockTempos.size()-1; i >= 0; i--)
+        {
+            if (midiClockTempos[i] < midiClockTempos[i-1])
+            {
+                  midiClockTempos.swap(i, i-1);
+            }
+        }
+        
+        //set tempo based on the median of the midiClockTempos array
+        double newTempo = midiClockTempos[midiClockTempos.size()/2];
+        
+        //round tempo to 1 decimal place
+        newTempo *= 10;
+        newTempo = ceil(newTempo);
+        newTempo = newTempo/10;
+        
+        //its probably worth changing the tempo less frequently than everytime a clock message is recieved,
+        //and set the tempo to the most common value found here.
+        
+        AppSettings::Instance()->setGlobalTempo(newTempo);
+        broadcaster.sendActionMessage("UPDATE TEMPO");
+    }
+    
+    sharedMemory.exit();
 }
 
 void GlobalClock::prepareToPlay (int samplesPerBlockExpected,double sampleRate)
@@ -290,6 +452,8 @@ void GlobalClock::setTempo (float value)
 {
     tempo = value;
     timeInterval = double(15000.0)/tempo;
+    
+    midiClockTimeInterval = timeInterval / 6.0;
 }
 void GlobalClock::setBeatsPerBar (int value)
 {
@@ -302,6 +466,18 @@ void GlobalClock::setQuantizationValue(int value)
 void GlobalClock::setMetronomeStatus(bool value)
 {
     metronomeStatus = value;
+}
+void GlobalClock::setMidiClockValue (int value)
+{
+    midiClockValue = value;
+}
+void GlobalClock::setMidiClockStartMessage (int value)
+{
+    midiClockStartMessage = value;
+}
+void GlobalClock::setMidiClockMessageFilter (int value)
+{
+    midiClockMessageFilter = value;
 }
 
 int GlobalClock::getBeatNumber()
@@ -316,4 +492,40 @@ int GlobalClock::getBarNumber()
 void GlobalClock::setMainComponent(MainComponent *mainComponent_)
 {
     mainComponent = mainComponent_;
+}
+
+void GlobalClock::sendLedClockMessage (uint8 messageType)
+{
+    /*
+     This function is used to send a message to the firmware to control
+     the LED interaction with the clock when LED clock interaction is enabled.
+     
+     The 'messageType' argument can be equal to two values:
+     0 - Stop LED clock interaction. Sent when the global clock stops to set the LED back to normal.
+     1 - Clock timestamp. Sent when the clock starts and on every clock beat after that to trigger the LED to animate.
+     
+     The tempo being sent here is used only to set the speed at which the LED fades on each beat,
+     NOT for the timing of each beat. Therefore the fact that the 'float' tempo may be rounded
+     down to an 'int' value won't cause any issues. Note that for tempos over 255 we must sent the
+     value over two bytes.
+     
+     */
+    
+    if (alphaLiveEngineRef.getDeviceStatus() != 0)
+    {
+        uint8 tempoLowerByte, tempoUpperByte = 0;
+        tempoLowerByte = (int)tempo & 255;
+        tempoUpperByte = (int)tempo >> 8;
+        
+        //int encodedTempo = (tempoUpperByte << 8) + tempoLowerByte;
+        //std::cout << (int)tempoLowerByte << " " << (int)tempoUpperByte << " " << encodedTempo << std::endl;
+        
+        unsigned char dataToSend[4];
+        dataToSend[0] = 0x05; //Clock timing messages command
+        dataToSend[1] = messageType;
+        dataToSend[2] = tempoLowerByte;
+        dataToSend[3] = tempoUpperByte;
+        alphaLiveEngineRef.addMessageToHidOutReport(dataToSend);
+    }
+    
 }

@@ -24,14 +24,12 @@
 #define H_MODECONTROLLER
 
 #include "../../../JuceLibraryCode/JuceHeader.h"
-#include "../../Application/AbstractSubjectAndObserver.h"
 #include "../../My IO Classes/OscOutput.h"
 
 class AlphaLiveEngine;
 class MainComponent;
 
-class ModeController :  public Subject, //so this class can be observed by the scene component
-                        public AsyncUpdater
+class ModeController :  public ActionListener
 {
 
 public:
@@ -42,25 +40,35 @@ public:
     
     void changeScene();
     
-    //void actionListenerCallback (const String& message);
-    void handleAsyncUpdate();
+    void actionListenerCallback (const String& message);
+    void killPad (int padNum);
+    void unlatchPad (int padNum, bool setPressureInstantaneously = false);
     
     int getPadNumber();
-    
     void setMainComponent(MainComponent *mainComponent_);
+    void setControl (int value, int padNum);
 
 private:
     
     int padNumber;
     int padValue;
     
-    //scene switcher stuff
+    int control[48];
+    
     int prevPadValue[48];
+    bool pressureLatchModeStatus[48]; //stores whether each pad is currently latching another pad
     
     OscOutput oscOutput;
     AlphaLiveEngine &alphaLiveEngineRef;
     
     MainComponent *mainComponent;
+    
+    ActionBroadcaster broadcaster;
+    
+    //see ModeMidi.h for a description of the follow variables...
+    Array<int> guiPadOnUpdater;
+    Array<int> guiPadOffUpdater;
+    
 };
 
 

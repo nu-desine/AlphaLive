@@ -272,7 +272,9 @@
     <ClCompile Include="..\..\Source\Functionality Classes\Sequencer Mode\SequenceAudioFilePlayer.cpp" />
     <ClCompile Include="..\..\Source\Functionality Classes\Sequencer Mode\SequencePlayer.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\AlphaLiveLookandFeel.cpp" />
-    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\BinaryDataNew.cpp" />
+    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\MainBinaryData.cpp" />
+    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\ThemeClassicBinaryData.cpp" />
+    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\ThemeMateriaBinaryData.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Circle Piano\GuiKeys.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Circle Piano\GuiPiano.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Circle Waveform\CircleWaveform.cpp" />
@@ -1466,7 +1468,9 @@
     <ClInclude Include="..\..\Source\Functionality Classes\Sequencer Mode\SequencePlayer.h" />
     <ClInclude Include="..\..\Source\Functionality Classes\Sequencer Mode\SequencerValues.h" />
     <ClInclude Include="..\..\Source\GUI Classes\AlphaLiveLookandFeel.h" />
-    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\BinaryDataNew.h" />
+    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\MainBinaryData.h" />
+    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\ThemeClassicBinaryData.h" />
+    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\ThemeMateriaBinaryData.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Circle Piano\GuiKeys.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Circle Piano\GuiPiano.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Circle Waveform\CircleWaveform.h" />

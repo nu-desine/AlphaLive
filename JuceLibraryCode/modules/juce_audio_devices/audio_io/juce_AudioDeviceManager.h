@@ -22,12 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_AUDIODEVICEMANAGER_JUCEHEADER__
-#define __JUCE_AUDIODEVICEMANAGER_JUCEHEADER__
-
-#include "juce_AudioIODeviceType.h"
-#include "../midi_io/juce_MidiInput.h"
-#include "../midi_io/juce_MidiOutput.h"
+#ifndef JUCE_AUDIODEVICEMANAGER_H_INCLUDED
+#define JUCE_AUDIODEVICEMANAGER_H_INCLUDED
 
 
 //==============================================================================
@@ -194,7 +190,7 @@ public:
                        int numOutputChannelsNeeded,
                        const XmlElement* savedState,
                        bool selectDefaultDeviceOnFailure,
-                       const String& preferredDefaultDeviceName = String::empty,
+                       const String& preferredDefaultDeviceName = String(),
                        const AudioDeviceSetup* preferredSetupOptions = 0);
 
     /** Returns some XML representing the current state of the manager.
@@ -481,7 +477,7 @@ private:
     //==============================================================================
     class CallbackHandler;
     friend class CallbackHandler;
-    friend class ScopedPointer<CallbackHandler>;
+    friend struct ContainerDeletePolicy<CallbackHandler>;
     ScopedPointer<CallbackHandler> callbackHandler;
 
     void audioDeviceIOCallbackInt (const float** inputChannelData, int totalNumInputChannels,
@@ -511,4 +507,4 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioDeviceManager)
 };
 
-#endif   // __JUCE_AUDIODEVICEMANAGER_JUCEHEADER__
+#endif   // JUCE_AUDIODEVICEMANAGER_H_INCLUDED

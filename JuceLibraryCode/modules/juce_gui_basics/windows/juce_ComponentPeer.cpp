@@ -22,7 +22,7 @@
   ==============================================================================
 */
 
-static uint32 lastUniqueID = 1;
+static uint32 lastUniquePeerID = 1;
 
 //==============================================================================
 ComponentPeer::ComponentPeer (Component& comp, const int flags)
@@ -30,16 +30,17 @@ ComponentPeer::ComponentPeer (Component& comp, const int flags)
       styleFlags (flags),
       constrainer (nullptr),
       lastDragAndDropCompUnderMouse (nullptr),
-      uniqueID (lastUniqueID += 2), // increment by 2 so that this can never hit 0
-      fakeMouseMessageSent (false),
+      uniqueID (lastUniquePeerID += 2), // increment by 2 so that this can never hit 0
       isWindowMinimised (false)
 {
-    Desktop::getInstance().addPeer (this);
+    Desktop::getInstance().peers.add (this);
 }
 
 ComponentPeer::~ComponentPeer()
 {
-    Desktop::getInstance().removePeer (this);
+    Desktop& desktop = Desktop::getInstance();
+    desktop.peers.removeFirstMatchingValue (this);
+    desktop.triggerFocusCallback();
 }
 
 //==============================================================================
@@ -73,26 +74,31 @@ bool ComponentPeer::isValidPeer (const ComponentPeer* const peer) noexcept
     return Desktop::getInstance().peers.contains (const_cast <ComponentPeer*> (peer));
 }
 
+void ComponentPeer::updateBounds()
+{
+    setBounds (ScalingHelpers::scaledScreenPosToUnscaled (component, component.getBoundsInParent()), false);
+}
+
 //==============================================================================
 void ComponentPeer::handleMouseEvent (const int touchIndex, const Point<int> positionWithinPeer,
                                       const ModifierKeys newMods, const int64 time)
 {
-    if (MouseInputSource* mouse = Desktop::getInstance().getOrCreateMouseInputSource (touchIndex))
-        mouse->handleEvent (*this, positionWithinPeer, time, newMods);
+    if (MouseInputSource* mouse = Desktop::getInstance().mouseSources->getOrCreateMouseInputSource (touchIndex))
+        MouseInputSource (*mouse).handleEvent (*this, positionWithinPeer, time, newMods);
 }
 
 void ComponentPeer::handleMouseWheel (const int touchIndex, const Point<int> positionWithinPeer,
                                       const int64 time, const MouseWheelDetails& wheel)
 {
-    if (MouseInputSource* mouse = Desktop::getInstance().getOrCreateMouseInputSource (touchIndex))
-        mouse->handleWheel (*this, positionWithinPeer, time, wheel);
+    if (MouseInputSource* mouse = Desktop::getInstance().mouseSources->getOrCreateMouseInputSource (touchIndex))
+        MouseInputSource (*mouse).handleWheel (*this, positionWithinPeer, time, wheel);
 }
 
 void ComponentPeer::handleMagnifyGesture (const int touchIndex, const Point<int> positionWithinPeer,
                                           const int64 time, const float scaleFactor)
 {
-    if (MouseInputSource* mouse = Desktop::getInstance().getOrCreateMouseInputSource (touchIndex))
-        mouse->handleMagnifyGesture (*this, positionWithinPeer, time, scaleFactor);
+    if (MouseInputSource* mouse = Desktop::getInstance().mouseSources->getOrCreateMouseInputSource (touchIndex))
+        MouseInputSource (*mouse).handleMagnifyGesture (*this, positionWithinPeer, time, scaleFactor);
 }
 
 //==============================================================================
@@ -100,11 +106,26 @@ void ComponentPeer::handlePaint (LowLevelGraphicsContext& contextToPaintTo)
 {
     ModifierKeys::updateCurrentModifiers();
 
-    Graphics g (&contextToPaintTo);
+    Graphics g (contextToPaintTo);
 
-   #if JUCE_ENABLE_REPAINT_DEBUGGING
-    g.saveState();
+    if (component.isTransformed())
+        g.addTransform (component.getTransform());
+
+    const Rectangle<int> peerBounds (getBounds());
+
+    if (peerBounds.getWidth() != component.getWidth() || peerBounds.getHeight() != component.getHeight())
+        // Tweak the scaling so that the component's integer size exactly aligns with the peer's scaled size
+        g.addTransform (AffineTransform::scale (peerBounds.getWidth()  / (float) component.getWidth(),
+                                                peerBounds.getHeight() / (float) component.getHeight()));
+
+  #if JUCE_ENABLE_REPAINT_DEBUGGING
+   #ifdef JUCE_IS_REPAINT_DEBUGGING_ACTIVE
+    if (JUCE_IS_REPAINT_DEBUGGING_ACTIVE)
    #endif
+    {
+        g.saveState();
+    }
+  #endif
 
     JUCE_TRY
     {
@@ -112,18 +133,23 @@ void ComponentPeer::handlePaint (LowLevelGraphicsContext& contextToPaintTo)
     }
     JUCE_CATCH_EXCEPTION
 
-   #if JUCE_ENABLE_REPAINT_DEBUGGING
-    // enabling this code will fill all areas that get repainted with a colour overlay, to show
-    // clearly when things are being repainted.
-    g.restoreState();
-
-    static Random rng;
-
-    g.fillAll (Colour ((uint8) rng.nextInt (255),
-                       (uint8) rng.nextInt (255),
-                       (uint8) rng.nextInt (255),
-                       (uint8) 0x50));
+  #if JUCE_ENABLE_REPAINT_DEBUGGING
+   #ifdef JUCE_IS_REPAINT_DEBUGGING_ACTIVE
+    if (JUCE_IS_REPAINT_DEBUGGING_ACTIVE)
    #endif
+    {
+        // enabling this code will fill all areas that get repainted with a colour overlay, to show
+        // clearly when things are being repainted.
+        g.restoreState();
+
+        static Random rng;
+
+        g.fillAll (Colour ((uint8) rng.nextInt (255),
+                           (uint8) rng.nextInt (255),
+                           (uint8) rng.nextInt (255),
+                           (uint8) 0x50));
+    }
+  #endif
 
     /** If this fails, it's probably be because your CPU floating-point precision mode has
         been set to low.. This setting is sometimes changed by things like Direct3D, and can
@@ -279,9 +305,11 @@ void ComponentPeer::handleMovedOrResized()
     {
         const WeakReference<Component> deletionChecker (&component);
 
-        const Rectangle<int> newBounds (getBounds());
-        const bool wasMoved   = (component.getPosition() != newBounds.getPosition());
-        const bool wasResized = (component.getWidth() != newBounds.getWidth() || component.getHeight() != newBounds.getHeight());
+        Rectangle<int> newBounds (Component::ComponentHelpers::rawPeerPositionToLocal (component, getBounds()));
+        Rectangle<int> oldBounds (component.getBounds());
+
+        const bool wasMoved   = (oldBounds.getPosition() != newBounds.getPosition());
+        const bool wasResized = (oldBounds.getWidth() != newBounds.getWidth() || oldBounds.getHeight() != newBounds.getHeight());
 
         if (wasMoved || wasResized)
         {
@@ -377,6 +405,12 @@ Rectangle<int> ComponentPeer::localToGlobal (const Rectangle<int>& relativePosit
 Rectangle<int> ComponentPeer::globalToLocal (const Rectangle<int>& screenPosition)
 {
     return screenPosition.withPosition (globalToLocal (screenPosition.getPosition()));
+}
+
+Rectangle<int> ComponentPeer::getAreaCoveredBy (Component& subComponent) const
+{
+    return ScalingHelpers::scaledScreenPosToUnscaled
+            (component, component.getLocalArea (&subComponent, subComponent.getLocalBounds()));
 }
 
 //==============================================================================
@@ -548,17 +582,5 @@ void ComponentPeer::setRepresentedFile (const File&)
 }
 
 //==============================================================================
-void ComponentPeer::clearMaskedRegion()
-{
-    maskedRegion.clear();
-}
-
-void ComponentPeer::addMaskedRegion (const Rectangle<int>& area)
-{
-    maskedRegion.add (area);
-}
-
-//==============================================================================
-StringArray ComponentPeer::getAvailableRenderingEngines()       { return StringArray ("Software Renderer"); }
 int ComponentPeer::getCurrentRenderingEngine() const            { return 0; }
 void ComponentPeer::setCurrentRenderingEngine (int index)       { jassert (index == 0); (void) index; }

@@ -26,12 +26,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_BUFFEREDINPUTSTREAM_JUCEHEADER__
-#define __JUCE_BUFFEREDINPUTSTREAM_JUCEHEADER__
-
-#include "juce_InputStream.h"
-#include "../memory/juce_OptionalScopedPointer.h"
-#include "../memory/juce_HeapBlock.h"
+#ifndef JUCE_BUFFEREDINPUTSTREAM_H_INCLUDED
+#define JUCE_BUFFEREDINPUTSTREAM_H_INCLUDED
 
 
 //==============================================================================
@@ -93,4 +89,4 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BufferedInputStream)
 };
 
-#endif   // __JUCE_BUFFEREDINPUTSTREAM_JUCEHEADER__
+#endif   // JUCE_BUFFEREDINPUTSTREAM_H_INCLUDED

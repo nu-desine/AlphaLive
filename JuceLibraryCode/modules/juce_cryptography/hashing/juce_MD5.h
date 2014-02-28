@@ -22,8 +22,9 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_MD5_JUCEHEADER__
-#define __JUCE_MD5_JUCEHEADER__
+#ifndef JUCE_MD5_H_INCLUDED
+#define JUCE_MD5_H_INCLUDED
+
 
 //==============================================================================
 /**
@@ -93,7 +94,7 @@ public:
         this operation on it. In new code, you shouldn't use this, and are recommended to
         use the constructor that takes a CharPointer_UTF8 instead.
     */
-    static MD5 fromUTF32 (const String&);
+    static MD5 fromUTF32 (StringRef);
 
     //==============================================================================
     bool operator== (const MD5&) const noexcept;
@@ -111,4 +112,4 @@ private:
 };
 
 
-#endif   // __JUCE_MD5_JUCEHEADER__
+#endif   // JUCE_MD5_H_INCLUDED

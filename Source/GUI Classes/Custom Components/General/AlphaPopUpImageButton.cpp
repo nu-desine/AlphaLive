@@ -124,8 +124,8 @@ void AlphaPopUpImageButton::paintButton (Graphics& g, bool isMouseOverButton, bo
 	g.drawEllipse((getWidth()*0.1), (getHeight()*0.1), (getWidth()*0.8), (getHeight()*0.8), 1.0f);
 	
 	
-	g.setFont (10);
-    g.setColour (AlphaTheme::getInstance()->iconOnColour.withAlpha(imageAlpha));
+	g.setFont (10 + AlphaTheme::getInstance()->fontSizeAddition);
+    g.setColour (AlphaTheme::getInstance()->iconColour.withAlpha(imageAlpha));
 
 	if(theImage->isValid ())
 	{

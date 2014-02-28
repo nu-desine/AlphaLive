@@ -35,27 +35,49 @@
 GuiControllerMode::GuiControllerMode(MainComponent &ref)
                                             :   mainComponentRef(ref)
 {
-    numOfControlButtons = 5;
+    numOfControlButtons = 7;
+    StringArray names;
+    names.add(translate("SCENE SWITCH"));
+    names.add(translate("MIDI PROGRAM"));
+    names.add(translate("SCENE/PROGRAM"));
+    names.add(translate("OSC MESSAGE"));
+    names.add(translate("KILLSWITCH"));
+    names.add(translate("PRESSURE LATCH"));
+    names.add(translate("LED CONTROL"));
     
+    //make sure numOfControlButtons is set to the correct amount of
+    //buttons/controls you want to display!
+    jassert(names.size() == numOfControlButtons);
+
     for (int i = 0; i < numOfControlButtons; i++)
     {
-        if (i == 0)
-            controlButtons.insert(i, new SettingsButton(translate("SCENE SWITCH"), (270 * (M_PI / 180)), 
-                                                        (306 * (M_PI / 180)),
-                                                        0.3f, -90, 0.45, 0.8));
-        if (i == 1)
-            controlButtons.insert(i, new SettingsButton(translate("MIDI PROGRAM"), (306 * (M_PI / 180)),
-                                                        (342 * (M_PI / 180)) , 0.3f, -90, 0.45, 0.8));
-        if (i == 2)
-            controlButtons.insert(i, new SettingsButton(translate("SCENE/PROGRAM"), (342 * (M_PI / 180)),
-                                                        (378 * (M_PI / 180)), 0.3f, 90, 0.55, 0.2)); //note I'm not wrapping round
-        if (i == 3)
-            controlButtons.insert(i, new SettingsButton(translate("OSC MESSAGE"), (18 * (M_PI / 180)),
-                                                        (58 * (M_PI / 180)), 0.3f, 90, 0.55, 0.3));
-        if (i == 4)
-            controlButtons.insert(i, new SettingsButton(translate("KILLSWITCH"), (56 * (M_PI / 180)),
-                                                        (90 * (M_PI / 180)), 0.3f, 90, 0.55, 0.3));
+        float startRadians, endRadians, textRotation, textAngle, textRadius;
+        startRadians = 270.0 + (i * (180.0 / (float)numOfControlButtons));
         
+        if (startRadians > 360.0)
+        {
+            startRadians -= 360.0;
+            
+            textRotation = 90;
+            textAngle = 0.55;
+            textRadius = 0.3;
+        }
+        else
+        {
+            textRotation = -90;
+            textAngle = 0.45;
+            textRadius = 0.8;
+        }
+        
+        endRadians = startRadians + (180.0 / (float)numOfControlButtons);
+        
+        controlButtons.insert(i, new SettingsButton(translate(names[i]),
+                                                    (startRadians * (M_PI / 180)),
+                                                    (endRadians * (M_PI / 180)),
+                                                    0.3f,
+                                                    textRotation,
+                                                    textAngle,
+                                                    textRadius));
         controlButtons[i]->addListener(this);
         controlButtons[i]->setOpaque(false);
         controlButtons[i]->setRadioGroupId (43);
@@ -67,12 +89,11 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
     controlButtons[0]->setToggleState(true, false);
     
     
-    addAndMakeVisible(sceneNumberSlider = new AlphaSlider());
+    addChildComponent(sceneNumberSlider = new AlphaSlider());
     sceneNumberSlider->setRange(1, NO_OF_SCENES, 1);
     sceneNumberSlider->addListener(this);
     sceneNumberSlider->setValue(1, dontSendNotification);
     sceneNumberSlider->addMouseListener(this, true);
-    sceneNumberSlider->setVisible(false);
     
     //for some reason using a textEditor was creating gui problems, so using a label instead now
     addChildComponent(oscIpAddressEditor = new Label());
@@ -94,7 +115,23 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
     midiProgramChangeNumberSlider->setValue(1, dontSendNotification);
     midiProgramChangeNumberSlider->addListener(this);
     midiProgramChangeNumberSlider->addMouseListener(this, true);
-    midiProgramChangeNumberSlider->setVisible(false);
+    
+    addChildComponent(pressureLatchPadNumberSlider = new AlphaSlider());
+    pressureLatchPadNumberSlider->setRange(1, 48, 1);
+    pressureLatchPadNumberSlider->setValue(1, dontSendNotification);
+    pressureLatchPadNumberSlider->addListener(this);
+    pressureLatchPadNumberSlider->addMouseListener(this, true);
+    
+    addChildComponent(ledControlMenu = new ComboBox());
+    ledControlMenu->addListener(this);
+    ledControlMenu->addMouseListener(this, true);
+    ledControlMenu->addItem(translate("LED Status"), 1);
+    ledControlMenu->addItem(translate("Pressure Interaction Status"), 2);
+    ledControlMenu->addItem(translate("Clock Interaction Status"), 3);
+    ledControlMenu->addItem(translate("MIDI CC Mode Status"), 4);
+    ledControlMenu->setSelectedId(1, true);
+    
+    
     
     //---------------channel buttons---------------------
 	
@@ -141,6 +178,10 @@ void GuiControllerMode::resized()
     oscPortNumberSlider-> setBounds(816, 393, 58, 58);
     
     midiProgramChangeNumberSlider->setBounds(816, 393, 58, 58);
+    
+    pressureLatchPadNumberSlider->setBounds(816, 393, 58, 58);
+    
+    ledControlMenu->setBounds(770, 490, 150, 20);
 	
 	midiChannelButtons[0]->setBounds(649,439,21, 21);
 	midiChannelButtons[1]->setBounds(656,467,21, 21);
@@ -242,7 +283,14 @@ void GuiControllerMode::setCurrentlySelectedPad (Array <int> selectedPads_)
 
 void GuiControllerMode::comboBoxChanged (ComboBox* comboBox)
 {
-   
+   if (comboBox == ledControlMenu)
+   {
+       for (int i = 0; i < selectedPads.size(); i++)
+       {
+           int padNum = selectedPads[i];
+           PAD_SETTINGS->setControllerLedControl(comboBox->getSelectedId());
+       }
+   }
     
 }
 
@@ -282,11 +330,52 @@ void GuiControllerMode::sliderValueChanged (Slider* slider)
             int padNum = selectedPads[i];
             PAD_SETTINGS->setControllerMidiProgramChangeNumber(midiProgramChangeNumberSlider->getValue());
         }
-        
     }
     
+    //Pressure latch pad number
+    else if (slider == pressureLatchPadNumberSlider)
+    {
+        int changeSliderValue = -1;
+        
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            int sliderValue = slider->getValue();
+            
+            //don't want a pad to control it's own pressure
+            
+            if (sliderValue - 1 != padNum)
+            {
+                PAD_SETTINGS->setControllerPressureLatchPadNumber(sliderValue-1);
+            }
+            else
+            {
+                sliderValue += 1;
+                
+                if (sliderValue > 48)
+                {
+                    sliderValue = 1;
+                }
+                
+                PAD_SETTINGS->setControllerPressureLatchPadNumber(sliderValue-1);
+                
+                changeSliderValue = sliderValue;
+            }
+        }
+        
+        //change the slider value if needed
+        
+        if (changeSliderValue != -1)
+        {
+            if (selectedPads.size() > 1)
+                changeSliderValue = -999;
+            
+            //why won't the -999 set the label to '-' here?
+            pressureLatchPadNumberSlider->setValue(changeSliderValue);
+        }
+        
+    }
 
-    
 }
 
 void GuiControllerMode::labelTextChanged (Label* labelThatHasChanged)
@@ -374,6 +463,8 @@ void GuiControllerMode::updateDisplay()
         oscPortNumberSlider->setValue(PAD_SETTINGS->getControllerOscPort());
         midiProgramChangeNumberSlider->setValue(PAD_SETTINGS->getControllerMidiProgramChangeNumber());
         midiChannelButtons[PAD_SETTINGS->getControllerMidiProgramChangeChannel()-1]->setToggleState(true, false);
+        pressureLatchPadNumberSlider->setValue(PAD_SETTINGS->getControllerPressureLatchPadNumber()+1);
+        ledControlMenu->setSelectedId(PAD_SETTINGS->getControllerLedControl(), true);
         
         setDisplay(PAD_SETTINGS->getControllerControl()-1);
     }
@@ -470,6 +561,34 @@ void GuiControllerMode::updateDisplay()
                 oscIpAddressEditor->setText(oscIp_, dontSendNotification);
         }
         
+        //==================================================================================================
+        int pressureLatch_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getControllerPressureLatchPadNumber();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getControllerPressureLatchPadNumber() != pressureLatch_)
+            {
+                pressureLatchPadNumberSlider->setValue(-999);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                pressureLatchPadNumberSlider->setValue(pressureLatch_+1);
+        }
+        
+        //==================================================================================================
+        int ledControl_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getControllerLedControl();
+        for (int i = 1; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            if (PAD_SETTINGS->getControllerLedControl() != ledControl_)
+            {
+                ledControlMenu->setSelectedId(0, true);
+                break;
+            }
+            if (i == selectedPads.size()-1)
+                ledControlMenu->setSelectedId(ledControl_, true);
+        }
+        
     }
 
     
@@ -487,8 +606,10 @@ void GuiControllerMode::setDisplay (int controlSelected)
     oscIpAddressEditor->setVisible(false);
     oscPortNumberSlider->setVisible(false);
     midiProgramChangeNumberSlider->setVisible(false);
+    pressureLatchPadNumberSlider->setVisible(false);
     for (int i = 0; i <= 15; i++)
         midiChannelButtons[i]->setVisible(false);
+    ledControlMenu->setVisible(false);
     
     //...and then set the right one visible
     if (controlSelected == 0) //scene switcher control selected
@@ -533,6 +654,20 @@ void GuiControllerMode::setDisplay (int controlSelected)
         drawButtons = 0;
         repaint(600, 200, 424, 469); // << SET REPAINT BOUNDS
     }
+    else if (controlSelected == 5) //Pressure latch mode
+    {
+        pressureLatchPadNumberSlider->setVisible(true);
+        drawButtons = 0;
+        
+        repaint(600, 200, 424, 469); // << SET REPAINT BOUNDS
+    }
+    else if (controlSelected == 6)
+    {
+        ledControlMenu->setVisible(true);
+        drawButtons = 0;
+        
+        repaint(600, 200, 424, 469); // << SET REPAINT BOUNDS
+    }
 
 }
 
@@ -562,6 +697,14 @@ void GuiControllerMode::mouseEnter (const MouseEvent &e)
         {
             mainComponentRef.setInfoTextBoxText(translate("Killswitch. This mode enables the selected pads to trigger AlphaLive's Killswitch to stop all sounds."));
         }
+        else if (controlButtons[5]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate("Pressure Latch Mode. This mode enables you to 'latch' the pressure of a selected pad. When you press this pad it will freeze the pressure to the currently pressed value of the selected pad, and then press this pad again to reset the pressure back to 0."));
+        }
+        else if (controlButtons[6]->isMouseOver(true))
+        {
+            mainComponentRef.setInfoTextBoxText(translate("LED Control Mode. This mode enables you to configure certain aspects of the LED in the AlphaSphere."));
+        }
     }
     
     if (sceneNumberSlider->isMouseOver(true))
@@ -579,6 +722,14 @@ void GuiControllerMode::mouseEnter (const MouseEvent &e)
     else if (midiProgramChangeNumberSlider->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("MIDI Program Change Number Selector. Sets the MIDI Program Change Number for the selected pads."));
+    }
+    else if (pressureLatchPadNumberSlider->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("Pad Number Selector. Sets which pad you want the selected pads to 'latch'."));
+    }
+    else if (ledControlMenu->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate("LED Control Selector. Sets which LED option you would like to control with the selected pads."));
     }
     
     for (int i = 0; i < 16; i++)

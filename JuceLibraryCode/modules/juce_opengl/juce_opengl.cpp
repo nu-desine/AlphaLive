@@ -22,7 +22,7 @@
   ==============================================================================
 */
 
-#if defined (__JUCE_OPENGL_JUCEHEADER__) && ! JUCE_AMALGAMATED_INCLUDE
+#if defined (JUCE_OPENGL_H_INCLUDED) && ! JUCE_AMALGAMATED_INCLUDE
  /* When you add this cpp file to your project, you mustn't include it in a file where you've
     already included any other headers - just put it inside a file on its own, possibly with your config
     flags preceding it, but don't include anything else. That also includes avoiding any automatic prefix
@@ -76,7 +76,6 @@ namespace juce
 {
 
 //==============================================================================
-#include "native/juce_MissingGLDefinitions.h"
 #include "native/juce_OpenGLExtensions.h"
 
 void OpenGLExtensionFunctions::initialise()
@@ -97,7 +96,7 @@ void OpenGLExtensionFunctions::initialise()
 
 #if JUCE_OPENGL_ES
  #define JUCE_DECLARE_GL_FUNCTION(name, returnType, params, callparams) \
-    inline returnType OpenGLExtensionFunctions::name params { return ::name callparams; }
+    returnType OpenGLExtensionFunctions::name params { return ::name callparams; }
 
  JUCE_GL_EXTENSION_FUNCTIONS (JUCE_DECLARE_GL_FUNCTION, JUCE_DECLARE_GL_FUNCTION)
  #undef JUCE_DECLARE_GL_FUNCTION

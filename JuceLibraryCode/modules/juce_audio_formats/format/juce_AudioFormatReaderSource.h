@@ -22,8 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_AUDIOFORMATREADERSOURCE_JUCEHEADER__
-#define __JUCE_AUDIOFORMATREADERSOURCE_JUCEHEADER__
+#ifndef JUCE_AUDIOFORMATREADERSOURCE_H_INCLUDED
+#define JUCE_AUDIOFORMATREADERSOURCE_H_INCLUDED
 
 
 //==============================================================================
@@ -74,7 +74,7 @@ public:
     void releaseResources() override;
 
     /** Implementation of the AudioSource method. */
-    void getNextAudioBlock (const AudioSourceChannelInfo& bufferToFill) override;
+    void getNextAudioBlock (const AudioSourceChannelInfo&) override;
 
     //==============================================================================
     /** Implements the PositionableAudioSource method. */
@@ -97,4 +97,4 @@ private:
 };
 
 
-#endif   // __JUCE_AUDIOFORMATREADERSOURCE_JUCEHEADER__
+#endif   // JUCE_AUDIOFORMATREADERSOURCE_H_INCLUDED

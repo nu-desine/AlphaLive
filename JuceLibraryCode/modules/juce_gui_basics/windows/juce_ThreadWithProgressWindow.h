@@ -22,10 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_THREADWITHPROGRESSWINDOW_JUCEHEADER__
-#define __JUCE_THREADWITHPROGRESSWINDOW_JUCEHEADER__
-
-#include "../windows/juce_AlertWindow.h"
+#ifndef JUCE_THREADWITHPROGRESSWINDOW_H_INCLUDED
+#define JUCE_THREADWITHPROGRESSWINDOW_H_INCLUDED
 
 
 //==============================================================================
@@ -98,7 +96,7 @@ public:
                                         the thread to stop before killing it forcibly (see
                                         Thread::stopThread() )
         @param cancelButtonText         the text that should be shown in the cancel button
-                                        (if it has one)
+                                        (if it has one). Leave this empty for the default "Cancel"
         @param componentToCentreAround  if this is non-null, the window will be positioned
                                         so that it's centred around this component.
     */
@@ -106,7 +104,7 @@ public:
                               bool hasProgressBar,
                               bool hasCancelButton,
                               int timeOutMsWhenCancelling = 10000,
-                              const String& cancelButtonText = "Cancel",
+                              const String& cancelButtonText = String(),
                               Component* componentToCentreAround = nullptr);
 
     /** Destructor. */
@@ -152,4 +150,4 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ThreadWithProgressWindow)
 };
 
-#endif   // __JUCE_THREADWITHPROGRESSWINDOW_JUCEHEADER__
+#endif   // JUCE_THREADWITHPROGRESSWINDOW_H_INCLUDED

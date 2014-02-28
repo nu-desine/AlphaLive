@@ -22,8 +22,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_IIRFILTER_JUCEHEADER__
-#define __JUCE_IIRFILTER_JUCEHEADER__
+#ifndef JUCE_IIRFILTER_H_INCLUDED
+#define JUCE_IIRFILTER_H_INCLUDED
 
 class IIRFilter;
 
@@ -98,9 +98,11 @@ public:
                                            double Q,
                                            float gainFactor) noexcept;
 
-private:
-    friend class IIRFilter;
-    float c[5];
+    //==============================================================================
+    /** The raw coefficients.
+        You should leave these numbers alone unless you really know what you're doing.
+    */
+    float coefficients[5];
 };
 
 //==============================================================================
@@ -169,4 +171,4 @@ protected:
 };
 
 
-#endif   // __JUCE_IIRFILTER_JUCEHEADER__
+#endif   // JUCE_IIRFILTER_H_INCLUDED

@@ -175,8 +175,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
     
     /*
      Colours that can't be changed here:
-     - All colours within of the pads. You don't want to change the mode/ring colours
-     and changing the background colours would interfere with these colours.
+     - Various colours within the pads. You don't want to change the mode/ring colours.
      - Various whites/silvers that are used for mouse-over highlighting as well as
      shadowing/highlighting buttons/components. We preferably don't want to change this
      - record button colour
@@ -412,9 +411,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
             TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
             
-            PopupMenu::backgroundColourId,              0x00000000,
+            PopupMenu::backgroundColourId,              AlphaTheme::getInstance()->childBackgroundColour_,
             PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
-            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->textColour_,
+            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->foregroundColour_,
             PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
             PopupMenu::highlightedBackgroundColourId,   AlphaTheme::getInstance()->mainColour_,
             
@@ -462,7 +461,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             HyperlinkButton::textColourId,              0xcc1111ee,
             
-            GroupComponent::outlineColourId,            0x66000000,
+            GroupComponent::outlineColourId,            AlphaTheme::getInstance()->textColour_,
             GroupComponent::textColourId,               AlphaTheme::getInstance()->textColour_,
             
             DirectoryContentsDisplayComponent::highlightColourId,   AlphaTheme::getInstance()->mainColour_, // <-- used for fileList and fileTree item's
@@ -472,6 +471,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
             DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
+            
+            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->foregroundColour_,
+            ColourSelector::labelTextColourId,          AlphaTheme::getInstance()->textColour_,
         };
         
         for (int i = 0; i < numElementsInArray (standardColours); i += 2)
@@ -559,9 +561,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
             TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
             
-            PopupMenu::backgroundColourId,              0x00000000,
+            PopupMenu::backgroundColourId,              AlphaTheme::getInstance()->childBackgroundColour_,
             PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
-            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->textColour_,
+            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->foregroundColour_,
             PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
             PopupMenu::highlightedBackgroundColourId,   AlphaTheme::getInstance()->mainColour_,
             
@@ -609,7 +611,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             HyperlinkButton::textColourId,              0xcc1111ee,
             
-            GroupComponent::outlineColourId,            0x66000000,
+            GroupComponent::outlineColourId,            AlphaTheme::getInstance()->textColour_,
             GroupComponent::textColourId,               AlphaTheme::getInstance()->textColour_,
             
             DirectoryContentsDisplayComponent::highlightColourId,   AlphaTheme::getInstance()->mainColour_, // <-- used for fileList and fileTree item's
@@ -619,6 +621,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
             DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
+            
+            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->foregroundColour_,
+            ColourSelector::labelTextColourId,          AlphaTheme::getInstance()->textColour_,
         };
         
         for (int i = 0; i < numElementsInArray (standardColours); i += 2)
@@ -704,9 +709,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
             TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
             
-            PopupMenu::backgroundColourId,              0x00000000,
+            PopupMenu::backgroundColourId,              AlphaTheme::getInstance()->childBackgroundColour_,
             PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
-            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->textColour_,
+            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->foregroundColour_,
             PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
             PopupMenu::highlightedBackgroundColourId,   AlphaTheme::getInstance()->mainColour_,
             
@@ -754,7 +759,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             HyperlinkButton::textColourId,              0xcc1111ee,
             
-            GroupComponent::outlineColourId,            0x66000000,
+            GroupComponent::outlineColourId,            AlphaTheme::getInstance()->textColour_,
             GroupComponent::textColourId,               AlphaTheme::getInstance()->textColour_,
             
             DirectoryContentsDisplayComponent::highlightColourId,   AlphaTheme::getInstance()->mainColour_, // <-- used for fileList and fileTree item's
@@ -764,6 +769,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
             DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
+            
+            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->foregroundColour_,
+            ColourSelector::labelTextColourId,          AlphaTheme::getInstance()->textColour_,
         };
         
         for (int i = 0; i < numElementsInArray (standardColours); i += 2)
@@ -851,9 +859,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TreeView::backgroundColourId,               AlphaTheme::getInstance()->backgroundColour_,
             TreeView::dragAndDropIndicatorColourId,     0x80ff0000,
             
-            PopupMenu::backgroundColourId,              0x00000000,
+            PopupMenu::backgroundColourId,              AlphaTheme::getInstance()->childBackgroundColour_,
             PopupMenu::textColourId,                    AlphaTheme::getInstance()->textColour_,
-            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->textColour_,
+            PopupMenu::headerTextColourId,              AlphaTheme::getInstance()->foregroundColour_,
             PopupMenu::highlightedTextColourId,         AlphaTheme::getInstance()->textColour_,
             PopupMenu::highlightedBackgroundColourId,   AlphaTheme::getInstance()->mainColour_,
             
@@ -901,7 +909,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             HyperlinkButton::textColourId,              0xcc1111ee,
             
-            GroupComponent::outlineColourId,            0x66000000,
+            GroupComponent::outlineColourId,            AlphaTheme::getInstance()->textColour_,
             GroupComponent::textColourId,               AlphaTheme::getInstance()->textColour_,
             
             DirectoryContentsDisplayComponent::highlightColourId,   AlphaTheme::getInstance()->mainColour_, // <-- used for fileList and fileTree item's
@@ -911,6 +919,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             
             FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
             DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
+            
+            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->foregroundColour_,
+            ColourSelector::labelTextColourId,          AlphaTheme::getInstance()->textColour_,
         };
         
         for (int i = 0; i < numElementsInArray (standardColours); i += 2)

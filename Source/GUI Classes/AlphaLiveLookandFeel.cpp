@@ -271,7 +271,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             ListBox::outlineColourId,                   AlphaTheme::getInstance()->childBackgroundColourLighter_,
             ListBox::textColourId,                      AlphaTheme::getInstance()->textColour_,
             
-            Slider::backgroundColourId,                 AlphaTheme::getInstance()->tabColour_,
+            Slider::backgroundColourId,                 0x00000000,
             Slider::thumbColourId,                      AlphaTheme::getInstance()->backgroundColour_,
             Slider::trackColourId,                      AlphaTheme::getInstance()->mainColour_,
             Slider::rotarySliderFillColourId,           AlphaTheme::getInstance()->mainColour_,
@@ -358,11 +358,11 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->mainColourLighter_ = 0xff6ec8e8; //light blue
         AlphaTheme::getInstance()->childBackgroundColour_ = 0xffebebeb; //light grey
         AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xfff0f0f0; //dark white
-        AlphaTheme::getInstance()->textColour_ = 0xff999999; //dark grey
+        AlphaTheme::getInstance()->textColour_ = 0xff777777; //dark grey
         AlphaTheme::getInstance()->backgroundColour_ = 0xffffffff; //white
         AlphaTheme::getInstance()->foregroundColour_ = 0xffaeaeae; //grey
         AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffdddddd; //light grey
-        AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff999999; //dark grey
+        AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff666666; //dark grey
         AlphaTheme::getInstance()->iconColour_ = 0xff999999; //dark grey (same as text colour)
         AlphaTheme::getInstance()->iconOnColour_ = 0xffffffff;
         AlphaTheme::getInstance()->padColour_ = 0xfff0f0f0; //dark grey
@@ -445,10 +445,10 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TooltipWindow::textColourId,                AlphaTheme::getInstance()->textColour_,
             TooltipWindow::outlineColourId,             0x4c000000,
             
-            TabbedComponent::backgroundColourId,        AlphaTheme::getInstance()->tabColour_,
+            TabbedComponent::backgroundColourId,        0x00000000,
             TabbedComponent::outlineColourId,           AlphaTheme::getInstance()->backgroundColour_,
-            TabbedButtonBar::tabOutlineColourId,        0x80000000,
-            TabbedButtonBar::frontOutlineColourId,      0x90000000,
+            TabbedButtonBar::tabOutlineColourId,        AlphaTheme::getInstance()->foregroundColour_,
+            TabbedButtonBar::frontOutlineColourId,      AlphaTheme::getInstance()->foregroundColour_,
             TabbedButtonBar::tabTextColourId,           AlphaTheme::getInstance()->textColour_,
             TabbedButtonBar::frontTextColourId,         AlphaTheme::getInstance()->textColour_,
             
@@ -595,10 +595,10 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TooltipWindow::textColourId,                AlphaTheme::getInstance()->textColour_,
             TooltipWindow::outlineColourId,             0x4c000000,
             
-            TabbedComponent::backgroundColourId,        AlphaTheme::getInstance()->tabColour_,
+            TabbedComponent::backgroundColourId,        0x00000000,
             TabbedComponent::outlineColourId,           AlphaTheme::getInstance()->backgroundColour_,
-            TabbedButtonBar::tabOutlineColourId,        AlphaTheme::getInstance()->backgroundColour_,
-            TabbedButtonBar::frontOutlineColourId,      AlphaTheme::getInstance()->foregroundColourLighter_,
+            TabbedButtonBar::tabOutlineColourId,        AlphaTheme::getInstance()->foregroundColour_,
+            TabbedButtonBar::frontOutlineColourId,      AlphaTheme::getInstance()->foregroundColour_,
             TabbedButtonBar::tabTextColourId,           AlphaTheme::getInstance()->textColour_,
             TabbedButtonBar::frontTextColourId,         AlphaTheme::getInstance()->textColour_,
             
@@ -743,10 +743,10 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TooltipWindow::textColourId,                AlphaTheme::getInstance()->textColour_,
             TooltipWindow::outlineColourId,             0x4c000000,
             
-            TabbedComponent::backgroundColourId,        AlphaTheme::getInstance()->tabColour_,
+            TabbedComponent::backgroundColourId,        0x00000000,
             TabbedComponent::outlineColourId,           AlphaTheme::getInstance()->backgroundColour_,
-            TabbedButtonBar::tabOutlineColourId,        AlphaTheme::getInstance()->backgroundColour_,
-            TabbedButtonBar::frontOutlineColourId,      AlphaTheme::getInstance()->foregroundColourLighter_,
+            TabbedButtonBar::tabOutlineColourId,        AlphaTheme::getInstance()->foregroundColour_,
+            TabbedButtonBar::frontOutlineColourId,      AlphaTheme::getInstance()->foregroundColour_,
             TabbedButtonBar::tabTextColourId,           AlphaTheme::getInstance()->textColour_,
             TabbedButtonBar::frontTextColourId,         AlphaTheme::getInstance()->textColour_,
             
@@ -783,7 +783,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
     //======================================================================
     //======================================================================
     
-    else if (theme == 5) //transparency theme
+    else if (theme == 5) //transparency theme (NOT CURRENTLY BEING USED)
     {
         // set background images here...
         
@@ -893,10 +893,10 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TooltipWindow::textColourId,                AlphaTheme::getInstance()->textColour_,
             TooltipWindow::outlineColourId,             0x4c000000,
             
-            TabbedComponent::backgroundColourId,        AlphaTheme::getInstance()->tabColour_,
+            TabbedComponent::backgroundColourId,        0x00000000,
             TabbedComponent::outlineColourId,           AlphaTheme::getInstance()->backgroundColour_,
-            TabbedButtonBar::tabOutlineColourId,        AlphaTheme::getInstance()->backgroundColour_,
-            TabbedButtonBar::frontOutlineColourId,      AlphaTheme::getInstance()->foregroundColourLighter_,
+            TabbedButtonBar::tabOutlineColourId,        0x80000000,
+            TabbedButtonBar::frontOutlineColourId,      0x90000000,
             TabbedButtonBar::tabTextColourId,           AlphaTheme::getInstance()->textColour_,
             TabbedButtonBar::frontTextColourId,         AlphaTheme::getInstance()->textColour_,
             
@@ -1040,7 +1040,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             TooltipWindow::textColourId,                AlphaTheme::getInstance()->textColour_,
             TooltipWindow::outlineColourId,             0x4c000000,
             
-            TabbedComponent::backgroundColourId,        AlphaTheme::getInstance()->tabColour_,
+            TabbedComponent::backgroundColourId,        0x00000000,
             TabbedComponent::outlineColourId,           AlphaTheme::getInstance()->backgroundColour_,
             TabbedButtonBar::tabOutlineColourId,        0x80000000,
             TabbedButtonBar::frontOutlineColourId,      0x90000000,

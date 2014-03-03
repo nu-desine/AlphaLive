@@ -134,7 +134,7 @@ void PreferencesComponent::removeMidiOutputSelector()
     
     //don't display the option to set a MIDI ouput device
     audioAndMidiSettingsComponent = new AudioDeviceSelectorComponent(alphaLiveEngineRef.getAudioDeviceManager(), 0, 0, 0, 2, false, false, true, false);
-    tabbedComponent->addTab(translate("Audio Output Settings"), AlphaTheme::getInstance()->foregroundColourDarker, audioAndMidiSettingsComponent, true);
+    tabbedComponent->addTab(translate("Audio Output Settings"), AlphaTheme::getInstance()->tabColour, audioAndMidiSettingsComponent, true);
     
     #endif //JUCE_WINDOWS
 }
@@ -173,7 +173,7 @@ void PreferencesComponent::setTabColour()
 {
     //This can't be called in paint as it calls repaint and would cause loops and high CPU.
     for (int i = 0; i < tabbedComponent->getNumTabs(); i++)
-        tabbedComponent->setTabBackgroundColour(i, AlphaTheme::getInstance()->foregroundColourDarker);
+        tabbedComponent->setTabBackgroundColour(i, AlphaTheme::getInstance()->tabColour);
 }
 
 void PreferencesComponent::redrawAudioSettingsComponent()
@@ -184,7 +184,7 @@ void PreferencesComponent::redrawAudioSettingsComponent()
     
     initAudioSettingsComponent();
 
-    tabbedComponent->addTab(translate("Audio Output Settings"), AlphaTheme::getInstance()->foregroundColourDarker, audioAndMidiSettingsComponent, true);
+    tabbedComponent->addTab(translate("Audio Output Settings"), AlphaTheme::getInstance()->tabColour, audioAndMidiSettingsComponent, true);
 }
 
 void PreferencesComponent::selectHardwareTab()
@@ -316,7 +316,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     interfaceThemeMenu->addItem(translate("Minimal"), 2);
     interfaceThemeMenu->addItem(translate("Charcoal"), 3);
     interfaceThemeMenu->addItem(translate("Aurora"), 4);
-    interfaceThemeMenu->addItem(translate("Transparency"), 5);
+    //interfaceThemeMenu->addItem(translate("Transparency"), 5);
     interfaceThemeMenu->addListener(this);
     interfaceThemeMenu->addMouseListener(this, true);
     
@@ -429,19 +429,19 @@ void GeneralSettingsComponent::resized()
 
 void GeneralSettingsComponent::paint (Graphics& g)
 {
-    deviceInterfaceLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    directoryLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    midiNoteDisplayTypeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    launchTaskLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    killOnClockStopLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    cleanOnCloseLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    autoSaveScenesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    autoCheckUpdatesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    interfaceThemeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    padContentDisplayMenu->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    padContentDisplayLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    midiChannelPressureModeMenu->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    midiChannelPressureModeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    deviceInterfaceLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    directoryLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    midiNoteDisplayTypeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    launchTaskLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    killOnClockStopLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    cleanOnCloseLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    autoSaveScenesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    autoCheckUpdatesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    interfaceThemeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    padContentDisplayMenu->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    padContentDisplayLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    midiChannelPressureModeMenu->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    midiChannelPressureModeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     
     fileGroup->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
     fileGroup->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
@@ -796,10 +796,10 @@ void HardwarePreferencesComponent::paint (Graphics& g)
         ledColourButton[i]->setColours(colour, colour, colour);
     }
     
-    ledColourSchemeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    ledColourLabel[0]->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    ledColourLabel[1]->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    ledColourLabel[2]->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    ledColourSchemeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    ledColourLabel[0]->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    ledColourLabel[1]->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    ledColourLabel[2]->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
 }
 
 void HardwarePreferencesComponent::buttonClicked (Button* button)

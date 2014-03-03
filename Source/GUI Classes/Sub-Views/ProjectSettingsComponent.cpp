@@ -45,11 +45,11 @@ ProjectSettingsComponent::ProjectSettingsComponent(MainComponent &ref, AlphaLive
     addAndMakeVisible(tabbedComponent = new TabbedComponent(TabbedButtonBar::TabsAtTop));
 
     tabbedComponent->addTab(translate("Software Settings"),
-                            AlphaTheme::getInstance()->foregroundColourDarker,
+                            AlphaTheme::getInstance()->tabColour,
                             generalSettingsComponent,
                             true);
     tabbedComponent->addTab(translate("Hardware Settings"),
-                            AlphaTheme::getInstance()->foregroundColourDarker,
+                            AlphaTheme::getInstance()->tabColour,
                             hardwareSettingsComponent,
                             true);
     
@@ -146,7 +146,7 @@ void ProjectSettingsComponent::setTabColour()
 {
     //This can't be called in paint as it calls repaint and would cause loops and high CPU.
     for (int i = 0; i < tabbedComponent->getNumTabs(); i++)
-        tabbedComponent->setTabBackgroundColour(i, AlphaTheme::getInstance()->foregroundColourDarker);
+        tabbedComponent->setTabBackgroundColour(i, AlphaTheme::getInstance()->tabColour);
 }
 
 void ProjectSettingsComponent::selectTab (int tab)
@@ -392,11 +392,11 @@ void GeneralProjSettingsComponent::resized()
 
 void GeneralProjSettingsComponent::paint (Graphics& g)
 {
-    copyExternalFilesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    midiClockLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    clockStartMessageLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    midiClockMessageFilterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    receiveMidiProgramChangeMessagesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    copyExternalFilesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    midiClockLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    clockStartMessageLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    midiClockMessageFilterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    receiveMidiProgramChangeMessagesLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     
     generalGroupComponent->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
     generalGroupComponent->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
@@ -648,10 +648,10 @@ void HardwareSettingsComponent::resized()
 
 void HardwareSettingsComponent::paint (Graphics& g)
 {
-    ledModeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    ledStatusLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    ledPressureStatusLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
-    ledClockStatusLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    ledModeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    ledStatusLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    ledPressureStatusLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
+//    ledClockStatusLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
 }
 
 void HardwareSettingsComponent::buttonClicked (Button* button)

@@ -70,7 +70,6 @@ GuiBitcrusher::GuiBitcrusher(MainComponent &ref)
     intensitySlider->setRange(0.0, 1.0, 0.001);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
-    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
     
     addAndMakeVisible(syncButton = new AlphaTextButton(translate("SYNC")));
     syncButton->setClickingTogglesState(true);
@@ -130,6 +129,7 @@ void GuiBitcrusher::resized()
 void GuiBitcrusher::paint(Graphics &g)
 {
     parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
 }
 
 void GuiBitcrusher::sliderValueChanged (Slider *slider)

@@ -52,7 +52,6 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     intensitySlider->setValue(0.5, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
-    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
     
     
 	addAndMakeVisible(rateMenu = new AlphaPopUpButton());
@@ -186,6 +185,7 @@ void GuiTremolo::resized()
 void GuiTremolo::paint (Graphics& g)
 {
     parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
     
 	g.setColour(AlphaTheme::getInstance()->backgroundColour);
 	g.fillEllipse(118, 232, 38, 38);

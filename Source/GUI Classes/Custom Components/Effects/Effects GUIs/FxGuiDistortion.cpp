@@ -58,7 +58,6 @@ GuiDistortion::GuiDistortion(MainComponent &ref)
     intensitySlider->setRange(0.0, 1.0, 0.001);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
-    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
     
     //below is temporily hidden in resized()!
     addAndMakeVisible(inputGainSlider = new AlphaRotarySlider((250 * (M_PI / 180)), (470 * (M_PI / 180)), 210));
@@ -126,6 +125,7 @@ GuiDistortion::~GuiDistortion()
 void GuiDistortion::paint(Graphics &g)
 {
     parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
 }
 
 void GuiDistortion::resized()

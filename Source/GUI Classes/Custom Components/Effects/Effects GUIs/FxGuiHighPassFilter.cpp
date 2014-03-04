@@ -74,7 +74,6 @@ GuiHighPassFilter::GuiHighPassFilter(MainComponent &ref)
     intensitySlider->setValue(1.0, dontSendNotification);
     intensitySlider->addListener(this);
     intensitySlider->addMouseListener(this, true);
-    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
     
     //---------------parameter label -------------------------------------
     addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
@@ -107,6 +106,7 @@ void GuiHighPassFilter::resized()
 void GuiHighPassFilter::paint(Graphics &g)
 {
     parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+    intensitySlider->setColour(Slider::rotarySliderFillColourId, AlphaTheme::getInstance()->mainColourLighter);
 }
 
 void GuiHighPassFilter::sliderValueChanged (Slider *slider)

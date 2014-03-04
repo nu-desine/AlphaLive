@@ -216,8 +216,10 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->iconColour_ = 0xffb6b797; // materia cream
         AlphaTheme::getInstance()->iconOnColour_ = 0xffb6b797;
         AlphaTheme::getInstance()->tabColour_ = 0xff46505a;
-        AlphaTheme::getInstance()->padColour_ = 0xff999999; //dark grey
-        AlphaTheme::getInstance()->padTextColour_ = 0xffffffff;
+        AlphaTheme::getInstance()->padColourBackground_ = 0xffb6b797; //light grey
+        AlphaTheme::getInstance()->padColour_ = 0xff555555; //dark grey
+        AlphaTheme::getInstance()->padColour2_ = 0xff808080; //grey
+        AlphaTheme::getInstance()->padTextColour_ = 0xffb6b797;
         
         
         // set up the standard set of colours..
@@ -365,7 +367,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff666666; //dark grey
         AlphaTheme::getInstance()->iconColour_ = 0xff999999; //dark grey (same as text colour)
         AlphaTheme::getInstance()->iconOnColour_ = 0xffffffff;
-        AlphaTheme::getInstance()->padColour_ = 0xfff0f0f0; //dark grey
+        AlphaTheme::getInstance()->padColourBackground_ = 0xffd3d3d3; //light grey
+        AlphaTheme::getInstance()->padColour_ = 0xfff0f0f0;
+        AlphaTheme::getInstance()->padColour2_ = 0xffc2c2c2; //grey
         AlphaTheme::getInstance()->padTextColour_ = 0xffffffff;
         AlphaTheme::getInstance()->tabColour_ = 0xffffffff;
         
@@ -515,7 +519,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff606060; //dark grey
         AlphaTheme::getInstance()->iconColour_ = 0xff999999; //dark grey (same as text colour)
         AlphaTheme::getInstance()->iconOnColour_ = 0xffffffff;
-        AlphaTheme::getInstance()->padColour_ = 0xff2e343f; //dark grey
+        AlphaTheme::getInstance()->padColourBackground_ = 0xff999999;
+        AlphaTheme::getInstance()->padColour_ = 0xff2e343f;
+        AlphaTheme::getInstance()->padColour2_ = 0xff585D65; //grey
         AlphaTheme::getInstance()->padTextColour_ = 0xff999999;
         AlphaTheme::getInstance()->tabColour_ = 0xff2e343f;
         
@@ -652,7 +658,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         
         //set custom and default AlphaLive colours here...
         
-        AlphaTheme::getInstance()->mainColour_ = 0xffb67dad; //purple
+        AlphaTheme::getInstance()->mainColour_ = 0xeea4709c; //purple
         AlphaTheme::getInstance()->mainColourLighter_ = 0xffee95ac; //pink
         AlphaTheme::getInstance()->childBackgroundColour_ = 0xff1c1c1c; //dark blue
         AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xff1e1e1e; //light grey
@@ -663,7 +669,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff3a3a3a; //dark grey
         AlphaTheme::getInstance()->iconColour_ = 0xff999999; //dark grey (same as text colour)
         AlphaTheme::getInstance()->iconOnColour_ = 0xffffffff;
+        AlphaTheme::getInstance()->padColourBackground_ = 0x484848;
         AlphaTheme::getInstance()->padColour_ = 0xff1e1e1e; //dark grey
+        AlphaTheme::getInstance()->padColour2_ = 0xff2e2e2e;
         AlphaTheme::getInstance()->padTextColour_ = 0xff999999;
         AlphaTheme::getInstance()->tabColour_ = 0xff262626; //0xff1e1e1e
         
@@ -960,9 +968,11 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff555555; //dark grey
         AlphaTheme::getInstance()->iconColour_ = 0xffffffff; //white (same as text colour)
         AlphaTheme::getInstance()->iconOnColour_ = 0xffffffff;
-        AlphaTheme::getInstance()->padColour_ = 0xff999999; //dark grey
+        AlphaTheme::getInstance()->padColourBackground_ = 0xffd3d3d3; //light grey
+        AlphaTheme::getInstance()->padColour_ = 0xff555555; //dark grey
+        AlphaTheme::getInstance()->padColour2_ = 0xff808080; //grey
         AlphaTheme::getInstance()->padTextColour_ = 0xffffffff;
-        AlphaTheme::getInstance()->tabColour_ = 0xff555555;
+        AlphaTheme::getInstance()->tabColour_ = 0xff555555; //dark grey
         
         
         // set up the standard set of colours..
@@ -1089,7 +1099,9 @@ void AlphaLiveLookandFeel::setTheme (int theme)
     AlphaTheme::getInstance()->foregroundColourDarker = Colour(AlphaTheme::getInstance()->foregroundColourDarker_);
     AlphaTheme::getInstance()->iconColour = Colour(AlphaTheme::getInstance()->iconColour_);
     AlphaTheme::getInstance()->iconOnColour = Colour(AlphaTheme::getInstance()->iconOnColour_);
+    AlphaTheme::getInstance()->padColourBackground = Colour(AlphaTheme::getInstance()->padColourBackground_);
     AlphaTheme::getInstance()->padColour = Colour(AlphaTheme::getInstance()->padColour_);
+    AlphaTheme::getInstance()->padColour2 = Colour(AlphaTheme::getInstance()->padColour2_);
     AlphaTheme::getInstance()->padTextColour = Colour(AlphaTheme::getInstance()->padTextColour_);
     AlphaTheme::getInstance()->tabColour = Colour(AlphaTheme::getInstance()->tabColour_);
     

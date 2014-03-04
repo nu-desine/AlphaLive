@@ -68,8 +68,14 @@ public:
     // colour for button images/icons when button is on.
     uint32 iconOnColour_;
     
-    // colour for pads
+    // background/outline colour for pads
+    uint32 padColourBackground_;
+    
+    // main foreground colour for pads
     uint32 padColour_;
+    
+    // foreground colour for first pad of each row
+    uint32 padColour2_;
     
     // colour for pads text
     uint32 padTextColour_;
@@ -79,7 +85,7 @@ public:
     
     Colour mainColour, mainColourLighter, childBackgroundColour, childBackgroundColourLighter, textColour;
     Colour backgroundColour, foregroundColour, foregroundColourLighter, foregroundColourDarker, iconColour;
-    Colour padColour, padTextColour,tabColour, iconOnColour;
+    Colour padColourBackground, padColour, padColour2, padTextColour, tabColour, iconOnColour;
     
     //=============================================
     // background images

@@ -71,26 +71,23 @@ GuiPad::GuiPad(int padNum, GuiPadLayout &ref)
     
     lastTime = Time::currentTimeMillis();
     
-    
     gradientOuterColourAlpha = gradientInnerColourAlpha = 0;
     gradientOuterColour = gradientInnerColour = Colours::white;
 	
 	modeOpacity = 0.05f;
 	
-    if (padNum == 0 || padNum == 8 || padNum == 16 || padNum == 24 || padNum == 32 || padNum == 40)
-    {
-        padOuterColour = Colours::grey.withAlpha(0.9f);
-        padInnerColour = Colours::grey.withAlpha(0.3f);
-    }
-    else
-    {
-        padOuterColour = Colours::darkgrey.withAlpha(0.9f);
-        padInnerColour = Colours::darkgrey.withAlpha(0.3f);
-    }
-    
-//    padOuterColour = Colours::darkgrey.withAlpha(0.9f);
-//    padInnerColour = Colours::darkgrey.withAlpha(0.3f);
-    padColour = Colours::lightgrey.withAlpha(0.6f);
+//    if (padNum == 0 || padNum == 8 || padNum == 16 || padNum == 24 || padNum == 32 || padNum == 40)
+//    {
+//        padOuterColour = Colours::grey.withAlpha(0.9f);
+//        padInnerColour = Colours::grey.withAlpha(0.3f);
+//    }
+//    else
+//    {
+//        padOuterColour = Colours::darkgrey.withAlpha(0.9f);
+//        padInnerColour = Colours::darkgrey.withAlpha(0.3f);
+//    }
+//
+//    padColour = Colours::lightgrey.withAlpha(0.6f);
     
     somethingIsBeingDraggedOver = false;
 	
@@ -122,11 +119,21 @@ void GuiPad::resized()
 
 void GuiPad::paint (Graphics& g)
 {
-    //main image
-	g.setColour(AlphaTheme::getInstance()->padColour.withAlpha(0.7f));
+    //main pad graphic
+	g.setColour(AlphaTheme::getInstance()->padColourBackground.withAlpha(0.6f));
 	g.drawEllipse(getWidth()*0.05, getHeight()*0.05, getWidth()*0.9, getHeight()*0.9, 2.0f);
-    ColourGradient padGradient(AlphaTheme::getInstance()->padColour.withAlpha(0.1f), (getWidth()*0.5),(getHeight()*0.5), AlphaTheme::getInstance()->padColour.withAlpha(0.7f), (getWidth()*0.8),(getHeight()*0.8), true);
-    g.setGradientFill(padGradient);
+    
+    //foreground pad graphic
+    if (padNumber == 0 || padNumber == 8 || padNumber == 16 || padNumber == 24 || padNumber == 32 || padNumber == 40)
+    {
+        ColourGradient padGradient(AlphaTheme::getInstance()->padColour2.withAlpha(0.3f), (getWidth()*0.5),(getHeight()*0.5), AlphaTheme::getInstance()->padColour2.withAlpha(0.9f), (getWidth()*0.8),(getHeight()*0.8), true);
+        g.setGradientFill(padGradient);
+    }
+    else
+    {
+        ColourGradient padGradient(AlphaTheme::getInstance()->padColour.withAlpha(0.3f), (getWidth()*0.5),(getHeight()*0.5), AlphaTheme::getInstance()->padColour.withAlpha(0.9f), (getWidth()*0.8),(getHeight()*0.8), true);
+        g.setGradientFill(padGradient);
+    }
     
 	g.fillEllipse((getWidth()*0.05), (getHeight()*0.05), (getWidth()*0.9), (getHeight()*0.9));
     
@@ -146,13 +153,14 @@ void GuiPad::paint (Graphics& g)
             fontSize = 7;
     }
     
+    //pad text
     g.setFont(fontSize + AlphaTheme::getInstance()->fontSizeAddition);
-    
     g.setColour(AlphaTheme::getInstance()->padTextColour);
     g.drawFittedText(padName, (getWidth()*0.1), 0, (getWidth()*0.8), getHeight(), Justification::centred, 5);
     
-    ColourGradient ringGradient(Colours::transparentWhite, (getWidth()*0.5), (getHeight()*0.6), modeColour, (getWidth()*0.5), 0, false);
-    g.setGradientFill(ringGradient);
+    //mode indicator
+    ColourGradient modeGradient(Colours::transparentWhite, (getWidth()*0.5), (getHeight()*0.6), modeColour, (getWidth()*0.5), 0, false);
+    g.setGradientFill(modeGradient);
     g.fillEllipse((getWidth()*0.08), (getHeight()*0.08), (getWidth()*0.84), (getHeight()*0.84));
     
     //pressure gradient (should this be in a seperate component so that repainting is less CPU-heavy)?
@@ -162,6 +170,7 @@ void GuiPad::paint (Graphics& g)
     g.setGradientFill(gradient);
     g.fillEllipse((getWidth()*0.05), (getHeight()*0.05), (getWidth()*0.9), (getHeight()*0.9));
 	
+    
     if (somethingIsBeingDraggedOver == true)
     {
         //draw a 'highlight' eclipse. Another option would be to draw an image of a downwards arrow signifying 'drop here'?

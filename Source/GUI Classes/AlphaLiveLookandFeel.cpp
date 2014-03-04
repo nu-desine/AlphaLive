@@ -665,7 +665,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->iconOnColour_ = 0xffffffff;
         AlphaTheme::getInstance()->padColour_ = 0xff1e1e1e; //dark grey
         AlphaTheme::getInstance()->padTextColour_ = 0xff999999;
-        AlphaTheme::getInstance()->tabColour_ = 0xff1e1e1e;
+        AlphaTheme::getInstance()->tabColour_ = 0xff262626; //0xff1e1e1e
         
         
         // set up the standard set of colours..

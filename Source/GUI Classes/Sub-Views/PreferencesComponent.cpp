@@ -443,12 +443,12 @@ void GeneralSettingsComponent::paint (Graphics& g)
 //    midiChannelPressureModeMenu->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
 //    midiChannelPressureModeLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->foregroundColourLighter);
     
-    fileGroup->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
-    fileGroup->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
-    displayGroup->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
-    displayGroup->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
-    audioMidiGroup->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
-    audioMidiGroup->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
+//    fileGroup->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
+//    fileGroup->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
+//    displayGroup->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
+//    displayGroup->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
+//    audioMidiGroup->setColour(GroupComponent::textColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
+//    audioMidiGroup->setColour(GroupComponent::outlineColourId, AlphaTheme::getInstance()->foregroundColourLighter.withAlpha(0.5f));
 }
 
 void GeneralSettingsComponent::buttonClicked (Button* button)

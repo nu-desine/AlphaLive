@@ -735,7 +735,7 @@ HardwarePreferencesComponent::HardwarePreferencesComponent(MainComponent &ref, A
     {
         if (names[i] == StoredSettings::getInstance()->hardwareLedColourScheme)
         {
-            ledColourSchemeMenu->setSelectedId(i + 1);
+            ledColourSchemeMenu->setSelectedId(i + 1, true);
             break;
         }
     }
@@ -873,7 +873,11 @@ void HardwarePreferencesComponent::changeListenerCallback (ChangeBroadcaster *so
     
     //Set the colour scheme menu to "Custom"
     if (ledColourSchemeMenu->getSelectedId() != ledColourSchemeMenu->getNumItems())
+    {
         ledColourSchemeMenu->setSelectedId(ledColourSchemeMenu->getNumItems(), true);
+        StoredSettings::getInstance()->hardwareLedColourScheme = ledColourSchemeMenu->getText();
+        StoredSettings::getInstance()->flush();
+    }
 }
 
 

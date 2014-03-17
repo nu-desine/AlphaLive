@@ -5,36 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>30587BCA-5557-4688-9632-E838F6338E2A</string>
+	<string>77809DFE-3647-4B7D-B60F-D198CB8D5C30</string>
 	<key>IDESourceControlProjectName</key>
 	<string>AlphaLive</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>03F02594-C560-48A3-9DC4-5BB637B6010C</key>
-		<string>https://bitbucket.org/kasbah/alphalive2.git</string>
+		<key>B3A9FDD9-ABF1-4F50-8A2E-2A1CC8809DE3</key>
+		<string>https://bitbucket.org/liamlacey/alphalive2.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Builds/MacOSX/AlphaLive.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>03F02594-C560-48A3-9DC4-5BB637B6010C</key>
+		<key>B3A9FDD9-ABF1-4F50-8A2E-2A1CC8809DE3</key>
 		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://bitbucket.org/kasbah/alphalive2.git</string>
+	<string>https://bitbucket.org/liamlacey/alphalive2.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>03F02594-C560-48A3-9DC4-5BB637B6010C</string>
+	<string>B3A9FDD9-ABF1-4F50-8A2E-2A1CC8809DE3</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>03F02594-C560-48A3-9DC4-5BB637B6010C</string>
+			<string>B3A9FDD9-ABF1-4F50-8A2E-2A1CC8809DE3</string>
 			<key>IDESourceControlWCCName</key>
-			<string>AlphaLive</string>
+			<string>AlphaLive NEW vDEV</string>
 		</dict>
 	</array>
 </dict>

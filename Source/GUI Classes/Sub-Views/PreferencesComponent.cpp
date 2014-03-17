@@ -335,8 +335,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
                      File::separatorString +
                      "Materia");
     
-    //hard code 'true' in here for now incase we don't put in any new themes for the next release
-    if (/*materiaDir.exists()*/true)
+    if (materiaDir.exists())
         interfaceThemeMenu->addItem("Materia", 101);
     
     interfaceThemeMenu->setSelectedId(StoredSettings::getInstance()->interfaceTheme, true);

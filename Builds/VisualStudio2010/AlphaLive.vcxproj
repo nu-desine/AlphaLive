@@ -273,8 +273,12 @@
     <ClCompile Include="..\..\Source\Functionality Classes\Sequencer Mode\SequencePlayer.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\AlphaLiveLookandFeel.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Binary Data\MainBinaryData.cpp" />
+    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\ThemeAuroraBinaryData.cpp" />
+    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\ThemeCharcoalBinaryData.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Binary Data\ThemeClassicBinaryData.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Binary Data\ThemeMateriaBinaryData.cpp" />
+    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\ThemeMinimalBinaryData.cpp" />
+    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\ThemeTransparencyBinaryData.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Circle Piano\GuiKeys.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Circle Piano\GuiPiano.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Circle Waveform\CircleWaveform.cpp" />
@@ -1469,8 +1473,12 @@
     <ClInclude Include="..\..\Source\Functionality Classes\Sequencer Mode\SequencerValues.h" />
     <ClInclude Include="..\..\Source\GUI Classes\AlphaLiveLookandFeel.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Binary Data\MainBinaryData.h" />
+    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\ThemeAuroraBinaryData.h" />
+    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\ThemeCharcoalBinaryData.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Binary Data\ThemeClassicBinaryData.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Binary Data\ThemeMateriaBinaryData.h" />
+    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\ThemeMinimalBinaryData.h" />
+    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\ThemeTransparencyBinaryData.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Circle Piano\GuiKeys.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Circle Piano\GuiPiano.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Circle Waveform\CircleWaveform.h" />

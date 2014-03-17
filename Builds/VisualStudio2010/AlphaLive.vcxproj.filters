@@ -1854,6 +1854,10 @@
     <ClCompile Include="..\..\Source\GUI Classes\Binary Data\ThemeMateriaBinaryData.cpp">
       <Filter>AlphaLive\Source\GUI Classes\Binary Data</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\ThemeAuroraBinaryData.cpp" />
+    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\ThemeCharcoalBinaryData.cpp" />
+    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\ThemeMinimalBinaryData.cpp" />
+    <ClCompile Include="..\..\Source\GUI Classes\Binary Data\ThemeTransparencyBinaryData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\Application\AbstractSubjectAndObserver.h">
@@ -3558,6 +3562,10 @@
     <ClInclude Include="..\..\Source\GUI Classes\Binary Data\ThemeMateriaBinaryData.h">
       <Filter>AlphaLive\Source\GUI Classes\Binary Data</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\ThemeAuroraBinaryData.h" />
+    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\ThemeCharcoalBinaryData.h" />
+    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\ThemeMinimalBinaryData.h" />
+    <ClInclude Include="..\..\Source\GUI Classes\Binary Data\ThemeTransparencyBinaryData.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\JuceLibraryCode\modules\juce_audio_basics\juce_module_info">

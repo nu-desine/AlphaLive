@@ -324,7 +324,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
             DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
             
-            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->foregroundColour_,
+            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->childBackgroundColour_,
             ColourSelector::labelTextColourId,          AlphaTheme::getInstance()->textColour_,
         };
         
@@ -476,7 +476,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
             DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
             
-            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->foregroundColour_,
+            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->childBackgroundColour_,
             ColourSelector::labelTextColourId,          AlphaTheme::getInstance()->textColour_,
         };
         
@@ -514,7 +514,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
         AlphaTheme::getInstance()->childBackgroundColourLighter_ = 0xff2e343f; //light grey
         AlphaTheme::getInstance()->textColour_ = 0xff999999; //dark grey
         AlphaTheme::getInstance()->backgroundColour_ = 0xff1c212a; //bg
-        AlphaTheme::getInstance()->foregroundColour_ = 0xff999999; //grey
+        AlphaTheme::getInstance()->foregroundColour_ = 0xff6B6B6B; //grey
         AlphaTheme::getInstance()->foregroundColourLighter_ = 0xffcccccc; //light grey
         AlphaTheme::getInstance()->foregroundColourDarker_ = 0xff606060; //dark grey
         AlphaTheme::getInstance()->iconColour_ = 0xff999999; //dark grey (same as text colour)
@@ -628,7 +628,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
             DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
             
-            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->foregroundColour_,
+            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->childBackgroundColour_,
             ColourSelector::labelTextColourId,          AlphaTheme::getInstance()->textColour_,
         };
         
@@ -778,7 +778,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
             DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
             
-            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->foregroundColour_,
+            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->childBackgroundColour_,
             ColourSelector::labelTextColourId,          AlphaTheme::getInstance()->textColour_,
         };
         
@@ -928,7 +928,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
             DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
             
-            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->foregroundColour_,
+            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->childBackgroundColour_,
             ColourSelector::labelTextColourId,          AlphaTheme::getInstance()->textColour_,
         };
         
@@ -1077,7 +1077,7 @@ void AlphaLiveLookandFeel::setTheme (int theme)
             FileChooserDialogBox::titleTextColourId,                AlphaTheme::getInstance()->textColour_,
             DrawableButton::textColourId,                           AlphaTheme::getInstance()->textColour_,
             
-            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->foregroundColour_,
+            ColourSelector::backgroundColourId,         AlphaTheme::getInstance()->childBackgroundColour_,
             ColourSelector::labelTextColourId,          AlphaTheme::getInstance()->textColour_,
         };
         

@@ -851,6 +851,11 @@ void HardwarePreferencesComponent::comboBoxChanged (ComboBox *comboBox)
             StoredSettings::getInstance()->hardwareLedColourScheme = ledColourScheme[schemeArrayIndex]->name;
             StoredSettings::getInstance()->flush();
         }
+		else
+		{
+			StoredSettings::getInstance()->hardwareLedColourScheme = comboBox->getText();
+            StoredSettings::getInstance()->flush();
+		}
     }
 }
 

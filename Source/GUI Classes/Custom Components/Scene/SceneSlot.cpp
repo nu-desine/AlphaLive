@@ -244,6 +244,9 @@ void SceneSlot::mouseDown (const MouseEvent &e)
             }
             else if (result == 2) // save scene
             {
+                selectSlot();   //else, if exporting a scene which isn't the currently selected one,
+                                //it just ends up copying to current scene to the clicked scene, and
+                                //exports the wrong data.
                 saveScene();
             }
             else if (result == 3) // clear and remove (except for scene 0) scene

@@ -1198,7 +1198,7 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
                         #endif
                         
                         bool shouldContinue = AlertWindow::showOkCancelBox (AlertWindow::NoIcon, 
-                                                      translate("Enter Updater Mode"), 
+                                                      translate("PLEASE FOLLOW THESE INSTRUCTIONS CAREFULLY"), 
                                                       translate("To allow the AlphaSphere to be updated, please unplug the device, hold down the reset button (next to the USB port), and plug the device back in. If the AlphaSphere is now flashing red, release the reset button and the device will successfully enter the updater mode. Press OK to continue."));
                         
                         if (shouldContinue)

@@ -732,3 +732,4 @@ countries: jp
 "Show Pads Sequence Settings..." = "パッドのシーケンス設定を表示"
 "Show Scene Presets in Toolbox..." = "パッドのシーン設定を表示"
 "Display Pad Contents on Pads..." = "パッドのコンテンツを表示"
+"PLEASE FOLLOW THESE INSTRUCTIONS CAREFULLY" = "これらの指示をよくお従ってください"

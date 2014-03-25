@@ -125,4 +125,5 @@ language: Chinesecountries: zh zho"Chromatic" = "半音""Chromatic (Two Row)
 "Show Pads Global Settings..." = "显示触垫全局设置..."
 "Show Pads Sequence Settings..." = "显示触垫音序设置..."
 "Show Scene Presets in Toolbox..." = "在工具盒显示场景预置..."
-"Display Pad Contents on Pads..." = "在触垫上显示触垫内容..."
+"Display Pad Contents on Pads..." = "在触垫上显示触垫内容..."
+"PLEASE FOLLOW THESE INSTRUCTIONS CAREFULLY" = "请仔细按照这些说明"

@@ -1379,19 +1379,66 @@ extern "C" {
     static HANDLE open_device(const char *path, BOOL enumerate)
     {
         HANDLE handle;
-        DWORD desired_access = (enumerate)? 0: (GENERIC_WRITE | GENERIC_READ);
-        DWORD share_mode = (enumerate)?
-        FILE_SHARE_READ|FILE_SHARE_WRITE:
-        FILE_SHARE_READ;
-        
-        handle = CreateFileA(path,
+
+		/*
+		Liam Lacey - Needed to make changes to work on Windows 8,
+		else device just wouldn't connect.
+		See https://github.com/signal11/hidapi/issues/107
+
+		To determine the Windows version I've used the OSVERSIONINFOEX structure -
+		http://msdn.microsoft.com/en-us/library/windows/desktop/ms724833(v=vs.85).aspx,
+		along with the GetVersionEx function - 
+		http://msdn.microsoft.com/en-us/library/windows/desktop/ms724451(v=vs.85).aspx.
+		I could however use the GetVersion function instead - 
+		http://msdn.microsoft.com/en-us/library/windows/desktop/ms724439(v=vs.85).aspx
+
+		When I upgrade to Windows 8.1 and the 8.1 SDK I will have to use the Version Helper functions -  
+		http://msdn.microsoft.com/en-us/library/windows/desktop/dn424972(v=vs.85).aspx.
+
+		I tried using the Juce::SystemStats class to determine the version, however I got a bunch of
+		errors when trying to include the JUCE header here. Though really the less I need to rely
+		on JUCE the better!
+		
+		Not relevent here, but If wanting to find the Windows version at compile time instead of run time, use - 
+		http://msdn.microsoft.com/en-us/library/windows/desktop/aa383745(v=vs.85).aspx
+		*/
+
+		OSVERSIONINFO osvi;
+		BOOL isWindows8OrLater;
+		ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
+		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+		GetVersionEx(&osvi);
+		isWindows8OrLater = (osvi.dwMajorVersion >= 6) && (osvi.dwMinorVersion >= 2);
+
+		if (isWindows8OrLater)
+		{
+			DWORD desired_access = GENERIC_WRITE | GENERIC_READ;
+			DWORD share_mode = FILE_SHARE_READ | FILE_SHARE_WRITE;
+
+			handle = CreateFileA(path,
                              desired_access,
                              share_mode,
                              NULL,
                              OPEN_EXISTING,
                              FILE_FLAG_OVERLAPPED,//FILE_ATTRIBUTE_NORMAL,
                              0);
-        
+		}
+		else
+		{
+			DWORD desired_access = (enumerate)? 0: (GENERIC_WRITE | GENERIC_READ);
+			 DWORD share_mode = (enumerate)?
+			FILE_SHARE_READ|FILE_SHARE_WRITE:
+			FILE_SHARE_READ;
+
+			handle = CreateFileA(path,
+                             desired_access,
+                             share_mode,
+                             NULL,
+                             OPEN_EXISTING,
+                             FILE_FLAG_OVERLAPPED,//FILE_ATTRIBUTE_NORMAL,
+                             0);
+		}
+
         return handle;
     }
     

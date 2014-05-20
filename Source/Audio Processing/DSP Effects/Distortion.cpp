@@ -96,8 +96,8 @@ void Distortion::processAudio (const AudioSourceChannelInfo& bufferToFill)
     
 	sharedMemory.enter();
     //get audio channel data
-	pIn[0] = bufferToFill.buffer->getArrayOfChannels()[0] + bufferToFill.startSample;
-	pIn[1] = bufferToFill.buffer->getArrayOfChannels()[1] + bufferToFill.startSample;
+	pIn[0] = bufferToFill.buffer->getArrayOfWritePointers()[0] + bufferToFill.startSample;
+	pIn[1] = bufferToFill.buffer->getArrayOfWritePointers()[1] + bufferToFill.startSample;
     
 	AudioSampleBuffer dryBuffer(pIn, bufferToFill.buffer->getNumChannels(),bufferToFill.numSamples);
 	AudioSampleBuffer wetBuffer(bufferToFill.buffer->getNumChannels(),bufferToFill.numSamples);
@@ -109,7 +109,7 @@ void Distortion::processAudio (const AudioSourceChannelInfo& bufferToFill)
 
     //===apply pre-filter1 (Hipass)===
     preFilter1->setParams (paramsPreFilter1);
-    preFilter1->process (wetBuffer.getNumSamples(), wetBuffer.getArrayOfChannels());
+    preFilter1->process (wetBuffer.getNumSamples(), wetBuffer.getArrayOfWritePointers());
 	
 	sharedMemory.enter();
     //===apply pre-gain===
@@ -125,8 +125,8 @@ void Distortion::processAudio (const AudioSourceChannelInfo& bufferToFill)
 	leftChannel = rightChannel = 0;
 	
 	//link wetBuffer to wet pointer variables
-	leftChannel = wetBuffer.getSampleData(0); 
-	rightChannel = wetBuffer.getSampleData(1); 
+	leftChannel = wetBuffer.getWritePointer(0); 
+	rightChannel = wetBuffer.getWritePointer(1); 
 	
 	sharedMemory.enter();
     //increment through each pair of samples (left channel and right channel) in the current block of the audio buffer
@@ -256,11 +256,11 @@ void Distortion::processAudio (const AudioSourceChannelInfo& bufferToFill)
 		sharedMemory.enter();
 		//===apply post-filter1===
 		postFilter1->setParams(paramsPostFilter1);
-		postFilter1->process(wetBuffer.getNumSamples(), wetBuffer.getArrayOfChannels());
+		postFilter1->process(wetBuffer.getNumSamples(), wetBuffer.getArrayOfWritePointers());
 		
 		//===apply post-filter2===
 		postFilter2->setParams(paramsPostFilter2);
-		postFilter2->process(wetBufferSplit.getNumSamples(), wetBufferSplit.getArrayOfChannels());
+		postFilter2->process(wetBufferSplit.getNumSamples(), wetBufferSplit.getArrayOfWritePointers());
 		sharedMemory.exit();
 	}
 	

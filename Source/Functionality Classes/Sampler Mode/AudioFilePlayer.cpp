@@ -699,8 +699,8 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
         sharedMemory.enter();
         
         //get first pair of sample data from audio buffer
-        float *pOutL = bufferToFill.buffer->getSampleData (0, bufferToFill.startSample);
-        float *pOutR = bufferToFill.buffer->getSampleData (1, bufferToFill.startSample);
+        float *pOutL = bufferToFill.buffer->getWritePointer (0, bufferToFill.startSample);
+        float *pOutR = bufferToFill.buffer->getWritePointer (1, bufferToFill.startSample);
         
         //increment through each pair of samples (left channel and right channel) in the current block of the audio buffer
         for (int i = 0; i < bufferToFill.numSamples; ++i)
@@ -796,8 +796,8 @@ void AudioFilePlayer::getNextAudioBlock (const AudioSourceChannelInfo& bufferToF
         sharedMemory.enter();
         
         //get first pair of sample data from audio buffer
-        float *pOutL = bufferToFill.buffer->getSampleData (0, bufferToFill.startSample);
-        float *pOutR = bufferToFill.buffer->getSampleData (1, bufferToFill.startSample);
+        float *pOutL = bufferToFill.buffer->getWritePointer (0, bufferToFill.startSample);
+        float *pOutR = bufferToFill.buffer->getWritePointer (1, bufferToFill.startSample);
         
         //increment through each pair of samples (left channel and right channel) in the current block of the audio buffer
         for (int i = 0; i < bufferToFill.numSamples; ++i)

@@ -55,11 +55,11 @@ void Flanger::processAudio (const AudioSourceChannelInfo& bufferToFill)
     float delaySamples;
     
     //get first pair of sample data from incoming buffer
-    float *pOutL = bufferToFill.buffer->getSampleData (0, bufferToFill.startSample);
-    float *pOutR = bufferToFill.buffer->getSampleData (1, bufferToFill.startSample);
+    float *pOutL = bufferToFill.buffer->getWritePointer (0, bufferToFill.startSample);
+    float *pOutR = bufferToFill.buffer->getWritePointer (1, bufferToFill.startSample);
     //get the first pair of samples from the processed buffer
-    float *pWetL = wetBuffer.getSampleData (0, bufferToFill.startSample);
-    float *pWetR = wetBuffer.getSampleData (1, bufferToFill.startSample);
+    float *pWetL = wetBuffer.getWritePointer (0, bufferToFill.startSample);
+    float *pWetR = wetBuffer.getWritePointer (1, bufferToFill.startSample);
     
     //increment through each pair of samples
     for (int i = 0; i < bufferToFill.numSamples; ++i)

@@ -163,7 +163,7 @@ double Oscillator::processSqr()
 	double output;
 	
 	sharedMemory.enter();
-	output = *squareBuffer.getSampleData(0, currentSample);
+	output = *squareBuffer.getWritePointer(0, currentSample);
     sharedMemory.exit();
 
     return output;
@@ -189,7 +189,7 @@ double Oscillator::processSawUp()
     //output = (2.0 * (currentPhase * (1.0 / TWOPI))) - 1.0;
 	
 	sharedMemory.enter();
-	output = *sawBuffer.getSampleData(0, currentSample);
+	output = *sawBuffer.getWritePointer(0, currentSample);
     sharedMemory.exit();
     
     return output;
@@ -202,7 +202,7 @@ double Oscillator::processSawDown()
     //output = 1.0 - 2.0 * (currentPhase * (1.0 / TWOPI)); 
 	
 	sharedMemory.enter();
-	output = *sawDownBuffer.getSampleData(0, currentSample);
+	output = *sawDownBuffer.getWritePointer(0, currentSample);
     sharedMemory.exit();
     
     return output;

@@ -75,8 +75,7 @@ public:
     operator var() const;
 
     /** Returns the value as a string.
-
-        This is alternative to writing things like "myValue.getValue().toString()".
+        This is a shortcut for "myValue.getValue().toString()".
     */
     String toString() const;
 
@@ -193,8 +192,13 @@ public:
     protected:
         //==============================================================================
         friend class Value;
-        SortedSet <Value*> valuesWithListeners;
-        ReferenceCountedObjectPtr<ReferenceCountedObject> asyncUpdater;
+        SortedSet<Value*> valuesWithListeners;
+
+    private:
+        struct Pimpl;
+        friend struct Pimpl;
+        friend struct ContainerDeletePolicy<Pimpl>;
+        ScopedPointer<Pimpl> pimpl;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ValueSource)
     };
@@ -211,8 +215,8 @@ public:
 private:
     //==============================================================================
     friend class ValueSource;
-    ReferenceCountedObjectPtr <ValueSource> value;
-    ListenerList <Listener> listeners;
+    ReferenceCountedObjectPtr<ValueSource> value;
+    ListenerList<Listener> listeners;
 
     void callListeners();
 

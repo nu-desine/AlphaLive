@@ -69,7 +69,7 @@ GuiReverb::GuiReverb(MainComponent &ref)
     alphaTouchMenu->addItem(translate("Room Size"), 3);
     alphaTouchMenu->addItem(translate("Damping"), 4);
     alphaTouchMenu->addItem(translate("Width"), 5);
-    alphaTouchMenu->setSelectedId(1, true);
+    alphaTouchMenu->setSelectedId(1, dontSendNotification);
     
     Image *reverseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::inverticon_png, MainBinaryData::inverticon_pngSize));
     addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
@@ -226,8 +226,8 @@ void GuiReverb::updateDisplay()
         dampingSlider->setValue(PAD_SETTINGS->getPadFxReverbDamping(), dontSendNotification);
         widthSlider->setValue(PAD_SETTINGS->getPadFxReverbWidth(), dontSendNotification);
         
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxReverbAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getPadFxReverbAtReverse(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxReverbAlphaTouch(), dontSendNotification);
+        reverseButton->setToggleState(PAD_SETTINGS->getPadFxReverbAtReverse(), dontSendNotification);
         intensitySlider->setValue(PAD_SETTINGS->getPadFxReverbAtIntensity(), dontSendNotification);
     }
     
@@ -238,8 +238,8 @@ void GuiReverb::updateDisplay()
         dampingSlider->setValue(0.5, dontSendNotification);
         widthSlider->setValue(0.5, dontSendNotification);
         
-        alphaTouchMenu->setSelectedId(0, true);
-        reverseButton->setToggleState(0, false);
+        alphaTouchMenu->setSelectedId(0, dontSendNotification);
+        reverseButton->setToggleState(0, dontSendNotification);
         intensitySlider->setValue(1.0, dontSendNotification);
     }
     

@@ -53,7 +53,7 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
         addAndMakeVisible(beatsPerBarButtons[i]);
     }
 	
-    beatsPerBarButtons[2]->setToggleState(true, false);
+    beatsPerBarButtons[2]->setToggleState(true, dontSendNotification);
     beatsPerBar_ = 4;
 	
 	//quantisation buttons
@@ -79,13 +79,13 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
         
     }
     
-    quantizationValueButtons[3]->setToggleState(true, false);
+    quantizationValueButtons[3]->setToggleState(true, dontSendNotification);
 
     //transport button
 	addAndMakeVisible(transportButton = new AlphaTextButton());
     transportButton->setButtonText(translate("START"));
     transportButton->setClickingTogglesState(true);
-    transportButton->setToggleState(false, false);
+    transportButton->setToggleState(false, dontSendNotification);
     transportButton->addListener(this);
     transportButton->addMouseListener(this, true);
 	
@@ -213,12 +213,12 @@ void GuiGlobalClock::updateTransportButtonDisplay (bool status)
 {
     if (status == true)
     {
-        transportButton->setToggleState(true, false);
+        transportButton->setToggleState(true, dontSendNotification);
         transportButton->setButtonText(translate("STOP"));
     }
     else
     {
-        transportButton->setToggleState(false, false);
+        transportButton->setToggleState(false, dontSendNotification);
         transportButton->setButtonText(translate("START"));
     }
 }
@@ -273,7 +273,7 @@ void GuiGlobalClock::buttonClicked (Button* button)
             if (button->getToggleState() == 0)
                 state = 1;
             
-            button->setToggleState(state, false);
+            button->setToggleState(state, dontSendNotification);
         }
     }
     
@@ -293,7 +293,7 @@ void GuiGlobalClock::toggleTransportButtonOff()
 {
     if (transportButton->getToggleState() == true)
     {
-        transportButton->setToggleState(false, false);
+        transportButton->setToggleState(false, dontSendNotification);
         transportButton->setButtonText(translate("START"));
         mainComponentRef.setIsClockRunning(false);
     }
@@ -309,9 +309,9 @@ void GuiGlobalClock::updateDisplay()
 {
     tempoSlider->setValue(AppSettings::Instance()->getGlobalTempo());
 	
-    beatsPerBarButtons[AppSettings::Instance()->getBeatsPerBar()-2]->setToggleState(true, false);
-    quantizationValueButtons[6-AppSettings::Instance()->getQuantizationValue()]->setToggleState(true, false);
-    autoStartSwitch->setToggleState(AppSettings::Instance()->getAutoStartClock(), false);
+    beatsPerBarButtons[AppSettings::Instance()->getBeatsPerBar()-2]->setToggleState(true, dontSendNotification);
+    quantizationValueButtons[6-AppSettings::Instance()->getQuantizationValue()]->setToggleState(true, dontSendNotification);
+    autoStartSwitch->setToggleState(AppSettings::Instance()->getAutoStartClock(), dontSendNotification);
 
 }
 

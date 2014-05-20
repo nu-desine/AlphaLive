@@ -112,7 +112,7 @@ GuiPiano::GuiPiano() : Component ("GuiPiano")
 		}
 
 		keys[i]->setClickingTogglesState(true);
-		keys[i]->setToggleState(false, false);	
+		keys[i]->setToggleState(false, dontSendNotification);	
 		keys[i]->addListener(this);
         keys[i]->addMouseListener(this, true);
 		keys[i]->setOpaque(false);
@@ -756,7 +756,7 @@ void GuiPiano::setKeyDisplay (int keyNumber, bool keyOn)
 
 	}    
     //set the button toggle/state
-    keys[keyNumber]->setToggleState(keyOn, false);
+    keys[keyNumber]->setToggleState(keyOn, dontSendNotification);
 }
 
 

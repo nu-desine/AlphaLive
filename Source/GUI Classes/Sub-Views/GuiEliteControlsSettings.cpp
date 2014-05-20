@@ -87,7 +87,7 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
 		dialMidiChannel.insert(i, new AlphaTextButton());
 		dialMidiChannel[i]->setButtonText(String(i + 1));
 		dialMidiChannel[i]->setClickingTogglesState(true);
-		dialMidiChannel[i]->setToggleState(false, false);	
+		dialMidiChannel[i]->setToggleState(false, dontSendNotification);
 		dialMidiChannel[i]->setRadioGroupId (12);
 		dialMidiChannel[i]->addListener(this);
         dialMidiChannel[i]->addMouseListener(this, true);
@@ -102,7 +102,7 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
 	addChildComponent(dialMidiControllerType = new AlphaTextButton());
 	dialMidiControllerType->setButtonText("ABSOLUTE");
 	dialMidiControllerType->setClickingTogglesState(true);
-	dialMidiControllerType->setToggleState(false, false);	
+	dialMidiControllerType->setToggleState(false, dontSendNotification);
 	dialMidiControllerType->addListener(this);
 	dialMidiControllerType->addMouseListener(this, true);
 	
@@ -193,7 +193,7 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
 		buttonMidiChannel.insert(i, new AlphaTextButton());
 		buttonMidiChannel[i]->setButtonText(String(i + 1));
 		buttonMidiChannel[i]->setClickingTogglesState(true);
-		buttonMidiChannel[i]->setToggleState(false, false);	
+		buttonMidiChannel[i]->setToggleState(false, dontSendNotification);
 		buttonMidiChannel[i]->setRadioGroupId (13);
 		buttonMidiChannel[i]->addListener(this);
         buttonMidiChannel[i]->addMouseListener(this, true);
@@ -270,7 +270,7 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
 	addAndMakeVisible(statusButton = new GuiSwitch());
     statusButton->addListener(this);
     statusButton->setClickingTogglesState(true);
-    statusButton->setToggleState(true, false);
+    statusButton->setToggleState(true, dontSendNotification);
     statusButton->addMouseListener(this, true);
 	
 	
@@ -779,25 +779,25 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
     if (controlNumber == 1 || controlNumber == 2)
     {
         
-        statusButton->setToggleState(AppSettings::Instance()->getEliteDialStatus(DIAL_NO), false);
-        dialsMenu->setSelectedId(AppSettings::Instance()->getEliteDialControl(DIAL_NO), true);
-        dialMidiCcNumber->setValue(AppSettings::Instance()->getEliteDialMidiCcNumber(DIAL_NO));
-        //dialMidiChannel->setValue(AppSettings::Instance()->getEliteDialMidiChannel(DIAL_NO));
-        dialMidiMinRange->setValue(AppSettings::Instance()->getEliteDialMidiMinRange(DIAL_NO));
-        dialMidiMaxRange->setValue(AppSettings::Instance()->getEliteDialMidiMaxRange(DIAL_NO));
-		dialMidiControllerType->setToggleState(AppSettings::Instance()->getEliteDialMidiControllerType(DIAL_NO), false);
-        dialOscPortNumber->setValue(AppSettings::Instance()->getEliteDialOscPortNumber(DIAL_NO));
-        dialOscMinRange->setValue(AppSettings::Instance()->getEliteDialOscMinRange(DIAL_NO));
-        dialOscMaxRange->setValue(AppSettings::Instance()->getEliteDialOscMaxRange(DIAL_NO));
+        statusButton->setToggleState(AppSettings::Instance()->getEliteDialStatus(DIAL_NO), dontSendNotification);
+        dialsMenu->setSelectedId(AppSettings::Instance()->getEliteDialControl(DIAL_NO), dontSendNotification);
+        dialMidiCcNumber->setValue(AppSettings::Instance()->getEliteDialMidiCcNumber(DIAL_NO), dontSendNotification);
+        //dialMidiChannel->setValue(AppSettings::Instance()->getEliteDialMidiChannel(DIAL_NO), dontSendNotification);
+        dialMidiMinRange->setValue(AppSettings::Instance()->getEliteDialMidiMinRange(DIAL_NO), dontSendNotification);
+        dialMidiMaxRange->setValue(AppSettings::Instance()->getEliteDialMidiMaxRange(DIAL_NO), dontSendNotification);
+		dialMidiControllerType->setToggleState(AppSettings::Instance()->getEliteDialMidiControllerType(DIAL_NO), dontSendNotification);
+        dialOscPortNumber->setValue(AppSettings::Instance()->getEliteDialOscPortNumber(DIAL_NO), dontSendNotification);
+        dialOscMinRange->setValue(AppSettings::Instance()->getEliteDialOscMinRange(DIAL_NO), dontSendNotification);
+        dialOscMaxRange->setValue(AppSettings::Instance()->getEliteDialOscMaxRange(DIAL_NO), dontSendNotification);
         setDialOscStepValueSliderRange(DIAL_NO);
-		dialOscStepSlider->setValue(AppSettings::Instance()->getEliteDialOscStepValue(DIAL_NO));
+		dialOscStepSlider->setValue(AppSettings::Instance()->getEliteDialOscStepValue(DIAL_NO), dontSendNotification);
         dialOscIpAddressEditor->setText(AppSettings::Instance()->getEliteDialOscIpAddress(DIAL_NO), dontSendNotification);
 		
         if (statusButton->getToggleState() == false)
             notSelected->setVisible(true);
 		
 		int channel_ = AppSettings::Instance()->getEliteDialMidiChannel(DIAL_NO);
-		dialMidiChannel[channel_-1]->setToggleState(true, false);
+		dialMidiChannel[channel_-1]->setToggleState(true, dontSendNotification);
     
         dialsMenu->setVisible(true);
         
@@ -835,17 +835,17 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
     }
     else if (controlNumber == 3 || controlNumber == 4 || controlNumber == 5)
     {
-        statusButton->setToggleState(AppSettings::Instance()->getEliteButtonStatus(BUTTON_NO), false);
-        buttonsMenu->setSelectedId(AppSettings::Instance()->getEliteButtonControl(BUTTON_NO), true);
-        buttonSceneModeMenu->setSelectedId(AppSettings::Instance()->getEliteButtonSceneMode(BUTTON_NO));
-        buttonSceneNumber->setValue(AppSettings::Instance()->getEliteButtonSceneNumber(BUTTON_NO));
-        buttonMidiCcNumber->setValue(AppSettings::Instance()->getEliteButtonMidiCcNumber(BUTTON_NO));
-        //buttonMidiChannel->setValue(AppSettings::Instance()->getEliteButtonMidiChannel(BUTTON_NO));
-        buttonMidiOffNumber->setValue(AppSettings::Instance()->getEliteButtonMidiOffNumber(BUTTON_NO));
-        buttonMidiOnNumber->setValue(AppSettings::Instance()->getEliteButtonMidiOnNumber(BUTTON_NO));
-        buttonOscPortNumber->setValue(AppSettings::Instance()->getEliteButtonOscPortNumber(BUTTON_NO));
-        buttonOscOffNumber->setValue(AppSettings::Instance()->getEliteButtonOscOffNumber(BUTTON_NO));
-        buttonOscOnNumber->setValue(AppSettings::Instance()->getEliteButtonOscOnNumber(BUTTON_NO));
+        statusButton->setToggleState(AppSettings::Instance()->getEliteButtonStatus(BUTTON_NO), dontSendNotification);
+        buttonsMenu->setSelectedId(AppSettings::Instance()->getEliteButtonControl(BUTTON_NO), dontSendNotification);
+        buttonSceneModeMenu->setSelectedId(AppSettings::Instance()->getEliteButtonSceneMode(BUTTON_NO), dontSendNotification);
+        buttonSceneNumber->setValue(AppSettings::Instance()->getEliteButtonSceneNumber(BUTTON_NO), dontSendNotification);
+        buttonMidiCcNumber->setValue(AppSettings::Instance()->getEliteButtonMidiCcNumber(BUTTON_NO), dontSendNotification);
+        //buttonMidiChannel->setValue(AppSettings::Instance()->getEliteButtonMidiChannel(BUTTON_NO), dontSendNotification);
+        buttonMidiOffNumber->setValue(AppSettings::Instance()->getEliteButtonMidiOffNumber(BUTTON_NO), dontSendNotification);
+        buttonMidiOnNumber->setValue(AppSettings::Instance()->getEliteButtonMidiOnNumber(BUTTON_NO), dontSendNotification);
+        buttonOscPortNumber->setValue(AppSettings::Instance()->getEliteButtonOscPortNumber(BUTTON_NO), dontSendNotification);
+        buttonOscOffNumber->setValue(AppSettings::Instance()->getEliteButtonOscOffNumber(BUTTON_NO), dontSendNotification);
+        buttonOscOnNumber->setValue(AppSettings::Instance()->getEliteButtonOscOnNumber(BUTTON_NO), dontSendNotification);
         buttonOscIpAddressEditor->setText(AppSettings::Instance()->getEliteButtonOscIpAddress(BUTTON_NO), dontSendNotification);
 
         if (statusButton->getToggleState() == false)
@@ -853,9 +853,9 @@ void GuiEliteControlsSettings::setDisplay (int controlNumber)
         
 		int channel_ = AppSettings::Instance()->getEliteButtonMidiChannel(BUTTON_NO);
 		for (int i = 0; i <16; i++)
-			buttonMidiChannel[i]->setToggleState(0, false);
+			buttonMidiChannel[i]->setToggleState(0, dontSendNotification);
 		
-		buttonMidiChannel[channel_-1]->setToggleState(true, false);
+		buttonMidiChannel[channel_-1]->setToggleState(true, dontSendNotification);
     
         buttonsMenu->setVisible(true);
         

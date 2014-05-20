@@ -180,7 +180,7 @@ GlobalOscComponent::GlobalOscComponent(MainComponent &ref, AlphaLiveEngine &ref2
     addAndMakeVisible(globalOscSwitch = new TextButton());
     globalOscSwitch->setButtonText(translate("Off"));
     globalOscSwitch->setClickingTogglesState(true);
-    globalOscSwitch->setToggleState(false, false);
+    globalOscSwitch->setToggleState(false, dontSendNotification);
     globalOscSwitch->addListener(this);
     globalOscSwitch->addMouseListener(this, true);
     
@@ -304,7 +304,7 @@ GeneralProjSettingsComponent::GeneralProjSettingsComponent(MainComponent &ref, A
                                                                  translate("General")));
     addAndMakeVisible(copyExternalFilesSwitch = new TextButton());
     copyExternalFilesSwitch->setClickingTogglesState(true);
-    copyExternalFilesSwitch->setToggleState(AppSettings::Instance()->getCopyExternalFiles(), false);
+    copyExternalFilesSwitch->setToggleState(AppSettings::Instance()->getCopyExternalFiles(), dontSendNotification);
     if(copyExternalFilesSwitch->getToggleStateValue() == true)
         copyExternalFilesSwitch->setButtonText(translate("On"));
     else
@@ -439,7 +439,7 @@ void GeneralProjSettingsComponent::buttonClicked (Button* button)
             }
             else
             {
-                copyExternalFilesSwitch->setToggleState(false, false);
+                copyExternalFilesSwitch->setToggleState(false, dontSendNotification);
             }
         }
         
@@ -485,17 +485,17 @@ void GeneralProjSettingsComponent::updateDisplay()
     
     //set component values...
     
-    copyExternalFilesSwitch->setToggleState(AppSettings::Instance()->getCopyExternalFiles(), false);
+    copyExternalFilesSwitch->setToggleState(AppSettings::Instance()->getCopyExternalFiles(), dontSendNotification);
     if(copyExternalFilesSwitch->getToggleStateValue() == true)
         copyExternalFilesSwitch->setButtonText(translate("On"));
     else
         copyExternalFilesSwitch->setButtonText(translate("Off"));
 
-    midiClockMenu->setSelectedId(AppSettings::Instance()->getMidiClockValue(), true);
-    clockStartMessageMenu->setSelectedId(AppSettings::Instance()->getMidiClockStartMessage(), true);
-    midiClockMessageFilterMenu->setSelectedId(AppSettings::Instance()->getMidiClockMessageFilter(), true);
+    midiClockMenu->setSelectedId(AppSettings::Instance()->getMidiClockValue(), dontSendNotification);
+    clockStartMessageMenu->setSelectedId(AppSettings::Instance()->getMidiClockStartMessage(), dontSendNotification);
+    midiClockMessageFilterMenu->setSelectedId(AppSettings::Instance()->getMidiClockMessageFilter(), dontSendNotification);
     
-    receiveMidiProgramChangeMessagesMenu->setSelectedId(AppSettings::Instance()->getReceiveMidiProgramChangeMessages() + 1, true);
+    receiveMidiProgramChangeMessagesMenu->setSelectedId(AppSettings::Instance()->getReceiveMidiProgramChangeMessages() + 1, dontSendNotification);
     
     setDisplay();
 

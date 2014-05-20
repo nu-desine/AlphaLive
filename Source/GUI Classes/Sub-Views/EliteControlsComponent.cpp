@@ -153,11 +153,11 @@ void EliteControlsComponent::buttonClicked (Button* button)
 void EliteControlsComponent::turnOffButtons()
 {
 	
-	dial1Button->setToggleState(false, false);
-	dial2Button->setToggleState(false, false);
-	button1Button->setToggleState(false, false);
-	button2Button->setToggleState(false, false);
-	button3Button->setToggleState(false, false);
+	dial1Button->setToggleState(false, dontSendNotification);
+	dial2Button->setToggleState(false, dontSendNotification);
+	button1Button->setToggleState(false, dontSendNotification);
+	button2Button->setToggleState(false, dontSendNotification);
+	button3Button->setToggleState(false, dontSendNotification);
 	
 }
 

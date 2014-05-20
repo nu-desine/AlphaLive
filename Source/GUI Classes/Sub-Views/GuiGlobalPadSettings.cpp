@@ -44,7 +44,7 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
 	Image *quantiseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::quantiseicon_png, MainBinaryData::quantiseicon_pngSize));
 	addAndMakeVisible(quantiseButton = new ModeButton(quantiseIcon));
 	quantiseButton->setClickingTogglesState(true);
-	quantiseButton->setToggleState(false, false);	
+	quantiseButton->setToggleState(false, dontSendNotification);
 	quantiseButton->addListener(this);
 	quantiseButton->addMouseListener(this, true);
     
@@ -53,7 +53,7 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
     exclusiveModeButton->addListener(this);
     exclusiveModeButton->addMouseListener(this, true);
     exclusiveModeButton->setClickingTogglesState(true);
-    exclusiveModeButton->setToggleState(0, false);
+    exclusiveModeButton->setToggleState(0, dontSendNotification);
     
     addChildComponent(exclusiveGroupSlider = new AlphaSlider());
     exclusiveGroupSlider->setRange(1, 24, 1);
@@ -385,9 +385,9 @@ void GuiGlobalPadSettings::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        exclusiveModeButton->setToggleState(PAD_SETTINGS->getExclusiveMode(), false);
+        exclusiveModeButton->setToggleState(PAD_SETTINGS->getExclusiveMode(), dontSendNotification);
         exclusiveGroupSlider->setValue(PAD_SETTINGS->getExclusiveGroup());
-        quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
+        quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), dontSendNotification);
         velocitySlider->setValue(PAD_SETTINGS->getStaticVelocity());
         velocityMinRangeSlider->setValue(PAD_SETTINGS->getVelocityMinRange());
         velocityMaxRangeSlider->setValue(PAD_SETTINGS->getVelocityMaxRange());
@@ -420,12 +420,12 @@ void GuiGlobalPadSettings::updateDisplay()
             //if setting of this pad does NOT match setting of last pad, set default and break
             if (PAD_SETTINGS->getQuantizeMode() != quantiseMode_)
             {
-                quantiseButton->setToggleState(0, false);
+                quantiseButton->setToggleState(0, dontSendNotification);
                 break;
             }
             //if this is the last 'natural' iteraction, displayed the setting that matches all the pads
             if (i == selectedPads.size()-1)
-                quantiseButton->setToggleState(quantiseMode_, false);
+                quantiseButton->setToggleState(quantiseMode_, dontSendNotification);
         }
         //==================================================================================================
         int exclusiveMode_ = AppSettings::Instance()->padSettings[selectedPads[0]]->getExclusiveMode();
@@ -434,11 +434,11 @@ void GuiGlobalPadSettings::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getExclusiveMode() != exclusiveMode_)
             {
-                exclusiveModeButton->setToggleState(0, false);
+                exclusiveModeButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                exclusiveModeButton->setToggleState(exclusiveMode_, false);
+                exclusiveModeButton->setToggleState(exclusiveMode_, dontSendNotification);
         }
         
         //==================================================================================================

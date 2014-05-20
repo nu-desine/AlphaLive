@@ -50,11 +50,10 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
 	//triggerSettingsButton->setButtonText("TRIGGER");
 	triggerSettingsButton->setRadioGroupId (1234);
 	triggerSettingsButton->setClickingTogglesState(true);
-	triggerSettingsButton->setToggleState(false, false);	
+	triggerSettingsButton->setToggleState(false, dontSendNotification);
 	triggerSettingsButton->addListener(this);
 	triggerSettingsButton->addMouseListener(this, true);
 	triggerSettingsButton->setOpaque(false);
-    triggerSettingsButton->setToggleState(true, false);
 	
 	//----------------pressure settings button-------------------
 	
@@ -63,7 +62,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
 	//pressureSettingsButton->setButtonText("PRESSURE");
 	pressureSettingsButton->setRadioGroupId (1234);
 	pressureSettingsButton->setClickingTogglesState(true);
-	pressureSettingsButton->setToggleState(false, false);	
+	pressureSettingsButton->setToggleState(false, dontSendNotification);
 	pressureSettingsButton->addListener(this);
 	pressureSettingsButton->addMouseListener(this, true);
 	pressureSettingsButton->setOpaque(false);
@@ -99,7 +98,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
         addAndMakeVisible(triggerModeButtons[i]);
     }
     
-    triggerModeButtons[0]->setToggleState(true, false);
+    triggerModeButtons[0]->setToggleState(true, dontSendNotification);
     
     
     //--------------pressure mode buttons--------------------------
@@ -139,7 +138,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
         addChildComponent(pressureModeButtons[i]);
     }
     
-    pressureModeButtons[0]->setToggleState(true, false);
+    pressureModeButtons[0]->setToggleState(true, dontSendNotification);
     
      
     //---------------channel buttons---------------------
@@ -148,7 +147,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
 		channelButtons.insert(i, new AlphaTextButton());
 		channelButtons[i]->setButtonText(String(i + 1));
 		channelButtons[i]->setClickingTogglesState(true);
-		channelButtons[i]->setToggleState(false, false);	
+		channelButtons[i]->setToggleState(false, dontSendNotification);
 		channelButtons[i]->setRadioGroupId (12);
 		channelButtons[i]->addListener(this);
         channelButtons[i]->addMouseListener(this, true);
@@ -157,7 +156,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
 		
 	}
     
-    channelButtons[0]->setToggleState(true, false);
+    channelButtons[0]->setToggleState(true, dontSendNotification);
     
     addAndMakeVisible(dynamicChannelButton = new AlphaTextButton);
     dynamicChannelButton->setButtonText(translate("DYN"));
@@ -170,7 +169,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
 	Image *quantiseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::quantiseicon_png, MainBinaryData::quantiseicon_pngSize));
 	addAndMakeVisible(quantiseButton = new ModeButton(quantiseIcon));
 	quantiseButton->setClickingTogglesState(true);
-	quantiseButton->setToggleState(false, false);	
+	quantiseButton->setToggleState(false, dontSendNotification);
 	quantiseButton->addListener(this);
 	quantiseButton->addMouseListener(this, true);
 	quantiseButton->setOpaque(false);
@@ -197,14 +196,14 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     indestructibleButton->addListener(this);
     indestructibleButton->addMouseListener(this, true);
     indestructibleButton->setClickingTogglesState(true);
-    indestructibleButton->setToggleState(false, false);
+    indestructibleButton->setToggleState(false, dontSendNotification);
     
 	Image *stickyIcon = new Image(ImageCache::getFromMemory(MainBinaryData::stickyicon_png, MainBinaryData::stickyicon_pngSize));
     addChildComponent(stickyButton = new ModeButton(stickyIcon));
     stickyButton->addListener(this);
     stickyButton->addMouseListener(this, true);
     stickyButton->setClickingTogglesState(true);
-    stickyButton->setToggleState(false, false);
+    stickyButton->setToggleState(false, dontSendNotification);
 
     
     //---------------CC controller Slider-------------------------------------
@@ -224,7 +223,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     addChildComponent(pressureStatusButton = new GuiSwitch());
     pressureStatusButton->addListener(this);
     pressureStatusButton->setClickingTogglesState(true);
-    pressureStatusButton->setToggleState(true, false);
+    pressureStatusButton->setToggleState(true, dontSendNotification);
     pressureStatusButton->addMouseListener(this, false);
     
     //---------------parameter label -------------------------------------
@@ -238,7 +237,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     addAndMakeVisible(noteStatusButton = new GuiSwitch());
     noteStatusButton->addListener(this);
     noteStatusButton->setClickingTogglesState(true);
-    noteStatusButton->setToggleState(true, false);
+    noteStatusButton->setToggleState(true, dontSendNotification);
     noteStatusButton->addMouseListener(this, true);
    
 }
@@ -493,7 +492,7 @@ void GuiMidiMode::buttonClicked (Button* button)
         //no way of determining if a channel is 'active' or not if no note data is being used.
         if (button->getToggleState() == false)
         {
-            dynamicChannelButton->setToggleState(false, true);
+            dynamicChannelButton->setToggleState(false, dontSendNotification);
             dynamicChannelButton->setEnabled(false);
             dynamicChannelButton->setAlpha(0.4);
         }
@@ -639,7 +638,7 @@ void GuiMidiMode::buttonClicked (Button* button)
                 }
                 else
                 {
-                    button->setToggleState(true, false);
+                    button->setToggleState(true, dontSendNotification);
                 }
                 
                 break;
@@ -699,19 +698,19 @@ void GuiMidiMode::updateDisplay()
         //set the stored values on the GUI components
         //Don't broadcast any changes to the component Listeners. Only want to update the GUI here
         
-        quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
+        quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), dontSendNotification);
         pressureMinRangeSlider->setValue(PAD_SETTINGS->getMidiMinPressureRange(), dontSendNotification);
         pressureMaxRangeSlider->setValue(PAD_SETTINGS->getMidiMaxPressureRange(), dontSendNotification);
-        pressureModeButtons[PAD_SETTINGS->getMidiPressureMode()-1]->setToggleState(true, false);
-        triggerModeButtons[PAD_SETTINGS->getMidiTriggerMode()-1]->setToggleState(true, false);
-        ccControllerSlider->setValue(PAD_SETTINGS->getMidiCcController());
-        indestructibleButton->setToggleState(PAD_SETTINGS->getMidiIndestructible(), false);
-        stickyButton->setToggleState(PAD_SETTINGS->getMidiSticky(), false);
+        pressureModeButtons[PAD_SETTINGS->getMidiPressureMode()-1]->setToggleState(true, dontSendNotification);
+        triggerModeButtons[PAD_SETTINGS->getMidiTriggerMode()-1]->setToggleState(true, dontSendNotification);
+        ccControllerSlider->setValue(PAD_SETTINGS->getMidiCcController(), dontSendNotification);
+        indestructibleButton->setToggleState(PAD_SETTINGS->getMidiIndestructible(), dontSendNotification);
+        stickyButton->setToggleState(PAD_SETTINGS->getMidiSticky(), dontSendNotification);
         
-        pressureStatusButton->setToggleState(PAD_SETTINGS->getMidiPressureStatus(), false);
-        noteStatusButton->setToggleState(PAD_SETTINGS->getMidiNoteStatus(), false);
+        pressureStatusButton->setToggleState(PAD_SETTINGS->getMidiPressureStatus(), dontSendNotification);
+        noteStatusButton->setToggleState(PAD_SETTINGS->getMidiNoteStatus(), dontSendNotification);
         
-        dynamicChannelButton->setToggleState(PAD_SETTINGS->getMidiDynamicChannelStatus(), false);
+        dynamicChannelButton->setToggleState(PAD_SETTINGS->getMidiDynamicChannelStatus(), dontSendNotification);
         
         if (dynamicChannelButton->getToggleState() == false) //static channel
         {
@@ -742,12 +741,12 @@ void GuiMidiMode::updateDisplay()
             //if setting of this pad does NOT match setting of last pad, set default and break
             if (PAD_SETTINGS->getQuantizeMode() != quantiseMode_)
             {
-                quantiseButton->setToggleState(0, false);
+                quantiseButton->setToggleState(0, dontSendNotification);
                 break;
             }
             //if this is the last 'natural' iteraction, displayed the setting that matches all the pads
             if (i == selectedPads.size()-1)
-                quantiseButton->setToggleState(quantiseMode_, false);
+                quantiseButton->setToggleState(quantiseMode_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -758,11 +757,11 @@ void GuiMidiMode::updateDisplay()
             if (PAD_SETTINGS->getMidiPressureMode() != pressureMode_)
             {
                 for (int i = 0; i < 6; i++)
-                    pressureModeButtons[i]->setToggleState(0, false);
+                    pressureModeButtons[i]->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                pressureModeButtons[pressureMode_-1]->setToggleState(true, false);
+                pressureModeButtons[pressureMode_-1]->setToggleState(true, dontSendNotification);
         }
         
         //==================================================================================================
@@ -773,11 +772,11 @@ void GuiMidiMode::updateDisplay()
             if (PAD_SETTINGS->getMidiTriggerMode() != triggerMode_)
             {
                 for (int i = 0; i < 4; i++)
-                    triggerModeButtons[i]->setToggleState(0, false);
+                    triggerModeButtons[i]->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                triggerModeButtons[triggerMode_-1]->setToggleState(true, false);
+                triggerModeButtons[triggerMode_-1]->setToggleState(true, dontSendNotification);
         }
         
         //==================================================================================================
@@ -829,11 +828,11 @@ void GuiMidiMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getMidiIndestructible() != indestructible_)
             {
-                indestructibleButton->setToggleState(0, false);
+                indestructibleButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                indestructibleButton->setToggleState(indestructible_, false);
+                indestructibleButton->setToggleState(indestructible_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -843,11 +842,11 @@ void GuiMidiMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getMidiSticky() != sticky_)
             {
-                stickyButton->setToggleState(0, false);
+                stickyButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                stickyButton->setToggleState(sticky_, false);
+                stickyButton->setToggleState(sticky_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -857,11 +856,11 @@ void GuiMidiMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getMidiNoteStatus() != noteStatus_)
             {
-                noteStatusButton->setToggleState(1, false);
+                noteStatusButton->setToggleState(1, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                noteStatusButton->setToggleState(noteStatus_, false);
+                noteStatusButton->setToggleState(noteStatus_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -871,11 +870,11 @@ void GuiMidiMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getMidiPressureStatus() != pressureStatus_)
             {
-                pressureStatusButton->setToggleState(0, false);
+                pressureStatusButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                pressureStatusButton->setToggleState(pressureStatus_, false);
+                pressureStatusButton->setToggleState(pressureStatus_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -885,11 +884,11 @@ void GuiMidiMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getMidiDynamicChannelStatus() != dynamicChannelStatus_)
             {
-                dynamicChannelButton->setToggleState(false, false);
+                dynamicChannelButton->setToggleState(false, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                dynamicChannelButton->setToggleState(dynamicChannelStatus_, false);
+                dynamicChannelButton->setToggleState(dynamicChannelStatus_, dontSendNotification);
         }
         
         

@@ -46,7 +46,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	Image *quantiseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::quantiseicon_png, MainBinaryData::quantiseicon_pngSize));
 	addAndMakeVisible(quantiseButton = new ModeButton(quantiseIcon));
 	quantiseButton->setClickingTogglesState(true);
-	quantiseButton->setToggleState(false, false);	
+	quantiseButton->setToggleState(false, dontSendNotification);
 	quantiseButton->addListener(this);
 	quantiseButton->addMouseListener(this, true);
 	quantiseButton->setOpaque(false);
@@ -58,11 +58,11 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	addAndMakeVisible(triggerSettingsButton = new ModeButton(triggerSettingsImage));
 	triggerSettingsButton->setRadioGroupId (1234);
 	triggerSettingsButton->setClickingTogglesState(true);
-	triggerSettingsButton->setToggleState(false, false);	
+	triggerSettingsButton->setToggleState(false, dontSendNotification);
 	triggerSettingsButton->addListener(this);
 	triggerSettingsButton->addMouseListener(this, true);
 	triggerSettingsButton->setOpaque(false);
-    triggerSettingsButton->setToggleState(true, false);
+    triggerSettingsButton->setToggleState(true, dontSendNotification);
 	
 	//----------------pressure settings button-------------------
 	
@@ -70,7 +70,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
 	addAndMakeVisible(pressureSettingsButton = new ModeButton(pressureSettingsImage));
 	pressureSettingsButton->setRadioGroupId (1234);
 	pressureSettingsButton->setClickingTogglesState(true);
-	pressureSettingsButton->setToggleState(false, false);	
+	pressureSettingsButton->setToggleState(false, dontSendNotification);
 	pressureSettingsButton->addListener(this);
 	pressureSettingsButton->addMouseListener(this, true);
 	pressureSettingsButton->setOpaque(false);
@@ -189,28 +189,28 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
         addAndMakeVisible(triggerModeButtons[i]);
     }
     
-    triggerModeButtons[1]->setToggleState(true, false);
+    triggerModeButtons[1]->setToggleState(true, dontSendNotification);
     
 	Image *loopIcon = new Image(ImageCache::getFromMemory(MainBinaryData::loopicon_png, MainBinaryData::loopicon_pngSize));
     addAndMakeVisible(loopButton =new ModeButton(loopIcon));
     loopButton->addListener(this);
     loopButton->addMouseListener(this, true);
     loopButton->setClickingTogglesState(true);
-    loopButton->setToggleState(1, false);
+    loopButton->setToggleState(1, dontSendNotification);
     
     Image *destructIcon = new Image(ImageCache::getFromMemory(MainBinaryData::indestructableicon_png, MainBinaryData::indestructableicon_pngSize));
 	addChildComponent(indestructibleButton = new ModeButton(destructIcon));
     indestructibleButton->addListener(this);
     indestructibleButton->addMouseListener(this, true);
     indestructibleButton->setClickingTogglesState(true);
-    indestructibleButton->setToggleState(0, false);
+    indestructibleButton->setToggleState(0, dontSendNotification);
     
 	Image *finishIcon = new Image(ImageCache::getFromMemory(MainBinaryData::finishicon_png, MainBinaryData::finishicon_pngSize));
     addAndMakeVisible(finishLoopButton =new ModeButton(finishIcon));
     finishLoopButton->addListener(this);
     finishLoopButton->addMouseListener(this, true);
     finishLoopButton->setClickingTogglesState(true);
-    finishLoopButton->setToggleState(0, false);
+    finishLoopButton->setToggleState(0, dontSendNotification);
     
     addChildComponent(fxDial = new GuiFxDial(mainComponentRef));
 	fxDial->setInterceptsMouseClicks(false, true);
@@ -221,7 +221,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     stickyButton->addListener(this);
     stickyButton->addMouseListener(this, true);
     stickyButton->setClickingTogglesState(true);
-    stickyButton->setToggleState(0, false);
+    stickyButton->setToggleState(0, dontSendNotification);
     
     
     //---------------status off bg-------------------------------------
@@ -234,7 +234,7 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     addAndMakeVisible(pressureStatusButton = new GuiSwitch());
     pressureStatusButton->addListener(this);
     pressureStatusButton->setClickingTogglesState(true);
-    pressureStatusButton->setToggleState(true, false);
+    pressureStatusButton->setToggleState(true, dontSendNotification);
     pressureStatusButton->addMouseListener(this, false);
     
     
@@ -695,18 +695,18 @@ void GuiSamplerMode::updateDisplay()
         attackSlider->setValue(PAD_SETTINGS->getSamplerAttackTime(), dontSendNotification);
         releaseSlider->setValue(PAD_SETTINGS->getSamplerReleaseTime(), dontSendNotification);
         polyphonySlider->setValue(PAD_SETTINGS->getSamplerPolyphony(), dontSendNotification);
-        quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
-        triggerModeButtons[PAD_SETTINGS->getSamplerTriggerMode()-1]->setToggleState(true, false);
-        loopButton->setToggleState(PAD_SETTINGS->getSamplerShouldLoop(), false);
-        indestructibleButton->setToggleState(PAD_SETTINGS->getSamplerIndestructible(), false);
-        finishLoopButton->setToggleState(PAD_SETTINGS->getSamplerShouldFinishLoop(), false);
-        stickyButton->setToggleState(PAD_SETTINGS->getSamplerSticky(), false);
+        quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), dontSendNotification);
+        triggerModeButtons[PAD_SETTINGS->getSamplerTriggerMode()-1]->setToggleState(true, dontSendNotification);
+        loopButton->setToggleState(PAD_SETTINGS->getSamplerShouldLoop(), dontSendNotification);
+        indestructibleButton->setToggleState(PAD_SETTINGS->getSamplerIndestructible(), dontSendNotification);
+        finishLoopButton->setToggleState(PAD_SETTINGS->getSamplerShouldFinishLoop(), dontSendNotification);
+        stickyButton->setToggleState(PAD_SETTINGS->getSamplerSticky(), dontSendNotification);
         //effect is found a set with fxDial
         
         if (PAD_SETTINGS->getSamplerEffect() == 0)
-            pressureStatusButton->setToggleState(false, false);
+            pressureStatusButton->setToggleState(false, dontSendNotification);
         else
-            pressureStatusButton->setToggleState(true, false);
+            pressureStatusButton->setToggleState(true, dontSendNotification);
     }
 
     else if (MULTI_PADS)
@@ -751,11 +751,11 @@ void GuiSamplerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getQuantizeMode() != quantiseMode_)
             {
-                quantiseButton->setToggleState(0, false);
+                quantiseButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                quantiseButton->setToggleState(quantiseMode_, false);
+                quantiseButton->setToggleState(quantiseMode_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -766,11 +766,11 @@ void GuiSamplerMode::updateDisplay()
             if (PAD_SETTINGS->getSamplerTriggerMode() != triggerMode_)
             {
                 for (int i = 0; i < 4; i++)
-                    triggerModeButtons[i]->setToggleState(0, false);
+                    triggerModeButtons[i]->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                triggerModeButtons[triggerMode_-1]->setToggleState(true, false);
+                triggerModeButtons[triggerMode_-1]->setToggleState(true, dontSendNotification);
         }
         
         //==================================================================================================
@@ -780,11 +780,11 @@ void GuiSamplerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSamplerIndestructible() != indestructible_)
             {
-                indestructibleButton->setToggleState(0, false);
+                indestructibleButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                indestructibleButton->setToggleState(indestructible_, false);
+                indestructibleButton->setToggleState(indestructible_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -794,11 +794,11 @@ void GuiSamplerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSamplerSticky() != sticky_)
             {
-                stickyButton->setToggleState(0, false);
+                stickyButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                stickyButton->setToggleState(sticky_, false);
+                stickyButton->setToggleState(sticky_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -808,11 +808,11 @@ void GuiSamplerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSamplerShouldLoop() != loop_)
             {
-                loopButton->setToggleState(1, false);
+                loopButton->setToggleState(1, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                loopButton->setToggleState(loop_, false);
+                loopButton->setToggleState(loop_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -822,11 +822,11 @@ void GuiSamplerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSamplerShouldFinishLoop() != finishLoop_)
             {
-                finishLoopButton->setToggleState(0, false);
+                finishLoopButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                finishLoopButton->setToggleState(finishLoop_, false);
+                finishLoopButton->setToggleState(finishLoop_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -910,15 +910,15 @@ void GuiSamplerMode::updateDisplay()
             
             if (effect_2 != effect_)
             {
-                pressureStatusButton->setToggleState(0, false);
+                pressureStatusButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
             {
                 if (effect_ == 0)
-                    pressureStatusButton->setToggleState(0, false);
+                    pressureStatusButton->setToggleState(0, dontSendNotification);
                 else
-                    pressureStatusButton->setToggleState(1, false);  
+                    pressureStatusButton->setToggleState(1, dontSendNotification);
             }
         }
     }

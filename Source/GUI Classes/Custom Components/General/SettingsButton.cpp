@@ -102,7 +102,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			g.fillPath(thePath, getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.5f));
-			g.strokePath (thePath, 1.0f, getTransform());
+			g.strokePath (thePath, PathStrokeType(1.0f), getTransform());
 			
             g.addTransform(rotateText);
             g.drawSingleLineText(theText, 0, 0);
@@ -117,7 +117,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			g.fillPath(thePath, getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.7f));
-			g.strokePath (thePath, 1.0f, getTransform());
+			g.strokePath (thePath, PathStrokeType(1.0f), getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker);
             
@@ -134,7 +134,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			g.fillPath(thePath, getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.7f));
-			g.strokePath (thePath, 1.0f, getTransform());
+			g.strokePath (thePath, PathStrokeType(1.0f), getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker);
             
@@ -152,7 +152,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			g.fillPath(thePath, getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.4f));
-			g.strokePath (thePath, 1.0f, getTransform());
+			g.strokePath (thePath, PathStrokeType(1.0f), getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->mainColour);
             
@@ -170,7 +170,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			g.fillPath(thePath, getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.4f));
-			g.strokePath (thePath, 1.0f, getTransform());
+			g.strokePath (thePath, PathStrokeType(1.0f), getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->mainColour);
 
@@ -187,7 +187,7 @@ void SettingsButton::paintButton (Graphics& g, bool isMouseOverButton, bool isBu
 			g.fillPath(thePath, getTransform());
 
 			g.setColour(AlphaTheme::getInstance()->foregroundColourDarker.withAlpha(0.4f));
-			g.strokePath (thePath, 1.0f, getTransform());
+			g.strokePath (thePath, PathStrokeType(1.0f), getTransform());
 			
 			g.setColour(AlphaTheme::getInstance()->mainColour);
 

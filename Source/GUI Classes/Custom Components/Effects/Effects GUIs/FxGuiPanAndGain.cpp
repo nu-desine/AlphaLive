@@ -52,7 +52,7 @@ GuiGainAndPan::GuiGainAndPan(MainComponent &ref)
     alphaTouchMenu->addItem(translate("Off"), 1);
     alphaTouchMenu->addItem(translate("Gain"), 2);
     alphaTouchMenu->addItem(translate("Pan"), 3);
-    alphaTouchMenu->setSelectedId(1, true);
+    alphaTouchMenu->setSelectedId(1, dontSendNotification);
     
 	Image *reverseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::inverticon_png, MainBinaryData::inverticon_pngSize));
     addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
@@ -186,8 +186,8 @@ void GuiGainAndPan::updateDisplay()
         gainSlider->setValue(PAD_SETTINGS->getPadFxGainPanGain(), dontSendNotification);
         panSlider->setValue(PAD_SETTINGS->getPadFxGainPanPan(), dontSendNotification);
         
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxGainPanAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getPadFxGainPanAtReverse(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxGainPanAlphaTouch(), dontSendNotification);
+        reverseButton->setToggleState(PAD_SETTINGS->getPadFxGainPanAtReverse(), dontSendNotification);
         intensitySlider->setValue(PAD_SETTINGS->getPadFxGainPanAtIntensity(), dontSendNotification);
     }
     
@@ -195,8 +195,8 @@ void GuiGainAndPan::updateDisplay()
     {
         gainSlider->setValue(0.5, dontSendNotification);
         panSlider->setValue(0.5, dontSendNotification);
-        alphaTouchMenu->setSelectedId(0, true);
-        reverseButton->setToggleState(0, false);
+        alphaTouchMenu->setSelectedId(0, dontSendNotification);
+        reverseButton->setToggleState(0, dontSendNotification);
         intensitySlider->setValue(1.0, dontSendNotification);
     }
     

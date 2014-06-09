@@ -71,7 +71,7 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     Image *syncImage = new Image(ImageCache::getFromMemory(MainBinaryData::syncicon_png, MainBinaryData::syncicon_pngSize));
     addAndMakeVisible(syncButton = new ModeButton(syncImage));
     syncButton->setClickingTogglesState(true);
-    syncButton->setToggleState(1, false);
+    syncButton->setToggleState(1, dontSendNotification);
     syncButton->addListener(this);
     syncButton->addMouseListener(this, true);
     
@@ -117,7 +117,7 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
 		addAndMakeVisible(shapeMenuButtons[i]);
     }
     
-    shapeMenuButtons[0]->setToggleState(true, false);
+    shapeMenuButtons[0]->setToggleState(true, dontSendNotification);
     
     
     addAndMakeVisible(alphaTouchMenu = new ComboBox());
@@ -127,7 +127,7 @@ GuiTremolo::GuiTremolo(MainComponent &ref)
     alphaTouchMenu->addItem(translate("Depth/Mix"), 2);
     alphaTouchMenu->addItem(translate("Rate"), 3);
     alphaTouchMenu->addItem(translate("Wave Shape"), 4);
-    alphaTouchMenu->setSelectedId(1, true);
+    alphaTouchMenu->setSelectedId(1, dontSendNotification);
     
     Image *reverseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::inverticon_png, MainBinaryData::inverticon_pngSize));
     addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
@@ -381,11 +381,11 @@ void GuiTremolo::updateDisplay()
         int padNum = selectedPads[0];
         depthSlider->setValue(PAD_SETTINGS->getPadFxTremoloDepth(), dontSendNotification);
         rateSlider->setValue(PAD_SETTINGS->getPadFxTremoloRate(), dontSendNotification);
-        syncButton->setToggleState(PAD_SETTINGS->getPadFxTremoloSync(), false);
-		shapeMenuButtons[PAD_SETTINGS->getPadFxTremoloShape()-1]->setToggleState(true, false);
+        syncButton->setToggleState(PAD_SETTINGS->getPadFxTremoloSync(), dontSendNotification);
+		shapeMenuButtons[PAD_SETTINGS->getPadFxTremoloShape()-1]->setToggleState(true, dontSendNotification);
         
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxTremoloAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getPadFxTremoloAtReverse(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxTremoloAlphaTouch(), dontSendNotification);
+        reverseButton->setToggleState(PAD_SETTINGS->getPadFxTremoloAtReverse(), dontSendNotification);
         intensitySlider->setValue(PAD_SETTINGS->getPadFxTremoloAtIntensity(), dontSendNotification);
 		
 		switch (PAD_SETTINGS->getPadFxTremoloRateMenu())
@@ -432,14 +432,14 @@ void GuiTremolo::updateDisplay()
         depthSlider->setValue(0.7, dontSendNotification);
         rateSlider->setValue(5.0, dontSendNotification);
         rateMenu->setButtonText("-");
-        syncButton->setToggleState(true, false);
+        syncButton->setToggleState(true, dontSendNotification);
         //shapeMenu->setSelectedId(2, true);
         
         for (int j = 0; j < 5; j++)
-            shapeMenuButtons[j]->setToggleState(false, false);
+            shapeMenuButtons[j]->setToggleState(false, dontSendNotification);
         
-        alphaTouchMenu->setSelectedId(0, true);
-        reverseButton->setToggleState(0, false);
+        alphaTouchMenu->setSelectedId(0, dontSendNotification);
+        reverseButton->setToggleState(0, dontSendNotification);
         intensitySlider->setValue(1.0, dontSendNotification);
     }
     

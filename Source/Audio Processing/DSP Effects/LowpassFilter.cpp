@@ -59,20 +59,26 @@ void LowpassFilter::processAudio (const AudioSourceChannelInfo& bufferToFill)
     /*
     //get audio channel data
     float *channels[2];
-    channels[0] = bufferToFill.buffer->getArrayOfChannels()[0] + bufferToFill.startSample;
-    channels[1] = bufferToFill.buffer->getArrayOfChannels()[1] + bufferToFill.startSample;
+    channels[0] = bufferToFill.buffer->getArrayOfWritePointers()[0] + bufferToFill.startSample;
+    channels[1] = bufferToFill.buffer->getArrayOfWritePointers()[1] + bufferToFill.startSample;
     //create audio buffers
     AudioSampleBuffer wetBuffer (channels, bufferToFill.buffer->getNumChannels(), bufferToFill.numSamples);
      */
     
     //create a COPY of bufferToFill's buffer that will be used to hold processed audio data
     //bufferToFill.buffer will stay unprocessed
-    AudioSampleBuffer wetBuffer(*bufferToFill.buffer);
+    int numChans = bufferToFill.buffer->getNumChannels();
+    int numSamps = bufferToFill.numSamples;
+    
+    AudioSampleBuffer wetBuffer(numChans, numSamps);
+    
+    for (int i = 0; i < numChans; i++)
+        wetBuffer.copyFrom(i, 0, *bufferToFill.buffer, 1, 0, numSamps);
     
     //process filtering
     sharedMemory.enter();
     filter->setParams (params);
-    filter->process (wetBuffer.getNumSamples(), wetBuffer.getArrayOfChannels());
+    filter->process (wetBuffer.getNumSamples(), wetBuffer.getArrayOfWritePointers());
     sharedMemory.exit();
     
     //set the relative gains of the processed and unprocessed buffers using the 'mix' value

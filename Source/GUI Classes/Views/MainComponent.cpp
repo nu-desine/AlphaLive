@@ -625,7 +625,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool call
         guiSequencerMode->setVisible(false);
         guiControllerMode->setVisible(false);
 		
-        globalSettingsButton->setToggleState(false, false);
+        globalSettingsButton->setToggleState(false, dontSendNotification);
         setGlobalPadSettingsDisplay();
         //i think the below if statement should be outside and above of its parent if statement.
         if (eliteControlSelected == 1)
@@ -685,13 +685,13 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool call
         if (PAD_SETTINGS->getMode() == 0) //off mode
         {
             setToOffMode();
-            modeOffButton->setToggleState(true, false);
+            modeOffButton->setToggleState(true, dontSendNotification);
         }
         
         if (PAD_SETTINGS->getMode() == 1) //midi mode
         {
             setToMidiMode();
-            modeMidiButton->setToggleState(true, false);
+            modeMidiButton->setToggleState(true, dontSendNotification);
             
             if (selectedPads[0] == prevSelectedPad && calledFromMouseClick)
                 guiMidiMode->changeView(0);
@@ -700,7 +700,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool call
         if (PAD_SETTINGS->getMode() == 2) //sampler mode
         {
             setToSamplerMode();
-            modeSamplerButton->setToggleState(true, false);
+            modeSamplerButton->setToggleState(true, dontSendNotification);
             
             if (selectedPads[0] == prevSelectedPad && calledFromMouseClick)
                 guiSamplerMode->changeView(0);
@@ -709,7 +709,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool call
         if (PAD_SETTINGS->getMode() == 3) //sequencer mode
         {
             setToSequencerMode();
-            modeSequencerButton->setToggleState(true, false);
+            modeSequencerButton->setToggleState(true, dontSendNotification);
             
             if (selectedPads[0] == prevSelectedPad && calledFromMouseClick)
                 guiSequencerMode->changeView(0);
@@ -717,7 +717,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool call
         if (PAD_SETTINGS->getMode() == 4) //controller mode
         {
             setToControllerMode();
-            modeControllerButton->setToggleState(true, false);
+            modeControllerButton->setToggleState(true, dontSendNotification);
         }
         
     }
@@ -740,7 +740,7 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool call
             if (PAD_SETTINGS->getMode() != mode_)
             {
                 setToOffMode();
-                modeOffButton->setToggleState(true, false);
+                modeOffButton->setToggleState(true, dontSendNotification);
                 break;
             }
             //if this is the last 'natural' interaction, displayed the setting that matches all the pads
@@ -749,27 +749,27 @@ void MainComponent::setCurrentlySelectedPad(Array <int> selectedPads_, bool call
                 if (mode_ == 0) //off mode
                 {
                     setToOffMode();
-                    modeOffButton->setToggleState(true, false);
+                    modeOffButton->setToggleState(true, dontSendNotification);
                 }
                 if (mode_ == 1) //midi mode
                 {
                     setToMidiMode();
-                    modeMidiButton->setToggleState(true, false);
+                    modeMidiButton->setToggleState(true, dontSendNotification);
                 }
                 if (mode_ == 2) //sampler mode
                 {
                     setToSamplerMode();
-                    modeSamplerButton->setToggleState(true, false);
+                    modeSamplerButton->setToggleState(true, dontSendNotification);
                 }
                 if (mode_ == 3) //sequencer mode
                 {
                     setToSequencerMode();
-                    modeSequencerButton->setToggleState(true, false);
+                    modeSequencerButton->setToggleState(true, dontSendNotification);
                 }
                 if (mode_ == 4) //controller mode
                 {
                     setToControllerMode();
-                    modeControllerButton->setToggleState(true, false);
+                    modeControllerButton->setToggleState(true, dontSendNotification);
                 }
             }
         }
@@ -2344,7 +2344,7 @@ bool MainComponent::perform (const InvocationInfo& info)
     {
         if (guiGlobalPadSettings->isVisible())
         {
-            globalSettingsButton->setToggleState(false, false);
+            globalSettingsButton->setToggleState(false, dontSendNotification);
             setGlobalPadSettingsDisplay();
         }
         
@@ -2361,7 +2361,7 @@ bool MainComponent::perform (const InvocationInfo& info)
     {
         if (guiGlobalPadSettings->isVisible())
         {
-            globalSettingsButton->setToggleState(false, false);
+            globalSettingsButton->setToggleState(false, dontSendNotification);
             setGlobalPadSettingsDisplay();
         }
         
@@ -2377,7 +2377,7 @@ bool MainComponent::perform (const InvocationInfo& info)
     {
         if (guiGlobalPadSettings->isVisible() == false)
         {
-            globalSettingsButton->setToggleState(true, false);
+            globalSettingsButton->setToggleState(true, dontSendNotification);
             setGlobalPadSettingsDisplay();
         }
         
@@ -2388,7 +2388,7 @@ bool MainComponent::perform (const InvocationInfo& info)
     {
         if (guiGlobalPadSettings->isVisible())
         {
-            globalSettingsButton->setToggleState(false, false);
+            globalSettingsButton->setToggleState(false, dontSendNotification);
             setGlobalPadSettingsDisplay();
         }
 

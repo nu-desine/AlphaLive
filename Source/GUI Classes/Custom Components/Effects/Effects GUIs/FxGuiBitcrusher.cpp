@@ -73,7 +73,7 @@ GuiBitcrusher::GuiBitcrusher(MainComponent &ref)
     
     addAndMakeVisible(syncButton = new AlphaTextButton(translate("SYNC")));
     syncButton->setClickingTogglesState(true);
-    syncButton->setToggleState(1, false);
+    syncButton->setToggleState(1, dontSendNotification);
     syncButton->addListener(this);
     syncButton->addMouseListener(this, true);    
     
@@ -86,7 +86,7 @@ GuiBitcrusher::GuiBitcrusher(MainComponent &ref)
 	alphaTouchMenu->addItem(translate("Crush"), 4);
     alphaTouchMenu->addItem(translate("Smoothing"), 5);
 	alphaTouchMenu->addItem(translate("Wet/Dry Mix"), 6);
-    alphaTouchMenu->setSelectedId(1, true);
+    alphaTouchMenu->setSelectedId(1, dontSendNotification);
     
     Image *reverseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::inverticon_png, MainBinaryData::inverticon_pngSize));
     addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
@@ -256,8 +256,8 @@ void GuiBitcrusher::updateDisplay()
 		smoothingSlider->setValue(PAD_SETTINGS->getPadFxBitcrusherSmoothing(), dontSendNotification);
 		wetDryMixSlider->setValue(PAD_SETTINGS->getPadFxBitcrusherWetDryMix(), dontSendNotification);
         
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxBitcrusherAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getPadFxBitcrusherAtReverse(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxBitcrusherAlphaTouch(), dontSendNotification);
+        reverseButton->setToggleState(PAD_SETTINGS->getPadFxBitcrusherAtReverse(), dontSendNotification);
         intensitySlider->setValue(PAD_SETTINGS->getPadFxBitcrusherAtIntensity(), dontSendNotification);
     }
     
@@ -268,10 +268,10 @@ void GuiBitcrusher::updateDisplay()
         crushSlider->setValue(8, dontSendNotification);
 		smoothingSlider->setValue(1.0, dontSendNotification);
 		wetDryMixSlider->setValue(1.0, dontSendNotification);
-        syncButton->setToggleState(true, false);
+        syncButton->setToggleState(true, dontSendNotification);
         
-        alphaTouchMenu->setSelectedId(0, true);
-        reverseButton->setToggleState(0, false);
+        alphaTouchMenu->setSelectedId(0, dontSendNotification);
+        reverseButton->setToggleState(0, dontSendNotification);
         intensitySlider->setValue(1.0, dontSendNotification);
     }
     

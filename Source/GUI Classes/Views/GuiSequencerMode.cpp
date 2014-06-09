@@ -117,7 +117,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	Image *quantiseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::quantiseicon_png, MainBinaryData::quantiseicon_pngSize));
 	addAndMakeVisible(quantiseButton = new ModeButton(quantiseIcon));
 	quantiseButton->setClickingTogglesState(true);
-	quantiseButton->setToggleState(false, false);	
+	quantiseButton->setToggleState(false, dontSendNotification);
 	quantiseButton->addListener(this);
 	quantiseButton->addMouseListener(this, true);
 	quantiseButton->setOpaque(false);
@@ -127,18 +127,18 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	addAndMakeVisible(sequenceSettingsButton = new ModeButton(sequenceIcon));
 	sequenceSettingsButton->setRadioGroupId (1234);
 	sequenceSettingsButton->setClickingTogglesState(true);
-	sequenceSettingsButton->setToggleState(false, false);	
+	sequenceSettingsButton->setToggleState(false, dontSendNotification);
 	sequenceSettingsButton->addListener(this);
 	sequenceSettingsButton->addMouseListener(this, true);
 	sequenceSettingsButton->setOpaque(false);
-    sequenceSettingsButton->setToggleState(true, false);
+    sequenceSettingsButton->setToggleState(true, dontSendNotification);
 	
 	//----------------trigger settings button-------------------
 	Image *triggerSettingsImage = new Image(ImageCache::getFromMemory(MainBinaryData::triggersettingsicon_png, MainBinaryData::triggersettingsicon_pngSize));
 	addAndMakeVisible(triggerSettingsButton = new ModeButton(triggerSettingsImage));
 	triggerSettingsButton->setRadioGroupId (1234);
 	triggerSettingsButton->setClickingTogglesState(true);
-	triggerSettingsButton->setToggleState(false, false);	
+	triggerSettingsButton->setToggleState(false, dontSendNotification);
 	triggerSettingsButton->addListener(this);
 	triggerSettingsButton->addMouseListener(this, true);
 	triggerSettingsButton->setOpaque(false);
@@ -148,7 +148,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	addAndMakeVisible(pressureSettingsButton = new ModeButton(pressureSettingsImage));
 	pressureSettingsButton->setRadioGroupId (1234);
 	pressureSettingsButton->setClickingTogglesState(true);
-	pressureSettingsButton->setToggleState(false, false);	
+	pressureSettingsButton->setToggleState(false, dontSendNotification);
 	pressureSettingsButton->addListener(this);
 	pressureSettingsButton->addMouseListener(this, true);
 	pressureSettingsButton->setOpaque(false);
@@ -160,7 +160,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	modeMidiButton->setClickingTogglesState(true);
 	modeMidiButton->addListener(this);
 	modeMidiButton->addMouseListener(this, true);
-    modeMidiButton->setToggleState(true, false);
+    modeMidiButton->setToggleState(true, dontSendNotification);
 	
 	//----------------sequence Samples button-------------------
 	Image *modeAudioIcon = new Image(ImageCache::getFromMemory(MainBinaryData::loopsymbol_png, MainBinaryData::loopsymbol_pngSize));
@@ -169,7 +169,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	modeSamplesButton->setClickingTogglesState(true);
 	modeSamplesButton->addListener(this);
 	modeSamplesButton->addMouseListener(this, true);
-    modeSamplesButton->setToggleState(false, false);
+    modeSamplesButton->setToggleState(false, dontSendNotification);
 	
 	//---------------channel buttons---------------------
 	for (int i = 0; i <= 15; i++)
@@ -177,7 +177,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 		midiChannelButtons.insert(i, new AlphaTextButton());
 		midiChannelButtons[i]->setButtonText(String(i + 1));
 		midiChannelButtons[i]->setClickingTogglesState(true);
-		midiChannelButtons[i]->setToggleState(false, false);	
+		midiChannelButtons[i]->setToggleState(false, dontSendNotification);
 		midiChannelButtons[i]->setRadioGroupId (12);
 		midiChannelButtons[i]->addListener(this);
         midiChannelButtons[i]->addMouseListener(this, true);
@@ -185,7 +185,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
         addAndMakeVisible(midiChannelButtons[i]);
 	}
     
-    midiChannelButtons[0]->setToggleState(true, false);
+    midiChannelButtons[0]->setToggleState(true, dontSendNotification);
 	
 	//---------------audio row buttons---------------------
 	for (int i = 0; i <= 11; i++)
@@ -296,7 +296,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
         addChildComponent(triggerModeButtons[i]);
     }
     
-    triggerModeButtons[1]->setToggleState(true, false);
+    triggerModeButtons[1]->setToggleState(true, dontSendNotification);
     
     //--------------pressure mode buttons--------------------------
 	
@@ -331,7 +331,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
         addChildComponent(midiPressureModeButtons[i]);
     }
     
-    midiPressureModeButtons[0]->setToggleState(true, false);
+    midiPressureModeButtons[0]->setToggleState(true, dontSendNotification);
         /*
     addAndMakeVisible(numberOfSequencesSlider = new AlphaSlider());
     numberOfSequencesSlider->setRange(1, NO_OF_SEQS, 1);
@@ -345,7 +345,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     loopButton->addListener(this);
     loopButton->addMouseListener(this, true);
     loopButton->setClickingTogglesState(true);
-    loopButton->setToggleState(1, false);
+    loopButton->setToggleState(1, dontSendNotification);
     
     Image *destructIcon = new Image(ImageCache::getFromMemory(MainBinaryData::indestructableicon_png, MainBinaryData::indestructableicon_pngSize));
 	addChildComponent(indestructibleButton = new ModeButton(destructIcon));
@@ -376,7 +376,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     addChildComponent(pressureStatusButton = new GuiSwitch());
     pressureStatusButton->addListener(this);
     pressureStatusButton->setClickingTogglesState(true);
-    pressureStatusButton->setToggleState(true, false);
+    pressureStatusButton->setToggleState(true, dontSendNotification);
     pressureStatusButton->addMouseListener(this, false);
     
     Image *linkIcon = new Image(ImageCache::getFromMemory(MainBinaryData::linkicon_png, MainBinaryData::linkicon_pngSize));
@@ -1811,34 +1811,34 @@ void GuiSequencerMode::updateDisplay()
         
         if (PAD_SETTINGS->getSequencerMode() == 1) //midi mode
         {
-            modeMidiButton->setToggleState(true, false);
-            pressureStatusButton->setToggleState(PAD_SETTINGS->getSequencerMidiPressureStatus(), false);
+            modeMidiButton->setToggleState(true, dontSendNotification);
+            pressureStatusButton->setToggleState(PAD_SETTINGS->getSequencerMidiPressureStatus(), dontSendNotification);
             
             mainComponentRef.getGuiPiano()->setActive(true);
             mainComponentRef.getGuiPiano()->updateDisplay();
             
-            modeSamplesButton->setToggleState(false, false);
+            modeSamplesButton->setToggleState(false, dontSendNotification);
         }
         else if (PAD_SETTINGS->getSequencerMode() == 2) //samples mode
         {
-            modeSamplesButton->setToggleState(true, false);
+            modeSamplesButton->setToggleState(true, dontSendNotification);
             mainComponentRef.getGuiPiano()->setActive(false);
             
             
             if (PAD_SETTINGS->getSequencerEffect() == 0)
-                pressureStatusButton->setToggleState(false, false);
+                pressureStatusButton->setToggleState(false, dontSendNotification);
             else
-                pressureStatusButton->setToggleState(true, false);
+                pressureStatusButton->setToggleState(true, dontSendNotification);
             //effect is found a set with fxDial
             
-            modeMidiButton->setToggleState(false, false);
+            modeMidiButton->setToggleState(false, dontSendNotification);
              
         }
         
         
         //calling setDisplay() at the bottom will in turn display the correct mode components
         
-        quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), false);
+        quantiseButton->setToggleState(PAD_SETTINGS->getQuantizeMode(), dontSendNotification);
         sequenceLength = PAD_SETTINGS->getSequencerLength();
         numberOfSequencesSlider->setValue(PAD_SETTINGS->getSequencerNumberOfSequences(), dontSendNotification);
         relativeTempoSlider->setValue(PAD_SETTINGS->getSequencerRelativeTempoMode(), dontSendNotification);
@@ -1848,18 +1848,18 @@ void GuiSequencerMode::updateDisplay()
         audioPanSlider->setValue(PAD_SETTINGS->getSequencerPan(), dontSendNotification);
         audioAttackSlider->setValue(PAD_SETTINGS->getSequencerSamplesAttackTime(), dontSendNotification);
         audioPolyphonySlider->setValue(PAD_SETTINGS->getSequencerSamplesPolyphony(), dontSendNotification);
-        triggerModeButtons[PAD_SETTINGS->getSequencerTriggerMode()-1]->setToggleState(true, false);
-        midiPressureModeButtons[PAD_SETTINGS->getSequencerMidiPressureMode()-1]->setToggleState(true, false);
-        midiChannelButtons[PAD_SETTINGS->getSequencerMidiChannel()-1]->setToggleState(true, false);
-        ccControllerSlider->setValue(PAD_SETTINGS->getSequencerMidiCcController());
-        loopButton->setToggleState(PAD_SETTINGS->getSequencerShouldLoop(), false);
-        indestructibleButton->setToggleState(PAD_SETTINGS->getSequencerIndestructible(), false);
-        finishLoopButton->setToggleState(PAD_SETTINGS->getSequencerShouldFinishLoop(), false);
-        stickyButton->setToggleState(PAD_SETTINGS->getSequencerSticky(), false);
-        linkButton->setToggleState(PAD_SETTINGS->getSequencerDynamicMode(), false);
+        triggerModeButtons[PAD_SETTINGS->getSequencerTriggerMode()-1]->setToggleState(true, dontSendNotification);
+        midiPressureModeButtons[PAD_SETTINGS->getSequencerMidiPressureMode()-1]->setToggleState(true, dontSendNotification);
+        midiChannelButtons[PAD_SETTINGS->getSequencerMidiChannel()-1]->setToggleState(true, dontSendNotification);
+        ccControllerSlider->setValue(PAD_SETTINGS->getSequencerMidiCcController(), dontSendNotification);
+        loopButton->setToggleState(PAD_SETTINGS->getSequencerShouldLoop(), dontSendNotification);
+        indestructibleButton->setToggleState(PAD_SETTINGS->getSequencerIndestructible(), dontSendNotification);
+        finishLoopButton->setToggleState(PAD_SETTINGS->getSequencerShouldFinishLoop(), dontSendNotification);
+        stickyButton->setToggleState(PAD_SETTINGS->getSequencerSticky(), dontSendNotification);
+        linkButton->setToggleState(PAD_SETTINGS->getSequencerDynamicMode(), dontSendNotification);
         midiPressureMinRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMinPressureRange(), dontSendNotification);
         midiPressureMaxRangeSlider->setValue(PAD_SETTINGS->getSequencerMidiMaxPressureRange(), dontSendNotification);
-        recordButton->setToggleState(PAD_SETTINGS->getSequencerRecordEnabled(), false);
+        recordButton->setToggleState(PAD_SETTINGS->getSequencerRecordEnabled(), dontSendNotification);
         
         
     }
@@ -1875,17 +1875,17 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerMode() != mode_)
             {
-                modeMidiButton->setToggleState(0, false);
-                modeSamplesButton->setToggleState(0, false);
+                modeMidiButton->setToggleState(0, dontSendNotification);
+                modeSamplesButton->setToggleState(0, dontSendNotification);
                 mainComponentRef.getGuiPiano()->setActive(false);
-                pressureStatusButton->setToggleState(0, false);
+                pressureStatusButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
             {
                 if (mode_ == 1)
                 {
-                    modeMidiButton->setToggleState(true, false);
+                    modeMidiButton->setToggleState(true, dontSendNotification);
                     mainComponentRef.getGuiPiano()->setActive(true);
                     mainComponentRef.getGuiPiano()->updateDisplay();
                     
@@ -1896,16 +1896,16 @@ void GuiSequencerMode::updateDisplay()
                         int padNum = selectedPads[i];
                         if (PAD_SETTINGS->getSequencerMidiPressureStatus() != pressureStatus_)
                         {
-                            pressureStatusButton->setToggleState(0, false);
+                            pressureStatusButton->setToggleState(0, dontSendNotification);
                             break;
                         }
                         if (i == selectedPads.size()-1)
-                            pressureStatusButton->setToggleState(pressureStatus_, false);
+                            pressureStatusButton->setToggleState(pressureStatus_, dontSendNotification);
                     }
                 }
                 else
                 {
-                    modeSamplesButton->setToggleState(true, false);
+                    modeSamplesButton->setToggleState(true, dontSendNotification);
                     mainComponentRef.getGuiPiano()->setActive(false);
                     
                     //==================================================================================================
@@ -1919,15 +1919,15 @@ void GuiSequencerMode::updateDisplay()
                         
                         if (effect_2 != effect_)
                         {
-                            pressureStatusButton->setToggleState(0, false);
+                            pressureStatusButton->setToggleState(0, dontSendNotification);
                             break;
                         }
                         if (i == selectedPads.size()-1)
                         {
                             if (effect_ == 0)
-                                pressureStatusButton->setToggleState(0, false);
+                                pressureStatusButton->setToggleState(0, dontSendNotification);
                             else
-                                pressureStatusButton->setToggleState(1, false);
+                                pressureStatusButton->setToggleState(1, dontSendNotification);
                         }
                     }
                 }
@@ -1941,11 +1941,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getQuantizeMode() != quantiseMode_)
             {
-                quantiseButton->setToggleState(0, false);
+                quantiseButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                quantiseButton->setToggleState(quantiseMode_, false);
+                quantiseButton->setToggleState(quantiseMode_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -2072,11 +2072,11 @@ void GuiSequencerMode::updateDisplay()
             if (PAD_SETTINGS->getSequencerTriggerMode() != triggerMode_)
             {
                 for (int i = 0; i < 6; i++)
-                    triggerModeButtons[i]->setToggleState(0, false);
+                    triggerModeButtons[i]->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                triggerModeButtons[triggerMode_-1]->setToggleState(true, false);
+                triggerModeButtons[triggerMode_-1]->setToggleState(true, dontSendNotification);
         }
         
         //==================================================================================================
@@ -2087,11 +2087,11 @@ void GuiSequencerMode::updateDisplay()
             if (PAD_SETTINGS->getSequencerMidiPressureMode() != pressureMode_)
             {
                 for (int i = 0; i < 5; i++)
-                    midiPressureModeButtons[i]->setToggleState(0, false);
+                    midiPressureModeButtons[i]->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                midiPressureModeButtons[pressureMode_-1]->setToggleState(true, false);
+                midiPressureModeButtons[pressureMode_-1]->setToggleState(true, dontSendNotification);
         }
         
         //==================================================================================================
@@ -2102,11 +2102,11 @@ void GuiSequencerMode::updateDisplay()
             if (PAD_SETTINGS->getSequencerMidiChannel() != channel_)
             {
                 for (int i = 0; i <16; i++)
-                    midiChannelButtons[i]->setToggleState(0, false);
+                    midiChannelButtons[i]->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                midiChannelButtons[channel_-1]->setToggleState(true, false);
+                midiChannelButtons[channel_-1]->setToggleState(true, dontSendNotification);
         }
         
         //==================================================================================================
@@ -2130,11 +2130,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerIndestructible() != indestructible_)
             {
-                indestructibleButton->setToggleState(0, false);
+                indestructibleButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                indestructibleButton->setToggleState(indestructible_, false);
+                indestructibleButton->setToggleState(indestructible_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -2144,11 +2144,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerSticky() != sticky_)
             {
-                stickyButton->setToggleState(0, false);
+                stickyButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                stickyButton->setToggleState(sticky_, false);
+                stickyButton->setToggleState(sticky_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -2158,11 +2158,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerShouldLoop() != loop_)
             {
-                loopButton->setToggleState(1, false);
+                loopButton->setToggleState(1, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                loopButton->setToggleState(loop_, false);
+                loopButton->setToggleState(loop_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -2172,11 +2172,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerShouldFinishLoop() != finishLoop_)
             {
-                finishLoopButton->setToggleState(0, false);
+                finishLoopButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                finishLoopButton->setToggleState(finishLoop_, false);
+                finishLoopButton->setToggleState(finishLoop_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -2186,11 +2186,11 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerDynamicMode() != dynamicMode_)
             {
-                linkButton->setToggleState(0, false);
+                linkButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                linkButton->setToggleState(dynamicMode_, false);
+                linkButton->setToggleState(dynamicMode_, dontSendNotification);
         }
         
         //==================================================================================================
@@ -2227,18 +2227,18 @@ void GuiSequencerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSequencerRecordEnabled() != recordEnabled_)
             {
-                recordButton->setToggleState(0, false);
+                recordButton->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                recordButton->setToggleState(recordEnabled_, false);
+                recordButton->setToggleState(recordEnabled_, dontSendNotification);
         }
         
     }
     
     if (previewButton->getToggleState() == true)
     {
-        previewButton->setToggleState(false, false);
+        previewButton->setToggleState(false, dontSendNotification);
     }
     
     

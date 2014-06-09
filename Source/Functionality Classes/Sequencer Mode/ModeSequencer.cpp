@@ -104,7 +104,7 @@ void ModeSequencer::editRunningSequencersArray (int action, int padNumber)
         
         if (runningSequencers.size() == 0)
         {
-            int setGlobalTimeInterval;
+            //int setGlobalTimeInterval;
             stopThread(100);
         }
         

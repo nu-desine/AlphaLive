@@ -80,8 +80,8 @@ void Bitcrusher::processAudio (const AudioSourceChannelInfo& bufferToFill)
     
 	sharedMemory.enter();
     //get audio channel data
-	pIn[0] = bufferToFill.buffer->getArrayOfChannels()[0] + bufferToFill.startSample;
-	pIn[1] = bufferToFill.buffer->getArrayOfChannels()[1] + bufferToFill.startSample;
+	pIn[0] = bufferToFill.buffer->getArrayOfWritePointers()[0] + bufferToFill.startSample;
+	pIn[1] = bufferToFill.buffer->getArrayOfWritePointers()[1] + bufferToFill.startSample;
     
 	AudioSampleBuffer dryBuffer(pIn, bufferToFill.buffer->getNumChannels(),bufferToFill.numSamples);
 	AudioSampleBuffer wetBuffer(bufferToFill.buffer->getNumChannels(),bufferToFill.numSamples);
@@ -103,8 +103,8 @@ void Bitcrusher::processAudio (const AudioSourceChannelInfo& bufferToFill)
 	leftChannel = rightChannel = 0;
 	
 	//link wetBuffer to wet pointer variables
-	leftChannel = wetBuffer.getSampleData(0); 
-	rightChannel = wetBuffer.getSampleData(1); 
+	leftChannel = wetBuffer.getWritePointer(0); 
+	rightChannel = wetBuffer.getWritePointer(1); 
 	
 	sharedMemory.enter();
     //increment through each pair of samples (left channel and right channel) in the current block of the audio buffer
@@ -140,7 +140,7 @@ void Bitcrusher::processAudio (const AudioSourceChannelInfo& bufferToFill)
 	sharedMemory.enter();
     //===apply smoothing-filter1===
     smoothingFilter->setParams(paramsSmoothingFilter);
-    smoothingFilter->process(wetBuffer.getNumSamples(), wetBuffer.getArrayOfChannels());
+    smoothingFilter->process(wetBuffer.getNumSamples(), wetBuffer.getArrayOfWritePointers());
 	sharedMemory.exit();
 	
     //set the relative gains of the processed and unprocessed buffers using the 'mix' value

@@ -221,7 +221,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     deviceInterfaceMenu->addItem(translate("AlphaSphere elite"), 2);
     deviceInterfaceMenu->addListener(this);
     deviceInterfaceMenu->addMouseListener(this, true);
-    deviceInterfaceMenu->setSelectedId(StoredSettings::getInstance()->deviceType, true);
+    deviceInterfaceMenu->setSelectedId(StoredSettings::getInstance()->deviceType, dontSendNotification);
     
     addAndMakeVisible(deviceInterfaceLabel = new Label("device label", translate("Device Interface:")));
     
@@ -231,7 +231,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     appProjectDirChooser->addItem(translate("Set Directory..."), 2);
     appProjectDirChooser->addListener(this);
     appProjectDirChooser->addMouseListener(this, true);
-    appProjectDirChooser->setSelectedId(1, true);
+    appProjectDirChooser->setSelectedId(1, dontSendNotification);
     
     addAndMakeVisible(directoryLabel = new Label("directory label", translate("Projects Directory:")));
     
@@ -242,7 +242,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     midiNoteDisplayTypeMenu->addItem(translate("MIDI Note Name"), 2);
     midiNoteDisplayTypeMenu->addListener(this);
     midiNoteDisplayTypeMenu->addMouseListener(this, true);
-    midiNoteDisplayTypeMenu->setSelectedId(StoredSettings::getInstance()->midiNoteDisplayType, true);
+    midiNoteDisplayTypeMenu->setSelectedId(StoredSettings::getInstance()->midiNoteDisplayType, dontSendNotification);
     
     addAndMakeVisible(launchTaskLabel = new Label ("Launch Task Label", translate("On Launch:")));
     
@@ -251,12 +251,12 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     launchTaskMenu->addItem(translate("Open last project"), 2);
     launchTaskMenu->addListener(this);
     launchTaskMenu->addMouseListener(this, true);
-    launchTaskMenu->setSelectedId(StoredSettings::getInstance()->launchTask, true);
+    launchTaskMenu->setSelectedId(StoredSettings::getInstance()->launchTask, dontSendNotification);
     
     
     addAndMakeVisible(killOnClockStopButton = new TextButton());
     killOnClockStopButton->setClickingTogglesState(true);
-    killOnClockStopButton->setToggleState(StoredSettings::getInstance()->killOnClockStop-1, false);
+    killOnClockStopButton->setToggleState(StoredSettings::getInstance()->killOnClockStop-1, dontSendNotification);
     if(killOnClockStopButton->getToggleStateValue() == true)
         killOnClockStopButton->setButtonText(translate("On"));
     else
@@ -271,7 +271,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     
     addAndMakeVisible(cleanOnCloseButton = new TextButton());
     cleanOnCloseButton->setClickingTogglesState(true);
-    cleanOnCloseButton->setToggleState(StoredSettings::getInstance()->cleanOnClose-1, false);
+    cleanOnCloseButton->setToggleState(StoredSettings::getInstance()->cleanOnClose-1, dontSendNotification);
     if(cleanOnCloseButton->getToggleStateValue() == true)
         cleanOnCloseButton->setButtonText(translate("On"));
     else
@@ -286,7 +286,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     
     addAndMakeVisible(autoSaveScenesButton = new TextButton());
     autoSaveScenesButton->setClickingTogglesState(true);
-    autoSaveScenesButton->setToggleState(StoredSettings::getInstance()->autoSaveScenes-1, false);
+    autoSaveScenesButton->setToggleState(StoredSettings::getInstance()->autoSaveScenes-1, dontSendNotification);
     if(autoSaveScenesButton->getToggleStateValue() == true)
         autoSaveScenesButton->setButtonText(translate("On"));
     else
@@ -300,7 +300,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
 
     addAndMakeVisible(autoCheckUpdatesButton = new TextButton());
     autoCheckUpdatesButton->setClickingTogglesState(true);
-    autoCheckUpdatesButton->setToggleState(StoredSettings::getInstance()->autoCheckUpdates-1, false);
+    autoCheckUpdatesButton->setToggleState(StoredSettings::getInstance()->autoCheckUpdates-1, dontSendNotification);
     if(autoCheckUpdatesButton->getToggleStateValue() == true)
         autoCheckUpdatesButton->setButtonText(translate("On"));
     else
@@ -338,7 +338,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     if (materiaDir.exists())
         interfaceThemeMenu->addItem("Materia", 101);
     
-    interfaceThemeMenu->setSelectedId(StoredSettings::getInstance()->interfaceTheme, true);
+    interfaceThemeMenu->setSelectedId(StoredSettings::getInstance()->interfaceTheme, dontSendNotification);
     
     addAndMakeVisible(padContentDisplayLabel = new Label());
     padContentDisplayLabel->setText(translate("Pad Content Display:"), dontSendNotification);
@@ -579,7 +579,7 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
                 }
             }
             
-            comboBox->setSelectedId(1, true);
+            comboBox->setSelectedId(1, dontSendNotification);
         }
     }
     
@@ -681,8 +681,8 @@ void GeneralSettingsComponent::updateDisplay()
 {
     //this function is called from PreferencesComponent::visibilityChanged
     
-    midiNoteDisplayTypeMenu->setSelectedId(StoredSettings::getInstance()->midiNoteDisplayType, true);
-    deviceInterfaceMenu->setSelectedId(StoredSettings::getInstance()->deviceType, true);
+    midiNoteDisplayTypeMenu->setSelectedId(StoredSettings::getInstance()->midiNoteDisplayType, dontSendNotification);
+    deviceInterfaceMenu->setSelectedId(StoredSettings::getInstance()->deviceType, dontSendNotification);
     
 }
 
@@ -735,7 +735,7 @@ HardwarePreferencesComponent::HardwarePreferencesComponent(MainComponent &ref, A
     {
         if (names[i] == StoredSettings::getInstance()->hardwareLedColourScheme)
         {
-            ledColourSchemeMenu->setSelectedId(i + 1, true);
+            ledColourSchemeMenu->setSelectedId(i + 1, dontSendNotification);
             break;
         }
     }
@@ -879,7 +879,7 @@ void HardwarePreferencesComponent::changeListenerCallback (ChangeBroadcaster *so
     //Set the colour scheme menu to "Custom"
     if (ledColourSchemeMenu->getSelectedId() != ledColourSchemeMenu->getNumItems())
     {
-        ledColourSchemeMenu->setSelectedId(ledColourSchemeMenu->getNumItems(), true);
+        ledColourSchemeMenu->setSelectedId(ledColourSchemeMenu->getNumItems(), dontSendNotification);
         StoredSettings::getInstance()->hardwareLedColourScheme = ledColourSchemeMenu->getText();
         StoredSettings::getInstance()->flush();
     }

@@ -56,15 +56,20 @@ BandPassFilter::~BandPassFilter()
 
 void BandPassFilter::processAudio (const AudioSourceChannelInfo& bufferToFill)
 {
-    
     //create a COPY of bufferToFill's buffer that will be used to hold processed audio data
     //bufferToFill.buffer will stay unprocessed
-    AudioSampleBuffer wetBuffer(*bufferToFill.buffer);
+    int numChans = bufferToFill.buffer->getNumChannels();
+    int numSamps = bufferToFill.numSamples;
+    
+    AudioSampleBuffer wetBuffer(numChans, numSamps);
+    
+    for (int i = 0; i < numChans; i++)
+        wetBuffer.copyFrom(i, 0, *bufferToFill.buffer, 1, 0, numSamps);
     
     //process filtering
     sharedMemory.enter();
     filter->setParams (params);
-    filter->process (wetBuffer.getNumSamples(), wetBuffer.getArrayOfChannels());
+    filter->process (wetBuffer.getNumSamples(), wetBuffer.getArrayOfWritePointers());
     sharedMemory.exit();
     
     //set the relative gains of the processed and unprocessed buffers using the 'mix' value

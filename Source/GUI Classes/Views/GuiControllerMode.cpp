@@ -86,7 +86,7 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
         
     }
     
-    controlButtons[0]->setToggleState(true, false);
+    controlButtons[0]->setToggleState(true, dontSendNotification);
     
     
     addChildComponent(sceneNumberSlider = new AlphaSlider());
@@ -129,7 +129,7 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
     ledControlMenu->addItem(translate("Pressure Interaction Status"), 2);
     ledControlMenu->addItem(translate("Clock Interaction Status"), 3);
     ledControlMenu->addItem(translate("MIDI CC Mode Status"), 4);
-    ledControlMenu->setSelectedId(1, true);
+    ledControlMenu->setSelectedId(1, dontSendNotification);
     
     
     
@@ -141,7 +141,7 @@ GuiControllerMode::GuiControllerMode(MainComponent &ref)
 		midiChannelButtons.insert(i, new AlphaTextButton());
 		midiChannelButtons[i]->setButtonText(String(i + 1));
 		midiChannelButtons[i]->setClickingTogglesState(true);
-		midiChannelButtons[i]->setToggleState(false, false);	
+		midiChannelButtons[i]->setToggleState(false, dontSendNotification);
 		midiChannelButtons[i]->setRadioGroupId (12);
 		midiChannelButtons[i]->addListener(this);
         midiChannelButtons[i]->addMouseListener(this, true);
@@ -457,14 +457,14 @@ void GuiControllerMode::updateDisplay()
     if(SINGLE_PAD)
     {
         int padNum = selectedPads[0];
-        controlButtons[PAD_SETTINGS->getControllerControl()-1]->setToggleState(true, false);
+        controlButtons[PAD_SETTINGS->getControllerControl()-1]->setToggleState(true, dontSendNotification);
         sceneNumberSlider->setValue(PAD_SETTINGS->getControllerSceneNumber());
         oscIpAddressEditor->setText(PAD_SETTINGS->getControllerOscIpAddress(), dontSendNotification);
         oscPortNumberSlider->setValue(PAD_SETTINGS->getControllerOscPort());
         midiProgramChangeNumberSlider->setValue(PAD_SETTINGS->getControllerMidiProgramChangeNumber());
-        midiChannelButtons[PAD_SETTINGS->getControllerMidiProgramChangeChannel()-1]->setToggleState(true, false);
+        midiChannelButtons[PAD_SETTINGS->getControllerMidiProgramChangeChannel()-1]->setToggleState(true, dontSendNotification);
         pressureLatchPadNumberSlider->setValue(PAD_SETTINGS->getControllerPressureLatchPadNumber()+1);
-        ledControlMenu->setSelectedId(PAD_SETTINGS->getControllerLedControl(), true);
+        ledControlMenu->setSelectedId(PAD_SETTINGS->getControllerLedControl(), dontSendNotification);
         
         setDisplay(PAD_SETTINGS->getControllerControl()-1);
     }
@@ -478,14 +478,14 @@ void GuiControllerMode::updateDisplay()
             if (PAD_SETTINGS->getControllerControl() != controlMode_)
             {
                 for (int i = 0; i < 4; i++)
-                    controlButtons[i]->setToggleState(0, false);
+                    controlButtons[i]->setToggleState(0, dontSendNotification);
                 
                 setDisplay(-1); //will effectively hide all components
                 break;
             }
             if (i == selectedPads.size()-1)
             {
-                controlButtons[controlMode_-1]->setToggleState(true, false);
+                controlButtons[controlMode_-1]->setToggleState(true, dontSendNotification);
                 setDisplay(controlMode_-1);
             }
         }
@@ -498,11 +498,11 @@ void GuiControllerMode::updateDisplay()
             if (PAD_SETTINGS->getControllerMidiProgramChangeChannel() != channel_)
             {
                 for (int i = 0; i <16; i++)
-                    midiChannelButtons[i]->setToggleState(0, false);
+                    midiChannelButtons[i]->setToggleState(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                midiChannelButtons[channel_-1]->setToggleState(true, false);
+                midiChannelButtons[channel_-1]->setToggleState(true, dontSendNotification);
         }
         
         //==================================================================================================
@@ -582,11 +582,11 @@ void GuiControllerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getControllerLedControl() != ledControl_)
             {
-                ledControlMenu->setSelectedId(0, true);
+                ledControlMenu->setSelectedId(0, dontSendNotification);
                 break;
             }
             if (i == selectedPads.size()-1)
-                ledControlMenu->setSelectedId(ledControl_, true);
+                ledControlMenu->setSelectedId(ledControl_, dontSendNotification);
         }
         
     }

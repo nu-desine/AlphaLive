@@ -82,7 +82,7 @@ GuiDelay::GuiDelay(MainComponent &ref)
 	Image *syncImage = new Image(ImageCache::getFromMemory(MainBinaryData::syncicon_png, MainBinaryData::syncicon_pngSize));
     addAndMakeVisible(syncButton = new ModeButton(syncImage));
     syncButton->setClickingTogglesState(true);
-    syncButton->setToggleState(1, false);
+    syncButton->setToggleState(1, dontSendNotification);
     syncButton->addListener(this);
     syncButton->addMouseListener(this, true);
 
@@ -96,7 +96,7 @@ GuiDelay::GuiDelay(MainComponent &ref)
     alphaTouchMenu->addItem(translate("Feedback"), 4);
     alphaTouchMenu->addItem(translate("LPF Frequency"), 5);
     alphaTouchMenu->addItem(translate("HPF Frequency"), 6);
-    alphaTouchMenu->setSelectedId(1, true);
+    alphaTouchMenu->setSelectedId(1, dontSendNotification);
     
     Image *reverseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::inverticon_png, MainBinaryData::inverticon_pngSize));
     addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
@@ -381,10 +381,10 @@ void GuiDelay::updateDisplay()
         feedbackSlider->setValue(PAD_SETTINGS->getPadFxDelayFeedback(), dontSendNotification);
         lpfFrequencySlider->setValue(PAD_SETTINGS->getPadFxDelayLpfFreq(), dontSendNotification);
         hpfFrequencySlider->setValue(PAD_SETTINGS->getPadFxDelayHpfFreq(), dontSendNotification);
-        syncButton->setToggleState(PAD_SETTINGS->getPadFxDelaySync(), false);
+        syncButton->setToggleState(PAD_SETTINGS->getPadFxDelaySync(), dontSendNotification);
         
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxDelayAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getPadFxDelayAtReverse(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxDelayAlphaTouch(), dontSendNotification);
+        reverseButton->setToggleState(PAD_SETTINGS->getPadFxDelayAtReverse(), dontSendNotification);
         intensitySlider->setValue(PAD_SETTINGS->getPadFxDelayAtIntensity(), dontSendNotification);
     }
     
@@ -396,10 +396,10 @@ void GuiDelay::updateDisplay()
         feedbackSlider->setValue(0.5, dontSendNotification);
         lpfFrequencySlider->setValue(5000, dontSendNotification);
         hpfFrequencySlider->setValue(50, dontSendNotification);
-        syncButton->setToggleState(1, false);
+        syncButton->setToggleState(1, dontSendNotification);
         
-        alphaTouchMenu->setSelectedId(0, true);
-        reverseButton->setToggleState(0, false);
+        alphaTouchMenu->setSelectedId(0, dontSendNotification);
+        reverseButton->setToggleState(0, dontSendNotification);
         intensitySlider->setValue(1.0, dontSendNotification);
     }
     

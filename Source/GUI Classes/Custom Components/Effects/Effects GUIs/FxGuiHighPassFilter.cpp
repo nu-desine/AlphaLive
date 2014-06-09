@@ -60,7 +60,7 @@ GuiHighPassFilter::GuiHighPassFilter(MainComponent &ref)
     alphaTouchMenu->addItem(translate("Mix"), 2);
     alphaTouchMenu->addItem(translate("Cut-Off Frequency"), 3);
     alphaTouchMenu->addItem(translate("Bandwidth/Resonance"), 4);
-    alphaTouchMenu->setSelectedId(1, true);
+    alphaTouchMenu->setSelectedId(1, dontSendNotification);
     
     Image *reverseIcon = new Image(ImageCache::getFromMemory(MainBinaryData::inverticon_png, MainBinaryData::inverticon_pngSize));
     addAndMakeVisible(reverseButton = new ModeButton(reverseIcon));
@@ -204,8 +204,8 @@ void GuiHighPassFilter::updateDisplay()
         mixSlider->setValue(PAD_SETTINGS->getPadFxHpfMix(), dontSendNotification);
         frequencySlider->setValue(PAD_SETTINGS->getPadFxHpfFreq(), dontSendNotification);
         bandwidthSlider->setValue(PAD_SETTINGS->getPadFxHpfBandwidth(), dontSendNotification);
-        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxHpfAlphaTouch(), true);
-        reverseButton->setToggleState(PAD_SETTINGS->getPadFxHpfAtReverse(), false);
+        alphaTouchMenu->setSelectedId(PAD_SETTINGS->getPadFxHpfAlphaTouch(), dontSendNotification);
+        reverseButton->setToggleState(PAD_SETTINGS->getPadFxHpfAtReverse(), dontSendNotification);
         intensitySlider->setValue(PAD_SETTINGS->getPadFxHpfAtIntensity(), dontSendNotification);
     }
     
@@ -214,8 +214,8 @@ void GuiHighPassFilter::updateDisplay()
         mixSlider->setValue(1.0, dontSendNotification);
         frequencySlider->setValue(1000, dontSendNotification);
         bandwidthSlider->setValue(5.0, dontSendNotification);
-        alphaTouchMenu->setSelectedId(0, true);
-        reverseButton->setToggleState(0, false);
+        alphaTouchMenu->setSelectedId(0, dontSendNotification);
+        reverseButton->setToggleState(0, dontSendNotification);
         intensitySlider->setValue(1.0, dontSendNotification);
     }
     

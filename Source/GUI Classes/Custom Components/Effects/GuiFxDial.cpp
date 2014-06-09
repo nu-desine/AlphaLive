@@ -92,7 +92,7 @@ GuiFxDial::GuiFxDial(MainComponent &ref) :  Component ("GuiFxDial"),
                              
     }
     
-    fxButtons[0]->setToggleState(true, false);
+    fxButtons[0]->setToggleState(true, dontSendNotification);
    
 }
 
@@ -303,7 +303,7 @@ void GuiFxDial::updateDisplay()
                 if (PAD_SETTINGS->getSamplerEffect() != effect_)
                 {
                     for (int i = 0; i < 10; i++)
-                        fxButtons[i]->setToggleState(0, false);
+                        fxButtons[i]->setToggleState(0, dontSendNotification);
                     
                     currentEffect = 0;
                     break;
@@ -323,7 +323,7 @@ void GuiFxDial::updateDisplay()
                 if (PAD_SETTINGS->getSequencerEffect() != effect_)
                 {
                     for (int i = 0; i < 10; i++)
-                        fxButtons[i]->setToggleState(0, false);
+                        fxButtons[i]->setToggleState(0, dontSendNotification);
                     
                     currentEffect = 0;
                     break;
@@ -389,7 +389,7 @@ void GuiFxDial::updateDisplay()
     }
   
     if (currentEffect >= 0)
-        fxButtons[currentEffect]->setToggleState(true, false);
+        fxButtons[currentEffect]->setToggleState(true, dontSendNotification);
     
     //repaint(); //repaint with bounds! Need to call repaint here?
 

@@ -53,11 +53,18 @@ void ReverbClass::processAudio (const AudioSourceChannelInfo& bufferToFill)
 {
     //create a COPY of bufferToFill's buffer that will be used to hold processed audio data
     //bufferToFill.buffer will stay unprocessed
-    AudioSampleBuffer wetBuffer(*bufferToFill.buffer);
+    int numChans = bufferToFill.buffer->getNumChannels();
+    int numSamps = bufferToFill.numSamples;
+    
+    AudioSampleBuffer wetBuffer(numChans, numSamps);
+    
+    for (int i = 0; i < numChans; i++)
+        wetBuffer.copyFrom(i, 0, *bufferToFill.buffer, 1, 0, numSamps);
+    
     //get audio channel data
     float *channels[2];
-    channels[0] = wetBuffer.getArrayOfChannels()[0] + bufferToFill.startSample;
-    channels[1] = wetBuffer.getArrayOfChannels()[1] + bufferToFill.startSample;
+    channels[0] = wetBuffer.getArrayOfWritePointers()[0] + bufferToFill.startSample;
+    channels[1] = wetBuffer.getArrayOfWritePointers()[1] + bufferToFill.startSample;
     
     //process reverb
     sharedMemory.enter();

@@ -1190,16 +1190,20 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
                     
                     while (tryToUpdate)
                     {
+						String instructionsString;
+
                         //sleep to make it more clear that a new alert has popped up...
                         #if JUCE_WINDOWS
                         sleep(500); //should this actually be Sleep() which need a windows library defined?
+						instructionsString = "To allow the AlphaSphere to be updated, please unplug the device, hold down the reset button (next to the USB port), and plug the device back in. If the AlphaSphere is now flashing red, release the reset button and the device will successfully enter the updater mode. If Windows is now installing new drivers for the device please wait for the drivers to be installed, and then press OK to continue.";
                         #else
                         usleep(500*1000);
+						instructionsString = "To allow the AlphaSphere to be updated, please unplug the device, hold down the reset button (next to the USB port), and plug the device back in. If the AlphaSphere is now flashing red, release the reset button and the device will successfully enter the updater mode. If Press OK to continue.";
                         #endif
                         
                         bool shouldContinue = AlertWindow::showOkCancelBox (AlertWindow::NoIcon, 
                                                       translate("PLEASE FOLLOW THESE INSTRUCTIONS CAREFULLY"), 
-                                                      translate("To allow the AlphaSphere to be updated, please unplug the device, hold down the reset button (next to the USB port), and plug the device back in. If the AlphaSphere is now flashing red, release the reset button and the device will successfully enter the updater mode. Press OK to continue."));
+                                                      translate(instructionsString));
                         
                         if (shouldContinue)
                         {

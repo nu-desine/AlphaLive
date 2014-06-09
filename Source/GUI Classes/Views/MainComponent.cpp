@@ -1907,6 +1907,7 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
             status = true;
         
         result.setTicked(status);
+        result.setActive(!alphaLiveEngineRef.getGlobalClock()->isThreadRunning());
     }
     
     else if (commandID == CommandIDs::MidiClockSettings)

@@ -537,9 +537,6 @@
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\GuiFxDial.cpp">
       <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaAudioSettingsComponent.cpp">
-      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaPopUpButton.cpp">
       <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
     </ClCompile>
@@ -2012,9 +2009,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\GuiFxDial.h">
       <Filter>AlphaLive\Source\GUI Classes\Custom Components\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaAudioSettingsComponent.h">
-      <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaPopUpButton.h">
       <Filter>AlphaLive\Source\GUI Classes\Custom Components\General</Filter>

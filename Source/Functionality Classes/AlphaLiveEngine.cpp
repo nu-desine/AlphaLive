@@ -108,7 +108,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     delete audioSettingsXml;
     
     
-    //SET UP MIDI OUTPUT AND INPUT if not connected to the HID device
+    //SET UP MIDI OUTPUT AND INPUT if not currently connected to the HID device
     if (getDeviceStatus() == 0)
     {
         #if JUCE_MAC || JUCE_LINUX
@@ -134,9 +134,13 @@ AlphaLiveEngine::AlphaLiveEngine()
         
         #if JUCE_WINDOWS
         //==========================================================================
-        //connect to a MIDI output and input device's
-        midiOutputDevice = NULL;
+        //The MidiInput and MidiOutput objects used on Windows are created 
+		//and set using the device selector component, so the one's in this
+		//class aren't used here.
+		midiOutputDevice = NULL;
         midiInputDevice = NULL;
+
+		audioDeviceManager.addMidiInputCallback (String::empty, this);
         
         #endif //JUCE_WINDOWS
     }
@@ -184,7 +188,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     usleep(1000*1000);
     
     if (getDeviceStatus() != 0)
-        removeMidiOut();
+        removeMidiInAndOut();
 	#endif
 }
 
@@ -871,6 +875,9 @@ void AlphaLiveEngine::sendMidiMessage(MidiMessage midiMessage)
     
     if (getDeviceStatus() != 0)
     {
+		//===============================================================
+		//Sending MIDI over HID
+
         unsigned char dataToSend[4];
         
         const uint8 *rawMidiMessage = midiMessage.getRawData();
@@ -884,27 +891,50 @@ void AlphaLiveEngine::sendMidiMessage(MidiMessage midiMessage)
     }
     else
     {
+		//===============================================================
+		//Sending MIDI using MidiOutput object
+
+		#if JUCE_MAC || JUCE_LINUX
         if(midiOutputDevice)
+		{
             midiOutputDevice->sendBlockOfMessages(MidiBuffer(midiMessage), Time::getMillisecondCounter(), 44100);
+		}
+		else
+		{
+			if (!hasDisplayedNoMidiDeviceWarning)
+			{
+				String instructionString = translate("AlphaLive cannot currently send any MIDI messages as the AlphaSphere has been disconnected. To start sending MIDI messages again please reconnect the AlphaSphere, or if you would like to use AlphaLive's virtual MIDI port, quit and relaunch AlphaLive without the AlphaSphere connected.");
+				AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
+								                              translate("No MIDI device available!"),
+									                          translate(instructionString));
+			}
+
+			hasDisplayedNoMidiDeviceWarning = true;
+		}
+
+		#elif JUCE_WINDOWS
+
+		//If midi output exists (it won't if the user hasn't chosen an output device...)
+        if (audioDeviceManager.getDefaultMidiOutput())
+        {
+            audioDeviceManager.getDefaultMidiOutput()->startBackgroundThread();
+            audioDeviceManager.getDefaultMidiOutput()->sendBlockOfMessages(MidiBuffer(midiMessage), Time::getMillisecondCounter(), 44100);
+        }
         else
         {
-            if (hasDisplayedNoMidiDeviceWarning == false)
-            {
-                #if JUCE_MAC || JUCE_LINUX
-                String instructionString = translate("AlphaLive cannot currently send any MIDI messages as the AlphaSphere has been disconnected. To start sending MIDI messages again please reconnect the AlphaSphere, or if you would like to use AlphaLive's virtual MIDI port, quit and relaunch AlphaLive without the AlphaSphere connected.");
-                #endif
-                #if JUCE_WINDOWS
-                String instructionString = translate("AlphaLive cannot currently send any MIDI messages as the AlphaSphere has been disconnected or no MIDI output port has be selected. To start sending MIDI messages please reconnect the AlphaSphere, or select an external MIDI output device from the Preferences view (if the option to select a MIDI output port is not available here, quit and relaunch AlphaLive without the AlphaSphere connected).");
-                #endif
+			if (!hasDisplayedNoMidiDeviceWarning)
+			{
+				String instructionString = translate("AlphaLive cannot currently send any MIDI messages as the AlphaSphere has been disconnected or no MIDI output port has be selected. To start sending MIDI messages please reconnect the AlphaSphere, or select an external MIDI output device from the Preferences view (if the option to select a MIDI output port is not available here, quit and relaunch AlphaLive without the AlphaSphere connected).");
+				AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
+								                              translate("No MIDI device available!"),
+									                          translate(instructionString));
+			}
 
-                AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon,
-                                                  translate("No MIDI device available!"),
-                                                  translate(instructionString));
-                
-                hasDisplayedNoMidiDeviceWarning = true;
-            }
-            std::cout << "No MIDI output selected\n";
-        }
+			hasDisplayedNoMidiDeviceWarning = true;
+		}
+
+		#endif
+
     }
     
     //==================================================================================
@@ -928,19 +958,16 @@ void AlphaLiveEngine::sendMidiMessage(MidiMessage midiMessage)
 }
 
 
-void AlphaLiveEngine::removeMidiOut()
+void AlphaLiveEngine::removeMidiInAndOut()
 {
     sharedMemoryMidi.enter();
     
-    std::cout << "removing midi input/output stuff" << std::endl;
-    
-    //if currently connected to midiOutputDevice and midiInputDevice (either the virtual ports on mac/linux
-    //or a hardware ports on Windows) delete/dissconnected them.
+	#if JUCE_MAC || JUCE_LINUX
+    //if currently connected to midiOutputDevice and midiInputDevice dissconnected and delete them
     if (midiOutputDevice)
     {
         midiOutputDevice->stopBackgroundThread();
         delete midiOutputDevice;
-        
         midiOutputDevice = NULL;
     }
     
@@ -948,11 +975,20 @@ void AlphaLiveEngine::removeMidiOut()
     {
         midiInputDevice->stop();
         delete midiInputDevice;
-        
         midiInputDevice = NULL;
     }
     
-    #if JUCE_WINDOWS
+    #elif JUCE_WINDOWS
+
+	if (audioDeviceManager.getDefaultMidiOutput())
+	{
+		audioDeviceManager.getDefaultMidiOutput()->stopBackgroundThread();
+		audioDeviceManager.setDefaultMidiOutput(String::empty);
+	}
+
+	audioDeviceManager.removeMidiInputCallback(String::empty, this);
+	//what about dissabling MIDI input object?
+
     //remove MIDI output and input selectors from the preferences view
     if (mainComponent != NULL)
     {
@@ -964,42 +1000,6 @@ void AlphaLiveEngine::removeMidiOut()
     
     sharedMemoryMidi.exit();
     
-}
-
-void AlphaLiveEngine::setMidiOutputDevice (int deviceIndex)
-{
-    sharedMemoryMidi.enter();
-    
-    if (deviceIndex >= 0)
-    {
-        std::cout << "Setting MIDI output device! " << std::endl;
-        
-        if (midiOutputDevice) //close open port
-        {
-            midiOutputDevice->stopBackgroundThread();
-            delete midiOutputDevice;
-        }
-        
-        midiOutputDevice = MidiOutput::openDevice(deviceIndex);
-        
-        if(midiOutputDevice)
-            midiOutputDevice->startBackgroundThread();
-        else
-            std::cout << "Failed to open output device: " << MidiOutput::getDefaultDeviceIndex() << std::endl;
-    }
-    
-    else if (deviceIndex == -1) //'none' selected
-    {
-        if (midiOutputDevice) //close open port
-        {
-            midiOutputDevice->stopBackgroundThread();
-            delete midiOutputDevice;
-        }
-        
-        midiOutputDevice = NULL;
-    } 
-    
-    sharedMemoryMidi.exit();
 }
 
 void AlphaLiveEngine::updateFirmware()

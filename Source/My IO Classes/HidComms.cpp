@@ -33,7 +33,7 @@ HidComms::HidComms() : Thread("HidThread")
     
     appHasInitialised = false;
     sendOutputReport = false;
-    midiOutExists = hidDeviceStatus = 0;
+    midiInOutExists = hidDeviceStatus = 0;
 	reconnectCounter = RECONNECT_TIME;
     
     for (int i = 0; i < 48; i++)
@@ -486,7 +486,7 @@ void HidComms::connectToDevice()
             // stuff cannot be called from here as at this point the
             // AlphaLiveEngine won't exist.
             
-            midiOutExists = true;
+            midiInOutExists = true;
         }
         
         hidDeviceStatus = 0;
@@ -502,13 +502,13 @@ void HidComms::connectToDevice()
 		setDeviceStatus();
 		setFirmwareDetails (firmwareString, serialString);
 
-        if (midiOutExists == true)
+        if (midiInOutExists == true)
         {
             //if the midi output stuff currently exists, which would have been caused
             //by the application initialising without the hid device connected,
             //remove it.
-            removeMidiOut();
-            midiOutExists = false;
+            removeMidiInAndOut();
+            midiInOutExists = false;
         }
         
         memset(buf,0,sizeof(buf));

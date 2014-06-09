@@ -54,7 +54,7 @@ public:
     virtual void processMidiInput (const MidiMessage midiMessage) = 0;
     
     virtual void setDeviceType (int type) = 0;
-    virtual void removeMidiOut() = 0;
+    virtual void removeMidiInAndOut() = 0;
     virtual void updateFirmware() = 0;
     virtual void setFirmwareUpdateStatus (bool status) = 0;
     virtual void setDeviceStatus() = 0;
@@ -75,7 +75,7 @@ private:
     hid_device *handle;
     
     bool hidDeviceStatus;
-    bool midiOutExists;
+    bool midiInOutExists;
     int reconnectCounter;
     
     CriticalSection sharedMemory;

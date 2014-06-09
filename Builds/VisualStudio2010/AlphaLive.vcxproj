@@ -68,6 +68,8 @@
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VCInstallDir)lib\amd64;$(VCInstallDir)atlmfc\lib\amd64;$(WindowsSdkDir)lib\x64;C:\WinDDK\7600.16385.1\lib\win7\amd64;</LibraryPath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;C:\WinDDK\7600.16385.1\inc;</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib;C:\WinDDK\7600.16385.1\lib\win7\i386;</LibraryPath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;C:\WinDDK\7600.16385.1\inc;</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VCInstallDir)lib\amd64;$(VCInstallDir)atlmfc\lib\amd64;$(WindowsSdkDir)lib\x64;C:\WinDDK\7600.16385.1\lib\win7\amd64;</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -295,7 +297,6 @@
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiReverb.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiTremolo.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\Effects\GuiFxDial.cpp" />
-    <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaAudioSettingsComponent.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaPopUpButton.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaPopUpImageButton.cpp" />
     <ClCompile Include="..\..\Source\GUI Classes\Custom Components\General\AlphaRotarySlider.cpp" />
@@ -1495,7 +1496,6 @@
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiReverb.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\Effects GUIs\FxGuiTremolo.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\Effects\GuiFxDial.h" />
-    <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaAudioSettingsComponent.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaPopUpButton.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaPopUpImageButton.h" />
     <ClInclude Include="..\..\Source\GUI Classes\Custom Components\General\AlphaRotarySlider.h" />

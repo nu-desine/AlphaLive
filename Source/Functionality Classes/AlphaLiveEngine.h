@@ -72,7 +72,7 @@ public:
     void hidInputCallback (int pad, int value, int velocity);
     void processMidiInput (const MidiMessage midiMessage);
     void setDeviceType (int type); //1 - AlphaSphere, 2 - AlphaSphere elite
-    void removeMidiOut();
+    void removeMidiInAndOut();
     void updateFirmware();
     void setFirmwareUpdateStatus (bool status);
     void setDeviceStatus();
@@ -105,9 +105,7 @@ public:
                                 int numSamples);
     
     void handleIncomingMidiMessage(MidiInput* midiInput, const MidiMessage& midiMessage);
-    
     void sendMidiMessage (MidiMessage midiMessage);
-    void setMidiOutputDevice (int deviceIndex);
     
     void setGain (float value);
     void setPan (float value);

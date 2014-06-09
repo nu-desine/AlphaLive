@@ -462,6 +462,9 @@ void GeneralProjSettingsComponent::comboBoxChanged (ComboBox *comboBox)
         
         //update the menu bar items status
         commandManager->commandStatusChanged();
+        
+        int status = mainComponentRef.getAlphaLiveEngineRef().getGlobalClock()->isThreadRunning();
+        mainComponentRef.getGuiGlobalClock()->updateTransportButtonDisplay(status);
     }
     
     else if (comboBox == clockStartMessageMenu)

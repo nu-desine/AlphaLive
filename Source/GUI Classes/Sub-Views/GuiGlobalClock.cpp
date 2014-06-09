@@ -104,6 +104,12 @@ GuiGlobalClock::GuiGlobalClock(MainComponent &ref, AlphaLiveEngine &ref2)
 	metronomeButton->addListener(this);
 	metronomeButton->addMouseListener(this, true);
     
+    //sync label (that hides the tempo control when synced to an external clock)
+    addChildComponent(syncLabel = new Label());
+    syncLabel->setText(translate("SYNC"), dontSendNotification);
+    syncLabel->setFont(Font (11.f + AlphaTheme::getInstance()->fontSizeAddition));
+    syncLabel->setJustificationType(Justification::centred);
+    
 	currentStepNumber = 0;
 	
 	countGap = (4 * (M_PI / 180));
@@ -124,6 +130,7 @@ void GuiGlobalClock::resized()
 {
     transportButton->setBounds(644-OFFSET_X, 42, 56, 56);
     tempoSlider->setBounds(550-OFFSET_X, 12, 50, 50);
+    syncLabel->setBounds(555-OFFSET_X, 29, 40, 15);
     metronomeButton->setBounds (489-OFFSET_X, 8, 16, 16);
     autoStartSwitch->setBounds (518-OFFSET_X, 10, 24, 24);
 	
@@ -198,6 +205,9 @@ void GuiGlobalClock::paint (Graphics &g)
     
     g.setColour(AlphaTheme::getInstance()->mainColour);
 	g.fillPath(barCount, getTransform());
+    
+    //set colours of components here so they repaint when the theme changes
+    syncLabel->setColour(Label::backgroundColourId, AlphaTheme::getInstance()->childBackgroundColour);
 }
 
 void GuiGlobalClock::updateClockDisplay (int beatNumber, int barNumber, int beatsPerBar)
@@ -211,15 +221,24 @@ void GuiGlobalClock::updateClockDisplay (int beatNumber, int barNumber, int beat
 
 void GuiGlobalClock::updateTransportButtonDisplay (bool status)
 {
-    if (status == true)
+    if (AppSettings::Instance()->getMidiClockValue() == 3)
+    {
+        transportButton->setButtonText(translate("EXTERNAL") + "\n" + translate("SYNC"));
+        syncLabel->setVisible(true);
+    }
+    else if (status == true)
     {
         transportButton->setToggleState(true, dontSendNotification);
         transportButton->setButtonText(translate("STOP"));
+        
+        syncLabel->setVisible(false);
     }
     else
     {
         transportButton->setToggleState(false, dontSendNotification);
         transportButton->setButtonText(translate("START"));
+        
+        syncLabel->setVisible(false);
     }
 }
 
@@ -312,6 +331,9 @@ void GuiGlobalClock::updateDisplay()
     beatsPerBarButtons[AppSettings::Instance()->getBeatsPerBar()-2]->setToggleState(true, dontSendNotification);
     quantizationValueButtons[6-AppSettings::Instance()->getQuantizationValue()]->setToggleState(true, dontSendNotification);
     autoStartSwitch->setToggleState(AppSettings::Instance()->getAutoStartClock(), dontSendNotification);
+    
+    updateTransportButtonDisplay(transportButton->getToggleState());
+        
 
 }
 

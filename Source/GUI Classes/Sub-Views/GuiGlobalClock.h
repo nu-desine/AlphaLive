@@ -79,6 +79,8 @@ private:
     OwnedArray <SettingsButton> quantizationValueButtons;
     
     ModeButton *metronomeButton, *autoStartSwitch;
+    
+    Label *syncLabel;
 };
 
 #endif //H_GUIGLOBALCLOCK

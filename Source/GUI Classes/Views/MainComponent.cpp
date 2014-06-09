@@ -2274,6 +2274,7 @@ bool MainComponent::perform (const InvocationInfo& info)
         }
         
         AppSettings::Instance()->setMidiClockValue(status);
+        globalClock->updateTransportButtonDisplay(alphaLiveEngineRef.getGlobalClock()->isThreadRunning());
         
         return true;
     }
@@ -2294,6 +2295,7 @@ bool MainComponent::perform (const InvocationInfo& info)
         }
         
         AppSettings::Instance()->setMidiClockValue(status);
+        globalClock->updateTransportButtonDisplay(alphaLiveEngineRef.getGlobalClock()->isThreadRunning());
 
         return true;
     }

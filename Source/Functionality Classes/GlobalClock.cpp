@@ -428,6 +428,8 @@ void GlobalClock::setMidiClockMessageTimestamp()
         //and set the tempo to the most common value found here.
         
         AppSettings::Instance()->setGlobalTempo(newTempo);
+        
+         //I don't think I need to do this anymore now we're covering up the tempo display when being synced!
         broadcaster.sendActionMessage("UPDATE TEMPO");
     }
     

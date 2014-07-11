@@ -220,19 +220,18 @@ public:
     //==============================================================================
     void systemRequestedQuit()
     {
-        bool shouldQuit = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, translate("Quit"), translate("Are you sure you want to quit?"));
+        int quitFlag = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon,
+                                                       translate("Quitting AlphaLive"),
+                                                       translate("Do you want to save your current project before quitting AlphaLive?"));
         
-        if (shouldQuit == true)
+        //if 'cancel' wasn't pressed
+        if (quitFlag != 0)
         {
-            /*
-            bool shouldSave = AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, "Save Project", "Would you like to save?", "Yes", "No");
-            
-            if (shouldSave == true)
+            //if 'yes' was pressed, save the project first
+            if (quitFlag == 1)
             {
-                //save
-                appDocumentState->savePerformance(0);
+                appDocumentState->saveProject();
             }
-             */
             
             //If the option is enabled in the prefs, the project will be automatically cleaned
             //on app shutdown.
@@ -250,9 +249,7 @@ public:
             }
             
             quit();
-            
         }
-        
     }
 
     //==============================================================================

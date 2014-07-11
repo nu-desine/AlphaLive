@@ -2942,7 +2942,7 @@ void AppDocumentState::cleanUpProject (bool closingApp)
             //the clean up is complete the audio file would now be missing. We are saving rather than loading here as the user
             //probably wouldn't want to lose the recently changed settings.
             
-            //However if this function was called when the app is closing, we most load the current project instead
+            //However if this function was called when the app is closing, we must load the current project instead
             //of saving before we clean. Again this is to prevent missing audio file errors. For example, if you clear
             //a scene containing audio files and then close the app without saving beforehand, without loading the project before
             //cleaning it will end up removing audio files that are actually needed. We are loading rather than saving here

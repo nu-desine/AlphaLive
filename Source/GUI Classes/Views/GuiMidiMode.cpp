@@ -50,7 +50,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
 	//triggerSettingsButton->setButtonText("TRIGGER");
 	triggerSettingsButton->setRadioGroupId (1234);
 	triggerSettingsButton->setClickingTogglesState(true);
-	triggerSettingsButton->setToggleState(false, dontSendNotification);
+	triggerSettingsButton->setToggleState(true, dontSendNotification);
 	triggerSettingsButton->addListener(this);
 	triggerSettingsButton->addMouseListener(this, true);
 	triggerSettingsButton->setOpaque(false);
@@ -192,7 +192,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     pressureMaxRangeSlider->addMouseListener(this, true);
     
 	Image *destructIcon = new Image(ImageCache::getFromMemory(MainBinaryData::indestructableicon_png, MainBinaryData::indestructableicon_pngSize));
-	addChildComponent(indestructibleButton = new ModeButton(destructIcon));
+	addAndMakeVisible(indestructibleButton = new ModeButton(destructIcon));
     indestructibleButton->addListener(this);
     indestructibleButton->addMouseListener(this, true);
     indestructibleButton->setClickingTogglesState(true);

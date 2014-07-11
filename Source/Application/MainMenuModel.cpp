@@ -136,6 +136,7 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
     else if (topLevelMenuIndex == 3) //Options
     {
         menu.addCommandItem (commandManager, CommandIDs::DisableHelpBox);
+        menu.addCommandItem(commandManager, CommandIDs::DisablePressureFeedback);
         menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::SendMidiClock);
         menu.addCommandItem(commandManager, CommandIDs::SyncToMidiClock);

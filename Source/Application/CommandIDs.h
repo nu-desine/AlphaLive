@@ -77,6 +77,7 @@ namespace CommandIDs
     static const int ViewScenePresets       = 0x20053;
     static const int EnabledPadContentsDisplay = 0x20054;
     static const int ViewSequenceSettings   = 0x20055;
+    static const int DisablePressureFeedback = 0x20056;
     
 }
 

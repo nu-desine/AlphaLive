@@ -21,6 +21,7 @@
 //
 
 #include "AppSettings.h"
+#include "../GUI Classes/Views/MainComponent.h"
 
 AppSettings* AppSettings::pInstance = 0;
 
@@ -66,6 +67,8 @@ AppSettings::AppSettings()
     hardwareLedStatus = 1;
     hardwareLedPressureStatus = 1;
     hardwareLedClockStatus = 1;
+    
+    disablePressureFeedback = false;
     
     // ==== elite controls settings ====
     eliteDial[0].control = 1;
@@ -203,6 +206,8 @@ void AppSettings::resetProjectSettingsData()
     setHardwareLedStatus(1);
     setHardwareLedPressureStatus(1);
     setHardwareLedClockStatus(1);
+    
+    setDisablePressureFeedback(false);
 }
 
 void AppSettings::copyPadSettings (int padNumber)
@@ -369,6 +374,12 @@ void AppSettings::setHardwareLedClockStatus (int value)
     alphaLiveEngineRef->setLedSettings(3, value);
 }
 
+void AppSettings::setDisablePressureFeedback (bool value)
+{
+    disablePressureFeedback = value;
+    alphaLiveEngineRef->getMainComponent()->getGuiPadLayout()->setDisablePressureFeedback(value);
+}
+
 
 Array<int> AppSettings::getCurrentlySelectedPad()
 {
@@ -454,6 +465,10 @@ int AppSettings::getHardwareLedClockStatus()
     return hardwareLedClockStatus;
 }
 
+bool AppSettings::getDisablePressureFeedback()
+{
+    return disablePressureFeedback;
+}
 
 void AppSettings::setLastAudioSampleDirectory (File directory)
 {

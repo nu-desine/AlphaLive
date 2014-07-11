@@ -75,6 +75,8 @@ public:
     void pastePadSettings();
     
     bool keyPressed (const KeyPress &key, Component *originatingComponent);
+    
+    void setDisablePressureFeedback (bool value);
 	
 private:
 	
@@ -95,7 +97,10 @@ private:
 	
 	unsigned char alphaThreshold;
 
-    bool shouldDisplaySettings;	
+    bool shouldDisplaySettings;
+    
+    bool disablePressureFeedback;
+    int prevPressureVal[48];
 };
 
 

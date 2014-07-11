@@ -773,6 +773,8 @@ void AppDocumentState::saveProjectSettings()
     projectData->setAttribute("hardwareLedPressureStatus", AppSettings::Instance()->getHardwareLedPressureStatus());
     projectData->setAttribute("hardwareLedClockStatus", AppSettings::Instance()->getHardwareLedClockStatus());
     
+    projectData->setAttribute("disablePressureFeedback", AppSettings::Instance()->getDisablePressureFeedback());
+    
 }
 
 void AppDocumentState::loadProjectSettings()
@@ -806,6 +808,9 @@ void AppDocumentState::loadProjectSettings()
         AppSettings::Instance()->setHardwareLedPressureStatus(projectData->getIntAttribute("hardwareLedPressureStatus"));
     if (projectData->hasAttribute("hardwareLedClockStatus"))
         AppSettings::Instance()->setHardwareLedClockStatus(projectData->getIntAttribute("hardwareLedClockStatus"));
+    
+    if (projectData->hasAttribute("disablePressureFeedback"))
+        AppSettings::Instance()->setDisablePressureFeedback(projectData->getBoolAttribute("disablePressureFeedback"));
     
 }
 

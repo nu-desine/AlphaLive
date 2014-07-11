@@ -128,6 +128,8 @@ public:
     void setHardwareLedPressureStatus (int value);
     void setHardwareLedClockStatus (int value);
     
+    void setDisablePressureFeedback (bool value);
+    
     Array<int> getCurrentlySelectedPad();
     
     float getGlobalPan();
@@ -151,6 +153,8 @@ public:
     int getHardwareLedStatus();
     int getHardwareLedPressureStatus();
     int getHardwareLedClockStatus();
+    
+    bool getDisablePressureFeedback();
     
     //Elite Controls Stuff
     void setEliteDialPrevValue(double value, int dialNumber);
@@ -279,6 +283,8 @@ private:
     int hardwareLedClockStatus;     // 0 - off, 1 - on
 
     String sceneName[20];
+    
+    bool disablePressureFeedback;
     
 };
 

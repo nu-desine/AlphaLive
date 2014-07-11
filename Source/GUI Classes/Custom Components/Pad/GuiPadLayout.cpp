@@ -79,6 +79,8 @@ GuiPadLayout::GuiPadLayout(AlphaLiveEngine &alphaLiveEngineRef_, MainComponent &
 		addAndMakeVisible(pads[i]);
 		pads[i]->getButton()->setClickingTogglesState(true);
         pads[i]->addMouseListener(this, true);
+        
+        prevPressureVal[i] = 0;
 	}
 	
 	//path for hit test - DO WE NEED A HIT TEST FOR THIS COMPONENT?
@@ -144,6 +146,8 @@ GuiPadLayout::GuiPadLayout(AlphaLiveEngine &alphaLiveEngineRef_, MainComponent &
     //set this component to listen to itself
     addKeyListener(this);
     setWantsKeyboardFocus(true);
+    
+    disablePressureFeedback = false;
 }
 
 GuiPadLayout::~GuiPadLayout()
@@ -242,7 +246,23 @@ void GuiPadLayout::setPadPlayingState (int pad, int state)
 void GuiPadLayout::setPadPressure (int pad, int pressure, int minPressureValue)
 {
     //update gradient
-    pads[pad]->setGradient(pressure, minPressureValue);
+    
+    //if disablePressureFeedback is set to true, only
+    //update the gradient of the pad when it is pressed
+    //or released. This cuts down CPU usage.
+    if (disablePressureFeedback)
+    {
+        if (prevPressureVal[pad] == 0 && pressure > 0)
+            pads[pad]->setGradient(1, minPressureValue);
+        else if (prevPressureVal > 0 && pressure == 0)
+            pads[pad]->setGradient(0, minPressureValue);
+    }
+    else
+    {
+        pads[pad]->setGradient(pressure, minPressureValue);
+    }
+    
+    prevPressureVal[pad] = pressure;
 }
 
 void GuiPadLayout::setPadPressureStatus (int pad, bool pressureIsLatched)
@@ -601,4 +621,9 @@ void GuiPadLayout::pastePadSettings()
 {
     //this function should only be called if a single pad is selected
     pads[selectedPads[0]]->pastePadSettings();
+}
+
+void GuiPadLayout::setDisablePressureFeedback (bool value)
+{
+    disablePressureFeedback = value;
 }

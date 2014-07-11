@@ -1680,7 +1680,8 @@ void MainComponent::getAllCommands (Array <CommandID>& commands)
         CommandIDs::ViewGlobalPadSettings,
         CommandIDs::ViewSequenceSettings,
         CommandIDs::ViewScenePresets,
-        CommandIDs::EnabledPadContentsDisplay
+        CommandIDs::EnabledPadContentsDisplay,
+        CommandIDs::DisablePressureFeedback
     };
 	
 	commands.addArray (ids, numElementsInArray (ids));
@@ -1987,7 +1988,6 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
         result.setInfo (translate("Show Scene Presets in Toolbox..."),
 						"Selects all pads and displays the scene preset tab in the Toolbox.",
 						CommandCategories::ViewCommands, 0);
-
     }
     else if (commandID == CommandIDs::EnabledPadContentsDisplay)
     {
@@ -1996,7 +1996,13 @@ void MainComponent::getCommandInfo (const CommandID commandID, ApplicationComman
 						CommandCategories::ViewCommands, 0);
         result.defaultKeypresses.add (KeyPress ('o', cmd|alt, 0));
         result.setTicked(StoredSettings::getInstance()->padContentDisplay - 1);
-        
+    }
+    else if (commandID == CommandIDs::DisablePressureFeedback)
+    {
+        result.setInfo (translate("Disable Pressure Feedback"),
+						"Sets a project setting that disables the pressure feedback on the pads.",
+						CommandCategories::OptionCommands, 0);
+        result.setTicked(AppSettings::Instance()->getDisablePressureFeedback());
     }
 
 }
@@ -2416,6 +2422,11 @@ bool MainComponent::perform (const InvocationInfo& info)
         for (int i = 0; i < 48; i++)
             guiPadLayout->setPadDisplay(i);
         
+        return true;
+    }
+    else if (info.commandID == CommandIDs::DisablePressureFeedback)
+    {
+        AppSettings::Instance()->setDisablePressureFeedback(!AppSettings::Instance()->getDisablePressureFeedback());
         return true;
     }
     

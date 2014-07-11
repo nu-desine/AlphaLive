@@ -157,6 +157,8 @@ PopupMenu MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& m
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::HardwareProjectSettings);
         menu.addCommandItem (commandManager, CommandIDs::HardwarePreferences);
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::UploadFirmwareUtility);
     }
     else if (topLevelMenuIndex == 6) //Help
     {

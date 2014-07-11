@@ -321,7 +321,8 @@ public:
             CommandIDs::EnableLed,
             CommandIDs::EnableLedPressure,
             CommandIDs::EnableLedClock,
-            CommandIDs::EnableLedMidiMode
+            CommandIDs::EnableLedMidiMode,
+            CommandIDs::UploadFirmwareUtility
         };
         
         commands.addArray (ids, numElementsInArray (ids));
@@ -423,6 +424,12 @@ public:
             
             result.setTicked (AppSettings::Instance()->getHardwareLedMode());
             //result.setActive (alphaLiveEngine->getDeviceStatus() != 0); // << not currently working
+        }
+        else if (commandID == CommandIDs::UploadFirmwareUtility)
+        {
+            result.setInfo (translate("Upload Firmware Utility..."),
+                            "Allows you to select a .hex file to upload onto the AlphaSphere hardware",
+                            CommandCategories::HardwareCommands, 0);
         }
         
     }
@@ -545,6 +552,11 @@ public:
         else if (info.commandID == StandardApplicationCommandIDs::quit)
         {
             systemRequestedQuit();
+            return true;
+        }
+        else if (info.commandID == CommandIDs::UploadFirmwareUtility)
+        {
+            alphaLiveEngine->uploadFirmware(false);
             return true;
         }
 

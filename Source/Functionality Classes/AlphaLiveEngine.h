@@ -74,6 +74,7 @@ public:
     void setDeviceType (int type); //1 - AlphaSphere, 2 - AlphaSphere elite
     void removeMidiInAndOut();
     void updateFirmware();
+    void uploadFirmware (bool applyingUpdate = true);
     void setFirmwareUpdateStatus (bool status);
     void setDeviceStatus();
     void setFirmwareDetails (String version, String serial);

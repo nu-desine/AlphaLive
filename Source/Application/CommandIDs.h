@@ -47,7 +47,6 @@ namespace CommandIDs
     static const int StartStopClock         = 0x20011;
     static const int KillSwitch             = 0x20012;
     
-    static const int updateFirmware         = 0x20018;
     static const int UpdateSoftware         = 0x20021;
     
     static const int StarterGuide           = 0x20019;
@@ -61,6 +60,7 @@ namespace CommandIDs
     static const int HardwarePreferences    = 0x20033;
     static const int EnableLedMidiMode      = 0x20034;
     static const int HardwareProjectSettings = 0x20035;
+    static const int UploadFirmwareUtility     = 0x20057;
     
     static const int SendMidiClock          = 0x20036;
     static const int SyncToMidiClock        = 0x20037;

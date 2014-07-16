@@ -315,11 +315,9 @@ void GuiSamplerMode::paint (Graphics& g)
 	g.fillEllipse(678,285, 38, 38);
 	g.fillEllipse(850,493, 38, 38);
     g.fillEllipse(891,469, 38, 38);
-    g.fillEllipse(915,428, 38, 38);
 	
 	if(triggerSettingsButton->getToggleStateValue()==true)
 	{
-        g.fillEllipse(891,469, 38, 38);
         g.fillEllipse(915,428, 38, 38);
 		
 		Path pieSeg;
@@ -336,7 +334,9 @@ void GuiSamplerMode::paint (Graphics& g)
 	g.drawEllipse(678,285, 38, 38, 1.0);
 	g.drawEllipse(850,493, 38, 38, 1.0);
     g.drawEllipse(891,469, 38, 38, 1.0);
-    g.drawEllipse(915,428, 38, 38, 1.0);
+    
+    if (triggerSettingsButton->getToggleState())
+        g.drawEllipse(915,428, 38, 38, 1.0);
 	
 	if(triggerSettingsButton->getToggleStateValue()==true)
 	{

@@ -87,6 +87,8 @@ private:
     OwnedArray<SettingsButtonImage> triggerModeButtons;
     OwnedArray<SettingsButtonImage> pressureModeButtons;
     
+    AlphaTextButton *reversePressureRangeButton;
+    
 };
 
 

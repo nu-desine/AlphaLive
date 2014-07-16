@@ -74,6 +74,8 @@ namespace CommonInfoBoxText
     
     static String midiMaxPressureRangeSlider(translate("Pressure Maximum Range Selector. Along with the Minimum Range Selector it sets and displays the MIDI pressure data range for the selected pads."));
     
+    static String midiReversePressureRangeButton(translate("Reverse Pressure Range Button. Click this button to automatically reverse/swap the pressure range values for the selected pads."));
+    
     static String oscIpAddressEditor(translate("IP Address Editor. Sets and displays the IP address of the device that you want the selected pads to send OSC messages to. Set to 127.0.0.1 to send OSC messages somewhere on the same computer."));
     
     static String oscportNumberSlider(translate("Port Number Selector. Sets and displays the UDP/TCP port number that you want the selected pads to send OSC messages over."));

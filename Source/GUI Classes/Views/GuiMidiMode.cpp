@@ -239,6 +239,12 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     noteStatusButton->setClickingTogglesState(true);
     noteStatusButton->setToggleState(true, dontSendNotification);
     noteStatusButton->addMouseListener(this, true);
+    
+    //---------------reverse pressure range button-------------------------------------
+    addChildComponent(reversePressureRangeButton = new AlphaTextButton());
+    reversePressureRangeButton->setButtonText(translate("REV"));
+    reversePressureRangeButton->addListener(this);
+    reversePressureRangeButton->addMouseListener(this, true);
    
 }
 
@@ -306,12 +312,18 @@ void GuiMidiMode::resized()
 	pressureModeButtons[5]->setBounds(728, 305, 234, 234);
 	
 	ccControllerSlider->setBounds(890, 431, 58, 58);
+    
+    //reversePressureRangeButton->setBounds(753, 309, 21, 21); //at the end of the range sliders
+    reversePressureRangeButton->setBounds(969, 395, 21, 21); //at the beginning of the range sliders
 
 }
 
 void GuiMidiMode::paint (Graphics& g)
 {
     parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
+    
+    //=============================================================================
+    //draw background circles for particular controls
     
 	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 
@@ -347,7 +359,14 @@ void GuiMidiMode::paint (Graphics& g)
 	g.fillEllipse(939,561, 27, 27);
 	g.fillEllipse(962,542, 27, 27);
 	g.fillEllipse(981,520, 27, 27);
+    
+    //reverse pressure range button
+    if (pressureSettingsButton->getToggleState())
+        g.fillEllipse(966, 392, 27, 27);
 	
+    //=============================================================================
+    //draw outlines for the background circles for particular controls
+    
 	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	
 	g.drawEllipse(678,285, 38, 38, 1.0);
@@ -373,6 +392,10 @@ void GuiMidiMode::paint (Graphics& g)
 	g.drawEllipse(939,561, 27, 27, 1.0);
 	g.drawEllipse(962,542, 27, 27, 1.0);
 	g.drawEllipse(981,520, 27, 27, 1.0);
+    
+    //reverse pressure range button
+    if (pressureSettingsButton->getToggleState())
+        g.drawEllipse(966, 392, 27, 27, 1.0);
 
 }
 
@@ -592,6 +615,37 @@ void GuiMidiMode::buttonClicked (Button* button)
                 }
             }
         }
+    }
+    
+    //reverse pressure range button
+    else if(button == reversePressureRangeButton)
+    {
+        //reverse/swap the min and max pressure values
+        //within PadSettings for each selected pad
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            int minPressure = PAD_SETTINGS->getMidiMinPressureRange();
+            int maxPressure = PAD_SETTINGS->getMidiMaxPressureRange();
+            
+            PAD_SETTINGS->setMidiMinPressureRange(maxPressure);
+            PAD_SETTINGS->setMidiMaxPressureRange(minPressure);
+        }
+        
+        //reverse/swap the min and max pressure values
+        //on the current GUI. This needs to be done
+        //seperatly from that of above incase the sliders
+        //are currently showing default values due to selecting
+        //multiple pads containing different values. Also,
+        //we only want to update the GUI once, unlike above.
+        {
+            int minPressure = pressureMinRangeSlider->getValue();
+            int maxPressure = pressureMaxRangeSlider->getValue();
+            
+            pressureMinRangeSlider->setValue(maxPressure, dontSendNotification);
+            pressureMaxRangeSlider->setValue(minPressure, dontSendNotification);
+        }
+        
     }
     
     
@@ -983,6 +1037,8 @@ void GuiMidiMode::setDisplay(int settingsType)
         ccControllerSlider->setVisible(false);
         parameterHoverLabel->setVisible(false);
         
+        reversePressureRangeButton->setVisible(false);
+        
         
         if(noteStatusButton->getToggleState()==true)
         {
@@ -993,7 +1049,7 @@ void GuiMidiMode::setDisplay(int settingsType)
             notSelected->setVisible(true);
         }
         
-        //should we be calling repaint here? Compare with Sampler Mode
+        repaint(750, 200, 274, 469);
         
     }
     
@@ -1022,13 +1078,16 @@ void GuiMidiMode::setDisplay(int settingsType)
         parameterHoverLabel->setVisible(true);
         //parameterHoverLabel->setText(String::empty, false);
         
+        reversePressureRangeButton->setVisible(true);
         
         if(pressureStatusButton->getToggleStateValue()==true)
             notSelected->setVisible(false);
         else
             notSelected->setVisible(true);
+        
+        
 
-        //should we be calling repaint here? Compare will Sampler Mode
+        repaint(750, 200, 274, 469);
     }
     
     //Set piano display
@@ -1174,6 +1233,10 @@ void GuiMidiMode::mouseEnter (const MouseEvent &e)
     else if (dynamicChannelButton->isMouseOver(true))
     {
         mainComponentRef.setInfoTextBoxText(translate("Dynamic MIDI Channel Mode button. Dynamic MIDI Channel Mode is a feature that allows individual channels to be dynamically applied to each pressed MIDI pad. Channels are applied to pads in the order they are pressed, and when this mode is turned on you can use the 16 MIDI channel buttons to select the possible channels that the selected pads could be applied to. This feature can be used as an alternative to polyphonic aftertouch when it is not available. Turn on this button to activate this mode. This feature is not available to pressure-only pads."));
+    }
+    else if (reversePressureRangeButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::midiReversePressureRangeButton));
     }
     
     

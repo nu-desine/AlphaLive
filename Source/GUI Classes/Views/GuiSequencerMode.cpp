@@ -420,6 +420,12 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     recordButton->setColour(TextButton::buttonOnColourId, Colours::red);
 	addAndMakeVisible (recordButton);
     
+    //---------------reverse pressure range button-------------------------------------
+    addChildComponent(reverseMidiPressureRangeButton = new AlphaTextButton());
+    reverseMidiPressureRangeButton->setButtonText(translate("REV"));
+    reverseMidiPressureRangeButton->addListener(this);
+    reverseMidiPressureRangeButton->addMouseListener(this, true);
+    
     drawDrawableButtons();
     
     //attach this class to the subject class
@@ -553,8 +559,9 @@ void GuiSequencerMode::resized()
     midiPressureMaxRangeSlider->setBounds(710, 287, 270, 270);
 	
 	fxDial->setBounds(683, 261, 324, 324);
-
     
+    //reverseMidiPressureRangeButton->setBounds(753, 309, 21, 21); //at the end of the range sliders
+    reverseMidiPressureRangeButton->setBounds(969, 395, 21, 21); //at the beginning of the range sliders
 }
 
 
@@ -562,6 +569,9 @@ void GuiSequencerMode::paint (Graphics& g)
 {
     parameterHoverLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColour);
 
+    //=============================================================================
+    //draw background circles for particular controls
+    
 	ColourGradient fillGradient(AlphaTheme::getInstance()->childBackgroundColour,845 , 461, AlphaTheme::getInstance()->backgroundColour, 845 , 383, false);
 	g.setGradientFill(fillGradient);
 	g.fillEllipse(802, 379, 86, 86);
@@ -598,6 +608,10 @@ void GuiSequencerMode::paint (Graphics& g)
 		
 		g.setColour(AlphaTheme::getInstance()->backgroundColour);
 		g.fillEllipse(800,265, 38, 38);
+        
+        //reverse pressure range button
+        if (modeMidiButton->getToggleState())
+            g.fillEllipse(966, 392, 27, 27);
 	}
 	
 	g.fillEllipse(646,436, 27, 27);
@@ -621,6 +635,9 @@ void GuiSequencerMode::paint (Graphics& g)
         g.fillEllipse(962,542, 27, 27);
         g.fillEllipse(981,520, 27, 27);
 	}
+    
+    //=============================================================================
+    //draw outlines for the background circles for particular controls
 	
 	g.setColour(AlphaTheme::getInstance()->foregroundColour.withAlpha(0.3f));
 	
@@ -678,6 +695,10 @@ void GuiSequencerMode::paint (Graphics& g)
         g.drawEllipse(939,561, 27, 27, 1.0);
         g.drawEllipse(962,542, 27, 27, 1.0);
         g.drawEllipse(981,520, 27, 27, 1.0);
+        
+        //reverse pressure range button
+        if (pressureSettingsButton->getToggleState())
+            g.drawEllipse(966, 392, 27, 27, 1.0);
 		
 	}
 	
@@ -1468,7 +1489,38 @@ void GuiSequencerMode::buttonClicked (Button* button)
             PAD_SETTINGS->setSequencerRecordEnabled(button->getToggleState());
         }
     }
-     
+    
+    
+    //reverse midi pressure range button
+    else if(button == reverseMidiPressureRangeButton)
+    {
+        //reverse/swap the min and max pressure values
+        //within PadSettings for each selected pad
+        for (int i = 0; i < selectedPads.size(); i++)
+        {
+            int padNum = selectedPads[i];
+            int minPressure = PAD_SETTINGS->getSequencerMidiMinPressureRange();
+            int maxPressure = PAD_SETTINGS->getSequencerMidiMaxPressureRange();
+            
+            PAD_SETTINGS->setSequencerMidiMinPressureRange(maxPressure);
+            PAD_SETTINGS->setSequencerMidiMaxPressureRange(minPressure);
+        }
+        
+        //reverse/swap the min and max pressure values
+        //on the current GUI. This needs to be done
+        //seperatly from that of above incase the sliders
+        //are currently showing default values due to selecting
+        //multiple pads containing different values. Also,
+        //we only want to update the GUI once, unlike above.
+        {
+            int minPressure = midiPressureMinRangeSlider->getValue();
+            int maxPressure = midiPressureMaxRangeSlider->getValue();
+            
+            midiPressureMinRangeSlider->setValue(maxPressure, dontSendNotification);
+            midiPressureMaxRangeSlider->setValue(minPressure, dontSendNotification);
+        }
+        
+    }
     
     //midi channel buttons
     for (int chan = 0; chan < 16; chan++)
@@ -1606,6 +1658,8 @@ void GuiSequencerMode::hideComponents()
     for (int i = 0; i < 12; i++)
         audioRowButtons[i]->setVisible(false);
     //setParameterLabelText(String::empty);
+    
+    reverseMidiPressureRangeButton->setVisible(false);
 }
 
 
@@ -1668,6 +1722,8 @@ void GuiSequencerMode::setDisplay (int settingsType)
                 midiPressureMinRangeSlider->setVisible(true);
                 midiPressureMaxRangeSlider->setVisible(true);
                 parameterHoverLabel->setVisible(true);
+                
+                reverseMidiPressureRangeButton->setVisible(true);
             }
             
             else if(modeSamplesButton->getToggleStateValue()==true)
@@ -2665,6 +2721,10 @@ void GuiSequencerMode::mouseEnter (const MouseEvent &e)
         }
     }
     
+    else if (reverseMidiPressureRangeButton->isMouseOver(true))
+    {
+        mainComponentRef.setInfoTextBoxText(translate(CommonInfoBoxText::midiReversePressureRangeButton));
+    }
     
     for (int i = 0; i < 16; i++)
     {

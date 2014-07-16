@@ -133,6 +133,8 @@ private:
     
     DrawablePath recordButtonNormalPath, recordButtonDownPath, previewButtonNormalPath, previewButtonDownPath;
     
+    AlphaTextButton *reverseMidiPressureRangeButton;
+    
      
 };
 

@@ -112,14 +112,58 @@ void SoftwareUpdateComponent::run()
             setVisible(true);
         }
         
-        //get AlphaLive zip file from our server
-        URL zipUrl ("http://www.alphasphere.com/AlphaLive_Update.zip");
-        InputStream* urlStream = zipUrl.createInputStream (true);
+        //=====================================================================
+        //NEW METHOD
         
-        //uncompress zip file
-        ZipFile zipFile (urlStream, true);
-        //should it be downloaded into a temp file instead?
-        Result result = zipFile.uncompressTo(alphaLiveDirectory);
+        //get the AlphaLive Update URL
+        URL updateUrl ("http://www.alphasphere.com/AlphaLive_Update.zip");
+        //Downloading the URL into an InputStream
+        InputStream *updateInputStream = updateUrl.createInputStream(false);
+        
+        std::cout << "URL File Size: " << updateInputStream->getTotalLength() << std::endl;
+        
+        //Create a local file
+        File updateFile (alphaLiveDirectory.getFullPathName() +
+                         File::separatorString +
+                         "AlphaLive_Update.zip");
+        updateFile.deleteFile();
+        updateFile.create();
+        
+        //Create an OutputStream for the file so we can write data to it
+        FileOutputStream *fileOutputStream = updateFile.createOutputStream();
+        
+        //Write to the file from the InputStream of the URL (this is the part that takes a while)
+        std::cout << "Downloading Update..." << std::endl;
+        fileOutputStream->writeFromInputStream(*updateInputStream, updateInputStream->getTotalLength());
+        std::cout << "Finished!" << std::endl;
+        
+        //Without deleting these here the ZipFile object below
+        //thinks that updateFile has no entries and doesn't uncompress
+        delete updateInputStream;
+        delete fileOutputStream;
+        
+        //Uncompress the zip file
+        ZipFile zipFile (updateFile);
+        std::cout << "Zip file entries: " << zipFile.getNumEntries() << std::endl;
+        std::cout << "Uncompressing download..." << std::endl;
+        Result result = zipFile.uncompressTo(updateFile.getParentDirectory(), true);
+        std::cout << "Finished!" << std::endl;
+        
+        //delete the zip file
+        updateFile.deleteFile();
+        
+        //=====================================================================
+        //OLD METHOD - very slow on Windows
+        
+//        //get AlphaLive zip file from our server
+//        URL zipUrl ("http://www.alphasphere.com/AlphaLive_Update.zip");
+//        InputStream* urlStream = zipUrl.createInputStream (true);
+//        
+//        //uncompress zip file
+//        ZipFile zipFile (urlStream, true);
+//        //should it be downloaded into a temp file instead?
+//        Result result = zipFile.uncompressTo(alphaLiveDirectory);
+        //=====================================================================
         
         File updateDirectory (alphaLiveDirectory.getFullPathName() + File::separatorString + "AlphaLive_Update");
         

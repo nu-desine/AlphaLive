@@ -213,6 +213,13 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     ccControllerSlider->addMouseListener(this, true);
     ccControllerSlider->setValue(-999);
     
+	//---------------reverse pressure range button-------------------------------------
+    addChildComponent(reversePressureRangeButton = new AlphaTextButton());
+    reversePressureRangeButton->setButtonText(translate("REV"));
+    reversePressureRangeButton->addListener(this);
+    reversePressureRangeButton->addMouseListener(this, true);
+
+	//PLEASE NOTE: ANYTHING PLACED AFTER HERE WILL NOT BE HIDDEN BY THE STATUS/PRESSURE OFF GRAPHIC
 
     //---------------status off bg-------------------------------------
     addChildComponent(notSelected = new GuiCircleBackground());
@@ -239,12 +246,6 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     noteStatusButton->setClickingTogglesState(true);
     noteStatusButton->setToggleState(true, dontSendNotification);
     noteStatusButton->addMouseListener(this, true);
-    
-    //---------------reverse pressure range button-------------------------------------
-    addChildComponent(reversePressureRangeButton = new AlphaTextButton());
-    reversePressureRangeButton->setButtonText(translate("REV"));
-    reversePressureRangeButton->addListener(this);
-    reversePressureRangeButton->addMouseListener(this, true);
    
 }
 

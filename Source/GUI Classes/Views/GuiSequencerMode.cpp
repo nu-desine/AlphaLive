@@ -364,8 +364,15 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     stickyButton->addListener(this);
     stickyButton->addMouseListener(this, true);
     stickyButton->setClickingTogglesState(true);
+
+	//---------------reverse pressure range button-------------------------------------
+    addChildComponent(reverseMidiPressureRangeButton = new AlphaTextButton());
+    reverseMidiPressureRangeButton->setButtonText(translate("REV"));
+    reverseMidiPressureRangeButton->addListener(this);
+    reverseMidiPressureRangeButton->addMouseListener(this, true);
     
-    
+    //PLEASE NOTE: ANYTHING PLACED AFTER HERE WILL NOT BE HIDDEN BY THE STATUS/PRESSURE OFF GRAPHIC
+
     //---------------status off bg-------------------------------------
     addChildComponent(notSelected = new GuiCircleBackground());
 	notSelected->setVisible(false);
@@ -419,12 +426,6 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
 	recordButton->addMouseListener(this, true);
     recordButton->setColour(TextButton::buttonOnColourId, Colours::red);
 	addAndMakeVisible (recordButton);
-    
-    //---------------reverse pressure range button-------------------------------------
-    addChildComponent(reverseMidiPressureRangeButton = new AlphaTextButton());
-    reverseMidiPressureRangeButton->setButtonText(translate("REV"));
-    reverseMidiPressureRangeButton->addListener(this);
-    reverseMidiPressureRangeButton->addMouseListener(this, true);
     
     drawDrawableButtons();
     

@@ -15,7 +15,7 @@ To build AlphaLive on Windows you will need to do the following:
 
 For all platforms see "[./Other Files/README - running AlphaLive.txt](https://github.com/nu-desine/AlphaLive/blob/master/Other%20Files/README%20-%20running%20AlphaLive.txt)" for instructions regarding the extra files needed when running the built AlphaLive binary.
 
-If you are familiar with JUCE development, you will probably expect your first port of call to be the projects Introjucer file. However this file has not been updated in some time, so if you currently try and rebuild the Xcode/VS2010/Makefile using the Introjucer as it is, it will remove/change some important Xcode/VS2010 project settings. This will be fixed in the near future.
+If you are familiar with JUCE development, you will probably expect your first port of call to be the projects Introjucer file. However this file has not been updated in some time, so if you currently try and rebuild the Xcode/VS2010 using the Introjucer as it is, it will remove/change some important Xcode/VS2010 project settings. This will be fixed in the near future.
 
 ## License ##
 

@@ -28,6 +28,14 @@
 #include "../../File and Settings/StoredSettings.h"
 #include "../Binary Data/MainBinaryData.h"
 
+#if JUCE_WINDOWS
+//for printing to output window in VS2010.
+//see for code example - http://stackoverflow.com/questions/3009042/how-to-view-printf-output-in-a-win32-application-on-visual-studio-2010,
+//though used in conjunction with JUCE it is simpler e.g. OutputDebugString(String("senseValue < 50 \n").toRawUTF8());
+	#include <windows.h>
+#endif
+
+
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
 #define MULTI_PADS (selectedPads.size() > 1)
@@ -1244,7 +1252,12 @@ void MainComponent::mouseExit (const MouseEvent &e)
 void MainComponent::setLocalisation()
 {
     static String countryCode = SystemStats::getDisplayLanguage();
-    std::cout << "Language: " << countryCode << std::endl;
+
+	#if JUCE_WINDOWS
+	OutputDebugString(String("Language: " + countryCode + "\n").toRawUTF8());
+	#else
+	std::cout << "Language: " << countryCode << std::endl;
+	#endif
     
     //We may need to find suitable fonst that exists on the current system
     //for languages such as Chinese, Japanese, and Korean.
@@ -1258,7 +1271,7 @@ void MainComponent::setLocalisation()
     //countryCode will equal ISO 639-1 or ISO 639-2 codes as listed here:
     //http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
     
-    if (countryCode == "ja" || countryCode == "jpn") //japanese
+    if (countryCode == "ja" || countryCode == "jpn" || countryCode == "ja-JP") //japanese
     {
         File transFile (appDir + "Application Data" + File::separatorString + "trans_ja.txt");
         trans = new LocalisedStrings (transFile, false);
@@ -1286,7 +1299,7 @@ void MainComponent::setLocalisation()
         currentLanguage = "Japanese";
         
     }
-    else if (countryCode == "zh" || countryCode == "zho" || countryCode == "zh-Hant" || countryCode == "zh-Hans") //chinese. do i need the first two?
+    else if (countryCode == "zh" || countryCode == "zho" || countryCode == "zh-Hant" || countryCode == "zh-Hans" || countryCode == "zh-CN" || countryCode == "zh-HK") //chinese. do i need the first two?
     {
         File transFile (appDir + "Application Data" + File::separatorString + "trans_zh.txt");
         trans = new LocalisedStrings (transFile, false);
@@ -1314,6 +1327,7 @@ void MainComponent::setLocalisation()
         
         currentLanguage = "Chinese";
     }
+	/*
     else if (countryCode == "ko" || countryCode == "kor") //Korean
     {
         File transFile (appDir + "Application Data" + File::separatorString + "trans_ko.txt");
@@ -1334,6 +1348,7 @@ void MainComponent::setLocalisation()
         
         currentLanguage = "Korean";
     }
+	*/
     else //english
     {
         LocalisedStrings::setCurrentMappings(0);

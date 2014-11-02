@@ -129,7 +129,7 @@ public:
                                        bool isMouseOverButton,
                                        bool isButtonDown);
 	
-	Font getTextButtonFont (TextButton& button);
+	Font getTextButtonFont (TextButton& button, int buttonHeight);
 	
 	void drawButtonText (Graphics& g, TextButton& button,
 						 bool isMouseOverButton, bool isButtonDown);

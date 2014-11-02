@@ -234,7 +234,7 @@ void FileInputStream::openHandle()
         status = WindowsFileHelpers::getResultForLastError();
 }
 
-void FileInputStream::closeHandle()
+FileInputStream::~FileInputStream()
 {
     CloseHandle ((HANDLE) fileHandle);
 }
@@ -551,6 +551,14 @@ File JUCE_CALLTYPE File::getSpecialLocation (const SpecialLocationType type)
             WCHAR dest [2048];
             dest[0] = 0;
             GetTempPath ((DWORD) numElementsInArray (dest), dest);
+            return File (String (dest));
+        }
+
+        case windowsSystemDirectory:
+        {
+            WCHAR dest [2048];
+            dest[0] = 0;
+            GetSystemDirectoryW (dest, (UINT) numElementsInArray (dest));
             return File (String (dest));
         }
 

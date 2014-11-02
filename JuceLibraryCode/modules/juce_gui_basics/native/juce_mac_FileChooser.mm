@@ -172,7 +172,7 @@ void FileChooser::showPlatformDialog (Array<File>& results,
         [panel setDirectoryURL: [NSURL fileURLWithPath: juceStringToNS (directory)]];
         [panel setNameFieldStringValue: juceStringToNS (filename)];
 
-        if ([panel runModal] == NSOKButton)
+        if ([panel runModal] == 1 /*NSModalResponseOK*/)
        #else
         if ([panel runModalForDirectory: juceStringToNS (directory)
                                    file: juceStringToNS (filename)] == NSOKButton)

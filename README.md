@@ -21,11 +21,11 @@ If you are familiar with JUCE development, you will probably expect your first p
 
 AlphaLive is licensed under the GPLv2. See GPL2.txt for details.
 
-AlphaLive and the AlphaSphere have been developed by [nu desine](http://nu-desine.com/).
+AlphaLive and the AlphaSphere have been developed by [nu desine](https://www.watershed.co.uk/studio/residents/nu-desine).
 
 The following libraries are included in the source code:
 
-+  The [JUCE](http://www.rawmaterialsoftware.com/juce.php) library which is licensed under the GPLv2. 
++  The [JUCE](https://juce.com) library which is licensed under the GPLv2. 
 +  The [oscpack](http://www.rossbencina.com/code/oscpack) library which is licensed under a BSD style license.
 +  The [HIDAPI](http://www.signal11.us/oss/hidapi/) library which is licensed under a BSD style license.
 +  The [JUCED](http://code.google.com/p/juced/) library which is licensed under the GPLv2. 

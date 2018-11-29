@@ -1,6 +1,6 @@
 # AlphaLive #
 
-AlphaLive is the [AlphaSphere](https://www.kvraudio.com/product/alphasphere-nexus-by-nu-desine)'s official software application that allows you to program the device into an expressive musical instrument and controller. The software can functions as a MIDI mapping editor, sampler, sequencer, and Open Sound Control converter.
+[AlphaLive](https://www.kvraudio.com/product/alphalive-by-nu-desine) is the [AlphaSphere](https://www.kvraudio.com/product/alphasphere-nexus-by-nu-desine)'s official software application that allows you to program the device into an expressive musical instrument and controller. The software can functions as a MIDI mapping editor, sampler, sequencer, and Open Sound Control converter.
 
 AlphaLive has been programmed using the [JUCE](https://juce.com) cross-platform C++ library, and includes an Xcode project for building on Mac OS X, and a Visual Studio 2010 project for building on Windows. JUCE also easily allows for Linux makefile's to be built.
 

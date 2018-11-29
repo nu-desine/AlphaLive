@@ -4,7 +4,7 @@ AlphaLive is the [AlphaSphere](http://www.alphasphere.com/)'s official software 
 
 AlphaLive has been programmed using the [JUCE](http://www.rawmaterialsoftware.com/juce.php) cross-platform C++ library, and includes an Xcode project for building on Mac OS X, and a Visual Studio 2010 project for building on Windows. JUCE also easily allows for Linux makefile's to be built.
 
-You can download pre-built binaries of the application for Mac OS X and Windows (32 and 64 bit) from [here](http://www.alphasphere.com/alphalive/).
+You can download pre-built binaries of the application for Mac OS X and Windows (32 and 64 bit) from [here](https://github.com/nu-desine/AlphaLive/releases/tag/version_1.3.2).
 
 ## Requirements ##
 

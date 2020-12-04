@@ -85,7 +85,7 @@ GuiReverb::GuiReverb(MainComponent &ref)
     intensitySlider->addMouseListener(this, true);
     
     //---------------parameter label -------------------------------------
-    addAndMakeVisible(parameterHoverLabel = new Label("value label", String::empty));
+    addAndMakeVisible(parameterHoverLabel = new Label("value label", String()));
     parameterHoverLabel->setJustificationType(Justification::centred);
     parameterHoverLabel->setFont(Font(11 + AlphaTheme::getInstance()->fontSizeAddition));
     parameterHoverLabel->addMouseListener(this, true);
@@ -288,7 +288,7 @@ void GuiReverb::mouseEnter (const MouseEvent &e)
 void GuiReverb::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
-    parameterHoverLabel->setText(String::empty, dontSendNotification);
+    mainComponentRef.setInfoTextBoxText (String());
+    parameterHoverLabel->setText(String(), dontSendNotification);
     
 }

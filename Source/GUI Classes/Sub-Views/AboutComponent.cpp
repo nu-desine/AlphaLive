@@ -206,7 +206,7 @@ void AboutComponent::mouseEnter (const MouseEvent &e)
 void AboutComponent::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
 }
 
 bool AboutComponent::keyPressed (const KeyPress &key, Component *originatingComponent)

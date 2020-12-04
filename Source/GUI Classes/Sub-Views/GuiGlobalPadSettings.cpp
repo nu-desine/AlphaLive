@@ -91,7 +91,7 @@ GuiGlobalPadSettings::GuiGlobalPadSettings(MainComponent &ref)
     pressureCurveButton->addMouseListener(this, true);
 	
 	//---------------parameter label -------------------------------------
-    addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
+    addChildComponent(parameterHoverLabel = new Label("value label", String()));
     parameterHoverLabel->setJustificationType(Justification::centred);
     parameterHoverLabel->setFont(Font(11 + AlphaTheme::getInstance()->fontSizeAddition));
     parameterHoverLabel->addMouseListener(this, true);
@@ -667,13 +667,13 @@ void GuiGlobalPadSettings::mouseEnter (const MouseEvent &e)
 void GuiGlobalPadSettings::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
 	
 	if(e.eventComponent == velocitySlider ||
        e.eventComponent == velocityMinRangeSlider ||
        e.eventComponent == velocityMaxRangeSlider)
 	{
-        parameterHoverLabel->setText(String::empty, dontSendNotification);
+        parameterHoverLabel->setText(String(), dontSendNotification);
 		parameterHoverLabel->setVisible(false);
 	}
 }

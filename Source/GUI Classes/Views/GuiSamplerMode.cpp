@@ -81,10 +81,10 @@ GuiSamplerMode::GuiSamplerMode(MainComponent &ref)
     
     
     fileChooser = new AlphaFilenameComponent ("audiofile",
-                                              File::nonexistent,
+                                              File(),
                                               false, false, false,
                                               "*.wav; *.aif; *.aiff",
-                                              String::empty,
+                                              String(),
                                               translate("(choose a WAV or AIFF file)"));
 	fileChooser->addListener (this);					
 	fileChooser->setBrowseButtonText ("+");
@@ -713,8 +713,8 @@ void GuiSamplerMode::updateDisplay()
     {
         /*
         //set default values
-        fileChooser->setCurrentFile(File::nonexistent, false, false);
-        waveform->setFile (File::nonexistent);
+        fileChooser->setCurrentFile(File(), false, false);
+        waveform->setFile (File());
         //gainSlider->sliderComponent()->setValue(0.7, false);
         //panSlider->sliderComponent()->setValue(0.5, false);
         quantiseButton->setToggleState(false, false);
@@ -733,8 +733,8 @@ void GuiSamplerMode::updateDisplay()
             int padNum = selectedPads[i];
             if (PAD_SETTINGS->getSamplerAudioFilePath() != file_)
             {
-                fileChooser->setCurrentFile(File::nonexistent, false, dontSendNotification);
-                waveform->setFile(File::nonexistent);
+                fileChooser->setCurrentFile(File(), false, dontSendNotification);
+                waveform->setFile(File());
                 break;
             }
             if (i == selectedPads.size()-1)
@@ -947,16 +947,16 @@ void GuiSamplerMode::setParameterLabelText (String value)
     //and passes in the controls value as a string and sets it to parameterLabel.
     
     //If you want to update the currentParameterLabel text call this function with
-    //String::empty and the currently visible control is found and the name is
+    //String() and the currently visible control is found and the name is
     //put into the label, as well as putting the value of it into the other label.
     
-    if (value != String::empty)
+    if (value != String())
     {
         parameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColourLighter);
         parameterLabel->setText(value, dontSendNotification);
     }
 	
-	else if (value == String::empty)
+	else if (value == String())
 	{
 		parameterLabel->setColour(Label::textColourId, LookAndFeel::getDefaultLookAndFeel().findColour(Label::textColourId));
 		
@@ -1011,7 +1011,7 @@ void GuiSamplerMode::setRotaryControlDisplay()
             polyphonySlider->setVisible(true);
     }
     
-    setParameterLabelText (String::empty);
+    setParameterLabelText (String());
 }
 
 
@@ -1151,19 +1151,19 @@ void GuiSamplerMode::mouseExit (const MouseEvent &e)
 {
     
 	if (e.eventComponent == gainSlider)
-		setParameterLabelText(String::empty);
+		setParameterLabelText(String());
 	else if (e.eventComponent == panSlider)
-		setParameterLabelText(String::empty);
+		setParameterLabelText(String());
     else if (e.eventComponent == attackSlider)
-		setParameterLabelText(String::empty);
+		setParameterLabelText(String());
     else if (e.eventComponent == releaseSlider)
-		setParameterLabelText(String::empty);
+		setParameterLabelText(String());
     else if (e.eventComponent == polyphonySlider)
-		setParameterLabelText(String::empty);
+		setParameterLabelText(String());
     
     
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
 }
 
 

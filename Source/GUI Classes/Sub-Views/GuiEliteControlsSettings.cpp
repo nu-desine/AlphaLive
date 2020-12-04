@@ -258,7 +258,7 @@ GuiEliteControlsSettings::GuiEliteControlsSettings(MainComponent &ref)
     buttonOscOnNumber->addMouseListener(this, true);
 	
 	//---------------parameter label -------------------------------------
-    addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
+    addChildComponent(parameterHoverLabel = new Label("value label", String()));
     parameterHoverLabel->setJustificationType(Justification::centred);
     parameterHoverLabel->setFont(Font(11 + AlphaTheme::getInstance()->fontSizeAddition));
     parameterHoverLabel->addMouseListener(this, true);
@@ -1055,7 +1055,7 @@ void GuiEliteControlsSettings::mouseEnter (const MouseEvent &e)
 void GuiEliteControlsSettings::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
 	
 	if(e.eventComponent == dialMidiMinRange || e.eventComponent == dialMidiMaxRange ||
 	   e.eventComponent == buttonMidiOffNumber || e.eventComponent == buttonMidiOnNumber ||
@@ -1063,7 +1063,7 @@ void GuiEliteControlsSettings::mouseExit (const MouseEvent &e)
 	   e.eventComponent == buttonOscOffNumber || e.eventComponent == buttonOscOnNumber
 	   || e.eventComponent == dialOscStepSlider)
 	{
-        parameterHoverLabel->setText(String::empty, dontSendNotification);
+        parameterHoverLabel->setText(String(), dontSendNotification);
 		parameterHoverLabel->setVisible(false);
 	}
 }

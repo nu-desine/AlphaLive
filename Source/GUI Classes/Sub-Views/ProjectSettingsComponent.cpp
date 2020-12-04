@@ -120,7 +120,7 @@ void ProjectSettingsComponent::mouseEnter (const MouseEvent &e)
 void ProjectSettingsComponent::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
 }
 
 bool ProjectSettingsComponent::keyPressed (const KeyPress &key, Component *originatingComponent)
@@ -286,7 +286,7 @@ void GlobalOscComponent::mouseEnter (const MouseEvent &e)
 void GlobalOscComponent::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
 }
 
 
@@ -558,7 +558,7 @@ void GeneralProjSettingsComponent::mouseEnter (const MouseEvent &e)
 void GeneralProjSettingsComponent::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
 }
 
 
@@ -734,7 +734,7 @@ void HardwareSettingsComponent::mouseEnter (const MouseEvent &e)
 void HardwareSettingsComponent::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
 }
 
 void HardwareSettingsComponent::updateDisplay()

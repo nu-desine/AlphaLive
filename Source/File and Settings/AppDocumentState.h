@@ -53,7 +53,7 @@
  It would probably make the code shorter and easier to read if
  both external and internal files have associated variables/attributes that tell the program what kind of file it is.
  
- All "/" have been changed to File::separatorString as I've just learnt Windows uses "\" instead.
+ All "/" have been changed to File::getSeparatorString() as I've just learnt Windows uses "\" instead.
  Will this make it incompatible to open up windows projects on mac. Apparrently windows can handle "/" too,
  so should I change it back? Must test this.
  */
@@ -94,36 +94,36 @@ public:
     void createNewProject();
     void saveProject();
     void saveProjectAs();
-    void loadProject(bool openBrowser, File fileToOpen = File::nonexistent, bool askToSave = true);
+    void loadProject(bool openBrowser, File fileToOpen = File(), bool askToSave = true);
     
     void saveSceneToDisk (int sceneNumber);
     bool loadSceneFromDisk (int sceneNumber, 
                             bool openBrowser = true, 
-                            File fileToOpen = File::nonexistent);
+                            File fileToOpen = File());
     
     void savePadToDisk (int padNumber);
     void loadPadFromDisk (Array<int> selectedPads_, 
                           bool openBrowser = true, 
-                          File fileToOpen = File::nonexistent);
+                          File fileToOpen = File());
     
     void saveSequence (int currentlySelectedSeqNumber, 
                        int currentlySelectedPad);
     void loadSequence (int currentlySeletedSeqNumber, 
                        Array<int> selectedPads_, 
                        bool openBrowser = true, 
-                       File fileToOpen = File::nonexistent);
+                       File fileToOpen = File());
     
     void saveSequenceSet (int currentlySelectedPad);
     void loadSequenceSet (Array<int> selectedPads_, 
                           bool openBrowser = true, 
-                          File fileToOpen = File::nonexistent);
+                          File fileToOpen = File());
 	
 	void saveEffect (int currentlySelectedPad);
 	
 	void exportSampleBank (int currentlySelectedPad);
     void importSampleBank (Array<int> selectedPads_, 
                            bool openBrowser = true, 
-                           File fileToOpen = File::nonexistent);
+                           File fileToOpen = File());
     
     void createMidiFile (int currentlySelectedSeqNumber, 
                          int currentlySelectedPad,
@@ -133,7 +133,7 @@ public:
                          int isSeqSet,
                          bool shouldImportNoteData,
                          bool openBrowser = true, 
-                         File fileToOpen = File::nonexistent);
+                         File fileToOpen = File());
     
     int getGuiUpdateFlag();
     int getSceneToUpdate();

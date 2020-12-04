@@ -37,7 +37,7 @@ GuiPiano::GuiPiano() : Component ("GuiPiano")
     recentlyUpdated = true;
     
     //note display label
-    addAndMakeVisible(midiNoteLabel = new Label("Note Label", String::empty));
+    addAndMakeVisible(midiNoteLabel = new Label("Note Label", String()));
     midiNoteLabel->setJustificationType(Justification::horizontallyCentred);
     midiNoteLabel->setFont(Font(12 + AlphaTheme::getInstance()->fontSizeAddition));
     midiNoteLabel->addMouseListener(this, true);
@@ -705,7 +705,7 @@ void GuiPiano::setNoteLabelText (int note)
     }
     else
     {
-        midiNoteLabel->setText(String::empty, dontSendNotification); 
+        midiNoteLabel->setText(String(), dontSendNotification); 
     }
 }
 
@@ -789,7 +789,7 @@ void GuiPiano::setActive (bool value)
     {
         setAlpha(0.3f);
         
-        midiNoteLabel->setText(String::empty, dontSendNotification);
+        midiNoteLabel->setText(String(), dontSendNotification);
         
         for (int i = 0; i < 120; i++)
             setKeyDisplay(i, false);

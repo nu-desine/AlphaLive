@@ -85,13 +85,13 @@ void SoftwareUpdateComponent::run()
     alphaLiveDirectory = File::getSpecialLocation (File::currentApplicationFile).getParentDirectory();
     
     #if JUCE_MAC
-    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.app");
+    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "Application Data/AlphaLive Updater.app");
     #endif
     #if JUCE_WINDOWS
-    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.exe");
+    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "Application Data/AlphaLive Updater.exe");
     #endif
     #if JUCE_LINUX
-    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater");
+    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "Application Data/AlphaLive Updater");
     #endif
     
     if (! alphaliveUpdaterApp.exists())
@@ -124,7 +124,7 @@ void SoftwareUpdateComponent::run()
         
         //Create a local file
         File updateFile (alphaLiveDirectory.getFullPathName() +
-                         File::separatorString +
+                         File::getSeparatorString() +
                          "AlphaLive_Update.zip");
         updateFile.deleteFile();
         updateFile.create();
@@ -165,7 +165,7 @@ void SoftwareUpdateComponent::run()
 //        Result result = zipFile.uncompressTo(alphaLiveDirectory);
         //=====================================================================
         
-        File updateDirectory (alphaLiveDirectory.getFullPathName() + File::separatorString + "AlphaLive_Update");
+        File updateDirectory (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "AlphaLive_Update");
         
         if (result.wasOk() && updateDirectory.exists())
         {
@@ -177,9 +177,9 @@ void SoftwareUpdateComponent::run()
             //or use th chmod() function as documented here:
             //http://www.manpagez.com/man/2/chmod/osx-10.4.php
             
-            File exe1 (updateDirectory.getFullPathName() + File::separatorString + "Mac Files/AlphaLive.app/Contents/MacOS/AlphaLive");
-            File exe2 (updateDirectory.getFullPathName() + File::separatorString + "Mac Files/AlphaLive Updater.app/Contents/MacOS/AlphaLive Updater");
-            File exe3 (updateDirectory.getFullPathName() + File::separatorString + "Mac Files/firmwareUpdater");
+            File exe1 (updateDirectory.getFullPathName() + File::getSeparatorString() + "Mac Files/AlphaLive.app/Contents/MacOS/AlphaLive");
+            File exe2 (updateDirectory.getFullPathName() + File::getSeparatorString() + "Mac Files/AlphaLive Updater.app/Contents/MacOS/AlphaLive Updater");
+            File exe3 (updateDirectory.getFullPathName() + File::getSeparatorString() + "Mac Files/firmwareUpdater");
             
             chmod (exe1.getFullPathName().toUTF8(), S_IRWXO | S_IRWXU | S_IRWXG);
             if (exe2.exists())
@@ -193,11 +193,11 @@ void SoftwareUpdateComponent::run()
             //==== Move the new version of AlphaLive Updater if there is one ====
             
             #if JUCE_MAC
-            File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString + "Mac Files/AlphaLive Updater.app");
+            File newUpdaterFile (updateDirectory.getFullPathName() + File::getSeparatorString() + "Mac Files/AlphaLive Updater.app");
             
             if (newUpdaterFile.exists())
             {
-                File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.app");
+                File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "Application Data/AlphaLive Updater.app");
                 oldUpdaterFile.deleteRecursively();
                 std::cout << newUpdaterFile.copyFileTo(oldUpdaterFile) << std::endl;
             }
@@ -206,22 +206,22 @@ void SoftwareUpdateComponent::run()
             #if JUCE_WINDOWS
             if (SystemStats::isOperatingSystem64Bit())
             {
-                File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString +  "Win64 Files/AlphaLive Updater.exe");
+                File newUpdaterFile (updateDirectory.getFullPathName() + File::getSeparatorString() +  "Win64 Files/AlphaLive Updater.exe");
                 
                 if (newUpdaterFile.exists())
                 {
-                    File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.exe");
+                    File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "Application Data/AlphaLive Updater.exe");
                     oldUpdaterFile.deleteRecursively();
                     std::cout << newUpdaterFile.copyFileTo(oldUpdaterFile) << std::endl;
                 }
             }
             else
             {
-                File newUpdaterFile (updateDirectory.getFullPathName() + File::separatorString +  "Win32 Files/AlphaLive Updater.exe");
+                File newUpdaterFile (updateDirectory.getFullPathName() + File::getSeparatorString() +  "Win32 Files/AlphaLive Updater.exe");
                 
                 if (newUpdaterFile.exists())
                 {
-                    File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.exe");
+                    File oldUpdaterFile (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "Application Data/AlphaLive Updater.exe");
                     oldUpdaterFile.deleteRecursively();
                     std::cout << newUpdaterFile.copyFileTo(oldUpdaterFile) << std::endl;
                 }
@@ -267,13 +267,13 @@ void SoftwareUpdateComponent::handleAsyncUpdate()
 {
     //launch AlphaLive Updater
     #if JUCE_MAC
-    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.app");
+    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "Application Data/AlphaLive Updater.app");
     #endif
     #if JUCE_WINDOWS
-    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater.exe");
+    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "Application Data/AlphaLive Updater.exe");
     #endif
     #if JUCE_LINUX
-    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::separatorString + "Application Data/AlphaLive Updater");
+    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "Application Data/AlphaLive Updater");
     #endif
     
     if (alphaliveUpdaterApp.exists())

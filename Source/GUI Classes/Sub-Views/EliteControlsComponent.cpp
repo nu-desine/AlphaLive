@@ -299,5 +299,5 @@ void EliteControlsComponent::mouseEnter (const MouseEvent &e)
 void EliteControlsComponent::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
 }

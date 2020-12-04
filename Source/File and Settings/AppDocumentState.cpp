@@ -60,7 +60,7 @@ AppDocumentState::AppDocumentState()
     tempDir = File::getSpecialLocation(File::tempDirectory);
     #endif
     #if JUCE_WINDOWS
-    tempDir = File::getSpecialLocation(File::tempDirectory).getFullPathName() + File::separatorString + "AlphaLive";
+    tempDir = File::getSpecialLocation(File::tempDirectory).getFullPathName() + File::getSeparatorString() + "AlphaLive";
     #endif
     tempDir.deleteRecursively();
     tempDir.createDirectory();
@@ -78,7 +78,7 @@ AppDocumentState::AppDocumentState()
     sceneToUpdate = 0;
     sceneStatus = 0;
     
-    currentProjectFile = File::nonexistent;
+    currentProjectFile = File();
     
     mainAppWindowRef = nullptr;
     
@@ -420,19 +420,19 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
     else if (PAD_SETTINGS->getMode() == 2)
     {
         File newFile;
-        String newFileString(String::empty);
+        String newFileString = String();
         
         if (padData->hasAttribute("samplerAudioFilePath"))
         {
             newFileString = padData->getStringAttribute("samplerAudioFilePath");
             
-            if (newFileString != String::empty) //to prevent trying to load in a file if there's nothing to load
+            if (newFileString != String()) //to prevent trying to load in a file if there's nothing to load
             {
                 if (File::isAbsolutePath(newFileString) == false)
                 {
                     //check if the saved audio file path is just the file name
                     //if so, get it from the working directory and apply the full pathname to it
-                    newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + newFileString;
+                    newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::getSeparatorString() + newFileString;
                 }
                 else if (File::isAbsolutePath(newFileString) == true)
                 {
@@ -443,7 +443,7 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
                 PAD_SETTINGS->setSamplerAudioFilePath(newFile);
             }
             else
-                PAD_SETTINGS->setSamplerAudioFilePath(File::nonexistent);
+                PAD_SETTINGS->setSamplerAudioFilePath(File());
         }
         
         if (padData->hasAttribute("samplerTriggerMode"))
@@ -550,19 +550,19 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
             for (int row = 0; row <= NO_OF_ROWS-1; row++)
             {
                 File newFile;
-                String newFileString(String::empty);
+                String newFileString = String();
                 
                 if (padData->hasAttribute("sequencerSamplesAudioFilePath"+String(row)))
                 {
                     newFileString = padData->getStringAttribute("sequencerSamplesAudioFilePath"+String(row));
                     
-                    if (newFileString != String::empty) //to prevent trying to load in a file if there's nothing to load
+                    if (newFileString != String()) //to prevent trying to load in a file if there's nothing to load
                     {
                         if (File::isAbsolutePath(newFileString) == false)
                         {
                             //check if the saved audio file path is just the file name
                             //if so, get it from the working directory and apply the full pathname to it
-                            newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + newFileString;
+                            newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::getSeparatorString() + newFileString;
                         }
                         else
                         {
@@ -573,7 +573,7 @@ void AppDocumentState::loadPadSettings (int padNumber, XmlElement *padData)
                         PAD_SETTINGS->setSequencerSamplesAudioFilePath(newFile, row);
                     }
                     else
-                        PAD_SETTINGS->setSequencerSamplesAudioFilePath(File::nonexistent, row);
+                        PAD_SETTINGS->setSequencerSamplesAudioFilePath(File(), row);
                 }
             }
             
@@ -1130,7 +1130,7 @@ void AppDocumentState::createNewProject()
         for (int i = 0; i <= 47; i++)
             PAD_SETTINGS->resetData(0);
         
-        currentProjectFile = File::nonexistent;
+        currentProjectFile = File();
         
         tempDir.deleteRecursively();
         tempDir.createDirectory();
@@ -1183,7 +1183,7 @@ void AppDocumentState::createNewProject()
 
 void AppDocumentState::saveProject()
 {
-    if (currentProjectFile == File::nonexistent) //if no performance has been saved yet
+    if (currentProjectFile == File()) //if no performance has been saved yet
     {
         saveProjectAs();
     }
@@ -1213,7 +1213,7 @@ void AppDocumentState::saveProject()
             performanceSettings.addChildElement(sceneData[i]);
         }
         
-        String xmlDoc = performanceSettings.createDocument(String::empty, false);
+        String xmlDoc = performanceSettings.createDocument(String(), false);
         currentProjectFile.appendText(xmlDoc);
         
         //remove projectData and sceneData child elements from performanceSettings so that they aren't deleted when
@@ -1267,7 +1267,7 @@ void AppDocumentState::saveProjectAs()
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create an AlphaLive project to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                String::empty);
+                                String());
     
     if (saveFileChooser.browseForFileToSave(false))
     {
@@ -1275,7 +1275,7 @@ void AppDocumentState::saveProjectAs()
         File savedDirectory (saveFileChooser.getResult());
         
         //create file
-        File savedFile (savedDirectory.getFullPathName() + File::separatorString + savedDirectory.getFileName()); //get file that the user has 'saved'
+        File savedFile (savedDirectory.getFullPathName() + File::getSeparatorString() + savedDirectory.getFileName()); //get file that the user has 'saved'
         String stringFile = savedFile.getFullPathName(); //get the filepath name of the file as a string
         stringFile = stringFile + ".alphalive"; //append an extension name to the filepath name
         savedFile = stringFile; //set the file to this name
@@ -1293,7 +1293,7 @@ void AppDocumentState::saveProjectAs()
             savedDirectory.createDirectory();
             
             //first, create folder to hold the projects audio files
-            File audioFileDirectory = (savedDirectory.getFullPathName() + File::separatorString + "Audio Files");
+            File audioFileDirectory = (savedDirectory.getFullPathName() + File::getSeparatorString() + "Audio Files");
             
             if (audioFileDirectory.exists()) //this would be true if the user is overwritting an old project
                 audioFileDirectory.deleteRecursively();
@@ -1327,7 +1327,7 @@ void AppDocumentState::saveProjectAs()
                 performanceSettings.addChildElement(sceneData[i]);
             }
             
-            String xmlDoc = performanceSettings.createDocument(String::empty, false);
+            String xmlDoc = performanceSettings.createDocument(String(), false);
             savedFile.appendText(xmlDoc);
             
             //remove projectData and sceneData child elements from performanceSettings so that they aren't deleted when
@@ -1357,7 +1357,7 @@ void AppDocumentState::saveProjectAs()
 void AppDocumentState::loadProject (bool openBrowser, File fileToOpen, bool askToSave)
 {
     //openBrower will be true when the 'Load' button is clicked, and false when a .alphalive file is clicked
-    //fileToOpen will be equal to File::nonexistent when Load is click, and the file path when a .alphalive
+    //fileToOpen will be equal to File() when Load is click, and the file path when a .alphalive
     //file is clicked
     
     //========== NEW: ask user if they would like to save the current project first =========
@@ -1429,7 +1429,7 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen, bool askT
                 loadedFile = fileToOpen;
             
             //parse file into xml file
-            ScopedPointer<XmlElement> loadedXml (XmlDocument::parse(loadedFile));
+            std::unique_ptr<XmlElement> loadedXml (XmlDocument::parse(loadedFile));
             
             if (loadedXml != nullptr && loadedXml->hasTagName("ALPHALIVE_PROJECT_VERSION_1"))
             {
@@ -1456,7 +1456,7 @@ void AppDocumentState::loadProject (bool openBrowser, File fileToOpen, bool askT
                     AppSettings::Instance()->resetData();
                     
                     //get the folder that holds the projects audio files
-                    File audioFileDirectory = (loadedFile.getParentDirectory().getFullPathName() + File::separatorString + "Audio Files");
+                    File audioFileDirectory = (loadedFile.getParentDirectory().getFullPathName() + File::getSeparatorString() + "Audio Files");
                     
                     //if so some strange reason the directory doesn't exist, create it
                     if (audioFileDirectory.exists() == false)
@@ -1579,7 +1579,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create an AlphaLive Scene file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                String::empty);
+                                String());
     if (saveFileChooser.browseForFileToSave(false))
     {
         //create a project directory
@@ -1588,7 +1588,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
         String directoryString = savedDirectory.getFullPathName() + " (SCENE)";
         savedDirectory = directoryString;
         
-        File savedFile (savedDirectory.getFullPathName() + File::separatorString + savedDirectoryName.getFileName()); //get file that the user has 'saved'
+        File savedFile (savedDirectory.getFullPathName() + File::getSeparatorString() + savedDirectoryName.getFileName()); //get file that the user has 'saved'
         String stringFile = savedFile.getFullPathName(); //get the filepath name of the file as a string
         stringFile = stringFile + ".alphascene"; //append an extension name to the filepath name
         savedFile = stringFile; //set the file to this name
@@ -1609,7 +1609,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
             //------
             
             //create folder to hold the projects audio files
-            File audioFileDirectory = (savedDirectory.getFullPathName() + File::separatorString + "Audio Files");
+            File audioFileDirectory = (savedDirectory.getFullPathName() + File::getSeparatorString() + "Audio Files");
             audioFileDirectory.createDirectory();
             
             if (AppSettings::Instance()->getCopyExternalFiles() == true)
@@ -1623,7 +1623,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
                     {
                         String newFileName(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
                         
-                        if (newFileName != String::empty) //if there is 'something'
+                        if (newFileName != String()) //if there is 'something'
                         {
                             File originalFile;
                             
@@ -1634,10 +1634,10 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
                             if (File::isAbsolutePath(newFileName) == false)
                             {
                                 //get the original audio file in question
-                                originalFile = File::getCurrentWorkingDirectory().getFullPathName()+ File::separatorString + newFileName;
+                                originalFile = File::getCurrentWorkingDirectory().getFullPathName()+ File::getSeparatorString() + newFileName;
                                 
                                 //create an new file in scenes "Audio Files" folder;
-                                File newFile (audioFileDirectory.getFullPathName() + File::separatorString + newFileName);
+                                File newFile (audioFileDirectory.getFullPathName() + File::getSeparatorString() + newFileName);
                                 
                                 if (originalFile.existsAsFile() == true) //if the file exists (which it should)
                                 {
@@ -1647,7 +1647,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
                                 else
                                 {
                                     AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), newFileName + " " + translate("could not be found."));
-                                    //do something here so the loaded data is string::empty and NOT the missing audio file name
+                                    //do something here so the loaded data is String() and NOT the missing audio file name
                                     //can i do this here or does it need to be done in the loadforscene method?
                                 }
                             
@@ -1661,7 +1661,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
                         {
                             String newFileName(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row)));
                             
-                            if (newFileName != String::empty) //if there is 'something'
+                            if (newFileName != String()) //if there is 'something'
                             {
                                 File originalFile;
                                 
@@ -1672,10 +1672,10 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
                                 if (File::isAbsolutePath(newFileName) == false)
                                 {
                                     //get the original audio file in question
-                                    originalFile = File::getCurrentWorkingDirectory().getFullPathName()+ File::separatorString + newFileName;
+                                    originalFile = File::getCurrentWorkingDirectory().getFullPathName()+ File::getSeparatorString() + newFileName;
                                     
                                     //create an new file in scenes "Audio Files" folder;
-                                    File newFile (audioFileDirectory.getFullPathName() + File::separatorString + newFileName);
+                                    File newFile (audioFileDirectory.getFullPathName() + File::getSeparatorString() + newFileName);
                                     
                                     if (originalFile.existsAsFile() == true) //if the file exists (which it should)
                                     {
@@ -1685,7 +1685,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
                                     else
                                     {
                                         AlertWindow::showMessageBoxAsync(AlertWindow::WarningIcon, translate("File not found!"), newFileName + " " + translate("could not be found."));
-                                        //do something here so the loaded data is string::empty and NOT the missing audio file name
+                                        //do something here so the loaded data is String() and NOT the missing audio file name
                                         //can i do this here or does it need to be done in the loadforscene method?
                                     }
                                     
@@ -1718,7 +1718,7 @@ void AppDocumentState::saveSceneToDisk (int sceneNumber)
             toBeSaved->addChildElement(new XmlElement(*sceneData[sceneNumber]->getChildByName("GLOBAL_DATA")));
             
             //save to file
-            String xmlDoc = toBeSaved->createDocument(String::empty, false);
+            String xmlDoc = toBeSaved->createDocument(String(), false);
             savedFile.appendText(xmlDoc);
             
             delete toBeSaved;
@@ -1755,7 +1755,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
             loadedFile = fileToOpen;
         
         //parse file into xml file
-        ScopedPointer<XmlElement> loadedXml (XmlDocument::parse(loadedFile));
+        std::unique_ptr<XmlElement> loadedXml (XmlDocument::parse(loadedFile));
         
         if (loadedXml != nullptr && loadedXml->hasTagName("ALPHALIVE_SCENE_VERSION_1"))
         {
@@ -1790,7 +1790,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
             //      file names and file contents, and names the file appropriately.
             
             //get the folder that holds the scene's audio files
-            File audioFileDirectory = (loadedFile.getParentDirectory().getFullPathName() + File::separatorString + "Audio Files");
+            File audioFileDirectory = (loadedFile.getParentDirectory().getFullPathName() + File::getSeparatorString() + "Audio Files");
             
             for (int i = 0; i <= 47; i++)
             {
@@ -1799,7 +1799,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
                 {
                     const String fileString(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
                     
-                    if (fileString != String::empty) //if there is 'something'
+                    if (fileString != String()) //if there is 'something'
                     {
                         //Need to check here if the saved file path is a file name, a
                         //relative path, or the full path, and handle the situation
@@ -1812,7 +1812,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
                             if (fileString.contains("/") == false)
                             {
                                 //fileString should equal the FILE NAME of an internal file
-                                filePath = audioFileDirectory.getFullPathName()+ File::separatorString + fileString;
+                                filePath = audioFileDirectory.getFullPathName()+ File::getSeparatorString() + fileString;
                             }
                             else
                             {
@@ -1823,7 +1823,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
                                 File currentAppFile = File::getSpecialLocation(File::currentApplicationFile);
                                 
                                 filePath =      currentAppFile.getParentDirectory().getFullPathName() +
-                                                File::separatorString +
+                                                File::getSeparatorString() +
                                                 fileString;
                                 
                             }
@@ -1842,7 +1842,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
                         
                         const String fileString(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row)));
                         
-                        if (fileString!= String::empty) //if there is 'something'
+                        if (fileString!= String()) //if there is 'something'
                         {
                             //Need to check here if the saved file path is a file name, a
                             //relative path, or the full path, and handle the situation
@@ -1855,7 +1855,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
                                 if (fileString.contains("/") == false)
                                 {
                                     //File should be an internal file
-                                    filePath = audioFileDirectory.getFullPathName()+ File::separatorString + fileString;
+                                    filePath = audioFileDirectory.getFullPathName()+ File::getSeparatorString() + fileString;
                                 }
                                 else
                                 {
@@ -1866,7 +1866,7 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
                                     File currentAppFile = File::getSpecialLocation(File::currentApplicationFile);
                                     
                                     filePath =  currentAppFile.getParentDirectory().getFullPathName() +
-                                    File::separatorString +
+                                    File::getSeparatorString() +
                                     fileString;
                                     
                                 }
@@ -1942,7 +1942,7 @@ void AppDocumentState::loadPadFromDisk (Array<int> selectedPads_, bool openBrows
             loadedFile = fileToOpen;
         
         //parse file into xml file
-        ScopedPointer<XmlElement> loadedXml (XmlDocument::parse(loadedFile));
+        std::unique_ptr<XmlElement> loadedXml (XmlDocument::parse(loadedFile));
         
         if (loadedXml != nullptr && loadedXml->hasTagName("ALPHALIVE_PAD_SETTINGS_VERSION_1"))
         {
@@ -1980,7 +1980,7 @@ void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int current
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create a single sequence file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                String::empty);
+                                String());
     
     if (saveFileChooser.browseForFileToSave(false))
     {
@@ -2010,7 +2010,7 @@ void AppDocumentState::saveSequence (int currentlySelectedSeqNumber, int current
             //get single sequence data string based on currently selected sequencer number slider value
             sequenceDataXml.setAttribute("sequenceData", PAD_SETTINGS_pad->getSequencerDataString(currentlySelectedSeqNumber));
             
-            String xmlDoc = sequenceDataXml.createDocument(String::empty);
+            String xmlDoc = sequenceDataXml.createDocument(String());
             savedFile.appendText(xmlDoc);
         }
     }
@@ -2043,7 +2043,7 @@ void AppDocumentState::loadSequence (int currentlySeletedSeqNumber,
         else
             loadedFile = fileToOpen;
         
-        XmlElement* xml = XmlDocument::parse(loadedFile);
+        auto xml = XmlDocument::parse(loadedFile);
         if (xml != nullptr && xml->hasTagName("SEQUENCE_DATA"))
         {
             for (int i = 0; i < selectedPads_.size(); i++)
@@ -2058,7 +2058,7 @@ void AppDocumentState::loadSequence (int currentlySeletedSeqNumber,
   
         }
         
-        delete xml;
+        //delete xml;
         
         //update GUI
         //SHOULD I CREATE A NEW GUIUPDATEFLAG VALUE THAT ONLY ALLOWS A MINIMUM AMOUNT OF
@@ -2075,7 +2075,7 @@ void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create a sequence set file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                String::empty);
+                                String());
     
     if (saveFileChooser.browseForFileToSave(false))
     {
@@ -2109,7 +2109,7 @@ void AppDocumentState::saveSequenceSet(int currentlySelectedPad)
                 sequenceDataXml.setAttribute("sequenceData"+String(i), PAD_SETTINGS_pad->getSequencerDataString(i));
             }
             
-            String xmlDoc = sequenceDataXml.createDocument(String::empty);
+            String xmlDoc = sequenceDataXml.createDocument(String());
             savedFile.appendText(xmlDoc);
             
         }
@@ -2144,7 +2144,7 @@ void AppDocumentState::loadSequenceSet(Array<int> selectedPads_,
         else
             loadedFile = fileToOpen;
         
-        XmlElement* xml = XmlDocument::parse(loadedFile);
+        auto xml = XmlDocument::parse(loadedFile);
         if (xml != nullptr && xml->hasTagName("SEQUENCE_DATA"))
         {
             for (int i = 0; i < selectedPads_.size(); i++)
@@ -2165,7 +2165,7 @@ void AppDocumentState::loadSequenceSet(Array<int> selectedPads_,
             
         }
         
-        delete xml;
+        //delete xml;
         
         //update GUI
         //SHOULD I CREATE A NEW GUIUPDATEFLAG VALUE THAT ONLY ALLOWS A MINIMUM AMOUNT OF
@@ -2181,7 +2181,7 @@ void AppDocumentState::saveEffect (int currentlySelectedPad)
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create an effect file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                String::empty);
+                                String());
     
     if (saveFileChooser.browseForFileToSave(false))
     {
@@ -2331,7 +2331,7 @@ void AppDocumentState::saveEffect (int currentlySelectedPad)
 			toBeSaved->addChildElement(new XmlElement (*effectDataXml));
 			
             //save to file
-            String xmlDoc = toBeSaved->createDocument(String::empty, false);
+            String xmlDoc = toBeSaved->createDocument(String(), false);
             savedFile.appendText(xmlDoc);
             
             delete toBeSaved;
@@ -2346,7 +2346,7 @@ void AppDocumentState::exportSampleBank (int currentlySelectedPad)
 	//navigate to app directory
     FileChooser saveFileChooser(translate("Create a .alphabank file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                String::empty);
+                                String());
     
     if (saveFileChooser.browseForFileToSave(false))
     {
@@ -2371,11 +2371,11 @@ void AppDocumentState::exportSampleBank (int currentlySelectedPad)
             bankDirectory.createDirectory();
             
             //create folder to hold the banks audio files
-            File audioFileDirectory = (bankDirectory.getFullPathName() + File::separatorString + bankName);
+            File audioFileDirectory = (bankDirectory.getFullPathName() + File::getSeparatorString() + bankName);
             audioFileDirectory.createDirectory();
             
             //create .alphabank file
-            File bankFile = (bankDirectory.getFullPathName() + File::separatorString + bankName + ".alphabank");
+            File bankFile = (bankDirectory.getFullPathName() + File::getSeparatorString() + bankName + ".alphabank");
             bankFile.create();
             
             XmlElement *alphaBankDataXml = new XmlElement("ALPHABANK"); //create Xml before extension name is appended
@@ -2388,10 +2388,10 @@ void AppDocumentState::exportSampleBank (int currentlySelectedPad)
                 
                 audioFilePath = PAD_SETTINGS_pad->getSequencerSamplesAudioFilePath(i);
                 
-                if (audioFilePath != File::nonexistent)
+                if (audioFilePath != File())
                 {
                     //create a new file for the seqs audio file but only if it doesn't already exist!!
-                    File audioFileCopy (audioFileDirectory.getFullPathName() + File::separatorString + audioFilePath.getFileName());
+                    File audioFileCopy (audioFileDirectory.getFullPathName() + File::getSeparatorString() + audioFilePath.getFileName());
                     
                     if (audioFileCopy.existsAsFile() == false) //if it doesn't yet exist
                     {
@@ -2434,7 +2434,7 @@ void AppDocumentState::exportSampleBank (int currentlySelectedPad)
                     audioFilePath = audioFileCopy;
 					
                     alphaBankDataXml->setAttribute(String("sample" + String(i+1)), 
-                                                   File::separatorString + String(audioFilePath.getRelativePathFrom(bankFile)));
+                                                   File::getSeparatorString() + String(audioFilePath.getRelativePathFrom(bankFile)));
                 }
             }
             
@@ -2444,7 +2444,7 @@ void AppDocumentState::exportSampleBank (int currentlySelectedPad)
             toBeSaved->addChildElement(new XmlElement (*alphaBankDataXml));
             
             //save to file
-            String xmlDoc = toBeSaved->createDocument(String::empty, false);
+            String xmlDoc = toBeSaved->createDocument(String(), false);
             bankFile.appendText(xmlDoc);
             
             delete toBeSaved;
@@ -2477,7 +2477,7 @@ void AppDocumentState::importSampleBank (Array<int> selectedPads_, bool openBrow
             loadedFile = fileToOpen;
         
         //parse file into xml file
-        ScopedPointer<XmlElement> xmlData (XmlDocument::parse(loadedFile));
+        std::unique_ptr<XmlElement> xmlData (XmlDocument::parse(loadedFile));
         
         //the code here is the same as the relevent code for applying sample banks to sequencer pads from the toolbox.
         //Ideally, the toolbox should just call this function instead of including the same code, however for sampler
@@ -2513,7 +2513,7 @@ void AppDocumentState::createMidiFile (int currentlySelectedSeqNumber, int curre
     //navigate to app directory
     FileChooser saveFileChooser(translate("Create a .mid file to save..."), 
                                 StoredSettings::getInstance()->appProjectDir, 
-                                String::empty);
+                                String());
     
     if (saveFileChooser.browseForFileToSave(false))
     {
@@ -2925,7 +2925,7 @@ void AppDocumentState::importMidiFile (int currentlySelectedSeqNumber,
 void AppDocumentState::cleanUpProject (bool closingApp)
 {
     
-    if (currentProjectFile != File::nonexistent) //if there is currently an open project
+    if (currentProjectFile != File()) //if there is currently an open project
     {
         bool shouldCleanUp = true;
         
@@ -2963,7 +2963,7 @@ void AppDocumentState::cleanUpProject (bool closingApp)
             }
             
             
-            File tempAudioDirectory = File::getCurrentWorkingDirectory().getParentDirectory().getFullPathName() + File::separatorString + "tempDir";
+            File tempAudioDirectory = File::getCurrentWorkingDirectory().getParentDirectory().getFullPathName() + File::getSeparatorString() + "tempDir";
             tempAudioDirectory.createDirectory();
             
             //search through all scenes
@@ -2981,20 +2981,20 @@ void AppDocumentState::cleanUpProject (bool closingApp)
                         {
                             String originalFile(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath"));
                             
-                            if (originalFile != String::empty) //if there is 'something'
+                            if (originalFile != String()) //if there is 'something'
                             {
-                                File audioFile(File::nonexistent);
+                                File audioFile = File();
                                 
                                 //Look for internal files, which are saved just by just their file name
                                 
                                 if (File::isAbsolutePath(originalFile) == false)
                                 {
                                     //File should be an internal file
-                                    audioFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + originalFile;
+                                    audioFile = File::getCurrentWorkingDirectory().getFullPathName() + File::getSeparatorString() + originalFile;
                                     
                                     if (audioFile.existsAsFile() == true)
                                     {
-                                        File newFile = tempAudioDirectory.getFullPathName()+ File::separatorString + originalFile;
+                                        File newFile = tempAudioDirectory.getFullPathName()+ File::getSeparatorString() + originalFile;
                                         if (newFile.existsAsFile() == false) //if it doesn't already exist
                                         {
                                             audioFile.copyFileTo(newFile);//copy the file
@@ -3014,7 +3014,7 @@ void AppDocumentState::cleanUpProject (bool closingApp)
                                     if (audioFile.isAChildOf(File::getCurrentWorkingDirectory()) == true)
                                     {
                                         originalFile = audioFile.getFileName();
-                                        File newFile = tempAudioDirectory.getFullPathName()+ File::separatorString + originalFile;
+                                        File newFile = tempAudioDirectory.getFullPathName()+ File::getSeparatorString() + originalFile;
                                         if (newFile.existsAsFile() == false) //if it doesn't already exist
                                         {
                                             audioFile.copyFileTo(newFile);//copy the file
@@ -3033,20 +3033,20 @@ void AppDocumentState::cleanUpProject (bool closingApp)
                             {
                                 String originalFile(sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row)));
                                 
-                                if (originalFile != String::empty) //if there is 'something'
+                                if (originalFile != String()) //if there is 'something'
                                 {
-                                    File audioFile(File::nonexistent);
+                                    File audioFile = File();
                                     
                                     //Look for internal files, which are saved just by just their file name
                                     
                                     if (File::isAbsolutePath(originalFile) == false)
                                     {
                                         //File should be an internal file
-                                        audioFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + originalFile;
+                                        audioFile = File::getCurrentWorkingDirectory().getFullPathName() + File::getSeparatorString() + originalFile;
                                         
                                         if (audioFile.existsAsFile() == true)
                                         {
-                                            File newFile = tempAudioDirectory.getFullPathName()+ File::separatorString + originalFile;
+                                            File newFile = tempAudioDirectory.getFullPathName()+ File::getSeparatorString() + originalFile;
                                             if (newFile.existsAsFile() == false) //if it doesn't already exist
                                             {
                                                 audioFile.copyFileTo(newFile);//copy the file
@@ -3066,7 +3066,7 @@ void AppDocumentState::cleanUpProject (bool closingApp)
                                         if (audioFile.isAChildOf(File::getCurrentWorkingDirectory()) == true)
                                         {
                                             originalFile = audioFile.getFileName();
-                                            File newFile = tempAudioDirectory.getFullPathName()+ File::separatorString + originalFile;
+                                            File newFile = tempAudioDirectory.getFullPathName()+ File::getSeparatorString() + originalFile;
                                             if (newFile.existsAsFile() == false) //if it doesn't already exist
                                             {
                                                 audioFile.copyFileTo(newFile);//copy the file
@@ -3088,7 +3088,7 @@ void AppDocumentState::cleanUpProject (bool closingApp)
             //delete the current working dir to remove the unused files
             File::getCurrentWorkingDirectory().deleteRecursively();
             //create a new Audio Files directory
-            File audioFileDirectory (audioFileDirectoryParent.getFullPathName() + File::separatorString + "Audio Files");
+            File audioFileDirectory (audioFileDirectoryParent.getFullPathName() + File::getSeparatorString() + "Audio Files");
             //copy the temp dir (all the needed files) to the new audio files directory
             tempAudioDirectory.copyDirectoryTo(audioFileDirectory);
             //delete the temp directory
@@ -3152,7 +3152,7 @@ void AppDocumentState::importAudioFiles()
                     File newFile;
                     String fileName = sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("samplerAudioFilePath");
                     
-                    if (fileName != String::empty)
+                    if (fileName != String())
                     {
                         //Here, we are looking for external files. If we find one, we need to copy it
                         if (File::isAbsolutePath(fileName) == true)
@@ -3166,7 +3166,7 @@ void AppDocumentState::importAudioFiles()
                             break;
                         }
                         
-                        newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + currentFile.getFileName();
+                        newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::getSeparatorString() + currentFile.getFileName();
                         
                         if (newFile.existsAsFile() == false) //if it doesn't yet exist
                         {
@@ -3224,7 +3224,7 @@ void AppDocumentState::importAudioFiles()
                         File newFile;
                         String fileName = sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->getStringAttribute("sequencerSamplesAudioFilePath"+String(row));
                         
-                        if (fileName != String::empty)
+                        if (fileName != String())
                         {
                             //Here, we are looking for external files. If we find one, we need to copy it
                             if (File::isAbsolutePath(fileName) == true)
@@ -3238,7 +3238,7 @@ void AppDocumentState::importAudioFiles()
                                 break;
                             }
                             
-                            newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + currentFile.getFileName();
+                            newFile = File::getCurrentWorkingDirectory().getFullPathName() + File::getSeparatorString() + currentFile.getFileName();
                             
                             if (newFile.existsAsFile() == false) //if it doesn't yet exist
                             {

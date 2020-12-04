@@ -53,40 +53,40 @@ Toolbox::Toolbox(MainComponent &parent) :
     currentList = 0;
     
     bankFileFilter = new WildcardFileFilter("*alphabank", "Drum Kits;Instruments", "Audio bank files");
-    padFileFilter = new WildcardFileFilter("*alphapad", String::empty, "Pad settings files");
+    padFileFilter = new WildcardFileFilter("*alphapad", String(), "Pad settings files");
     seqFileFilter = new WildcardFileFilter("*alphaseq;*alphaseqset", "*", "AlphaLive sequencer files");
     audioFileFilter = new WildcardFileFilter("*wav;*aiff;*aif", "*", "Audio files");
     sceneFileFilter = new WildcardFileFilter("*alphascene", "*", "Scene files");
      
-    String appDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString);
+    String appDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::getSeparatorString());
     
     File banksFile(appDir + "Library/Audio Library/AlphaBanks");
     if (banksFile.exists() == false)
-        banksFile = File::nonexistent;
+        banksFile = File();
     File midiPresetsFile(appDir + "Library/Pad Presets/MIDI Mode");
     if (midiPresetsFile.exists() == false)
-        midiPresetsFile = File::nonexistent;
+        midiPresetsFile = File();
     File samplerPresetsFile(appDir + "Library/Pad Presets/Sampler Mode");
     if (samplerPresetsFile.exists() == false)
-        samplerPresetsFile = File::nonexistent;
+        samplerPresetsFile = File();
     File sequencerPresetsFile(appDir + "Library/Pad Presets/Sequencer Mode");
     if (sequencerPresetsFile.exists() == false)
-        sequencerPresetsFile = File::nonexistent;
+        sequencerPresetsFile = File();
     File controllerPresetsFile(appDir + "Library/Pad Presets/Controller Mode");
     if (controllerPresetsFile.exists() == false)
-        controllerPresetsFile = File::nonexistent;
+        controllerPresetsFile = File();
     File effectPresetsFile(appDir + "Library/Pad Presets/Effects");
     if (effectPresetsFile.exists() == false)
-        effectPresetsFile = File::nonexistent;
+        effectPresetsFile = File();
     File scenePresetsFile(appDir + "Library/Scene Presets");
     if (scenePresetsFile.exists() == false)
-        scenePresetsFile = File::nonexistent;
+        scenePresetsFile = File();
     File audioSamplesFile(appDir + "Library/Audio Library");
     if (audioSamplesFile.exists() == false)
-        audioSamplesFile = File::nonexistent;
+        audioSamplesFile = File();
     File sequencesFile(appDir + "Library/Sequences");
     if (sequencesFile.exists() == false)
-        sequencesFile = File::nonexistent;
+        sequencesFile = File();
     
     contentLists.insert(MIDI_PRESETS, new DirectoryContentsList(padFileFilter, thread));
     contentLists[MIDI_PRESETS]->setDirectory (midiPresetsFile, false, true);
@@ -144,19 +144,19 @@ Toolbox::Toolbox(MainComponent &parent) :
     
     File scalesFile(appDir + "Application Data/library_scales.xml");
     if (scalesFile.exists() == false)
-        scalesFile = File::nonexistent;
+        scalesFile = File();
     
     File layoutsFile(appDir + "Application Data/library_notational_arrangements.xml");
     if (layoutsFile.exists() == false)
-        layoutsFile = File::nonexistent;
+        layoutsFile = File();
     
     File userScalesFile(appDir + "Application Data/user_scales.xml");
     if (userScalesFile.exists() == false)
-        userScalesFile = File::nonexistent;
+        userScalesFile = File();
     
     File userLayoutsFile(appDir + "Application Data/user_notational_arrangements.xml");
     if (userLayoutsFile.exists() == false)
-        userLayoutsFile = File::nonexistent;
+        userLayoutsFile = File();
     
     scalesListBox = new XmlAttributesListBox (scalesFile, userScalesFile, true, *this);
     scalesListBox->addMouseListener(this, true);
@@ -475,7 +475,7 @@ void Toolbox::noteLayoutSelected (String layout, bool isScale)
     
     //get the individual MIDI notes from the string and put them into an array
     StringArray tokens;
-    tokens.addTokens(layout, " ", String::empty);
+    tokens.addTokens(layout, " ", String());
     
     //====================================================================================
     //====================================================================================
@@ -640,6 +640,6 @@ void Toolbox::mouseEnter (const MouseEvent &e)
 void Toolbox::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
     
 }

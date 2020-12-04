@@ -40,8 +40,8 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
                             owner(owner_)
                             
 {
-    appDir = File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString;
-    infoBoxText = String::empty;
+    appDir = File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::getSeparatorString();
+    infoBoxText = String();
     
     //language/localisation stuff
     setLocalisation();
@@ -172,7 +172,7 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
     gainSlider->addMouseListener(this, true);
     
     //gain and pan label
-    addAndMakeVisible(gainPanValueLabel = new Label("value label", String::empty));
+    addAndMakeVisible(gainPanValueLabel = new Label("value label", String()));
     gainPanValueLabel->setJustificationType(Justification::horizontallyCentred);
     gainPanValueLabel->setFont(Font(12 + AlphaTheme::getInstance()->fontSizeAddition));
     gainPanValueLabel->addMouseListener(this, true);
@@ -1230,11 +1230,11 @@ void MainComponent::mouseEnter (const MouseEvent &e)
 void MainComponent::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    setInfoTextBoxText (String::empty);
+    setInfoTextBoxText (String());
     
     
     if(e.eventComponent == gainSlider || e.eventComponent == panSlider)
-        gainPanValueLabel->setText(String::empty, dontSendNotification);
+        gainPanValueLabel->setText(String(), dontSendNotification);
         
         
 }
@@ -1260,7 +1260,7 @@ void MainComponent::setLocalisation()
     
     if (countryCode == "ja" || countryCode == "jpn") //japanese
     {
-        File transFile (appDir + "Application Data" + File::separatorString + "trans_ja.txt");
+        File transFile (appDir + "Application Data" + File::getSeparatorString() + "trans_ja.txt");
         trans = new LocalisedStrings (transFile, false);
         LocalisedStrings::setCurrentMappings(trans);
         
@@ -1288,7 +1288,7 @@ void MainComponent::setLocalisation()
     }
     else if (countryCode == "zh" || countryCode == "zho" || countryCode == "zh-Hant" || countryCode == "zh-Hans") //chinese. do i need the first two?
     {
-        File transFile (appDir + "Application Data" + File::separatorString + "trans_zh.txt");
+        File transFile (appDir + "Application Data" + File::getSeparatorString() + "trans_zh.txt");
         trans = new LocalisedStrings (transFile, false);
         LocalisedStrings::setCurrentMappings(trans);
         
@@ -1316,7 +1316,7 @@ void MainComponent::setLocalisation()
     }
     else if (countryCode == "ko" || countryCode == "kor") //Korean
     {
-        File transFile (appDir + "Application Data" + File::separatorString + "trans_ko.txt");
+        File transFile (appDir + "Application Data" + File::getSeparatorString() + "trans_ko.txt");
         trans = new LocalisedStrings (transFile, false);
         LocalisedStrings::setCurrentMappings(trans);
         
@@ -1498,7 +1498,7 @@ void MainComponent::setDeviceStatus (int status)
 
 void MainComponent::openDocumentation (int type)
 {
-    String docDir (appDir + "Documentation" + File::separatorString);
+    String docDir (appDir + "Documentation" + File::getSeparatorString());
     bool opened = true;
     
     if (currentLanguage == "Japanese")
@@ -1562,7 +1562,7 @@ bool MainComponent::updateSoftware (bool autoCheck)
     
     //get latest AlphaLive version from somewhere online
     URL versionUrl ("http://www.alphasphere.com/AlphaLive_Version.php");
-    String urlString = String::empty;
+    String urlString = String();
     
     //get the text using an InputStream object so that we
     //can set a timeout incase there is a problem with the

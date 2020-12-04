@@ -75,7 +75,7 @@ PadSettings::PadSettings(int arrayIndex)
         midiDynamicChannels[i] = false;
     
     //sampler mode
-    samplerAudioFilePath = String::empty;
+    samplerAudioFilePath = String();
     samplerTriggerMode = 2; 
     samplerShouldLoop = 1;
     samplerIndestructible = 0;
@@ -103,7 +103,7 @@ PadSettings::PadSettings(int arrayIndex)
     
     for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
     {
-        sequencerDataString[seq] = String::empty;
+        sequencerDataString[seq] = String();
     }
     
     
@@ -135,7 +135,7 @@ PadSettings::PadSettings(int arrayIndex)
     
     for (int i = 0; i <= NO_OF_ROWS-1; i++)
     {
-        sequencerSamplesAudioFilePath[i] = String::empty;
+        sequencerSamplesAudioFilePath[i] = String();
     }
      
     sequencerEffect = 0;
@@ -336,7 +336,7 @@ void PadSettings::resetData (int whatToReset)
     
     if (whatToReset != 2)
     {
-        setSamplerAudioFilePath (File::nonexistent);
+        setSamplerAudioFilePath (File());
         setSamplerTriggerMode (2);
         setSamplerShouldLoop(1);
         setSamplerIndestructible(0);
@@ -389,7 +389,7 @@ void PadSettings::resetData (int whatToReset)
         
         for (int i = 0; i <= NO_OF_ROWS-1; i++)
         {
-            setSequencerSamplesAudioFilePath (File::nonexistent, i);
+            setSequencerSamplesAudioFilePath (File(), i);
         }
         setSequencerEffect(0);
         setSequencerPan (0.5);
@@ -780,12 +780,12 @@ void PadSettings::setSamplerAudioFilePath(File value)
     //It is only in AppDocumentState and when the files are saved to XML files that the file can be
     //stored as just a file name.
     
-    if (value != File::nonexistent)
+    if (value != File())
     {
         if (AppSettings::Instance()->getCopyExternalFiles() == true)
         {
             //create a new file for the imported audio file in the working directory but only if it doesn't already exist!!
-            File audioFileCopy (File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + value.getFileName());
+            File audioFileCopy (File::getCurrentWorkingDirectory().getFullPathName() + File::getSeparatorString() + value.getFileName());
             
             if (audioFileCopy.existsAsFile() == false) //if it doesn't yet exist
             {
@@ -834,7 +834,7 @@ void PadSettings::setSamplerAudioFilePath(File value)
         samplerAudioFilePath = value.getFullPathName();
     }
     else
-        samplerAudioFilePath = String::empty;
+        samplerAudioFilePath = String();
     
     //set the audio file within the correct AudioFilePlayer Instance if it exists
     if (alphaLiveEngineRef->getModeSampler()->getAudioFilePlayerInstance(padNumber) != nullptr)
@@ -953,7 +953,7 @@ File PadSettings::getSamplerAudioFilePath()
     //It is only in AppDocumentState and when the files are saved to XML files that the file can be
     //stored as just a file name.
     
-    if (samplerAudioFilePath != String::empty)
+    if (samplerAudioFilePath != String())
     {
         File audioFile = samplerAudioFilePath;
         
@@ -965,15 +965,15 @@ File PadSettings::getSamplerAudioFilePath()
             //SAVED INTO THE samplerAudioFilePath STRING IN THE CORRECT FORMAT.
             
             //set the relevent variables to nonexistent/empty
-            audioFile = File::nonexistent;
-            samplerAudioFilePath = String::empty;
+            audioFile = File();
+            samplerAudioFilePath = String();
         }
         
         return audioFile;
     }
     
     else
-        return File::nonexistent;
+        return File();
     
 }
 
@@ -1150,7 +1150,7 @@ void PadSettings::seqDataToString()
 {
     for (int seq = 0; seq <= NO_OF_SEQS-1; seq++)
     {
-        sequencerDataString[seq] = String::empty;
+        sequencerDataString[seq] = String();
         
         for (int row = 0; row <= NO_OF_ROWS-1; row++)
         {
@@ -1170,7 +1170,7 @@ void PadSettings::stringToSeqData(String savedString, int seqNumber)
     // code take from http://www.rawmaterialsoftware.com/viewtopic.php?f=2&t=6933&hilit=split+string
     
     StringArray tokens;
-    tokens.addTokens(savedString, " ", String::empty);
+    tokens.addTokens(savedString, " ", String());
     
     int i = 0; //counts the index tokens
     
@@ -1193,7 +1193,7 @@ void PadSettings::stringToSeqDataFormatConversion(String savedString, int seqNum
     // code take from http://www.rawmaterialsoftware.com/viewtopic.php?f=2&t=6933&hilit=split+string
     
     StringArray tokens;
-    tokens.addTokens(savedString, " ", String::empty);
+    tokens.addTokens(savedString, " ", String());
     
     int i = 0; //counts the index tokens
     
@@ -1227,7 +1227,7 @@ String PadSettings::getSequencerDataString (int seqNumber)
 
 void PadSettings::clearSequencerDataString (int seqNumber)
 {
-    //make it a series or 0's. Doing String::empty causes problems somewhere down the line in certain situations. OR DOES IT? check?
+    //make it a series or 0's. Doing String() causes problems somewhere down the line in certain situations. OR DOES IT? check?
      sequencerDataString[seqNumber] = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ";
     
 }
@@ -1320,12 +1320,12 @@ void PadSettings::setSequencerSamplesAudioFilePath(File value, int rowNumber)
     //It is only in AppDocumentState and when the files are saved to XML files that the file can be
     //stored as just a file name.
     
-    if (value != File::nonexistent)
+    if (value != File())
     {
         if (AppSettings::Instance()->getCopyExternalFiles() == true)
         {
             //create a new file for the imported audio file in the working directory but only if it doesn't already exist!!
-            File audioFileCopy (File::getCurrentWorkingDirectory().getFullPathName() + File::separatorString + value.getFileName());
+            File audioFileCopy (File::getCurrentWorkingDirectory().getFullPathName() + File::getSeparatorString() + value.getFileName());
             
             if (audioFileCopy.existsAsFile() == false) //if it doesn't yet exist
             {
@@ -1374,7 +1374,7 @@ void PadSettings::setSequencerSamplesAudioFilePath(File value, int rowNumber)
         sequencerSamplesAudioFilePath[rowNumber] = value.getFullPathName();
     }
     else
-        sequencerSamplesAudioFilePath[rowNumber] = String::empty;
+        sequencerSamplesAudioFilePath[rowNumber] = String();
     
     
     //if (alphaLiveEngineRef != nullptr)  //THIS IF STATEMENT IS ONLY TEMP WHILE DEFAULT SAMPLES ARE LOADED IN FROM CONSTRUCTOR
@@ -1533,7 +1533,7 @@ File PadSettings::getSequencerSamplesAudioFilePath(int rowNumber)
     //It is only in AppDocumentState and when the files are saved to XML files that the file can be
     //stored as just a file name.
     
-    if (sequencerSamplesAudioFilePath[rowNumber] != String::empty)
+    if (sequencerSamplesAudioFilePath[rowNumber] != String())
     {
         File audioFile = sequencerSamplesAudioFilePath[rowNumber];
         
@@ -1545,15 +1545,15 @@ File PadSettings::getSequencerSamplesAudioFilePath(int rowNumber)
             //SAVED INTO THE samplerAudioFilePath STRING IN THE CORRECT FORMAT.
             
             //set the relevent variables to nonexistent/empty
-            audioFile = File::nonexistent;
-            sequencerSamplesAudioFilePath[rowNumber] = String::empty;
+            audioFile = File();
+            sequencerSamplesAudioFilePath[rowNumber] = String();
         }
 
         return audioFile;
     }
     
     else
-        return File::nonexistent;
+        return File();
     
 }
 

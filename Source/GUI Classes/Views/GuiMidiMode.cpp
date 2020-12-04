@@ -234,7 +234,7 @@ GuiMidiMode::GuiMidiMode(MainComponent &ref)
     pressureStatusButton->addMouseListener(this, false);
     
     //---------------parameter label -------------------------------------
-    addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
+    addChildComponent(parameterHoverLabel = new Label("value label", String()));
     parameterHoverLabel->setJustificationType(Justification::centred);
     parameterHoverLabel->setFont(Font(11 + AlphaTheme::getInstance()->fontSizeAddition));
     parameterHoverLabel->addMouseListener(this, true);
@@ -1077,7 +1077,7 @@ void GuiMidiMode::setDisplay(int settingsType)
         pressureMinRangeSlider->setVisible(true);
         pressureMaxRangeSlider->setVisible(true);
         parameterHoverLabel->setVisible(true);
-        //parameterHoverLabel->setText(String::empty, false);
+        //parameterHoverLabel->setText(String(), false);
         
         reversePressureRangeButton->setVisible(true);
         
@@ -1251,11 +1251,11 @@ void GuiMidiMode::mouseEnter (const MouseEvent &e)
 void GuiMidiMode::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
     
     
     if(e.eventComponent == pressureMinRangeSlider || e.eventComponent == pressureMaxRangeSlider)
-        parameterHoverLabel->setText(String::empty, dontSendNotification);
+        parameterHoverLabel->setText(String(), dontSendNotification);
 }
 
 

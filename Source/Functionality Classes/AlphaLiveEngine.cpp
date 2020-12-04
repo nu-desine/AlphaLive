@@ -91,11 +91,11 @@ AlphaLiveEngine::AlphaLiveEngine()
     
     //==========================================================================
     // initialise the device manager
-    XmlElement *audioSettingsXml = XmlDocument::parse(StoredSettings::getInstance()->audioSettings);
+    auto audioSettingsXml = XmlDocument::parse(StoredSettings::getInstance()->audioSettings);
     
 	const String error (audioDeviceManager.initialise (0, /* number of input channels */
 													   2, /* number of output channels */
-													   audioSettingsXml, /* XML settings from prefs*/
+                                                       audioSettingsXml.release(), /* XML settings from prefs*/
 													   true  /* select default device on failure */));
 	if (error.isNotEmpty())
 	{
@@ -105,7 +105,7 @@ AlphaLiveEngine::AlphaLiveEngine()
 	}
     
     audioDeviceManager.addAudioCallback (this);
-    delete audioSettingsXml;
+    //delete audioSettingsXml;
     
     
     //SET UP MIDI OUTPUT AND INPUT if not currently connected to the HID device
@@ -140,7 +140,7 @@ AlphaLiveEngine::AlphaLiveEngine()
 		midiOutputDevice = NULL;
         midiInputDevice = NULL;
 
-		audioDeviceManager.addMidiInputCallback (String::empty, this);
+		audioDeviceManager.addMidiInputCallback (String(), this);
         
         #endif //JUCE_WINDOWS
     }
@@ -185,7 +185,7 @@ AlphaLiveEngine::AlphaLiveEngine()
     
     //sleep to give the HID thread time to attempt to connect to the device.
 	//I may be able to reduce the sleep time to 500ms.
-    usleep(1000*1000);
+    sleep(1000);
     
     if (getDeviceStatus() != 0)
         removeMidiInAndOut();
@@ -198,14 +198,14 @@ AlphaLiveEngine::~AlphaLiveEngine()
     stopThread(1000);
     
     //save audio output settings to prefs
-    XmlElement *audioSettingsXml = audioDeviceManager.createStateXml();
+    auto audioSettingsXml = audioDeviceManager.createStateXml();
     if (audioSettingsXml != nullptr)
     {
-        String audioSettingsString = audioSettingsXml->createDocument(String::empty, true, false);
+        String audioSettingsString = audioSettingsXml->createDocument(String(), true, false);
         StoredSettings::getInstance()->audioSettings = audioSettingsString;
         StoredSettings::getInstance()->flush();
     }
-    delete audioSettingsXml;
+    //delete audioSettingsXml;
 
     audioMixer.removeAllInputs();
 	audioPlayer.setSource(NULL);
@@ -213,13 +213,13 @@ AlphaLiveEngine::~AlphaLiveEngine()
     if (midiOutputDevice)
     {
         midiOutputDevice->stopBackgroundThread();
-        delete midiOutputDevice;
+       //delete midiOutputDevice;
     }
     
     if (midiInputDevice)
     {
         midiInputDevice->stop();
-        delete midiInputDevice;
+        //delete midiInputDevice;
     }
     
     audioDeviceManager.removeAudioCallback (this);//unregister the audio callback
@@ -967,14 +967,14 @@ void AlphaLiveEngine::removeMidiInAndOut()
     if (midiOutputDevice)
     {
         midiOutputDevice->stopBackgroundThread();
-        delete midiOutputDevice;
+        //delete midiOutputDevice;
         midiOutputDevice = NULL;
     }
     
     if (midiInputDevice)
     {
         midiInputDevice->stop();
-        delete midiInputDevice;
+        //delete midiInputDevice;
         midiInputDevice = NULL;
     }
     
@@ -983,10 +983,10 @@ void AlphaLiveEngine::removeMidiInAndOut()
 	if (audioDeviceManager.getDefaultMidiOutput())
 	{
 		audioDeviceManager.getDefaultMidiOutput()->stopBackgroundThread();
-		audioDeviceManager.setDefaultMidiOutput(String::empty);
+		audioDeviceManager.setDefaultMidiOutput(String());
 	}
 
-	audioDeviceManager.removeMidiInputCallback(String::empty, this);
+	audioDeviceManager.removeMidiInputCallback(String(), this);
 	//what about dissabling MIDI input object?
 
     //remove MIDI output and input selectors from the preferences view
@@ -1041,11 +1041,11 @@ void AlphaLiveEngine::uploadFirmware (bool applyingUpdate)
     ChildProcess bootloader;
     
     StringArray arguments;
-    String appDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::separatorString);
+    String appDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::getSeparatorString());
     
     //Get the hex file...
     
-    File firmwareFile (File::nonexistent);
+    File firmwareFile = File();
     bool shouldContinue = true;
     
     if (applyingUpdate)
@@ -1064,7 +1064,7 @@ void AlphaLiveEngine::uploadFirmware (bool applyingUpdate)
     else
     {
         FileChooser loadFileChooser(translate("Select an AlphaSphere firmware (.hex) file to open..."),
-                                    File::nonexistent,
+                                    File(),
                                     "*.hex");
         
         shouldContinue = loadFileChooser.browseForFileToOpen(); //open file browser
@@ -1074,10 +1074,10 @@ void AlphaLiveEngine::uploadFirmware (bool applyingUpdate)
     
     //Get the bootloader app
     #if JUCE_MAC || JUCE_LINUX //is this right for Linux?
-    File bootloaderFile(appDir + "Application Data" + File::separatorString + "firmwareUpdater");
+    File bootloaderFile(appDir + "Application Data" + File::getSeparatorString() + "firmwareUpdater");
     #endif
     #if JUCE_WINDOWS
-    File bootloaderFile(appDir + "Application Data" + File::separatorString + "firmwareUpdater.exe");
+    File bootloaderFile(appDir + "Application Data" + File::getSeparatorString() + "firmwareUpdater.exe");
     #endif
     
     String mmcuString("-mmcu=atmega32u4");
@@ -1106,7 +1106,7 @@ void AlphaLiveEngine::uploadFirmware (bool applyingUpdate)
             sleep(500); //should this actually be Sleep() which need a windows library defined?
             instructionsString = translate("To allow the AlphaSphere to be updated, please unplug the device, hold down the reset button (next to the USB port), and plug the device back in. If the AlphaSphere is now flashing red, release the reset button and the device will successfully enter the updater mode. If Windows is now installing new drivers for the device please wait for the drivers to be installed, and then press OK to continue.");
             #else
-            usleep(500*1000);
+            sleep(1000);
             instructionsString = translate("To allow the AlphaSphere to be updated, please unplug the device, hold down the reset button (next to the USB port), and plug the device back in. If the AlphaSphere is now flashing red, release the reset button and the device will successfully enter the updater mode. If Press OK to continue.");
             #endif
             
@@ -1128,7 +1128,7 @@ void AlphaLiveEngine::uploadFirmware (bool applyingUpdate)
                     #if JUCE_WINDOWS
                     sleep(500); //should this actually be Sleep() which need a windows library defined?
                     #else
-                    usleep(500*1000);
+                    sleep(500);
                     #endif
                     
                     tryToUpload = AlertWindow::showOkCancelBox(AlertWindow::InfoIcon,
@@ -1147,7 +1147,7 @@ void AlphaLiveEngine::uploadFirmware (bool applyingUpdate)
                     #if JUCE_WINDOWS
                     sleep(500); //should this actually be Sleep() which need a windows library defined?
                     #else
-                    usleep(500*1000);
+                    sleep(500);
                     #endif
                     
                     //catch any other outputs (errors most likely)

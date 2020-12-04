@@ -123,11 +123,11 @@ void StoredSettings::setDefaultValues()
     
     //============================================================================
     
-    if (appProjectDir == File::nonexistent)
+    if (appProjectDir == File())
     {
         //Create the AlphaLive Projects folder 
         File defaultProjectDirectory = (File::getSpecialLocation(File::userDocumentsDirectory).getFullPathName()) +
-                                        File::separatorString +
+                                        File::getSeparatorString() +
                                         "AlphaLive Projects";
         
         if (defaultProjectDirectory.exists() == false)
@@ -163,11 +163,11 @@ void StoredSettings::setDefaultValues()
         //then be automatically launched.
         
         File demoProjFile (File::getSpecialLocation(File::userDocumentsDirectory).getFullPathName() +
-                           File::separatorString +
+                           File::getSeparatorString() +
                            "AlphaLive Projects" +
-                           File::separatorString +
+                           File::getSeparatorString() +
                            "Demo Project" +
-                           File::separatorString +
+                           File::getSeparatorString() +
                            "Demo Project.alphalive");
         
         if (demoProjFile.exists())
@@ -178,11 +178,11 @@ void StoredSettings::setDefaultValues()
         {
             //see if the Demo Project (Basic) project exists, and if so load that.
             File demoProjBasicFile (File::getSpecialLocation(File::userDocumentsDirectory).getFullPathName() +
-                                    File::separatorString +
+                                    File::getSeparatorString() +
                                     "AlphaLive Projects" +
-                                    File::separatorString +
+                                    File::getSeparatorString() +
                                     "Demo Project (Basic)" +
-                                    File::separatorString +
+                                    File::getSeparatorString() +
                                     "Demo Project (Basic).alphalive");
             
             if (demoProjBasicFile.exists())
@@ -226,7 +226,7 @@ void StoredSettings::setDefaultValues()
     if (midiChannelPressureMode == 0)
         midiChannelPressureMode = 2; //should this be the default?
     
-    if (hardwareLedColourScheme == String::empty)
+    if (hardwareLedColourScheme == String())
         hardwareLedColourScheme = "Default";
     
     if (hardwareLedColour[0] == Colours::transparentBlack)
@@ -248,7 +248,7 @@ void StoredSettings::installBasicDemoProj()
     //project to open at launch is set.
     
     File basicDemoProjDir = (File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() +
-                             File::separatorString +
+                             File::getSeparatorString() +
                              "Demo Project (Basic)");
     
     if (basicDemoProjDir.exists())
@@ -256,7 +256,7 @@ void StoredSettings::installBasicDemoProj()
         //move this folder to the appProjectDir
         
         File newBasicDemoProjDir (appProjectDir.getFullPathName() +
-                                  File::separatorString +
+                                  File::getSeparatorString() +
                                   "Demo Project (Basic)");
         
         if (newBasicDemoProjDir.exists())
@@ -267,7 +267,7 @@ void StoredSettings::installBasicDemoProj()
         
         // set the project file to read-only.
         
-        File basicDemoProjFile (newBasicDemoProjDir.getFullPathName() + File::separatorString + "Demo Project (Basic).alphalive");
+        File basicDemoProjFile (newBasicDemoProjDir.getFullPathName() + File::getSeparatorString() + "Demo Project (Basic).alphalive");
         
         #if JUCE_MAC || JUCE_LINUX
         //To set the file permissions to read only, you can use the command chmod 555 in terminal

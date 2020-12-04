@@ -90,7 +90,7 @@ public:
     //==============================================================================
     void initialise (const String& commandLine)
     {
-        SplashScreen* splash = new SplashScreen(String::empty,
+        SplashScreen* splash = new SplashScreen(String(),
                                                 ImageFileFormat::loadFrom(MainBinaryData::loading_png, MainBinaryData::loading_pngSize),
                                                 false);
         
@@ -164,7 +164,7 @@ public:
         else if (StoredSettings::getInstance()->launchTask == 2)
         {
             //Open the last project...
-            if (StoredSettings::getInstance()->recentFiles.getFile(0) != File::nonexistent)
+            if (StoredSettings::getInstance()->recentFiles.getFile(0) != File())
                 appDocumentState->loadProject(false, StoredSettings::getInstance()->recentFiles.getFile(0));
         }
         

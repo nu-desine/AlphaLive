@@ -254,7 +254,7 @@ GuiSequencerMode::GuiSequencerMode(ModeSequencer &ref, MainComponent &ref2, AppD
     currentParameterLabel->addListener(this);
     
     //---------------hover parameter label -------------------------------------
-    addChildComponent(parameterHoverLabel = new Label("value label", String::empty));
+    addChildComponent(parameterHoverLabel = new Label("value label", String()));
     parameterHoverLabel->setJustificationType(Justification::centred);
     parameterHoverLabel->setFont(Font(11 + AlphaTheme::getInstance()->fontSizeAddition));
     parameterHoverLabel->addMouseListener(this, true);
@@ -1658,7 +1658,7 @@ void GuiSequencerMode::hideComponents()
         midiChannelButtons[i]->setVisible(false);
     for (int i = 0; i < 12; i++)
         audioRowButtons[i]->setVisible(false);
-    //setParameterLabelText(String::empty);
+    //setParameterLabelText(String());
     
     reverseMidiPressureRangeButton->setVisible(false);
 }
@@ -1849,7 +1849,7 @@ void GuiSequencerMode::setRotaryControlDisplay()
     }
     
     
-    setParameterLabelText (String::empty);
+    setParameterLabelText (String());
     
 }
 
@@ -2332,16 +2332,16 @@ void GuiSequencerMode::setParameterLabelText (String value)
     //and passes in the controls value as a string and sets it to parameterLabel.
     
     //If you want to update the currentParameterLabel text call this function with
-    //String::empty and the currently visible control is found and the name is
+    //String() and the currently visible control is found and the name is
     //put into the label, as well as putting the value of it into the other label.
     
-    if (value != String::empty)
+    if (value != String())
     {
 	parameterLabel->setColour(Label::textColourId, AlphaTheme::getInstance()->mainColourLighter);
 	parameterLabel->setText(value, dontSendNotification);
     }
 	
-	else if (value == String::empty)
+	else if (value == String())
 	{
 		parameterLabel->setColour(Label::textColourId, LookAndFeel::getDefaultLookAndFeel().findColour(Label::textColourId));
 		
@@ -2764,40 +2764,40 @@ void GuiSequencerMode::mouseExit (const MouseEvent &e)
 {
     
     if (e.eventComponent == numberOfSequencesSlider)
-		setParameterLabelText(String::empty);
+		setParameterLabelText(String());
 	else if (e.eventComponent == relativeTempoSlider)
-		setParameterLabelText(String::empty);
+		setParameterLabelText(String());
 	else if (e.eventComponent == noteLengthSlider)
-		setParameterLabelText(String::empty);
+		setParameterLabelText(String());
 	else if (e.eventComponent == audioGainSlider)
-		setParameterLabelText(String::empty);
+		setParameterLabelText(String());
 	else if (e.eventComponent == audioPanSlider)
-		setParameterLabelText(String::empty);
+		setParameterLabelText(String());
     else if (e.eventComponent == audioAttackSlider)
-		setParameterLabelText(String::empty);
+		setParameterLabelText(String());
     else if (e.eventComponent == audioPolyphonySlider)
-		setParameterLabelText(String::empty);
+		setParameterLabelText(String());
     
     if(e.eventComponent == midiPressureMinRangeSlider || e.eventComponent == midiPressureMaxRangeSlider)
-        parameterHoverLabel->setText(String::empty, dontSendNotification);
+        parameterHoverLabel->setText(String(), dontSendNotification);
      
     
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
     
 //    if (e.eventComponent == numberOfSequencesSlider)
-//		setParameterLabelText(String::empty);
+//		setParameterLabelText(String());
 //	if (e.eventComponent == relativeTempoSlider)
-//		setParameterLabelText(String::empty);
+//		setParameterLabelText(String());
 //	if (e.eventComponent == noteLengthSlider)
-//		setParameterLabelText(String::empty);
+//		setParameterLabelText(String());
 //	if (e.eventComponent == audioGainSlider)
-//		setParameterLabelText(String::empty);
+//		setParameterLabelText(String());
 //	if (e.eventComponent == audioPanSlider)
-//		setParameterLabelText(String::empty);
+//		setParameterLabelText(String());
 //    if (e.eventComponent == audioAttackSlider)
-//		setParameterLabelText(String::empty);
+//		setParameterLabelText(String());
 //    if (e.eventComponent == audioPolyphonySlider)
-//		setParameterLabelText(String::empty);
+//		setParameterLabelText(String());
 }
 

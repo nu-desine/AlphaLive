@@ -747,5 +747,5 @@ void GuiControllerMode::mouseEnter (const MouseEvent &e)
 void GuiControllerMode::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty); 
+    mainComponentRef.setInfoTextBoxText (String()); 
 }

@@ -416,7 +416,7 @@ void GuiPad::setPadText()
             padName = String(padNumber+1);
             
             //sample
-            if (PAD_SETTINGS->getSamplerAudioFilePath() != File::nonexistent)
+            if (PAD_SETTINGS->getSamplerAudioFilePath() != File())
             {
                 padName += "\n" + File(PAD_SETTINGS->getSamplerAudioFilePath()).getFileNameWithoutExtension();
             }
@@ -680,7 +680,7 @@ void GuiPad::filesDropped (const StringArray& files, int /*x*/, int /*y*/)
 	//string of filepath
 	message = files.joinIntoString ("\n");
 	//string reduced to only include characters after last "/"
-	//message = message.fromLastOccurrenceOf(File::separatorString, false, true);
+	//message = message.fromLastOccurrenceOf(File::getSeparatorString(), false, true);
 	
     //file of filepath
     File droppedFile (message);

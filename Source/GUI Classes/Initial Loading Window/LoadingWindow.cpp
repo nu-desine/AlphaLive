@@ -24,7 +24,7 @@
 
 
 LoadingWindow::LoadingWindow()
-:               DocumentWindow (String::empty,
+:               DocumentWindow (String(),
                                 Colours::lightgrey,
                                 0,
                                 false)

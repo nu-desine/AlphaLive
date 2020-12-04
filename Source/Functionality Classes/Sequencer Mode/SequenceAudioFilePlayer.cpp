@@ -36,7 +36,7 @@ SequenceAudioFilePlayer::SequenceAudioFilePlayer(int padNumber_, int rowNumber_,
 	AudioFormatManager formatManager;
 	formatManager.registerBasicFormats();
     
-    currentFile = File::nonexistent;
+    currentFile = File();
     setPolyphony(PAD_SETTINGS->getSequencerSamplesPolyphony());
     setAudioFile(PAD_SETTINGS->getSequencerSamplesAudioFilePath(rowNumber));
     attackTime = PAD_SETTINGS->getSequencerSamplesAttackTime();
@@ -66,7 +66,7 @@ SequenceAudioFilePlayer::~SequenceAudioFilePlayer()
 //called from either the constructor, or setSequencerSamplesAudioFilePath() in PadSettings
 void SequenceAudioFilePlayer::setAudioFile (File audioFile_)
 {
-    if (audioFile_ != File::nonexistent)
+    if (audioFile_ != File())
     {
         //passes in pads audio file
         File audioFile (audioFile_);
@@ -295,7 +295,7 @@ void SequenceAudioFilePlayer::setPolyphony (int value)
             audioMixer.addInputSource(fileSource.getLast(), false);
             
             //apply audio file to new element
-            if (currentFile != File::nonexistent)
+            if (currentFile != File())
             {
                 addtoFileSourceArray (fileSource.size()-1, reader);
             }

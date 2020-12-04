@@ -99,7 +99,7 @@ void SequencerGridPoint::mouseDown (const MouseEvent &e)
         else
         {
             status = 0; //off
-            parent.setVelocityLabelText(String::empty);
+            parent.setVelocityLabelText(String());
         }
         
         //send data
@@ -167,7 +167,7 @@ void SequencerGridPoint::mouseEnter (const MouseEvent &e)
 
 void SequencerGridPoint::mouseExit (const MouseEvent &e)
 {
-    parent.setVelocityLabelText(String::empty);
+    parent.setVelocityLabelText(String());
 }
 
 bool SequencerGridPoint::hitTest (int x, int y)

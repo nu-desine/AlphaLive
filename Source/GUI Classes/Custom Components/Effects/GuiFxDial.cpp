@@ -445,7 +445,7 @@ void GuiFxDial::mouseEnter (const MouseEvent &e)
 void GuiFxDial::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty); 
+    mainComponentRef.setInfoTextBoxText (String()); 
 }
 
 void GuiFxDial::mouseDown(const MouseEvent &e)

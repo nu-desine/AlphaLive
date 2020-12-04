@@ -407,5 +407,5 @@ void GuiGlobalClock::mouseEnter (const MouseEvent &e)
 void GuiGlobalClock::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
 }

@@ -161,8 +161,8 @@ private:
     float recievedVelocity;
     
     //midi output and input devices
-    MidiOutput *midiOutputDevice;
-    MidiInput *midiInputDevice;
+    std::unique_ptr<MidiOutput> midiOutputDevice;
+    std::unique_ptr<MidiInput> midiInputDevice;
     
     //audio related
 	AudioDeviceManager audioDeviceManager;	// this wraps the actual audio device

@@ -33,23 +33,24 @@ Oscillator::Oscillator (double sampleRate)
 	formatManager.registerBasicFormats();
 	
     ScopedPointer <AudioFormatReader> squareReader 
-    (formatManager.createReaderFor(new MemoryInputStream (MainBinaryData::squarewave20500_wav,
+    (formatManager.createReaderFor(std::make_unique <MemoryInputStream> (MainBinaryData::squarewave20500_wav,
                                                           MainBinaryData::squarewave20500_wavSize,
                                                           false)));
+    
     
 	squareReader->read(&squareBuffer, 0, squareReader->lengthInSamples, 0, true, false);
 	
     squareNumSamples = squareReader->lengthInSamples;
 	
 	ScopedPointer <AudioFormatReader> sawReader 
-    (formatManager.createReaderFor(new MemoryInputStream (MainBinaryData::sawwave20500_wav,
+    (formatManager.createReaderFor(std::make_unique <MemoryInputStream> (MainBinaryData::sawwave20500_wav,
                                                           MainBinaryData::sawwave20500_wavSize,
                                                           false)));
     
 	sawReader->read(&sawBuffer, 0, sawReader->lengthInSamples, 0, true, false);
 	
 	ScopedPointer <AudioFormatReader> sawDownReader
-    (formatManager.createReaderFor(new MemoryInputStream (MainBinaryData::sawdownwave20500_wav,
+    (formatManager.createReaderFor(std::make_unique <MemoryInputStream> (MainBinaryData::sawdownwave20500_wav,
                                                           MainBinaryData::sawdownwave20500_wavSize,
                                                           false)));
     

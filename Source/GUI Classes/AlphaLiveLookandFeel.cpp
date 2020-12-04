@@ -1320,7 +1320,7 @@ Font AlphaLiveLookandFeel::getComboBoxFont (ComboBox& box)
 
 Label* AlphaLiveLookandFeel::createComboBoxTextBox (ComboBox&)
 {
-    return new Label (String::empty, String::empty);
+    return new Label (String(), String());
 }
 
 void AlphaLiveLookandFeel::positionComboBoxText (ComboBox& box, Label& label)

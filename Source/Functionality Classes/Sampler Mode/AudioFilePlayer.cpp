@@ -88,7 +88,7 @@ AudioFilePlayer::AudioFilePlayer(int samplerPadNumber, ModeSampler &ref, TimeSli
     velocityGain = 1.0;
     velocity = 127;
     
-    currentFile = File::nonexistent;
+    currentFile = File();
     setPolyphony(PAD_SETTINGS->getSamplerPolyphony());
     setAudioFile(PAD_SETTINGS->getSamplerAudioFilePath());
     
@@ -139,7 +139,7 @@ bool AudioFilePlayer::getAudioTransportSourceStatus()
 
 void AudioFilePlayer::processAudioFile(int padValue, int padVelocity)
 {
-    if (currentFile != File::nonexistent && currentAudioFileSource != NULL)
+    if (currentFile != File() && currentAudioFileSource != NULL)
     {
         //this is needed incase audio ends on its own or is stopped via the 'exclusive mode' feature, in order to reset everything so it will trigger again properly
         if ((isCurrentlyPlaying() == false && 
@@ -372,7 +372,7 @@ void AudioFilePlayer::processAudioFile(int padValue, int padVelocity)
 //called from either the constructor, or setSamplerAudioFilePath() in PadSettings
 void AudioFilePlayer::setAudioFile (File audioFile_)
 {
-    if (audioFile_ != File::nonexistent)
+    if (audioFile_ != File())
     {
         //passes in pads audio file
         File audioFile (audioFile_);
@@ -1146,7 +1146,7 @@ void AudioFilePlayer::setPolyphony (int value)
             audioMixer.addInputSource(fileSource.getLast(), false);
             
             //apply audio file to new element
-            if (currentFile != File::nonexistent)
+            if (currentFile != File())
             {
                 //here, do I need to do the... 
                 

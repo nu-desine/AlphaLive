@@ -154,7 +154,7 @@ void PreferencesComponent::mouseEnter (const MouseEvent &e)
 void PreferencesComponent::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
 }
 
 bool PreferencesComponent::keyPressed (const KeyPress &key, Component *originatingComponent)
@@ -328,11 +328,11 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     File currentAppParentDir = File::getSpecialLocation(File::currentApplicationFile).getParentDirectory();
     
     File materiaDir (currentAppParentDir.getFullPathName() +
-                     File::separatorString +
+                     File::getSeparatorString() +
                      "Library" +
-                     File::separatorString +
+                     File::getSeparatorString() +
                      "Audio Library" +
-                     File::separatorString +
+                     File::getSeparatorString() +
                      "Materia");
     
     if (materiaDir.exists())
@@ -568,7 +568,7 @@ void GeneralSettingsComponent::comboBoxChanged (ComboBox *comboBox)
                     StoredSettings::getInstance()->appProjectDir != selectedDir)
                 {
                     //create new directory based on the users selection
-                    File newProjectDirectory = (selectedDir.getFullPathName() + File::separatorString + "AlphaLive Projects");
+                    File newProjectDirectory = (selectedDir.getFullPathName() + File::getSeparatorString() + "AlphaLive Projects");
                     //move old directory to the new one
                     StoredSettings::getInstance()->appProjectDir.moveFileTo(newProjectDirectory);
                     //Add to stored settings
@@ -674,7 +674,7 @@ void GeneralSettingsComponent::mouseEnter (const MouseEvent &e)
 void GeneralSettingsComponent::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
 }
 
 void GeneralSettingsComponent::updateDisplay()
@@ -910,7 +910,7 @@ void HardwarePreferencesComponent::mouseEnter (const MouseEvent &e)
 void HardwarePreferencesComponent::mouseExit (const MouseEvent &e)
 {
     //remove any text
-    mainComponentRef.setInfoTextBoxText (String::empty);
+    mainComponentRef.setInfoTextBoxText (String());
 }
 
 void HardwarePreferencesComponent::updateDisplay()

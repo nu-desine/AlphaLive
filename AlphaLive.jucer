@@ -126,9 +126,34 @@
         <FILE id="QmeiUH" name="AlphaLiveLookandFeel.h" compile="0" resource="0"
               file="Source/GUI Classes/AlphaLiveLookandFeel.h"/>
         <GROUP id="{0D9C21B8-6791-84EB-9AB2-7A81A95F671B}" name="Binary Data">
-          <FILE id="G10zTT" name="BinaryDataNew.cpp" compile="1" resource="0"
-                file="Source/GUI Classes/Binary Data/BinaryDataNew.cpp"/>
-          <FILE id="BSwhNK" name="BinaryDataNew.h" compile="0" resource="0" file="Source/GUI Classes/Binary Data/BinaryDataNew.h"/>
+          <FILE id="sjhkKI" name="MainBinaryData.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Binary Data/MainBinaryData.cpp"/>
+          <FILE id="c5hrb6" name="MainBinaryData.h" compile="0" resource="0"
+                file="Source/GUI Classes/Binary Data/MainBinaryData.h"/>
+          <FILE id="cdPIMs" name="ThemeAuroraBinaryData.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Binary Data/ThemeAuroraBinaryData.cpp"/>
+          <FILE id="IxidOy" name="ThemeAuroraBinaryData.h" compile="0" resource="0"
+                file="Source/GUI Classes/Binary Data/ThemeAuroraBinaryData.h"/>
+          <FILE id="dorQK3" name="ThemeCharcoalBinaryData.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Binary Data/ThemeCharcoalBinaryData.cpp"/>
+          <FILE id="guJsaD" name="ThemeCharcoalBinaryData.h" compile="0" resource="0"
+                file="Source/GUI Classes/Binary Data/ThemeCharcoalBinaryData.h"/>
+          <FILE id="vb1EjD" name="ThemeClassicBinaryData.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Binary Data/ThemeClassicBinaryData.cpp"/>
+          <FILE id="FCfe3T" name="ThemeClassicBinaryData.h" compile="0" resource="0"
+                file="Source/GUI Classes/Binary Data/ThemeClassicBinaryData.h"/>
+          <FILE id="UUtzU2" name="ThemeMateriaBinaryData.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Binary Data/ThemeMateriaBinaryData.cpp"/>
+          <FILE id="WA9BR9" name="ThemeMateriaBinaryData.h" compile="0" resource="0"
+                file="Source/GUI Classes/Binary Data/ThemeMateriaBinaryData.h"/>
+          <FILE id="qzDxm4" name="ThemeMinimalBinaryData.cpp" compile="1" resource="0"
+                file="Source/GUI Classes/Binary Data/ThemeMinimalBinaryData.cpp"/>
+          <FILE id="iRYDEk" name="ThemeMinimalBinaryData.h" compile="0" resource="0"
+                file="Source/GUI Classes/Binary Data/ThemeMinimalBinaryData.h"/>
+          <FILE id="GYmNi0" name="ThemeTransparencyBinaryData.cpp" compile="1"
+                resource="0" file="Source/GUI Classes/Binary Data/ThemeTransparencyBinaryData.cpp"/>
+          <FILE id="zw1dub" name="ThemeTransparencyBinaryData.h" compile="0"
+                resource="0" file="Source/GUI Classes/Binary Data/ThemeTransparencyBinaryData.h"/>
         </GROUP>
         <GROUP id="{0199B216-9B08-4289-F248-B65B7D0992BC}" name="Custom Components">
           <GROUP id="{8ED4B1FD-FB9C-335C-FDFB-6846591669D7}" name="Circle Piano">

@@ -193,9 +193,33 @@
 			isa = PBXBuildFile;
 			fileRef = AFEF11425DC9D49419C5F164;
 		};
-		A26294BA229648672264FE3F = {
+		F3D730E865CBB9EFB071A773 = {
 			isa = PBXBuildFile;
-			fileRef = E445C184D61472D9725C1C57;
+			fileRef = 3632D134C943F492CD2978C7;
+		};
+		2D0169B07F60FBA915CB0EDB = {
+			isa = PBXBuildFile;
+			fileRef = 6A4E8AA24781078C077FD70B;
+		};
+		24367A7940300D75F2690BB7 = {
+			isa = PBXBuildFile;
+			fileRef = 631FB95BAF0D0800C61D7121;
+		};
+		899DDDE785B21DCEB94CC6B6 = {
+			isa = PBXBuildFile;
+			fileRef = C2627DCFA1CB1FDD9CADC3FD;
+		};
+		8AF3D5BB4CB027CA9486EC58 = {
+			isa = PBXBuildFile;
+			fileRef = 40A8BB87D1BF39170A5BBBBE;
+		};
+		F98EA05223D764519E83C5F2 = {
+			isa = PBXBuildFile;
+			fileRef = 6AFB1C346EFC7151A9371492;
+		};
+		D846C38BD5837E962AA7B10C = {
+			isa = PBXBuildFile;
+			fileRef = 4CD1936072C853CE8BF8E815;
 		};
 		E040EE3B9B0966410B5EC296 = {
 			isa = PBXBuildFile;
@@ -1062,13 +1086,6 @@
 			path = "../../Source/My IO Classes/HidComms.cpp";
 			sourceTree = "SOURCE_ROOT";
 		};
-		306037AA9D90ADBDE9A57BCC = {
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = BinaryDataNew.h;
-			path = "../../Source/GUI Classes/Binary Data/BinaryDataNew.h";
-			sourceTree = "SOURCE_ROOT";
-		};
 		311ADF0E1F83C521F1B4D5BD = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.cpp.cpp;
@@ -1123,6 +1140,13 @@
 			lastKnownFileType = sourcecode.cpp.cpp;
 			name = AlphaListBoxModel.cpp;
 			path = "../../Source/GUI Classes/Custom Components/Toolbox/AlphaListBoxModel.cpp";
+			sourceTree = "SOURCE_ROOT";
+		};
+		3632D134C943F492CD2978C7 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = MainBinaryData.cpp;
+			path = "../../Source/GUI Classes/Binary Data/MainBinaryData.cpp";
 			sourceTree = "SOURCE_ROOT";
 		};
 		382808A44C831D8878448A3B = {
@@ -1200,6 +1224,13 @@
 			lastKnownFileType = sourcecode.c.h;
 			name = JuceHeader.h;
 			path = ../../JuceLibraryCode/JuceHeader.h;
+			sourceTree = "SOURCE_ROOT";
+		};
+		40A8BB87D1BF39170A5BBBBE = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = ThemeMateriaBinaryData.cpp;
+			path = "../../Source/GUI Classes/Binary Data/ThemeMateriaBinaryData.cpp";
 			sourceTree = "SOURCE_ROOT";
 		};
 		41DC2253206042F0E1E5F1C5 = {
@@ -1342,6 +1373,13 @@
 			path = "../../Source/Third Party Libraries/ASIOSDK/driver/asiosample/asiosmpl.h";
 			sourceTree = "SOURCE_ROOT";
 		};
+		4CD1936072C853CE8BF8E815 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = ThemeTransparencyBinaryData.cpp;
+			path = "../../Source/GUI Classes/Binary Data/ThemeTransparencyBinaryData.cpp";
+			sourceTree = "SOURCE_ROOT";
+		};
 		4E2551D197E422959E35C079 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
@@ -1354,6 +1392,13 @@
 			lastKnownFileType = sourcecode.c.h;
 			name = ChebyshevII.h;
 			path = "../../Source/Third Party Libraries/DspFilters/ChebyshevII.h";
+			sourceTree = "SOURCE_ROOT";
+		};
+		4F17664389A9F9B3625E3579 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = ThemeMateriaBinaryData.h;
+			path = "../../Source/GUI Classes/Binary Data/ThemeMateriaBinaryData.h";
 			sourceTree = "SOURCE_ROOT";
 		};
 		5068D24E2B375851C1FD7D11 = {
@@ -1403,6 +1448,13 @@
 			lastKnownFileType = sourcecode.c.h;
 			name = XmlAttributesListBox.h;
 			path = "../../Source/GUI Classes/Custom Components/Toolbox/XmlAttributesListBox.h";
+			sourceTree = "SOURCE_ROOT";
+		};
+		55A64E9F7AB01CBCB9C79A23 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = ThemeMinimalBinaryData.h;
+			path = "../../Source/GUI Classes/Binary Data/ThemeMinimalBinaryData.h";
 			sourceTree = "SOURCE_ROOT";
 		};
 		55A6EB75A97BCCC4A2B532FB = {
@@ -1531,6 +1583,13 @@
 			path = "../../Source/Third Party Libraries/ASIOSDK/changes.txt";
 			sourceTree = "SOURCE_ROOT";
 		};
+		631FB95BAF0D0800C61D7121 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = ThemeCharcoalBinaryData.cpp;
+			path = "../../Source/GUI Classes/Binary Data/ThemeCharcoalBinaryData.cpp";
+			sourceTree = "SOURCE_ROOT";
+		};
 		64358223FD469DAEEB938523 = {
 			isa = PBXFileReference;
 			lastKnownFileType = file.dsw;
@@ -1592,6 +1651,20 @@
 			lastKnownFileType = sourcecode.c.h;
 			name = FxGuiHighPassFilter.h;
 			path = "../../Source/GUI Classes/Custom Components/Effects/Effects GUIs/FxGuiHighPassFilter.h";
+			sourceTree = "SOURCE_ROOT";
+		};
+		6A4E8AA24781078C077FD70B = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = ThemeAuroraBinaryData.cpp;
+			path = "../../Source/GUI Classes/Binary Data/ThemeAuroraBinaryData.cpp";
+			sourceTree = "SOURCE_ROOT";
+		};
+		6AFB1C346EFC7151A9371492 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = ThemeMinimalBinaryData.cpp;
+			path = "../../Source/GUI Classes/Binary Data/ThemeMinimalBinaryData.cpp";
 			sourceTree = "SOURCE_ROOT";
 		};
 		6DD80ED8DAB15CE111FA19C2 = {
@@ -2252,6 +2325,13 @@
 			path = "../../Source/Audio Processing/DSP Effects/Tremolo.cpp";
 			sourceTree = "SOURCE_ROOT";
 		};
+		ADDA0A61F23725410BFA6421 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = ThemeAuroraBinaryData.h;
+			path = "../../Source/GUI Classes/Binary Data/ThemeAuroraBinaryData.h";
+			sourceTree = "SOURCE_ROOT";
+		};
 		ADDB976020A33DF4790FF6B4 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
@@ -2525,6 +2605,13 @@
 			path = "../../Source/Third Party Libraries/ASIOSDK/driver/asiosample/asiosmpl.cpp";
 			sourceTree = "SOURCE_ROOT";
 		};
+		C2627DCFA1CB1FDD9CADC3FD = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = ThemeClassicBinaryData.cpp;
+			path = "../../Source/GUI Classes/Binary Data/ThemeClassicBinaryData.cpp";
+			sourceTree = "SOURCE_ROOT";
+		};
 		C27A76EBF9B67C1F4F54D708 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
@@ -2735,6 +2822,13 @@
 			path = "../../Source/Third Party Libraries/oscpack/osc/OscHostEndianness.h";
 			sourceTree = "SOURCE_ROOT";
 		};
+		D61812F57195E764F550DF64 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = ThemeCharcoalBinaryData.h;
+			path = "../../Source/GUI Classes/Binary Data/ThemeCharcoalBinaryData.h";
+			sourceTree = "SOURCE_ROOT";
+		};
 		D69BC306DD6628701D5F38E1 = {
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
@@ -2789,6 +2883,13 @@
 			lastKnownFileType = sourcecode.cpp.cpp;
 			name = AlphaAudioSettingsComponent.cpp;
 			path = "../../Source/GUI Classes/Custom Components/General/AlphaAudioSettingsComponent.cpp";
+			sourceTree = "SOURCE_ROOT";
+		};
+		D947B3C9B25A1518500618F3 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = MainBinaryData.h;
+			path = "../../Source/GUI Classes/Binary Data/MainBinaryData.h";
 			sourceTree = "SOURCE_ROOT";
 		};
 		DA039105E41DC9E9E62016A4 = {
@@ -2859,13 +2960,6 @@
 			lastKnownFileType = sourcecode.cpp.cpp;
 			name = ModeButton.cpp;
 			path = "../../Source/GUI Classes/Custom Components/General/ModeButton.cpp";
-			sourceTree = "SOURCE_ROOT";
-		};
-		E445C184D61472D9725C1C57 = {
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.cpp;
-			name = BinaryDataNew.cpp;
-			path = "../../Source/GUI Classes/Binary Data/BinaryDataNew.cpp";
 			sourceTree = "SOURCE_ROOT";
 		};
 		E5C67AEAB6A506AE401A6D92 = {
@@ -2945,6 +3039,13 @@
 			path = "../../Source/GUI Classes/AlphaLiveLookandFeel.h";
 			sourceTree = "SOURCE_ROOT";
 		};
+		EFE2A62EC93E462F48436F3F = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = ThemeTransparencyBinaryData.h;
+			path = "../../Source/GUI Classes/Binary Data/ThemeTransparencyBinaryData.h";
+			sourceTree = "SOURCE_ROOT";
+		};
 		F22DE24FC5CCED735E00364B = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.cpp.cpp;
@@ -2992,6 +3093,13 @@
 			lastKnownFileType = sourcecode.cpp.cpp;
 			name = GuiPadLayout.cpp;
 			path = "../../Source/GUI Classes/Custom Components/Pad/GuiPadLayout.cpp";
+			sourceTree = "SOURCE_ROOT";
+		};
+		FC7BE92A5D08BAAC055776CB = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = ThemeClassicBinaryData.h;
+			path = "../../Source/GUI Classes/Binary Data/ThemeClassicBinaryData.h";
 			sourceTree = "SOURCE_ROOT";
 		};
 		FCEC16CBE4C8446A782C84B6 = {
@@ -3174,8 +3282,20 @@
 		01AB8EC30C2288304A549A6A = {
 			isa = PBXGroup;
 			children = (
-				E445C184D61472D9725C1C57,
-				306037AA9D90ADBDE9A57BCC,
+				3632D134C943F492CD2978C7,
+				D947B3C9B25A1518500618F3,
+				6A4E8AA24781078C077FD70B,
+				ADDA0A61F23725410BFA6421,
+				631FB95BAF0D0800C61D7121,
+				D61812F57195E764F550DF64,
+				C2627DCFA1CB1FDD9CADC3FD,
+				FC7BE92A5D08BAAC055776CB,
+				40A8BB87D1BF39170A5BBBBE,
+				4F17664389A9F9B3625E3579,
+				6AFB1C346EFC7151A9371492,
+				55A64E9F7AB01CBCB9C79A23,
+				4CD1936072C853CE8BF8E815,
+				EFE2A62EC93E462F48436F3F,
 			);
 			name = "Binary Data";
 			sourceTree = "<group>";
@@ -4057,7 +4177,13 @@
 				6DFD1A16323BF499830553E6,
 				F04F9F71D883DEF8E5FCCE97,
 				C0762E8CB60307F8885A5F46,
-				A26294BA229648672264FE3F,
+				F3D730E865CBB9EFB071A773,
+				2D0169B07F60FBA915CB0EDB,
+				24367A7940300D75F2690BB7,
+				899DDDE785B21DCEB94CC6B6,
+				8AF3D5BB4CB027CA9486EC58,
+				F98EA05223D764519E83C5F2,
+				D846C38BD5837E962AA7B10C,
 				E040EE3B9B0966410B5EC296,
 				2AADBE0DC704CB869AB48392,
 				F4C862FEF4D56BEA7DDB4F71,

@@ -100,7 +100,13 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/SequenceAudioFilePlayer_590714bc.o \
   $(JUCE_OBJDIR)/SequencePlayer_c045cf02.o \
   $(JUCE_OBJDIR)/AlphaLiveLookandFeel_3871d7ab.o \
-  $(JUCE_OBJDIR)/BinaryDataNew_8f48cf82.o \
+  $(JUCE_OBJDIR)/MainBinaryData_897b98a1.o \
+  $(JUCE_OBJDIR)/ThemeAuroraBinaryData_fc06b461.o \
+  $(JUCE_OBJDIR)/ThemeCharcoalBinaryData_1f0b77ee.o \
+  $(JUCE_OBJDIR)/ThemeClassicBinaryData_baf95571.o \
+  $(JUCE_OBJDIR)/ThemeMateriaBinaryData_c448e784.o \
+  $(JUCE_OBJDIR)/ThemeMinimalBinaryData_7e2e2440.o \
+  $(JUCE_OBJDIR)/ThemeTransparencyBinaryData_5a7acd99.o \
   $(JUCE_OBJDIR)/GuiKeys_601b14fa.o \
   $(JUCE_OBJDIR)/GuiPiano_2d804f4d.o \
   $(JUCE_OBJDIR)/CircleWaveform_ed1ccd70.o \
@@ -374,9 +380,39 @@ $(JUCE_OBJDIR)/AlphaLiveLookandFeel_3871d7ab.o: ../../Source/GUI\ Classes/AlphaL
 	@echo "Compiling AlphaLiveLookandFeel.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
-$(JUCE_OBJDIR)/BinaryDataNew_8f48cf82.o: ../../Source/GUI\ Classes/Binary\ Data/BinaryDataNew.cpp
+$(JUCE_OBJDIR)/MainBinaryData_897b98a1.o: ../../Source/GUI\ Classes/Binary\ Data/MainBinaryData.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling BinaryDataNew.cpp"
+	@echo "Compiling MainBinaryData.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ThemeAuroraBinaryData_fc06b461.o: ../../Source/GUI\ Classes/Binary\ Data/ThemeAuroraBinaryData.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ThemeAuroraBinaryData.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ThemeCharcoalBinaryData_1f0b77ee.o: ../../Source/GUI\ Classes/Binary\ Data/ThemeCharcoalBinaryData.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ThemeCharcoalBinaryData.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ThemeClassicBinaryData_baf95571.o: ../../Source/GUI\ Classes/Binary\ Data/ThemeClassicBinaryData.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ThemeClassicBinaryData.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ThemeMateriaBinaryData_c448e784.o: ../../Source/GUI\ Classes/Binary\ Data/ThemeMateriaBinaryData.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ThemeMateriaBinaryData.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ThemeMinimalBinaryData_7e2e2440.o: ../../Source/GUI\ Classes/Binary\ Data/ThemeMinimalBinaryData.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ThemeMinimalBinaryData.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ThemeTransparencyBinaryData_5a7acd99.o: ../../Source/GUI\ Classes/Binary\ Data/ThemeTransparencyBinaryData.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ThemeTransparencyBinaryData.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/GuiKeys_601b14fa.o: ../../Source/GUI\ Classes/Custom\ Components/Circle\ Piano/GuiKeys.cpp

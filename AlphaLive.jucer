@@ -5,6 +5,8 @@
               includeBinaryInAppConfig="0" jucerFormatVersion="1">
   <MAINGROUP id="Xse6xB" name="AlphaLive">
     <GROUP id="{D96C7CCD-D014-601C-6DD6-17BA600E9A71}" name="Source">
+      <FILE id="bJMiAQ" name="icon_large.png" compile="0" resource="0" file="Other Files/icon_large.png"/>
+      <FILE id="k8A2Id" name="icon_small.png" compile="0" resource="0" file="Other Files/icon_small.png"/>
       <GROUP id="{D8514422-A9A0-21E1-7B65-ED53B5B2A34D}" name="Application">
         <FILE id="TCu4Bf" name="AbstractSubjectAndObserver.cpp" compile="1"
               resource="0" file="Source/Application/AbstractSubjectAndObserver.cpp"/>
@@ -582,12 +584,13 @@
     <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="1"/>
   </MODULES>
   <EXPORTFORMATS>
-    <XCODE_MAC targetFolder="Builds/MacOSX" documentExtensions=".alphalive">
+    <XCODE_MAC targetFolder="Builds/MacOSX" documentExtensions=".alphalive"
+               smallIcon="k8A2Id" bigIcon="bJMiAQ">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="AlphaLive"
                        osxSDK="10.5 SDK" osxCompatibility="10.5 SDK" osxArchitecture="64BitIntel"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="AlphaLive"
-                       osxSDK="10.5 SDK" osxCompatibility="10.5 SDK" osxArchitecture="64BitUniversal"/>
+                       osxSDK="10.5 SDK" osxCompatibility="10.5 SDK"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_opengl" path="JuceLibraryCode/modules"/>

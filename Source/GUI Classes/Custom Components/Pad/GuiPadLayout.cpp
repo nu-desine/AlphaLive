@@ -254,7 +254,7 @@ void GuiPadLayout::setPadPressure (int pad, int pressure, int minPressureValue)
     {
         if (prevPressureVal[pad] == 0 && pressure > 0)
             pads[pad]->setGradient(1, minPressureValue);
-        else if (prevPressureVal > 0 && pressure == 0)
+        else if (prevPressureVal[pad] > 0 && pressure == 0)
             pads[pad]->setGradient(0, minPressureValue);
     }
     else

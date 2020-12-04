@@ -196,7 +196,7 @@ private:
             InputStream* audioFileStream = source->createInputStream();
 			
             if (audioFileStream != nullptr)
-                reader = owner.formatManagerToUse.createReaderFor (audioFileStream);
+                reader = owner.formatManagerToUse.createReaderFor (std::make_unique <InputStream> (audioFileStream));
         }
     }
 	
@@ -488,7 +488,7 @@ public:
 						
 						
 						
-						g.drawLine(Line< float >::Line(x0, y0, x1, y1));
+						g.drawLine(x0, y0, x1, y1);
 						
                         
 						

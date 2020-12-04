@@ -376,7 +376,7 @@ void Toolbox::fileDoubleClicked (const File& file)
         {
             if (file.getFileExtension() == ".alphabank")
             {
-                ScopedPointer<XmlElement> xmlData (XmlDocument::parse(file));
+                std::unique_ptr<XmlElement> xmlData (XmlDocument::parse(file));
                 
                 int numOfSamples = xmlData->getChildElement(0)->getIntAttribute("numSamples");
                 String fileDirPath (file.getParentDirectory().getFullPathName());

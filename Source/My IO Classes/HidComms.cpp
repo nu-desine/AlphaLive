@@ -404,7 +404,7 @@ void HidComms::run()
         #ifdef WIN32
         sleep(1); //should this actually be Sleep() which need a windows library defined? See hidtest.
         #else
-        usleep(1*1000);
+        sleep(1);
         #endif
         
         reconnectCounter ++;

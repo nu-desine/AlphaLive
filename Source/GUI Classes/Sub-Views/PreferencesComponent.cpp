@@ -807,13 +807,13 @@ void HardwarePreferencesComponent::buttonClicked (Button* button)
     {
         if (button == ledColourButton[i])
         {
-            ColourSelector* colourSelector = new ColourSelector(14);
+            std::unique_ptr <ColourSelector> colourSelector = std::unique_ptr <ColourSelector> (new ColourSelector(14));
             colourSelector->setName("cs" + String (i));
             colourSelector->setCurrentColour (StoredSettings::getInstance()->hardwareLedColour[i]);
             colourSelector->addChangeListener(this);
             colourSelector->setSize (300, 400);
 
-            CallOutBox::launchAsynchronously (colourSelector, button->getScreenBounds(), nullptr);
+            CallOutBox::launchAsynchronously (std::move(colourSelector), button->getScreenBounds(), nullptr);
         }
     }
  

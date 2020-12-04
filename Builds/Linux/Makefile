@@ -123,7 +123,6 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/FxGuiReverb_1603d9b0.o \
   $(JUCE_OBJDIR)/FxGuiTremolo_1852fc78.o \
   $(JUCE_OBJDIR)/GuiFxDial_334fe79.o \
-  $(JUCE_OBJDIR)/AlphaAudioSettingsComponent_d91f2584.o \
   $(JUCE_OBJDIR)/AlphaPopUpButton_a4331dc8.o \
   $(JUCE_OBJDIR)/AlphaPopUpImageButton_333be861.o \
   $(JUCE_OBJDIR)/AlphaRotarySlider_8b49ded2.o \
@@ -493,11 +492,6 @@ $(JUCE_OBJDIR)/FxGuiTremolo_1852fc78.o: ../../Source/GUI\ Classes/Custom\ Compon
 $(JUCE_OBJDIR)/GuiFxDial_334fe79.o: ../../Source/GUI\ Classes/Custom\ Components/Effects/GuiFxDial.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling GuiFxDial.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/AlphaAudioSettingsComponent_d91f2584.o: ../../Source/GUI\ Classes/Custom\ Components/General/AlphaAudioSettingsComponent.cpp
-	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "Compiling AlphaAudioSettingsComponent.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/AlphaPopUpButton_a4331dc8.o: ../../Source/GUI\ Classes/Custom\ Components/General/AlphaPopUpButton.cpp

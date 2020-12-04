@@ -38,7 +38,7 @@ XmlAttributesListBox::XmlAttributesListBox (File fileToList, File fileToList2, b
     //search through the files for the child elements and append them to xmlData
     if (fileToList.exists())
     {
-        ScopedPointer <XmlElement> xmlFile(XmlDocument::parse(fileToList));
+        std::unique_ptr <XmlElement> xmlFile(XmlDocument::parse(fileToList));
         
         for (int i = 0; i < xmlFile->getNumChildElements(); i++)
         {
@@ -47,7 +47,7 @@ XmlAttributesListBox::XmlAttributesListBox (File fileToList, File fileToList2, b
     }
     if (fileToList2.exists())
     {
-        ScopedPointer <XmlElement> xmlFile(XmlDocument::parse(fileToList2));
+        std::unique_ptr <XmlElement> xmlFile(XmlDocument::parse(fileToList2));
         
         for (int i = 0; i < xmlFile->getNumChildElements(); i++)
         {

@@ -217,10 +217,6 @@
             <FILE id="TQiUlA" name="GuiFxDial.h" compile="0" resource="0" file="Source/GUI Classes/Custom Components/Effects/GuiFxDial.h"/>
           </GROUP>
           <GROUP id="{1B6AE6A5-CB5D-3D29-11D8-6EE905090F43}" name="General">
-            <FILE id="TD9F67" name="AlphaAudioSettingsComponent.cpp" compile="1"
-                  resource="0" file="Source/GUI Classes/Custom Components/General/AlphaAudioSettingsComponent.cpp"/>
-            <FILE id="YCED1I" name="AlphaAudioSettingsComponent.h" compile="0"
-                  resource="0" file="Source/GUI Classes/Custom Components/General/AlphaAudioSettingsComponent.h"/>
             <FILE id="jTjSwX" name="AlphaPopUpButton.cpp" compile="1" resource="0"
                   file="Source/GUI Classes/Custom Components/General/AlphaPopUpButton.cpp"/>
             <FILE id="ZlsqFw" name="AlphaPopUpButton.h" compile="0" resource="0"

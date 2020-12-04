@@ -1567,8 +1567,7 @@ bool MainComponent::updateSoftware (bool autoCheck)
     //get the text using an InputStream object so that we
     //can set a timeout incase there is a problem with the
     //internet connection (which would cause hanging)
-    ScopedPointer<InputStream> inputStream;
-    inputStream = versionUrl.createInputStream(false, nullptr, nullptr, String(), 8000); //what should the timeout be?
+    auto inputStream = versionUrl.createInputStream(false, nullptr, nullptr, String(), 8000); //what should the timeout be?
     if (inputStream)
         urlString = inputStream->readEntireStreamAsString();
     

@@ -118,7 +118,7 @@ void SoftwareUpdateComponent::run()
         //get the AlphaLive Update URL
         URL updateUrl ("http://www.alphasphere.com/AlphaLive_Update.zip");
         //Downloading the URL into an InputStream
-        InputStream *updateInputStream = updateUrl.createInputStream(false);
+        auto updateInputStream = updateUrl.createInputStream(false);
         
         std::cout << "URL File Size: " << updateInputStream->getTotalLength() << std::endl;
         
@@ -130,7 +130,7 @@ void SoftwareUpdateComponent::run()
         updateFile.create();
         
         //Create an OutputStream for the file so we can write data to it
-        FileOutputStream *fileOutputStream = updateFile.createOutputStream();
+        auto fileOutputStream = updateFile.createOutputStream();
         
         //Write to the file from the InputStream of the URL (this is the part that takes a while)
         std::cout << "Downloading Update..." << std::endl;
@@ -139,8 +139,8 @@ void SoftwareUpdateComponent::run()
         
         //Without deleting these here the ZipFile object below
         //thinks that updateFile has no entries and doesn't uncompress
-        delete updateInputStream;
-        delete fileOutputStream;
+        //delete updateInputStream;
+        //delete fileOutputStream;
         
         //Uncompress the zip file
         ZipFile zipFile (updateFile);

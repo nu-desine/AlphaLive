@@ -193,10 +193,10 @@ private:
     {
         if (reader == nullptr && source != nullptr)
         {
-            InputStream* audioFileStream = source->createInputStream();
+            std::unique_ptr <InputStream> audioFileStream = std::unique_ptr <InputStream> (source->createInputStream());
 			
             if (audioFileStream != nullptr)
-                reader = owner.formatManagerToUse.createReaderFor (std::make_unique <InputStream> (audioFileStream));
+                reader = owner.formatManagerToUse.createReaderFor (std::move (audioFileStream));
         }
     }
 	

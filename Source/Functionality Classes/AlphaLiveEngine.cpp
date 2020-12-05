@@ -850,8 +850,9 @@ void AlphaLiveEngine::setDeviceType (int type)
     
     if (mainComponent != NULL)
     {
-        const MessageManagerLock mmLock;
-        mainComponent->editInterfaceFromDeviceConnectivity(2);
+        //const MessageManagerLock mmLock;
+        //mainComponent->editInterfaceFromDeviceConnectivity(2);
+        broadcaster.sendActionMessage("SET DEVICE TYPE");
     }
 }
 
@@ -859,8 +860,9 @@ void AlphaLiveEngine::setDeviceStatus()
 {
     if (mainComponent != NULL)
     {
-        const MessageManagerLock mmLock;
-        mainComponent->editInterfaceFromDeviceConnectivity(3);
+        //const MessageManagerLock mmLock;
+        //mainComponent->editInterfaceFromDeviceConnectivity(3);
+        broadcaster.sendActionMessage("SET DEVICE STATUS");
     }
     
     if (getDeviceStatus() != 0)
@@ -992,8 +994,9 @@ void AlphaLiveEngine::removeMidiInAndOut()
     //remove MIDI output and input selectors from the preferences view
     if (mainComponent != NULL)
     {
-        const MessageManagerLock mmLock;
-        mainComponent->editInterfaceFromDeviceConnectivity(1);
+        //const MessageManagerLock mmLock;
+        //mainComponent->editInterfaceFromDeviceConnectivity(1);
+        broadcaster.sendActionMessage("RM MIDI IO");
     }
     
     #endif //JUCE_WINDOWS
@@ -1176,8 +1179,10 @@ void AlphaLiveEngine::setFirmwareDetails (String version, String serial)
     
     if (mainComponent != NULL)
     {
-        const MessageManagerLock mmLock;
-        mainComponent->editInterfaceFromDeviceConnectivity(4);
+        //const MessageManagerLock mmLock;
+        
+        broadcaster.sendActionMessage("SET FW DETAILS");
+       // mainComponent->editInterfaceFromDeviceConnectivity(4);
     }
 }
 
@@ -1294,8 +1299,27 @@ void AlphaLiveEngine::actionListenerCallback (const String& message)
             }
             
         }
-    }    
+    }
     
+    else if (message == "SET DEVICE TYPE")
+    {
+        mainComponent->editInterfaceFromDeviceConnectivity(2);
+    }
+    
+    else if (message == "SET DEVICE STATUS")
+    {
+        mainComponent->editInterfaceFromDeviceConnectivity(3);
+    }
+    
+    else if (message == "SET FW DETAILS")
+    {
+        mainComponent->editInterfaceFromDeviceConnectivity(4);
+    }
+    
+    else if (message == "RM MIDI IO")
+    {
+        mainComponent->editInterfaceFromDeviceConnectivity(1);
+    }
 }
 void AlphaLiveEngine::setFirmwareUpdateStatus (bool status)
 {

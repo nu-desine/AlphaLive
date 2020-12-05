@@ -1063,10 +1063,13 @@ void MainComponent::run()
     
     if (isInfoBoxEnabled == true)
     {
-        const MessageManagerLock mmLock;
+        //const MessageManagerLock mmLock;
         
-        infoTextBox->clear();
-        infoTextBox->setText(infoBoxText);
+        //infoTextBox->clear();
+        //infoTextBox->setText(infoBoxText);
+        
+        asyncUpdateFlagInfoBox = true;
+        triggerAsyncUpdate();
     }
     
 }
@@ -2461,5 +2464,16 @@ void MainComponent::changeLookAndFeel()
     projectSettingsComponent->setTabColour();
     
     sendLookAndFeelChange();
+}
+
+void MainComponent::handleAsyncUpdate()
+{
+    if (asyncUpdateFlagInfoBox)
+    {
+        infoTextBox->clear();
+        infoTextBox->setText(infoBoxText);
+        
+        asyncUpdateFlagInfoBox = false;
+    }
 }
 

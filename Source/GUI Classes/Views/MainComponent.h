@@ -67,7 +67,8 @@ class MainComponent :   public Component,
                         public ComboBox::Listener,
                         public Observer, //so this class can 'observe' appDocumentState
                         public ApplicationCommandTarget,
-                        public Thread
+                        public Thread,
+                        public AsyncUpdater
 {
 public:
     //==============================================================================
@@ -134,6 +135,8 @@ public:
     bool updateSoftware (bool autoCheck);
     
     void changeLookAndFeel();
+    
+    void handleAsyncUpdate() override;
     
 private:
     //==============================================================================
@@ -211,6 +214,8 @@ private:
     SoftwareUpdateComponent *softwareUpdateComponent;
     
     Component *mouseOverComponent;
+    
+    bool asyncUpdateFlagInfoBox = false;
     
     //==============================================================================
 };

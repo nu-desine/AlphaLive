@@ -30,7 +30,7 @@ class AlphaLiveEngine;
 class AppSettings;
 class MainComponent;
 
-class EliteControls
+class EliteControls : public AsyncUpdater
 {
 public:
     EliteControls (AlphaLiveEngine &ref);
@@ -39,6 +39,8 @@ public:
     void setMainComponent(MainComponent *mainComponent_);
     
     void getInputData(int control, int value);
+    
+    void handleAsyncUpdate() override;
     
 private:
     
@@ -49,6 +51,12 @@ private:
     
     OscOutput oscOutput;
     AlphaLiveEngine &alphaLiveEngineRef;
+    
+    bool asyncUpdateFlagStartStop = false;
+    bool asyncUpdateFlagMetronome = false;
+    bool asyncUpdateFlagRecord = false;
+    bool asyncUpdateFlagSave = false;
+    bool asyncUpdateFlagKillswitch = false;
     
 };
 

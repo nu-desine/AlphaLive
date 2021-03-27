@@ -220,11 +220,6 @@ void EliteControls::getInputData(int control, int value)
         }    
     }
     
-    
-    
-    
-    
-    
     //buttons
     else if (control >= 102 && control <= 104)
     {
@@ -240,7 +235,9 @@ void EliteControls::getInputData(int control, int value)
                 if (eliteControlValue == 1)
                 {
                     //const MessageManagerLock mmLock;
-                    mainComponent->perform(CommandIDs::StartStopClock);
+                    //mainComponent->perform(CommandIDs::StartStopClock);
+                    asyncUpdateFlagStartStop = true;
+                    triggerAsyncUpdate();
                 }
             }
             
@@ -266,7 +263,9 @@ void EliteControls::getInputData(int control, int value)
                 if (eliteControlValue == 1)
                 {
                     //const MessageManagerLock mmLock;
-                    mainComponent->getGuiGlobalClock()->getMetronomeButton()->triggerClick();
+                    //mainComponent->getGuiGlobalClock()->getMetronomeButton()->triggerClick();
+                    asyncUpdateFlagMetronome = true;
+                    triggerAsyncUpdate();
                 }
             }
             
@@ -276,7 +275,9 @@ void EliteControls::getInputData(int control, int value)
                 if (eliteControlValue == 1)
                 {
                     //const MessageManagerLock mmLock;
-                    mainComponent->getGuiSequencerMode()->getRecordButton()->triggerClick();
+                    //mainComponent->getGuiSequencerMode()->getRecordButton()->triggerClick();
+                    asyncUpdateFlagRecord = true;
+                    triggerAsyncUpdate();
                 }
             }
             
@@ -286,7 +287,9 @@ void EliteControls::getInputData(int control, int value)
                 if (eliteControlValue == 1)
                 {
                     //const MessageManagerLock mmLock;
-                    mainComponent->getAppDocumentStateRef().saveProject();
+                    //mainComponent->getAppDocumentStateRef().saveProject();
+                    asyncUpdateFlagSave = true;
+                    triggerAsyncUpdate();
                 }
             }
             
@@ -329,8 +332,10 @@ void EliteControls::getInputData(int control, int value)
             {
                 if (eliteControlValue == 1)
                 {
-                    const MessageManagerLock mmLock;
-                    mainComponent->perform(CommandIDs::KillSwitch);
+                    //const MessageManagerLock mmLock;
+                    //mainComponent->perform(CommandIDs::KillSwitch);
+                    asyncUpdateFlagKillswitch = true;
+                    triggerAsyncUpdate();
                 }
             }
             
@@ -362,5 +367,33 @@ void EliteControls::getInputData(int control, int value)
             }
         }
     }
-    
+}
+
+void EliteControls::handleAsyncUpdate()
+{
+    if (asyncUpdateFlagStartStop)
+    {
+        mainComponent->perform(CommandIDs::StartStopClock);
+        asyncUpdateFlagStartStop = false;
+    }
+    if (asyncUpdateFlagMetronome)
+    {
+        mainComponent->getGuiGlobalClock()->getMetronomeButton()->triggerClick();
+        asyncUpdateFlagMetronome = false;
+    }
+    if (asyncUpdateFlagRecord)
+    {
+        mainComponent->getGuiSequencerMode()->getRecordButton()->triggerClick();
+        asyncUpdateFlagRecord = false;
+    }
+    if (asyncUpdateFlagSave)
+    {
+        mainComponent->getAppDocumentStateRef().saveProject();
+        asyncUpdateFlagSave = false;
+    }
+    if (asyncUpdateFlagKillswitch)
+    {
+        mainComponent->perform(CommandIDs::KillSwitch);
+        asyncUpdateFlagKillswitch = false;
+    }
 }

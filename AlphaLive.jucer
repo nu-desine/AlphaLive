@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="F22pMI" name="AlphaLive" projectType="guiapp" version="1.3.3"
+<JUCERPROJECT id="F22pMI" name="AlphaLive" projectType="guiapp" version="1.4.0"
               companyName="nu desine" bundleIdentifier="com.nu_desine.AlphaLive"
               includeBinaryInAppConfig="0" jucerFormatVersion="1">
   <MAINGROUP id="Xse6xB" name="AlphaLive">

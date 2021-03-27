@@ -217,6 +217,9 @@ private:
     
     bool asyncUpdateFlagInfoBox = false;
     
+    bool asyncUpdateFlagEliteDial = false;
+    int asyncUpdateValEliteDialId = 0;
+    double asyncUpdateValEliteDialValue = 0;
     //==============================================================================
 };
 

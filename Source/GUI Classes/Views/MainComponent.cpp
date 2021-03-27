@@ -1356,6 +1356,8 @@ void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
     Slider *sliderToChange = nullptr;
     double incremValue;
     
+    asyncUpdateValEliteDialId = command;
+    
     //global gain
     if (command == 1)
     {
@@ -1443,12 +1445,11 @@ void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
         //if new value is different from the previous value, change the slider value
         if (newVal != currentVal)
         {
-            //should I be locking the message thread like I'm currently doing?
-            //or could this cause delays/lagging, in which case I should use an aSyncUpdater?
-            const MessageManagerLock mmLock;
-            
-            sliderToChange->setValue(newVal, sendNotification);
-            //std::cout << "New Slider Value: " << newVal << std::endl;
+            //const MessageManagerLock mmLock;
+            //sliderToChange->setValue(newVal, sendNotification);
+            asyncUpdateValEliteDialValue = newVal;
+            asyncUpdateFlagEliteDial = true;
+            triggerAsyncUpdate();
         }
     }
     
@@ -2474,6 +2475,31 @@ void MainComponent::handleAsyncUpdate()
         infoTextBox->setText(infoBoxText);
         
         asyncUpdateFlagInfoBox = false;
+    }
+    
+    if (asyncUpdateFlagEliteDial)
+    {
+        Slider *sliderToChange = nullptr;
+
+        if (asyncUpdateValEliteDialId == 1)
+        {
+            sliderToChange = gainSlider;
+        }
+        else if (asyncUpdateValEliteDialId == 2)
+        {
+            sliderToChange = panSlider;
+        }
+        else if (asyncUpdateValEliteDialId == 3)
+        {
+            sliderToChange = globalClock->getTempoSlider();
+        }
+        else if (asyncUpdateValEliteDialId == 4)
+        {
+            sliderToChange = dynamic_cast<juce::Slider *> (mouseOverComponent);
+        }
+        
+        sliderToChange->setValue (asyncUpdateValEliteDialValue, sendNotification);
+        asyncUpdateFlagEliteDial = false;
     }
 }
 

@@ -217,9 +217,14 @@ private:
     
     bool asyncUpdateFlagInfoBox = false;
     
-    bool asyncUpdateFlagEliteDial = false;
-    int asyncUpdateValEliteDialId = 0;
-    double asyncUpdateValEliteDialValue = 0;
+    bool asyncUpdateFlagEliteDialGain = false;
+    bool asyncUpdateFlagEliteDialPan = false;
+    bool asyncUpdateFlagEliteDialTempo = false;
+    bool asyncUpdateFlagEliteDialSmart = false;
+    double asyncUpdateValEliteDialGainValue = 0;
+    double asyncUpdateValEliteDialPanValue = 0;
+    double asyncUpdateValEliteDialTempoValue = 0;
+    double asyncUpdateValEliteDialSmartValue = 0;
     //==============================================================================
 };
 

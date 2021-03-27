@@ -1356,8 +1356,6 @@ void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
     Slider *sliderToChange = nullptr;
     double incremValue;
     
-    asyncUpdateValEliteDialId = command;
-    
     //global gain
     if (command == 1)
     {
@@ -1413,7 +1411,6 @@ void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
             //just to be safe (this could be caused is a sliders interval isn't set)...
             if (incremValue == 0)
                 incremValue = 0.1;
-            
         }
     
     }
@@ -1447,12 +1444,30 @@ void MainComponent::sendEliteDialCommand (int command, int eliteControlValue)
         {
             //const MessageManagerLock mmLock;
             //sliderToChange->setValue(newVal, sendNotification);
-            asyncUpdateValEliteDialValue = newVal;
-            asyncUpdateFlagEliteDial = true;
+            if (command == 1)
+            {
+                asyncUpdateValEliteDialGainValue = newVal;
+                asyncUpdateFlagEliteDialGain = true;
+            }
+            else if (command == 2)
+            {
+                asyncUpdateValEliteDialPanValue = newVal;
+                asyncUpdateFlagEliteDialPan = true;
+            }
+            else if (command == 3)
+            {
+                asyncUpdateValEliteDialTempoValue = newVal;
+                asyncUpdateFlagEliteDialTempo = true;
+            }
+            else if (command == 4)
+            {
+                asyncUpdateValEliteDialSmartValue = newVal;
+                asyncUpdateFlagEliteDialSmart = true;
+            }
+            
             triggerAsyncUpdate();
         }
     }
-    
 }
 
 
@@ -2476,30 +2491,25 @@ void MainComponent::handleAsyncUpdate()
         
         asyncUpdateFlagInfoBox = false;
     }
-    
-    if (asyncUpdateFlagEliteDial)
+    if (asyncUpdateFlagEliteDialGain)
     {
-        Slider *sliderToChange = nullptr;
-
-        if (asyncUpdateValEliteDialId == 1)
-        {
-            sliderToChange = gainSlider;
-        }
-        else if (asyncUpdateValEliteDialId == 2)
-        {
-            sliderToChange = panSlider;
-        }
-        else if (asyncUpdateValEliteDialId == 3)
-        {
-            sliderToChange = globalClock->getTempoSlider();
-        }
-        else if (asyncUpdateValEliteDialId == 4)
-        {
-            sliderToChange = dynamic_cast<juce::Slider *> (mouseOverComponent);
-        }
-        
-        sliderToChange->setValue (asyncUpdateValEliteDialValue, sendNotification);
-        asyncUpdateFlagEliteDial = false;
+        gainSlider->setValue (asyncUpdateValEliteDialGainValue, sendNotification);
+        asyncUpdateFlagEliteDialGain = false;
+    }
+    if (asyncUpdateFlagEliteDialPan)
+    {
+        panSlider->setValue (asyncUpdateValEliteDialPanValue, sendNotification);
+        asyncUpdateFlagEliteDialPan = false;
+    }
+    if (asyncUpdateFlagEliteDialTempo)
+    {
+        globalClock->getTempoSlider()->setValue (asyncUpdateValEliteDialTempoValue, sendNotification);
+        asyncUpdateFlagEliteDialTempo = false;
+    }
+    if (asyncUpdateFlagEliteDialSmart)
+    {
+        dynamic_cast<juce::Slider *> (mouseOverComponent)->setValue (asyncUpdateValEliteDialSmartValue, sendNotification);
+        asyncUpdateFlagEliteDialSmart = false;
     }
 }
 

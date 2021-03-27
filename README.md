@@ -1,10 +1,10 @@
 # AlphaLive #
 
-AlphaLive is the [AlphaSphere](http://www.alphasphere.com/)'s official software application that allows you to program the device into an expressive musical instrument and controller. The software can functions as a MIDI mapping editor, sampler, sequencer, and Open Sound Control converter.
+[AlphaLive](https://www.kvraudio.com/product/alphalive-by-nu-desine) is the [AlphaSphere](https://www.kvraudio.com/product/alphasphere-nexus-by-nu-desine)'s official software application that allows you to program the device into an expressive musical instrument and controller. The software can functions as a MIDI mapping editor, sampler, sequencer, and Open Sound Control converter.
 
-AlphaLive has been programmed using the [JUCE](http://www.rawmaterialsoftware.com/juce.php) cross-platform C++ library, and includes an Xcode project for building on Mac OS X, and a Visual Studio 2010 project for building on Windows. JUCE also easily allows for Linux makefile's to be built.
+AlphaLive has been programmed using the [JUCE](https://juce.com) cross-platform C++ library, and includes an Xcode project for building on Mac OS X, and a Visual Studio 2010 project for building on Windows. JUCE also easily allows for Linux makefile's to be built.
 
-You can download pre-built binaries of the application for Mac OS X and Windows (32 and 64 bit) from [here](http://www.alphasphere.com/alphalive/).
+You can download pre-built binaries of the application for Mac OS X and Windows (32 and 64 bit) from [here](https://github.com/nu-desine/AlphaLive/releases/tag/version_1.3.2).
 
 ## Requirements ##
 
@@ -21,11 +21,11 @@ If you are familiar with JUCE development, you will probably expect your first p
 
 AlphaLive is licensed under the GPLv2. See GPL2.txt for details.
 
-AlphaLive and the AlphaSphere have been developed by [nu desine](http://nu-desine.com/).
+AlphaLive and the AlphaSphere have been developed by [nu desine](https://www.watershed.co.uk/studio/residents/nu-desine).
 
 The following libraries are included in the source code:
 
-+  The [JUCE](http://www.rawmaterialsoftware.com/juce.php) library which is licensed under the GPLv2. 
++  The [JUCE](https://juce.com) library which is licensed under the GPLv2. 
 +  The [oscpack](http://www.rossbencina.com/code/oscpack) library which is licensed under a BSD style license.
 +  The [HIDAPI](http://www.signal11.us/oss/hidapi/) library which is licensed under a BSD style license.
 +  The [JUCED](http://code.google.com/p/juced/) library which is licensed under the GPLv2. 

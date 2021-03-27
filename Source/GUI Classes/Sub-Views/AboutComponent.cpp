@@ -58,7 +58,7 @@ AboutComponent::AboutComponent(MainComponent &ref)
     companyLabel->setText(translate("Developed by") + " ", dontSendNotification);
     companyLabel->setJustificationType(Justification::horizontallyCentred);
     
-    addAndMakeVisible(nuDesineLink = new HyperlinkButton("nu desine", URL("http://www.nu-desine.com")));
+    addAndMakeVisible(nuDesineLink = new HyperlinkButton("nu desine", URL("https://alphasphere.com")));
     //Font hyperlinkFont(18);
     //nuDesineLink->setFont(hyperlinkFont, true);
     
@@ -69,11 +69,11 @@ AboutComponent::AboutComponent(MainComponent &ref)
     openSourceLabel->setText(translate("released under the") + " ", dontSendNotification);
     openSourceLabel->setJustificationType(Justification::horizontallyCentred);
     
-    addAndMakeVisible(gnuLicenseLink = new HyperlinkButton("GNU General Public License v2.0", 
-                                                         URL("http://www.opensource.org/licenses/GPL-2.0")));
+    addAndMakeVisible(gnuLicenseLink = new HyperlinkButton("GNU General Public License v3.0",
+                                                         URL("https://www.gnu.org/licenses/gpl-3.0.en.html")));
     
     addAndMakeVisible(copyrightLabel = new Label("Copyright Label"));
-    copyrightLabel->setText(translate("Copyright 2011-2020 nu desine"), dontSendNotification);
+    copyrightLabel->setText(translate("Copyright 2011-2021 nu desine"), dontSendNotification);
     copyrightLabel->setJustificationType(Justification::horizontallyCentred);
     
     addAndMakeVisible(samplesLabel = new Label("Samples Label"));

@@ -51,6 +51,11 @@ private:
     
     ScopedPointer <ProgressBar> progressBar;
     double progress;
+    
+    bool asyncUpdateFlagVisibleEnabled = false;
+    bool asyncUpdateFlagAppChangeAlert = false;
+    bool asyncUpdateFlagAppChangeTrigger = false;
+    bool asyncUpdateFlagVisibleDisabled = false;
 };
 
 #endif // H_SOFTWAREUPDATECOMPONENT

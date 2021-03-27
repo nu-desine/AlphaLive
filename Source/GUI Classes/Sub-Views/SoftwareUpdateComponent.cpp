@@ -108,8 +108,10 @@ void SoftwareUpdateComponent::run()
     while (!threadShouldExit())
     {
         {
-            const MessageManagerLock mmLock;
-            setVisible(true);
+            //const MessageManagerLock mmLock;
+            //setVisible(true);
+            asyncUpdateFlagVisibleEnabled = true;
+            triggerAsyncUpdate();
         }
         
         //=====================================================================
@@ -229,17 +231,19 @@ void SoftwareUpdateComponent::run()
             #endif
             
             {
-                const MessageManagerLock mmLock;
-                infoLabel->setText (translate("Closing AlphaLive") +
-                                    "\n" + 
-                                    translate("and launching AlphaLive Updater..."), dontSendNotification);
-
+                //const MessageManagerLock mmLock;
+                //infoLabel->setText (translate("Closing AlphaLive") +
+                //                    "\n" +
+                //                    translate("and launching AlphaLive Updater..."), dontSendNotification);
+                asyncUpdateFlagAppChangeAlert = true;
+                triggerAsyncUpdate();
             }
             
             wait(4000);
             
             {
-                const MessageManagerLock mmLock;
+                //const MessageManagerLock mmLock;
+                asyncUpdateFlagAppChangeTrigger = true;
                 triggerAsyncUpdate();
             }
             
@@ -257,31 +261,54 @@ void SoftwareUpdateComponent::run()
     }
     
     {
-        const MessageManagerLock mmLock;
-        setVisible(false);
+        //const MessageManagerLock mmLock;
+        //setVisible(false);
+        asyncUpdateFlagVisibleDisabled = true;
+        triggerAsyncUpdate();
     }
    
 }
 
 void SoftwareUpdateComponent::handleAsyncUpdate()
 {
-    //launch AlphaLive Updater
-    #if JUCE_MAC
-    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "Application Data/AlphaLive Updater.app");
-    #endif
-    #if JUCE_WINDOWS
-    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "Application Data/AlphaLive Updater.exe");
-    #endif
-    #if JUCE_LINUX
-    File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "Application Data/AlphaLive Updater");
-    #endif
-    
-    if (alphaliveUpdaterApp.exists())
+    if (asyncUpdateFlagVisibleEnabled)
     {
-        alphaliveUpdaterApp.startAsProcess();
-        //stop HID thread and close AlphaLive
-        mainComponentRef.getAlphaLiveEngineRef().stopThread(100);
-        JUCEApplication::quit();
-    } 
-
+        setVisible(true);
+        asyncUpdateFlagVisibleEnabled = false;
+    }
+    if (asyncUpdateFlagAppChangeAlert)
+    {
+        infoLabel->setText (translate("Closing AlphaLive") +
+                            "\n" +
+                            translate("and launching AlphaLive Updater..."), dontSendNotification);
+        asyncUpdateFlagAppChangeAlert = false;
+    }
+    if (asyncUpdateFlagAppChangeTrigger)
+    {
+        //launch AlphaLive Updater
+        #if JUCE_MAC
+        File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "Application Data/AlphaLive Updater.app");
+        #endif
+        #if JUCE_WINDOWS
+        File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "Application Data/AlphaLive Updater.exe");
+        #endif
+        #if JUCE_LINUX
+        File alphaliveUpdaterApp (alphaLiveDirectory.getFullPathName() + File::getSeparatorString() + "Application Data/AlphaLive Updater");
+        #endif
+        
+        if (alphaliveUpdaterApp.exists())
+        {
+            alphaliveUpdaterApp.startAsProcess();
+            //stop HID thread and close AlphaLive
+            mainComponentRef.getAlphaLiveEngineRef().stopThread(100);
+            JUCEApplication::quit();
+        }
+        
+        asyncUpdateFlagAppChangeTrigger = false;
+    }
+    if (asyncUpdateFlagVisibleDisabled)
+    {
+        setVisible(false);
+        asyncUpdateFlagVisibleDisabled = false;
+    }
 }

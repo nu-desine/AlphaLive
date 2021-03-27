@@ -30,7 +30,8 @@
 #include "../../../Functionality Classes/Controller Mode/ModeController.h"
 
 class SceneComponent :  public Component,
-                        public KeyListener
+                        public KeyListener,
+                        public AsyncUpdater
 {
 public:
     SceneComponent(AppDocumentState &ref, ModeController &ref2);
@@ -58,6 +59,8 @@ public:
     
     bool keyPressed (const KeyPress &key, Component *originatingComponent);
     
+    void handleAsyncUpdate() override;
+    
 private:
     
     SceneSlot *slot[NO_OF_SCENES];
@@ -66,6 +69,9 @@ private:
     AppDocumentState &appDocumentStateRef;
     
     bool shouldShowSaveWindow;
+    
+    bool asyncUpdateFlagSelectSlot = false;
+    int asyncUpdateValSelectSlotNum = 0;
 };
 
 #endif

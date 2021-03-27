@@ -156,12 +156,11 @@ void SceneComponent::selectSlot (int slotNumber)
     
     //else, slotNumber represents the actualy slot number that needs to be selected
     
-    
-    //should I be locking the message thread like I'm currently doing?
-    //or could this cause delays/lagging, in which case I should use an aSyncUpdater?
-    const MessageManagerLock mmLock;
-    
-    slot[slotNumber]->selectSlot();
+    //const MessageManagerLock mmLock;
+    //slot[slotNumber]->selectSlot();
+    asyncUpdateValSelectSlotNum = slotNumber;
+    asyncUpdateFlagSelectSlot = true;
+    triggerAsyncUpdate();
 }
 
 bool SceneComponent::keyPressed (const KeyPress &key, Component *originatingComponent)
@@ -198,4 +197,13 @@ SceneSlot* SceneComponent::getSelectedSceneSlot()
 void SceneComponent::disableSaveAlertWindow()
 {
     shouldShowSaveWindow = false;
+}
+
+void SceneComponent::handleAsyncUpdate()
+{
+    if (asyncUpdateFlagSelectSlot)
+    {
+        slot[asyncUpdateValSelectSlotNum]->selectSlot();
+        asyncUpdateFlagSelectSlot = false;
+    }
 }

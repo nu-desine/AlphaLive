@@ -588,7 +588,7 @@ void AlphaLiveEngine::handleExclusiveMode (int padNum)
 void AlphaLiveEngine::updatePadPlayingStatus (int padNumber, int status)
 {
     //is this function called from an external actionListenerCallback function every time?
-    //If not do we need a MessageManagerLock here?
+    //If not do we need to do this async?
     if (mainComponent != NULL)
         mainComponent->getGuiPadLayout()->setPadPlayingState(padNumber, status);
     
@@ -1180,9 +1180,8 @@ void AlphaLiveEngine::setFirmwareDetails (String version, String serial)
     if (mainComponent != NULL)
     {
         //const MessageManagerLock mmLock;
-        
+        //mainComponent->editInterfaceFromDeviceConnectivity(4);
         broadcaster.sendActionMessage("SET FW DETAILS");
-       // mainComponent->editInterfaceFromDeviceConnectivity(4);
     }
 }
 

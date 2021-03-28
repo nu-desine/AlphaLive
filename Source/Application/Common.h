@@ -28,7 +28,7 @@
 
 //full path string for the directory where all the application supporting files
 //(e.g. Application Data, Documentation, Library) are stored.
-const String appFilesDirString (File::getSpecialLocation(File::commonApplicationDataDirectory).getFullPathName() + File::getSeparatorString() + "AlphaLive" + File::getSeparatorString());
+const String appFilesDirString (File::getSpecialLocation(File::userApplicationDataDirectory).getFullPathName() + File::getSeparatorString() + "AlphaLive" + File::getSeparatorString());
 
 extern ScopedPointer<ApplicationCommandManager> commandManager;
 

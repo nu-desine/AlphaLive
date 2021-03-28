@@ -26,6 +26,10 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "CommandIDs.h"
 
+//full path string for the directory where all the application supporting files
+//(e.g. Application Data, Documentation, Library) are stored.
+const String appFilesDirString (File::getSpecialLocation(File::commonApplicationDataDirectory).getFullPathName() + File::getSeparatorString() + "AlphaLive" + File::getSeparatorString());
+
 extern ScopedPointer<ApplicationCommandManager> commandManager;
 
 static double scaleValue (double value, double minValue, double maxValue, double minRange, double maxRange)

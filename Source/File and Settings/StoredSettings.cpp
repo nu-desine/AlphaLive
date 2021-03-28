@@ -19,6 +19,7 @@
 //
 
 #include "StoredSettings.h"
+#include "../Application/Common.h"
 
 #if JUCE_MAC || JUCE_LINUX
 #include <sys/stat.h>
@@ -247,9 +248,7 @@ void StoredSettings::installBasicDemoProj()
     //app project directory is created/set but before the default
     //project to open at launch is set.
     
-    File basicDemoProjDir = (File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() +
-                             File::getSeparatorString() +
-                             "Demo Project (Basic)");
+    File basicDemoProjDir = appFilesDirString + "Demo Project (Basic)";
     
     if (basicDemoProjDir.exists())
     {

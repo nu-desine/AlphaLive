@@ -25,6 +25,7 @@
 #include "../Functionality Classes/Sequencer Mode/SequencerValues.h"
 #include "../Application/MainWindow.h"
 #include "StoredSettings.h"
+#include "../Application/Common.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[i]
 #define PAD_SETTINGS_pad AppSettings::Instance()->padSettings[currentlySelectedPad]
@@ -1817,15 +1818,8 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
                             else
                             {
                                 //This should be true if loading a SCENE PRESET that contains audio files.
-                                //Here, fileString should be the relative path from the
-                                //current application file parent directory ('AlphaLive').
-                                
-                                File currentAppFile = File::getSpecialLocation(File::currentApplicationFile);
-                                
-                                filePath =      currentAppFile.getParentDirectory().getFullPathName() +
-                                                File::getSeparatorString() +
-                                                fileString;
-                                
+                                //Here, fileString should be the relative path from app files dir.
+                                filePath = appFilesDirString + fileString;
                             }
                             
                             sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("samplerAudioFilePath", filePath);
@@ -1860,15 +1854,8 @@ bool AppDocumentState::loadSceneFromDisk(int sceneNumber, bool openBrowser, File
                                 else
                                 {
                                     //This should be true if loading a SCENE PRESET that contains audio files.
-                                    //Here, newFileName should be the relative path from the
-                                    //current application file parent directory ('AlphaLive').
-                                    
-                                    File currentAppFile = File::getSpecialLocation(File::currentApplicationFile);
-                                    
-                                    filePath =  currentAppFile.getParentDirectory().getFullPathName() +
-                                    File::getSeparatorString() +
-                                    fileString;
-                                    
+                                    //Here, fileString should be the relative path from app files dir.
+                                    filePath = appFilesDirString + fileString;
                                 }
                                 
                                 sceneData[sceneNumber]->getChildByName("PAD_DATA_"+String(i))->setAttribute("sequencerSamplesAudioFilePath"+String(row), filePath);

@@ -1,0 +1,210 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\paperw11900\paperh16840\vieww12000\viewh14300\viewkind0
+\deftab720
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+
+\f0\b\fs24 \cf0 AlphaLive Change Log\
+\
+Version 1.3.2 - 16th November 2014\
+
+\b0 \
+Bug fixes:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Fixed an issue where language translations weren't working on Windows anymore.\
+	\'95	Other minor bugs and general performance issues fixed.
+\b \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+Version 1.3.1 - 4th August 2014\
+
+\b0 \
+New features:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	You can now disable the pad pressure feedback on the pad layout GUI, which is useful when wanting to reduce CPU usage. Access this option from the 'Options' menu.\
+	\'95	Added an 'Update Firmware Utility' option to the 'Hardware' menu that allows you to manually upload firmware/hex files to the AlphaSphere.\
+	\'95	Added a 'Reverse' button the pressure settings of MIDI Mode and MIDI Sequencer Mode for quickly swapping the values of the minimum and maximum pressure ranges.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+Bug fixes:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Fixed a bug where the virtual MIDI I/O ports on Windows weren't working anymore.\
+	\'95	Fixed an issue where the application would hang on the splash screen at launch if you were connected to a network but having problems with its internet connection.\
+	\'95	Dramatically reduced the time it takes for the AlphaLive to update itself on Windows.\
+	\'95	Other minor bugs and general performance issues fixed.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+Other:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Improved the GUI when syncing to an external MIDI clock.\
+	\'95	The application now asks if you want to save your current project on close.\
+	\'95	Updated the Japanese Reference Manual.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+
+\b Version 1.3.0 - 31st March 2014\
+
+\b0 New features:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	AlphaSphere LED Configuration and Control - The RGB LED inside the AlphaSphere can now be completely customised - change the colour/brightness, make it flash in sync to AlphaLive's clock or an external MIDI Clock, as well create completely custom colour changes and animations using external MIDI CC messages. Some LED settings can be controlled with pads (via Controller Mode) or elite buttons.\
+	\'95	MIDI Dynamic Channel Mode - This is a useful new feature that allows MIDI channels to be dynamically applied to pads when they are pressed, giving each pad a unique MIDI channel. This can be used to create polyphonic pitch bend, as well being an alternative to polyphonic aftertouch when it is not available, allowing notes to be modulated individually.\
+	\'95	MIDI Clock - You can now send MIDI Clock messages to sync external MIDI software/hardware with AlphaLive's clock, or you can receive MIDI clock messages to sync AlphaLive to an external MIDI source.\
+	\'95	Pressure Latch Mode - This mode allows you to 'latch' the pressure value of a pad. This feature will be most useful when wanting to control a MIDI slider/dial in a more conventional way, without the control going back to zero when you release the pad.\
+	\'95	You can now send MIDI Program Change messages to the AlphaSphere/AlphaLive to change the current scene number.\
+	\'95	Added a 'View' menu that includes some shortcuts for viewing different displays and interface elements within AlphaLive.\
+	\'95	You can now change the text of the pads on the Pad Layout section to display pad contents rather than just pad numbers. Change this via the Preferences pane. 
+\i Please note that this feature is still in beta mode.\
+
+\i0 	\'95	A new option that sets only the most recently pressed MIDI pad to have control of any type of MIDI channel pressure data (channel aftertouch, pitch bend, mod wheel or CC data) of a particular channel at any time. This option will prevent the glitchy/jumpy effect caused by pressing multiple pads set to the same MIDI message. Access this option via the Preferences pane.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+Bug fixes:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Fixed an issue with device connectivity on Windows 8 and 8.1.\
+	\'95	Fixed a bug where there would occasionally be clicks at the beginning of audio file playback.\
+	\'95	Fixed an issue where certain rotary sliders wouldn't disappear.\
+	\'95	Fixed a bug where not all controls/settings would be reset when creating a new project.\
+	\'95	Fixed an issue where trying to export a scene that isn't the currently selected one would result in the exported scene data being overwritten with the selected scene data.\
+	\'95	Fixed a bug where changing the 'MIDI note display type' control in Preferences wouldn't change the formatting of the piano label.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+Other:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Slightly increased the font size of most text, especially that of Chinese and Japanese characters.\
+	\'95	Improved the arrangement and look of the Preferences and Project Settings displays.\
+	\'95	Improved the look of the rotary sliders.\
+	\'95	Highlighted the first pad or each row on the Pad Layout section.\
+	\'95	Added some useful resources and links to the 'Help' menu.\
+	\'95	Added new interface themes.\
+	\'95	Updated English Reference Manual (Japanese update coming soon).\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+Firmware version 1.0.2:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Improved the AlphaSphere-to-AlphaLive communication to allow MIDI messages to be sent to AlphaLive via the AlphaSphere.\
+	\'95	Added LED configurability and control.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+\
+
+\b Version 1.2.0 - 15th October 2013\
+
+\b0 New features:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Interface Themes - You can now change the skin and colour scheme of the software interface. Go to 'Preferences -> General Settings -> Interface Theme' to do this. \
+	\'95	Scene presets - The Toolbox now contains a 'Scene Presets'
+\i  
+\i0 tab that allows you to apply template mappings or setting to the entire set of pads. Select all pads to display these presets in the Toolbox.\
+	\'95	Scene names - You can now name each Scene using the provided text box shown when hovering the mouse over each Scene slot.\
+	\'95	Copy Notes/Samples to Sequencer option - You can now easily apply a set of MIDI pad notes or Sampler pad samples to a Sequencer pad when wanting to recording them. To do this, select all the MIDI/Sampler pads you want to record as well as the Sequencer pad/s you want to record into, and select the 'Copy Notes/Samples to Sequencer' item from the 'Edit' menu.\
+	\'95	You can now set any pad to be the AlphaLive Killswitch using Controller Mode.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+Bug fixes:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Fixed a bug that would occasionally cause the application to crash on close.\
+	\'95	All audio file browsers will now always remember the last used directory.\
+	\'95	Read-only projects can no longer be saved.\
+	\'95	Fixed a bug where clearing a scene would cause project settings to be reset to their default values.\
+	\'95	Fixed a bug within the project-cleaning feature that would occasionally cause missing audio file errors.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+Other:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Improved the look of certain interface elements.\
+	\'95	Improved the startup process of the application.\
+	\'95	You will now be alerted when AlphaLive is in an unstable state due to opening a project that was created or last modified by a newer version of AlphaLive.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+
+\b Version 1.1.2 - 16th July 2013\
+
+\b0 New features:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	You can now switch between the different pad settings views (trigger/touch settings, pressure settings, sequence settings) by just clicking on the currently selected pad.\
+	\'95	The menu bar on Windows now has a 'Quit' option in the 'File' menu.\
+\pard\tx560\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 Bug fixes:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Fixed a bug within the Cycle Pad Behaviour where emulating pad presses via the AlphaLive interface would cause the sequence number to jump by two instead of one.\
+	\'95	Fixed a bug where if you pressed a pad within an exclusive group that isn't quantised, it would not kill any pads within the same exclusive group that were currently waiting to play or stop.\
+	\'95	Fixed a bug on OS X where launching AlphaLive by opening an AlphaLive Project file whilst AlphaLive is set to open the previously opened project on launch would cause the previous project to be opened first.\
+	\'95	Fixed a bug on Windows where the MIDI output selector would appear when it shouldn't.\
+	\'95	Set the application to automatically run as administrator on Windows so that certain functionality will work correctly.\
+	\'95	Minor bugs and general performance issues fixed.\
+\pard\tx560\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+Other:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Improved the look of the Toolbox component.\
+	\'95	Optimised Sequencer Mode to reduce CPU usage when playing multiple sequences simultaneously.\
+	\'95	Translation to Chinese is now fully supported (Chinese Reference Manual coming soon).\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+
+\b Version 1.1.1 - 14th May 2013\
+
+\b0 New features:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	The text box slider controls can now be edited by clicking on the arrow buttons.\
+	\'95	The 'Record Enable' setting within Sequencer Mode is now savable.\
+\pard\tx560\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 Bug fixes:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Fixed an issue that sometimes caused MIDI messages, particularly within sequences, to not be sent correctly.\
+	\'95	Minor bugs and general performance issues fixed.\
+\pard\tx560\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+Other:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Optimised Sequencer Mode to reduce CPU usage in certain situations.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+
+\b Version 1.1.0 - 26th April 2013
+\b0 \
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 New features:\
+	\'95	Software Update Checker - You can now check for AlphaLive updates online by going to 'Help -> Check for Updates' in the menu bar. Any available updates will then automatically be downloaded and installed. By default AlphaLive checks for any updates on launch, however this can be turned off via the Preferences pane.\
+	\'95	Controllable velocity range - You can now set the range of the incoming velocity values for each pad using the Global Pad Settings section.\
+	\'95	Added the following options to the elite buttons:\
+\pard\tx940\tx1440\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li1440\fi-1440
+\cf0 	\uc0\u8259 	Metronome - start and stop the metronome.\
+	\uc0\u8259 	Sequencer Record - enable or disable record mode for the currently selected sequencer pad/s. \
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Added the following options to the elite dials:\
+\pard\tx940\tx1440\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li1440\fi-1440
+\cf0 	\uc0\u8259 	Smart Dial - hover your mouse over any slider on the AlphaLive interface and control it with the physical dial.\
+	\uc0\u8259 	Tempo - change the global tempo.\
+\pard\tx220\tx720\tx1120\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Added visual feedback to the elite dials and buttons.\
+\pard\tx560\tx1120\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 Bug fixes:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Fixed the issue where the software interface would start to lag after using AlphaLive for a long period of time.\
+	\'95	Fixed the issue where static velocity values would not be sent via OSC.\
+	\'95	Fixed the issue where the reverb effect would cause the application to crash.\
+	\'95	Fixed the issue where sometimes the clock display wouldn't be displayed correctly.\
+	\'95	Fixed the issue where the application would occasionally crash on close.\
+	\'95	Minor bugs and general performance issues fixed.\
+\pard\tx560\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 New firmware version:\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\li720\fi-720
+\cf0 	\'95	Fixed an issue with the elite dials where they would occasionally send values without being rotated.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720
+\cf0 \
+
+\b Version 1.0.0 - 12th March 2013
+\b0 \
+\pard\pardeftab720\sl276\slmult1\sa200
+\cf0 Initial release\
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_SAMPLE_SET>
+    <IDMCREATION name="IDM Creation Kit" 
+    numSamples="16"
+    sample1="/IDM Creation Kit/IDM Creation Kick.wav" 
+    sample2="/IDM Creation Kit/IDM Creation Kick 2.wav" 
+    sample3="/IDM Creation Kit/IDM Creation Layered Clap.wav" 
+    sample4="/IDM Creation Kit/IDM Creation Snare.wav" 
+    sample5="/IDM Creation Kit/IDM Creation Snare 2.wav"  
+    sample6="/IDM Creation Kit/IDM Creation Snare 5.wav" 
+    sample7="/IDM Creation Kit/IDM Creation Tambourine.wav" 
+    sample8="/IDM Creation Kit/IDM Creation Snare 4.wav" 
+    sample9="/IDM Creation Kit/IDM Creation Cup n Spoon.wav" 
+    sample10="/IDM Creation Kit/IDM Creation Snare 3.wav" 
+    sample11="/IDM Creation Kit/IDM Creation Crash.wav" 
+    sample12="/IDM Creation Kit/IDM Creation Hit 3.wav" 
+    sample13="/IDM Creation Kit/IDM Creation Hit.wav" 
+    sample14="/IDM Creation Kit/IDM Creation Hit 2.wav" 
+    sample15="/IDM Creation Kit/IDM Creation Natural Clap.wav" 
+    sample16="/IDM Creation Kit/IDM Creation Triangle.wav" 
+    />
+    </ALPHALIVE_SAMPLE_SET>

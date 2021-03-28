@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_SAMPLE_SET>
+    <NATURALROOMKIT name="Natural Room Kit" 
+    numSamples="16"
+    sample1="/Natural Room Kit/Natural Room Kick.wav" 
+    sample2="/Natural Room Kit/Natural Room Rim.wav" 
+    sample3="/Natural Room Kit/Natural Room Cow Bell.wav" 
+    sample4="/Natural Room Kit/Natural Room Snare.wav" 
+    sample5="/Natural Room Kit/Natural Room Snare 2.wav"  
+    sample6="/Natural Room Kit/Natural Room Floor Tom.wav" 
+    sample7="/Natural Room Kit/Natural Room Hi-Hat Closed.wav" 
+    sample8="/Natural Room Kit/Natural Room Mid Tom.wav" 
+    sample9="/Natural Room Kit/Natural Room Bell.wav" 
+    sample10="/Natural Room Kit/Natural Room High Tom.wav" 
+    sample11="/Natural Room Kit/Natural Room Splash.wav" 
+    sample12="/Natural Room Kit/Natural Room Splash 2.wav"
+    sample13="/Natural Room Kit/Natural Room Bells.wav"
+    sample14="/Natural Room Kit/Natural Room Rim 2.wav"
+    sample15="/Natural Room Kit/Natural Room Tambourine 1.wav"
+    sample16="/Natural Room Kit/Natural Room Tambourine 2.wav"
+    />
+    </ALPHALIVE_SAMPLE_SET>

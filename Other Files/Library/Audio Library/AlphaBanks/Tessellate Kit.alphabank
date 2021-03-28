@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_SAMPLE_SET>
+    <TESSELLATE name="Tessellate Kit" 
+    numSamples="16"
+    sample1="/Tessellate Kit/Tessellate Kick 1.wav" 
+    sample2="/Tessellate Kit/Tessellate Kick 2.wav" 
+    sample3="/Tessellate Kit/Tessellate Scrape Glitch.wav" 
+    sample4="/Tessellate Kit/Tessellate Snare 1.wav" 
+    sample5="/Tessellate Kit/Tessellate Snare 2.wav"  
+    sample6="/Tessellate Kit/Tessellate Metal Hit 3.wav" 
+    sample7="/Tessellate Kit/Tessellate Hi-Hat.wav" 
+    sample8="/Tessellate Kit/Tessellate Metal Hit 2.wav" 
+    sample9="/Tessellate Kit/Tessellate Cow Bell.wav" 
+    sample10="/Tessellate Kit/Tessellate Metal Hit 1.wav" 
+    sample11="/Tessellate Kit/Tessellate Dirty Cymbal.wav" 
+    sample12="/Tessellate Kit/Tessellate Grit Crash.wav" 
+    sample13="/Tessellate Kit/Tessellate Snare 3.wav" 
+    sample14="/Tessellate Kit/Tessellate Snare 4.wav" 
+    sample15="/Tessellate Kit/Tessellate Bells.wav" 
+    sample16="/Tessellate Kit/Tessellate Kick 3.wav" 
+    />
+    </ALPHALIVE_SAMPLE_SET>

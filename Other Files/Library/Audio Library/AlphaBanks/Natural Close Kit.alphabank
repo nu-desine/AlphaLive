@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_SAMPLE_SET>
+    <NATURALCLOSEKIT name="Natural Close Kit" 
+    numSamples="16"
+    sample1="/Natural Close Kit/Natural Close Kick.wav" 
+    sample2="/Natural Close Kit/Natural Close Rimshot.wav" 
+    sample3="/Natural Close Kit/Natural Close Cow Bell.wav" 
+    sample4="/Natural Close Kit/Natural Close Snare.wav" 
+    sample5="/Natural Close Kit/Natural Close Snare 2.wav"  
+    sample6="/Natural Close Kit/Natural Close Floor Tom.wav" 
+    sample7="/Natural Close Kit/Natural Close Hi-Hat.wav" 
+    sample8="/Natural Close Kit/Natural Close Mid Tom.wav" 
+    sample9="/Natural Close Kit/Natural Close Ride.wav" 
+    sample10="/Natural Close Kit/Natural Close High Tom.wav" 
+    sample11="/Natural Close Kit/Natural Close Splash.wav" 
+    sample12="/Natural Close Kit/Natural Close Splash 2.wav"
+    sample13="/Natural Close Kit/Natural Close Bells.wav"
+    sample14="/Natural Close Kit/Natural Close Rimshot 2.wav"
+    sample15="/Natural Close Kit/Natural Close Tambourine 1.wav"
+    sample16="/Natural Close Kit/Natural Close Tambourine 2.wav"
+    />
+    </ALPHALIVE_SAMPLE_SET>

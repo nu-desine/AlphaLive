@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_SAMPLE_SET>
+    <ANTISOCIALKIT name="Anti-Social Kit" 
+    numSamples="16"
+    sample1="/Anti-Social Kit/Anti-Social Kick.wav" 
+    sample2="/Anti-Social Kit/Anti-Social Kick 2.wav" 
+    sample3="/Anti-Social Kit/Anti-Social Sub Tom.wav" 
+    sample4="/Anti-Social Kit/Anti-Social Snare.wav" 
+    sample5="/Anti-Social Kit/Anti-Social Snare 2.wav"  
+    sample6="/Anti-Social Kit/Anti-Social Floor Tom.wav" 
+    sample7="/Anti-Social Kit/Anti-Social Hi-Hat Closed.wav" 
+    sample8="/Anti-Social Kit/Anti-Social Mid Tom.wav" 
+    sample9="/Anti-Social Kit/Anti-Social Hi-Hat Open.wav" 
+    sample10="/Anti-Social Kit/Anti-Social High Tom.wav" 
+    sample11="/Anti-Social Kit/Anti-Social Crash.wav" 
+    sample12="/Anti-Social Kit/Anti-Social China.wav" 
+    sample13="/Anti-Social Kit/Anti-Social Hi-Hat Lose.wav" 
+    sample14="/Anti-Social Kit/Anti-Social Clap.wav" 
+    sample15="/Anti-Social Kit/Anti-Social Cow Bell.wav" 
+    sample16="/Anti-Social Kit/Anti-Social Stand Hit.wav" 
+    />
+    </ALPHALIVE_SAMPLE_SET>

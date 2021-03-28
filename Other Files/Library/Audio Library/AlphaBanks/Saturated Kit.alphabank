@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_SAMPLE_SET>
+    <SATURATEDKIT name="Saturated Kit" 
+    numSamples="16"
+    sample1="/Saturated Kit/Saturated Kick.wav" 
+    sample2="/Saturated Kit/Saturated Kick 2.wav" 
+    sample3="/Saturated Kit/Saturated Hi-Hat Closed.wav" 
+    sample4="/Saturated Kit/Saturated Snare.wav" 
+    sample5="/Saturated Kit/Saturated Snare 2.wav"  
+    sample6="/Saturated Kit/Saturated Low Tom.wav" 
+    sample7="/Saturated Kit/Saturated Hi-Hat Loose.wav" 
+    sample8="/Saturated Kit/Saturated Mid Tom.wav" 
+    sample9="/Saturated Kit/Saturated Hi-Hat Open.wav" 
+    sample10="/Saturated Kit/Saturated High Tom.wav" 
+    sample11="/Saturated Kit/Saturated Crash.wav" 
+    sample12="/Saturated Kit/Saturated Crash 2.wav" 
+    sample13="/Saturated Kit/Saturated Hi-Hat 2.wav" 
+    sample14="/Saturated Kit/Saturated Deep Tom.wav" 
+    sample15="/Saturated Kit/Saturated Flutter Tom.wav" 
+    sample16="/Saturated Kit/Saturated Deep Kick.wav" 
+    />
+    </ALPHALIVE_SAMPLE_SET>

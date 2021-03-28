@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_SAMPLE_SET>
+    <FMKIT name="FM Kit" 
+    numSamples="16"
+    sample1="/FM Kit/FM Kick.wav" 
+    sample2="/FM Kit/FM Kick 2.wav" 
+    sample3="/FM Kit/FM Sub Hit.wav" 
+    sample4="/FM Kit/FM Snare.wav" 
+    sample5="/FM Kit/FM Snare 2.wav"  
+    sample6="/FM Kit/FM Tom Floor.wav" 
+    sample7="/FM Kit/FM Hi-Hat Closed.wav" 
+    sample8="/FM Kit/FM Tom Mid.wav" 
+    sample9="/FM Kit/FM Hi-Hat Open.wav" 
+    sample10="/FM Kit/FM Tom High.wav" 
+    sample11="/FM Kit/FM Cymbal.wav" 
+    sample12="/FM Kit/FM Cymbal 2.wav" 
+    sample13="/FM Kit/FM Extra Tom 1.wav"
+    sample14="/FM Kit/FM Extra Tom 2.wav"
+    sample15="/FM Kit/FM Extra Tom 3.wav"
+    sample16="/FM Kit/FM Stereo Snare.wav"
+    />
+    </ALPHALIVE_SAMPLE_SET>

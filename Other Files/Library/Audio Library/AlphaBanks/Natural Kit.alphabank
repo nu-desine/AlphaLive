@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_SAMPLE_SET>
+    <NATURALKIT name="Natural Kit" 
+    numSamples="16"
+    sample1="/Natural Kit/Natural Kick.wav" 
+    sample2="/Natural Kit/Natural Kick 2.wav" 
+    sample3="/Natural Kit/Natural Rimshot.wav" 
+    sample4="/Natural Kit/Natural Snare.wav" 
+    sample5="/Natural Kit/Natural Snare 2.wav"  
+    sample6="/Natural Kit/Natural Low Tom.wav" 
+    sample7="/Natural Kit/Natural Hi-Hat Closed.wav" 
+    sample8="/Natural Kit/Natural Mid Tom.wav" 
+    sample9="/Natural Kit/Natural Hi-Hat Open.wav" 
+    sample10="/Natural Kit/Natural High Tom.wav" 
+    sample11="/Natural Kit/Natural Crash.wav" 
+    sample12="/Natural Kit/Natural Ride.wav" 
+    sample13="/Natural Kit/Natural China.wav" 
+    sample14="/Natural Kit/Natural Ride Bell.wav" 
+    sample15="/Natural Kit/Natural Ride Scrape.wav" 
+    sample16="/Natural Kit/Natural Hi-Hat Loose.wav" 
+    />
+    </ALPHALIVE_SAMPLE_SET>

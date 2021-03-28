@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALPHALIVE_SAMPLE_SET>
+    <DUBSTEPKIT name="Dubstep Kit" 
+    numSamples="16"
+    sample1="/Dubstep Kit/Dubstep Kick.wav" 
+    sample2="/Dubstep Kit/Dubstep Kick 2.wav" 
+    sample3="/Dubstep Kit/Dubstep Sub-Drop.wav" 
+    sample4="/Dubstep Kit/Dubstep Snare.wav" 
+    sample5="/Dubstep Kit/Dubstep Snare 2.wav"  
+    sample6="/Dubstep Kit/Dubstep Clap 2.wav" 
+    sample7="/Dubstep Kit/Dubstep Hi-Hat Closed.wav" 
+    sample8="/Dubstep Kit/Dubstep Clap 3.wav" 
+    sample9="/Dubstep Kit/Dubstep Hi-Hat Open.wav" 
+    sample10="/Dubstep Kit/Dubstep Percussive Tap 3.wav" 
+    sample11="/Dubstep Kit/Dubstep Crash.wav" 
+    sample12="/Dubstep Kit/Dubstep Percussive Tap 4.wav" 
+    sample13="/Dubstep Kit/Dubstep Percussive Tap 1.wav"
+    sample14="/Dubstep Kit/Dubstep Percussive Tap 2.wav"
+    sample15="/Dubstep Kit/Dubstep Clap.wav"
+    sample16="/Dubstep Kit/Dubstep Kick 3.wav"
+    />
+    </ALPHALIVE_SAMPLE_SET>

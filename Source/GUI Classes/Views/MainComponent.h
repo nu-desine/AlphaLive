@@ -207,7 +207,6 @@ private:
     String infoBoxText;
     float infoBoxTextSize;
     
-    String appDir;
     String currentLanguage;
     
     DeviceStatusComponent *deviceStatusComponent;

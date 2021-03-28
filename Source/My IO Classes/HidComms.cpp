@@ -21,6 +21,7 @@
 #include "HidComms.h"
 #include "../File and Settings/StoredSettings.h"
 #include "../File and Settings/AppSettings.h"
+#include "../Application/Common.h"
 #if JUCE_LINUX
 #include <unistd.h>
 #endif
@@ -516,7 +517,7 @@ void HidComms::connectToDevice()
         
         //==== check to see if the firmware needs updating ====
         
-        File appDataDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::getSeparatorString() + "Application Data");
+        File appDataDir (appFilesDirString + "Application Data");
         String wildcard = "SphereWare*";
         Array<File> hexFile;
         appDataDir.findChildFiles(hexFile, 2, false, wildcard);

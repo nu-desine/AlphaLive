@@ -325,10 +325,7 @@ GeneralSettingsComponent::GeneralSettingsComponent(MainComponent &ref, AlphaLive
     
     // ===== Add the Materia theme if the user has the Materia sample pack =====
     
-    File currentAppParentDir = File::getSpecialLocation(File::currentApplicationFile).getParentDirectory();
-    
-    File materiaDir (currentAppParentDir.getFullPathName() +
-                     File::getSeparatorString() +
+    File materiaDir (appFilesDirString +
                      "Library" +
                      File::getSeparatorString() +
                      "Audio Library" +

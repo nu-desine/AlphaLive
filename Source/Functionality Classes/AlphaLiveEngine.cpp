@@ -1044,7 +1044,6 @@ void AlphaLiveEngine::uploadFirmware (bool applyingUpdate)
     ChildProcess bootloader;
     
     StringArray arguments;
-    String appDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::getSeparatorString());
     
     //Get the hex file...
     
@@ -1053,7 +1052,7 @@ void AlphaLiveEngine::uploadFirmware (bool applyingUpdate)
     
     if (applyingUpdate)
     {
-        File appDataDir(appDir + "Application Data");
+        File appDataDir(appFilesDirString + "Application Data");
         String wildcard = "SphereWare*";
         
         //There could be multiple instances of SphereWare* files,
@@ -1077,10 +1076,10 @@ void AlphaLiveEngine::uploadFirmware (bool applyingUpdate)
     
     //Get the bootloader app
     #if JUCE_MAC || JUCE_LINUX //is this right for Linux?
-    File bootloaderFile(appDir + "Application Data" + File::getSeparatorString() + "firmwareUpdater");
+    File bootloaderFile(appFilesDirString + "Application Data" + File::getSeparatorString() + "firmwareUpdater");
     #endif
     #if JUCE_WINDOWS
-    File bootloaderFile(appDir + "Application Data" + File::getSeparatorString() + "firmwareUpdater.exe");
+    File bootloaderFile(appFilesDirString + "Application Data" + File::getSeparatorString() + "firmwareUpdater.exe");
     #endif
     
     String mmcuString("-mmcu=atmega32u4");

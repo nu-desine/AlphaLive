@@ -45,8 +45,6 @@ private:
     
     MainComponent &mainComponentRef;
     
-    File alphaLiveDirectory;
-    
     ScopedPointer <Label> infoLabel;
     
     ScopedPointer <ProgressBar> progressBar;

@@ -40,7 +40,6 @@ MainComponent::MainComponent(AlphaLiveEngine &ref, AppDocumentState &ref2, Docum
                             owner(owner_)
                             
 {
-    appDir = File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::getSeparatorString();
     infoBoxText = String();
     
     //language/localisation stuff
@@ -1263,7 +1262,7 @@ void MainComponent::setLocalisation()
     
     if (countryCode == "ja" || countryCode == "jpn") //japanese
     {
-        File transFile (appDir + "Application Data" + File::getSeparatorString() + "trans_ja.txt");
+        File transFile (appFilesDirString + "Application Data" + File::getSeparatorString() + "trans_ja.txt");
         trans = new LocalisedStrings (transFile, false);
         LocalisedStrings::setCurrentMappings(trans);
         
@@ -1291,7 +1290,7 @@ void MainComponent::setLocalisation()
     }
     else if (countryCode == "zh" || countryCode == "zho" || countryCode == "zh-Hant" || countryCode == "zh-Hans") //chinese. do i need the first two?
     {
-        File transFile (appDir + "Application Data" + File::getSeparatorString() + "trans_zh.txt");
+        File transFile (appFilesDirString + "Application Data" + File::getSeparatorString() + "trans_zh.txt");
         trans = new LocalisedStrings (transFile, false);
         LocalisedStrings::setCurrentMappings(trans);
         
@@ -1319,7 +1318,7 @@ void MainComponent::setLocalisation()
     }
     else if (countryCode == "ko" || countryCode == "kor") //Korean
     {
-        File transFile (appDir + "Application Data" + File::getSeparatorString() + "trans_ko.txt");
+        File transFile (appFilesDirString + "Application Data" + File::getSeparatorString() + "trans_ko.txt");
         trans = new LocalisedStrings (transFile, false);
         LocalisedStrings::setCurrentMappings(trans);
         
@@ -1517,7 +1516,7 @@ void MainComponent::setDeviceStatus (int status)
 
 void MainComponent::openDocumentation (int type)
 {
-    String docDir (appDir + "Documentation" + File::getSeparatorString());
+    String docDir (appFilesDirString + "Documentation" + File::getSeparatorString());
     bool opened = true;
     
     if (currentLanguage == "Japanese")
@@ -1541,7 +1540,7 @@ void MainComponent::openDocumentation (int type)
     if (opened == false) //probably due to the file not existing
         AlertWindow::showMessageBoxAsync (AlertWindow::NoIcon, 
                                           translate("Documentation cannot be found!"), 
-                                          translate("The documentation file seems to be missing from the AlphaLive application directory."));
+                                          translate("The documentation file seems to be missing from the AlphaLive data directory."));
 }
 
 

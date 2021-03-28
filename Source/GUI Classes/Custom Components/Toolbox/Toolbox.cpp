@@ -23,6 +23,7 @@
 #include "Toolbox.h"
 #include "../../../File and Settings/AppSettings.h"
 #include "../../Views/MainComponent.h"
+#include "../../../Application/Common.h"
 
 #define PAD_SETTINGS AppSettings::Instance()->padSettings[padNum]
 #define SINGLE_PAD (selectedPads.size() == 1)
@@ -57,34 +58,32 @@ Toolbox::Toolbox(MainComponent &parent) :
     seqFileFilter = new WildcardFileFilter("*alphaseq;*alphaseqset", "*", "AlphaLive sequencer files");
     audioFileFilter = new WildcardFileFilter("*wav;*aiff;*aif", "*", "Audio files");
     sceneFileFilter = new WildcardFileFilter("*alphascene", "*", "Scene files");
-     
-    String appDir(File::getSpecialLocation(File::currentApplicationFile).getParentDirectory().getFullPathName() + File::getSeparatorString());
     
-    File banksFile(appDir + "Library/Audio Library/AlphaBanks");
+    File banksFile(appFilesDirString + "Library/Audio Library/AlphaBanks");
     if (banksFile.exists() == false)
         banksFile = File();
-    File midiPresetsFile(appDir + "Library/Pad Presets/MIDI Mode");
+    File midiPresetsFile(appFilesDirString + "Library/Pad Presets/MIDI Mode");
     if (midiPresetsFile.exists() == false)
         midiPresetsFile = File();
-    File samplerPresetsFile(appDir + "Library/Pad Presets/Sampler Mode");
+    File samplerPresetsFile(appFilesDirString + "Library/Pad Presets/Sampler Mode");
     if (samplerPresetsFile.exists() == false)
         samplerPresetsFile = File();
-    File sequencerPresetsFile(appDir + "Library/Pad Presets/Sequencer Mode");
+    File sequencerPresetsFile(appFilesDirString + "Library/Pad Presets/Sequencer Mode");
     if (sequencerPresetsFile.exists() == false)
         sequencerPresetsFile = File();
-    File controllerPresetsFile(appDir + "Library/Pad Presets/Controller Mode");
+    File controllerPresetsFile(appFilesDirString + "Library/Pad Presets/Controller Mode");
     if (controllerPresetsFile.exists() == false)
         controllerPresetsFile = File();
-    File effectPresetsFile(appDir + "Library/Pad Presets/Effects");
+    File effectPresetsFile(appFilesDirString + "Library/Pad Presets/Effects");
     if (effectPresetsFile.exists() == false)
         effectPresetsFile = File();
-    File scenePresetsFile(appDir + "Library/Scene Presets");
+    File scenePresetsFile(appFilesDirString + "Library/Scene Presets");
     if (scenePresetsFile.exists() == false)
         scenePresetsFile = File();
-    File audioSamplesFile(appDir + "Library/Audio Library");
+    File audioSamplesFile(appFilesDirString + "Library/Audio Library");
     if (audioSamplesFile.exists() == false)
         audioSamplesFile = File();
-    File sequencesFile(appDir + "Library/Sequences");
+    File sequencesFile(appFilesDirString + "Library/Sequences");
     if (sequencesFile.exists() == false)
         sequencesFile = File();
     
@@ -142,19 +141,19 @@ Toolbox::Toolbox(MainComponent &parent) :
         fileLists[i]->addMouseListener(this, true);
     }
     
-    File scalesFile(appDir + "Application Data/library_scales.xml");
+    File scalesFile(appFilesDirString + "Application Data/library_scales.xml");
     if (scalesFile.exists() == false)
         scalesFile = File();
     
-    File layoutsFile(appDir + "Application Data/library_notational_arrangements.xml");
+    File layoutsFile(appFilesDirString + "Application Data/library_notational_arrangements.xml");
     if (layoutsFile.exists() == false)
         layoutsFile = File();
     
-    File userScalesFile(appDir + "Application Data/user_scales.xml");
+    File userScalesFile(appFilesDirString + "Application Data/user_scales.xml");
     if (userScalesFile.exists() == false)
         userScalesFile = File();
     
-    File userLayoutsFile(appDir + "Application Data/user_notational_arrangements.xml");
+    File userLayoutsFile(appFilesDirString + "Application Data/user_notational_arrangements.xml");
     if (userLayoutsFile.exists() == false)
         userLayoutsFile = File();
     

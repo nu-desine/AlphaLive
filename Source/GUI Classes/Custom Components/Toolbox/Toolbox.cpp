@@ -59,31 +59,31 @@ Toolbox::Toolbox(MainComponent &parent) :
     audioFileFilter = new WildcardFileFilter("*wav;*aiff;*aif", "*", "Audio files");
     sceneFileFilter = new WildcardFileFilter("*alphascene", "*", "Scene files");
     
-    File banksFile(appFilesDirString + "Library/Audio Library/AlphaBanks");
+    File banksFile(appFilesDirString + "Library" + File::getSeparatorString() + "Audio Library" + File::getSeparatorString() + "AlphaBanks");
     if (banksFile.exists() == false)
         banksFile = File();
-    File midiPresetsFile(appFilesDirString + "Library/Pad Presets/MIDI Mode");
+    File midiPresetsFile(appFilesDirString + "Library" + File::getSeparatorString() + "Pad Presets" + File::getSeparatorString() + "MIDI Mode");
     if (midiPresetsFile.exists() == false)
         midiPresetsFile = File();
-    File samplerPresetsFile(appFilesDirString + "Library/Pad Presets/Sampler Mode");
+    File samplerPresetsFile(appFilesDirString + "Library" + File::getSeparatorString() + "Pad Presets" + File::getSeparatorString() + "Sampler Mode");
     if (samplerPresetsFile.exists() == false)
         samplerPresetsFile = File();
-    File sequencerPresetsFile(appFilesDirString + "Library/Pad Presets/Sequencer Mode");
+    File sequencerPresetsFile(appFilesDirString + "Library" + File::getSeparatorString() + "Pad Presets" + File::getSeparatorString() + "Sequencer Mode");
     if (sequencerPresetsFile.exists() == false)
         sequencerPresetsFile = File();
-    File controllerPresetsFile(appFilesDirString + "Library/Pad Presets/Controller Mode");
+    File controllerPresetsFile(appFilesDirString + "Library" + File::getSeparatorString() + "Pad Presets" + File::getSeparatorString() + "Controller Mode");
     if (controllerPresetsFile.exists() == false)
         controllerPresetsFile = File();
-    File effectPresetsFile(appFilesDirString + "Library/Pad Presets/Effects");
+    File effectPresetsFile(appFilesDirString + "Library" + File::getSeparatorString() + "Pad Presets" + File::getSeparatorString() + "Effects");
     if (effectPresetsFile.exists() == false)
         effectPresetsFile = File();
-    File scenePresetsFile(appFilesDirString + "Library/Scene Presets");
+    File scenePresetsFile(appFilesDirString + "Library" + File::getSeparatorString() + "Scene Presets");
     if (scenePresetsFile.exists() == false)
         scenePresetsFile = File();
-    File audioSamplesFile(appFilesDirString + "Library/Audio Library");
+    File audioSamplesFile(appFilesDirString + "Library" + File::getSeparatorString() + "Audio Library");
     if (audioSamplesFile.exists() == false)
         audioSamplesFile = File();
-    File sequencesFile(appFilesDirString + "Library/Sequences");
+    File sequencesFile(appFilesDirString + "Library" + File::getSeparatorString() + "Sequences");
     if (sequencesFile.exists() == false)
         sequencesFile = File();
     
@@ -141,19 +141,19 @@ Toolbox::Toolbox(MainComponent &parent) :
         fileLists[i]->addMouseListener(this, true);
     }
     
-    File scalesFile(appFilesDirString + "Application Data/library_scales.xml");
+    File scalesFile(appFilesDirString + "Application Data" + File::getSeparatorString() + "library_scales.xml");
     if (scalesFile.exists() == false)
         scalesFile = File();
     
-    File layoutsFile(appFilesDirString + "Application Data/library_notational_arrangements.xml");
+    File layoutsFile(appFilesDirString + "Application Data" + File::getSeparatorString() + "library_notational_arrangements.xml");
     if (layoutsFile.exists() == false)
         layoutsFile = File();
     
-    File userScalesFile(appFilesDirString + "Application Data/user_scales.xml");
+    File userScalesFile(appFilesDirString + "Application Data" + File::getSeparatorString() + "user_scales.xml");
     if (userScalesFile.exists() == false)
         userScalesFile = File();
     
-    File userLayoutsFile(appFilesDirString + "Application Data/user_notational_arrangements.xml");
+    File userLayoutsFile(appFilesDirString + "Application Data" + File::getSeparatorString() + "user_notational_arrangements.xml");
     if (userLayoutsFile.exists() == false)
         userLayoutsFile = File();
     

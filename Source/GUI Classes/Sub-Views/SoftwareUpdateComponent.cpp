@@ -85,13 +85,13 @@ void SoftwareUpdateComponent::run()
     //and don't run the thread if it doesn't.
 
     #if JUCE_MAC
-    File alphaliveUpdaterApp (appFilesDirString + "Application Data/AlphaLive Updater.app");
+    File alphaliveUpdaterApp (appFilesDirString + "Application Data" + File::getSeparatorString() + "AlphaLive Updater.app");
     #endif
     #if JUCE_WINDOWS
-    File alphaliveUpdaterApp (appFilesDirString + "Application Data/AlphaLive Updater.exe");
+    File alphaliveUpdaterApp (appFilesDirString + "Application Data" + File::getSeparatorString() + "AlphaLive Updater.exe");
     #endif
     #if JUCE_LINUX
-    File alphaliveUpdaterApp (appFilesDirString + "Application Data/AlphaLive Updater");
+    File alphaliveUpdaterApp (appFilesDirString + "Application Data" + File::getSeparatorString() + "AlphaLive Updater");
     #endif
     
     if (! alphaliveUpdaterApp.exists())
@@ -197,7 +197,7 @@ void SoftwareUpdateComponent::run()
             
             if (newUpdaterFile.exists())
             {
-                File oldUpdaterFile (appFilesDirString + "Application Data/AlphaLive Updater.app");
+                File oldUpdaterFile (appFilesDirString + "Application Data" + File::getSeparatorString() + "AlphaLive Updater.app");
                 oldUpdaterFile.deleteRecursively();
                 std::cout << newUpdaterFile.copyFileTo(oldUpdaterFile) << std::endl;
             }
@@ -210,7 +210,7 @@ void SoftwareUpdateComponent::run()
                 
                 if (newUpdaterFile.exists())
                 {
-                    File oldUpdaterFile (appFilesDirString + "Application Data/AlphaLive Updater.exe");
+                    File oldUpdaterFile (appFilesDirString + "Application Data" + File::getSeparatorString() + "AlphaLive Updater.exe");
                     oldUpdaterFile.deleteRecursively();
                     std::cout << newUpdaterFile.copyFileTo(oldUpdaterFile) << std::endl;
                 }
@@ -221,7 +221,7 @@ void SoftwareUpdateComponent::run()
                 
                 if (newUpdaterFile.exists())
                 {
-                    File oldUpdaterFile (appFilesDirString + "Application Data/AlphaLive Updater.exe");
+                    File oldUpdaterFile (appFilesDirString + "Application Data" + File::getSeparatorString() + "AlphaLive Updater.exe");
                     oldUpdaterFile.deleteRecursively();
                     std::cout << newUpdaterFile.copyFileTo(oldUpdaterFile) << std::endl;
                 }
@@ -285,13 +285,13 @@ void SoftwareUpdateComponent::handleAsyncUpdate()
     {
         //launch AlphaLive Updater
         #if JUCE_MAC
-        File alphaliveUpdaterApp (appFilesDirString + "Application Data/AlphaLive Updater.app");
+        File alphaliveUpdaterApp (appFilesDirString + "Application Data" + File::getSeparatorString() + "AlphaLive Updater.app");
         #endif
         #if JUCE_WINDOWS
-        File alphaliveUpdaterApp (appFilesDirString + "Application Data/AlphaLive Updater.exe");
+        File alphaliveUpdaterApp (appFilesDirString + "Application Data" + File::getSeparatorString() + "AlphaLive Updater.exe");
         #endif
         #if JUCE_LINUX
-        File alphaliveUpdaterApp (appFilesDirString + "Application Data/AlphaLive Updater");
+        File alphaliveUpdaterApp (appFilesDirString + "Application Data" + File::getSeparatorString() + "AlphaLive Updater");
         #endif
         
         if (alphaliveUpdaterApp.exists())

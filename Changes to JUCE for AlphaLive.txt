@@ -4,7 +4,7 @@ for AlphaLive to work correctly. Make sure that if you update the library
 code you reapply these changes:
 
 JuceLibraryCode/modules/juce_audio_devices/juce_audio_devices.cpp
-Line 83
+Line "#include <iasiodrv.h>"
 Change to: 
 #include <../Source/Third Party Libraries/ASIOSDK/common/iasiodrv.h>
 

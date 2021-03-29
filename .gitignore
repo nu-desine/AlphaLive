@@ -14,3 +14,4 @@ InstallerGenerators/AlphaLiveMacInstallerProject/build
 Builds/VisualStudio2019/.vs/
 Builds/VisualStudio2019/x64/
 Builds/VisualStudio2019/AlphaLive_App.vcxproj.user
+InstallerGenerators/AlphaLiveWindowsInstallerProject/Output/

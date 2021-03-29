@@ -20,6 +20,15 @@
         http://github.com/signal11/hidapi .
 ********************************************************/
 
+//Liam Lacey (nu desine) - this file is an amalgamation of the HIDAPI library's
+//mac, windows, and linux hid.c files. Therefore if needing to update the HIDAPI
+//source code in this project then the code from these three files needs to
+//be manually copied over to this file.
+
+//Liam Lacey (nu desine) - this code hasn't been updated to the latest HIDAPI code 
+//for AlphaLive v1.4.0 and above. Therefore if there are any issue with hardware comms 
+//with this new version of AlphaLive, this may be why.
+
 //Target platform defines - see juce_TargetPlatform.h for Juce's ones
 #define OS_MAC ((__APPLE_CPP__) || (__APPLE_CC__))
 #define OS_LINUX ((LINUX) || (__linux__))
@@ -1210,7 +1219,7 @@ extern "C" {
     
 #include <winioctl.h>
 #ifdef HIDAPI_USE_DDK
-	#include <api/hidsdi.h> //modified by Liam Lacey
+	#include <hidsdi.h>
 	//Link with hid.lib
 	//instead of the pragma comment, you could also add the file to Configuration Properties-> Linker-> Input-> Additional Dependencies
 	#pragma comment (lib, "hid.lib") //added by Liam Lacey

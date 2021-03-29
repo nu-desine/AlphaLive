@@ -20,6 +20,12 @@
         http://github.com/signal11/hidapi .
 ********************************************************/
 
+//Liam Lacey (nu desine) - this file is a direct copy from the HIDAPI library.
+
+//Liam Lacey (nu desine) - this code hasn't been updated to the latest HIDAPI code 
+//for AlphaLive v1.4.0 and above. Therefore if there are any issue with hardware comms 
+//with this new version of AlphaLive, this may be why.
+
 /** @file
  * @defgroup API hidapi API
  */

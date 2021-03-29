@@ -157,7 +157,7 @@ namespace ump = universal_midi_packets;
         comes with the SDK. (Only about a handful of the SDK header files are actually
         needed - so to simplify things, you could just copy these into your JUCE directory).
   */
-  #include <iasiodrv.h>
+  #include <../Source/Third Party Libraries/ASIOSDK/common/iasiodrv.h>
   #include "native/juce_win32_ASIO.cpp"
  #endif
 

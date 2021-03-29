@@ -56,6 +56,8 @@ THE SOFTWARE.
 #include <limits>
 #include <vector>
 
+#include <algorithm> //Added by Liam Lacey (to fix compiler issue with Windows 10 SDK / VS2019)
+
 #ifdef _MSC_VER
 namespace tr1 = std::tr1;
 #else

@@ -38,19 +38,19 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\Liam Lacey\Documents\alphalive2\Builds\VisualStudio2019\x64\Release\App\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Liam Lacey\Documents\alphalive2\Other Files\Application Data\library_notational_arrangements.xml"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
-Source: "C:\Users\Liam Lacey\Documents\alphalive2\Other Files\Application Data\library_scales.xml"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
-Source: "C:\Users\Liam Lacey\Documents\alphalive2\Other Files\Application Data\SphereWare_1.02.hex"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
-Source: "C:\Users\Liam Lacey\Documents\alphalive2\Other Files\Application Data\trans_ja.txt"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
-Source: "C:\Users\Liam Lacey\Documents\alphalive2\Other Files\Application Data\trans_zh.txt"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
-Source: "C:\Users\Liam Lacey\Documents\alphalive2\Other Files\Application Data\user_notational_arrangements.xml"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
-Source: "C:\Users\Liam Lacey\Documents\alphalive2\Other Files\Application Data\user_scales.xml"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
-Source: "C:\Users\Liam Lacey\Documents\alphalive2\Other Files\Application Data\Windows\AlphaLive Updater.exe"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
-Source: "C:\Users\Liam Lacey\Documents\alphalive2\Other Files\Application Data\Windows\firmwareUpdater.exe"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
-Source: "C:\Users\Liam Lacey\Documents\alphalive2\Other Files\Demo Project (Basic)\*"; DestDir: "C:\Users\Public\Documents\AlphaLive\Demo Project (Basic)\"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\Liam Lacey\Documents\alphalive2\Other Files\Documentation\*"; DestDir: "C:\Users\Public\Documents\AlphaLive\Documentation\"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\Liam Lacey\Documents\alphalive2\Other Files\Library\*"; DestDir: "C:\Users\Public\Documents\AlphaLive\Library"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#SourcePath}\..\..\Builds\VisualStudio2019\x64\Release\App\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourcePath}\..\..\Other Files\Application Data\library_notational_arrangements.xml"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
+Source: "{#SourcePath}\..\..\Other Files\Application Data\library_scales.xml"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
+Source: "{#SourcePath}\..\..\Other Files\Application Data\SphereWare_1.02.hex"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
+Source: "{#SourcePath}\..\..\Other Files\Application Data\trans_ja.txt"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
+Source: "{#SourcePath}\..\..\Other Files\Application Data\trans_zh.txt"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
+Source: "{#SourcePath}\..\..\Other Files\Application Data\user_notational_arrangements.xml"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
+Source: "{#SourcePath}\..\..\Other Files\Application Data\user_scales.xml"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
+Source: "{#SourcePath}\..\..\Other Files\Application Data\Windows\AlphaLive Updater.exe"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
+Source: "{#SourcePath}\..\..\Other Files\Application Data\Windows\firmwareUpdater.exe"; DestDir: "C:\Users\Public\Documents\AlphaLive\Application Data"; Flags: ignoreversion
+Source: "{#SourcePath}\..\..\Other Files\Demo Project (Basic)\*"; DestDir: "C:\Users\Public\Documents\AlphaLive\Demo Project (Basic)\"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#SourcePath}\..\..\Other Files\Documentation\*"; DestDir: "C:\Users\Public\Documents\AlphaLive\Documentation\"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#SourcePath}\..\..\Other Files\Library\*"; DestDir: "C:\Users\Public\Documents\AlphaLive\Library"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]

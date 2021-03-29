@@ -10,7 +10,7 @@ You can download the latest pre-built binaries of the application for macOS and 
 
 To build AlphaLive on Windows you will need to do the following:
 
-+  Download and install the [Windows Driver Kit (WDK)](http://msdn.microsoft.com/en-gb/library/windows/hardware/gg487428.aspx).
++  Download and install the [Windows Driver Kit (WDK)](https://docs.microsoft.com/en-gb/windows-hardware/drivers/download-the-wdk).
 +  Download the [Steinberg ASIO SDK](http://www.steinberg.net/en/company/developer.html) and add to "./Source/Third Party Libraries" within a folder called "ASIOSDK". However AlphaLive can be built without ASIO compatibility by setting the JUCE_ASIO flag in "./JuceLibraryCode/AppConfig.h" to "0" which will not require the ASIO SDK.
 
 For all platforms see "[./Other Files/README - running AlphaLive.txt](https://github.com/nu-desine/AlphaLive/blob/master/Other%20Files/README%20-%20running%20AlphaLive.txt)" for instructions regarding the extra files needed when running the built AlphaLive binary.
@@ -27,7 +27,7 @@ The following libraries are included in the source code:
 
 +  The [JUCE](https://juce.com) library which is licensed under the GPLv3. 
 +  The [oscpack](http://www.rossbencina.com/code/oscpack) library which is licensed under a BSD style license.
-+  The [HIDAPI](http://www.signal11.us/oss/hidapi/) library which is licensed under a BSD style license.
++  The [HIDAPI](https://github.com/signal11/hidapi) library which is licensed under a BSD style license.
 +  The [JUCED](http://code.google.com/p/juced/) library which is licensed under the GPLv2. 
 +  The [DSPFilters](https://github.com/vinniefalco/DSPFilters) library which is licensed under the MIT License. 
 

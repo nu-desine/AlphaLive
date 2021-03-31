@@ -42,7 +42,7 @@
 									<key>PATH_TYPE</key>
 									<integer>1</integer>
 									<key>PERMISSIONS</key>
-									<integer>493</integer>
+									<integer>511</integer>
 									<key>TYPE</key>
 									<integer>3</integer>
 									<key>UID</key>
@@ -414,6 +414,16 @@
 														<dict>
 															<key>BUNDLE_CAN_DOWNGRADE</key>
 															<false/>
+															<key>BUNDLE_POSTINSTALL_PATH</key>
+															<dict>
+																<key>PATH_TYPE</key>
+																<integer>0</integer>
+															</dict>
+															<key>BUNDLE_PREINSTALL_PATH</key>
+															<dict>
+																<key>PATH_TYPE</key>
+																<integer>0</integer>
+															</dict>
 															<key>CHILDREN</key>
 															<array/>
 															<key>GID</key>
@@ -423,7 +433,7 @@
 															<key>PATH_TYPE</key>
 															<integer>1</integer>
 															<key>PERMISSIONS</key>
-															<integer>493</integer>
+															<integer>511</integer>
 															<key>TYPE</key>
 															<integer>3</integer>
 															<key>UID</key>
@@ -439,7 +449,7 @@
 															<key>PATH_TYPE</key>
 															<integer>1</integer>
 															<key>PERMISSIONS</key>
-															<integer>493</integer>
+															<integer>511</integer>
 															<key>TYPE</key>
 															<integer>3</integer>
 															<key>UID</key>
@@ -455,7 +465,7 @@
 															<key>PATH_TYPE</key>
 															<integer>1</integer>
 															<key>PERMISSIONS</key>
-															<integer>420</integer>
+															<integer>438</integer>
 															<key>TYPE</key>
 															<integer>3</integer>
 															<key>UID</key>
@@ -471,7 +481,7 @@
 															<key>PATH_TYPE</key>
 															<integer>1</integer>
 															<key>PERMISSIONS</key>
-															<integer>420</integer>
+															<integer>438</integer>
 															<key>TYPE</key>
 															<integer>3</integer>
 															<key>UID</key>
@@ -487,7 +497,7 @@
 															<key>PATH_TYPE</key>
 															<integer>1</integer>
 															<key>PERMISSIONS</key>
-															<integer>420</integer>
+															<integer>438</integer>
 															<key>TYPE</key>
 															<integer>3</integer>
 															<key>UID</key>
@@ -503,7 +513,7 @@
 															<key>PATH_TYPE</key>
 															<integer>1</integer>
 															<key>PERMISSIONS</key>
-															<integer>420</integer>
+															<integer>438</integer>
 															<key>TYPE</key>
 															<integer>3</integer>
 															<key>UID</key>
@@ -519,7 +529,7 @@
 															<key>PATH_TYPE</key>
 															<integer>1</integer>
 															<key>PERMISSIONS</key>
-															<integer>420</integer>
+															<integer>438</integer>
 															<key>TYPE</key>
 															<integer>3</integer>
 															<key>UID</key>
@@ -581,7 +591,7 @@
 													<key>PATH_TYPE</key>
 													<integer>1</integer>
 													<key>PERMISSIONS</key>
-													<integer>493</integer>
+													<integer>511</integer>
 													<key>TYPE</key>
 													<integer>3</integer>
 													<key>UID</key>
@@ -600,7 +610,7 @@
 															<key>PATH_TYPE</key>
 															<integer>1</integer>
 															<key>PERMISSIONS</key>
-															<integer>493</integer>
+															<integer>511</integer>
 															<key>TYPE</key>
 															<integer>3</integer>
 															<key>UID</key>
@@ -616,7 +626,7 @@
 															<key>PATH_TYPE</key>
 															<integer>1</integer>
 															<key>PERMISSIONS</key>
-															<integer>493</integer>
+															<integer>511</integer>
 															<key>TYPE</key>
 															<integer>3</integer>
 															<key>UID</key>
@@ -632,7 +642,7 @@
 															<key>PATH_TYPE</key>
 															<integer>1</integer>
 															<key>PERMISSIONS</key>
-															<integer>493</integer>
+															<integer>511</integer>
 															<key>TYPE</key>
 															<integer>3</integer>
 															<key>UID</key>
@@ -648,7 +658,7 @@
 															<key>PATH_TYPE</key>
 															<integer>1</integer>
 															<key>PERMISSIONS</key>
-															<integer>493</integer>
+															<integer>511</integer>
 															<key>TYPE</key>
 															<integer>3</integer>
 															<key>UID</key>
@@ -662,7 +672,7 @@
 													<key>PATH_TYPE</key>
 													<integer>2</integer>
 													<key>PERMISSIONS</key>
-													<integer>509</integer>
+													<integer>511</integer>
 													<key>TYPE</key>
 													<integer>2</integer>
 													<key>UID</key>
@@ -692,7 +702,7 @@
 											<key>PATH_TYPE</key>
 											<integer>2</integer>
 											<key>PERMISSIONS</key>
-											<integer>509</integer>
+											<integer>511</integer>
 											<key>TYPE</key>
 											<integer>2</integer>
 											<key>UID</key>

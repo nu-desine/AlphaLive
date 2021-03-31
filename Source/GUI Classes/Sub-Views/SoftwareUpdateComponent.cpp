@@ -193,7 +193,7 @@ void SoftwareUpdateComponent::run()
             //==== Move the new version of AlphaLive Updater if there is one ====
             
             #if JUCE_MAC
-            File newUpdaterFile (updateDirectory.getFullPathName() + File::getSeparatorString() + "Mac Files/AlphaLive Updater.app");
+            File newUpdaterFile (updateDirectory.getFullPathName() + File::getSeparatorString() + "Mac Files" + File::getSeparatorString() + "AlphaLive Updater.app");
             
             if (newUpdaterFile.exists())
             {
@@ -206,7 +206,7 @@ void SoftwareUpdateComponent::run()
             #if JUCE_WINDOWS
             if (SystemStats::isOperatingSystem64Bit())
             {
-                File newUpdaterFile (updateDirectory.getFullPathName() + File::getSeparatorString() +  "Win64 Files/AlphaLive Updater.exe");
+                File newUpdaterFile (updateDirectory.getFullPathName() + File::getSeparatorString() +  "Win64 Files" + File::getSeparatorString() + "AlphaLive Updater.exe");
                 
                 if (newUpdaterFile.exists())
                 {
@@ -217,7 +217,7 @@ void SoftwareUpdateComponent::run()
             }
             else
             {
-                File newUpdaterFile (updateDirectory.getFullPathName() + File::getSeparatorString() +  "Win32 Files/AlphaLive Updater.exe");
+                File newUpdaterFile (updateDirectory.getFullPathName() + File::getSeparatorString() +  "Win32 Files" + File::getSeparatorString() + "AlphaLive Updater.exe");
                 
                 if (newUpdaterFile.exists())
                 {

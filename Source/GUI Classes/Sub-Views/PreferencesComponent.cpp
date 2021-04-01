@@ -804,7 +804,7 @@ void HardwarePreferencesComponent::buttonClicked (Button* button)
     {
         if (button == ledColourButton[i])
         {
-            std::unique_ptr <ColourSelector> colourSelector = std::unique_ptr <ColourSelector> (new ColourSelector(14));
+            std::unique_ptr <ColourSelector> colourSelector = std::unique_ptr <ColourSelector> (new ColourSelector((ColourSelector::showColourAtTop | ColourSelector::showSliders | ColourSelector::showColourspace)));
             colourSelector->setName("cs" + String (i));
             colourSelector->setCurrentColour (StoredSettings::getInstance()->hardwareLedColour[i]);
             colourSelector->addChangeListener(this);

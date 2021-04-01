@@ -1528,13 +1528,14 @@ void AlphaLiveLookandFeel::drawMenuBarBackground (Graphics& g, int width, int he
 
 
 void AlphaLiveLookandFeel::drawFileBrowserRow (Graphics& g, int width, int height,
-                                      const String& filename, Image* /*icon*/,
-                                      const String& /*fileSizeDescription*/,
-                                      const String& /*fileTimeDescription*/,
-                                      const bool isDirectory,
-                                      const bool isItemSelected,
-                                      const int /*itemIndex*/,
-                                      DirectoryContentsDisplayComponent&)
+                                               const File& file,
+                                               const String& filename, Image* /*icon*/,
+                                               const String& /*fileSizeDescription*/,
+                                               const String& /*fileTimeDescription*/,
+                                               const bool isDirectory,
+                                               const bool isItemSelected,
+                                               const int /*itemIndex*/,
+                                               DirectoryContentsDisplayComponent&)
 {
     if (isItemSelected)
         g.fillAll (findColour (DirectoryContentsDisplayComponent::highlightColourId));

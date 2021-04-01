@@ -127,33 +127,32 @@ public:
                                        Button& button,
                                        const Colour& backgroundColour,
                                        bool isMouseOverButton,
-                                       bool isButtonDown);
+                                       bool isButtonDown) override;
 	
-	Font getTextButtonFont (TextButton& button, int buttonHeight);
+	Font getTextButtonFont (TextButton& button, int buttonHeight) override;
 	
 	void drawButtonText (Graphics& g, TextButton& button,
-						 bool isMouseOverButton, bool isButtonDown);
+						 bool isMouseOverButton, bool isButtonDown) override;
 	
     //=====================================================================
 	void drawComboBox (Graphics& g, int width, int height,
 											 const bool isButtonDown,
 											 int buttonX, int buttonY,
 											 int buttonW, int buttonH,
-											 ComboBox& box);
+											 ComboBox& box) override;
     
-    Font getComboBoxFont (ComboBox&);
-    Label* createComboBoxTextBox (ComboBox&);
-	
+    Font getComboBoxFont (ComboBox&) override;
+    Label* createComboBoxTextBox (ComboBox&) override;
 	
 	//void positionComboBoxText (ComboBox& box, Label& label) override;
 	
 	//=====================================================================
 	void layoutFilenameComponent (FilenameComponent& filenameComp,
 								  ComboBox* filenameBox,
-								  Button* browseButton);
+								  Button* browseButton) override;
      
 	//=====================================================================
-	void drawLabel (Graphics& g, Label& label);
+	void drawLabel (Graphics& g, Label& label) override;
 	
     //=====================================================================
 	void drawRotarySlider (Graphics& g,
@@ -162,32 +161,29 @@ public:
 										float sliderPos,
 										const float rotaryStartAngle,
 										const float rotaryEndAngle,
-										Slider& slider);
+										Slider& slider) override;
     
     
 	//=====================================================================
-	Font getPopupMenuFont();
+	Font getPopupMenuFont() override;
     
-    void drawPopupMenuBackground (Graphics &g, int width, int height);
+    void drawPopupMenuBackground (Graphics &g, int width, int height) override;
     
     //=====================================================================
     
-	int getDefaultScrollbarWidth(); 
+	int getDefaultScrollbarWidth() override;
 
     //=====================================================================
-	int getDefaultMenuBarHeight();
-	void drawMenuBarBackground (Graphics& g, int width, int height, bool, MenuBarComponent& menuBar);
+	int getDefaultMenuBarHeight() override;
+	void drawMenuBarBackground (Graphics& g, int width, int height, bool, MenuBarComponent& menuBar) override;
     
     //=====================================================================
     
-    void drawFileBrowserRow (Graphics& g, int width, int height,
-                             const String& filename, Image* icon,
-                             const String& fileSizeDescription,
-                             const String& fileTimeDescription,
-                             bool isDirectory,
-                             bool isItemSelected,
-                             int itemIndex,
-                             DirectoryContentsDisplayComponent& component);
+    void drawFileBrowserRow (Graphics&, int width, int height,
+                             const File& file, const String& filename, Image* icon,
+                             const String& fileSizeDescription, const String& fileTimeDescription,
+                             bool isDirectory, bool isItemSelected, int itemIndex,
+                             DirectoryContentsDisplayComponent&) override;
                                     
    	
 private:

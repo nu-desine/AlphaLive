@@ -1323,17 +1323,18 @@ Label* AlphaLiveLookandFeel::createComboBoxTextBox (ComboBox&)
     return new Label (String(), String());
 }
 
-void AlphaLiveLookandFeel::positionComboBoxText (ComboBox& box, Label& label)
-{
-    label.setBounds (5, 3,
-                     box.getWidth() - box.getHeight(),
-                     box.getHeight() - 6);
-	
-    label.setFont (10 + AlphaTheme::getInstance()->fontSizeAddition);
-    
-}
-
-
+//Using this existing function with latest code version (app v1.4.0)
+//causes combobox popupmenu text to be very small / badly positioned
+//in certain instances.
+//void AlphaLiveLookandFeel::positionComboBoxText (ComboBox& box, Label& label)
+//{
+//    label.setBounds (5, 3,
+//                     box.getWidth() - box.getHeight(),
+//                     box.getHeight() - 6);
+//	
+//    label.setFont (10 + AlphaTheme::getInstance()->fontSizeAddition);
+//    
+//}
 
 void AlphaLiveLookandFeel::layoutFilenameComponent (FilenameComponent& filenameComp,
                                            ComboBox* filenameBox,

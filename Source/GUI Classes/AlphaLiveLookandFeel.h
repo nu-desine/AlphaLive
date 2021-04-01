@@ -144,8 +144,8 @@ public:
     Font getComboBoxFont (ComboBox&);
     Label* createComboBoxTextBox (ComboBox&);
 	
-	void positionComboBoxText (ComboBox& box, Label& label);
 	
+	//void positionComboBoxText (ComboBox& box, Label& label) override;
 	
 	//=====================================================================
 	void layoutFilenameComponent (FilenameComponent& filenameComp,

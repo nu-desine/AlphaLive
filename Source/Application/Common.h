@@ -26,9 +26,13 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "CommandIDs.h"
 
-//full path string for the directory where all the application supporting files
+//Full path string for the directory where all the application supporting files
 //(e.g. Application Data, Documentation, Library) are stored.
-const String appFilesDirString (File::getSpecialLocation(File::commonDocumentsDirectory).getFullPathName() + File::getSeparatorString() + "AlphaLive" + File::getSeparatorString());
+//Don't use File::currentApplicationFile or File::currentExecutableFile here, as on macOS
+//if the app is flagged as being from an 'unidentified' developer (which it currently
+//will be) then the app may actually be run from a different location (/private/var/folders/)
+//meaning these file locations won't be what we expect and cause incorrect file access!
+const String appFilesDirString (File::getSpecialLocation(File::globalApplicationsDirectory).getFullPathName() + File::getSeparatorString() + "AlphaLive" + File::getSeparatorString());
 
 extern ScopedPointer<ApplicationCommandManager> commandManager;
 

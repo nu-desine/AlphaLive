@@ -7,9 +7,3 @@ JuceLibraryCode/modules/juce_audio_devices/juce_audio_devices.cpp
 Line "#include <iasiodrv.h>"
 Change to: 
 #include <../Source/Third Party Libraries/ASIOSDK/common/iasiodrv.h>
-
-JuceLibraryCode/modules/juce_audio_devices/sources/juce_AudioTransportSource.cpp
-Line 289-290
-Change to:
-info.buffer->applyGain (i, info.startSample, info.numSamples,
-                        gain);

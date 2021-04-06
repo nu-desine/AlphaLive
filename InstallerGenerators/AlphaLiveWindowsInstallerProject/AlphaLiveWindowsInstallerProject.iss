@@ -56,7 +56,7 @@ Source: "{#SourcePath}\..\..\Other Files\Application Data\user_notational_arrang
 Source: "{#SourcePath}\..\..\Other Files\Application Data\user_scales.xml"; DestDir: "{app}\Application Data"; Flags: ignoreversion
 Source: "{#SourcePath}\..\..\Other Files\Application Data\Windows\AlphaLive Updater.exe"; DestDir: "{app}\Application Data"; Flags: ignoreversion
 Source: "{#SourcePath}\..\..\Other Files\Application Data\Windows\firmwareUpdater.exe"; DestDir: "{app}\Application Data"; Flags: ignoreversion
-Source: "{#SourcePath}\..\..\Other Files\Demo Project (Basic)\*"; DestDir: "{app}\Demo Project (Basic)\"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#SourcePath}\..\..\Other Files\Demo Project (Basic)\*"; DestDir: "{userdocs}\AlphaLive Projects\Demo Project (Basic)\"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#SourcePath}\..\..\Other Files\Documentation\*"; DestDir: "{app}\Documentation\"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#SourcePath}\..\..\Other Files\Library\*"; DestDir: "{app}\Library"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Audio Unit Hosting -->
+	<key>com.apple.security.cs.allow-audio-unit-host</key>
+	<true/>
+	
+	<!-- Allow JIT compilation for audio processing -->
+	<key>com.apple.security.cs.allow-jit</key>
+	<true/>
+	
+	<!-- Allow unsigned executable memory for audio processing -->
+	<key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+	<true/>
+	
+	<!-- Allow dynamic code generation for audio processing -->
+	<key>com.apple.security.cs.disable-executable-page-protection</key>
+	<true/>
+	
+	<!-- Network access for OSC communication -->
+	<key>com.apple.security.network.client</key>
+	<true/>
+	<key>com.apple.security.network.server</key>
+	<true/>
+	
+	<!-- File system access for loading samples and projects -->
+	<key>com.apple.security.files.user-selected.read-write</key>
+	<true/>
+	
+	<!-- Hardware access for MIDI and audio -->
+	<key>com.apple.security.device.audio-input</key>
+	<true/>
+	<key>com.apple.security.device.midi</key>
+	<true/>
+</dict>
+</plist>

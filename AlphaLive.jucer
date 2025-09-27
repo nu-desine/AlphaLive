@@ -588,8 +588,8 @@
                smallIcon="k8A2Id" bigIcon="bJMiAQ">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="AlphaLive"
-                       osxCompatibility="10.9 SDK" osxArchitecture="Native"/>
-        <CONFIGURATION name="Release" isDebug="0" targetName="AlphaLive" osxCompatibility="10.9 SDK"/>
+                       osxCompatibility="11.0 SDK" osxArchitecture="Native"/>
+        <CONFIGURATION name="Release" isDebug="0" targetName="AlphaLive" osxCompatibility="11.0 SDK"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_opengl" path="JuceLibraryCode/modules"/>

@@ -6,7 +6,7 @@
 
 AlphaLive has been programmed using the [JUCE](https://juce.com) cross-platform C++ library. It includes an Xcode project for building on macOS, and a Visual Studio 2019 project for building on Windows. JUCE also easily allows for Linux makefile's to be built.
 
-You can download the latest pre-built binaries of the application for macOS and Windows from [here](https://github.com/nu-desine/AlphaLive/releases/tag/version_1.4.0). This is a 64 bit version compatible with macOS 10.9 (Mavericks) and above, and Windows 10 and above. For older OS versions (macOS 10.5 (Leopard) up to 10.8 (Mountain Lion), Windows 7 and 8) which are both 32 and 64 bit, see [here](https://github.com/nu-desine/AlphaLive/releases/tag/version_1.3.2).
+You can download the latest pre-built binaries of the application for macOS and Windows from [here](https://github.com/nu-desine/AlphaLive/releases/tag/version_1.4.0). This is a 64 bit version compatible with macOS 11.0 (Big Sur) and above, and Windows 10 and above. For older OS versions (macOS 10.9 (Mavericks) up to 10.15 (Catalina), Windows 7 and 8) which are both 32 and 64 bit, see [here](https://github.com/nu-desine/AlphaLive/releases/tag/version_1.3.2).
 
 ## Build Requirements ##
 

@@ -2,7 +2,7 @@
 
 [DOWNLOAD HERE](https://github.com/nu-desine/AlphaLive/releases/tag/version_1.4.0)
 
-[AlphaLive](https://alphasphere.com/alphalive/) is the [AlphaSphere](https://alphasphere.com)'s official software application that allows you to program the device into an expressive musical instrument and controller. The software can functions as a MIDI mapping editor, sampler, sequencer, and Open Sound Control converter.
+AlphaLive is the AlphaSphere's official software application that allows you to program the device into an expressive musical instrument and controller. The software can functions as a MIDI mapping editor, sampler, sequencer, and Open Sound Control converter.
 
 AlphaLive has been programmed using the [JUCE](https://juce.com) cross-platform C++ library. It includes an Xcode project for building on macOS, and a Visual Studio 2019 project for building on Windows. JUCE also easily allows for Linux makefile's to be built.
 
